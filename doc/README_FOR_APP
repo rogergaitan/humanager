@@ -1,0 +1,8 @@
+Use this README file to introduce your application and point to useful places in the API for learning more.
+Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+
+If you create a new model with scaffold make sure you adapt to bootstrap css. 
+	rails g boostrap:themed model_name
+
+Delete any scaffold.css because this will afect any view into the app.
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+	  <title><%= @title %></title>
+	  <%= render 'layouts/stylesheets' %>
+	  <%= render 'layouts/javascripts' %>
+	  <%= csrf_meta_tags %>
+	  <meta name='viewport' content='width=devise-width, initial-scale=1.0'>
+	</head>
+	<body>
+
+
+	  <div class="navbar navbar-fixed-top">
+		  <div class="navbar-inner">
+			  <div class="container-fluid">	   
+			  <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+			  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  </a>		   
+			  <!-- Be sure to leave the brand out there if you want it shown -->
+			  <a class="brand" href= <%= root_path %> >Reasa</a>		   
+			  <!-- Everything you want hidden at 940px or less, place within here -->
+			  
+			  <%= render 'layouts/header'%>
+
+			  </div>
+		  </div>
+	  </div>
+	<div class = 'container-fluid'>
+		<div class='row-fluid'></div>
+			<div><%= render 'layouts/messages'%></div>
+			<div class='span2'><%= render 'layouts/menus' %></div>
+			<div class='span10'>
+				<%= yield %>
+		</div>
+
+	</div>
+
+	</body>
+	</html>

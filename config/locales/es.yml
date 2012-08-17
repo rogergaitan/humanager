@@ -1,0 +1,92 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+es:
+  hello: "Hello world"
+  routes:
+    new: nuevo
+    edit: editar
+    users: usuario
+  helpers:
+    actions: Acciones 
+    select:
+      prompt: Por favor selecciona
+    submit:
+      create: Crear %{model}
+      submit: Guardar %{model}
+      update: Actualizar %{model}
+    links:
+      destroy: Eliminar        
+      edit: Editar
+      new: Nuevo
+      cancel: Cancelar  
+      back: Regresar   
+    titles:
+      edit: Editar  %{model}
+      new:  Nuevo registro de %{model}
+  activerecord:
+      models:
+        warehouse:  Bodega
+        user: Usuario
+      attributes:
+        warehouse:
+          code: Código
+          name: Nombre
+          description:  Descripción
+          manager:  Responsable
+          address: Dirección
+        user:
+          login:
+  date:
+      abbr_day_names:
+      - dom
+      - lun
+      - mar
+      - mié
+      - jue
+      - vie
+      - sáb
+      abbr_month_names:
+      -
+      - ene
+      - feb
+      - mar
+      - abr
+      - may
+      - jun
+      - jul
+      - ago
+      - sep
+      - oct
+      - nov
+      - dic
+      day_names:
+      - domingo
+      - lunes
+      - martes
+      - miércoles
+      - jueves
+      - viernes
+      - sábado
+      formats:
+        default: ! '%d/%m/%Y'
+        long: ! '%A, %d de %B de %Y'
+        short: ! '%d de %b'
+      month_names:
+      -
+      - enero
+      - febrero
+      - marzo
+      - abril
+      - mayo
+      - junio
+      - julio
+      - agosto
+      - septiembre
+      - octubre
+      - noviembre
+      - diciembre
+      order:
+      - :day
+      - :month
+      - :year
