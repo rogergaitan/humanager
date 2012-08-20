@@ -2,6 +2,7 @@
 	<html>
 	<head>
 	  <title><%= @title %></title>
+	  <link type="image/x-icon" href="/assets/favicon.ico" rel="icon">
 	  <%= render 'layouts/stylesheets' %>
 	  <%= render 'layouts/javascripts' %>
 	  <%= csrf_meta_tags %>
@@ -31,7 +32,9 @@
 	<div class = 'container-fluid'>
 		<div class='row-fluid'></div>
 			<div><%= render 'layouts/messages'%></div>
-			<div class='span2'><%= render 'layouts/menus' %></div>
+
+			<div class='span2'><%= render 'layouts/menus',  %></div>
+			
 			<div class='span10'>
 				<%= yield %>
 		</div>

@@ -3,17 +3,17 @@
 es:
   errors:
     messages:
-      expired: "has expired, please request a new one"
-      not_found: "not found"
-      already_confirmed: "was already confirmed, please try signing in"
-      not_locked: "was not locked"
+      expired: "ha expirado por favor solicite una nueva"
+      not_found: "no encontrado"
+      already_confirmed: "ya fue confirmado, por favor trate de iniciar sesión"
+      not_locked: "no fue bloqueado"
       not_saved:
         one: "1 error prohibited this %{resource} from being saved:"
         other: "%{count} errors prohibited this %{resource} from being saved:"
 
   devise:
     failure:
-      already_authenticated: 'You are already signed in.'
+      already_authenticated: 'Usted ya ha iniciado sesión.'
       unauthenticated: 'You need to sign in or sign up before continuing.'
       unconfirmed: 'You have to confirm your account before continuing.'
       locked: 'Your account is locked.'

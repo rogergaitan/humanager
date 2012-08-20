@@ -1,4 +1,6 @@
 Reasapp::Application.routes.draw do
+  resources :sublines
+
   resources :warehouses
 
   devise_for :users

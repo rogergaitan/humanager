@@ -2,7 +2,7 @@ class WarehousesController < ApplicationController
   # GET /warehouses
   # GET /warehouses.json
   def index
-    @title = 'Bodegas'
+    @title = t('.activerecord.models.warehouse').pluralize
     @warehouses = Warehouse.all
 
     respond_to do |format|
@@ -14,6 +14,7 @@ class WarehousesController < ApplicationController
   # GET /warehouses/1
   # GET /warehouses/1.json
   def show
+    @title = t('.activerecord.models.warehouse')
     @warehouse = Warehouse.find(params[:id])
 
     respond_to do |format|
@@ -36,6 +37,7 @@ class WarehousesController < ApplicationController
 
   # GET /warehouses/1/edit
   def edit
+    @title = t('.activerecord.models.warehouse')
     @warehouse = Warehouse.find(params[:id])
   end
 

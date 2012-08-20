@@ -1,15 +1,32 @@
 <div class='well sidebar-nav'>
   <ul class="nav nav-list">
-    <li class="nav-header">Herramientas</li>
+    <li class="nav-header"><%= I18n.t('.content.titles.tools')%></li>
     
-    <li><a href=<%=root_path %> ><i class='icon-white icon-home'></i> Inicio</a></li>
-    <li><a href=<%=warehouses_path %> ><i class='icon-picture'></i> Bodegas</a></li>
-    <li class="nav-header">Usuario</li>
-    <li><a href=<%=edit_user_registration_path %>><i class='icon-usuario'></i>Perfil</a></li>
-    <li><a href="#"><i class='icon-cog'></i>Herramientas</a></li>
-    <li><a href="#"><i class='icon-inbox'></i>Mensajes</a></li>
+    <li><a href=<%=root_path %> ><i class='icon-white icon-home'></i><%= I18n.t('.content.titles.home')%></a></li>
+    <!-- <li><a href=<%=warehouses_path %> ><i class='icon-picture'></i> Bodegas</a></li> -->
+    
+    <%if user_signed_in? %>
+    <li class="divider"></li>
+        <li class="nav-header"><%= I18n.t('.activerecord.models.user') %></li>
+            <li><a href=<%=edit_user_registration_path %>><i class='icon-user'></i>Perfil</a></li>
+            <li><a href="#"><i class='icon-cog'></i>Herramientas</a></li>
+            <li><a href="#"><i class='icon-inbox'></i>Mensajes</a></li>
+        <%if !@warehouses.nil? %>
+        <li class="divider"></li>
+            <li class="nav-header"><%= I18n.t('.activerecord.models.warehouse').pluralize %></li>
+            
+        <%end%>
+        <%if !@sublines.nil? %>
+        <li class="divider"></li>
+            <li class="nav-header"><%= I18n.t('.activerecord.models.subline').pluralize %></li>
+            
+        <%end%>
+
+    <%end%>
+    <li class="divider"></li>
     <li class="nav-header">Otros</li>
-    <li><a href=<%=help_path %>><i class='icon-flag'></i>Ayuda</a></li>
-    <li><a href="#"><i class='icon-search'></i>Buscar</a></li>
+        <li><a href=<%=help_path %>><i class='icon-flag'></i>Ayuda</a></li>
+        <li><a href="#"><i class='icon-search'></i>Buscar</a></li>
+    
   </ul>
 </div>
