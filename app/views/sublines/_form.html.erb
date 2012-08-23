@@ -1,4 +1,4 @@
-<%= form_for @subline, :html => { :class => 'form-horizontal' } do |f| %>
+<%= form_for @subline, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :code, :class => 'control-label' %>
     <div class="controls">

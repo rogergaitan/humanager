@@ -31,6 +31,28 @@ es:
       home: Inicio
       other: Otros
   activerecord:
+      errors:
+        models:
+          warehouse:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+          subline:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
       models:
         warehouse:  Bodega
         warehouses: Bodegas
