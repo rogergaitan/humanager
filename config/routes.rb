@@ -1,4 +1,6 @@
 Reasapp::Application.routes.draw do
+  resources :categories
+
   resources :sublines
 
   resources :warehouses

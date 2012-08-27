@@ -20,10 +20,18 @@ es:
       edit: Editar
       new: Nuevo
       cancel: Cancelar  
-      back: Regresar   
+      back: Regresar
+      confirm: '¿Está seguro(a)?'   
     titles:
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
+  notice:
+    successfully_created:  creado exitosamente
+    successfully_updated:  actualizado exitosamente
+    successfully_deleted:  eliminado correctamente
+    a_successfully_deleted: ' eliminada correctamente'
+    a_successfully_created: ' creada correctamente'
+    a_successfully_updated: ' actualizada correctamente'
   content:
     titles: 
       tools: Herramientas
@@ -39,6 +47,7 @@ es:
                 too_short: Código demasiado corto
                 too_long: Código demasiado largo
                 blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
               description:
                 blank: Este campo no puede quedar en blanco
               name:
@@ -49,6 +58,18 @@ es:
                 too_short: Código demasiado corto
                 too_long: Código demasiado largo
                 blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+          category:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
               description:
                 blank: Este campo no puede quedar en blanco
               name:
@@ -58,7 +79,12 @@ es:
         warehouses: Bodegas
         user: Usuario
         subline: Sub-Línea
+        category: Categoría
       attributes:
+        category:
+          code: Código
+          description: Descripción
+          name: Nombre                  
         subline:
           code: Código
           description: Descripción
