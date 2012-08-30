@@ -1,4 +1,6 @@
 Reasapp::Application.routes.draw do
+  resources :lines
+
   resources :categories
 
   resources :sublines

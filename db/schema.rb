@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824191754) do
+ActiveRecord::Schema.define(:version => 20120827202535) do
 
   create_table "categories", :force => true do |t|
     t.string   "code"
@@ -19,6 +19,23 @@ ActiveRecord::Schema.define(:version => 20120824191754) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "lines", :force => true do |t|
+    t.string   "code"
+    t.string   "name"
+    t.string   "description"
+    t.integer  "inventory"
+    t.integer  "sale_cost"
+    t.integer  "utility_adjusment"
+    t.integer  "lost_adjustment"
+    t.integer  "income"
+    t.integer  "sales_return"
+    t.integer  "purchase_return"
+    t.integer  "sale_tax"
+    t.integer  "purchase_tax"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "sublines", :force => true do |t|

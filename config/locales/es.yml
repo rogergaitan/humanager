@@ -21,7 +21,8 @@ es:
       new: Nuevo
       cancel: Cancelar  
       back: Regresar
-      confirm: '¿Está seguro(a)?'   
+      confirm: '¿Está seguro(a)?'
+      show_accounting_info: 'Información Contable'   
     titles:
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
@@ -41,6 +42,56 @@ es:
   activerecord:
       errors:
         models:
+          line:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+              description:
+                blank: Este campo no puede quedar en blanco
+              income:
+                blank: Este campo no puede quedar en blanco
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              inventory:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              lost_adjustment:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              name:
+                blank: Este campo no puede quedar en blanco
+              purchase_return:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              purchase_tax:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              sale_cost:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              sale_tax:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              sales_return:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              utility_adjusment:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
           warehouse:
             attributes:
               code:
@@ -75,12 +126,26 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
+        line: Línea
         warehouse:  Bodega
         warehouses: Bodegas
         user: Usuario
         subline: Sub-Línea
         category: Categoría
       attributes:
+        line:
+          code: Código
+          description: Descripción
+          income: Ingreso
+          inventory: Inventario
+          lost_adjustment: 'Ajuste/pérdida'
+          name: Nombre
+          purchase_return: 'Dev/compra'
+          purchase_tax: 'Impuesto/compra'
+          sale_cost: 'Costo/ventas'
+          sale_tax: 'Impuesto/venta'
+          sales_return: 'Dev/venta'
+          utility_adjusment: 'Ajuste/utilidad'
         category:
           code: Código
           description: Descripción
