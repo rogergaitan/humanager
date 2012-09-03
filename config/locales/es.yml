@@ -3,6 +3,9 @@
 
 es:
   hello: "Hello world"
+  will_paginate:
+    next_label: Siguiente
+    previous_label: Anterior
   routes:
     new: nuevo
     edit: editar
@@ -42,6 +45,15 @@ es:
   activerecord:
       errors:
         models:
+          product:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              name:
+                blank: Este campo no puede quedar en blanco
           line:
             attributes:
               code:
@@ -126,6 +138,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
+        product: Producto
         line: Línea
         warehouse:  Bodega
         warehouses: Bodegas
@@ -133,6 +146,26 @@ es:
         subline: Sub-Línea
         category: Categoría
       attributes:
+        product:
+          code: Código
+          name: Nombre
+          bar_code: Código Barras
+          cost: costo
+          status: estado
+          stock: existencia
+          line_id: línea
+          subline_id: sub-línea
+          category_id: categoría
+          part_number: parte
+          make: marca
+          model: modelo
+          year: año
+          version: versión
+          max_discount: 'descuento max'
+          address: dirección
+          max_cant: max
+          min_cant: min
+          market_price: 'precio mercado'
         line:
           code: Código
           description: Descripción
@@ -215,5 +248,6 @@ es:
       - :day
       - :month
       - :year
+
 
 

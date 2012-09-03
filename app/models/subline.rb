@@ -1,6 +1,8 @@
 class Subline < ActiveRecord::Base
-  attr_accessible :code, :description, :name
 
+	has_many :products
+
+  	attr_accessible :code, :description, :name
 
 	validates :code, 
 					:presence => true, 

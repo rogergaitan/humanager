@@ -1,4 +1,6 @@
 Reasapp::Application.routes.draw do
+  resources :products
+
   resources :lines
 
   resources :categories

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120827202535) do
+ActiveRecord::Schema.define(:version => 20120830181231) do
 
   create_table "categories", :force => true do |t|
     t.string   "code"
@@ -36,6 +36,30 @@ ActiveRecord::Schema.define(:version => 20120827202535) do
     t.integer  "purchase_tax"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "products", :force => true do |t|
+    t.string   "code"
+    t.integer  "line_id"
+    t.integer  "subline_id"
+    t.integer  "category_id"
+    t.string   "part_number"
+    t.string   "name"
+    t.string   "make"
+    t.string   "model"
+    t.string   "year"
+    t.string   "version"
+    t.integer  "max_discount"
+    t.string   "address"
+    t.integer  "max_cant"
+    t.integer  "min_cant"
+    t.float    "cost"
+    t.string   "bar_code"
+    t.integer  "market_price"
+    t.enum     "status",       :limit => [:active, :inactive, :out_of_stock]
+    t.integer  "stock"
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
   end
 
   create_table "sublines", :force => true do |t|

@@ -1,0 +1,43 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  line_id: 1
+  subline_id: 1
+  category_id: 1
+  part_number: MyString
+  name: MyString
+  make: MyString
+  model: MyString
+  year: MyString
+  version: MyString
+  max_discount: 1
+  address: MyString
+  max_cant: 1
+  min_cant: 1
+  cost: 1.5
+  bar_code: MyString
+  market_price: 1
+  stock: 1
+  status: MyString
+
+two:
+  code: MyString
+  line_id: 1
+  subline_id: 1
+  category_id: 1
+  part_number: MyString
+  name: MyString
+  make: MyString
+  model: MyString
+  year: MyString
+  version: MyString
+  max_discount: 1
+  address: MyString
+  max_cant: 1
+  min_cant: 1
+  cost: 1.5
+  bar_code: MyString
+  market_price: 1
+  stock: 1
+  status: MyString

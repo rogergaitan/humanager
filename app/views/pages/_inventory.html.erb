@@ -19,7 +19,26 @@
         </div>        
     </div>
     </li>
-    
+    <li class="span2">
+    <div class="thumbnail">
+      <img src="http://placehold.it/300x200" alt="">
+     
+        <div class='btn-group'>
+            <a href=<%=products_path %> class='btn'>
+                <i class='icon-picture'></i>        
+                <%= I18n.t('.activerecord.models.product').pluralize %>
+            </a>
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href=<%=new_product_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+                <li><a href=<%=products_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+                <li class="divider"></li>
+                <li><a href="#">Información</a></li>
+            </ul>
+        </div>        
+    </div>
+    </li>
     <li class="span2">
       <div class="thumbnail">
       <img src="http://placehold.it/300x200" alt="">
