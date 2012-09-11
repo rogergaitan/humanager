@@ -11,6 +11,7 @@ gem 'devise'
 gem 'carrierwave'
 gem 'client_side_validations'
 gem 'twitter-bootstrap-rails'
+gem 'rubyfb'
 
 # Gems used only for assets and not required
 # in production environments by default.
