@@ -1,0 +1,22 @@
+<%= form_for @district, :html => { :class => 'form-horizontal' } do |f| %>
+
+<div class="control-group">
+      <%= f.label :canton_id, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select(:canton_id, @cantons, :id, :canton ) %>
+      </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :district, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :district, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                districts_path, :class => 'btn' %>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  canton_id: 1
+  district: MyString
+
+two:
+  canton_id: 1
+  district: MyString
