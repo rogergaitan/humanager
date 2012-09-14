@@ -1,4 +1,10 @@
 Reasapp::Application.routes.draw do
+  resources :districts
+
+  resources :cantons
+
+  resources :provinces
+
   resources :categories
 
   resources :sublines

@@ -80,6 +80,9 @@ es:
         user: Usuario
         subline: Sub-Línea
         category: Categoría
+        province: Provincia
+        district: Distritos
+        canton: Cantones
       attributes:
         category:
           code: Código
@@ -95,6 +98,14 @@ es:
           description:  Descripción
           manager:  Responsable
           address: Dirección
+        province:
+          province: Provincia
+        canton:
+          canton: Cantón
+          province_id: Provincia
+        district:
+          district: Distrito
+          canton_id: Cantón
         user:
           login:
   date:
