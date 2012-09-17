@@ -1,4 +1,5 @@
 <%= form_for @category, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  
   <div class="control-group">
     <%= f.label :code, :class => 'control-label' %>
     <div class="controls">
@@ -20,7 +21,11 @@
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
+    <% if !@category.id %>
+      <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-primary btn-info' %>
+    <%end %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 categories_path, :class => 'btn' %>
   </div>
+
 <% end %>

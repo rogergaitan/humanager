@@ -1,3 +1,5 @@
+# == SubLines Controller 
+# ==  Subline is the second option to search
 class SublinesController < ApplicationController
   # GET /sublines
   # GET /sublines.json
@@ -35,17 +37,24 @@ class SublinesController < ApplicationController
   # GET /sublines/1/edit
   def edit
     @subline = Subline.find(params[:id])
+    #
   end
 
   # POST /sublines
   # POST /sublines.json
+  # POST _create_and_show_or_create_and_continue_
   def create
     @subline = Subline.new(params[:subline])
 
     respond_to do |format|
       if @subline.save
-        format.html { redirect_to @subline, notice: 'Subline was successfully created.' }
-        format.json { render json: @subline, status: :created, location: @subline }
+        if params['continue']
+          format.html { redirect_to new_subline_path, notice: 'Subline was successfully created.' }
+          format.json { render json: @subline, status: :created, location: @subline }
+        else
+          format.html { redirect_to @subline, notice: 'Subline was successfully created.' }
+          format.json { render json: @subline, status: :created, location: @subline }
+        end
       else
         format.html { render action: "new" }
         format.json { render json: @subline.errors, status: :unprocessable_entity }
@@ -78,6 +87,17 @@ class SublinesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to sublines_url }
       format.json { head :no_content }
+    end
+  end
+
+  # SHORT /subline/short
+  # Get All sublines including just the id and the name. 
+  # We use this method on: *create* or *edit* products(dropdowns)
+  def fetch
+    @names_ids = Subline.find(:all, :select =>['id','name']).to_json
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @names_ids }
     end
   end
 end

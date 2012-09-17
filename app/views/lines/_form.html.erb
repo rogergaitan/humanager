@@ -95,8 +95,8 @@
 </div>
 
   <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                lines_path, :class => 'btn' %>
+    <%= f.submit nil, :class => 'btn btn-primary btn-success' %>
+    <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-primary btn-info' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), lines_path, :class => 'btn' %>
   </div>
 <% end %>

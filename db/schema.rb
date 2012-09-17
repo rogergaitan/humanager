@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120830181231) do
+ActiveRecord::Schema.define(:version => 20120913203512) do
 
   create_table "categories", :force => true do |t|
     t.string   "code"
@@ -36,6 +36,16 @@ ActiveRecord::Schema.define(:version => 20120830181231) do
     t.integer  "purchase_tax"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "product_pricings", :force => true do |t|
+    t.integer  "product_id"
+    t.float    "utility"
+    t.enum     "type",       :limit => [:other, :credit, :cash]
+    t.enum     "category",   :limit => [:a, :b, :c]
+    t.float    "sell_price"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
   end
 
   create_table "products", :force => true do |t|

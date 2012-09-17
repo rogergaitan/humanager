@@ -3,6 +3,8 @@
 
 es:
   hello: "Hello world"
+  tabs:
+    general: General
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -19,7 +21,8 @@ es:
       submit: Guardar %{model}
       update: Actualizar %{model}
     links:
-      destroy: Eliminar        
+      destroy: Eliminar
+      save_continue: Guardar y Continuar        
       edit: Editar
       new: Nuevo
       cancel: Cancelar  
@@ -53,6 +56,24 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
               name:
+                blank: Este campo no puede quedar en blanco
+              part_number:
+                blank: Este campo no puede quedar en blanco
+              name: 
+                blank: Este campo no puede quedar en blanco
+              make:
+                blank: Este campo no puede quedar en blanco
+              model:
+                blank: Este campo no puede quedar en blanco
+              year:
+                blank: Este campo no puede quedar en blanco
+              version:
+                blank: Este campo no puede quedar en blanco
+              line_id:
+                blank: Este campo no puede quedar en blanco  
+              subline_id:
+                blank: Este campo no puede quedar en blanco
+              product_subline:
                 blank: Este campo no puede quedar en blanco
           line:
             attributes:
@@ -138,6 +159,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
+        product_pricing: Precios
         product: Producto
         line: Línea
         warehouse:  Bodega
@@ -146,26 +168,32 @@ es:
         subline: Sub-Línea
         category: Categoría
       attributes:
+        product_pricing:
+          product_id: Producto
+          utility: Utilidad
+          price_type: Tipo de precio
+          category: Categoría
+          sell_price: Precio Venta
         product:
           code: Código
           name: Nombre
           bar_code: Código Barras
-          cost: costo
-          status: estado
-          stock: existencia
-          line_id: línea
-          subline_id: sub-línea
-          category_id: categoría
-          part_number: parte
-          make: marca
-          model: modelo
-          year: año
-          version: versión
-          max_discount: 'descuento max'
-          address: dirección
-          max_cant: max
-          min_cant: min
-          market_price: 'precio mercado'
+          cost: Costo
+          status: Estado
+          stock: Existencia
+          line_id: Línea
+          subline_id: Sub-línea
+          category_id: Categoría
+          part_number: Parte
+          make: Marca
+          model: Modelo
+          year: Año
+          version: Versión
+          max_discount: 'Descuento max'
+          address: Dirección
+          max_cant: Max
+          min_cant: Min
+          market_price: 'Precio mercado'
         line:
           code: Código
           description: Descripción

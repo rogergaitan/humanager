@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require rails.validations
-//= require_tree .
+//= require autocomplete-rails
+//= require_directory .

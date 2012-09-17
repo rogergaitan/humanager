@@ -1,10 +1,11 @@
 class WarehousesController < ApplicationController
   # GET /warehouses
-  # GET /warehouses.json
+  # GET /warehouses.json,
+  # index paginated
   def index
     @title = t('.activerecord.models.warehouse').pluralize
     @warehouses = Warehouse.all
-
+    @warehouses = Warehouse.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @warehouses }
@@ -48,8 +49,13 @@ class WarehousesController < ApplicationController
 
     respond_to do |format|
       if @warehouse.save
-        format.html { redirect_to @warehouse, notice: 'Warehouse was successfully created.' }
-        format.json { render json: @warehouse, status: :created, location: @warehouse }
+        if params['continue']
+          format.html { redirect_to new_warehouse_path, notice: 'Warehouse was successfully created.' }
+          format.json { render json: @warehouse, status: :created, location: @warehouse }
+        else
+          format.html { redirect_to @warehouse, notice: 'Warehouse was successfully created.' }
+          format.json { render json: @warehouse, status: :created, location: @warehouse }
+        end
       else
         format.html { render action: "new" }
         format.json { render json: @warehouse.errors, status: :unprocessable_entity }

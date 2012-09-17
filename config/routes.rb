@@ -1,11 +1,7 @@
 Reasapp::Application.routes.draw do
+  resources :product_pricings
+
   resources :products
-
-  resources :lines
-
-  resources :categories
-
-  resources :sublines
 
   resources :warehouses
 
@@ -22,7 +18,30 @@ Reasapp::Application.routes.draw do
   match '/contact', :to => 'pages#contact'
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
+  match '/404', :to => 'errors#not_found'
   root :to => 'pages#home'
+
+  resources :lines do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :categories do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :sublines do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :sublines
+  resources :categories
+  resources :lines
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -41,7 +60,7 @@ Reasapp::Application.routes.draw do
   # Sample resource route with options:
   #   resources :products do
   #     member do
-  #       get 'short'
+  #       get 'fetch'
   #       post 'toggle'
   #     end
   #

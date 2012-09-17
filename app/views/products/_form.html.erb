@@ -4,35 +4,34 @@
             <li><a href="#tab2" data-toggle="tab">Prices</a></li>
         </ul>
     <div class="tab-content">
+
         <div class="tab-pane active" id="tab1">
-            <%= form_for @product, :html => { :class => 'form-horizontal' } do |f| %>
+            <%= form_for @product, :validate => true,:html => { :class => 'form-horizontal' } do |f| %>
           <div class="control-group">
             <%= f.label :code, :class => 'control-label' %>
             <div class="controls">
               <%= f.text_field :code, :class => 'text_field' %>
             </div>
           </div>
-<!--           <div class="control-group">
+           <div class="control-group">
             <%= f.label :line_id, :class => 'control-label' %>
             <div class="controls">
-              <%= f.number_field :line_id, :class => 'number_field' %>
-            </div> -->
-            <div class="control-group">
-            <%= f.label :line_id, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.collection_select :line_id, Line.find(:all), :id, :name, :class => 'number_field' %>
+              <%= f.hidden_field :line_id %>
+              <%= text_field_tag 'product_line',nil, :class => 'text_field required', :for=>:line_id%>  
             </div>
           </div>
           <div class="control-group">
             <%= f.label :subline_id, :class => 'control-label' %>
             <div class="controls">
-              <%= f.number_field :subline_id, :class => 'number_field' %>
+              <%= f.hidden_field :subline_id %>
+              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required', :for =>:subline_id, :type =>'text' %>
             </div>
           </div>
           <div class="control-group">
             <%= f.label :category_id, :class => 'control-label' %>
             <div class="controls">
-              <%= f.number_field :category_id, :class => 'number_field' %>
+              <%= f.hidden_field :category_id %>
+              <%= text_field_tag 'product_category',nil, :class => 'number_field required', :for => :category_id %>
             </div>
           </div>
           <div class="control-group">
@@ -127,14 +126,21 @@
                 </div>
           </div>
           <div class="form-actions">
-            <%= f.submit nil, :class => 'btn btn-primary' %>
+            <%= f.submit nil, :class => 'btn btn-primary btn-success' %>
+            <% if !@product.id %>
+              <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-primary btn-info' %>
+            <%end %>
             <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                         products_path, :class => 'btn' %>
           </div>
             <% end %>
         </div>
         <div class="tab-pane" id="tab2">
-            <p>2.</p>
+          <% if !@product.id %>
+            <%= render :template => 'product_pricings/index' %>
+          <% else %>
+            <%= render :template => 'product_pricings/index' %>
+          <% end %>
         </div>
     </div>
 </div>
