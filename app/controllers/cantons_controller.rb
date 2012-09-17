@@ -36,6 +36,7 @@ class CantonsController < ApplicationController
   # GET /cantons/1/edit
   def edit
     @canton = Canton.find(params[:id])
+    @provinces = Province.all
   end
 
   # POST /cantons
