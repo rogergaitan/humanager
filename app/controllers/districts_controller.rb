@@ -2,7 +2,7 @@ class DistrictsController < ApplicationController
   # GET /districts
   # GET /districts.json
   def index
-    @districts = District.all
+    @districts = District.joins(:canton)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +14,8 @@ class DistrictsController < ApplicationController
   # GET /districts/1.json
   def show
     @district = District.find(params[:id])
-
+    @districts = District.joins(:canton)
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @district }

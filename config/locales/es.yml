@@ -74,6 +74,21 @@ es:
                 blank: Este campo no puede quedar en blanco
               name:
                 blank: Este campo no puede quedar en blanco
+          province:
+            attributes:
+              province:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Esta provincia ya existe'
+          canton:
+            attributes:
+              canton:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este cantón ya existe'
+          district:
+            attributes:
+              district:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este distrito ya existe'
       models:
         warehouse:  Bodega
         warehouses: Bodegas

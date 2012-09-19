@@ -2,7 +2,7 @@ class CantonsController < ApplicationController
   # GET /cantons
   # GET /cantons.json
   def index
-    @cantons = Canton.all
+    @cantons = Canton.joins(:province)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +14,8 @@ class CantonsController < ApplicationController
   # GET /cantons/1.json
   def show
     @canton = Canton.find(params[:id])
-
+    @cantons = Canton.joins(:province)
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @canton }
