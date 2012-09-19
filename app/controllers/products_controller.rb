@@ -54,10 +54,10 @@ class ProductsController < ApplicationController
     respond_to do |format|
       if @product.save
         if params['continue']
-          format.html { redirect_to new_product_path, notice: 'Product was successfully created.' }
+          format.html { redirect_to new_product_path, notice: t('.activerecord.models.product').capitalize + t('.notice.successfully_created') }
           format.json { render json: @product, status: :created, location: @product }
         else
-          format.html { redirect_to @product, notice: 'Product was successfully created.' }
+          format.html { redirect_to @product, notice: t('.activerecord.models.product').capitalize + t('.notice.successfully_created') }
           format.json { render json: @product, status: :created, location: @product }
         end  
       else
@@ -74,7 +74,7 @@ class ProductsController < ApplicationController
     @product_pricing = ProductPricing.where(:product_id => params[:id])
     respond_to do |format|
       if @product.update_attributes(params[:product])
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
+        format.html { redirect_to @product, notice: t('.activerecord.models.product').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -88,9 +88,9 @@ class ProductsController < ApplicationController
   def destroy
     @product = Product.find(params[:id])
     @product.destroy
-
+    
     respond_to do |format|
-      format.html { redirect_to products_url }
+      format.html { redirect_to products_url, notice: t('.activerecord.models.product').capitalize + t('.notice.successfully_deleted') }
       format.json { head :no_content }
     end
   end

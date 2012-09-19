@@ -3,9 +3,10 @@ class ProductPricingsController < ApplicationController
   # GET /product_pricings.json
   def index
     #@product_pricings = ProductPricing.all
-    @product_pricing = ProductPricing.new
+    #@product_pricing = ProductPricing.new
     #@product_pricings = ProductPricing.where(:product_id => params[:id])
-    #@product_pricing = ProductPricing.where(:product_id => params[:id])
+    @title = I18n.t('.activerecord.models.product').pluralize
+    @product_pricing = ProductPricing.where(:product_id => params[:id])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @product_pricings }
@@ -48,7 +49,8 @@ class ProductPricingsController < ApplicationController
 
     respond_to do |format|
       if @product_pricing.save
-        format.html { redirect_to @product_pricing, notice: 'Product pricing was successfully created.' }
+        #format.html { redirect_to @product_pricing, notice: 'Product pricing was successfully created.' }
+        format.html { redirect_to products_url, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_created') }
         format.json { render json: @product_pricing, status: :created, location: @product_pricing }
       else
         format.html { render action: "new" }
@@ -60,12 +62,12 @@ class ProductPricingsController < ApplicationController
   # PUT /product_pricings/1
   # PUT /product_pricings/1.json
   def update
-    #@product_pricing = ProductPricing.find(params[:id])
-    @product_pricing = ProductPricing.where(:product_id => params[:id])
+    @product_pricing = ProductPricing.find(params[:id])
+    #@product_pricing = ProductPricing.where(:product_id => params[:id])
 
     respond_to do |format|
       if @product_pricing.update_attributes(params[:product_pricing])
-        format.html { redirect_to @product_pricing, notice: 'Product pricing was successfully updated.' }
+        format.html { redirect_to @product_pricing, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -82,7 +84,7 @@ class ProductPricingsController < ApplicationController
 
     respond_to do |format|
       #format.html { redirect_to product_pricings_url }
-      format.html { redirect_to product_path(params[:id]) }
+      format.html { redirect_to products_url, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_deleted') }
       format.json { head :no_content }
     end
   end

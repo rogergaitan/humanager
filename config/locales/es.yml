@@ -5,6 +5,8 @@ es:
   hello: "Hello world"
   tabs:
     general: General
+    prices: Precios
+    other: Otros
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -33,9 +35,9 @@ es:
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
   notice:
-    successfully_created:  creado exitosamente
-    successfully_updated:  actualizado exitosamente
-    successfully_deleted:  eliminado correctamente
+    successfully_created:  ' creado exitosamente'
+    successfully_updated:  ' actualizado exitosamente'
+    successfully_deleted:  ' eliminado correctamente'
     a_successfully_deleted: ' eliminada correctamente'
     a_successfully_created: ' creada correctamente'
     a_successfully_updated: ' actualizada correctamente'
@@ -159,7 +161,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
-        product_pricing: Precios
+        product_pricing: Precio
         product: Producto
         line: Línea
         warehouse:  Bodega

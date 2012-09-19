@@ -41,16 +41,11 @@ $(jQuery(document).ready(function($) {
             }
         });
         if($("#product_category_id").val()){
- 
-
-
-           $( "#product_category" ).autocomplete('search', $("#product_category_id").val() ); 
-
-           
-            
+           $( "#product_category" ).autocomplete('search', $("#product_category_id").val() );             
         }       
     })
 
-    $("#product_pricing_product_id").val($("#product_id").val());
+
+    
 }))
 

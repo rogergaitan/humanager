@@ -5,7 +5,7 @@ set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 #role :web, "missionfig.lognllc.com"                           # Your HTTP server, Apache/etc
-role :app, "ec2-184-73-44-205.compute-1.amazonaws.comp"                          # This may be the same as your `Web` server
+role :app, "ec2-184-73-44-205.compute-1.amazonaws.com"                          # This may be the same as your `Web` server
 set :user, "ec2-user"
 #role :db,  "your primary db-server here", :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
@@ -17,7 +17,7 @@ set :deploy_to, "/home/ec2-user/reasapp"
 # after "deploy:restart", "deploy:cleanup"r
 #after 'deploy:update', 'bundle:install', 'deploy:migrate'
 
-after "deploy:restart"
+#after "deploy:restart"
 #after "deploy:update_swf", "deploy:restore_assets"
 #before :deploy, "deploy:backup_assets"
 

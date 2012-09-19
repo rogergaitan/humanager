@@ -5,10 +5,10 @@
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1" data-toggle="tab">General</a></li>
-            <li><a href="#tab2" data-toggle="tab">Specific</a></li>
-            <li><a href="#tab3" data-toggle="tab">Prices</a> </li>
-            <li class='pull-right'>
+            <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
+            <li><a href="#tab2" data-toggle="tab"><%= t("tabs.other") %></a></li>
+            <li><a href="#tab3" data-toggle="tab"><%= t("tabs.prices") %></a> </li>
+            <!-- <li class='pull-right'>
                  <div>
               <form class="form-search">
                     
@@ -18,7 +18,7 @@
                     </div>
                     </form>
                   </div>
-            </li> 
+            </li>  -->
             
         </ul>
     <%= will_paginate :class =>'pagination pagination-centered' %>

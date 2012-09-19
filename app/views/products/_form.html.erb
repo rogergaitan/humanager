@@ -1,7 +1,9 @@
-<div class="tabbable"> <!-- Only required for left/right tabs -->
+<div class="tabbable">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1" data-toggle="tab">General</a></li>
-            <li><a href="#tab2" data-toggle="tab">Prices</a></li>
+            <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
+            <% if @product.id %>
+              <li><a href="#tab2" data-toggle="tab"><%= t("tabs.prices") %></a></li>
+            <% end %>  
         </ul>
     <div class="tab-content">
 
@@ -135,13 +137,12 @@
           </div>
             <% end %>
         </div>
+        <% if @product.id %>
         <div class="tab-pane" id="tab2">
-          <% if !@product.id %>
+          
             <%= render :template => 'product_pricings/index' %>
-          <% else %>
-            <%= render :template => 'product_pricings/index' %>
-          <% end %>
         </div>
+        <% end %>
     </div>
 </div>
 
