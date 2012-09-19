@@ -96,7 +96,7 @@ es:
         subline: Sub-Línea
         category: Categoría
         province: Provincia
-        district: Distritos
+        district: Distrito
         canton: Cantones
       attributes:
         category:

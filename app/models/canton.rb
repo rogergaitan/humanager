@@ -5,8 +5,9 @@ class Canton < ActiveRecord::Base
   has_many :district, :dependent => :destroy #UN CANTON PUEDE TENER MUCHOS DISTRITOS 
   
 
-   validates :canton, :presence => true,
-   			:uniqueness => { :case_sensitive => false }
-  			#:uniqueness => { :canton =>  :province_id }
+   validates :canton, 	
+   					:presence => true,
+   					:uniqueness => { :case_sensitive => false }
+  					#:uniqueness => { :canton =>  :province_id }
 
 end
