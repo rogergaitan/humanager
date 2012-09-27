@@ -17,7 +17,7 @@ set :deploy_to, "/home/ec2-user/reasapp"
 # after "deploy:restart", "deploy:cleanup"r
 #after 'deploy:update', 'bundle:install', 'deploy:migrate'
 
-#after "deploy:restart"
+after :deploy, "deploy:restart"
 #after "deploy:update_swf", "deploy:restore_assets"
 #before :deploy, "deploy:backup_assets"
 

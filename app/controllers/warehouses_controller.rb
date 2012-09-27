@@ -50,10 +50,10 @@ class WarehousesController < ApplicationController
     respond_to do |format|
       if @warehouse.save
         if params['continue']
-          format.html { redirect_to new_warehouse_path, notice: 'Warehouse was successfully created.' }
+          format.html { redirect_to new_warehouse_path, notice: t('.activerecord.models.warehouse').capitalize + t('.notice.a_successfully_created') }
           format.json { render json: @warehouse, status: :created, location: @warehouse }
         else
-          format.html { redirect_to @warehouse, notice: 'Warehouse was successfully created.' }
+          format.html { redirect_to @warehouse, notice: t('.activerecord.models.warehouse').capitalize + t('.notice.a_successfully_created') }
           format.json { render json: @warehouse, status: :created, location: @warehouse }
         end
       else
@@ -70,7 +70,7 @@ class WarehousesController < ApplicationController
 
     respond_to do |format|
       if @warehouse.update_attributes(params[:warehouse])
-        format.html { redirect_to @warehouse, notice: 'Warehouse was successfully updated.' }
+        format.html { redirect_to @warehouse, notice: t('.activerecord.models.warehouse').capitalize + t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -86,7 +86,7 @@ class WarehousesController < ApplicationController
     @warehouse.destroy
 
     respond_to do |format|
-      format.html { redirect_to warehouses_url }
+      format.html { redirect_to warehouses_url, notice: t('.activerecord.models.warehouse').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end

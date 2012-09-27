@@ -19,6 +19,7 @@ Reasapp::Application.routes.draw do
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
   match '/404', :to => 'errors#not_found'
+  
   root :to => 'pages#home'
 
   resources :lines do
