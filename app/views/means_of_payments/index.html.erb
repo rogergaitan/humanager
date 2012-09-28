@@ -1,0 +1,23 @@
+<h1>Listing means_of_payments</h1>
+
+<table>
+  <tr>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @means_of_payments.each do |means_of_payment| %>
+  <tr>
+    <td><%= means_of_payment.description %></td>
+    <td><%= link_to 'Show', means_of_payment %></td>
+    <td><%= link_to 'Edit', edit_means_of_payment_path(means_of_payment) %></td>
+    <td><%= link_to 'Destroy', means_of_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Means of payment', new_means_of_payment_path %>

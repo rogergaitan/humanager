@@ -15,7 +15,7 @@ development:
   database: reasapp_development
   pool: 5
   username: root
-  password: root
+  password: 'root'
   socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -28,7 +28,7 @@ test:
   database: reasapp_test
   pool: 5
   username: root
-  password: root
+  password: 'root'
   socket: /var/run/mysqld/mysqld.sock
 
 production:
@@ -38,5 +38,12 @@ production:
   database: reasapp_production
   pool: 5
   username: root
-  password: root
+  password: 'root'
   socket: /var/run/mysqld/mysqld.sock
+
+firebird:
+  adapter: rubyfb
+  database: /var/lib/firebird/2.5/data/AreaT_AREATRABAJO1.fdb
+  username: SYSDBA
+  password: 'root'
+  host: localhost

@@ -1,0 +1,29 @@
+<h1>Listing payment_schedules</h1>
+
+<table>
+  <tr>
+    <th>Description</th>
+    <th>Employee</th>
+    <th>Initial date</th>
+    <th>End date</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @payment_schedules.each do |payment_schedule| %>
+  <tr>
+    <td><%= payment_schedule.description %></td>
+    <td><%= payment_schedule.employee %></td>
+    <td><%= payment_schedule.initial_date %></td>
+    <td><%= payment_schedule.end_date %></td>
+    <td><%= link_to 'Show', payment_schedule %></td>
+    <td><%= link_to 'Edit', edit_payment_schedule_path(payment_schedule) %></td>
+    <td><%= link_to 'Destroy', payment_schedule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Payment schedule', new_payment_schedule_path %>

@@ -1,0 +1,2 @@
+module WorkBenefitsHelper
+end
