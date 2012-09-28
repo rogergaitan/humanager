@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Subline < ActiveRecord::Base
   attr_accessible :code, :description, :name
 

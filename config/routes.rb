@@ -1,4 +1,11 @@
+# -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
+
+  resources :people do
+    collection do
+      get 'sync'
+    end
+  end
 
   resources :districts
 
@@ -46,6 +53,8 @@ Reasapp::Application.routes.draw do
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
   root :to => 'pages#home'
+
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

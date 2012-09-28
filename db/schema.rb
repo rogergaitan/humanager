@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
     t.integer  "payment_method_id"
     t.integer  "payment_frequency_id"
     t.integer  "means_of_payment_id"
-    t.decimal  "wage_payment",         :precision => 10, :scale => 0
+    t.decimal  "wage_payment",         :precision => 12, :scale => 2
     t.boolean  "ccss_calculated"
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
@@ -159,7 +159,6 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-  end
 
   create_table "sublines", :force => true do |t|
     t.string   "code"
