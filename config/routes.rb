@@ -1,11 +1,11 @@
 Reasapp::Application.routes.draw do
-<<<<<<< HEAD
+
   resources :districts
 
   resources :cantons
 
   resources :provinces
-=======
+
   resources :payment_schedules
 
   resources :deductions
@@ -25,7 +25,6 @@ Reasapp::Application.routes.draw do
   resources :occupations
 
   resources :roles
->>>>>>> 1d104188d6d673de5139f66365a54ef0a2e5f5db
 
   resources :categories
 
