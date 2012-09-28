@@ -1,4 +1,24 @@
 Reasapp::Application.routes.draw do
+  resources :payment_schedules
+
+  resources :deductions
+
+  resources :work_benefits
+
+  resources :departments
+
+  resources :people
+
+  resources :payment_frequencies
+
+  resources :payment_methods
+
+  resources :means_of_payments
+
+  resources :occupations
+
+  resources :roles
+
   resources :categories
 
   resources :sublines

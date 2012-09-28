@@ -11,11 +11,132 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824191754) do
+ActiveRecord::Schema.define(:version => 20120928004731) do
 
   create_table "categories", :force => true do |t|
     t.string   "code"
     t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "deductions", :force => true do |t|
+    t.string   "description"
+    t.integer  "employee_id"
+    t.string   "frequency"
+    t.string   "calculation_method"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "deductions", ["employee_id"], :name => "index_deductions_on_employee_id"
+
+  create_table "departments", :force => true do |t|
+    t.string   "name"
+    t.integer  "employee_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
+
+  create_table "emails", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "email"
+    t.enum     "typeemail",  :limit => [:personal, :work]
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
+
+  add_index "emails", ["person_id"], :name => "index_emails_on_person_id"
+
+  create_table "employees", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "social_insurance"
+    t.boolean  "number_of_dependens"
+    t.string   "spouse"
+    t.date     "join_date"
+    t.integer  "department_id"
+    t.integer  "occupation_id"
+    t.integer  "role_id"
+    t.integer  "payment_method_id"
+    t.integer  "payment_frequency_id"
+    t.integer  "means_of_payment_id"
+    t.decimal  "wage_payment",         :precision => 10, :scale => 0
+    t.boolean  "ccss_calculated"
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+  end
+
+  add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
+  add_index "employees", ["means_of_payment_id"], :name => "index_employees_on_means_of_payment_id"
+  add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
+  add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
+  add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
+  add_index "employees", ["person_id"], :name => "index_employees_on_person_id"
+  add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
+
+  create_table "means_of_payments", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "occupations", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "payment_frequencies", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "payment_methods", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "payment_schedules", :force => true do |t|
+    t.string   "description"
+    t.integer  "employee_id"
+    t.date     "initial_date"
+    t.date     "end_date"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "payment_schedules", ["employee_id"], :name => "index_payment_schedules_on_employee_id"
+
+  create_table "people", :force => true do |t|
+    t.string   "id_person"
+    t.string   "name"
+    t.string   "first_surname"
+    t.string   "second_surname"
+    t.date     "birthdate"
+    t.string   "fb_person"
+    t.enum     "typeid",         :limit => [:national, :foreign]
+    t.enum     "gender",         :limit => [:male, :female]
+    t.enum     "marital_status", :limit => [:single, :married, :divorced, :windowd, :civil_union, :engage]
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+  end
+
+  create_table "photos", :force => true do |t|
+    t.integer  "employee_id"
+    t.string   "url"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
+
+  create_table "roles", :force => true do |t|
+    t.string   "rol"
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -28,6 +149,16 @@ ActiveRecord::Schema.define(:version => 20120824191754) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "telephones", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "telephone"
+    t.enum     "typephone",  :limit => [:phone, :cell]
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+  end
+
+  add_index "telephones", ["person_id"], :name => "index_telephones_on_person_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
@@ -56,5 +187,16 @@ ActiveRecord::Schema.define(:version => 20120824191754) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "work_benefits", :force => true do |t|
+    t.string   "description"
+    t.integer  "employee_id"
+    t.string   "frequency"
+    t.string   "calculation_method"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
 
 end

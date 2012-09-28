@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Description:</b>
+  <%= @payment_schedule.description %>
+</p>
+
+<p>
+  <b>Employee:</b>
+  <%= @payment_schedule.employee %>
+</p>
+
+<p>
+  <b>Initial date:</b>
+  <%= @payment_schedule.initial_date %>
+</p>
+
+<p>
+  <b>End date:</b>
+  <%= @payment_schedule.end_date %>
+</p>
+
+
+<%= link_to 'Edit', edit_payment_schedule_path(@payment_schedule) %> |
+<%= link_to 'Back', payment_schedules_path %>

@@ -1,0 +1,21 @@
+<%= form_for(@means_of_payment) do |f| %>
+  <% if @means_of_payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@means_of_payment.errors.count, "error") %> prohibited this means_of_payment from being saved:</h2>
+
+      <ul>
+      <% @means_of_payment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
