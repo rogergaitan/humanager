@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  person_id: 1
+  social_insurance: MyString
+  number_of_dependents: MyString
+  spouse: MyString
+  join_date: 2012-09-16
+  departement_id: 1
+  occupation_id: 1
+  role_id: 1
+  payment_method_id: 1
+  payment_frequency_id: 1
+  means_of_payment_id: 1
+  wage_payment: 9.99
+  ccss_calculated: false
+  fb_employee: MyString
+
+two:
+  person_id: 1
+  social_insurance: MyString
+  number_of_dependents: MyString
+  spouse: MyString
+  join_date: 2012-09-16
+  departement_id: 1
+  occupation_id: 1
+  role_id: 1
+  payment_method_id: 1
+  payment_frequency_id: 1
+  means_of_payment_id: 1
+  wage_payment: 9.99
+  ccss_calculated: false
+  fb_employee: MyString

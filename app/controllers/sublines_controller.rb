@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class SublinesController < ApplicationController
   # GET /sublines
   # GET /sublines.json

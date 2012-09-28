@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824191754) do
+ActiveRecord::Schema.define(:version => 20120925001214) do
 
   create_table "categories", :force => true do |t|
     t.string   "code"
@@ -19,6 +19,38 @@ ActiveRecord::Schema.define(:version => 20120824191754) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "employees", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "social_insurance"
+    t.string   "number_of_dependents"
+    t.string   "spouse"
+    t.date     "join_date"
+    t.integer  "department_id"
+    t.integer  "occupation_id"
+    t.integer  "role_id"
+    t.integer  "payment_method_id"
+    t.integer  "payment_frequency_id"
+    t.integer  "means_of_payment_id"
+    t.decimal  "wage_payment",         :precision => 12, :scale => 2
+    t.boolean  "ccss_calculated"
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+  end
+
+  create_table "people", :force => true do |t|
+    t.string   "id_person"
+    t.string   "name"
+    t.string   "first_surname"
+    t.string   "second_surname"
+    t.date     "birthday"
+    t.enum     "tipoid",         :limit => [:national, :foreign]
+    t.enum     "gender",         :limit => [:male, :female]
+    t.enum     "marital_status", :limit => [:single, :married, :divorced, :widowed, :civil_union, :engage]
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+    t.string   "fb_person"
   end
 
   create_table "sublines", :force => true do |t|

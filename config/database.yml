@@ -43,7 +43,7 @@ production:
 
 firebird:
   adapter: rubyfb
-  database: /var/lib/firebird/2.5/data/AreaT_AREATRABAJO1.fdb
+  database: /var/lib/firebird/2.5/data/AreaT_PRUEBAS.fdb
   username: SYSDBA
   password: '12345678'
   host: localhost
