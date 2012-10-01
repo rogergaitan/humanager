@@ -91,11 +91,11 @@ class PeopleController < ApplicationController
     people = []
     @c = 0
     @abanits.each do |person|
-      if Person.where("fb_person = ?", person.init).empty?
+      if Person.where("id_person = ?", person.init).empty?
         full_name = splitname(firebird_encoding(person.ntercero).split)
         person_new = Person.create(:name => full_name[:name], :first_surname =>
                       full_name[:first_surname], :second_surname => full_name[:second_surname], 
-                      :id_person => person.init, :fb_person => person.init)
+                      :id_person => person.init)
         if person_new.save
           people << person_new
           @c += 1

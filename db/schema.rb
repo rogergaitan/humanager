@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
   create_table "employees", :force => true do |t|
     t.integer  "person_id"
     t.string   "social_insurance"
-    t.boolean  "number_of_dependens"
+    t.integer  "number_of_dependents"
     t.string   "spouse"
     t.date     "join_date"
     t.integer  "department_id"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
 
   create_table "sublines", :force => true do |t|
     t.string   "code"

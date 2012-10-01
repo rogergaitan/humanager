@@ -3,7 +3,7 @@ class CreateEmployees < ActiveRecord::Migration
     create_table :employees do |t|
       t.references :person
       t.string :social_insurance
-      t.boolean :number_of_dependens
+      t.integer :number_of_dependents
       t.string :spouse
       t.date :join_date
       t.references :department
@@ -12,7 +12,7 @@ class CreateEmployees < ActiveRecord::Migration
       t.references :payment_method
       t.references :payment_frequency
       t.references :means_of_payment
-      t.decimal :wage_payment
+      t.decimal :wage_payment, :precision => 12, :scale => 2
       t.boolean :ccss_calculated
 
       t.timestamps
