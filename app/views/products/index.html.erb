@@ -51,6 +51,10 @@
                         <td>
                           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                                       edit_product_path(product), :class => 'btn btn-mini' %>
+
+                          <%= link_to t('.edit_price', :default => t("helpers.links.edit_price")),
+                                      edit_product_path(product,'#tab2'), :class => 'btn btn-mini' %>
+
                           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                                       product_path(product),
                                       :method => :delete,

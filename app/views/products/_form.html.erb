@@ -19,21 +19,23 @@
             <%= f.label :line_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :line_id %>
-              <%= text_field_tag 'product_line',nil, :class => 'text_field required', :for=>:line_id%>  
+              <%= hidden_field_tag 'product_line_name' %>
+              <%= hidden_field_tag 'product_line_full' %>
+              <%= text_field_tag 'product_line',nil, :class => 'text_field required search-image-line', :for=>:line_id%>  
             </div>
           </div>
           <div class="control-group">
             <%= f.label :subline_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :subline_id %>
-              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required', :for =>:subline_id, :type =>'text' %>
+              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required search-image-subline', :for =>:subline_id, :type =>'text' %>
             </div>
           </div>
           <div class="control-group">
             <%= f.label :category_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :category_id %>
-              <%= text_field_tag 'product_category',nil, :class => 'number_field required', :for => :category_id %>
+              <%= text_field_tag 'product_category',nil, :class => 'number_field required search-image-category', :for => :category_id %>
             </div>
           </div>
           <div class="control-group">

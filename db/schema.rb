@@ -11,7 +11,43 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001202632) do
+ActiveRecord::Schema.define(:version => 20121001204531) do
+
+  create_table "addresses", :force => true do |t|
+    t.string   "address"
+    t.integer  "entity_id"
+    t.integer  "province_id"
+    t.integer  "canton_id"
+    t.integer  "district_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "addresses", ["canton_id"], :name => "index_addresses_on_canton_id"
+  add_index "addresses", ["district_id"], :name => "index_addresses_on_district_id"
+  add_index "addresses", ["entity_id"], :name => "index_addresses_on_entity_id"
+  add_index "addresses", ["province_id"], :name => "index_addresses_on_province_id"
+
+  create_table "bank_accounts", :force => true do |t|
+    t.string   "bank"
+    t.string   "bank_account"
+    t.string   "sinpe"
+    t.string   "account_title"
+    t.integer  "entity_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "bank_accounts", ["entity_id"], :name => "index_bank_accounts_on_entity_id"
+
+  create_table "cantons", :force => true do |t|
+    t.string   "canton"
+    t.integer  "province_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "cantons", ["province_id"], :name => "index_cantons_on_province_id"
 
   create_table "categories", :force => true do |t|
     t.string   "code"
@@ -20,6 +56,38 @@ ActiveRecord::Schema.define(:version => 20121001202632) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "contacts", :force => true do |t|
+    t.string   "name"
+    t.string   "occupation"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "skype"
+    t.integer  "entity_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "contacts", ["entity_id"], :name => "index_contacts_on_entity_id"
+
+  create_table "districts", :force => true do |t|
+    t.string   "district"
+    t.integer  "canton_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
+
+  create_table "emails", :force => true do |t|
+    t.string   "email_type"
+    t.string   "email"
+    t.integer  "entity_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "emails", ["entity_id"], :name => "index_emails_on_entity_id"
 
   create_table "entities", :force => true do |t|
     t.string   "name"
@@ -46,6 +114,16 @@ ActiveRecord::Schema.define(:version => 20121001202632) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
+
+  create_table "phones", :force => true do |t|
+    t.string   "phone_type"
+    t.string   "phone"
+    t.integer  "entity_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "phones", ["entity_id"], :name => "index_phones_on_entity_id"
 
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
@@ -79,6 +157,12 @@ ActiveRecord::Schema.define(:version => 20121001202632) do
     t.integer  "stock"
     t.datetime "created_at",                                                  :null => false
     t.datetime "updated_at",                                                  :null => false
+  end
+
+  create_table "provinces", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "sublines", :force => true do |t|

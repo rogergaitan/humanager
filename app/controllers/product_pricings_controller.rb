@@ -67,7 +67,7 @@ class ProductPricingsController < ApplicationController
 
     respond_to do |format|
       if @product_pricing.update_attributes(params[:product_pricing])
-        format.html { redirect_to @product_pricing, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_updated') }
+        format.html { redirect_to products_path, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

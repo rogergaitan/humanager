@@ -24,8 +24,9 @@
         <td>
         <a  href="#myModal<%=product_pricing.id%>" role="button" 
             class="btn btn-mini" data-toggle="modal">
-            <%=t('.destroy', :default => t("helpers.links.edit"))%>
+            <%=t('.edit', :default => t("helpers.links.edit"))%>
         </a>
+
         <%= link_to t('.destroy', :default => t("helpers.links.destroy")), 
             product_pricing_path(product_pricing),
                 :method => :delete,

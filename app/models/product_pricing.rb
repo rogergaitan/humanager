@@ -14,4 +14,7 @@
 
 class ProductPricing < ActiveRecord::Base
   attr_accessible :category, :product_id, :sell_price, :price_type, :utility
+
+  validates :category, :product_id, :sell_price, :price_type, :utility,
+  		:presence => true
 end

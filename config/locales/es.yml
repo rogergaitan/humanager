@@ -26,6 +26,7 @@ es:
       destroy: Eliminar
       save_continue: Guardar y Continuar        
       edit: Editar
+      edit_price: Editar precio
       new: Nuevo
       cancel: Cancelar  
       back: Regresar
