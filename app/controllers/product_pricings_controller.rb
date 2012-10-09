@@ -49,12 +49,15 @@ class ProductPricingsController < ApplicationController
 
     respond_to do |format|
       if @product_pricing.save
+        flash[:notice] = t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_created')
         #format.html { redirect_to @product_pricing, notice: 'Product pricing was successfully created.' }
         format.html { redirect_to products_url, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_created') }
         format.json { render json: @product_pricing, status: :created, location: @product_pricing }
+        format.js   
       else
         format.html { render action: "new" }
         format.json { render json: @product_pricing.errors, status: :unprocessable_entity }
+        format.js 
       end
     end
   end

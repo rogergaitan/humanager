@@ -11,17 +11,37 @@ $(jQuery(document).ready(function($) {
                     id: item.id
                 }
             }),
+
             select: function( event, ui ) {
-                $("#product_line_id").val(ui.item.id);
+                if(ui.item.id){
+                    $("#product_line_id").val(ui.item.id);    
+                }
+                
+                //$("#product_line_id").val(ui.item.id);
                 //$("#product_line_name").val(ui.item.label);
+            },
+            focus: function(event, ui){
+                $( "#product_line" ).val(ui.item.label);
+            },
+            change: function(event, ui){
+                if(!ui.item){
+                    alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $( "#product_line" ).val("");
+                    $("#product_line_id").val("");    
+                } 
             }
+            
+
         }) 
         if($("#product_line_id").val()){
             var product_line_name = $.data(document.body, 'line_' + $("#product_line_id").val()+'');
             $("#product_line").val(product_line_name);
         }      
-    })
-    
+    });
+
+    //validate
+   
+
     //Obtain sublines(id and name)
     $.getJSON('/sublines/fetch', function(subline_data) {
         $( "#product_subline" ).autocomplete({
@@ -40,7 +60,7 @@ $(jQuery(document).ready(function($) {
             var product_subline_name = $.data(document.body, 'subline_' + $("#product_subline_id").val()+'');
             $("#product_subline").val(product_subline_name);
         }       
-    })
+    });
 
     //Obtanin categories(id and name)
     $.getJSON('/categories/fetch', function(category_data) {
@@ -61,7 +81,18 @@ $(jQuery(document).ready(function($) {
             var product_category_name = $.data(document.body, 'category_' + $("#product_category_id").val()+'');
             $("#product_category").val(product_category_name);
         }        
-    })  
+    });  
 
-}))
+    //Consider js response on create method from product_pricing controller
+    jQuery.ajaxSetup({ 
+        'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+    });
+
+    //Create with ajax
+    $("#new_product_pricing").submit(function(){
+        $.post($(this).attr("action"), $(this).serialize(), null, "script" );
+        return false;
+    });
+
+}));
 
