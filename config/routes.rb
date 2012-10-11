@@ -1,4 +1,6 @@
 Reasapp::Application.routes.draw do
+  resources :employees
+
   resources :product_pricings
 
   resources :products

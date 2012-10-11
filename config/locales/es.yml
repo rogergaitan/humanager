@@ -162,6 +162,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
+        employee: Empleado
         product_pricing: Precio
         product: Producto
         line: Línea
