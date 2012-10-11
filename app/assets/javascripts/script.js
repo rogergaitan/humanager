@@ -1,29 +1,27 @@
 $(document).ready(function() {
   $('#sync-fb').click(function() {
-    $.getJSON('/people/sync', function(element) {
+    $.getJSON('/employees/sync', function(element) {
       $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
-      $(element.people).each(function() { add_people(this, 'table#person-data')});
+      $(element.employee).each(function() { add_employees(this, 'table#employee-data')});
       $('#sync-fb').hide();
     })
   });
 
-  function add_people(person, target_table)
+  function add_employees(employee, target_table)
   {
-    var test = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/people/'+ person.id +'">'+ person.id +'</a></td>' +
-        '<td>' + replace_value(person.id_person) + '</td>' +
-        '<td>' + replace_value(person.name) + '</td>' +
-        '<td>' + replace_value(person.first_surname) + '</td>' +
-        '<td>' + replace_value(person.second_surname) + '</td>' +
-        '<td>' + replace_value(person.birthday) + '</td>' +
-        '<td>' + replace_value(person.tipoid) + '</td>' +
-        '<td>' + replace_value(person.gender) + '</td>' +
-        '<td>' + replace_value(person.marital_status) + '</td>' +
-        '<td><a href="/people/'+ person.id +'/edit" class="btn btn-mini">Editar</a> ' +
-        '<a href="/people/'+ person.id +'" class="btn btn-mini btn-danger" ' +
+    var row = $(target_table + '> tbody:last').append('<tr>' + 
+        '<td><a href="/employees/'+ employee.id +'">'+ employee.id +'</a></td>' +
+        '<td>' + replace_value(employee.entity.entityid) + '</td>' +
+        '<td>' + replace_value(employee.entity.name) + '</td>' +
+        '<td>' + replace_value(employee.entity.surname) + '</td>' +
+        '<td>' + replace_value(employee.department_id) + '</td>' +
+        '<td>' + replace_value(employee.role_id) + '</td>' +
+        '<td>' + replace_value(employee.wage_payment) + '</td>' +
+        '<td><a href="/employees/'+ employee.id +'/edit" class="btn btn-mini">Editar</a> ' +
+        '<a href="/employees/'+ employee.id +'" class="btn btn-mini btn-danger" ' +
         'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
       '</tr>');
-    return test;
+    return row;
   }
 
   function replace_value(value)
