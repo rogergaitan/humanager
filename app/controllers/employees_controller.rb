@@ -117,7 +117,7 @@ class EmployeesController < ApplicationController
     if splitname.count < 4
       full_name[:name] = splitname.first
       full_name[:surname] = splitname[1, 3].join(" ")
-    elsif splitname.count > 3
+    else
       n = splitname.count - 2
       full_name[:name] = splitname[0, n].join(" ")
       full_name[:surname] = splitname[n, splitname.count].join(" ")     

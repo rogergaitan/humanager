@@ -1,6 +1,12 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :payment_schedules
+
+  resources :payment_frequencies
+
+  resources :payment_methods
+
   resources :employees do
     collection do
       get 'sync'
@@ -15,19 +21,11 @@ Reasapp::Application.routes.draw do
 
   resources :provinces
 
-  resources :payment_schedules
-
   resources :deductions
 
   resources :work_benefits
 
   resources :departments
-
-  resources :payment_frequencies
-
-  resources :payment_methods
-
-  resources :means_of_payments
 
   resources :occupations
 

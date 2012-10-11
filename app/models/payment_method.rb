@@ -1,3 +1,3 @@
 class PaymentMethod < ActiveRecord::Base
-  attr_accessible :description
+  attr_accessible :code, :description
 end

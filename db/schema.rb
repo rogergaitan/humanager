@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121006181820) do
+ActiveRecord::Schema.define(:version => 20121011040743) do
 
   create_table "cantons", :force => true do |t|
     t.integer  "province_id"
@@ -104,12 +104,6 @@ ActiveRecord::Schema.define(:version => 20121006181820) do
     t.datetime "updated_at",                                            :null => false
   end
 
-  create_table "means_of_payments", :force => true do |t|
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
   create_table "occupations", :force => true do |t|
     t.string   "description"
     t.datetime "created_at",  :null => false
@@ -117,27 +111,27 @@ ActiveRecord::Schema.define(:version => 20121006181820) do
   end
 
   create_table "payment_frequencies", :force => true do |t|
+    t.string   "code"
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
   create_table "payment_methods", :force => true do |t|
+    t.string   "code"
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
   create_table "payment_schedules", :force => true do |t|
+    t.string   "code"
     t.string   "description"
-    t.integer  "employee_id"
     t.date     "initial_date"
     t.date     "end_date"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
-
-  add_index "payment_schedules", ["employee_id"], :name => "index_payment_schedules_on_employee_id"
 
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
