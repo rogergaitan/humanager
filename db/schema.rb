@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120928004731) do
+ActiveRecord::Schema.define(:version => 20121006181820) do
+
+  create_table "cantons", :force => true do |t|
+    t.integer  "province_id"
+    t.string   "canton"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "cantons", :force => true do |t|
     t.integer  "province_id"
@@ -58,30 +65,43 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
   add_index "emails", ["person_id"], :name => "index_emails_on_person_id"
 
   create_table "employees", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "social_insurance"
-    t.boolean  "number_of_dependens"
+    t.integer  "entity_id"
+    t.enum     "gender",               :limit => [:male, :female]
+    t.date     "birthday"
+    t.enum     "marital_status",       :limit => [:single, :married, :divorced, :widowed, :civil_union, :engage]
+    t.integer  "number_of_dependents"
     t.string   "spouse"
     t.date     "join_date"
+    t.string   "social_insurance"
+    t.boolean  "ccss_calculated"
     t.integer  "department_id"
     t.integer  "occupation_id"
     t.integer  "role_id"
+    t.boolean  "seller"
     t.integer  "payment_method_id"
     t.integer  "payment_frequency_id"
     t.integer  "means_of_payment_id"
-    t.decimal  "wage_payment",         :precision => 10, :scale => 0
-    t.boolean  "ccss_calculated"
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
+    t.decimal  "wage_payment",                                                                                    :precision => 12, :scale => 2
+    t.datetime "created_at",                                                                                                                     :null => false
+    t.datetime "updated_at",                                                                                                                     :null => false
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
+  add_index "employees", ["entity_id"], :name => "index_employees_on_entity_id"
   add_index "employees", ["means_of_payment_id"], :name => "index_employees_on_means_of_payment_id"
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
   add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
   add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
-  add_index "employees", ["person_id"], :name => "index_employees_on_person_id"
   add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
+
+  create_table "entities", :force => true do |t|
+    t.string   "name"
+    t.string   "surname"
+    t.string   "entityid"
+    t.enum     "typeid",     :limit => [:national, :foreign, :company]
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
+  end
 
   create_table "means_of_payments", :force => true do |t|
     t.string   "description"
@@ -117,20 +137,6 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
   end
 
   add_index "payment_schedules", ["employee_id"], :name => "index_payment_schedules_on_employee_id"
-
-  create_table "people", :force => true do |t|
-    t.string   "id_person"
-    t.string   "name"
-    t.string   "first_surname"
-    t.string   "second_surname"
-    t.date     "birthdate"
-    t.string   "fb_person"
-    t.enum     "typeid",         :limit => [:national, :foreign]
-    t.enum     "gender",         :limit => [:male, :female]
-    t.enum     "marital_status", :limit => [:single, :married, :divorced, :windowd, :civil_union, :engage]
-    t.datetime "created_at",                                                                                :null => false
-    t.datetime "updated_at",                                                                                :null => false
-  end
 
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"

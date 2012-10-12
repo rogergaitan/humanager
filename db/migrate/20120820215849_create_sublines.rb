@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateSublines < ActiveRecord::Migration
   def change
     create_table :sublines do |t|

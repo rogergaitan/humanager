@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Warehouse < ActiveRecord::Base
   attr_accessible :address, :code, :description, :manager, :name
 

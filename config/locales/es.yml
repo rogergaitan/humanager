@@ -23,6 +23,7 @@ es:
       back: Regresar
       confirm: '¿Está seguro(a)?'   
     titles:
+      sync: datos sincronizados
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
   notice:
@@ -90,6 +91,8 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        employee: Empleado
+        person: Persona
         warehouse:  Bodega
         warehouses: Bodegas
         user: Usuario
@@ -99,6 +102,30 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        employee:
+          ccss_calculated: Calcula CCSS?
+          department_id: Departamento
+          fb_employee: ContaPyme
+          join_date: Ingreso
+          means_of_payment_id: Medio de Pago
+          number_of_dependents: Dependientes
+          occupation_id: 'Ocupación'
+          payment_frequency_id: Frecuencia de Pago
+          payment_method_id: Forma de Pago
+          person_id: Persona
+          role_id: Rol
+          social_insurance: Seguro Social
+          spouse: 'Cónyuge'
+          wage_payment: Salario
+        person:
+          birthday: Nacimiento
+          first_surname: Apellido 1
+          id_person: 'Cédula'
+          name: Nombre
+          second_surname: Apellido 2
+          tipoid: 'Tipo Identificación'
+          gender: 'Sexo'
+          marital_status: 'Estado Civil'
         category:
           code: Código
           description: Descripción
