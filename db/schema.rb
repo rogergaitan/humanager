@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121011155841) do
+ActiveRecord::Schema.define(:version => 20121011225241) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -109,14 +109,16 @@ ActiveRecord::Schema.define(:version => 20121011155841) do
     t.boolean  "ccss_calculated"
     t.datetime "created_at",                                                                                      :null => false
     t.datetime "updated_at",                                                                                      :null => false
+    t.integer  "entity_id"
   end
 
   add_index "employees", ["entities_id"], :name => "index_employees_on_entities_id"
+  add_index "employees", ["entity_id"], :name => "index_employees_on_entity_id"
 
   create_table "entities", :force => true do |t|
     t.string   "name"
     t.string   "surname"
-    t.integer  "entityid"
+    t.string   "entityid"
     t.enum     "typeid",     :limit => [:nacional, :extrangero, :juridico]
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false

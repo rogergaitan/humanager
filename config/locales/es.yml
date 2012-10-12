@@ -162,6 +162,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
+        entity: Entidad
         employee: Empleado
         product_pricing: Precio
         product: Producto
@@ -172,6 +173,13 @@ es:
         subline: Sub-Línea
         category: Categoría
       attributes:
+        entity:
+          name: Nombre
+          surname: Apellidos
+          entityid: Cédula
+          typeid: Tipo cédula
+        employee:
+          join_date: Fecha ingreso
         product_pricing:
           product_id: Producto
           utility: Utilidad

@@ -1,0 +1,47 @@
+<%= form_for @entity, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :surname, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :surname, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :entityid, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :entityid, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :typeid, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :typeid, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <%= f.fields_for :employees do |ent| %>
+  
+  <div class="control-group">
+    <%= ent.label :join_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= ent.date_select :join_date, :class => 'date_select' %>
+    </div>
+  </div>
+
+
+  <% end %>    
+
+
+
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                entities_path, :class => 'btn' %>
+  </div>
+<% end %>
