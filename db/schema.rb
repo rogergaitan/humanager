@@ -13,10 +13,9 @@
 
 ActiveRecord::Schema.define(:version => 20120928004731) do
 
-  create_table "categories", :force => true do |t|
-    t.string   "code"
-    t.string   "name"
-    t.string   "description"
+  create_table "cantons", :force => true do |t|
+    t.integer  "province_id"
+    t.string   "canton"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -40,6 +39,13 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
   end
 
   add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
+
+  create_table "districts", :force => true do |t|
+    t.integer  "canton_id"
+    t.string   "district"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "emails", :force => true do |t|
     t.integer  "person_id"
@@ -134,6 +140,12 @@ ActiveRecord::Schema.define(:version => 20120928004731) do
   end
 
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
+
+  create_table "provinces", :force => true do |t|
+    t.string   "province"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "roles", :force => true do |t|
     t.string   "rol"
