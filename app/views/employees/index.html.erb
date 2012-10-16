@@ -1,4 +1,5 @@
 <%- model_class = Employee -%>
+<%- model_class_entity = Entity -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
   <button id="sync-fb" class="btn btn-primary pull-right">
@@ -9,9 +10,9 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:entityid) %></th>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:surname) %></th>
+      <th><%= model_class_entity.human_attribute_name(:entityid) %></th>
+      <th><%= model_class_entity.human_attribute_name(:name) %></th>
+      <th><%= model_class_entity.human_attribute_name(:surname) %></th>
       <th><%= model_class.human_attribute_name(:department_id) %></th>
       <th><%= model_class.human_attribute_name(:role_id) %></th>
       <th><%= model_class.human_attribute_name(:wage_payment) %></th>

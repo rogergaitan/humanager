@@ -1,3 +1,4 @@
 class Occupation < ActiveRecord::Base
-  attr_accessible :description
+	has_many :employees
+  	attr_accessible :description
 end

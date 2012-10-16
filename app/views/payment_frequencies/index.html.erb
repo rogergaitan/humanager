@@ -6,9 +6,8 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:code) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -16,9 +15,8 @@
     <% @payment_frequencies.each do |payment_frequency| %>
       <tr>
         <td><%= link_to payment_frequency.id, payment_frequency_path(payment_frequency) %></td>
-        <td><%= payment_frequency.code %></td>
+        <td><%= payment_frequency.name %></td>
         <td><%= payment_frequency.description %></td>
-        <td><%=l payment_frequency.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_payment_frequency_path(payment_frequency), :class => 'btn btn-mini' %>

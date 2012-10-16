@@ -26,6 +26,12 @@ class EmployeesController < ApplicationController
   def new
     @employee = Employee.new
     @employee.build_entity
+    @department = Department.find(:all, :select =>['id','name'])
+    @occupation = Occupation.find(:all, :select =>['id','description'])
+    @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
+    @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
+    @role = Role.find(:all, :select =>['id','rol'])
+    @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
 
     respond_to do |format|
       format.html # new.html.erb
@@ -123,5 +129,12 @@ class EmployeesController < ApplicationController
       full_name[:surname] = splitname[n, splitname.count].join(" ")     
     end
     full_name
+  end
+
+  def load_employees
+    @employees = Employee.all
+    respond_to do |format|
+      format.json { render json: @employees, :include => :entity }
+    end
   end
 end

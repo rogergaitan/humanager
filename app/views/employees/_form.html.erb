@@ -74,21 +74,21 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :department_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :department_id, :class => 'number_field' %>
-    </div>
+      <%= f.label :department_id, :class => 'control-label' %>
+      <div class="controls">
+        <%= collection_select(:employee, :department_id, @department, :id, :name , :prompt => true) %>
+      </div>
   </div>
   <div class="control-group">
     <%= f.label :occupation_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :occupation_id, :class => 'number_field' %>
+      <%= collection_select(:employee, :occupation_id, @occupation, :id, :description , :prompt => true) %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :role_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :role_id, :class => 'number_field' %>
+      <%= collection_select(:employee, :role_id, @role, :id, :rol , :prompt => true) %>
     </div>
   </div>
   <div class="control-group">
@@ -100,19 +100,22 @@
   <div class="control-group">
     <%= f.label :payment_method_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :payment_method_id, :class => 'number_field' %>
+      <%= collection_select(:employee, :payment_method_id, @payment_method, :id,
+                            :name , :prompt => true) %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :payment_frequency_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :payment_frequency_id, :class => 'number_field' %>
+      <%= collection_select(:employee, :payment_frequency_id, @payment_frequency, :id,
+                            :name , :prompt => true) %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :means_of_payment_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :means_of_payment_id, :class => 'number_field' %>
+      <%= collection_select(:employee, :means_of_payment_id, @mean_of_payment, :id,
+                            :name , :prompt => true) %>
     </div>
   </div>
   <div class="control-group">

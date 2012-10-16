@@ -1,15 +1,20 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :payment_schedules
+  resources :means_of_payments
 
   resources :payment_frequencies
 
   resources :payment_methods
 
+  resources :payment_schedules
+
   resources :employees do
     collection do
       get 'sync'
+    end
+    collection do
+      get 'load_employees'
     end
   end
 

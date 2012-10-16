@@ -1,3 +1,4 @@
 class PaymentFrequency < ActiveRecord::Base
-  attr_accessible :code, :description
+	has_many :employees
+  	attr_accessible :description, :name
 end
