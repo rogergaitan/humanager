@@ -1,17 +1,12 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-#<<<<<<< HEAD
-#=======
   resources :employees do
     collection do
       get 'sync'
     end
   end
 
-  resources :employees
-
-#>>>>>>> 3ddf677296c94b825188b62b6e2d57176d26e999
   resources :districts
 
   resources :cantons
