@@ -25,6 +25,7 @@ class RolesController < ApplicationController
   # GET /roles/new.json
   def new
     @role = Role.new
+    @department = Department.all
 
     respond_to do |format|
       format.html # new.html.erb

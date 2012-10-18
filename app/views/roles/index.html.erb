@@ -6,8 +6,9 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:rol) %></th>
+      <th><%= model_class.human_attribute_name(:role) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:department_id) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -15,8 +16,9 @@
     <% @roles.each do |role| %>
       <tr>
         <td><%= link_to role.id, role_path(role) %></td>
-        <td><%= role.rol %></td>
+        <td><%= role.role %></td>
         <td><%= role.description %></td>
+        <td><%= role.department.name %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_role_path(role), :class => 'btn btn-mini' %>

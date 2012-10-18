@@ -3,6 +3,12 @@
 
 es:
   hello: "Hello world"
+  tabs:
+    general: General
+    prices: Precios
+    other: Otros
+    personal_data: 'Datos Personales'
+    employment_data: 'Datos Laborales'
   routes:
     new: nuevo
     edit: editar
@@ -92,6 +98,7 @@ es:
                 taken: 'Este distrito ya existe'
       models:
         payment_schedule: 'Calendario de pagos'
+        telephone: 'Teléfono'
         employee: Empleado
         entity: Entidad
         warehouse:  Bodega
@@ -103,6 +110,9 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        telephone:
+          telephone: 'Teléfono'
+          typephone: 'Tipo de teléfono'
         payment_schedule:
           code: 'Código'
           description: 'Descripción'

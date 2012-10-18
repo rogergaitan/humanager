@@ -1,4 +1,4 @@
 class Telephone < ActiveRecord::Base
-  belongs_to :person
-  attr_accessible :telephone
+  belongs_to :entity
+  attr_accessible :telephone, :typephone
 end

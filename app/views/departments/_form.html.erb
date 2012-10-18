@@ -1,3 +1,4 @@
+<%= javascript_include_tag "employees/employee" %>
 <%= form_for @department, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :name, :class => 'control-label' %>
@@ -10,7 +11,7 @@
     <div class="controls">
       <%= f.hidden_field :employee_id %>
       <%= text_field_tag 'load_employee',nil, :class => 'text_field required 
-      search-image-employee', :for=>:employee_id %>  
+                          search-image-employee', :for=>:employee_id %>  
     </div>
   </div>
 

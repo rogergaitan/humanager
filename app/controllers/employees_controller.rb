@@ -25,12 +25,15 @@ class EmployeesController < ApplicationController
   # GET /employees/new.json
   def new
     @employee = Employee.new
-    @employee.build_entity
+    @entity = @employee.build_entity
+    2.times do
+      @entity.telephones.build
+    end
     @department = Department.find(:all, :select =>['id','name'])
     @occupation = Occupation.find(:all, :select =>['id','description'])
     @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
     @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
-    @role = Role.find(:all, :select =>['id','rol'])
+    @roles = Role.all
     @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
 
     respond_to do |format|
@@ -42,6 +45,12 @@ class EmployeesController < ApplicationController
   # GET /employees/1/edit
   def edit
     @employee = Employee.find(params[:id])
+    @department = Department.find(:all, :select =>['id','name'])
+    @occupation = Occupation.find(:all, :select =>['id','description'])
+    @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
+    @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
+    @roles = Role.all
+    @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
   end
 
   # POST /employees

@@ -1,133 +1,144 @@
-<%= form_for @employee, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.fields_for :entity do |builder| %>
-    <div class="control-group">
-      <%= builder.label :name, :class => 'control-label' %>
-      <div class="controls">
-        <%= builder.text_field :name, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= builder.label :surname, :class => 'control-label' %>
-      <div class="controls">
-        <%= builder.text_field :surname, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= builder.label :entityid, :class => 'control-label' %>
-      <div class="controls">
-        <%= builder.text_field :entityid, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= builder.label :typeid, :class => 'control-label' %>
-      <div class="controls">
-        <%= builder.enum_select :typeid, :include_blank => false %>
-      </div>
-    </div>
+<script type="text/javascript">
+  var roles = new Array();
+  <% @roles.each do |role| %>
+    roles.push(new Array(<%= role.department_id %>, '<%=h role.role %>', <%= role.id %>));
   <% end %>
-  <div class="control-group">
-    <%= f.label :gender, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.enum_select :gender, :include_blank => false %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :birthday, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.date_select :birthday, :class => 'date_select' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :marital_status, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.enum_select :marital_status, :include_blank => false %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :number_of_dependents, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :number_of_dependents, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :spouse, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :spouse, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :join_date, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.date_select :join_date, :class => 'date_select' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :social_insurance, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :social_insurance, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :ccss_calculated, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.check_box :ccss_calculated, :class => 'check_box' %>
-    </div>
-  </div>
-  <div class="control-group">
-      <%= f.label :department_id, :class => 'control-label' %>
-      <div class="controls">
-        <%= collection_select(:employee, :department_id, @department, :id, :name , :prompt => true) %>
+</script>
+<%= javascript_include_tag 'employees/dynamic_departments' %>
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.personal_data") %></a></li>
+        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
+        <li><a href="#tab3" data-toggle="tab"><%= t("tabs.general") %></a></li>
+    </ul>
+    <%= form_for @employee, :html => { :class => 'form-horizontal' } do |f| %>
+    <div class="tab-content">
+      <div class="tab-pane" id="tab2">
+        <%= f.fields_for :entity do |builder| %>
+          <%= builder.fields_for :telephones do |phone| %>
+            <div class="control-group">
+              <%= phone.label :telephone, :class => 'control-label' %>
+              <div class="controls">
+                <%= phone.text_field :telephone, :class => 'text_field' %>
+              </div>
+            </div>
+            <div class="control-group">
+              <%= phone.label :typephone, :class => 'control-label' %>
+              <div class="controls">
+                <%= phone.enum_select :typephone, :include_blank => false %>
+              </div>
+            </div>
+          <% end %>
       </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :occupation_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= collection_select(:employee, :occupation_id, @occupation, :id, :description , :prompt => true) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :role_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= collection_select(:employee, :role_id, @role, :id, :rol , :prompt => true) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :seller, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.check_box :seller, :class => 'check_box' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :payment_method_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= collection_select(:employee, :payment_method_id, @payment_method, :id,
-                            :name , :prompt => true) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :payment_frequency_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= collection_select(:employee, :payment_frequency_id, @payment_frequency, :id,
-                            :name , :prompt => true) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :means_of_payment_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= collection_select(:employee, :means_of_payment_id, @mean_of_payment, :id,
-                            :name , :prompt => true) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :wage_payment, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :wage_payment, :class => 'text_field' %>
-    </div>
-  </div>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                employees_path, :class => 'btn' %>
-  </div>
-<% end %>
+      <div class="tab-pane active" id="tab1">
+          <%= render 'entity_form', :builder => builder %>
+        <% end %>
+        <div class="control-group">
+          <%= f.label :gender, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.enum_select :gender, :include_blank => false %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :birthday, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.date_select :birthday, :class => 'date_select' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :marital_status, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.enum_select :marital_status, :include_blank => false %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :number_of_dependents, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.number_field :number_of_dependents, :class => 'number_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :spouse, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :spouse, :class => 'text_field' %>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a href="#tab3" class='btn btn-primary' data-toggle="tab">Siguiente</a>
+        </div>        
+      </div>
+      <div class="tab-pane" id="tab3">
+        <div class="control-group">
+          <%= f.label :join_date, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.date_select :join_date, :class => 'date_select' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :social_insurance, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :social_insurance, :class => 'text_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :ccss_calculated, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.check_box :ccss_calculated, :class => 'check_box' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :occupation_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :occupation_id, @occupation, :id, :description , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+            <%= f.label :department_id, :class => 'control-label' %>
+            <div class="controls">
+              <%= collection_select(:employee, :department_id, @department, :id, :name , :prompt => true) %>
+            </div>
+        </div>
+        <div class="control-group" id="role_field">
+          <%= f.label :role_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :role_id, @roles, :id, :role , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :payment_method_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :payment_method_id, @payment_method, :id,
+                                  :name , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :payment_frequency_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :payment_frequency_id, @payment_frequency, :id,
+                                  :name , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :means_of_payment_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :means_of_payment_id, @mean_of_payment, :id,
+                                  :name , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :wage_payment, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :wage_payment, :class => 'text_field' %>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit nil, :class => 'btn btn-primary' %>
+          <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      employees_path, :class => 'btn' %>
+        </div> 
+      </div>
+    </div>
+    <% end %>
+</div>

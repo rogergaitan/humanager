@@ -26,8 +26,8 @@
         <td><%= employee.entity.entityid %></td>
         <td><%= employee.entity.name %></td>
         <td><%= employee.entity.surname %></td>
-        <td><%= employee.department_id %></td>
-        <td><%= employee.role_id %></td>
+        <td><%= employee.department.name if employee.department %></td>
+        <td><%= employee.role.role if employee.role %></td>
         <td><%= employee.wage_payment %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

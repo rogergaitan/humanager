@@ -1,0 +1,24 @@
+<div class="control-group">
+  <%= builder.label :name, :class => 'control-label' %>
+  <div class="controls">
+    <%= builder.text_field :name, :class => 'text_field' %>
+  </div>
+</div>
+<div class="control-group">
+  <%= builder.label :surname, :class => 'control-label' %>
+  <div class="controls">
+    <%= builder.text_field :surname, :class => 'text_field' %>
+  </div>
+</div>
+<div class="control-group">
+  <%= builder.label :entityid, :class => 'control-label' %>
+  <div class="controls">
+    <%= builder.text_field :entityid, :class => 'text_field' %>
+  </div>
+</div>
+<div class="control-group">
+  <%= builder.label :typeid, :class => 'control-label' %>
+  <div class="controls">
+    <%= builder.enum_select :typeid, :include_blank => false %>
+  </div>
+</div>

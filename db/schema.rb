@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121016190203) do
+ActiveRecord::Schema.define(:version => 20121018181329) do
 
   create_table "cantons", :force => true do |t|
     t.integer  "province_id"
@@ -157,11 +157,14 @@ ActiveRecord::Schema.define(:version => 20121016190203) do
   end
 
   create_table "roles", :force => true do |t|
-    t.string   "rol"
+    t.string   "role"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "department_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
+
+  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"
@@ -172,14 +175,14 @@ ActiveRecord::Schema.define(:version => 20121016190203) do
   end
 
   create_table "telephones", :force => true do |t|
-    t.integer  "person_id"
+    t.integer  "entity_id"
     t.string   "telephone"
-    t.enum     "typephone",  :limit => [:phone, :cell]
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.enum     "typephone",  :limit => [:personal, :home, :work]
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
   end
 
-  add_index "telephones", ["person_id"], :name => "index_telephones_on_person_id"
+  add_index "telephones", ["entity_id"], :name => "index_telephones_on_entity_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

@@ -1,6 +1,10 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :roles
+
+  resources :departments
+
   resources :means_of_payments
 
   resources :payment_frequencies
@@ -30,11 +34,7 @@ Reasapp::Application.routes.draw do
 
   resources :work_benefits
 
-  resources :departments
-
   resources :occupations
-
-  resources :roles
 
   resources :categories
 
@@ -56,8 +56,6 @@ Reasapp::Application.routes.draw do
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
   root :to => 'pages#home'
-
-
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
