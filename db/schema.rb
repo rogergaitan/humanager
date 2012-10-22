@@ -11,14 +11,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121018181329) do
+ActiveRecord::Schema.define(:version => 20121019225102) do
 
-  create_table "cantons", :force => true do |t|
+  create_table "addresses", :force => true do |t|
+    t.integer  "entity_id"
+    t.string   "address"
     t.integer  "province_id"
-    t.string   "canton"
+    t.integer  "canton_id"
+    t.integer  "district_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  add_index "addresses", ["canton_id"], :name => "index_addresses_on_canton_id"
+  add_index "addresses", ["district_id"], :name => "index_addresses_on_district_id"
+  add_index "addresses", ["entity_id"], :name => "index_addresses_on_entity_id"
+  add_index "addresses", ["province_id"], :name => "index_addresses_on_province_id"
+
+  create_table "cantons", :force => true do |t|
+    t.string   "name"
+    t.integer  "province_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "cantons", ["province_id"], :name => "index_cantons_on_province_id"
 
   create_table "categories", :force => true do |t|
     t.string   "code"
@@ -49,21 +66,25 @@ ActiveRecord::Schema.define(:version => 20121018181329) do
   add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
 
   create_table "districts", :force => true do |t|
+    t.string   "name"
     t.integer  "canton_id"
-    t.string   "district"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "province_id"
   end
 
+  add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
+  add_index "districts", ["province_id"], :name => "index_districts_on_province_id"
+
   create_table "emails", :force => true do |t|
-    t.integer  "person_id"
+    t.integer  "entity_id"
     t.string   "email"
     t.enum     "typeemail",  :limit => [:personal, :work]
     t.datetime "created_at",                               :null => false
     t.datetime "updated_at",                               :null => false
   end
 
-  add_index "emails", ["person_id"], :name => "index_emails_on_person_id"
+  add_index "emails", ["entity_id"], :name => "index_emails_on_entity_id"
 
   create_table "employees", :force => true do |t|
     t.integer  "entity_id"
@@ -151,7 +172,7 @@ ActiveRecord::Schema.define(:version => 20121018181329) do
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
 
   create_table "provinces", :force => true do |t|
-    t.string   "province"
+    t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

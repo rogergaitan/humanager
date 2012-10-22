@@ -26,15 +26,18 @@ class EmployeesController < ApplicationController
   def new
     @employee = Employee.new
     @entity = @employee.build_entity
-    2.times do
-      @entity.telephones.build
-    end
+    @entity.telephones.build
+    @entity.emails.build
+    @entity.addresses.build
     @department = Department.find(:all, :select =>['id','name'])
     @occupation = Occupation.find(:all, :select =>['id','description'])
     @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
     @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
     @roles = Role.all
     @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
+    @province = Province.all
+    @canton = Canton.all
+    @district = District.all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -51,6 +54,9 @@ class EmployeesController < ApplicationController
     @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
     @roles = Role.all
     @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
+    @province = Province.all
+    @canton = Canton.all
+    @district = District.all
   end
 
   # POST /employees
@@ -100,15 +106,17 @@ class EmployeesController < ApplicationController
   def sync
     @abanits = Abanit.where("bempleado = ?", 'T').find(:all, 
                             :select => ['init', 'ntercero'])
-    @c = 0
+    @c = 0 
     @syn_data = {}
     @employees = []
     @abanits.each do |employee|
       if Entity.where("entityid = ?", employee.init).empty?
         full_name = splitname(firebird_encoding(employee.ntercero).split)
         @new_employee = Employee.new
-        @new_employee.build_entity(:name => full_name[:name], :surname => 
+        @entity = @new_employee.build_entity(:name => full_name[:name], :surname => 
                                 full_name[:surname], :entityid => employee.init)
+        @entity.telephones.build
+        @entity.emails.build
         if @new_employee.save
            @employees << @new_employee
             @c += 1

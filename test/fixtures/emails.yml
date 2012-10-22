@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  person: 
+  entity: 
   email: MyString
 
 two:
-  person: 
+  entity: 
   email: MyString

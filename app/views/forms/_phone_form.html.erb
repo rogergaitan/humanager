@@ -1,0 +1,12 @@
+<div class="control-group">
+	<%= f.label :telephone, :class => 'control-label' %>
+	<div class="controls">
+		<%= f.text_field :telephone, :class => 'text_field' %>
+	</div>
+</div>
+<div class="control-group">
+	<%= f.label :typephone, :class => 'control-label' %>
+	<div class="controls">
+		<%= f.enum_select :typephone, :include_blank => false %>
+	</div>
+</div>  

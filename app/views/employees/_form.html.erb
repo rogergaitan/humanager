@@ -8,31 +8,26 @@
 <div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.personal_data") %></a></li>
-        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
-        <li><a href="#tab3" data-toggle="tab"><%= t("tabs.general") %></a></li>
+        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.contact") %></a></li>
+        <li><a href="#tab3" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
     </ul>
     <%= form_for @employee, :html => { :class => 'form-horizontal' } do |f| %>
     <div class="tab-content">
       <div class="tab-pane" id="tab2">
         <%= f.fields_for :entity do |builder| %>
           <%= builder.fields_for :telephones do |phone| %>
-            <div class="control-group">
-              <%= phone.label :telephone, :class => 'control-label' %>
-              <div class="controls">
-                <%= phone.text_field :telephone, :class => 'text_field' %>
-              </div>
-            </div>
-            <div class="control-group">
-              <%= phone.label :typephone, :class => 'control-label' %>
-              <div class="controls">
-                <%= phone.enum_select :typephone, :include_blank => false %>
-              </div>
-            </div>
+						<%= render 'forms/phone_form', :f => phone %>
+          <% end %>
+          <%= builder.fields_for :emails do |email| %>
+						<%= render 'forms/email_form', :f => email %>
+          <% end %>
+          <%= builder.fields_for :addresses do |address| %>
+						<%= render 'forms/address_form', :f => address %>
           <% end %>
       </div>
 
       <div class="tab-pane active" id="tab1">
-          <%= render 'entity_form', :builder => builder %>
+          <%= render 'forms/entity_form', :f => builder %>
         <% end %>
         <div class="control-group">
           <%= f.label :gender, :class => 'control-label' %>

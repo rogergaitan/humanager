@@ -2,7 +2,6 @@ class ProvincesController < ApplicationController
   # GET /provinces
   # GET /provinces.json
   def index
-    @title = t('.activerecord.models.province').capitalize.pluralize
     @provinces = Province.all
 
     respond_to do |format|
@@ -14,7 +13,6 @@ class ProvincesController < ApplicationController
   # GET /provinces/1
   # GET /provinces/1.json
   def show
-    @title = t('.activerecord.models.province').capitalize
     @province = Province.find(params[:id])
 
     respond_to do |format|
@@ -26,7 +24,6 @@ class ProvincesController < ApplicationController
   # GET /provinces/new
   # GET /provinces/new.json
   def new
-    @title = t('.activerecord.models.province').capitalize
     @province = Province.new
 
     respond_to do |format|
@@ -37,19 +34,17 @@ class ProvincesController < ApplicationController
 
   # GET /provinces/1/edit
   def edit
-    @title = t('.activerecord.models.province').capitalize
     @province = Province.find(params[:id])
   end
 
   # POST /provinces
   # POST /provinces.json
   def create
-    @title = t('.activerecord.models.province').capitalize
     @province = Province.new(params[:province])
 
     respond_to do |format|
       if @province.save
-        format.html { redirect_to @province, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_created') }
+        format.html { redirect_to @province, notice: 'Province was successfully created.' }
         format.json { render json: @province, status: :created, location: @province }
       else
         format.html { render action: "new" }
@@ -65,7 +60,7 @@ class ProvincesController < ApplicationController
 
     respond_to do |format|
       if @province.update_attributes(params[:province])
-        format.html { redirect_to @province, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_updated') }
+        format.html { redirect_to @province, notice: 'Province was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -81,7 +76,7 @@ class ProvincesController < ApplicationController
     @province.destroy
 
     respond_to do |format|
-      format.html { redirect_to provinces_url, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_deleted') }
+      format.html { redirect_to provinces_url }
       format.json { head :no_content }
     end
   end

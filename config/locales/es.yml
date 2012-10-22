@@ -9,6 +9,7 @@ es:
     other: Otros
     personal_data: 'Datos Personales'
     employment_data: 'Datos Laborales'
+    contact: Contacto
   routes:
     new: nuevo
     edit: editar

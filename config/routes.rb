@@ -1,6 +1,12 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :districts
+
+  resources :cantons
+
+  resources :provinces
+
   resources :roles
 
   resources :departments
@@ -23,12 +29,6 @@ Reasapp::Application.routes.draw do
   end
 
   resources :employees
-
-  resources :districts
-
-  resources :cantons
-
-  resources :provinces
 
   resources :deductions
 

@@ -18,7 +18,7 @@ class ProvincesControllerTest < ActionController::TestCase
 
   test "should create province" do
     assert_difference('Province.count') do
-      post :create, province: { province: @province.province }
+      post :create, province: { name: @province.name }
     end
 
     assert_redirected_to province_path(assigns(:province))
@@ -35,7 +35,7 @@ class ProvincesControllerTest < ActionController::TestCase
   end
 
   test "should update province" do
-    put :update, id: @province, province: { province: @province.province }
+    put :update, id: @province, province: { name: @province.name }
     assert_redirected_to province_path(assigns(:province))
   end
 

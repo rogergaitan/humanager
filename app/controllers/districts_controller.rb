@@ -2,8 +2,7 @@ class DistrictsController < ApplicationController
   # GET /districts
   # GET /districts.json
   def index
-    @title = t('.activerecord.models.district').pluralize
-    @districts = District.joins(:canton)
+    @districts = District.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,10 +13,8 @@ class DistrictsController < ApplicationController
   # GET /districts/1
   # GET /districts/1.json
   def show
-    @title = t('.activerecord.models.district')
     @district = District.find(params[:id])
-    @districts = District.joins(:canton)
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @district }
@@ -27,10 +24,10 @@ class DistrictsController < ApplicationController
   # GET /districts/new
   # GET /districts/new.json
   def new
-    @title = t('.activerecord.models.district').capitalize
     @district = District.new
     @cantons = Canton.all
-    
+    @provinces = Province.all
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @district }
@@ -39,20 +36,17 @@ class DistrictsController < ApplicationController
 
   # GET /districts/1/edit
   def edit
-    @title = t('.activerecord.models.district').capitalize
     @district = District.find(params[:id])
-     @cantons = Canton.all
   end
 
   # POST /districts
   # POST /districts.json
   def create
-    @title = t('.activerecord.models.district').capitalize
     @district = District.new(params[:district])
 
     respond_to do |format|
       if @district.save
-        format.html { redirect_to @district, notice: t('.activerecord.models.district').capitalize + t('.notice.a_successfully_created') }
+        format.html { redirect_to @district, notice: 'District was successfully created.' }
         format.json { render json: @district, status: :created, location: @district }
       else
         format.html { render action: "new" }
@@ -68,7 +62,7 @@ class DistrictsController < ApplicationController
 
     respond_to do |format|
       if @district.update_attributes(params[:district])
-        format.html { redirect_to @district, notice: t('.activerecord.models.district').capitalize + t('.notice.a_successfully_updated') }
+        format.html { redirect_to @district, notice: 'District was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -84,7 +78,7 @@ class DistrictsController < ApplicationController
     @district.destroy
 
     respond_to do |format|
-      format.html { redirect_to districts_url, notice: t('.activerecord.models.district').capitalize + t('.notice.a_successfully_deleted') }
+      format.html { redirect_to districts_url }
       format.json { head :no_content }
     end
   end
