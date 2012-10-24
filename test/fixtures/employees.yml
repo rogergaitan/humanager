@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  entity: 
+  birthday: 2012-10-06
+  number_of_dependents: 1
+  spouse: MyString
+  join_date: 2012-10-06
+  social_insurance: MyString
+  ccss_calculated: false
+  department: 
+  occupation: 
+  role: 
+  seller: false
+  payment_method: 
+  payment_frequency: 
+  means_of_payment: 
+  wage_payment: 9.99
+
+two:
+  entity: 
+  birthday: 2012-10-06
+  number_of_dependents: 1
+  spouse: MyString
+  join_date: 2012-10-06
+  social_insurance: MyString
+  ccss_calculated: false
+  department: 
+  occupation: 
+  role: 
+  seller: false
+  payment_method: 
+  payment_frequency: 
+  means_of_payment: 
+  wage_payment: 9.99

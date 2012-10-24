@@ -1,4 +1,42 @@
+# -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
+
+  resources :districts
+
+  resources :cantons
+
+  resources :provinces
+
+  resources :roles
+
+  resources :departments
+
+  resources :means_of_payments
+
+  resources :payment_frequencies
+
+  resources :payment_methods
+
+  resources :payment_schedules
+
+  resources :employees do
+    collection do
+      get 'sync'
+    end
+    collection do
+      get 'load_employees'
+    end
+  end
+
+  resources :employees
+
+  resources :deductions
+
+  resources :work_benefits
+
+  resources :occupations
+
+  resources :categories
 
   resources :customers
 

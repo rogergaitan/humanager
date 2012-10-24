@@ -1,0 +1,158 @@
+<script type="text/javascript">
+  var roles = new Array();
+	var cantons = new Array();
+	var district = new Array();
+  <% @roles.each do |role| %>
+    roles.push(new Array(<%= role.department_id %>, '<%=h role.role %>', <%= role.id %>));
+  <% end %>
+  <% @canton.each do |canton| %>
+		cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
+  <% end %>
+  <% @district.each do |district| %>
+		district.push(new Array(<%= district.canton_id %>, '<%=h district.name %>', <%= district.id %>));
+  <% end %>
+</script>
+<%= javascript_include_tag 'employees/dynamic_fields' %>
+<div class="tabbable">
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
+        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.contact") %></a></li>
+        <li><a href="#tab3" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
+    </ul>
+    <%= form_for @employee, :html => { :class => 'form-horizontal' } do |f| %>
+    <div class="tab-content">
+      <div class="tab-pane" id="tab2">
+				<h2>Teléfonos</h2>
+				<hr>
+        <%= f.fields_for :entity do |builder| %>
+          <%= builder.fields_for :telephones do |phone| %>
+						<%= render 'forms/telephone_form', :f => phone %>
+          <% end %>
+          <%= link_to_add_fields("Agregar otro teléfono", builder, :telephones) %>
+					<%= hidden_field 'count_phones', 'employees', :value => "1", :class => "hidden_fields"  %>
+					<h2>Emails</h2>
+					<hr>
+          <%= builder.fields_for :emails do |email| %>
+						<%= render 'forms/email_form', :f => email %>
+          <% end %>
+					<%= link_to_add_fields("Agregar otro email", builder, :emails) %>
+					<%= hidden_field 'count_emails', 'employees', :value => "1", :class => "hidden_fields" %>
+					<h2>Dirección</h2>
+					<hr>
+          <%= builder.fields_for :addresses do |address| %>
+						<%= render 'forms/address_form', :f => address %>
+          <% end %>
+      </div>
+
+      <div class="tab-pane active" id="tab1">
+				<h2>Datos Personales</h2>
+				<hr>
+          <%= render 'forms/entity_form', :f => builder %>
+        <% end %>
+        <div class="control-group">
+          <%= f.label :gender, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.enum_select :gender, :include_blank => false %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :birthday, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.date_select :birthday, :class => 'date_select' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :marital_status, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.enum_select :marital_status, :include_blank => false %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :number_of_dependents, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.number_field :number_of_dependents, :class => 'number_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :spouse, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :spouse, :class => 'text_field' %>
+          </div>
+        </div>     
+      </div>
+			
+      <div class="tab-pane" id="tab3">
+				<h2>Datos Laborales</h2>
+				<hr>
+        <div class="control-group">
+          <%= f.label :join_date, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.date_select :join_date, :class => 'date_select' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :social_insurance, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :social_insurance, :class => 'text_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :ccss_calculated, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.check_box :ccss_calculated, :class => 'check_box' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :occupation_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :occupation_id, @occupation, :id, :description , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+            <%= f.label :department_id, :class => 'control-label' %>
+            <div class="controls">
+              <%= collection_select(:employee, :department_id, @department, :id, :name , :prompt => true) %>
+            </div>
+        </div>
+        <div class="control-group" id="role_field">
+          <%= f.label :role_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :role_id, @roles, :id, :role , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :payment_method_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :payment_method_id, @payment_method, :id,
+                                  :name , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :payment_frequency_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :payment_frequency_id, @payment_frequency, :id,
+                                  :name , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :means_of_payment_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= collection_select(:employee, :means_of_payment_id, @mean_of_payment, :id,
+                                  :name , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :wage_payment, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :wage_payment, :class => 'text_field' %>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.submit nil, :class => 'btn btn-primary' %>
+        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                    employees_path, :class => 'btn' %>
+      </div> 
+    </div>
+    <% end %>
+</div>

@@ -10,6 +10,9 @@ es:
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
+    personal_data: 'Datos Personales'
+    employment_data: 'Empresa'
+    contact: Contacto
   routes:
     new: nuevo
     edit: editar
@@ -33,6 +36,7 @@ es:
       confirm: '¿Está seguro(a)?'
       show_accounting_info: 'Información Contable'   
     titles:
+      sync: datos sincronizados
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
   notice:
@@ -161,6 +165,21 @@ es:
                 blank: Este campo no puede quedar en blanco
               name:
                 blank: Este campo no puede quedar en blanco
+          province:
+            attributes:
+              province:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Esta provincia ya existe'
+          canton:
+            attributes:
+              canton:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este cantón ya existe'
+          district:
+            attributes:
+              district:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este distrito ya existe'
       models:
         customer: Cliente
         vendor: Proveedor
@@ -169,11 +188,18 @@ es:
         product_pricing: Precio
         product: Producto
         line: Línea
+        payment_schedule: 'Calendario de pagos'
+        telephone: 'Teléfono'
+        employee: Empleado
+        entity: Entidad
         warehouse:  Bodega
         warehouses: Bodegas
         user: Usuario
         subline: Sub-Línea
         category: Categoría
+        province: Provincia
+        district: Distrito
+        canton: Cantones
       attributes:
         vendor:
         credit_limit: Crédito
@@ -223,6 +249,38 @@ es:
           sale_tax: 'Impuesto/venta'
           sales_return: 'Dev/venta'
           utility_adjusment: 'Ajuste/utilidad'
+        telephone:
+          telephone: 'Teléfono'
+          typephone: 'Tipo de teléfono'
+        payment_schedule:
+          code: 'Código'
+          description: 'Descripción'
+          initial_date: 'Desde'
+          end_date: 'Hasta'
+          payment_date: 'Fecha del pago'
+        employee:
+          entity_id: Entidad
+          join_date: Ingreso
+          seller: Vendedor
+          gender: 'Género'
+          birthday: 'Nacimiento'
+          marital_status: 'Estado Civil'
+          ccss_calculated: Calcula CCSS?
+          department_id: Departamento
+          means_of_payment_id: Medio de Pago
+          number_of_dependents: Dependientes
+          occupation_id: 'Ocupación'
+          payment_frequency_id: Frecuencia de Pago
+          payment_method_id: Forma de Pago
+          role_id: Rol
+          social_insurance: Seguro Social
+          spouse: 'Cónyuge'
+          wage_payment: Salario
+        entity:
+          name: Nombre
+          surname: Apellidos
+          entityid: 'Cédula'
+          typeid: 'Tipo Identificación'
         category:
           code: Código
           description: Descripción
@@ -237,6 +295,14 @@ es:
           description:  Descripción
           manager:  Responsable
           address: Dirección
+        province:
+          province: Provincia
+        canton:
+          canton: Cantón
+          province_id: Provincia
+        district:
+          district: Distrito
+          canton_id: Cantón
         user:
           login:
   date:

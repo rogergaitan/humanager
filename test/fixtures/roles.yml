@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  role: MyString
+  description: MyString
+  department: 
+
+two:
+  role: MyString
+  description: MyString
+  department: 

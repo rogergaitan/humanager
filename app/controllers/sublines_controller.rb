@@ -1,5 +1,3 @@
-# == SubLines Controller 
-# ==  Subline is the second option to search
 class SublinesController < ApplicationController
   # GET /sublines
   # GET /sublines.json

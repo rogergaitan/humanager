@@ -1,0 +1,33 @@
+<script type="text/javascript">
+  var cantons = new Array();
+  <% @cantons.each do |canton| %>
+	cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
+  <% end %>
+</script>
+<%= javascript_include_tag 'addresses/dynamic_addresses' %>
+<%= form_for @district, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :province_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :province_id, @provinces, :id, :name , :prompt => true %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :canton_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :canton_id, @cantons, :id, :name , :prompt => true %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                districts_path, :class => 'btn' %>
+  </div>
+<% end %>

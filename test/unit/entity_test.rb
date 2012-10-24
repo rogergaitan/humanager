@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # == Schema Information
 #
 # Table name: entities
@@ -11,6 +12,8 @@
 #  updated_at :datetime         not null
 #
 
+=======
+>>>>>>> hrerp
 require 'test_helper'
 
 class EntityTest < ActiveSupport::TestCase

@@ -11,6 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+
 ActiveRecord::Schema.define(:version => 20121024204834) do
 
   create_table "addresses", :force => true do |t|
@@ -99,16 +100,19 @@ ActiveRecord::Schema.define(:version => 20121024204834) do
   add_index "districts", ["province_id"], :name => "index_districts_on_province_id"
 
   create_table "emails", :force => true do |t|
+
     t.string   "email_type"
     t.string   "email"
     t.integer  "entity_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+
   end
 
   add_index "emails", ["entity_id"], :name => "index_emails_on_entity_id"
 
   create_table "employees", :force => true do |t|
+
     t.integer  "entities_id"
     t.date     "join_date"
     t.enum     "gender",               :limit => [:male, :female]
@@ -254,5 +258,16 @@ ActiveRecord::Schema.define(:version => 20121024204834) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "work_benefits", :force => true do |t|
+    t.string   "description"
+    t.integer  "employee_id"
+    t.string   "frequency"
+    t.string   "calculation_method"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
 
 end
