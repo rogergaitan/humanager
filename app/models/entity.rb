@@ -19,6 +19,7 @@ class Entity < ActiveRecord::Base
 	has_many :telephones
 	has_many :contacts
 	has_many :addresses
+  has_one :customer
 
 #Attributes accessibles
   	attr_accessible :entityid, :name, :surname, :typeid, 

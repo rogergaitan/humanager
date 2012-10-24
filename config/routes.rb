@@ -1,5 +1,7 @@
 Reasapp::Application.routes.draw do
 
+  resources :customers
+
   resources :entities
   resources :product_pricings
   resources :products

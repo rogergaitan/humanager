@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121022154346) do
+ActiveRecord::Schema.define(:version => 20121024204834) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "entity_id"
@@ -69,6 +69,23 @@ ActiveRecord::Schema.define(:version => 20121022154346) do
   end
 
   add_index "contacts", ["entity_id"], :name => "index_contacts_on_entity_id"
+
+  create_table "customer_profiles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "customers", :force => true do |t|
+    t.string   "asigned_seller"
+    t.integer  "customer_profile_id"
+    t.integer  "entity_id"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "customers", ["customer_profile_id"], :name => "index_customers_on_customer_profile_id"
+  add_index "customers", ["entity_id"], :name => "index_customers_on_entity_id"
 
   create_table "districts", :force => true do |t|
     t.string   "name"

@@ -1,0 +1,69 @@
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#tab1" data-toggle="tab"><%=t("tabs.general")%></a>
+    </li>
+    <li class="disabled">
+      <a href="#tab2" data-toggle="tab"><%=t("tabs.contact")%></a>
+    </li>
+  </ul>
+
+<!-- Render Vendor form -->
+  <%= form_for @customer, :html => { :class => 'form-horizontal' } do |f| %>
+    <div class="tab-content">
+    
+    <%= f.fields_for :entity do |ent| %>
+    <div class="tab-pane active" id="tab1">
+      <%= render 'forms/entity_form', :f => ent %>
+      
+      <div class="control-group">
+          <%= f.label :asigned_seller, :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :asigned_seller, :class => 'text_field' %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <%= f.label :customer_profile_id, :class => 'control-label' %>
+        <div class="controls">
+          <%= f.number_field :customer_profile_id, :class => 'number_field' %>
+        </div>
+      </div>
+
+      <%= ent.fields_for :addresses do |add| %>              
+        <%= render 'forms/address_form', :f => add %>
+      <% end %>
+    </div>
+<!-- Render Entity's phones information into partial to reuse code -->
+            <div class="tab-pane" id="tab2">
+
+            <%= ent.fields_for :telephones do |pho| %>
+                <%= render 'forms/telephone_form', :f => pho %>
+                
+            <% end %>
+            <%= link_to_add_fields("Agregar otro teléfono", ent, :telephones) %>
+            <div class="control-label">
+              
+            </div>
+            <%= ent.fields_for :contacts do |cont| %>
+              <br /><br />
+              <h2>Información de contacto</h2>
+                <%= render 'forms/contact_form', :f => cont %>
+            <% end %>
+            </div>
+
+<!-- Render Entity's contacts information into partial to reuse code -->
+            <div class="tab-pane" id="tab3">  
+            
+            </div>
+    <% end -%>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  customers_path, :class => 'btn' %>
+    </div>
+   </div>
+  </div>
+  
+  <% end %>

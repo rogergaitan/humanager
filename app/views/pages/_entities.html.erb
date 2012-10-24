@@ -1,14 +1,71 @@
 <ul class="thumbnails">
+<!--Employee information -->    
     <li class="span2">
         <div class="thumbnail">
             <a href=<%= %>><%= image_tag ("employee.png" ) %></a>
         <div class='btn-group'>
 
-            <a href=<%= %> class='btn btn-info btn-info'>
+            <a href="" class='btn btn-success btn-success'>
                 <i class='icon-user'></i>
                 <%= I18n.t('.activerecord.models.employee').pluralize %>
             </a>
-            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-success btn-success dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href=<%=%>>
+                        <i class='icon-pencil'></i>  Nuevo</a>
+                    </li>
+                <li>
+                    <a href=<%= %>>
+                        <i class='icon-list-alt'></i> Lista</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">Información</a></li>
+            </ul>
+        </div>
+        </div>
+    </li>
+<!-- Vendors information -->
+    <li class="span2">
+        <div class="thumbnail">
+            <a href=<%= %>><%= image_tag ("vendor.png" ) %></a>
+        <div class='btn-group'>
+
+            <a href=<%=vendors_path %> class='btn btn-success btn-success'>
+                <i class='icon-user'></i>
+                <%= I18n.t('.activerecord.models.vendor').pluralize %>
+            </a>
+            <button class="btn btn-success btn-success dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href=<%=%>>
+                        <i class='icon-pencil'></i>  Nuevo</a>
+                    </li>
+                <li>
+                    <a href=<%= %>>
+                        <i class='icon-list-alt'></i> Lista</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">Información</a></li>
+            </ul>
+        </div>
+        </div>
+    </li>
+<!--Customer's information -->
+    <li class="span2">
+        <div class="thumbnail">
+            <a href=<%= %>><%= image_tag ("customer.png" ) %></a>
+        <div class='btn-group'>
+
+            <a href="" class='btn btn-success btn-success'>
+                <i class='icon-user'></i>
+                <%= I18n.t('.activerecord.models.customer').pluralize %>
+            </a>
+            <button class="btn btn-success btn-success dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">

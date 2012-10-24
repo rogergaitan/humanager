@@ -47,4 +47,3 @@ $ ->
 	cantonSelected()
 	$('div.vendor_telephone a.remove_fields').remove()
   
-  
