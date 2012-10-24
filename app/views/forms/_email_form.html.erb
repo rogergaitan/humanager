@@ -1,0 +1,12 @@
+<div class="control-group">
+	<%= email.label :email, :class => 'control-label' %>
+	<div class="controls">
+		<%= email.text_field :email, :class => 'text_field' %>
+	</div>
+</div>
+<div class="control-group">
+	<%= email.label :typeemail, :class => 'control-label' %>
+	<div class="controls">
+		<%= email.enum_select :typeemail, :include_blank => false %>
+	</div>
+</div>  

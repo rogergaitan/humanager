@@ -1,23 +1,14 @@
 Reasapp::Application.routes.draw do
 
   resources :entities
-
-  resources :employees
-
   resources :product_pricings
-
   resources :products
-
   resources :warehouses
-
   devise_for :users
 
   get "pages/home"
-
   get "pages/about"
-
   get "pages/help"
-
   get "pages/contact"
 
   match '/contact', :to => 'pages#contact'
@@ -45,6 +36,7 @@ Reasapp::Application.routes.draw do
     end
   end
 
+  resources :vendors
   resources :sublines
   resources :categories
   resources :lines

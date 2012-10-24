@@ -1,0 +1,10 @@
+<div class="control-group">
+	<%= f.label :telephone, :class => 'control-label' %>
+	<div class="controls">
+		<%= f.enum_select :typephone, :include_blank => false %>
+		<%= f.text_field :telephone, :class => 'text_field', 
+						:placeholder => "Número teléfono" %>
+						<%= f.hidden_field :_destroy %>
+			<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
+	</div>
+</div>

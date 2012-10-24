@@ -162,6 +162,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
       models:
+        vendor: Proveedor
         entity: Entidad
         employee: Empleado
         product_pricing: Precio
@@ -173,6 +174,8 @@ es:
         subline: Sub-Línea
         category: Categoría
       attributes:
+        vendor:
+        credit_limit: Crédito
         entity:
           name: Nombre
           surname: Apellidos

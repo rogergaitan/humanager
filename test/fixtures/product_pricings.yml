@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  product_id :integer
 #  utility    :float
-#  type       :enum([:other, :c
+#  price_type :enum([:other, :c
 #  category   :enum([:a, :b, :c
 #  sell_price :float
 #  created_at :datetime         not null
