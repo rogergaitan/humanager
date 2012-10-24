@@ -15,13 +15,13 @@
   <div class="control-group">
     <%= f.label :province_id, :class => 'control-label' %>
     <div class="controls">
-      <%= collection_select(:district, :province_id, @provinces, :id, :name , :prompt => true) %>
+      <%= f.collection_select :province_id, @provinces, :id, :name , :prompt => true %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :canton_id, :class => 'control-label' %>
     <div class="controls">
-      <%= collection_select(:district, :canton_id, @cantons, :id, :name , :prompt => true) %>
+      <%= f.collection_select :canton_id, @cantons, :id, :name , :prompt => true %>
     </div>
   </div>
 

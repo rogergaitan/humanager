@@ -1,15 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  entity: 
   address: MyString
+  entity: 
   province: 
   canton: 
   district: 
 
 two:
-  entity: 
   address: MyString
+  entity: 
   province: 
   canton: 
   district: 

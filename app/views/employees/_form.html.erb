@@ -1,32 +1,52 @@
 <script type="text/javascript">
   var roles = new Array();
+	var cantons = new Array();
+	var district = new Array();
   <% @roles.each do |role| %>
     roles.push(new Array(<%= role.department_id %>, '<%=h role.role %>', <%= role.id %>));
   <% end %>
+  <% @canton.each do |canton| %>
+		cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
+  <% end %>
+  <% @district.each do |district| %>
+		district.push(new Array(<%= district.canton_id %>, '<%=h district.name %>', <%= district.id %>));
+  <% end %>
 </script>
-<%= javascript_include_tag 'employees/dynamic_departments' %>
+<%= javascript_include_tag 'employees/dynamic_fields' %>
 <div class="tabbable">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.personal_data") %></a></li>
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
         <li><a href="#tab2" data-toggle="tab"><%= t("tabs.contact") %></a></li>
         <li><a href="#tab3" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
     </ul>
     <%= form_for @employee, :html => { :class => 'form-horizontal' } do |f| %>
     <div class="tab-content">
       <div class="tab-pane" id="tab2">
+				<h2>Teléfonos</h2>
+				<hr>
         <%= f.fields_for :entity do |builder| %>
           <%= builder.fields_for :telephones do |phone| %>
-						<%= render 'forms/phone_form', :f => phone %>
+						<%= render 'forms/telephone_form', :f => phone %>
           <% end %>
+          <%= link_to_add_fields("Agregar otro teléfono", builder, :telephones) %>
+					<%= hidden_field 'count_phones', 'employees', :value => "1", :class => "hidden_fields"  %>
+					<h2>Emails</h2>
+					<hr>
           <%= builder.fields_for :emails do |email| %>
 						<%= render 'forms/email_form', :f => email %>
           <% end %>
+					<%= link_to_add_fields("Agregar otro email", builder, :emails) %>
+					<%= hidden_field 'count_emails', 'employees', :value => "1", :class => "hidden_fields" %>
+					<h2>Dirección</h2>
+					<hr>
           <%= builder.fields_for :addresses do |address| %>
 						<%= render 'forms/address_form', :f => address %>
           <% end %>
       </div>
 
       <div class="tab-pane active" id="tab1">
+				<h2>Datos Personales</h2>
+				<hr>
           <%= render 'forms/entity_form', :f => builder %>
         <% end %>
         <div class="control-group">
@@ -58,12 +78,12 @@
           <div class="controls">
             <%= f.text_field :spouse, :class => 'text_field' %>
           </div>
-        </div>
-        <div class="form-actions">
-          <a href="#tab3" class='btn btn-primary' data-toggle="tab">Siguiente</a>
-        </div>        
+        </div>     
       </div>
+			
       <div class="tab-pane" id="tab3">
+				<h2>Datos Laborales</h2>
+				<hr>
         <div class="control-group">
           <%= f.label :join_date, :class => 'control-label' %>
           <div class="controls">
@@ -127,13 +147,12 @@
             <%= f.text_field :wage_payment, :class => 'text_field' %>
           </div>
         </div>
-
-        <div class="form-actions">
-          <%= f.submit nil, :class => 'btn btn-primary' %>
-          <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                      employees_path, :class => 'btn' %>
-        </div> 
       </div>
+      <div class="form-actions">
+        <%= f.submit nil, :class => 'btn btn-primary' %>
+        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                    employees_path, :class => 'btn' %>
+      </div> 
     </div>
     <% end %>
 </div>

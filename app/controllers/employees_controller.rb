@@ -1,4 +1,6 @@
 class EmployeesController < ApplicationController
+  before_filter :get_address_info, :only => [:new, :edit]
+  before_filter :get_employee_info, :only => [:new, :edit]
   # GET /employees
   # GET /employees.json
   def index
@@ -29,15 +31,6 @@ class EmployeesController < ApplicationController
     @entity.telephones.build
     @entity.emails.build
     @entity.addresses.build
-    @department = Department.find(:all, :select =>['id','name'])
-    @occupation = Occupation.find(:all, :select =>['id','description'])
-    @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
-    @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
-    @roles = Role.all
-    @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
-    @province = Province.all
-    @canton = Canton.all
-    @district = District.all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -48,15 +41,6 @@ class EmployeesController < ApplicationController
   # GET /employees/1/edit
   def edit
     @employee = Employee.find(params[:id])
-    @department = Department.find(:all, :select =>['id','name'])
-    @occupation = Occupation.find(:all, :select =>['id','description'])
-    @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
-    @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
-    @roles = Role.all
-    @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
-    @province = Province.all
-    @canton = Canton.all
-    @district = District.all
   end
 
   # POST /employees
@@ -117,6 +101,7 @@ class EmployeesController < ApplicationController
                                 full_name[:surname], :entityid => employee.init)
         @entity.telephones.build
         @entity.emails.build
+        @entity.addresses.build
         if @new_employee.save
            @employees << @new_employee
             @c += 1
@@ -147,11 +132,19 @@ class EmployeesController < ApplicationController
     end
     full_name
   end
-
-  def load_employees
-    @employees = Employee.all
-    respond_to do |format|
-      format.json { render json: @employees, :include => :entity }
-    end
-  end
+  
+  def get_address_info
+     @province ||= Province.find(:all, :select =>['id','name'])
+     @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
+     @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
+   end
+   
+   def get_employee_info
+     @department = Department.find(:all, :select =>['id','name'])
+     @occupation = Occupation.find(:all, :select =>['id','description'])
+     @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
+     @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
+     @roles = Role.find(:all, :select =>['id','role', 'department_id'])
+     @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
+   end
 end

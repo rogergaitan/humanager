@@ -1,8 +1,8 @@
 class CreateAddresses < ActiveRecord::Migration
   def change
     create_table :addresses do |t|
-      t.references :entity
       t.string :address
+      t.references :entity
       t.references :province
       t.references :canton
       t.references :district

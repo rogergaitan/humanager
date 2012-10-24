@@ -8,7 +8,7 @@ es:
     prices: Precios
     other: Otros
     personal_data: 'Datos Personales'
-    employment_data: 'Datos Laborales'
+    employment_data: 'Empresa'
     contact: Contacto
   routes:
     new: nuevo

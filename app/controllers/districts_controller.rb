@@ -37,6 +37,8 @@ class DistrictsController < ApplicationController
   # GET /districts/1/edit
   def edit
     @district = District.find(params[:id])
+    @cantons = Canton.all
+    @provinces = Province.all
   end
 
   # POST /districts
