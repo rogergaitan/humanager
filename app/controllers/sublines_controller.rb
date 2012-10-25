@@ -1,35 +1,24 @@
 class SublinesController < ApplicationController
+  respond_to :json, :html
   # GET /sublines
   # GET /sublines.json
   def index
     @sublines = Subline.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @sublines }
-    end
+    respond_with @sublines
   end
 
   # GET /sublines/1
   # GET /sublines/1.json
   def show
     @subline = Subline.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @subline }
-    end
+    respond_with @subline
   end
 
   # GET /sublines/new
   # GET /sublines/new.json
   def new
     @subline = Subline.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @subline }
-    end
+    respond_with @subline
   end
 
   # GET /sublines/1/edit
@@ -47,10 +36,10 @@ class SublinesController < ApplicationController
     respond_to do |format|
       if @subline.save
         if params['continue']
-          format.html { redirect_to new_subline_path, notice: 'Subline was successfully created.' }
+          format.html { redirect_to new_subline_path, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_created') }
           format.json { render json: @subline, status: :created, location: @subline }
         else
-          format.html { redirect_to @subline, notice: 'Subline was successfully created.' }
+          format.html { redirect_to @subline, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_created') }
           format.json { render json: @subline, status: :created, location: @subline }
         end
       else
@@ -67,7 +56,7 @@ class SublinesController < ApplicationController
 
     respond_to do |format|
       if @subline.update_attributes(params[:subline])
-        format.html { redirect_to @subline, notice: 'Subline was successfully updated.' }
+        format.html { redirect_to @subline, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -83,7 +72,7 @@ class SublinesController < ApplicationController
     @subline.destroy
 
     respond_to do |format|
-      format.html { redirect_to sublines_url }
+      format.html { redirect_to sublines_url, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end
