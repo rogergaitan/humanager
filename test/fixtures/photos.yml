@@ -1,20 +1,11 @@
-# == Schema Information
-#
-# Table name: photos
-#
-#  id          :integer          not null, primary key
-#  employee_id :integer
-#  url         :string(255)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#
-
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
   employee: 
-  url: MyString
+  name: MyString
+  photo: MyString
 
 two:
   employee: 
-  url: MyString
+  name: MyString
+  photo: MyString

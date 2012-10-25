@@ -28,6 +28,7 @@ class EmployeesController < ApplicationController
   def new
     @employee = Employee.new
     @entity = @employee.build_entity
+    @employee.build_photo
     @entity.telephones.build
     @entity.emails.build
     @entity.addresses.build
@@ -100,6 +101,7 @@ class EmployeesController < ApplicationController
         @entity = @new_employee.build_entity(:name => full_name[:name], :surname => 
                                 full_name[:surname], :entityid => employee.init)
         @entity.telephones.build
+        @new_employee.build_photo
         @entity.emails.build
         @entity.addresses.build
         if @new_employee.save

@@ -12,6 +12,6 @@
 class Department < ActiveRecord::Base
 	belongs_to :employee
 	has_many :employees
-	has_many :roles
+	has_many :roles, :dependent => :destroy
   attr_accessible :name, :employee_id
 end
