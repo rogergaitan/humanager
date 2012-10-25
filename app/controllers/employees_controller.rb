@@ -133,6 +133,13 @@ class EmployeesController < ApplicationController
     full_name
   end
   
+  def load_employees
+    @employees = Employee.all
+    respond_to do |format|
+      format.json { render json: @employees, :include => :entity }
+    end
+  end
+  
   def get_address_info
      @province ||= Province.find(:all, :select =>['id','name'])
      @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
