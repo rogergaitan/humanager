@@ -7,6 +7,7 @@ es:
     general: General
     prices: Precios
     other: Otros
+    contacts: Contactos
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -202,7 +203,7 @@ es:
         canton: Cantones
       attributes:
         vendor:
-        credit_limit: Crédito
+          credit_limit: Crédito
         entity:
           name: Nombre
           surname: Apellidos
