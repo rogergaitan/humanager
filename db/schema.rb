@@ -233,7 +233,7 @@ ActiveRecord::Schema.define(:version => 20121024204834) do
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
     t.float    "utility"
-    t.enum     "price_type", :limit => [:other, :credit, :cash]
+    t.enum     "type",       :limit => [:other, :credit, :cash]
     t.enum     "category",   :limit => [:a, :b, :c]
     t.float    "sell_price"
     t.datetime "created_at",                                     :null => false

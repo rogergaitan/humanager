@@ -36,8 +36,6 @@ Reasapp::Application.routes.draw do
 
   resources :occupations
 
-  resources :categories
-
   resources :customers
 
   resources :entities
