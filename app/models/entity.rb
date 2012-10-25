@@ -1,12 +1,12 @@
 class Entity < ActiveRecord::Base
 	
-  has_one :employee, :dependent => :destroy
+  has_one  :employee, :dependent => :destroy
 	has_many :telephones, :dependent => :destroy
   has_many :emails, :dependent => :destroy
   has_many :addresses, :dependent => :destroy
   has_many :contacts, :dependent => :destroy
-  has_one :customer
-  has_one :vendor
+  has_one  :customer
+  has_one  :vendor
 	accepts_nested_attributes_for :telephones, :allow_destroy => true, :reject_if => proc { |attributes| attributes["telephone"].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
   accepts_nested_attributes_for :addresses, :allow_destroy => true 

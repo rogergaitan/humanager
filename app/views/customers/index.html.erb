@@ -18,7 +18,7 @@
   <tbody>
     <% @customers.each do |customer| %>
       <tr>
-        <td><%= link_to customer.entity.name, customer_path(customer) %></td>
+        <td><%= customer.entity.name %></td>
         <td><%= customer.asigned_seller %></td>
         <td><%= customer.customer_profile_id %></td>
         <td>
