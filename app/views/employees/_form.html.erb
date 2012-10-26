@@ -93,7 +93,8 @@
 		      <div class="control-group">
 		        <%= builder.label :photo, :class => 'control-label' %>
 		        <div class="controls">
-								<%= builder.file_field :photo, :class => 'file_field' %>
+							<%= image_tag(@employee.photo.photo_url) if @employee.photo %>
+							<%= builder.file_field :photo, :class => 'file_field' %>
 		        </div>
 		      </div>
 				<% end %>   
