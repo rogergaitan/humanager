@@ -8,6 +8,7 @@ es:
     prices: Precios
     other: Otros
     contacts: Contactos
+    contact: Contacto
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -182,6 +183,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        bank_account: Cuenta Bancaria
         customer: Cliente
         vendor: Proveedor
         entity: Entidad
@@ -202,13 +204,27 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        address:
+          province_id: Provincia
+          canton_id: Canton
+          district_id: Distrito
+          address: Dirección
+        contact:
+          name: Nombre
+          occupation: Ocupación
+          phone: 'Teléfono'
+          email: Correo
+          skype: Skype
+        customer:
+          asigned_seller: Vendedor asignado
+          customer_profile_id: Perfil del cliente
+        bank_account:
+          bank: Banco
+          bank_account: Cuenta
+          sinpe: Sinpe
+          account_title: 'A nombre de'
         vendor:
           credit_limit: Crédito
-        entity:
-          name: Nombre
-          surname: Apellidos
-          entityid: Cédula
-          typeid: Tipo cédula
         employee:
           join_date: Fecha ingreso
         product_pricing:

@@ -6,6 +6,9 @@
     <li class="disabled">
       <a href="#tab2" data-toggle="tab"><%=t("tabs.contact")%></a>
     </li>
+    <li class="">
+      <a href="#tab3" data-toggle="tab"><%=t("tabs.other")%></a>
+    </li>
   </ul>
 
 <!-- Render Vendor form -->
@@ -46,15 +49,19 @@
               
             </div>
             <%= ent.fields_for :contacts do |cont| %>
-              <br /><br />
+              <br />
               <h2>Información de contacto</h2>
                 <%= render 'forms/contact_form', :f => cont %>
             <% end %>
             </div>
 
-<!-- Render Entity's contacts information into partial to reuse code -->
+<!-- Render Entity's accounts information -->
             <div class="tab-pane" id="tab3">  
-            
+              <%= ent.fields_for :bank_accounts do |cont| %>
+              <br />
+              <h2>Cuentas Bancarias</h2>
+                <%= render 'forms/bank_account_form', :f => cont %>
+              <% end %>
             </div>
     <% end -%>
 

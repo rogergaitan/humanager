@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: work_benefits
+#
+#  id                 :integer          not null, primary key
+#  description        :string(255)
+#  employee_id        :integer
+#  frequency          :string(255)
+#  calculation_method :string(255)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:

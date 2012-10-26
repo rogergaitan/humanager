@@ -29,7 +29,7 @@ class CustomersController < ApplicationController
     @entity.addresses.build
     @entity.contacts.build
     @entity.telephones.build
-
+    @entity.bank_accounts.build
     respond_with @customer
   end
 

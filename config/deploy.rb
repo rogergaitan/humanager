@@ -25,7 +25,7 @@ after :deploy, "deploy:restart"
 namespace :deploy do
 
   task :restart do
-    run "sudo service httpd restart"
+    run "service httpd restart"
   end
 
 
