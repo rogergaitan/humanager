@@ -42,7 +42,7 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.save
-        format.html { redirect_to @vendor, notice: 'Vendor was successfully created.' }
+        format.html { redirect_to @vendor, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_created') }
         format.json { render json: @vendor, status: :created, location: @vendor }
       else
         format.html { render action: "new" }
@@ -58,7 +58,7 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.update_attributes(params[:vendor])
-        format.html { redirect_to @vendor, notice: 'Vendor was successfully updated.' }
+        format.html { redirect_to @vendor, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -72,7 +72,10 @@ class VendorsController < ApplicationController
   def destroy
     @vendor = Vendor.find(params[:id])
     @vendor.destroy
-    respond_with @vendor
+    respond_to do |format|
+      format.html { redirect_to vendors_url, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_deleted') }
+      format.json { head :no_content }
+    end
   end
 
   # Before filter method to get provinces, cantons and districts

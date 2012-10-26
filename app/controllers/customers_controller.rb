@@ -45,7 +45,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
+        format.html { redirect_to @customer, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_created') }
         format.json { render json: @customer, status: :created, location: @customer }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        format.html { redirect_to @customer, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,7 +77,7 @@ class CustomersController < ApplicationController
     @customer.destroy
 
     respond_to do |format|
-      format.html { redirect_to customers_url }
+      format.html { redirect_to customers_url, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_deleted') }
       format.json { head :no_content }
     end
   end
