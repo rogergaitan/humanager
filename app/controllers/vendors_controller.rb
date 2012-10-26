@@ -27,7 +27,8 @@ class VendorsController < ApplicationController
     @entity = @vendor.build_entity
     @entity.addresses.build
     @entity.contacts.build
-    @entity.telephones.build 
+    @entity.telephones.build
+    @entity.bank_accounts.build 
   end
 
   # GET /vendors/1/edit

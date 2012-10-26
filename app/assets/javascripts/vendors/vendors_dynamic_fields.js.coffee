@@ -13,7 +13,7 @@ cantonSelected = () ->
   $('#vendor_entity_attributes_addresses_attributes_0_district_id').find('option').remove()
   $(district).each ->
     $('#vendor_entity_attributes_addresses_attributes_0_district_id').append ->
-    	"<option value= #{@[2]}>#{@[1]}</option>" if @[0] == canton_id
+    	"<option value= #{@[2]}>#{@[1]}</option>" if @[0] is canton_id
 
 addFields = (e) ->
 	if numberPhoneFields < 3 
