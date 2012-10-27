@@ -1,6 +1,12 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :tasks do
+    collection do
+      get 'tasksfb'
+    end
+  end
+
   resources :employees do
     collection do
       get 'sync'

@@ -11,14 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121006181820) do
-
-  create_table "cantons", :force => true do |t|
-    t.integer  "province_id"
-    t.string   "canton"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
+ActiveRecord::Schema.define(:version => 20121021205936) do
 
   create_table "cantons", :force => true do |t|
     t.integer  "province_id"
@@ -138,6 +131,20 @@ ActiveRecord::Schema.define(:version => 20121006181820) do
 
   add_index "payment_schedules", ["employee_id"], :name => "index_payment_schedules_on_employee_id"
 
+  create_table "people", :force => true do |t|
+    t.string   "id_person"
+    t.string   "name"
+    t.string   "first_surname"
+    t.string   "second_surname"
+    t.date     "birthdate"
+    t.string   "fb_person"
+    t.enum     "typeid",         :limit => [:national, :foreign]
+    t.enum     "gender",         :limit => [:male, :female]
+    t.enum     "marital_status", :limit => [:single, :married, :divorced, :windowd, :civil_union, :engage]
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+  end
+
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
     t.string   "url"
@@ -166,6 +173,16 @@ ActiveRecord::Schema.define(:version => 20121006181820) do
     t.string   "name"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.string   "iactivity"
+    t.string   "itask"
+    t.string   "ntask"
+    t.string   "iaccount"
+    t.decimal  "mlaborcost", :precision => 18, :scale => 4
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "telephones", :force => true do |t|

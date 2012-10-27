@@ -24,6 +24,7 @@ es:
       confirm: '¿Está seguro(a)?'   
     titles:
       sync: datos sincronizados
+      tasksfb: datos sincronizados
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
   notice:
@@ -101,6 +102,7 @@ es:
         province: Provincia
         district: Distrito
         canton: Cantones
+        task: Labor
       attributes:
         employee:
           ccss_calculated: Calcula CCSS?
@@ -148,6 +150,10 @@ es:
         district:
           district: Distrito
           canton_id: Cantón
+        task:
+          itask: Codigo
+          ntask: Descripción
+          mlaborcost: Costo Labor
         user:
           login:
   date:
