@@ -16,8 +16,7 @@ $(document).ready(function() {
         '<td>' + replace_value(task.ntask) + '</td>' +
         '<td>' + replace_value(task.iaccount) + '</td>' +
         '<td>' + replace_value(task.mlaborcost) + '</td>' +
-        '<td><a href="/tasks/'+ task.id +'/edit" class="btn btn-mini">Editar</a> ' +
-        '<a href="/tasks/'+ task.id +'" class="btn btn-mini btn-danger" ' +
+        '<td><a href="/tasks/'+ task.id +'" class="btn btn-mini btn-danger" ' +
         'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
       '</tr>');
     return row;
