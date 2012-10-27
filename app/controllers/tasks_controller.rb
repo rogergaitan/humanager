@@ -1,0 +1,115 @@
+class TasksController < ApplicationController
+  # GET /tasks
+  # GET /tasks.json
+  def index
+     @title = t('.activerecord.models.task').capitalize.pluralize
+    @tasks = Task.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @tasks }
+    end
+  end
+
+  # GET /tasks/1
+  # GET /tasks/1.json
+  def show
+    @task = Task.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @task }
+    end
+  end
+
+  # GET /tasks/new
+  # GET /tasks/new.json
+  def new
+    @task = Task.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @task }
+    end
+  end
+
+  # GET /tasks/1/edit
+  def edit
+    @task = Task.find(params[:id])
+  end
+
+  # POST /tasks
+  # POST /tasks.json
+  def create
+    @task = Task.new(params[:task])
+
+    respond_to do |format|
+      if @task.save
+        format.html { redirect_to @task, notice: 'Task was successfully created.' }
+        format.json { render json: @task, status: :created, location: @task }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /tasks/1
+  # PUT /tasks/1.json
+  def update
+    @task = Task.find(params[:id])
+
+    respond_to do |format|
+      if @task.update_attributes(params[:task])
+        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /tasks/1
+  # DELETE /tasks/1.json
+  def destroy
+    @task = Task.find(params[:id])
+    @task.destroy
+
+    respond_to do |format|
+      format.html { redirect_to tasks_url }
+      format.json { head :no_content }
+    end
+  end
+
+  def tasksfb
+    @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor'])
+
+    @c = 0
+    @tasks = []
+    @tasks_fb = {}
+
+    @labmaests.each  do |task|
+        if Task.where("itask = ?", task.ilabor).empty?
+          @new_task = Task.new(:iactivity => task.iactividad, :itask => task.ilabor, :ntask =>
+            firebird_encoding(task.nlabor), :iaccount => task.icuenta, :mlaborcost => task.mcostolabor)
+
+          if @new_task.save
+            @tasks <<  @new_task
+            @c +=  1
+          else
+            @new_task.er.each do |error|
+              Rails.logger.error "Error Creating task: #{task.ilabor}, 
+                                Description: #{error}"
+            end
+          end
+        end
+        @tasks_fb[:task] = @tasks
+        @tasks_fb[:notice] =  "#{t('helpers.titles.tasksfb').capitalize}: #{@c}"
+    end
+
+    respond_to do |format|
+      format.json {render json: @tasks_fb}
+    end
+  end
+end
