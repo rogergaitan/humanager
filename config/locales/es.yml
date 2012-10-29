@@ -186,6 +186,7 @@ es:
         bank_account: Cuenta Bancaria
         customer: Cliente
         vendor: Proveedor
+        vendors: Proveedores
         entity: Entidad
         employee: Empleado
         product_pricing: Precio

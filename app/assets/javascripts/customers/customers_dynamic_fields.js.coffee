@@ -1,18 +1,18 @@
 numberPhoneFields = 1
-province_id = $('#vendor_entity_attributes_addresses_attributes_0_province_id').val()
-canton_id = $('#vendor_entity_attributes_addresses_attributes_0_canton_id').val()
+province_id = $('#customer_entity_attributes_addresses_attributes_0_province_id').val()
+canton_id = $('#customer_entity_attributes_addresses_attributes_0_canton_id').val()
 
 provinceSelected = () ->
-  $('#vendor_entity_attributes_addresses_attributes_0_district_id').find('option').remove()
-		$('#vendor_entity_attributes_addresses_attributes_0_canton_id').find('option').remove()
+  $('#customer_entity_attributes_addresses_attributes_0_district_id').find('option').remove()
+		$('#customer_entity_attributes_addresses_attributes_0_canton_id').find('option').remove()
   $(cantons).each ->
-  		$('#vendor_entity_attributes_addresses_attributes_0_canton_id').append ->
+  		$('#customer_entity_attributes_addresses_attributes_0_canton_id').append ->
     		"<option value=#{@[2]}>#{@[1]}</option>" if @[0] == province_id
 
 cantonSelected = () ->  
-  $('#vendor_entity_attributes_addresses_attributes_0_district_id').find('option').remove()
+  $('#customer_entity_attributes_addresses_attributes_0_district_id').find('option').remove()
   $(district).each ->
-    $('#vendor_entity_attributes_addresses_attributes_0_district_id').append ->
+    $('#customer_entity_attributes_addresses_attributes_0_district_id').append ->
     	"<option value= #{@[2]}>#{@[1]}</option>" if @[0] is canton_id
 
 addFields = (e) ->
@@ -35,11 +35,11 @@ removeFields = (e) ->
 	e.preventDefault()
   
 $ ->
-	$('#vendor_department_id').change -> 
+	$('#customer_department_id').change -> 
   	departmentSelected
-	$('#vendor_entity_attributes_addresses_attributes_0_province_id').change ->
+	$('#customer_entity_attributes_addresses_attributes_0_province_id').change ->
 		provinceSelected
-	$('#vendor_entity_attributes_addresses_attributes_0_canton_id').change -> 
+	$('#customer_entity_attributes_addresses_attributes_0_canton_id').change -> 
 		cantonSelected
 	$('form').on('click', '.add_fields', addFields)
 	$('form').on('click', '.remove_fields', removeFields)
