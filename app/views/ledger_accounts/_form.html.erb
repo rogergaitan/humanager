@@ -1,0 +1,26 @@
+<%= form_for @ledger_account, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :icuenta, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :icuenta, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :ncuenta, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :ncuenta, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :ipadre, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :ipadre, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                ledger_accounts_path, :class => 'btn' %>
+  </div>
+<% end %>
