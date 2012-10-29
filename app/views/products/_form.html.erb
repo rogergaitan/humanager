@@ -22,6 +22,7 @@
               <%= hidden_field_tag 'product_line_name' %>
               <%= hidden_field_tag 'product_line_full' %>
               <%= text_field_tag 'product_line',nil, :class => 'text_field required search-image-line', :for=>:line_id%>  
+              <a href="#lines_list" role="button" class="btn btn-info" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
           <div class="control-group">
@@ -29,6 +30,7 @@
             <div class="controls">
               <%= f.hidden_field :subline_id %>
               <%= text_field_tag 'product_subline', nil,  :class => 'number_field required search-image-subline', :for =>:subline_id, :type =>'text' %>
+              <a href="#sublines_list" role="button" class="btn btn-info" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
           <div class="control-group">
@@ -36,6 +38,7 @@
             <div class="controls">
               <%= f.hidden_field :category_id %>
               <%= text_field_tag 'product_category',nil, :class => 'number_field required search-image-category', :for => :category_id %>
+              <a href="#category_list" role="button" class="btn btn-info" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
           <div class="control-group">
@@ -139,6 +142,40 @@
           </div>
             <% end %>
         </div>
+        <div class="modal hide fade pagination_product" id="lines_list" tabindex="-1" role="dialog" aria-labelledby="mylines_listlLabel" aria-hidden="true"> 
+            <input type='hidden' class='current_page' />  
+            <input type='hidden' class='show_per_page' /> 
+            <div class="modal-body  pagination " type_name = "lines_list"></div> 
+            <div class='page_navigation' ></div>  
+            <div class="form-actions">
+              <button class="btn click_cancel" data-dismiss="modal" aria-hidden="true" align="center">
+                Cancel
+              </button>   
+            </div>   
+                
+        </div>
+        <div class="modal hide fade pagination_product" id="sublines_list" tabindex="-1" role="dialog" aria-labelledby="mysublines_listlLabel" aria-hidden="true"> 
+            <input type='hidden' class='current_page' />  
+            <input type='hidden' class='show_per_page' /> 
+            <div class="modal-body pagination "></div>   
+            <div class='page_navigation' ></div>  
+           <div class="form-actions">
+              <button class="btn click_cancel" data-dismiss="modal" aria-hidden="true" align="center">
+                Cancel
+              </button>   
+            </div>             
+        </div>
+        <div class="modal hide fade pagination_product" id="category_list" tabindex="-1" role="dialog" aria-labelledby="mycategory_listLabel" aria-hidden="true"> 
+            <input type='hidden' class='current_page' />  
+            <input type='hidden' class='show_per_page' /> 
+            <div class="modal-body pagination"></div> 
+            <div class='page_navigation' ></div>  
+            <div class="form-actions">
+              <button class="btn click_cancel" data-dismiss="modal" aria-hidden="true" align="center">
+                Cancel
+              </button>   
+            </div>               
+        </div>
         <% if @product.id %>
         <div class="tab-pane" id="tab2">
           
@@ -149,4 +186,7 @@
 </div>
 
 
+<style>
 
+
+</style>
