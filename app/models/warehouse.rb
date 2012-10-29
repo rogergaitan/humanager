@@ -23,6 +23,6 @@ class Warehouse < ActiveRecord::Base
 	validates :description, 
 					:presence => true		
 					
-	validates :name, 
+	validates :name, :manager,
 					:presence => true
 end

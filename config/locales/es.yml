@@ -145,6 +145,8 @@ es:
                 blank: Este campo no puede quedar en blanco
               name:
                 blank: Este campo no puede quedar en blanco
+              manager:
+                blank: Este campo no puede quedar en blanco
           subline:
             attributes:
               code:
