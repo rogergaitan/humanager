@@ -90,7 +90,7 @@ class LedgerAccountsController < ApplicationController
 
       @cntpuc.each do |account|
         if LedgerAccount.where("iaccount = ?", account.icuenta).empty?
-          @new_account = LedgerAccount.new(:iaccount => account.icuenta, :naccount => account.ncuenta,
+          @new_account = LedgerAccount.new(:iaccount => account.icuenta, :naccount => firebird_encoding(account.ncuenta),
             :ifather => account.ipadre)
           if @new_account.save
             @accounts << @new_account

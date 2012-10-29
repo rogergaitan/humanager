@@ -1,22 +1,20 @@
 $(document).ready(function() {
-  $('#task-fb').click(function() { 
-    $.getJSON('/tasks/tasksfb', function(element) {
+  $('#account-fb').click(function() { 
+    $.getJSON('/ledger_accounts/accountfb', function(element) {
       $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
-      $(element.task).each(function() { add_tasks(this, 'table#task-data')});
-      $('#task-fb').hide();
+      $(element.account).each(function() { add_accounts(this, 'table#account-data')});
+      $('#account-fb').hide();
     })
   });
 
-  function add_tasks(task, target_table)
+  function add_accounts(account, target_table)
   {
     var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/tasks/'+ task.id +'">'+ task.id +'</a></td>' +
-        '<td>' + replace_value(task.iactivity) + '</td>' +
-        '<td>' + replace_value(task.itask) + '</td>' +
-        '<td>' + replace_value(task.ntask) + '</td>' +
-        '<td>' + replace_value(task.iaccount) + '</td>' +
-        '<td>' + replace_value(task.mlaborcost) + '</td>' +
-        '<td><a href="/tasks/'+ task.id +'" class="btn btn-mini btn-danger" ' +
+        '<td><a href="/ledger_accounts/'+ account.id +'">'+ account.id +'</a></td>' +
+        '<td>' + replace_value(account.ifather) + '</td>' +
+        '<td>' + replace_value(account.iaccount) + '</td>' +
+        '<td>' + replace_value(account.naccount) + '</td>' +
+        '<td><a href="/ledger_accounts/'+ account.id +'" class="btn btn-mini btn-danger" ' +
         'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
       '</tr>');
     return row;
