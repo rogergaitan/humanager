@@ -8,11 +8,17 @@ gem 'rails', '3.2.6'
 gem 'mysql2'
 gem 'jquery-rails'
 gem 'devise'
+gem 'rmagick'
 gem 'carrierwave'
 gem 'client_side_validations'
 gem 'twitter-bootstrap-rails'
-gem 'rubyfb'
 gem 'enum_column3'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
+gem 'rails3-jquery-autocomplete'
+gem 'annotate'
+gem 'rubyfb'
+
 
 # Gems used only for assets and not required
 # in production environments by default.

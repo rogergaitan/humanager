@@ -1,0 +1,102 @@
+<%= form_for @line, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  
+<div class='row-fluid'>
+    <div class='span4'>
+        <h4>Información General</h4>
+        <br />
+          <div class="control-group">
+            <%= f.label :code, :class => 'control-label' %>
+            <div class="controls">
+              <%= f.text_field :code, :class => 'text_field' %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label :name, :class => 'control-label' %>
+            <div class="controls">
+              <%= f.text_field :name, :class => 'text_field' %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label :description, :class => 'control-label' %>
+            <div class="controls">
+              <%= f.text_field :description, :class => 'text_field' %>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class='row-fluid'>
+
+<div class='span4'>
+  <h4>Información Contable</h4>
+  <br />
+  <div class="control-group">
+    <%= f.label :inventory, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :inventory, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :sale_cost, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :sale_cost, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :utility_adjusment, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :utility_adjusment, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :lost_adjustment, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :lost_adjustment, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :income, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :income, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :sales_return, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :sales_return, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :purchase_return, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :purchase_return, :class => 'number_field' %>
+    </div>
+  </div>
+  </div>
+</div>
+<br />
+<div class='row-fluid'>
+  <div class='span4'>
+    <h4>Impuestos </h4>
+    <br />
+  <div class="control-group">
+    <%= f.label :sale_tax, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :sale_tax, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :purchase_tax, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :purchase_tax, :class => 'number_field' %>
+    </div>
+  </div>
+</div>
+</div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary btn-success' %>
+    <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-primary btn-info' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), lines_path, :class => 'btn' %>
+  </div>
+<% end %>

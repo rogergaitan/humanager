@@ -1,23 +1,5 @@
-
-<div class='row-fluid'>
-	<div class='span2'>
-		<a href=<%=warehouses_path %> class='btn btn-primary btn-large'>
-      <%= I18n.t('.activerecord.models.warehouse').pluralize %>
-    </a>
-	</div>
-</div>
-
-<br />
-
-<div class='row-fluid'>
-	<div class='span2'>
-		<a href=<%=sublines_path %> class='btn btn-primary btn-large'>
-      <i class='icon-picture'></i> 
-      <%= I18n.t('.activerecord.models.subline').pluralize %>
-    </a>
-	</div>
-</div>
-<br>
-</ul>
+<h2>Inventario</h2>
 <%= render 'pages/inventory' %>
-
+<hr>
+<h2>Entidades</h2>
+<%= render 'pages/entities' %>

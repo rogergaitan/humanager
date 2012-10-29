@@ -1,5 +1,5 @@
-# -*- encoding : utf-8 -*-
 class ApplicationController < ActionController::Base
+  #Allows user to keep session on
   protect_from_forgery
 
 	def firebird_encoding(element)

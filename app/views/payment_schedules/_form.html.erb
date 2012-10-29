@@ -1,33 +1,38 @@
-<%= form_for(@payment_schedule) do |f| %>
-  <% if @payment_schedule.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@payment_schedule.errors.count, "error") %> prohibited this payment_schedule from being saved:</h2>
-
-      <ul>
-      <% @payment_schedule.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @payment_schedule, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :code, :class => 'text_field' %>
     </div>
-  <% end %>
+  </div>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :initial_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.date_select :initial_date, :class => 'date_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :end_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.date_select :end_date, :class => 'date_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :payment_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.date_select :payment_date, :class => 'date_select' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
-  </div>
-  <div class="field">
-    <%= f.label :employee %><br />
-    <%= f.text_field :employee %>
-  </div>
-  <div class="field">
-    <%= f.label :initial_date %><br />
-    <%= f.date_select :initial_date %>
-  </div>
-  <div class="field">
-    <%= f.label :end_date %><br />
-    <%= f.date_select :end_date %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                payment_schedules_path, :class => 'btn' %>
   </div>
 <% end %>

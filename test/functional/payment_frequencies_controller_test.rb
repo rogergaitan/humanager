@@ -18,7 +18,7 @@ class PaymentFrequenciesControllerTest < ActionController::TestCase
 
   test "should create payment_frequency" do
     assert_difference('PaymentFrequency.count') do
-      post :create, payment_frequency: { description: @payment_frequency.description }
+      post :create, payment_frequency: { description: @payment_frequency.description, name: @payment_frequency.name }
     end
 
     assert_redirected_to payment_frequency_path(assigns(:payment_frequency))
@@ -35,7 +35,7 @@ class PaymentFrequenciesControllerTest < ActionController::TestCase
   end
 
   test "should update payment_frequency" do
-    put :update, id: @payment_frequency, payment_frequency: { description: @payment_frequency.description }
+    put :update, id: @payment_frequency, payment_frequency: { description: @payment_frequency.description, name: @payment_frequency.name }
     assert_redirected_to payment_frequency_path(assigns(:payment_frequency))
   end
 

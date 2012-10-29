@@ -18,7 +18,7 @@ class PaymentSchedulesControllerTest < ActionController::TestCase
 
   test "should create payment_schedule" do
     assert_difference('PaymentSchedule.count') do
-      post :create, payment_schedule: { description: @payment_schedule.description, end_date: @payment_schedule.end_date, initial_date: @payment_schedule.initial_date }
+      post :create, payment_schedule: { code: @payment_schedule.code, description: @payment_schedule.description, end_date: @payment_schedule.end_date, initial_date: @payment_schedule.initial_date }
     end
 
     assert_redirected_to payment_schedule_path(assigns(:payment_schedule))
@@ -35,7 +35,7 @@ class PaymentSchedulesControllerTest < ActionController::TestCase
   end
 
   test "should update payment_schedule" do
-    put :update, id: @payment_schedule, payment_schedule: { description: @payment_schedule.description, end_date: @payment_schedule.end_date, initial_date: @payment_schedule.initial_date }
+    put :update, id: @payment_schedule, payment_schedule: { code: @payment_schedule.code, description: @payment_schedule.description, end_date: @payment_schedule.end_date, initial_date: @payment_schedule.initial_date }
     assert_redirected_to payment_schedule_path(assigns(:payment_schedule))
   end
 

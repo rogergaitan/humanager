@@ -5,14 +5,16 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:province) %></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @provinces.each do |province| %>
       <tr>
-        <td><%= province.province %></td>
+        <td><%= link_to province.id, province_path(province) %></td>
+        <td><%= province.name %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_province_path(province), :class => 'btn btn-mini' %>

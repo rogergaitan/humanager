@@ -1,9 +1,13 @@
     <ul class="thumbnails">
-      
-      <li class="span2">
+            <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=warehouses_path %>>
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
           <div class='btn-group'>
-           <a href=<%=warehouses_path %> class='btn btn-large'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.warehouse').pluralize %></a>
-            <button class="btn btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+
+           <a href=<%=warehouses_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.warehouse').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a href=<%=new_warehouse_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
               <li><a href=<%=warehouses_path %> ><i class='icon-list-alt'></i> Lista</a></li>
@@ -12,34 +16,26 @@
               <li><a href="#">Información</a></li>
             </ul>
             </div>
-      </li>
-      
-      <li class="span2">
-        <div class='btn-group'>
-         <a href=<%=categories_path %> class='btn btn-large'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.category').pluralize %></a>
-        <button class="btn btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li><a href=<%=new_category_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
-          <li><a href=<%=categories_path %> ><i class='icon-list-alt'></i> Lista</a></li>
-          
-          <li class="divider"></li>
-          <li><a href="#">Información</a></li>
-        </ul>
+           
         </div>
       </li>
       
       <li class="span2">
-            <div class='btn-group'>
-            <a href=<%=sublines_path %> class='btn btn-large'><i class='icon-picture'></i> <%= I18n.t('.activerecord.models.subline').pluralize %></a>
-            <button class="btn btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <div class='thumbnail'>
+              <div class='btn-group'>
+              <a href=<%=lines_path %>>
+          <%= image_tag ("line_icon.png" ) %> 
+          </a>
+            <a href=<%=lines_path %> class='btn btn-info'><i class='icon-picture'></i> <%= I18n.t('.activerecord.models.line').pluralize %></a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li>
-                <a href=<%=new_subline_path%>>
+                <a href=<%=new_line_path%>>
                   <i class='icon-pencil'></i>  Nuevo
                 </a>
               </li>
               <li>
-                <a href=<%=sublines_path %>>
+                <a href=<%=lines_path %>>
                   <i class='icon-list-alt'></i> Lista
                 </a>
               </li>              
@@ -48,35 +44,17 @@
             </ul>
             </div>
       </li>
-    
-      <li class="span2">
-        <div class="thumbnail">
-          <img src="http://placehold.it/300x200" alt="">
-          <p>
-          <div class='btn-group'>
-           <a href=<%=warehouses_path %> class='btn btn-info btn-large'><i class='icon-picture'></i>        <%= I18n.t('.activerecord.models.warehouse').pluralize %></a>
-            <button class="btn btn-large btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href=<%=new_warehouse_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
-              <li><a href=<%=warehouses_path %> ><i class='icon-list-alt'></i> Lista</a></li>
-              
-              <li class="divider"></li>
-              <li><a href="#">Información</a></li>
-            </ul>
-            </div>
-            </p>
-        </div>
-      </li>
 
       <li class="span2">
         <div class="thumbnail">
-          <a href=<%=sublines_path %>>
-          <%= image_tag ("bodega.jpg" ) %> 
+          <a href=<%=sublines_path %> class='sublines'>
+          <%= image_tag ("subline_icon.png" ) %> 
           </a>
-          <p>
+          
           <div class='btn-group'>
-           <a href=<%=sublines_path %> class='btn btn-success btn-large'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.subline').pluralize %></a>
-            <button class="btn btn-success btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+   
+           <a href=<%=sublines_path %> class='btn btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.subline').pluralize %></a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a href=<%=new_subline_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
               <li><a href=<%=sublines_path %> ><i class='icon-list-alt'></i> Lista</a></li>
@@ -85,8 +63,46 @@
               <li><a href="#">Información</a></li>
             </ul>
             </div>
-            </p>
+            
         </div>
       </li>
+            <li class="span2">
+        <div class='thumbnail'>
+        <div class='btn-group'>
+          <a href=<%=categories_path %>>
+          <%= image_tag ("category_icon.png" ) %> 
+          </a>
+         <a href=<%=categories_path %> class='btn btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.category').pluralize %></a>
+        <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href=<%=new_category_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+          <li><a href=<%=categories_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+          
+          <li class="divider"></li>
+          <li><a href="#">Información</a></li>
+        </ul>
+        </div>
+      </div>
+      </li>
 
+      <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=products_path %>>
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=products_path %> class='btn btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.product').pluralize %></a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_product_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=products_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+            
+        </div>
+      </li>
 </ul>

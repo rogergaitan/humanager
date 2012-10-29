@@ -1,13 +1,27 @@
+# == Schema Information
+#
+# Table name: payment_schedules
+#
+#  id           :integer          not null, primary key
+#  code         :string(255)
+#  description  :string(255)
+#  initial_date :date
+#  end_date     :date
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  payment_date :date
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
+  code: MyString
   description: MyString
-  employee: 
-  initial_date: 2012-09-27
-  end_date: 2012-09-27
+  initial_date: 2012-10-10
+  end_date: 2012-10-10
 
 two:
+  code: MyString
   description: MyString
-  employee: 
-  initial_date: 2012-09-27
-  end_date: 2012-09-27
+  initial_date: 2012-10-10
+  end_date: 2012-10-10

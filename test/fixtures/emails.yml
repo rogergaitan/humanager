@@ -1,9 +1,13 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+# == Schema Information
+#
+# Table name: emails
+#
+#  id         :integer          not null, primary key
+#  entity_id  :integer
+#  email      :string(255)
+#  typeemail  :enum([:personal,
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 
-one:
-  person: 
-  email: MyString
 
-two:
-  person: 
-  email: MyString

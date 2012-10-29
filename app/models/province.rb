@@ -1,8 +1,17 @@
-class Province < ActiveRecord::Base
-  attr_accessible :province
-  
-  has_many :canton, :dependent => :destroy #UNA PROVINCIA PUEDE TENER MUCHOS CANTONES
+# == Schema Information
+#
+# Table name: provinces
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 
-  validates :province, :presence => true,
-  			:uniqueness => { :case_sensitive => false }
+class Province < ActiveRecord::Base
+  has_many :addresses
+  has_many :cantons
+  has_many :districts
+
+  attr_accessible :name
 end

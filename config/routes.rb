@@ -13,58 +13,83 @@ Reasapp::Application.routes.draw do
     end
   end
 
-  resources :employees do
-    collection do
-      get 'sync'
-    end
-  end
-
   resources :districts
 
   resources :cantons
 
   resources :provinces
 
-  resources :payment_schedules
-
-  resources :deductions
-
-  resources :work_benefits
+  resources :roles
 
   resources :departments
+
+  resources :means_of_payments
 
   resources :payment_frequencies
 
   resources :payment_methods
 
-  resources :means_of_payments
+  resources :payment_schedules
+
+  resources :employees do
+    collection do
+      get 'sync'
+    end
+    collection do
+      get 'load_employees'
+    end
+  end
+
+  resources :employees
+
+  resources :deductions
+
+  resources :work_benefits
 
   resources :occupations
 
-  resources :roles
+  resources :customers
 
-  resources :categories
-
-  resources :sublines
-
+  resources :entities
+  resources :product_pricings
+  resources :products
   resources :warehouses
-
   devise_for :users
 
   get "pages/home"
-
   get "pages/about"
-
   get "pages/help"
-
   get "pages/contact"
 
   match '/contact', :to => 'pages#contact'
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
+  match '/404', :to => 'errors#not_found'
+  
   root :to => 'pages#home'
 
+  resources :lines do
+    collection do
+      get 'fetch'
+    end
+  end
 
+  resources :categories do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :sublines do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :vendors
+  resources :sublines
+  resources :categories
+  resources :lines
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -83,7 +108,7 @@ Reasapp::Application.routes.draw do
   # Sample resource route with options:
   #   resources :products do
   #     member do
-  #       get 'short'
+  #       get 'fetch'
   #       post 'toggle'
   #     end
   #

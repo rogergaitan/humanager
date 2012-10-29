@@ -1,0 +1,29 @@
+# == Schema Information
+#
+# Table name: product_pricings
+#
+#  id         :integer          not null, primary key
+#  product_id :integer
+#  utility    :float
+#  type       :enum([:other, :c
+#  category   :enum([:a, :b, :c
+#  sell_price :float
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  product_id: 1
+  utility: 1.5
+  type: 
+  category: 
+  sell_price: 1.5
+
+two:
+  product_id: 1
+  utility: 1.5
+  type: 
+  category: 
+  sell_price: 1.5

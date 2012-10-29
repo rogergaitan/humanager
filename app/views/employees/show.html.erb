@@ -38,6 +38,7 @@
   <dd><%= @employee.means_of_payment_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:wage_payment) %>:</strong></dt>
   <dd><%= @employee.wage_payment %></dd>
+	<dd><%= image_tag @employee.photo.photo_url(:thumb).to_s %></dd>
 </dl>
 
 <div class="form-actions">

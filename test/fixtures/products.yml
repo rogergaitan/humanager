@@ -1,0 +1,71 @@
+# == Schema Information
+#
+# Table name: products
+#
+#  id           :integer          not null, primary key
+#  code         :string(255)
+#  line_id      :integer
+#  subline_id   :integer
+#  category_id  :integer
+#  part_number  :string(255)
+#  name         :string(255)
+#  make         :string(255)
+#  model        :string(255)
+#  year         :string(255)
+#  version      :string(255)
+#  max_discount :integer
+#  address      :string(255)
+#  max_cant     :integer
+#  min_cant     :integer
+#  cost         :float
+#  bar_code     :string(255)
+#  market_price :integer
+#  status       :enum([:active, :
+#  stock        :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  line_id: 1
+  subline_id: 1
+  category_id: 1
+  part_number: MyString
+  name: MyString
+  make: MyString
+  model: MyString
+  year: MyString
+  version: MyString
+  max_discount: 1
+  address: MyString
+  max_cant: 1
+  min_cant: 1
+  cost: 1.5
+  bar_code: MyString
+  market_price: 1
+  stock: 1
+  status: MyString
+
+two:
+  code: MyString
+  line_id: 1
+  subline_id: 1
+  category_id: 1
+  part_number: MyString
+  name: MyString
+  make: MyString
+  model: MyString
+  year: MyString
+  version: MyString
+  max_discount: 1
+  address: MyString
+  max_cant: 1
+  min_cant: 1
+  cost: 1.5
+  bar_code: MyString
+  market_price: 1
+  stock: 1
+  status: MyString

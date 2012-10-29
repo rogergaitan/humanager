@@ -1,11 +1,11 @@
-# -*- encoding : utf-8 -*-
 class CategoriesController < ApplicationController
   # GET /categories
-  # GET /categories.json
+  # GET /categories.json,
+  # categories *paginated*
   def index
     @title = t('.activerecord.models.category').capitalize.pluralize
     @categories = Category.all
-
+    @categories = Category.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @categories }
@@ -44,14 +44,20 @@ class CategoriesController < ApplicationController
 
   # POST /categories
   # POST /categories.json
+  # Create and *Show* or Create and *Continue*
   def create
     @title = t('.activerecord.models.category').capitalize
     @category = Category.new(params[:category])
 
     respond_to do |format|
       if @category.save
-        format.html { redirect_to @category, notice: t('.activerecord.models.category').capitalize + t('.notice.a_successfully_created') }
-        format.json { render json: @category, status: :created, location: @category }
+        if params['continue']
+          format.html { redirect_to new_category_path, notice: t('.activerecord.models.category').capitalize + t('.notice.a_successfully_created') }
+          format.json { render json: @category, status: :created, location: @category }
+        else
+          format.html { redirect_to @category, notice: t('.activerecord.models.category').capitalize + t('.notice.a_successfully_created') }
+          format.json { render json: @category, status: :created, location: @category }
+        end
       else
         format.html { render action: "new" }
         format.json { render json: @category.errors, status: :unprocessable_entity }
@@ -84,6 +90,17 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to categories_url, notice: t('.activerecord.models.category').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
+    end
+  end
+
+  # SHORT /lines/categories
+  # Get All categories including just the id and the name. 
+  # We use this method on: create or edit products(dropdowns)
+  def fetch
+    @names_ids = Category.find(:all, :select =>['id','name']).to_json
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @names_ids }
     end
   end
 end

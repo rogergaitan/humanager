@@ -1,4 +1,6 @@
 class EmployeesController < ApplicationController
+  before_filter :get_address_info, :only => [:new, :edit]
+  before_filter :get_employee_info, :only => [:new, :edit]
   # GET /employees
   # GET /employees.json
   def index
@@ -25,7 +27,11 @@ class EmployeesController < ApplicationController
   # GET /employees/new.json
   def new
     @employee = Employee.new
-    @employee.build_entity
+    @entity = @employee.build_entity
+    @employee.build_photo
+    @entity.telephones.build
+    @entity.emails.build
+    @entity.addresses.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -85,15 +91,19 @@ class EmployeesController < ApplicationController
   def sync
     @abanits = Abanit.where("bempleado = ?", 'T').find(:all, 
                             :select => ['init', 'ntercero'])
-    @c = 0
+    @c = 0 
     @syn_data = {}
     @employees = []
     @abanits.each do |employee|
       if Entity.where("entityid = ?", employee.init).empty?
         full_name = splitname(firebird_encoding(employee.ntercero).split)
         @new_employee = Employee.new
-        @new_employee.build_entity(:name => full_name[:name], :surname => 
+        @entity = @new_employee.build_entity(:name => full_name[:name], :surname => 
                                 full_name[:surname], :entityid => employee.init)
+        @entity.telephones.build
+        @new_employee.build_photo
+        @entity.emails.build
+        @entity.addresses.build
         if @new_employee.save
            @employees << @new_employee
             @c += 1
@@ -117,11 +127,33 @@ class EmployeesController < ApplicationController
     if splitname.count < 4
       full_name[:name] = splitname.first
       full_name[:surname] = splitname[1, 3].join(" ")
-    elsif splitname.count > 3
+    else
       n = splitname.count - 2
       full_name[:name] = splitname[0, n].join(" ")
       full_name[:surname] = splitname[n, splitname.count].join(" ")     
     end
     full_name
   end
+  
+  def load_employees
+    @employees = Employee.all
+    respond_to do |format|
+      format.json { render json: @employees, :include => :entity }
+    end
+  end
+  
+  def get_address_info
+     @province ||= Province.find(:all, :select =>['id','name'])
+     @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
+     @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
+   end
+   
+   def get_employee_info
+     @department = Department.find(:all, :select =>['id','name'])
+     @occupation = Occupation.find(:all, :select =>['id','description'])
+     @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
+     @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
+     @roles = Role.find(:all, :select =>['id','role', 'department_id'])
+     @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
+   end
 end

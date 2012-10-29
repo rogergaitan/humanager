@@ -2,8 +2,10 @@
 
 one:
   employee: 
-  url: MyString
+  name: MyString
+  photo: MyString
 
 two:
   employee: 
-  url: MyString
+  name: MyString
+  photo: MyString

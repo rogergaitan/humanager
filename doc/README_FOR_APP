@@ -1,3 +1,10 @@
+Install npm
+http://npmjs.org/install.sh
+
+sudo sh install.sh
+
+We need npm to install eventmachine to handle sockets
+
 Use this README file to introduce your application and point to useful places in the API for learning more.
 Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
 
@@ -5,4 +12,23 @@ If you create a new model with scaffold make sure you adapt to bootstrap css.
 	rails g boostrap:themed model_name
 
 Delete any scaffold.css because this will afect any view into the app.
+      <th><%= model_class.human_attribute_name(:inventory) %></th>
+      <th><%= model_class.human_attribute_name(:sale_cost) %></th>
+      <th><%= model_class.human_attribute_name(:utility_adjusment) %></th>
+      <th><%= model_class.human_attribute_name(:lost_adjustment) %></th>
+      <th><%= model_class.human_attribute_name(:income) %></th>
+      <th><%= model_class.human_attribute_name(:sales_return) %></th>
+      <th><%= model_class.human_attribute_name(:purchase_return) %></th>
+      <th><%= model_class.human_attribute_name(:sale_tax) %></th>
+      <th><%= model_class.human_attribute_name(:purchase_tax) %></th>
 
+
+        <td><%= line.inventory %></td>
+        <td><%= line.sale_cost %></td>
+        <td><%= line.utility_adjusment %></td>
+        <td><%= line.lost_adjustment %></td>
+        <td><%= line.income %></td>
+        <td><%= line.sales_return %></td>
+        <td><%= line.purchase_return %></td>
+        <td><%= line.sale_tax %></td>
+        <td><%= line.purchase_tax %></td>

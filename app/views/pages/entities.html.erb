@@ -1,0 +1,29 @@
+<ul class="thumbnails">
+    <li class="span2">
+        <div class="thumbnail">
+            <a href=<%=employees_path %>><%= image_tag ("" ) %></a>
+        <div class='btn-group'>
+
+            <a href=<%=employees_path %> class='btn btn-info btn-info'>
+                <i class='icon-user'></i>
+                <%= I18n.t('.activerecord.models.warehouse').pluralize %>
+            </a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href=<%=new_employee_path%>>
+                        <i class='icon-pencil'></i>  Nuevo</a>
+                    </li>
+                <li>
+                    <a href=<%=employee_path %>>
+                        <i class='icon-list-alt'></i> Lista</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">Información</a></li>
+            </ul>
+        </div>
+        </div>
+    </li>
+</ul>

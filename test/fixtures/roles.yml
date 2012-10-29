@@ -1,9 +1,23 @@
+# == Schema Information
+#
+# Table name: roles
+#
+#  id            :integer          not null, primary key
+#  role          :string(255)
+#  description   :string(255)
+#  department_id :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  rol: MyString
+  role: MyString
   description: MyString
+  department: 
 
 two:
-  rol: MyString
+  role: MyString
   description: MyString
+  department: 

@@ -5,16 +5,18 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:province_id) %></th>
-      <th><%= model_class.human_attribute_name(:canton) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @cantons.each do |canton| %>
       <tr>
-        <td><%= canton.province.province %></td>
-        <td><%= canton.canton %></td>
+        <td><%= link_to canton.id, canton_path(canton) %></td>
+        <td><%= canton.name %></td>
+        <td><%= canton.province_id %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_canton_path(canton), :class => 'btn btn-mini' %>
