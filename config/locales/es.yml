@@ -103,6 +103,7 @@ es:
         district: Distrito
         canton: Cantones
         task: Labor
+        ledger_account: Cuentas Contable
       attributes:
         employee:
           ccss_calculated: Calcula CCSS?
@@ -154,6 +155,9 @@ es:
           itask: Codigo
           ntask: Descripción
           mlaborcost: Costo Labor
+        ledger_account:
+          iaccount: Cuenta
+          naccount: Descripción Cuenta         
         user:
           login:
   date:

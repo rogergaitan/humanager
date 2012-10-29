@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121021205936) do
+ActiveRecord::Schema.define(:version => 20121029011947) do
 
   create_table "cantons", :force => true do |t|
     t.integer  "province_id"
@@ -94,6 +94,14 @@ ActiveRecord::Schema.define(:version => 20121021205936) do
     t.enum     "typeid",     :limit => [:national, :foreign, :company]
     t.datetime "created_at",                                            :null => false
     t.datetime "updated_at",                                            :null => false
+  end
+
+  create_table "ledger_accounts", :force => true do |t|
+    t.string   "iaccount"
+    t.string   "naccount"
+    t.string   "ifather"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "means_of_payments", :force => true do |t|
