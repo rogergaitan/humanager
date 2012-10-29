@@ -1,6 +1,18 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :ledger_accounts do
+    collection do
+      get 'accountfb'
+    end
+  end
+
+  resources :tasks do
+    collection do
+      get 'tasksfb'
+    end
+  end
+
   resources :districts
 
   resources :cantons

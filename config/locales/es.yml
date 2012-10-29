@@ -38,6 +38,7 @@ es:
       show_accounting_info: 'Información Contable'   
     titles:
       sync: datos sincronizados
+      tasksfb: datos sincronizados
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
   notice:
@@ -201,6 +202,8 @@ es:
         province: Provincia
         district: Distrito
         canton: Cantones
+        task: Labor
+        ledger_account: Cuentas Contable
       attributes:
         vendor:
           credit_limit: Crédito
@@ -304,6 +307,13 @@ es:
         district:
           district: Distrito
           canton_id: Cantón
+        task:
+          itask: Codigo
+          ntask: Descripción
+          mlaborcost: Costo Labor
+        ledger_account:
+          iaccount: Cuenta
+          naccount: Descripción Cuenta         
         user:
           login:
   date:

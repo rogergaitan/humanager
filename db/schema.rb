@@ -11,6 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema.define(:version => 20121029011947) do
+=======
 ActiveRecord::Schema.define(:version => 20121025204013) do
 
   create_table "addresses", :force => true do |t|
@@ -39,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   end
 
   add_index "bank_accounts", ["entity_id"], :name => "index_bank_accounts_on_entity_id"
+>>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
 
   create_table "cantons", :force => true do |t|
     t.string   "name"
@@ -47,6 +51,8 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.datetime "updated_at",  :null => false
   end
 
+<<<<<<< HEAD
+=======
   add_index "cantons", ["province_id"], :name => "index_cantons_on_province_id"
 
   create_table "categories", :force => true do |t|
@@ -87,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   add_index "customers", ["customer_profile_id"], :name => "index_customers_on_customer_profile_id"
   add_index "customers", ["entity_id"], :name => "index_customers_on_entity_id"
 
+>>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
   create_table "deductions", :force => true do |t|
     t.string   "description"
     t.integer  "employee_id"
@@ -167,6 +174,14 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.datetime "updated_at",                                            :null => false
   end
 
+<<<<<<< HEAD
+  create_table "ledger_accounts", :force => true do |t|
+    t.string   "iaccount"
+    t.string   "naccount"
+    t.string   "ifather"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+=======
   create_table "lines", :force => true do |t|
     t.string   "code"
     t.string   "name"
@@ -182,6 +197,7 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.integer  "purchase_tax"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+>>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
   end
 
   create_table "means_of_payments", :force => true do |t|
@@ -221,6 +237,25 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.date     "payment_date"
   end
 
+<<<<<<< HEAD
+  add_index "payment_schedules", ["employee_id"], :name => "index_payment_schedules_on_employee_id"
+
+  create_table "people", :force => true do |t|
+    t.string   "id_person"
+    t.string   "name"
+    t.string   "first_surname"
+    t.string   "second_surname"
+    t.date     "birthdate"
+    t.string   "fb_person"
+    t.enum     "typeid",         :limit => [:national, :foreign]
+    t.enum     "gender",         :limit => [:male, :female]
+    t.enum     "marital_status", :limit => [:single, :married, :divorced, :windowd, :civil_union, :engage]
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+  end
+
+=======
+>>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
     t.string   "name"
@@ -287,6 +322,16 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.string   "name"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.string   "iactivity"
+    t.string   "itask"
+    t.string   "ntask"
+    t.string   "iaccount"
+    t.decimal  "mlaborcost", :precision => 18, :scale => 4
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "telephones", :force => true do |t|
