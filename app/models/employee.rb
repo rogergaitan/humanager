@@ -41,7 +41,8 @@ class Employee < ActiveRecord::Base
   					:means_of_payment_id, :photo_attributes
   accepts_nested_attributes_for :entity, :allow_destroy => true
   accepts_nested_attributes_for :photo, :allow_destroy => true
-    
+  
+  validates_associated :entity, :on => :create    
 
   def full_name
     "#{entity.name} #{entity.surname}"

@@ -13,6 +13,6 @@
 class District < ActiveRecord::Base
   belongs_to :province
   belongs_to :canton
-  has_many :addresses
+  has_many :addresses, :dependent => :destroy
   attr_accessible :name, :canton_id, :province_id
 end

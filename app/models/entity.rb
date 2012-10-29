@@ -27,5 +27,7 @@ class Entity < ActiveRecord::Base
   
   attr_accessible :entityid, :name, :surname, :typeid, :telephones_attributes, 
                   :emails_attributes, :addresses_attributes, :contacts_attributes
+  
+  validates :name, :surname, :entityid, :presence => true, :format => { :with => /\A[a-zA-Z]+\z/ }
 end
 
