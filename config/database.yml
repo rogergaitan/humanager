@@ -43,5 +43,5 @@ firebird:
   adapter: rubyfb
   database: /var/lib/firebird/2.5/data/AreaT_PRUEBAS.fdb
   username: SYSDBA
-  password: '12345678'
-  host: 127.0.0.1
+  password: 'root'
+  host: localhost
