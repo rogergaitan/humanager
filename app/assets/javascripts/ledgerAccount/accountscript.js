@@ -1,9 +1,12 @@
 $(document).ready(function() {
   $('#account-fb').click(function() { 
-    $.getJSON('/ledger_accounts/accountfb', function(element) {
-      $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
-      $(element.account).each(function() { add_accounts(this, 'table#account-data')});
-      $('#account-fb').hide();
+    //$('#account-fb').attr("disabled", true); //desabilito el boton
+     $('#account-fb').hide();
+     $('#imagen').show();
+    $.getJSON('/ledger_accounts/accountfb', function(resultado) {
+      $('section.nav').append('<div class="notice">'+ resultado.notice +'</div>'); 
+      $(resultado.account).each(function() { add_accounts(this, 'table#account-data')});
+      $('#imagen').hide();
     })
   });
 
@@ -26,3 +29,7 @@ $(document).ready(function() {
     return value;
   }
 })
+
+  $(document).ready(function() {
+     $('#imagen').hide();
+  });
