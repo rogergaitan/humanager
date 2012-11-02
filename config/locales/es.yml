@@ -313,7 +313,8 @@ es:
           mlaborcost: Costo Labor
         ledger_account:
           iaccount: Cuenta
-          naccount: Descripción Cuenta         
+          naccount: Descripción Cuenta  
+          ifather: Cuenta Padre       
         user:
           login:
   date:

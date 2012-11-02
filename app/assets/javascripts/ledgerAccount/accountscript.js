@@ -33,3 +33,15 @@ $(document).ready(function() {
   $(document).ready(function() {
      $('#imagen').hide();
   });
+
+  $(document).ready(function(){ // Script del Navegador
+    $("ul.subnavegador").hide();                
+    $("a.desplegable").toggle(
+      function() { 
+        $(this).parent().find("ul.subnavegador").slideDown('fast'); 
+      },
+      function() { 
+        $(this).parent().find("ul.subnavegador").slideUp('fast'); 
+      }                
+    );    
+});

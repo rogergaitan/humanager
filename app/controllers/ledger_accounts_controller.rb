@@ -87,6 +87,8 @@ class LedgerAccountsController < ApplicationController
       @c = 0
       @accounts = []
       @accounts_fb = {}
+# Cntpuc.select(:ipadre).where("bvisible = ?", 'T').uniq 
+# hijos = Cntpuc.where("ipadre = ?", '11').find(:all, :select => ['icuenta', 'ncuenta'])
 
       @cntpuc.each do |account|
         if LedgerAccount.where("iaccount = ?", account.icuenta).empty?
