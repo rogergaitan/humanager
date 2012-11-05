@@ -1,6 +1,16 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :centro_de_costos do
+    collection do
+      get 'sync_cc'
+    end
+  end
+
+  resources :centro_de_costos
+
+  resources :positions
+
   resources :ledger_accounts do
     collection do
       get 'accountfb'

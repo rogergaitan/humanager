@@ -1,0 +1,364 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+es:
+  hello: "Hello world"
+  tabs:
+    general: General
+    prices: Precios
+    other: Otros
+    contacts: Contactos
+  will_paginate:
+    next_label: Siguiente
+    previous_label: Anterior
+    personal_data: 'Datos Personales'
+    employment_data: 'Empresa'
+    contact: Contacto
+  routes:
+    new: nuevo
+    edit: editar
+    users: usuario
+  helpers:
+    actions: Acciones 
+    select:
+      prompt: Por favor selecciona
+    submit:
+      create: Crear %{model}
+      submit: Guardar %{model}
+      update: Actualizar %{model}
+    links:
+      destroy: Eliminar
+      save_continue: Guardar y Continuar        
+      edit: Editar
+      edit_price: Editar precio
+      new: Nuevo
+      cancel: Cancelar  
+      back: Regresar
+      confirm: '¿Está seguro(a)?'
+      show_accounting_info: 'Información Contable'   
+    titles:
+      sync: datos sincronizados
+      edit: Editar  %{model}
+      new:  Nuevo registro de %{model}
+  notice:
+    successfully_created:  ' creado exitosamente'
+    successfully_updated:  ' actualizado exitosamente'
+    successfully_deleted:  ' eliminado correctamente'
+    a_successfully_deleted: ' eliminada correctamente'
+    a_successfully_created: ' creada correctamente'
+    a_successfully_updated: ' actualizada correctamente'
+  content:
+    titles: 
+      tools: Herramientas
+      messages: Mensajes
+      home: Inicio
+      other: Otros
+  activerecord:
+      errors:
+        models:
+          product:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              name:
+                blank: Este campo no puede quedar en blanco
+              part_number:
+                blank: Este campo no puede quedar en blanco
+              name: 
+                blank: Este campo no puede quedar en blanco
+              make:
+                blank: Este campo no puede quedar en blanco
+              model:
+                blank: Este campo no puede quedar en blanco
+              year:
+                blank: Este campo no puede quedar en blanco
+              version:
+                blank: Este campo no puede quedar en blanco
+              line_id:
+                blank: Este campo no puede quedar en blanco  
+              subline_id:
+                blank: Este campo no puede quedar en blanco
+              product_subline:
+                blank: Este campo no puede quedar en blanco
+          line:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+              description:
+                blank: Este campo no puede quedar en blanco
+              income:
+                blank: Este campo no puede quedar en blanco
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              inventory:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              lost_adjustment:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              name:
+                blank: Este campo no puede quedar en blanco
+              purchase_return:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              purchase_tax:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              sale_cost:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              sale_tax:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              sales_return:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              utility_adjusment:
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+          warehouse:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+          subline:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+          category:
+            attributes:
+              code:
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
+              name:
+                blank: Este campo no puede quedar en blanco
+          province:
+            attributes:
+              province:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Esta provincia ya existe'
+          canton:
+            attributes:
+              canton:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este cantón ya existe'
+          district:
+            attributes:
+              district:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este distrito ya existe'
+      models:
+        customer: Cliente
+        vendor: Proveedor
+        entity: Entidad
+        employee: Empleado
+        product_pricing: Precio
+        product: Producto
+        line: Línea
+        payment_schedule: 'Calendario de pagos'
+        telephone: 'Teléfono'
+        employee: Empleado
+        entity: Entidad
+        warehouse:  Bodega
+        warehouses: Bodegas
+        user: Usuario
+        subline: Sub-Línea
+        category: Categoría
+        province: Provincia
+        district: Distrito
+        canton: Cantones
+      attributes:
+        vendor:
+          credit_limit: Crédito
+        entity:
+          name: Nombre
+          surname: Apellidos
+          entityid: Cédula
+          typeid: Tipo cédula
+        employee:
+          join_date: Fecha ingreso
+        product_pricing:
+          product_id: Producto
+          utility: Utilidad
+          price_type: Tipo de precio
+          category: Categoría
+          sell_price: Precio Venta
+        product:
+          code: Código
+          name: Nombre
+          bar_code: Código Barras
+          cost: Costo
+          status: Estado
+          stock: Existencia
+          line_id: Línea
+          subline_id: Sub-línea
+          category_id: Categoría
+          part_number: Parte
+          make: Marca
+          model: Modelo
+          year: Año
+          version: Versión
+          max_discount: 'Descuento max'
+          address: Dirección
+          max_cant: Max
+          min_cant: Min
+          market_price: 'Precio mercado'
+        line:
+          code: Código
+          description: Descripción
+          income: Ingreso
+          inventory: Inventario
+          lost_adjustment: 'Ajuste/pérdida'
+          name: Nombre
+          purchase_return: 'Dev/compra'
+          purchase_tax: 'Impuesto/compra'
+          sale_cost: 'Costo/ventas'
+          sale_tax: 'Impuesto/venta'
+          sales_return: 'Dev/venta'
+          utility_adjusment: 'Ajuste/utilidad'
+        telephone:
+          telephone: 'Teléfono'
+          typephone: 'Tipo de teléfono'
+        payment_schedule:
+          code: 'Código'
+          description: 'Descripción'
+          initial_date: 'Desde'
+          end_date: 'Hasta'
+          payment_date: 'Fecha del pago'
+        employee:
+          entity_id: Entidad
+          join_date: Ingreso
+          seller: Vendedor
+          gender: 'Género'
+          birthday: 'Nacimiento'
+          marital_status: 'Estado Civil'
+          ccss_calculated: Calcula CCSS?
+          department_id: Departamento
+          means_of_payment_id: Medio de Pago
+          number_of_dependents: Dependientes
+          occupation_id: 'Ocupación'
+          payment_frequency_id: Frecuencia de Pago
+          payment_method_id: Forma de Pago
+          role_id: Rol
+          social_insurance: Seguro Social
+          spouse: 'Cónyuge'
+          wage_payment: Salario
+        entity:
+          name: Nombre
+          surname: Apellidos
+          entityid: 'Cédula'
+          typeid: 'Tipo Identificación'
+        category:
+          code: Código
+          description: Descripción
+          name: Nombre                  
+        subline:
+          code: Código
+          description: Descripción
+          name: Nombre          
+        warehouse:
+          code: Código
+          name: Nombre
+          description:  Descripción
+          manager:  Responsable
+          address: Dirección
+        province:
+          province: Provincia
+        canton:
+          canton: Cantón
+          province_id: Provincia
+        district:
+          district: Distrito
+          canton_id: Cantón
+        user:
+          login:
+  date:
+      abbr_day_names:
+      - dom
+      - lun
+      - mar
+      - mié
+      - jue
+      - vie
+      - sáb
+      abbr_month_names:
+      -
+      - ene
+      - feb
+      - mar
+      - abr
+      - may
+      - jun
+      - jul
+      - ago
+      - sep
+      - oct
+      - nov
+      - dic
+      day_names:
+      - domingo
+      - lunes
+      - martes
+      - miércoles
+      - jueves
+      - viernes
+      - sábado
+      formats:
+        default: ! '%d/%m/%Y'
+        long: ! '%A, %d de %B de %Y'
+        short: ! '%d de %b'
+      month_names:
+      -
+      - enero
+      - febrero
+      - marzo
+      - abril
+      - mayo
+      - junio
+      - julio
+      - agosto
+      - septiembre
+      - octubre
+      - noviembre
+      - diciembre
+      order:
+      - :day
+      - :month
+      - :year
+
+
+

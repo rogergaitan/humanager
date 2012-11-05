@@ -1,0 +1,115 @@
+<script type="text/javascript">
+	var centro_costos = [];
+  <% @centro_de_costos.each do |cc| %>
+		centro_costos.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>));
+  <% end %>
+	$(document).ready(function() {
+		cc_tree(centro_costos);
+		$('.expand_tree').click(expand);
+	})
+	
+	function cc_tree (centro_costos) {
+		var row = "";
+		var left = []
+		$(centro_costos.sort()).each(function() {
+			if (this[2] == 0) {
+				$('#list').append("<ul><li id='" + this[0] + "' class='accordion-group'><p class='main-parent'>" + this[1] + "</p></li></ul>");
+			}
+			else {
+				if ($('#list li#'+this[2]).length) {
+					$('#list li#' + this[2] + ' p:first').addClass('expand_tree');
+					$('#list li#' + this[2]).append("<ul style='display:none'><li id='" + this[0] + "' data-parent='" + this[2] + "'><p>" + this[1] + "</p></li></ul>");
+				}
+				else {
+					left.push(this);
+				};
+			};
+		})
+		if (left.length) {
+			cc_tree(left);
+		}
+	}
+	
+	function expand (e) {
+		e.stopPropagation();
+		$(this).siblings().slideToggle('fast', 'linear');
+	}
+</script>
+<%- model_class = CentroDeCosto -%>
+<%= javascript_include_tag 'centro_costos/sync_cc' %>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %> 
+    <button id="sync-cc" class="btn btn-primary pull-right">
+      <i class='icon-refresh'></i>
+    </button>
+  </h1>
+</div>
+<!--
+<table class="table table-striped" id="cc-data">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:iempresa) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody id="treeview">
+    <% @centro_de_costos.each do |centro_de_costo| %>
+      <tr>
+        <td><%= centro_de_costo.nombre_cc %></td>
+				<td><%= centro_de_costo.icentro_costo %></td>
+        <td><%= centro_de_costo.nombre_cc %></td>
+        <td><%= centro_de_costo.icc_padre %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_centro_de_costo_path(centro_de_costo), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      centro_de_costo_path(centro_de_costo),
+                      :method => :delete,
+                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_centro_de_costo_path,
+            :class => 'btn btn-primary' %>
+
+						-->
+<div id="list"></div>
+<!--	
+<ul>
+	<li>1</li>
+	<ul>
+		<li>1.1</li>
+	</ul>
+</ul>
+
+<div class="accordion" id="accordion2">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        Collapsible Group Item #1
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        Collapsible Group Item #2
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+</div>-->

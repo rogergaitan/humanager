@@ -1,10 +1,6 @@
 <script type="text/javascript">
-  var roles = new Array();
-	var cantons = new Array();
-	var district = new Array();
-  <% @roles.each do |role| %>
-    roles.push(new Array(<%= role.department_id %>, '<%=h role.role %>', <%= role.id %>));
-  <% end %>
+	var cantons = [];
+	var district = [];
   <% @canton.each do |canton| %>
 		cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
   <% end %>
@@ -19,7 +15,7 @@
         <li><a href="#tab2" data-toggle="tab"><%= t("tabs.contact") %></a></li>
         <li><a href="#tab3" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
     </ul>
-    <%= form_for @employee, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+    <%= form_for @employee, :validate => true, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
     <div class="tab-content">
       <div class="tab-pane" id="tab2">
 				<h2>Teléfonos</h2>
@@ -124,40 +120,46 @@
         <div class="control-group">
           <%= f.label :occupation_id, :class => 'control-label' %>
           <div class="controls">
-            <%= collection_select(:employee, :occupation_id, @occupation, :id, :description , :prompt => true) %>
+            <%= f.collection_select(:occupation_id, @occupation, :id, :description , :prompt => true) %>
           </div>
         </div>
         <div class="control-group">
-            <%= f.label :department_id, :class => 'control-label' %>
-            <div class="controls">
-							<% h = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
-              <%= collection_select(:employee, :department_id, @department, :id, :name , :prompt => h) %>
-            </div>
+          <%= f.label :position_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.collection_select(:position_id, @position, :id, :position , :prompt => true) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :department_id, :class => 'control-label' %>
+          <div class="controls">
+						<% h = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+          	<%= f.collection_select(:department_id, @department, :id, :name , :prompt => h) %>
+          </div>
         </div>
         <div class="control-group" id="role_field">
           <%= f.label :role_id, :class => 'control-label' %>
           <div class="controls">
-            <%= collection_select(:employee, :role_id, @roles, :id, :role , :prompt => true) %>
+            <%= f.collection_select(:role_id, @roles, :id, :role , :prompt => true) %>
           </div>
         </div>
         <div class="control-group">
           <%= f.label :payment_method_id, :class => 'control-label' %>
           <div class="controls">
-            <%= collection_select(:employee, :payment_method_id, @payment_method, :id,
+            <%= f.collection_select(:payment_method_id, @payment_method, :id,
                                   :name , :prompt => true) %>
           </div>
         </div>
         <div class="control-group">
           <%= f.label :payment_frequency_id, :class => 'control-label' %>
           <div class="controls">
-            <%= collection_select(:employee, :payment_frequency_id, @payment_frequency, :id,
+            <%= f.collection_select(:payment_frequency_id, @payment_frequency, :id,
                                   :name , :prompt => true) %>
           </div>
         </div>
         <div class="control-group">
           <%= f.label :means_of_payment_id, :class => 'control-label' %>
           <div class="controls">
-            <%= collection_select(:employee, :means_of_payment_id, @mean_of_payment, :id,
+            <%= f.collection_select(:means_of_payment_id, @mean_of_payment, :id,
                                   :name , :prompt => true) %>
           </div>
         </div>

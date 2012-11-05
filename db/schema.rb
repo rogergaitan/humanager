@@ -11,10 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20121029011947) do
-=======
-ActiveRecord::Schema.define(:version => 20121025204013) do
+ActiveRecord::Schema.define(:version => 20121031023209) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -42,7 +39,6 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   end
 
   add_index "bank_accounts", ["entity_id"], :name => "index_bank_accounts_on_entity_id"
->>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
 
   create_table "cantons", :force => true do |t|
     t.string   "name"
@@ -51,8 +47,6 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.datetime "updated_at",  :null => false
   end
 
-<<<<<<< HEAD
-=======
   add_index "cantons", ["province_id"], :name => "index_cantons_on_province_id"
 
   create_table "categories", :force => true do |t|
@@ -61,6 +55,15 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "centro_de_costos", :force => true do |t|
+    t.string   "iempresa"
+    t.string   "icentro_costo"
+    t.string   "nombre_cc"
+    t.string   "icc_padre"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "contacts", :force => true do |t|
@@ -93,7 +96,6 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   add_index "customers", ["customer_profile_id"], :name => "index_customers_on_customer_profile_id"
   add_index "customers", ["entity_id"], :name => "index_customers_on_entity_id"
 
->>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
   create_table "deductions", :force => true do |t|
     t.string   "description"
     t.integer  "employee_id"
@@ -155,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.decimal  "wage_payment",                                                                                    :precision => 12, :scale => 2
     t.datetime "created_at",                                                                                                                     :null => false
     t.datetime "updated_at",                                                                                                                     :null => false
+    t.string   "position_id"
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
@@ -163,7 +166,13 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
   add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
   add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
+  add_index "employees", ["position_id"], :name => "index_employees_on_position_id"
   add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
+
+  create_table "empmaestccs", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "entities", :force => true do |t|
     t.string   "name"
@@ -174,14 +183,14 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.datetime "updated_at",                                            :null => false
   end
 
-<<<<<<< HEAD
   create_table "ledger_accounts", :force => true do |t|
     t.string   "iaccount"
     t.string   "naccount"
     t.string   "ifather"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-=======
+  end
+
   create_table "lines", :force => true do |t|
     t.string   "code"
     t.string   "name"
@@ -197,7 +206,6 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.integer  "purchase_tax"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
->>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
   end
 
   create_table "means_of_payments", :force => true do |t|
@@ -237,25 +245,6 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
     t.date     "payment_date"
   end
 
-<<<<<<< HEAD
-  add_index "payment_schedules", ["employee_id"], :name => "index_payment_schedules_on_employee_id"
-
-  create_table "people", :force => true do |t|
-    t.string   "id_person"
-    t.string   "name"
-    t.string   "first_surname"
-    t.string   "second_surname"
-    t.date     "birthdate"
-    t.string   "fb_person"
-    t.enum     "typeid",         :limit => [:national, :foreign]
-    t.enum     "gender",         :limit => [:male, :female]
-    t.enum     "marital_status", :limit => [:single, :married, :divorced, :windowd, :civil_union, :engage]
-    t.datetime "created_at",                                                                                :null => false
-    t.datetime "updated_at",                                                                                :null => false
-  end
-
-=======
->>>>>>> a10b8d89ba0154c49b2d359a7509dd605568534f
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
     t.string   "name"
@@ -265,6 +254,15 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   end
 
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
+
+  create_table "positions", :force => true do |t|
+    t.string   "position"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "codigo_ins"
+    t.string   "codigo_ccss"
+  end
 
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
@@ -309,12 +307,9 @@ ActiveRecord::Schema.define(:version => 20121025204013) do
   create_table "roles", :force => true do |t|
     t.string   "role"
     t.string   "description"
-    t.integer  "department_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
-
-  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"
