@@ -6,6 +6,8 @@ $(document).ready(function() {
       $('#sync-cc').hide();
     })
   });
+	treeviewhr.cc_tree(centro_costos);
+	$('.expand_tree').click(treeviewhr.expand);
 })
 
 function add_cc(centro_costos, target_table)

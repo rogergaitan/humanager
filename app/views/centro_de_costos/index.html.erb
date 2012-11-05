@@ -3,40 +3,10 @@
   <% @centro_de_costos.each do |cc| %>
 		centro_costos.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>));
   <% end %>
-	$(document).ready(function() {
-		cc_tree(centro_costos);
-		$('.expand_tree').click(expand);
-	})
-	
-	function cc_tree (centro_costos) {
-		var row = "";
-		var left = []
-		$(centro_costos.sort()).each(function() {
-			if (this[2] == 0) {
-				$('#list').append("<ul><li id='" + this[0] + "' class='accordion-group'><p class='main-parent'>" + this[1] + "</p></li></ul>");
-			}
-			else {
-				if ($('#list li#'+this[2]).length) {
-					$('#list li#' + this[2] + ' p:first').addClass('expand_tree');
-					$('#list li#' + this[2]).append("<ul style='display:none'><li id='" + this[0] + "' data-parent='" + this[2] + "'><p>" + this[1] + "</p></li></ul>");
-				}
-				else {
-					left.push(this);
-				};
-			};
-		})
-		if (left.length) {
-			cc_tree(left);
-		}
-	}
-	
-	function expand (e) {
-		e.stopPropagation();
-		$(this).siblings().slideToggle('fast', 'linear');
-	}
 </script>
 <%- model_class = CentroDeCosto -%>
 <%= javascript_include_tag 'centro_costos/sync_cc' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %> 
     <button id="sync-cc" class="btn btn-primary pull-right">
