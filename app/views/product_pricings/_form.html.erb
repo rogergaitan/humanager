@@ -7,7 +7,7 @@
     <div class="controls">
       
         <% if params[:id] %>
-            <%= f.number_field :product_id, :class => 'number_field uneditable-input', :value => params[:id] %>
+            <%= f.number_field :product_id, :class => 'number_field uneditable-input', :value => params[:id] , :disabled=>'disabled'%>
         <% else %>
             <%= f.number_field :product_id, :class => 'number_field' %>
         <% end %>
