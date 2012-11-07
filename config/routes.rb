@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :payroll_types
+
   resources :centro_de_costos do
     collection do
       get 'sync_cc'

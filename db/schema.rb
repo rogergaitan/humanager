@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121031023209) do
+ActiveRecord::Schema.define(:version => 20121107224627) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -243,6 +243,13 @@ ActiveRecord::Schema.define(:version => 20121031023209) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.date     "payment_date"
+  end
+
+  create_table "payroll_types", :force => true do |t|
+    t.string   "description"
+    t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
   end
 
   create_table "photos", :force => true do |t|
