@@ -1,10 +1,25 @@
+<script type="text/javascript" charset="utf-8">
+	var cc_child = [];
+	<% @cc_child.each do |cc| %>
+		cc_child.push(new Array(<%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, '<%=h cc.nombre_cc %>', <%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>));
+	<% end %>
+	$(document).ready(function() {
+		dd_parent(cc_child);
+	})
+	
+	function dd_parent(cc_child) {
+		if (($('#centro_de_costo_icentro_costo').val() != '') || $('#centro_de_costo_nombre_cc').val() != '') {
+			var parent = $('#centro_de_costo_icentro_costo').val();
+			$('#centro_de_costo_icc_padre').find('option').remove();
+		  $(cc_child).each(function() {
+		    if (!(this[0] == parent || this[2] == parent || parent == 0)) {
+					$('#centro_de_costo_icc_padre').append('<option value='+ this[2] + '>' + this[1] + '</option>');
+				}
+			});
+		} 
+	}
+</script>
 <%= form_for @centro_de_costo, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :iempresa, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :iempresa, :class => 'text_field' %>
-    </div>
-  </div>
   <div class="control-group">
     <%= f.label :icentro_costo, :class => 'control-label' %>
     <div class="controls">
@@ -20,7 +35,7 @@
   <div class="control-group">
     <%= f.label :icc_padre, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :icc_padre, :class => 'text_field' %>
+      <%= f.collection_select(:icc_padre, @cc_child, :icentro_costo, :nombre_cc , :prompt => '-') %>
     </div>
   </div>
 
