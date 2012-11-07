@@ -1,0 +1,6 @@
+
+//Append the content to the table
+$('#table_products').append("<%= escape_javascript(render(:partial => 'products')) %>");
+
+//Show the changes
+$('#table_products')[0].reset();

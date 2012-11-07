@@ -49,4 +49,9 @@ class Product < ActiveRecord::Base
 					
 	validates :name, 
 					:presence => true
+	
+	def self.search(search)
+		find(:all, :conditions => ['name LIKE ?', "%#{search}%"]) if search			
+	end
+
 end

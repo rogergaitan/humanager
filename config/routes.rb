@@ -42,7 +42,7 @@ Reasapp::Application.routes.draw do
 
   resources :entities
   resources :product_pricings
-  resources :products
+
   resources :warehouses
   devise_for :users
 
@@ -76,6 +76,13 @@ Reasapp::Application.routes.draw do
     end
   end
 
+  resources :products do
+    collection do
+      get 'search'
+    end
+  end
+  
+  resources :products
   resources :vendors
   resources :sublines
   resources :categories

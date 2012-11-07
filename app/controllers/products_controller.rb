@@ -1,7 +1,7 @@
 # Products Controller.
 # Belongs to Line, Subline, Category
 class ProductsController < ApplicationController
-  
+  respond_to :json, :html, :js
   # GET /products
   # GET /products.json
   def index
@@ -93,5 +93,9 @@ class ProductsController < ApplicationController
       format.html { redirect_to products_url, notice: t('.activerecord.models.product').capitalize + t('.notice.successfully_deleted') }
       format.json { head :no_content }
     end
+  end
+
+  def search
+    @products = Product.search(params[:search])   
   end
 end
