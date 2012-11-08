@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyString
+  percentage: 9.99
+  debit_account: 1
+  credit_account: 1
+
+two:
+  description: MyString
+  percentage: 9.99
+  debit_account: 1
+  credit_account: 1

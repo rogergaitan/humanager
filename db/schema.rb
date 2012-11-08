@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121107224627) do
+ActiveRecord::Schema.define(:version => 20121108223102) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -136,6 +136,16 @@ ActiveRecord::Schema.define(:version => 20121107224627) do
   end
 
   add_index "emails", ["entity_id"], :name => "index_emails_on_entity_id"
+
+  create_table "employee_benefits", :force => true do |t|
+    t.integer  "work_benefit_id"
+    t.integer  "employee_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "employee_benefits", ["employee_id"], :name => "index_employee_benefits_on_employee_id"
+  add_index "employee_benefits", ["work_benefit_id"], :name => "index_employee_benefits_on_work_benefit_id"
 
   create_table "employees", :force => true do |t|
     t.integer  "entity_id"
@@ -390,5 +400,17 @@ ActiveRecord::Schema.define(:version => 20121107224627) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "work_benefits", :force => true do |t|
+    t.string   "description"
+    t.decimal  "percentage",     :precision => 12, :scale => 2
+    t.integer  "debit_account"
+    t.integer  "credit_account"
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
+  end
+
+  add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
+  add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"
 
 end

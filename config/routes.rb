@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :work_benefits
+
   resources :payroll_types
 
   resources :centro_de_costos do

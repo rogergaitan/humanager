@@ -41,6 +41,8 @@ class Employee < ActiveRecord::Base
   belongs_to :means_of_payment
   belongs_to :position
   has_one :photo, :dependent => :destroy
+  has_many :employee_benefits
+  has_many :work_benefits, :through => :employee_benefits
   
   accepts_nested_attributes_for :entity, :allow_destroy => true
   accepts_nested_attributes_for :photo, :allow_destroy => true
