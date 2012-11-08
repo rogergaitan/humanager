@@ -59,6 +59,11 @@ es:
   activerecord:
       errors:
         models:
+          payroll_type:
+            attributes:
+              description:
+                blank: Este campo no puede quedar en blanco
+                taken: La descripción especificada ya existe
           entity:
             attributes:
               name:
@@ -210,6 +215,9 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        payroll_type:
+          one: Tipo de planilla
+          other: Tipos de planillas
         centro_de_costo: Centro De Costos
         position: Puesto
         role:
@@ -238,6 +246,9 @@ es:
         task: Labor
         ledger_account: Cuentas Contable
       attributes:
+        payroll_type:
+          description: Descripción
+          payroll_type: Tipo de planilla
         centro_de_costo:
           iempresa: Empresa
           icentro_costo: Id Centro de Costos

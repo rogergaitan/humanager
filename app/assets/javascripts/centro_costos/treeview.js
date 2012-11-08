@@ -3,12 +3,22 @@ var treeviewhr = new function() {
 		var leftover = []
 		$(tree_array.sort()).each(function() {
 			if (this[2] == 0) {
-				$('#list').append("<ul><li id='" + this[0] + "' class='accordion-group'><p class='main-parent'>" + this[1] + "</p></li></ul>");
+				$('#list').append("<ul><li id='" + this[0] + "' class='accordion-group'><p class='main-parent tree-hover'><span><i class='icon-minus'></i>" + 
+														this[1] + "</span> <span class='tree-actions'><a title='Eliminar' href='/centro_de_costos/" + this[3] + 
+														"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/centro_de_costos/" + 
+														this[3] + "/edit' rel='tooltip' class='btn-mini icon-pencil'></a></span></p></li></ul>");
 			}
 			else {
 				if ($('#list li#'+this[2]).length) {
-					$('#list li#' + this[2] + ' p:first').addClass('expand_tree');
-					$('#list li#' + this[2]).append("<ul style='display:none'><li id='" + this[0] + "' data-parent='" + this[2] + "'><p>" + this[1] + "</p></li></ul>");
+					if (!($('#list li#' + this[2] + ' p:first i.icon-chevron-right').length)) {
+						$('#list li#' + this[2] + ' p:first i').toggleClass('icon-minus icon-chevron-right');
+					}
+					$('#list li#' + this[2] + ' p:first span:first').addClass('expand_tree');
+					$('#list li#' + this[2] + ' p:first span.tree-actions a.icon-trash').remove();
+					$('#list li#' + this[2]).append("<ul style='display:none'><li id='" + this[0] + "' data-parent='" + this[2] + "'><p class='tree-hover'><span><i class='icon-minus'></i>" + 
+																						this[1] + "</span> <span class='tree-actions'><a title='Eliminar' href='/centro_de_costos/" + this[3] + 
+																						"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/centro_de_costos/" + 
+																						this[3] + "/edit' rel='tooltip' class='btn-mini icon-pencil'></a></span></p></li></ul>");
 				}
 				else {
 					leftover.push(this);
@@ -22,6 +32,7 @@ var treeviewhr = new function() {
 	
 	this.expand = function(e) {
 		e.stopPropagation();
-		$(this).siblings().slideToggle('fast', 'linear');
+		$(this).children('i').toggleClass('icon-chevron-right icon-chevron-down');
+		$(this).parent().siblings().slideToggle(400, 'linear');
 	}
 };

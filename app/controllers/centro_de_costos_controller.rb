@@ -1,4 +1,5 @@
 class CentroDeCostosController < ApplicationController
+  before_filter :get_parent_info, :only => [:new, :edit]
   # GET /centro_de_costos
   # GET /centro_de_costos.json
   def index
@@ -74,9 +75,12 @@ class CentroDeCostosController < ApplicationController
   def destroy
     @centro_de_costo = CentroDeCosto.find(params[:id])
     @centro_de_costo.destroy
+    unless @centro_de_costo.errors.empty?
+      notice = "El elemento que esta intentando eliminar tiene hijos asociados"
+    end
 
     respond_to do |format|
-      format.html { redirect_to centro_de_costos_url }
+      format.html { redirect_to centro_de_costos_url, notice: notice }
       format.json { head :no_content }
     end
   end
@@ -110,4 +114,8 @@ class CentroDeCostosController < ApplicationController
         format.json { render json: @syn_data}
       end
   end
+  
+  def get_parent_info
+    @cc_child ||= CentroDeCosto.find(:all, :select =>['icentro_costo','icc_padre', 'nombre_cc'])
+   end
 end
