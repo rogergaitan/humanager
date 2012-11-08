@@ -244,6 +244,7 @@ es:
         district: Distrito
         canton: Cantones
         task: Labor
+        other_salary: Otros Salarios
         ledger_account: Cuentas Contable
       attributes:
         payroll_type:
@@ -378,6 +379,10 @@ es:
           iaccount: Cuenta
           naccount: Descripción Cuenta  
           ifather: Cuenta Padre       
+        other_salary:
+          code: Codigo
+          description: Descripción
+          ledger_account_id: Cuenta Contable
         user:
           login:
   date:

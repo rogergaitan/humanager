@@ -87,8 +87,6 @@ class LedgerAccountsController < ApplicationController
       @c = 0
       @accounts = []
       @accounts_fb = {}
-# Cntpuc.select(:ipadre).where("bvisible = ?", 'T').uniq 
-# hijos = Cntpuc.where("ipadre = ?", '11').find(:all, :select => ['icuenta', 'ncuenta'])
 
       @cntpuc.each do |account|
         if LedgerAccount.where("iaccount = ?", account.icuenta).empty?
@@ -112,5 +110,15 @@ class LedgerAccountsController < ApplicationController
         format.json {render json: @accounts_fb}
       end
   end 
+
+#Busca todas las cuentas contables pero solamente el ipadre y ncuenta selecciona
+#Este metodo se utilza para crear o editar otros salarios(dropdowns)
+  def fetch
+    @names_ids = LedgerAccount.find(:all, :select =>['ifather','naccount']).to_json
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @names_ids }
+    end
+  end
 
 end

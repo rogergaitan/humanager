@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :other_salaries
+  
   resources :payroll_types
 
   resources :centro_de_costos do
@@ -16,6 +18,7 @@ Reasapp::Application.routes.draw do
   resources :ledger_accounts do
     collection do
       get 'accountfb'
+      get 'fetch'
     end
   end
 
