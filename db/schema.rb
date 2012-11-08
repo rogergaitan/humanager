@@ -13,7 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20121107224627) do
 
-
   create_table "addresses", :force => true do |t|
     t.string   "address"
     t.integer  "entity_id"
@@ -120,9 +119,9 @@ ActiveRecord::Schema.define(:version => 20121107224627) do
   create_table "districts", :force => true do |t|
     t.string   "name"
     t.integer  "canton_id"
+    t.integer  "province_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "province_id"
   end
 
   add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
@@ -274,10 +273,10 @@ ActiveRecord::Schema.define(:version => 20121107224627) do
   create_table "positions", :force => true do |t|
     t.string   "position"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
     t.string   "codigo_ins"
     t.string   "codigo_ccss"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "product_pricings", :force => true do |t|
@@ -323,12 +322,9 @@ ActiveRecord::Schema.define(:version => 20121107224627) do
   create_table "roles", :force => true do |t|
     t.string   "role"
     t.string   "description"
-    t.integer  "department_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
-
-  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"
@@ -394,16 +390,5 @@ ActiveRecord::Schema.define(:version => 20121107224627) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
-
-  create_table "work_benefits", :force => true do |t|
-    t.string   "description"
-    t.integer  "employee_id"
-    t.string   "frequency"
-    t.string   "calculation_method"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
-
-  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
 
 end

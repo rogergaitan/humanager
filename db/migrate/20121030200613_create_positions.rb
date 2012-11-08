@@ -3,6 +3,8 @@ class CreatePositions < ActiveRecord::Migration
     create_table :positions do |t|
       t.string :position
       t.string :description
+      t.string :codigo_ins
+      t.string :codigo_ccss
 
       t.timestamps
     end

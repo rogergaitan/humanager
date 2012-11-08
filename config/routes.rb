@@ -56,8 +56,6 @@ Reasapp::Application.routes.draw do
 
   resources :deductions
 
-  resources :work_benefits
-
   resources :occupations
 
   resources :customers
