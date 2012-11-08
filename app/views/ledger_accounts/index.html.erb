@@ -1,5 +1,12 @@
+<script type="text/javascript">
+  var cuenta_contable = [];
+  <%  @ledger_accounts.each do |cc| %>
+    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>));
+  <% end %>
+</script>
 <%- model_class = LedgerAccount -%>
 <%= javascript_include_tag 'ledgerAccount/accountscript' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
     <button id="account-fb" class="btn btn-primary pull-right">
@@ -8,8 +15,10 @@
 <div id="imagen" class="pull-right"> <%= image_tag("ajax-loader.gif") %> </div></h1>
 </div>
 
+<div id="list"></div>
+
 <!-- PRUEBA CON LAS LISTAS -->
- <% @ledger_accounts.each do |ledger_account| %>
+ <!-- <% @ledger_accounts.each do |ledger_account| %>
 <ul id="navegador" class="nav nav-list" >
     <li><a href="#" class="desplegable"><%= model_class.human_attribute_name(:ifather) %> <%= ledger_account.ifather %> </a>
       <ul class="subnavegador">
@@ -20,7 +29,6 @@
     </li>    
   </ul>
    <% end %>
-  <!-- FIN DE PRUEBA CON LISTAS-->
 
 <table class="table table-striped" id="account-data">
   <thead>
@@ -49,5 +57,5 @@
       </tr>
     <% end %>
   </tbody>
-</table>
+</table> -->
 

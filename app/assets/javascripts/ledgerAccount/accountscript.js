@@ -1,4 +1,8 @@
 $(document).ready(function() {
+  $('#imagen').hide();
+  treeviewhr.cc_tree(cuenta_contable);
+  $('.expand_tree').click(treeviewhr.expand);
+
   $('#account-fb').click(function() { 
     //$('#account-fb').attr("disabled", true); //desabilito el boton
      $('#account-fb').hide();
@@ -30,18 +34,15 @@ $(document).ready(function() {
   }
 })
 
-  $(document).ready(function() {
-     $('#imagen').hide();
-  });
 
-  $(document).ready(function(){ // Script del Navegador
-    $("ul.subnavegador").hide();                
-    $("a.desplegable").toggle(
-      function() { 
-        $(this).parent().find("ul.subnavegador").slideDown('fast'); 
-      },
-      function() { 
-        $(this).parent().find("ul.subnavegador").slideUp('fast'); 
-      }                
-    );    
-});
+ // $(document).ready(function(){ // Script del Navegador
+//    $("ul.subnavegador").hide();                
+ //   $("a.desplegable").toggle(
+  //    function() { 
+   //     $(this).parent().find("ul.subnavegador").slideDown('fast'); 
+    //  },
+     // function() { 
+     //   $(this).parent().find("ul.subnavegador").slideUp('fast'); 
+     // }                
+    //);    
+//});

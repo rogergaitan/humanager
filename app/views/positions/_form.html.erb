@@ -1,0 +1,32 @@
+<%= form_for @position, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :position, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :position, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :codigo_ins, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :codigo_ins, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :codigo_ccss, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :codigo_ccss, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                positions_path, :class => 'btn' %>
+  </div>
+<% end %>

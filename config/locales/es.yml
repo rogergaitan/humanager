@@ -8,6 +8,8 @@ es:
     prices: Precios
     other: Otros
     contacts: Contactos
+    employment_data: Datos de empleado
+    contact: Contacto
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -57,6 +59,31 @@ es:
   activerecord:
       errors:
         models:
+          entity:
+            attributes:
+              name:
+                blank: Este campo no puede quedar en blanco
+              surname:
+                blank: Este campo no puede quedar en blanco
+              entityid:
+                blank: Este campo no puede quedar en blanco
+          position:
+            attributes:
+              position:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este puesto ya existe'
+          role:
+            attributes:
+              role:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este rol ya existe'
+          department:
+            attributes:
+              name:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              employee_id:
+                blank: Este campo no puede quedar en blanco
           product:
             attributes:
               code:
@@ -183,6 +210,12 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        centro_de_costo: Centro De Costos
+        position: Puesto
+        role:
+          one: Rol
+          other: Roles
+        department: Departamento
         customer: Cliente
         vendor: Proveedor
         entity: Entidad
@@ -205,6 +238,24 @@ es:
         task: Labor
         ledger_account: Cuentas Contable
       attributes:
+        centro_de_costo:
+          iempresa: Empresa
+          icentro_costo: Id Centro de Costos
+          nombre_cc: Nombre
+          icc_padre: Padre
+        email:
+          typeemail: Tipo de email
+        position:
+          position: Puesto
+          description: Descripción
+          codigo_ins: Código INS
+          codigo_ccss: Código CCSS
+        role:
+          role: Rol
+          description: 'Descripción'
+        department:
+          name: Departamento
+          employee_id: Encargado
         vendor:
           credit_limit: Crédito
         entity:
@@ -280,6 +331,7 @@ es:
           social_insurance: Seguro Social
           spouse: 'Cónyuge'
           wage_payment: Salario
+          position_id: Puesto
         entity:
           name: Nombre
           surname: Apellidos
