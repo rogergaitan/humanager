@@ -1,0 +1,85 @@
+class OtherSalariesController < ApplicationController
+  # GET /other_salaries
+  # GET /other_salaries.json
+  def index
+    @other_salaries = OtherSalary.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @other_salaries }
+    end
+  end
+
+  # GET /other_salaries/1
+  # GET /other_salaries/1.json
+  def show
+    @other_salary = OtherSalary.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @other_salary }
+    end
+  end
+
+  # GET /other_salaries/new
+  # GET /other_salaries/new.json
+  def new
+    @other_salary = OtherSalary.new
+    @ledger_account = LedgerAccount.where("ifather = ?", '').find(:all, :select => ['ifather', 'iaccount','naccount'])
+    @all_ledger_account = LedgerAccount.all
+    
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @other_salary }
+    end
+  end
+
+  # GET /other_salaries/1/edit
+  def edit
+    @other_salary = OtherSalary.find(params[:id])
+  end
+
+  # POST /other_salaries
+  # POST /other_salaries.json
+  def create
+    @other_salary = OtherSalary.new(params[:other_salary])
+
+    respond_to do |format|
+      if @other_salary.save
+        format.html { redirect_to @other_salary, notice: 'Other salary was successfully created.' }
+        format.json { render json: @other_salary, status: :created, location: @other_salary }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @other_salary.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /other_salaries/1
+  # PUT /other_salaries/1.json
+  def update
+    @other_salary = OtherSalary.find(params[:id])
+
+    respond_to do |format|
+      if @other_salary.update_attributes(params[:other_salary])
+        format.html { redirect_to @other_salary, notice: 'Other salary was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @other_salary.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /other_salaries/1
+  # DELETE /other_salaries/1.json
+  def destroy
+    @other_salary = OtherSalary.find(params[:id])
+    @other_salary.destroy
+
+    respond_to do |format|
+      format.html { redirect_to other_salaries_url }
+      format.json { head :no_content }
+    end
+  end
+end

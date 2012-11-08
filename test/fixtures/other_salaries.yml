@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  description: MyString
+  ledger_account_id: 1
+
+two:
+  code: MyString
+  description: MyString
+  ledger_account_id: 1
