@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class WorkBenefitTest < ActiveSupport::TestCase
+class EmployeeBenefitTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -1,33 +1,32 @@
-<%= form_for(@work_benefit) do |f| %>
-  <% if @work_benefit.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@work_benefit.errors.count, "error") %> prohibited this work_benefit from being saved:</h2>
-
-      <ul>
-      <% @work_benefit.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @work_benefit, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
     </div>
-  <% end %>
+  </div>
+  <div class="control-group">
+    <%= f.label :percentage, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :percentage, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :debit_account, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :debit_account, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :credit_account, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :credit_account, :class => 'number_field' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
-  </div>
-  <div class="field">
-    <%= f.label :employee %><br />
-    <%= f.text_field :employee %>
-  </div>
-  <div class="field">
-    <%= f.label :frequency %><br />
-    <%= f.text_field :frequency %>
-  </div>
-  <div class="field">
-    <%= f.label :calculation_method %><br />
-    <%= f.text_field :calculation_method %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                work_benefits_path, :class => 'btn' %>
   </div>
 <% end %>

@@ -2,7 +2,9 @@
 Reasapp::Application.routes.draw do
 
   resources :other_salaries
-  
+
+  resources :work_benefits
+
   resources :payroll_types
 
   resources :centro_de_costos do
@@ -58,8 +60,6 @@ Reasapp::Application.routes.draw do
   resources :employees
 
   resources :deductions
-
-  resources :work_benefits
 
   resources :occupations
 
