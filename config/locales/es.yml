@@ -214,6 +214,17 @@ es:
               district:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
+          other_salary:
+            attributes:
+              code:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+              description:
+                blank: Este campo no puede quedar en blanco
+              ledger_account_id:
+                blank: Este campo no puede quedar en blanco
       models:
         payroll_type:
           one: Tipo de planilla

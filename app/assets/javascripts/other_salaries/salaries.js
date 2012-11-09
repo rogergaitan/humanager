@@ -1,4 +1,6 @@
 $(jQuery(document).ready(function($) {
+
+    treeviewhr.cc_tree(cuenta_contable);
 //Obtiene las cuentas contables(ipadre y ncuenta)
     $.getJSON('/ledger_accounts/fetch', function(category_data) {
         $( "#other_salary_ledger_account" ).autocomplete({
@@ -18,13 +20,18 @@ $(jQuery(document).ready(function($) {
             var salarios_cuentas = $.data(document.body, 'category_' + $("#other_salary_ledger_account_id").val()+'');
             $("#other_salary_ledger_account").val(salarios_cuentas);
         }        
-    });  
+    }); 
+    $('.expand_tree').click(treeviewhr.expand);
 
-    //nf
-     $('.btn').click(function() { 
-        treeviewhr.cc_tree(cuenta_contable);
-        $('.expand_tree').click(treeviewhr.expand);
-    })
- 
+    $('.node_link').click(set_account);
 
 }));
+
+function set_account(e) {
+    e.preventDefault();
+    var accountId = $(this).parent().attr('id');
+    var accountName = $(this).text();
+    $('#other_salary_ledger_account_id').val(accountId);
+    $('#other_salary_ledger_account').val(accountName);
+    
+}

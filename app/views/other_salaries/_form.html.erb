@@ -6,7 +6,7 @@
 </script>
 <%= javascript_include_tag 'other_salaries/salaries' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
-<%= form_for @other_salary, :html => { :class => 'form-horizontal' } do |f| %>
+<%= form_for @other_salary, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :code, :class => 'control-label' %>
     <div class="controls">
