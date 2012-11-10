@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :other_salaries
+
   resources :work_benefits
 
   resources :payroll_types
@@ -18,6 +20,7 @@ Reasapp::Application.routes.draw do
   resources :ledger_accounts do
     collection do
       get 'accountfb'
+      get 'fetch'
     end
   end
 

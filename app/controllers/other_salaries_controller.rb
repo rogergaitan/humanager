@@ -25,8 +25,7 @@ class OtherSalariesController < ApplicationController
   # GET /other_salaries/new.json
   def new
     @other_salary = OtherSalary.new
-    @ledger_account = LedgerAccount.where("ifather = ?", '').find(:all, :select => ['ifather', 'iaccount','naccount'])
-    @all_ledger_account = LedgerAccount.all
+    @cuenta_contable = LedgerAccount.all
     
     respond_to do |format|
       format.html # new.html.erb

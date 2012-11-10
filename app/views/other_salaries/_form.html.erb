@@ -1,11 +1,12 @@
 <script type="text/javascript">
-  var cuentas = [];
-  <% @all_ledger_account.each do |cuenta| %>
-  cuentas.push(new Array(<%= cuenta.ifather %>, '<%=h cuenta.naccount %>', <%= cuenta.iaccount %>));
+  var cuenta_contable = [];
+  <%  @cuenta_contable.each do |cc| %>
+    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>));
   <% end %>
 </script>
-<%= javascript_include_tag 'other_salaries/dynamic_fields' %>
-<%= form_for @other_salary, :html => { :class => 'form-horizontal' } do |f| %>
+<%= javascript_include_tag 'other_salaries/salaries' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= form_for @other_salary, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :code, :class => 'control-label' %>
     <div class="controls">
@@ -19,17 +20,14 @@
     </div>
   </div>
 
-  <div class="control-group">
+   <div class="control-group">
     <%= f.label :ledger_account_id, :class => 'control-label' %>
     <div class="controls">
-      <!--Primer parametro :ledger_account_id Foranea en other_salaries
-          Segundo parametro  @ledger_account coleccion que trae todas las cuentas contables
-          Tercer parametro :iaccount va a ser lo que se vaya a guardar en other_salaries como cuenta es la llave primaria o el valor que se quiere manejar cm value en el select.
-          Cuarto Parametro: :naccount lo que el usuario va a ver ACTIVO , PASIVO etc-->
-      <%= f.collection_select :ledger_account_id, @ledger_account, :iaccount, :naccount , :prompt => true %>
+      <%= f.hidden_field :ledger_account_id %>
+       <%= text_field_tag 'other_salary_ledger_account',nil, :class => 'number_field required search-image-category', :for => :ledger_account_id %>
+     <a href="#myModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i> </a>
     </div>
   </div>
-
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
@@ -37,3 +35,17 @@
                 other_salaries_path, :class => 'btn' %>
   </div>
 <% end %>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>
