@@ -114,11 +114,11 @@ class CentroDeCostosController < ApplicationController
         format.json { render json: @syn_data}
       end
   end
-  
-  def load_centro_de_costos
-    @employees = CentroDeCosto.all
+
+  def load_cc
+    @namesIds = CentroDeCosto.all
     respond_to do |format|
-      format.json { render json: @centro_de_costos }
+      format.json { render json: @namesIds}
     end
   end
 
