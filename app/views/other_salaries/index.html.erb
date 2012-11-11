@@ -18,7 +18,7 @@
         <td><%= link_to other_salary.id, other_salary_path(other_salary) %></td>
         <td><%= other_salary.code %></td>
         <td><%= other_salary.description %></td>
-        <td><%= other_salary.ledger_account_id %></td>
+        <td><%= other_salary.ledger_account.naccount if other_salary.ledger_account %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_other_salary_path(other_salary), :class => 'btn btn-mini' %>

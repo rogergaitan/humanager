@@ -1,7 +1,7 @@
 <script type="text/javascript" charset="utf-8">
 	var cc_child = [];
 	<% @cc_child.each do |cc| %>
-		cc_child.push(new Array(<%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, '<%=h cc.nombre_cc %>', <%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>));
+		cc_child.push(new Array(<%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, '<%=h cc.nombre_cc %>', <%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, <%= cc.id %>));
 	<% end %>
 	$(document).ready(function() {
 		dd_parent(cc_child);
