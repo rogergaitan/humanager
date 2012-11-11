@@ -80,4 +80,12 @@ class WorkBenefitsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def fetch
+    @names_ids = LedgerAccount.find(:all, :select =>['ifather','naccount'])
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @names_ids }
+    end
+  end
 end
