@@ -27,11 +27,12 @@ $(jQuery(document).ready(function($) {
 
 }));
 
+//obtiene del treeview el nombre y id de la cuenta seleccionada
 function set_account(e) {
     e.preventDefault();
     var accountId = $(this).parent().attr('id');
     var accountName = $(this).text();
     $('#other_salary_ledger_account_id').val(accountId);
-    $('#other_salary_ledger_account').val(accountName);
-    
+    $('#other_salary_ledger_account').val(accountName);  
+  //  $('#myModal').dialog('close'); 
 }
