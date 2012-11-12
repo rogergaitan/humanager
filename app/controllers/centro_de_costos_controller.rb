@@ -114,7 +114,14 @@ class CentroDeCostosController < ApplicationController
         format.json { render json: @syn_data}
       end
   end
-  
+
+  def load_cc
+    @namesIds = CentroDeCosto.all
+    respond_to do |format|
+      format.json { render json: @namesIds}
+    end
+  end
+
   def get_parent_info
     @cc_child ||= CentroDeCosto.find(:all, :select =>['icentro_costo','icc_padre', 'nombre_cc'])
    end

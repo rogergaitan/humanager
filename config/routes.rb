@@ -18,6 +18,9 @@ Reasapp::Application.routes.draw do
     collection do
       get 'sync_cc'
     end
+    collection do
+      get 'load_cc'
+    end
   end
 
   resources :centro_de_costos
@@ -27,7 +30,9 @@ Reasapp::Application.routes.draw do
   resources :ledger_accounts do
     collection do
       get 'accountfb'
-      get 'fetch'
+    end
+    collection do
+      get 'accountfb'
     end
   end
 
