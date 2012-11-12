@@ -1,4 +1,5 @@
 class OtherSalariesController < ApplicationController
+  before_filter :accounts, :only => [:new, :edit]
   # GET /other_salaries
   # GET /other_salaries.json
   def index
@@ -25,7 +26,6 @@ class OtherSalariesController < ApplicationController
   # GET /other_salaries/new.json
   def new
     @other_salary = OtherSalary.new
-    @cuenta_contable = LedgerAccount.all
     
     respond_to do |format|
       format.html # new.html.erb
@@ -80,5 +80,9 @@ class OtherSalariesController < ApplicationController
       format.html { redirect_to other_salaries_url }
       format.json { head :no_content }
     end
+  end
+  
+  def accounts
+    @cuenta_contable = LedgerAccount.all
   end
 end

@@ -30,7 +30,7 @@ var treeviewhr = new function() {
 			this.cc_tree(leftover, isPopup);
 		}
 		if (isPopup == true) {
-			$('span.linkclass span').addClass('node_link');
+			$('span.linkclass span').addClass('node_link').attr("data-dismiss", "modal");
 		}
 	}
 	
