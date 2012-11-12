@@ -2,6 +2,13 @@
 Reasapp::Application.routes.draw do
 
   resources :other_salaries
+  
+  resources :work_benefits do
+    collection do
+      get 'fetch_debit_accounts'
+      get 'fetch_credit_accounts'
+    end
+  end
 
   resources :work_benefits
 
@@ -10,6 +17,9 @@ Reasapp::Application.routes.draw do
   resources :centro_de_costos do
     collection do
       get 'sync_cc'
+    end
+    collection do
+      get 'load_cc'
     end
   end
 
@@ -20,7 +30,9 @@ Reasapp::Application.routes.draw do
   resources :ledger_accounts do
     collection do
       get 'accountfb'
-      get 'fetch'
+    end
+    collection do
+      get 'accountfb'
     end
   end
 

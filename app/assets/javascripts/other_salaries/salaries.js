@@ -1,14 +1,14 @@
 $(jQuery(document).ready(function($) {
 
-    treeviewhr.cc_tree(cuenta_contable);
+    treeviewhr.cc_tree(cuenta_contable, true);
 //Obtiene las cuentas contables(ipadre y ncuenta)
     $.getJSON('/ledger_accounts/fetch', function(category_data) {
         $( "#other_salary_ledger_account" ).autocomplete({
             source: $.map(category_data, function(item){
-                $.data(document.body, 'category_' + item.ifather+"", item.naccount);
+                $.data(document.body, 'category_' + item.id+"", item.naccount);
                 return{
                     label: item.naccount,                        
-                    id: item.ifather
+                    id: item.id
                 }
             }),
             select: function( event, ui ) {
@@ -23,16 +23,22 @@ $(jQuery(document).ready(function($) {
     }); 
     $('.expand_tree').click(treeviewhr.expand);
 
-    $('.node_link').click(set_account);
+    $('.node_link').bind({
+				click: set_account,
+				mouseenter: function() {
+					$(this).css("text-decoration", "underline");
+				},
+				mouseleave: function() {
+					$(this).css("text-decoration", "none");
+				}});
 
 }));
 
 //obtiene del treeview el nombre y id de la cuenta seleccionada
 function set_account(e) {
     e.preventDefault();
-    var accountId = $(this).parent().attr('id');
+    var accountId = $(this).closest('li').data('id');
     var accountName = $(this).text();
     $('#other_salary_ledger_account_id').val(accountId);
     $('#other_salary_ledger_account').val(accountName);  
-  //  $('#myModal').dialog('close'); 
 }

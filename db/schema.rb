@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121108223102) do
+ActiveRecord::Schema.define(:version => 20121111025108) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -110,8 +110,9 @@ ActiveRecord::Schema.define(:version => 20121108223102) do
   create_table "departments", :force => true do |t|
     t.string   "name"
     t.integer  "employee_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.integer  "centro_de_costos_id"
   end
 
   add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
