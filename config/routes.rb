@@ -2,6 +2,13 @@
 Reasapp::Application.routes.draw do
 
   resources :other_salaries
+  
+  resources :work_benefits do
+    collection do
+      get 'fetch_debit_accounts'
+      get 'fetch_credit_accounts'
+    end
+  end
 
   resources :work_benefits
 
