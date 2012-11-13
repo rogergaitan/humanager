@@ -1,7 +1,7 @@
 $(jQuery(document).ready(function($) {
 
     treeviewhr.cc_tree(centro_costos, true);
-//Obtiene las centros de costo(ipadre y ncuenta)
+//Obtiene las centros de costo
     $.getJSON('/centro_de_costos/load_cc', function(category_data) {
         $( "#load_centro_de_costo" ).autocomplete({
             source: $.map(category_data, function(item){
@@ -24,13 +24,16 @@ $(jQuery(document).ready(function($) {
     $('.expand_tree').click(treeviewhr.expand);
 
     $('.node_link').bind({
-                click: set_account,
+                click: set_account, 
+                
                 mouseenter: function() {
                     $(this).css("text-decoration", "underline");
                 },
                 mouseleave: function() {
                     $(this).css("text-decoration", "none");
-                }});
+                }
+                
+            });
 
 }));
 
@@ -41,4 +44,5 @@ function set_account(e) {
     $('#department_centro_de_costos_id').val(accountId);
     $('#load_centro_de_costo').val(accountName);
     
+       
 }
