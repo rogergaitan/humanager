@@ -51,7 +51,7 @@ class Product < ActiveRecord::Base
 					:presence => true
 	
 	def self.search(search)
-		find(:all, :conditions => ['name LIKE ?', "%#{search}%"]) if search			
+		where("name LIKE ? OR code Like ? OR part_number LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%") if search			
 	end
 
 end

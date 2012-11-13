@@ -32,27 +32,18 @@
       </a>
     </li>    
   </ul>
-
+    
     <div class="tab-content span5">
+        <div id ="table_products"></div>
         <div class="tab-pane active" id="tab1">
-        <table class="table table-condensed" id="table_products">
-          <thead>
-              <tr>
-                  <th></th>       
-                  <th><%= model_class.human_attribute_name(:code) %></th>
-                  <th><%= model_class.human_attribute_name(:name) %></th>
-              </tr>
-          </thead>
-          <tbody>
-          <!-- Content from ajax call -->
-          </tbody>
-        </table>
         <div class="alert alert-info" id="products_notice">
-          <p> No se ha buscado productos todavía </p></div>
+          <p> No se ha buscado productos todavía </p>
+        </div>
       </div>
     </div>
-    <div class="tab-content span5">
+    <div class="tab-content span5 well">
         <div class="tab-pane active" id="tab1">
+        <div>Productos Buscados</div>
         <table class="table table-condensed" id="storage">
           <thead>
               <tr>
