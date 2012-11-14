@@ -1,17 +1,13 @@
+require 'will_paginate/array'
 # Products Controller.
 # Belongs to Line, Subline, Category
 class ProductsController < ApplicationController
-  
+  respond_to :json, :html, :js
   # GET /products
   # GET /products.json
   def index
-    #@products = Product.all
-
-    @products = Product.paginate(:page => params[:page], :per_page => 10)
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @products }
-    end
+    @products = Product.paginate(:page => params[:page], :per_page => 2)
+    respond_with @products
   end
 
   # GET /products/1
@@ -93,5 +89,11 @@ class ProductsController < ApplicationController
       format.html { redirect_to products_url, notice: t('.activerecord.models.product').capitalize + t('.notice.successfully_deleted') }
       format.json { head :no_content }
     end
+  end
+
+  def search
+    @products = Product.search(params[:search]).to_a.paginate(:per_page => 10, :page => params[:page] )
+    #@products = @products. if params[:page]
+    respond_with @products
   end
 end

@@ -1,0 +1,62 @@
+<%= javascript_include_tag "products/search" %>
+<%- model_class = Product -%>
+
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+
+<div class="tabbable"> <!-- Only required for left/right tabs -->
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <%= form_tag search_products_path,:id =>"search_form", :class => "form-search", :method => 'get' do %>
+        <div class="input-append">  
+        <%= text_field_tag :search, params[:search], 
+          :class => "search-query" %><%= submit_tag t("helpers.links.search"), 
+          :name => nil, :class => "btn" %>
+        </div>  
+      <% end %>
+    </li>
+    <li class="pull-right">
+      <a href="#" data-toggle="tab">
+        <%=button_tag "PurchaseOrder", :class=>"btn btn-mini btn-success pull-right" %> 
+      </a>
+    </li>
+    <li class="pull-right">
+      <a href="#" data-toggle="tab">
+        <%=button_tag "Quotation", :class=>"btn btn-mini btn-primary pull-right" %>
+      </a> 
+    </li>
+    <li class="pull-right">
+      <a href="">
+      <%=button_tag "PDF", :class=>"btn btn-mini btn-danger pull-right" %>
+      </a>
+    </li>    
+  </ul>
+    
+    <div class="tab-content span5">
+        <div id ="table_products"></div>
+        <div class="tab-pane active" id="tab1">
+        <div class="alert alert-info" id="products_notice">
+          <p> No se ha buscado productos todavía </p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content span5 well">
+        <div class="tab-pane active" id="tab1">
+        <div>Productos Buscados</div>
+        <table class="table table-condensed" id="storage">
+          <thead>
+              <tr>
+                  <th></th>       
+                  <th><%= model_class.human_attribute_name(:code) %></th>
+                  <th><%= model_class.human_attribute_name(:name) %></th>
+              </tr>
+          </thead>
+          <tbody>
+          <!-- Content from ajax call -->
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+</div>

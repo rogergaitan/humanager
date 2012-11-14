@@ -49,8 +49,16 @@ class Product < ActiveRecord::Base
 					
 	validates :name, 
 					:presence => true
+<<<<<<< HEAD
 
 	def self.search(search)
 	  where("name LIKE ? OR code Like ? OR part_number LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%") if search   
 	 end
+=======
+	
+	def self.search(search)
+		where("name LIKE ? OR code Like ? OR part_number LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%") if search			
+	end
+
+>>>>>>> 7a789f0c8d60b06c95ab07c124434e050a05baf9
 end
