@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  
+
   resources :districts
 
   resources :cantons
@@ -76,6 +78,14 @@ Reasapp::Application.routes.draw do
     end
   end
 
+  resources :purchase_orders do
+    collection do
+      get 'searchProduct'
+      get 'searchVendor'
+    end
+  end
+
+  resources :purchase_orders
   resources :vendors
   resources :sublines
   resources :categories

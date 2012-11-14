@@ -1,0 +1,126 @@
+<%= javascript_include_tag "purchase_order/purchase_order" %>
+<%= form_for @purchase_order, :html => { :class => 'form-horizontal new_purchase_order well' } do |f| %>
+  <div class="warp_block_1 left">
+    <div class="contentWidget" >
+        <div class="labelCellTable">
+          <%= f.label :vendor_id, :class => '' %>
+        </div>
+        <div class="contentCellTable">
+          <%= f.hidden_field :vendor_id %>
+            <%= text_field_tag "vendor_text", "#{@purchase_order.vendor.entity.name} #{@purchase_order.vendor.entity.surname}" ,:class => 'text_field' %>
+        </div>
+    </div>
+       <div class="contentWidget  " >
+        <div class="labelCellTable">
+          <%= f.label :delivery_date, :class => '' %>
+        </div>
+        <div class="contentCellTable">
+          <%= f.text_field :delivery_date, :class => 'text_field' %>
+        </div>
+      </div>
+
+     <div class="contentWidget  " >
+        <div class="labelCellTable">
+          <%= f.label :shipping_type, :class => '' %>
+        </div>
+        <div class="contentCellTable">
+          <%= f.select :shipping_type,['Patito1','Patito2'],{}, :class => 'text_field' %>
+        </div>
+      </div>
+  </div>
+
+  <div class="warp_block_2 right">
+    <div class="contentWidget" >
+      <div class="labelCellTable">
+        <%= f.label :reference_info, :class => '' %>
+      </div>
+      <div class="contentCellTable">
+        <%= f.text_field :reference_info,:class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="contentWidget" >
+      <div class="labelCellTable">
+        <%= f.label :currency, :class => '' %>
+      </div>
+      <div class="contentCellTable">
+        <%= f.select :currency,['Colones','Dolares'],{},:class => 'text_field' %>
+      </div>
+    </div>
+  </div>
+ <div class="clear_fix "></div>
+
+  <div class="new_product_field control-group">
+    <div class="add_field_fake"></div>
+    
+    <div id="container_new_item">
+      <%= link_to_add_fields("", f, :items_purchase_order,"icon-plus btn_plus right") %>
+    </div>
+    <table id="products_items" class=" table table-hover table-bordered table-striped">
+      <tr class="header_items">
+        <td class="header_code">Código</td>
+        <td class="header_description">Descripción</td>
+        <td class="header_quantiy">Cantidad</td>
+        <td class="header_costunit">Costo Unit</td>
+        <td class="header_costTotal">Costo Total</td>
+      </tr>
+
+
+      <%= f.fields_for :items_purchase_order do |items| %>
+          <%= render 'forms/items_purchase_order_form', :f => items %>
+
+      <% end %>
+    </table>
+  </div>
+  <div class="clear_fix top_space_15"></div>
+
+  <div class="warp_block_3 left ">
+     <div class="contentWidget" >
+      <div class="labelCellTable">
+        <%= f.label :observation, :class => '' %>
+      </div>
+      <div class="contentCellTable">
+        <%= f.text_area :observation, :class => 'text_area',:rows=>5 %>
+      </div>
+    </div>
+  </div>
+  <div class="warp_block_4 right">
+     <div class="contentWidget" >
+      <div class="labelCellTable">
+        <%= f.label :subtotal, :class => '' %>
+      </div>
+      <div class="contentCellTable">
+        <%= f.text_field :subtotal, :class => 'text_field subtotal' , :readonly => "readonly"%>
+      </div>
+     </div>
+
+     <div class="contentWidget" >
+      <div class="labelCellTable">
+        <%= f.label :taxes, :class => '' %>
+      </div>
+      <div class="contentCellTable">
+        <%= f.text_field :taxes, :class => 'text_field' , :readonly => "readonly"%>
+      </div>
+     </div>
+    <div class="contentWidget" >
+        <div class="labelCellTable">
+          <%= f.label :total, :class => '' %>
+        </div>
+        <div class="contentCellTable">
+          <%= f.text_field :total, :class => 'text_field total', :readonly => "readonly" %>
+        </div>
+    </div>
+
+  </div>
+
+
+
+
+  <div class="clear_fix"></div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                purchase_orders_path, :class => 'btn' %>
+  </div>
+<% end %>
