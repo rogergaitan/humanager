@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  type_of_personnel_action: 
+  fields_personnel_action: 
+
+two:
+  type_of_personnel_action: 
+  fields_personnel_action: 
