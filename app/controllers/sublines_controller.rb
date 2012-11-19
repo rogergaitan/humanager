@@ -81,10 +81,7 @@ class SublinesController < ApplicationController
   # Get All sublines including just the id and the name. 
   # We use this method on: *create* or *edit* products(dropdowns)
   def fetch
-    @names_ids = Subline.find(:all, :select =>['id','name']).to_json
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @names_ids }
-    end
+    @sublines = Subline.fetch
+    respond_with @sublines
   end
 end

@@ -14,7 +14,7 @@ class Subline < ActiveRecord::Base
 
 	has_many :products
 
-  	attr_accessible :code, :description, :name
+  attr_accessible :code, :description, :name
 
 	validates :code, 
 					:presence => true, 
@@ -22,8 +22,13 @@ class Subline < ActiveRecord::Base
 					:uniqueness => { :case_sensitive => false }
 
 	validates :description, 
-					:presence => true		
+						:presence => true		
 					
 	validates :name, 
 					:presence => true
+
+	def self.fetch
+		@sublines = Rails.cache.fetch("Subline.all"){ find(:all, :select =>['id','name']).to_json } 
+	end
+
 end

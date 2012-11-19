@@ -1,11 +1,12 @@
 <%- model_class = Product -%>
-
+<% if @products %>
 <table class="table table-condensed" id="">
   <thead>
       <tr>
           <th></th>       
           <th><%= model_class.human_attribute_name(:code) %></th>
           <th><%= model_class.human_attribute_name(:name) %></th>
+          <th><%= model_class.human_attribute_name(:part_number) %></th>
       </tr>
   </thead>
   <tbody>
@@ -14,13 +15,15 @@
 		<tr>
 		  <td><%= check_box_tag product.id, nil, nil, :class => "case" %></td>
 		  <td><%= link_to product.code, product_path(product) %></td>
-		  <td><%= product.name %></td>                                       
+		  <td><%= product.name %></td>
+      <td><%= product.part_number %></td>                                       
 		</tr>
 	<% end %>
 
   </tbody>
 </table>
-<%= will_paginate if params[:search] %> 
+<%= will_paginate :inner_window => 2 %> 
+<% end %>
 
 
 

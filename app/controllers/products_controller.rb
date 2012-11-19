@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = Product.paginate(:page => params[:page], :per_page => 2)
+    @products = Product.paginate(:page => params[:page], :per_page => 15)
     respond_with @products
   end
 
@@ -43,7 +43,6 @@ class ProductsController < ApplicationController
 
   # POST /products
   # POST /products.json
-  # POST _create and show or create and continue_
   def create
     @product = Product.new(params[:product])
 
@@ -92,8 +91,12 @@ class ProductsController < ApplicationController
   end
 
   def search
-    @products = Product.search(params[:search]).to_a.paginate(:per_page => 10, :page => params[:page] )
-    #@products = @products. if params[:page]
+    if params[:name] or params[:code] or params[:part_number]
+      @products = Product.advancedSearch(params[:code], params[:name], params[:part_number]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
+    else
+      @products = Product.search(params[:search]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
+    end
     respond_with @products
   end
+
 end

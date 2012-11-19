@@ -3,7 +3,7 @@
     <li class="nav-header"><%= I18n.t('.content.titles.tools')%></li>
     
     <li><a href=<%=root_path %> ><i class='icon-white icon-home'></i><%= I18n.t('.content.titles.home')%></a></li>
-    <!-- <li><a href=<%=warehouses_path %> ><i class='icon-picture'></i> Bodegas</a></li> -->
+    
     
     <%if user_signed_in? %>
     <li class="divider"></li>
@@ -21,12 +21,9 @@
         <%end%>
 
     <%end%>
-    <li>
-                    
-            </li>
     <li class="divider"></li>
     <li class="nav-header">Otros</li>
-        <li><a href=<%=help_path %>><i class='icon-flag'></i>Ayuda</a></li>
-    
+    <li><a href=<%=help_path %>><i class='icon-flag'></i>Ayuda</a></li>
+    <li><a href=<%=search_products_path %> ><i class='icon-search'></i>Buscar Productos</a></li>
   </ul>
 </div>

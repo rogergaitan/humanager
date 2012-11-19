@@ -36,22 +36,43 @@ class Product < ActiveRecord::Base
   					:code, :cost, :line_id, :make, :market_price, :max_cant, 
   					:max_discount, :min_cant, :model, :name, :part_number, 
   					:status, :stock, :subline_id, :version, :year
-  	validates :code, 
-					:presence => true, 
-					:length => { :within => 4..10 },
+  
+  validates :code,  
+						:length => { :within => 4..10 },
 						:uniqueness => { :case_sensitive => false }
 
-	validates 	:address, :bar_code, :category_id, 
-				:code, :cost, :line_id, :make, :market_price, :max_cant, 
-				:max_discount, :min_cant, :model, :name, :part_number, 
-				:status, :stock, :subline_id, :version, :year, 
-					:presence => true		
-					
-	validates :name, 
-					:presence => true
+	validates :code, :line_id, :subline_id, :category_id, :part_number, :name,
+							:presence => true		
 	
+	#General Search
 	def self.search(search)
-		where("name LIKE ? OR code Like ? OR part_number LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%") if search			
+		query = "%"
+		if search 
+			search.each do |q|
+				query += "#{q}%" if !q.blank? and q.length >= 3
+			end		
+			where("name LIKE '" + query.gsub("% ", "%") + "'") if query.length >= 3
+		end
+	end
+
+	#Advanced Search
+	def self.advancedSearch(code, name, part_number)
+		query = ""
+		params = []
+		params.push(" code LIKE '%#{code}%' ") if !code.empty? and code.length >= 3
+		params.push(" name LIKE '%#{name}%' ") if !name.empty? and name.length >= 3
+		params.push(" part_number LIKE '%#{part_number}%' ") if !part_number.empty? and part_number.length >= 3
+
+		if params	
+			params.each_with_index do |q, i|
+				if i < params.length - 1
+					query += q + " AND " 
+				else
+					query += q
+				end
+			end
+		end
+		where(query) if query
 	end
 
 end
