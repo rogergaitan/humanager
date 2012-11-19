@@ -257,7 +257,7 @@ es:
         task: Labor
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
-        type_of_personnel_action: Tipo de Accion de Personal
+        type_of_personnel_action: Tipo de Acción de Personal
         
       attributes:
         payroll_type:
