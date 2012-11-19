@@ -1,5 +1,5 @@
 var treeviewhr = new function() {
-	this.cc_tree = function(tree_array, isPopup) {
+	this.cc_tree = function(tree_array, isPopup, textField, idField) {
 		var leftover = []
 		$(tree_array.sort()).each(function() {
 			if (this[2] == 0) {
@@ -31,6 +31,8 @@ var treeviewhr = new function() {
 		}
 		if (isPopup == true) {
 			$('span.linkclass span').addClass('node_link').attr("data-dismiss", "modal");
+			$('#list').append("<input id='textFieldPopup' type='hidden' value='" + textField + "' />");
+			$('#list').append("<input id='idFieldPopup' type='hidden' value='" + idField + "' />");
 		}
 	}
 	

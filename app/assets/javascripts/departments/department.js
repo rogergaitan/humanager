@@ -18,7 +18,7 @@ $(jQuery(document).ready(function($) {
         })
         if($('#department_centro_de_costos_id').val()){
             var load_centro_de_costo_name = $.data(document.body, 'category_' + $('#department_centro_de_costos_id').val()+'');
-            $("#other_salary_ledger_account").val(load_centro_de_costo_name);
+            $("#load_centro_de_costo").val(load_centro_de_costo_name);
         }        
     }); 
     $('.expand_tree').click(treeviewhr.expand);

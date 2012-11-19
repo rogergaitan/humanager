@@ -1,4 +1,5 @@
 class DepartmentsController < ApplicationController
+  before_filter :resources, :only => [:new, :edit]
   # GET /departments
   # GET /departments.json
   def index
@@ -25,7 +26,6 @@ class DepartmentsController < ApplicationController
   # GET /departments/new.json
   def new
     @department = Department.new
-    @centro_costos = CentroDeCosto.all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -80,5 +80,9 @@ class DepartmentsController < ApplicationController
       format.html { redirect_to departments_url }
       format.json { head :no_content }
     end
+  end
+  
+  def resources
+    @centro_costos = CentroDeCosto.all
   end
 end

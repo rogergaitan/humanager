@@ -1,8 +1,9 @@
 class WorkBenefitsController < ApplicationController
+  before_filter :resources, :only => [:new, :edit]
   # GET /work_benefits
   # GET /work_benefits.json
   def index
-    @work_benefits = WorkBenefit.all
+    @work_benefits = WorkBenefit.includes(:credit, :debit).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -81,11 +82,24 @@ class WorkBenefitsController < ApplicationController
     end
   end
   
-  def fetch
-    @names_ids = LedgerAccount.find(:all, :select =>['ifather','naccount'])
+  def fetch_debit_accounts
+    @debit_accounts = LedgerAccount.debit_accounts
     respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @names_ids }
+      format.json { render json: @debit_accounts }
     end
+  end
+  
+  def fetch_credit_accounts
+    @credit_accounts = LedgerAccount.credit_accounts
+    respond_to do |format|
+      format.json { render json: @credit_accounts }
+    end
+  end
+  
+  def resources
+    @debit_accounts = LedgerAccount.debit_accounts
+    @credit_accounts = LedgerAccount.credit_accounts
+    @employees = Employee.order_employees
+    @department = Department.all
   end
 end

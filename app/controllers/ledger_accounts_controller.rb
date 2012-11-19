@@ -116,7 +116,6 @@ class LedgerAccountsController < ApplicationController
   def fetch
     @names_ids = LedgerAccount.find(:all, :select =>['id','naccount']).to_json
     respond_to do |format|
-      format.html # new.html.erb
       format.json { render json: @names_ids }
     end
   end

@@ -14,7 +14,7 @@ class Department < ActiveRecord::Base
 	belongs_to :employee 
 	belongs_to :centro_de_costos
 	has_many :employees
-  attr_accessible :name, :employee_id
+  attr_accessible :name, :employee_id, :centro_de_costos_id
   validates :name, :presence => true, :uniqueness => true
   validates :employee_id, :presence => true
   validates :centro_de_costos_id, 

@@ -1,7 +1,7 @@
 # == Schema Information
-#
+# 
 # Table name: employees
-#
+# 
 #  id                   :integer          not null, primary key
 #  entity_id            :integer
 #  gender               :enum([:male, :fe
@@ -22,7 +22,7 @@
 #  wage_payment         :decimal(12, 2)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#
+
 
 class Employee < ActiveRecord::Base
   attr_accessible :gender, :birthday, :marital_status, :ccss_calculated, :join_date, 
@@ -41,11 +41,13 @@ class Employee < ActiveRecord::Base
   belongs_to :means_of_payment
   belongs_to :position
   has_one :photo, :dependent => :destroy
-  has_many :employee_benefits
+  has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits
   
   accepts_nested_attributes_for :entity, :allow_destroy => true
   accepts_nested_attributes_for :photo, :allow_destroy => true
+  
+  scope :order_employees, joins(:entity).order('surname ASC')
   
 
   def full_name

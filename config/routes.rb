@@ -30,6 +30,7 @@ Reasapp::Application.routes.draw do
   resources :ledger_accounts do
     collection do
       get 'accountfb'
+      get 'fetch'
     end
     collection do
       get 'accountfb'
