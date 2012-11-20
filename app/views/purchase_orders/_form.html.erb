@@ -3,16 +3,16 @@
   <div class="warp_block_1 left">
     <div class="contentWidget" >
         <div class="labelCellTable">
-          <%= f.label :vendor_id, :class => '' %>
+          <%= f.label :vendor_id %>
         </div>
         <div class="contentCellTable">
           <%= f.hidden_field :vendor_id %>
-            <%= text_field_tag "vendor_text", "#{@purchase_order.vendor.entity.name} #{@purchase_order.vendor.entity.surname}" ,:class => 'text_field' %>
+            <%= text_field_tag "vendor_text", @vendor, :class => 'text_field' %> <%= link_to('', '#newVendor', class: "icon-plus btn_plus right", 'data-toggle' => 'modal')  %>
         </div>
     </div>
        <div class="contentWidget  " >
         <div class="labelCellTable">
-          <%= f.label :delivery_date, :class => '' %>
+          <%= f.label :delivery_date %>
         </div>
         <div class="contentCellTable">
           <%= f.text_field :delivery_date, :class => 'text_field' %>
@@ -21,7 +21,7 @@
 
      <div class="contentWidget  " >
         <div class="labelCellTable">
-          <%= f.label :shipping_type, :class => '' %>
+          <%= f.label :shipping_type %>
         </div>
         <div class="contentCellTable">
           <%= f.select :shipping_type,['Patito1','Patito2'],{}, :class => 'text_field' %>
@@ -32,7 +32,7 @@
   <div class="warp_block_2 right">
     <div class="contentWidget" >
       <div class="labelCellTable">
-        <%= f.label :reference_info, :class => '' %>
+        <%= f.label :reference_info %>
       </div>
       <div class="contentCellTable">
         <%= f.text_field :reference_info,:class => 'text_field' %>
@@ -41,7 +41,7 @@
 
     <div class="contentWidget" >
       <div class="labelCellTable">
-        <%= f.label :currency, :class => '' %>
+        <%= f.label :currency %>
       </div>
       <div class="contentCellTable">
         <%= f.select :currency,['Colones','Dolares'],{},:class => 'text_field' %>
@@ -77,7 +77,7 @@
   <div class="warp_block_3 left ">
      <div class="contentWidget" >
       <div class="labelCellTable">
-        <%= f.label :observation, :class => '' %>
+        <%= f.label :observation %>
       </div>
       <div class="contentCellTable">
         <%= f.text_area :observation, :class => 'text_area',:rows=>5 %>
@@ -87,7 +87,7 @@
   <div class="warp_block_4 right">
      <div class="contentWidget" >
       <div class="labelCellTable">
-        <%= f.label :subtotal, :class => '' %>
+        <%= f.label :subtotal %>
       </div>
       <div class="contentCellTable">
         <%= f.text_field :subtotal, :class => 'text_field subtotal' , :readonly => "readonly"%>
@@ -96,7 +96,7 @@
 
      <div class="contentWidget" >
       <div class="labelCellTable">
-        <%= f.label :taxes, :class => '' %>
+        <%= f.label :taxes %>
       </div>
       <div class="contentCellTable">
         <%= f.text_field :taxes, :class => 'text_field' , :readonly => "readonly"%>
@@ -104,7 +104,7 @@
      </div>
     <div class="contentWidget" >
         <div class="labelCellTable">
-          <%= f.label :total, :class => '' %>
+          <%= f.label :total %>
         </div>
         <div class="contentCellTable">
           <%= f.text_field :total, :class => 'text_field total', :readonly => "readonly" %>
@@ -124,3 +124,22 @@
                 purchase_orders_path, :class => 'btn' %>
   </div>
 <% end %>
+
+<!-- Modal -->
+<div id="newVendor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<%= form_for @new_vendor, :validate => true, :url => createvendor_purchase_orders_path(@new_vendor), :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Crear Proveedor</h3>
+  </div>
+  <div class="modal-body">
+		<%= f.fields_for :entity do |ent| %>
+			<%= render 'forms/entity_form', :f => ent %>
+		<% end %>
+  </div>
+  <div class="modal-footer">
+    <button class="btn closeVendor" data-dismiss="modal" aria-hidden="true">Close</button>
+		<%= f.submit nil, :class => 'btn btn-primary' %>
+  </div>
+	<% end %>
+</div>

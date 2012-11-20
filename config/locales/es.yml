@@ -58,6 +58,15 @@ es:
   activerecord:
       errors:
         models:
+          entity:
+            attributes:
+              entityid:
+                blank: "Este campo no puede quedar en blanco"
+                taken: "La entidad ya se encuentra en el sistema"
+              name:
+                blank: "Este campo no puede quedar en blanco"
+              surname:
+                blank: "Este campo no puede quedar en blanco"
           product_pricing:
             attributes:
               utility: 

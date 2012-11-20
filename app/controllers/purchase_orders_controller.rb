@@ -27,14 +27,15 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders/new.json
   def new
     @purchase_order = PurchaseOrder.new
-    #@purchase_order.items_purchase_order.build
-   
-    
+    @vendor = PurchaseOrder.get_vendor
+    @new_vendor = Vendor.new
+    @new_vendor.build_entity
   end
 
   # GET /purchase_orders/1/edit
   def edit
     @purchase_order = PurchaseOrder.find(params[:id])
+    @vendor = PurchaseOrder.get_vendor(params[:id])
   end
 
   # POST /purchase_orders
@@ -92,4 +93,21 @@ class PurchaseOrdersController < ApplicationController
     respond_with @Vendor
   end
 
+  def createvendor
+    @new_vendor = Vendor.new(params[:vendor])
+    @new_vendor.save
+  end
+  
+  def tovendor
+    @entity = Entity.find_by_entityid(params[:entityid])
+    @entity.build_vendor
+    respond_to do |format|
+      if @entity.save
+        @vendor = @entity.vendor
+        format.json { render json: @vendor}
+      else
+        format.json { render json: @entity.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 end

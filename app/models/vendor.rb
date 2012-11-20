@@ -11,6 +11,7 @@
 
 class Vendor < ActiveRecord::Base
   belongs_to :entity, :dependent => :destroy
+  has_many :purchase_orders
   attr_accessible :credit_limit, :entity_attributes
   accepts_nested_attributes_for :entity, :allow_destroy => true
   

@@ -156,7 +156,36 @@ var request_search_vendors = function(){
             }
     });
 };
-
+var convertingEntity = null;
+var convertEntityToVendor = function(e) {
+	e.preventDefault();
+	if (convertingEntity) {
+		convertingEntity.abort();
+	}
+	var entityid = $('#vendor_entity_attributes_entityid').val();
+	convertingEntity = $.ajax('/purchase_orders/tovendor', {
+		type: 'post',
+		data: { 'entityid' : entityid },
+		dataType: 'json',
+		cache: false,
+		timeout: 5000,
+		beforeSend: function(vendor) {
+			alert('enviando...');
+		},
+		complete: function(vendor) {
+			$(".closeVendor").trigger("click");
+			convertingEntity = null;
+		},
+		success: function(vendor) {
+			alert('vendor creado');
+		},
+		error: function(vendor) {
+			if (vendor.statusText != "abort") {
+				$('section.nav').append('<div class="alert alert-error">Error: La entidad especificada es un proveedor</div>').delay(5000).fadeOut();
+			}
+		}
+	})
+}
 
 
 $(document).ready(function(){
@@ -166,7 +195,7 @@ $(document).ready(function(){
 	$('.add_field_fake').trigger('click');
 	$('form').on('keyup', '.calculate', cost_live_calculate);
 	$('#products_items').find('label').remove();
-	$('form').submit(function(){
+	$('form.new_purchase_order').submit(function(){
 		$('#container_new_item input').attr('disabled',true);
 	});	
   	request_search_vendors();
@@ -178,5 +207,5 @@ $(document).ready(function(){
 		   event.preventDefault();
 		} 
     });
-
+	$('div.modal-body').on('click', '#entity-to-vendor', convertEntityToVendor);
 });

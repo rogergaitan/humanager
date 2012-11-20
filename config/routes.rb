@@ -78,24 +78,24 @@ Reasapp::Application.routes.draw do
     end
   end
 
-<<<<<<< HEAD
   resources :purchase_orders do
     collection do
       get 'searchProduct'
       get 'searchVendor'
+      post 'createvendor'
+      post 'tovendor'
     end
   end
 
-  resources :purchase_orders
-=======
+  
   resources :products do
     collection do
       get 'search'
     end
   end
   
+  resources :purchase_orders
   resources :products
->>>>>>> 7a789f0c8d60b06c95ab07c124434e050a05baf9
   resources :vendors
   resources :sublines
   resources :categories

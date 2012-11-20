@@ -23,5 +23,13 @@ class PurchaseOrder < ActiveRecord::Base
   				  :shipping_type, :subtotal, :taxes, :total, :items_purchase_order_attributes,:vendor_attributes
   accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true
   accepts_nested_attributes_for :vendor, :allow_destroy => true
-
+  
+  def self.get_vendor(vendor_id = nil)
+    unless vendor_id.nil?
+      @vendor = Vendor.find(vendor_id)
+      "#{@vendor.entity.name} #{@vendor.entity.surname}"
+    else
+      ""
+    end
+  end
 end

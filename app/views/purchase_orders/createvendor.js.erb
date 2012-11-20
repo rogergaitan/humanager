@@ -1,0 +1,3 @@
+$("#vendor_text").val('<%= "#{@new_vendor.entity.name} #{@new_vendor.entity.surname}" %>');
+$("#purchase_order_vendor_id").val('<%= @new_vendor.id %>');
+$(".closeVendor").trigger("click");

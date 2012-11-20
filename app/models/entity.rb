@@ -31,6 +31,8 @@ class Entity < ActiveRecord::Base
   attr_accessible :entityid, :name, :surname, :typeid, :telephones_attributes, 
                   :emails_attributes, :addresses_attributes, 
                   :contacts_attributes, :bank_accounts_attributes
-
+                  
+  validates :name, :surname, :entityid, :presence => true
+  validates :entityid, :uniqueness => true
 end
 
