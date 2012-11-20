@@ -16,7 +16,7 @@
       <tr>
         <td><%= link_to type_of_personnel_action.id, type_of_personnel_action_path(type_of_personnel_action) %></td>
         <td><%= type_of_personnel_action.description %></td>
-        <td><%=l type_of_personnel_action.created_at %></td>
+        <td><%= type_of_personnel_action.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_type_of_personnel_action_path(type_of_personnel_action), :class => 'btn btn-mini' %>

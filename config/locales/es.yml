@@ -400,6 +400,7 @@ es:
           login:
         type_of_personnel_action:
           description: Descripción
+          created_at: Creado
   date:
       abbr_day_names:
       - dom
