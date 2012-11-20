@@ -255,6 +255,7 @@ es:
         district: Distrito
         canton: Cantones
         task: Labor
+        deduction: Deducción
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
       attributes:
@@ -394,6 +395,13 @@ es:
           code: Codigo
           description: Descripción
           ledger_account_id: Cuenta Contable
+        deduction:
+          description: Descripción
+          deduction_type: Tipo de deducción
+          amount_exhaust: Monto a agotar
+          calculation_type: Tipo de calculo
+          calculation: Calculo
+          ledger_account_id: Cuenta de crédito
         user:
           login:
   date:

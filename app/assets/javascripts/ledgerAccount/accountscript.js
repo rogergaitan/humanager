@@ -1,16 +1,13 @@
 $(document).ready(function() {
-  $('#imagen').hide();
   treeviewhr.cc_tree(cuenta_contable);
   $('.expand_tree').click(treeviewhr.expand);
 
   $('#account-fb').click(function() { 
-    //$('#account-fb').attr("disabled", true); //desabilito el boton
-     $('#account-fb').hide();
-     $('#imagen').show();
+    $('#account-fb').attr("disabled", true); //desabilito el boton
     $.getJSON('/ledger_accounts/accountfb', function(resultado) {
       $('section.nav').append('<div class="notice">'+ resultado.notice +'</div>'); 
       $(resultado.account).each(function() { add_accounts(this, 'table#account-data')});
-      $('#imagen').hide();
+      $('#account-fb').hide();
     })
   });
 

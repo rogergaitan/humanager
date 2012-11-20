@@ -1,0 +1,73 @@
+    <ul class="thumbnails">
+          
+      <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=dcerp_config_path %>>
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=dcerp_config_path %> class='btn btn-info'><i class='icon-picture'></i> Configuración</a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%= employees_path%>><i class='icon-list-alt'></i> Empleados</a></li>
+              <li><a href=<%= departments_path%>><i class='icon-list-alt'></i> Departamentos</a></li>
+              <li><a href=<%= ledger_accounts_path%>><i class='icon-list-alt'></i> Cuentas Contables</a></li>
+              <li><a href=<%= other_salaries_path%>><i class='icon-list-alt'></i> Otros Salarios</a></li>
+              <li><a href=<%= centro_de_costos_path%>><i class='icon-list-alt'></i> Centro de Costos</a></li>
+              <li><a href=<%= deductions_path%>><i class='icon-list-alt'></i> Deducciones</a></li>
+              <li><a href=<%= occupations_path%>><i class='icon-list-alt'></i> Ocupaciones</a></li>
+              <li><a href=<%= means_of_payments_path%>><i class='icon-list-alt'></i> Medios de Pago</a></li>
+              <li><a href=<%= payment_frequencies_path%>><i class='icon-list-alt'></i> Frecuencias de Pago</a></li>
+              <li><a href=<%= payment_methods_path%>><i class='icon-list-alt'></i> Metodos de Pago</a></li>
+              <li><a href=<%= payment_schedules_path%>><i class='icon-list-alt'></i> Calendarios de Pago</a></li>
+
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+            
+        </div>
+      </li>
+
+      <!-- PROCESOS -->
+       <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=products_path %>>
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=products_path %> class='btn btn-info'><i class='icon-picture'></i>Procesos</a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+
+              <li><a href="#">Lista de menus</a></li>
+
+            </ul>
+            </div>
+            
+        </div>
+      </li>
+
+      <!-- INFORMES -->
+       <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=products_path %>>
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=products_path %> class='btn btn-info'><i class='icon-picture'></i> Informes </a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+             
+              <li><a href="#">Lista de menus</a></li>
+
+            </ul>
+            </div>
+            
+        </div>
+      </li>
+
+</ul>

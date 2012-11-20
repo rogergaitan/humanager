@@ -1,7 +1,11 @@
 class OtherSalariesController < ApplicationController
   before_filter :accounts, :only => [:new, :edit]
-  # GET /other_salaries
-  # GET /other_salaries.json
+  before_filter :get_account, :only => [:edit, :update, :destroy]
+  
+  def get_account
+        @other_salary = OtherSalary.find(params[:id])
+  end
+
   def index
     @other_salaries = OtherSalary.all
 
@@ -35,7 +39,6 @@ class OtherSalariesController < ApplicationController
 
   # GET /other_salaries/1/edit
   def edit
-    @other_salary = OtherSalary.find(params[:id])
   end
 
   # POST /other_salaries
@@ -57,7 +60,6 @@ class OtherSalariesController < ApplicationController
   # PUT /other_salaries/1
   # PUT /other_salaries/1.json
   def update
-    @other_salary = OtherSalary.find(params[:id])
 
     respond_to do |format|
       if @other_salary.update_attributes(params[:other_salary])
@@ -73,7 +75,6 @@ class OtherSalariesController < ApplicationController
   # DELETE /other_salaries/1
   # DELETE /other_salaries/1.json
   def destroy
-    @other_salary = OtherSalary.find(params[:id])
     @other_salary.destroy
 
     respond_to do |format|

@@ -1,4 +1,10 @@
 class ProvincesController < ApplicationController
+before_filter :get_province, :only => [:edit, :update, :destroy]
+
+  def get_province
+    @province = Province.find(params[:id])
+  end
+
   # GET /provinces
   # GET /provinces.json
   def index
@@ -34,7 +40,6 @@ class ProvincesController < ApplicationController
 
   # GET /provinces/1/edit
   def edit
-    @province = Province.find(params[:id])
   end
 
   # POST /provinces
@@ -56,8 +61,6 @@ class ProvincesController < ApplicationController
   # PUT /provinces/1
   # PUT /provinces/1.json
   def update
-    @province = Province.find(params[:id])
-
     respond_to do |format|
       if @province.update_attributes(params[:province])
         format.html { redirect_to @province, notice: 'Province was successfully updated.' }
@@ -72,7 +75,6 @@ class ProvincesController < ApplicationController
   # DELETE /provinces/1
   # DELETE /provinces/1.json
   def destroy
-    @province = Province.find(params[:id])
     @province.destroy
 
     respond_to do |format|

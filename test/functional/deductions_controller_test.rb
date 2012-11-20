@@ -18,7 +18,7 @@ class DeductionsControllerTest < ActionController::TestCase
 
   test "should create deduction" do
     assert_difference('Deduction.count') do
-      post :create, deduction: { calculation_method: @deduction.calculation_method, description: @deduction.description, frequency: @deduction.frequency }
+      post :create, deduction: { amount_exhaust: @deduction.amount_exhaust, calculation: @deduction.calculation, calculation_type: @deduction.calculation_type, credit_account: @deduction.credit_account, deduction_type: @deduction.deduction_type, description: @deduction.description }
     end
 
     assert_redirected_to deduction_path(assigns(:deduction))
@@ -35,7 +35,7 @@ class DeductionsControllerTest < ActionController::TestCase
   end
 
   test "should update deduction" do
-    put :update, id: @deduction, deduction: { calculation_method: @deduction.calculation_method, description: @deduction.description, frequency: @deduction.frequency }
+    put :update, id: @deduction, deduction: { amount_exhaust: @deduction.amount_exhaust, calculation: @deduction.calculation, calculation_type: @deduction.calculation_type, credit_account: @deduction.credit_account, deduction_type: @deduction.deduction_type, description: @deduction.description }
     assert_redirected_to deduction_path(assigns(:deduction))
   end
 

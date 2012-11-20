@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :deductions
+
   resources :other_salaries
   
   resources :work_benefits do
@@ -30,6 +32,7 @@ Reasapp::Application.routes.draw do
   resources :ledger_accounts do
     collection do
       get 'accountfb'
+      get 'fetch'
     end
     collection do
       get 'accountfb'
@@ -71,8 +74,6 @@ Reasapp::Application.routes.draw do
 
   resources :employees
 
-  resources :deductions
-
   resources :occupations
 
   resources :customers
@@ -92,8 +93,9 @@ Reasapp::Application.routes.draw do
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
   match '/404', :to => 'errors#not_found'
-  
-  root :to => 'pages#home'
+  match '/configuracion', :to  => 'pages#configuracion', :as  => 'dcerp_config'
+
+  root :to => 'pages#index'
 
   resources :lines do
     collection do

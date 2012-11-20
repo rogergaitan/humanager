@@ -1,4 +1,10 @@
 class CantonsController < ApplicationController
+  before_filter :get_canton, :only => [:edit, :update, :destroy]
+
+  def get_canton
+    @canton = Canton.find(params[:id])
+  end
+
   # GET /cantons
   # GET /cantons.json
   def index
@@ -35,7 +41,7 @@ class CantonsController < ApplicationController
 
   # GET /cantons/1/edit
   def edit
-    @canton = Canton.find(params[:id])
+    @province = Province.all
   end
 
   # POST /cantons
@@ -57,8 +63,6 @@ class CantonsController < ApplicationController
   # PUT /cantons/1
   # PUT /cantons/1.json
   def update
-    @canton = Canton.find(params[:id])
-
     respond_to do |format|
       if @canton.update_attributes(params[:canton])
         format.html { redirect_to @canton, notice: 'Canton was successfully updated.' }
@@ -73,7 +77,6 @@ class CantonsController < ApplicationController
   # DELETE /cantons/1
   # DELETE /cantons/1.json
   def destroy
-    @canton = Canton.find(params[:id])
     @canton.destroy
 
     respond_to do |format|

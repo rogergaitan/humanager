@@ -1,0 +1,111 @@
+<h2>Configuraciones</h2>
+    <!--employees-->
+    <ul class="thumbnails">
+        
+        <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=employees_path %>>
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=employees_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.employee').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_employee_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=employees_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+      <!--departamentos -->
+            <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=departments_path %>>
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=departments_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.department').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_department_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=departments_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+      <!-- cuentas contables-->
+       <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=ledger_accounts_path %>>
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=ledger_accounts_path %> class='btn btn-info btn-info hrbox'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.ledger_account').pluralize %></a>
+            <button class="btn btn-info btn-info hrbox dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=ledger_accounts_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+      <!--otros salarios-->
+            <li class="span2">
+        <div class="thumbnail">
+          <a href=<%=other_salaries_path %>>
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=ledger_accounts_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.other_salary').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_other_salary_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=other_salaries_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+      <!-- centro de costos-->
+      <li class="span2">
+            <div class='thumbnail'>
+              <div class='btn-group'>
+              <a href=<%=centro_de_costos_path %>>
+          <%= image_tag ("line_icon.png" ) %> 
+          </a>
+            <a href=<%=centro_de_costos_path %> class='btn btn-info'><i class='icon-picture'></i> <%= I18n.t('.activerecord.models.centro_de_costo').pluralize %></a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li>
+                <a href=<%=centro_de_costos_path %>>
+                  <i class='icon-list-alt'></i> Lista
+                </a>
+              </li>              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+      </li>
+
+</ul>

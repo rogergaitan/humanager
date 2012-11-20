@@ -25,6 +25,7 @@ class DeductionsController < ApplicationController
   # GET /deductions/new.json
   def new
     @deduction = Deduction.new
+    @credit_account = LedgerAccount.credit_accounts
 
     respond_to do |format|
       format.html # new.html.erb

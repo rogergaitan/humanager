@@ -1,33 +1,72 @@
-<%= form_for(@deduction) do |f| %>
-  <% if @deduction.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@deduction.errors.count, "error") %> prohibited this deduction from being saved:</h2>
-
-      <ul>
-      <% @deduction.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+<script type="text/javascript">
+  var cuenta_credito = [];
+  <%  @credit_account.each do |cc| %>
+    cuenta_credito.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
   <% end %>
+</script>
+<%= javascript_include_tag 'deductions/deductions' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= form_for @deduction, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
+    <div class="control-group">
+      <%= f.label :deduction_type, :class => 'control-label' %>
+      <div class='controls'>
+        <%= f.enum_select :deduction_type, :include_blank =>false %>
+      </div>
+    </div>
+
+  <div class="control-group">
+    <%= f.label :amount_exhaust, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field  :amount_exhaust, :class => 'text_field' %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :employee %><br />
-    <%= f.text_field :employee %>
+
+  <div class="control-group">
+    <%= f.label :calculation_type, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.enum_select :calculation_type, :include_blank =>false %>
+    </div>
+    </div>
+
+  <div class="control-group">
+    <%= f.label :calculation, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :calculation, :class => 'text_field' %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :frequency %><br />
-    <%= f.text_field :frequency %>
+  <div class="control-group">
+    <%= f.label :credit_account, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :ledger_account_id %>
+       <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field required search-image-category', :for => :ledger_account_id %>
+      <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :calculation_method %><br />
-    <%= f.text_field :calculation_method %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                deductions_path, :class => 'btn' %>
   </div>
 <% end %>
+
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la cuenta de crédito</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>

@@ -1,4 +1,10 @@
 class DistrictsController < ApplicationController
+before_filter :get_district, :only => [:edit, :update, :destroy]
+
+  def get_district
+     @district = District.find(params[:id])
+  end
+  
   # GET /districts
   # GET /districts.json
   def index
@@ -36,7 +42,6 @@ class DistrictsController < ApplicationController
 
   # GET /districts/1/edit
   def edit
-    @district = District.find(params[:id])
     @cantons = Canton.all
     @provinces = Province.all
   end
@@ -60,8 +65,6 @@ class DistrictsController < ApplicationController
   # PUT /districts/1
   # PUT /districts/1.json
   def update
-    @district = District.find(params[:id])
-
     respond_to do |format|
       if @district.update_attributes(params[:district])
         format.html { redirect_to @district, notice: 'District was successfully updated.' }
@@ -76,7 +79,6 @@ class DistrictsController < ApplicationController
   # DELETE /districts/1
   # DELETE /districts/1.json
   def destroy
-    @district = District.find(params[:id])
     @district.destroy
 
     respond_to do |format|

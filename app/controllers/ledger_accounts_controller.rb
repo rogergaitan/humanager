@@ -1,6 +1,10 @@
 class LedgerAccountsController < ApplicationController
-  # GET /ledger_accounts
-  # GET /ledger_accounts.json
+  before_filter :get_ledger, :only => [:edit, :update, :destroy]
+
+  def get_ledger
+    @ledger_account = LedgerAccount.find(params[:id])
+  end
+
   def index
     @ledger_accounts = LedgerAccount.all
 
@@ -34,7 +38,6 @@ class LedgerAccountsController < ApplicationController
 
   # GET /ledger_accounts/1/edit
   def edit
-    @ledger_account = LedgerAccount.find(params[:id])
   end
 
   # POST /ledger_accounts
@@ -56,7 +59,6 @@ class LedgerAccountsController < ApplicationController
   # PUT /ledger_accounts/1
   # PUT /ledger_accounts/1.json
   def update
-    @ledger_account = LedgerAccount.find(params[:id])
 
     respond_to do |format|
       if @ledger_account.update_attributes(params[:ledger_account])
@@ -72,7 +74,6 @@ class LedgerAccountsController < ApplicationController
   # DELETE /ledger_accounts/1
   # DELETE /ledger_accounts/1.json
   def destroy
-    @ledger_account = LedgerAccount.find(params[:id])
     @ledger_account.destroy
 
     respond_to do |format|
@@ -114,9 +115,8 @@ class LedgerAccountsController < ApplicationController
 #Busca todas las cuentas contables pero solamente selecciona el ipadre y ncuenta 
 #Este metodo se utilza para crear o editar otros salarios(dropdowns)
   def fetch
-    @names_ids = LedgerAccount.find(:all, :select =>['id','naccount']).to_json
+    @names_ids = LedgerAccount.find(:all, :select =>['id','naccount'])
     respond_to do |format|
-      format.html # new.html.erb
       format.json { render json: @names_ids }
     end
   end
