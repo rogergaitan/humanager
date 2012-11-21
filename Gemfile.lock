@@ -141,7 +141,7 @@ DEPENDENCIES
   annotate
   bootstrap-will_paginate
   carrierwave
-  client_side_validations
+  client_side_validations (~> 3.1.4)
   coffee-rails (~> 3.2.1)
   devise
   enum_column3

@@ -24,7 +24,7 @@
   </ul>
 
 <!-- Render Vendor form -->
-    <%= form_for @vendor, :html => { :class => 'form-horizontal' } do |f| %>
+    <%= form_for @vendor, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
     <div class="tab-content">
       
 <!-- Render Entity information into partial to reuse that code -->

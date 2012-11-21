@@ -170,21 +170,37 @@ var convertEntityToVendor = function(e) {
 		cache: false,
 		timeout: 5000,
 		beforeSend: function(vendor) {
-			alert('enviando...');
+			$('#status-vendor').hide();
+			$('#vendor-spinner').show();
+			$('section.nav').empty().show();
 		},
 		complete: function(vendor) {
+			$('#vendor-spinner').hide();
+			$('#status-vendor').show();
+			resetFieldsErrors('new_vendor');
 			$(".closeVendor").trigger("click");
 			convertingEntity = null;
 		},
 		success: function(vendor) {
-			alert('vendor creado');
+			$('#purchase_order_vendor_id').val(vendor.id);
+			$('#vendor_text').val(vendor.entity.name + ' ' + vendor.entity.surname);
+			$('section.nav').html('<div class="notice">Proveedor creado correctamente</div>').delay(10000).fadeOut();
 		},
 		error: function(vendor) {
 			if (vendor.statusText != "abort") {
-				$('section.nav').append('<div class="alert alert-error">Error: La entidad especificada es un proveedor</div>').delay(5000).fadeOut();
+				$('section.nav').html('<div class="alert alert-error">Error: La entidad especificada es un proveedor</div>').delay(10000).fadeOut();
 			}
 		}
 	})
+}
+
+function resetFieldsErrors (form) {
+	$('form#'+form)[0].reset();
+	$('#'+form).find('[data-validate]:input').each(function() {
+		$(this).removeData();
+	});
+	$('.message').remove();
+	$('#status-vendor').remove();
 }
 
 
@@ -208,4 +224,9 @@ $(document).ready(function(){
 		} 
     });
 	$('div.modal-body').on('click', '#entity-to-vendor', convertEntityToVendor);
+	$('div.modal-body').on('click', '#cancel-convert', function(e) {
+		e.preventDefault();
+		resetFieldsErrors('new_vendor');
+		$(".closeVendor").trigger("click");
+	});
 });

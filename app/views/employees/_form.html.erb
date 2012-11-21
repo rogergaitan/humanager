@@ -1,10 +1,6 @@
 <script type="text/javascript">
-  var roles = new Array();
 	var cantons = new Array();
 	var district = new Array();
-  <% @roles.each do |role| %>
-    roles.push(new Array(<%= role.department_id %>, '<%=h role.role %>', <%= role.id %>));
-  <% end %>
   <% @canton.each do |canton| %>
 		cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
   <% end %>

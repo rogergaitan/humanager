@@ -12,5 +12,5 @@
 
 class Role < ActiveRecord::Base
   belongs_to :department
-  attr_accessible :description, :role, :department_id
+  attr_accessible :description, :role
 end

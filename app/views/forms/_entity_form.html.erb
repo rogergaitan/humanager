@@ -15,18 +15,18 @@
   </div>
 </div>
 <div class="control-group">
-  <%= f.label :entityid, :class => 'control-label' %>
-  <div class="controls">
-		<div class="input-prepend">
-			<span class="add-on">C</span><%= f.text_field :entityid, :class => 'text_field' %>
-		</div>
-  </div>
-</div>
-<div class="control-group">
   <%= f.label :typeid, :class => 'control-label' %>
   <div class="controls">
 		<div class="input-prepend">
 			<span class="add-on">T</span><%= f.enum_select :typeid, :include_blank => false %>
+		</div>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :entityid, :class => 'control-label' %>
+  <div class="controls">
+		<div class="input-prepend">
+			<span class="add-on">C</span><%= f.text_field :entityid, :class => 'text_field' %>
 		</div>
   </div>
 </div>

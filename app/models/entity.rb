@@ -34,5 +34,14 @@ class Entity < ActiveRecord::Base
                   
   validates :name, :surname, :entityid, :presence => true
   validates :entityid, :uniqueness => true
+  
+  def create_vendor
+    unless self.vendor
+      self.build_vendor
+      self.save
+    else
+      false
+    end
+  end
 end
 

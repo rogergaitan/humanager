@@ -100,11 +100,10 @@ class PurchaseOrdersController < ApplicationController
   
   def tovendor
     @entity = Entity.find_by_entityid(params[:entityid])
-    @entity.build_vendor
     respond_to do |format|
-      if @entity.save
+      if @entity.create_vendor
         @vendor = @entity.vendor
-        format.json { render json: @vendor}
+        format.json { render json: @vendor, :include => :entity }
       else
         format.json { render json: @entity.errors, status: :unprocessable_entity }
       end
