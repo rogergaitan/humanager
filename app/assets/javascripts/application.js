@@ -15,4 +15,5 @@
 //= require twitter/bootstrap
 //= require rails.validations
 //= require autocomplete-rails
+//= require waypoints.min
 //= require_directory .

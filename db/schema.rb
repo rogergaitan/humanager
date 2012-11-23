@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121030201826) do
+ActiveRecord::Schema.define(:version => 20121113231121) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -55,6 +55,15 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "centro_de_costos", :force => true do |t|
+    t.string   "iempresa"
+    t.string   "icentro_costo"
+    t.string   "nombre_cc"
+    t.string   "icc_padre"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "contacts", :force => true do |t|
@@ -101,8 +110,9 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
   create_table "departments", :force => true do |t|
     t.string   "name"
     t.integer  "employee_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.integer  "centro_de_costos_id"
   end
 
   add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
@@ -110,9 +120,9 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
   create_table "districts", :force => true do |t|
     t.string   "name"
     t.integer  "canton_id"
+    t.integer  "province_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "province_id"
   end
 
   add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
@@ -127,6 +137,16 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
   end
 
   add_index "emails", ["entity_id"], :name => "index_emails_on_entity_id"
+
+  create_table "employee_benefits", :force => true do |t|
+    t.integer  "work_benefit_id"
+    t.integer  "employee_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "employee_benefits", ["employee_id"], :name => "index_employee_benefits_on_employee_id"
+  add_index "employee_benefits", ["work_benefit_id"], :name => "index_employee_benefits_on_work_benefit_id"
 
   create_table "employees", :force => true do |t|
     t.integer  "entity_id"
@@ -148,6 +168,7 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.decimal  "wage_payment",                                                                                    :precision => 12, :scale => 2
     t.datetime "created_at",                                                                                                                     :null => false
     t.datetime "updated_at",                                                                                                                     :null => false
+    t.string   "position_id"
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
@@ -156,7 +177,13 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
   add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
   add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
+  add_index "employees", ["position_id"], :name => "index_employees_on_position_id"
   add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
+
+  create_table "empmaestccs", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "entities", :force => true do |t|
     t.string   "name"
@@ -165,6 +192,27 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.enum     "typeid",     :limit => [:national, :foreign, :company]
     t.datetime "created_at",                                            :null => false
     t.datetime "updated_at",                                            :null => false
+  end
+
+  create_table "items_purchase_orders", :force => true do |t|
+    t.integer  "purchase_order_id"
+    t.string   "product"
+    t.string   "description"
+    t.integer  "quantity"
+    t.float    "cost_unit"
+    t.float    "cost_total"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "items_purchase_orders", ["purchase_order_id"], :name => "index_items_purchase_orders_on_purchase_order_id"
+
+  create_table "ledger_accounts", :force => true do |t|
+    t.string   "iaccount"
+    t.string   "naccount"
+    t.string   "ifather"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "lines", :force => true do |t|
@@ -197,6 +245,14 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "other_salaries", :force => true do |t|
+    t.string   "code"
+    t.string   "description"
+    t.integer  "ledger_account_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "payment_frequencies", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -221,14 +277,31 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.date     "payment_date"
   end
 
+  create_table "payroll_types", :force => true do |t|
+    t.string   "description"
+    t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
+  end
+
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
-    t.string   "url"
+    t.string   "name"
+    t.string   "photo"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
+
+  create_table "positions", :force => true do |t|
+    t.string   "position"
+    t.string   "description"
+    t.string   "codigo_ins"
+    t.string   "codigo_ccss"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
@@ -270,15 +343,28 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "purchase_orders", :force => true do |t|
+    t.integer  "vendor_id"
+    t.string   "reference_info"
+    t.string   "currency"
+    t.text     "observation"
+    t.float    "subtotal"
+    t.float    "taxes"
+    t.float    "total"
+    t.date     "delivery_date"
+    t.string   "shipping_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
+
   create_table "roles", :force => true do |t|
     t.string   "role"
     t.string   "description"
-    t.integer  "department_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
-
-  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"
@@ -286,6 +372,16 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
     t.string   "name"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.string   "iactivity"
+    t.string   "itask"
+    t.string   "ntask"
+    t.string   "iaccount"
+    t.decimal  "mlaborcost", :precision => 18, :scale => 4
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "telephones", :force => true do |t|
@@ -337,13 +433,14 @@ ActiveRecord::Schema.define(:version => 20121030201826) do
 
   create_table "work_benefits", :force => true do |t|
     t.string   "description"
-    t.integer  "employee_id"
-    t.string   "frequency"
-    t.string   "calculation_method"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.decimal  "percentage",     :precision => 12, :scale => 2
+    t.integer  "debit_account"
+    t.integer  "credit_account"
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
   end
 
-  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
+  add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
+  add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"
 
 end

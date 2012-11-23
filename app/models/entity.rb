@@ -31,5 +31,17 @@ class Entity < ActiveRecord::Base
   attr_accessible :entityid, :name, :surname, :typeid, :telephones_attributes, 
                   :emails_attributes, :addresses_attributes, 
                   :contacts_attributes, :bank_accounts_attributes
+                  
+  validates :name, :surname, :entityid, :presence => true
+  validates :entityid, :uniqueness => true
+  
+  def create_vendor
+    unless self.vendor
+      self.build_vendor
+      self.save
+    else
+      false
+    end
+  end
 end
 

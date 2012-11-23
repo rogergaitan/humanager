@@ -58,6 +58,15 @@ es:
   activerecord:
       errors:
         models:
+          entity:
+            attributes:
+              entityid:
+                blank: "Este campo no puede quedar en blanco"
+                taken: "La entidad ya se encuentra en el sistema"
+              name:
+                blank: "Este campo no puede quedar en blanco"
+              surname:
+                blank: "Este campo no puede quedar en blanco"
           product_pricing:
             attributes:
               utility: 
@@ -190,6 +199,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        purchase_order: Orden de compra
         bank_account: Cuenta Bancaria
         customer: Cliente
         vendor: Proveedor
@@ -212,6 +222,21 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        purchase_order:
+          vendor_id: Proveedor
+          reference_info: Referencia
+          currency: Moneda
+          observation: Observaciones
+          subtotal: Subtotal
+          taxes: Impuestos
+          total: Total
+          delivery_date: Fecha de entrega
+          shipping_type: Forma de envío
+          created_at: Fecha
+        items_purchase_order:
+          product: Producto
+          quantity: Cantidad
+          cost_unit: Costo Unit
         address:
           province_id: Provincia
           canton_id: Canton
@@ -383,6 +408,7 @@ es:
       - :day
       - :month
       - :year
+
 
 
 

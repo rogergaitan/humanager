@@ -1,0 +1,24 @@
+ <tr class="items_purchase_orders_form success">
+    <td class="controls_item">
+      <%= f.text_field :product, :class => 'text_field product input-mini code' %>
+    </td>
+    <td class="controls_item">
+      <%= f.label :product, :class => '' %>
+      <%= f.text_field :description, :class => 'text_field description',:placeholder => 'Buscar Producto' %>
+    </td>
+    <td class="controls_item">
+      <%= f.label :quantity, :class => '' %>
+      <%= f.text_field :quantity, :class => 'text_field input-small quantity calculate', :placeholder => 'Cantidad' %>
+    </td>
+    <td class="controls_item">
+      <%= f.label :cost_unit, :class => '' %>
+      <%= f.text_field :cost_unit, :class => 'text_field input-small cost_unit calculate', :placeholder => 'Costo Unit' %>
+    </td>
+    <td class="controls_item">
+      <%= f.text_field :cost_total, :class => 'text_field input-mini cost_total' %>
+    </td>
+    <td>
+      <%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger none" %>
+    </td>
+</tr>
+

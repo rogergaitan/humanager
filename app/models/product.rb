@@ -86,4 +86,5 @@ class Product < ActiveRecord::Base
 	def self.clean_cache
 		Rails.cache.delete("Product.cart")
 	end
+
 end

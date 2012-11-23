@@ -151,7 +151,7 @@ class EmployeesController < ApplicationController
      @occupation = Occupation.find(:all, :select =>['id','description'])
      @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
      @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
-     @roles = Role.find(:all, :select =>['id','role', 'department_id'])
+     @roles = Role.find(:all, :select =>['id','role'])
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
    end
 end

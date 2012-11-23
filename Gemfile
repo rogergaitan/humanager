@@ -9,7 +9,7 @@ gem 'mysql2'
 gem 'jquery-rails'
 gem 'devise'
 gem 'carrierwave'
-gem 'client_side_validations'
+gem "client_side_validations", "~> 3.1.4"
 gem 'twitter-bootstrap-rails'
 gem 'enum_column3'
 gem 'will_paginate'
