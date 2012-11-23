@@ -17,18 +17,18 @@ class Subline < ActiveRecord::Base
   attr_accessible :code, :description, :name
 
 	validates :code, 
-					:presence => true, 
-					:length => { :within => 4..10 },
+					:length => { :within => 1..10 },
 					:uniqueness => { :case_sensitive => false }
 
-	validates :description, 
+	validates :code, :name,
 						:presence => true		
-					
-	validates :name, 
-					:presence => true
 
 	def self.fetch
-		@sublines = Rails.cache.fetch("Subline.all"){ find(:all, :select =>['id','name']).to_json } 
+		Rails.cache.fetch("Subline.all"){ find(:all, :select =>['id','name']).to_json } 
+	end
+
+	def self.clean_cache
+		Rails.cache.delete("Subline.all")
 	end
 
 end

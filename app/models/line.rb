@@ -23,26 +23,27 @@ class Line < ActiveRecord::Base
 
 has_many :products
 
-attr_accessible 	:code, :description, :income, :inventory, 
-  					:lost_adjustment, :name, :purchase_return, 
-  					:purchase_tax, :sale_cost, :sale_tax, 
-  					:sales_return, :utility_adjusment
+attr_accessible :code, :description, :income, :inventory, 
+								  :lost_adjustment, :name, :purchase_return, 
+									:purchase_tax, :sale_cost, :sale_tax, 
+									:sales_return, :utility_adjusment
 
 validates 	:code, 
-				:presence => true, 
-				:length => { :within => 4..10 },
-				:uniqueness => { :case_sensitive => false }
+							:length => { :within => 1..10 },
+							:uniqueness => { :case_sensitive => false }
 
-validates 	:description, :income, :inventory, 
-			:lost_adjustment, :name, :purchase_return, 
-			:purchase_tax, :sale_cost, :sale_tax, 
-			:sales_return, :utility_adjusment,
-
-				:presence => true	
-
+validates 	:code, :name, 
+							:presence => true	
+=begin
 validates 	:income, :inventory, :lost_adjustment, :purchase_return, 
-			:purchase_tax, :sale_cost, :sale_tax, :sales_return, :utility_adjusment,
-			
-				:numericality => { :only_integer => true, :greater_than => 0 }
+						:purchase_tax, :sale_cost, :sale_tax, :sales_return, :utility_adjusment,		
+							:numericality => { :only_integer => true, :greater_than => 0 }
+=end
+	def self.fetch
+		Rails.cache.fetch("Line.all"){ find(:all, :select =>['id','name']).to_json } 
+	end
 
+	def self.clean_cache
+		Rails.cache.delete("Line.all")
+	end
 end

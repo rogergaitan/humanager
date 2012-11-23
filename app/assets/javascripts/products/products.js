@@ -17,7 +17,6 @@ $(jQuery(document).ready(function($) {
                     id: item.id
                 }
             }),
-
             select: function( event, ui ) {
                 if(ui.item.id){
                     $("#product_line_id").val(ui.item.id);    
@@ -36,8 +35,6 @@ $(jQuery(document).ready(function($) {
                     $("#product_line_id").val("");    
                 } 
             }
-            
-
         }) 
         if($("#product_line_id").val()){
             var product_line_name = $.data(document.body, 'line_' + $("#product_line_id").val()+'');

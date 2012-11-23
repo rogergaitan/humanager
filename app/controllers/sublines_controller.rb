@@ -1,9 +1,13 @@
 class SublinesController < ApplicationController
+
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
   respond_to :json, :html
+
+
   # GET /sublines
   # GET /sublines.json
   def index
-    @sublines = Subline.all
+    @sublines = Subline.paginate(:page => params[:page], :per_page => 10)
     respond_with @sublines
   end
 
@@ -81,7 +85,11 @@ class SublinesController < ApplicationController
   # Get All sublines including just the id and the name. 
   # We use this method on: *create* or *edit* products(dropdowns)
   def fetch
-    @sublines = Subline.fetch
-    respond_with @sublines
+    respond_with Subline.fetch
   end
+
+  def clean_cache
+    Subline.clean_cache
+  end
+
 end

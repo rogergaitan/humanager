@@ -2,7 +2,7 @@ require 'will_paginate/array'
 # Products Controller.
 # Belongs to Line, Subline, Category
 class ProductsController < ApplicationController
-  respond_to :json, :html, :js
+  respond_to :json, :html, :js, :pdf
   # GET /products
   # GET /products.json
   def index
@@ -17,6 +17,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.pdf do
+        render :pdf => "file_name"
+      end
       format.json { render json: @product }
     end
   end
@@ -99,4 +102,29 @@ class ProductsController < ApplicationController
     respond_with @products
   end
 
+  def set_cart
+    Product.set_cart(params[:cart_products])
+    respond_to do |format|
+      format.json { head :no_content }
+    end
+  end
+
+  def get_cart
+    @products = Product.get_cart
+    
+    respond_to do |format|
+      format.html
+      format.js
+      format.json { render json: @products }
+      format.pdf do
+        pdf = ProductsPDF.new(@products)
+        send_data pdf.render, filename: "products.pdf", type: "application/pdf", disposition: "inline"
+        #clean_cache
+      end
+    end
+  end
+
+  def clean_cache
+    Product.clean_cache
+  end
 end

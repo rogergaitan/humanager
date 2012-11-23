@@ -17,6 +17,7 @@ gem 'bootstrap-will_paginate'
 gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'dalli'
+gem 'prawn'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

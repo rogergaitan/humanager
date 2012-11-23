@@ -59,9 +59,9 @@ class Product < ActiveRecord::Base
 	def self.advancedSearch(code, name, part_number)
 		query = ""
 		params = []
-		params.push(" code LIKE '%#{code}%' ") if !code.empty? and code.length >= 3
-		params.push(" name LIKE '%#{name}%' ") if !name.empty? and name.length >= 3
-		params.push(" part_number LIKE '%#{part_number}%' ") if !part_number.empty? and part_number.length >= 3
+		params.push(" code LIKE '%#{code}%' ") if code and code.length >= 3
+		params.push(" name LIKE '%#{name}%' ") if name and name.length >= 3
+		params.push(" part_number LIKE '%#{part_number}%' ") if part_number and part_number.length >= 3
 
 		if params	
 			params.each_with_index do |q, i|
@@ -75,4 +75,15 @@ class Product < ActiveRecord::Base
 		where(query) if query
 	end
 
+	def self.set_cart(cart_products)
+			Rails.cache.write("Product.cart", cart_products )
+	end
+
+	def self.get_cart
+		Rails.cache.fetch("Product.cart")
+	end
+
+	def self.clean_cache
+		Rails.cache.delete("Product.cart")
+	end
 end

@@ -1,15 +1,15 @@
 class CategoriesController < ApplicationController
+  
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
+  respond_to :json, :html
+  
   # GET /categories
   # GET /categories.json,
-  # categories *paginated*
   def index
     @title = t('.activerecord.models.category').capitalize.pluralize
     @categories = Category.all
     @categories = Category.paginate(:page => params[:page], :per_page => 10)
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @categories }
-    end
+    respond_with @categories
   end
 
   # GET /categories/1
@@ -17,11 +17,7 @@ class CategoriesController < ApplicationController
   def show
     @title = t('.activerecord.models.category').capitalize
     @category = Category.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @category }
-    end
+    respond_with @category
   end
 
   # GET /categories/new
@@ -29,11 +25,7 @@ class CategoriesController < ApplicationController
   def new
     @title = t('.activerecord.models.category').capitalize
     @category = Category.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @category }
-    end
+    respond_with @category
   end
 
   # GET /categories/1/edit
@@ -93,14 +85,15 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # SHORT /lines/categories
+  # FETCH /lines/categories
   # Get All categories including just the id and the name. 
-  # We use this method on: create or edit products(dropdowns)
   def fetch
-    @names_ids = Category.find(:all, :select =>['id','name']).to_json
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @names_ids }
-    end
+    respond_with Category.fetch
   end
+
+  # DELETE "Category.all" key from cache
+  def clean_cache
+    Category.clean_cache
+  end
+
 end
