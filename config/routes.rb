@@ -13,6 +13,9 @@ Reasapp::Application.routes.draw do
 
   resources :deductions
 
+  resources :type_of_personnel_actions
+
+
   resources :other_salaries
   
   resources :work_benefits do

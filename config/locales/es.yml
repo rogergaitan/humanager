@@ -269,6 +269,7 @@ es:
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
         payroll: Planilla
+        type_of_personnel_action: Tipo de Acción de Personal
       attributes:
         payroll_type:
           description: Descripción
@@ -421,6 +422,9 @@ es:
           state: Estado
         user:
           login:
+        type_of_personnel_action:
+          description: Descripción
+          created_at: Creado
   date:
       abbr_day_names:
       - dom

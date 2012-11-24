@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20121120185217) do
+=======
+ActiveRecord::Schema.define(:version => 20121116165006) do
+>>>>>>> bf4ce98f9fd8f9b7adb1691d27dcdec76fdfbc55
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -194,6 +198,13 @@ ActiveRecord::Schema.define(:version => 20121120185217) do
     t.datetime "updated_at",                                            :null => false
   end
 
+  create_table "fields_personnel_actions", :force => true do |t|
+    t.string   "name"
+    t.string   "field_type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "ledger_accounts", :force => true do |t|
     t.string   "iaccount"
     t.string   "naccount"
@@ -271,6 +282,7 @@ ActiveRecord::Schema.define(:version => 20121120185217) do
     t.datetime "updated_at",                                                 :null => false
   end
 
+<<<<<<< HEAD
   create_table "payrolls", :force => true do |t|
     t.integer  "payroll_type_id"
     t.date     "star_date"
@@ -282,6 +294,17 @@ ActiveRecord::Schema.define(:version => 20121120185217) do
   end
 
   add_index "payrolls", ["payroll_type_id"], :name => "index_payrolls_on_payroll_type_id"
+=======
+  create_table "personalized_fields", :force => true do |t|
+    t.integer  "type_of_personnel_action_id"
+    t.integer  "fields_personnel_action_id"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "personalized_fields", ["fields_personnel_action_id"], :name => "index_personalized_fields_on_fields_personnel_action_id"
+  add_index "personalized_fields", ["type_of_personnel_action_id"], :name => "index_personalized_fields_on_type_of_personnel_action_id"
+>>>>>>> bf4ce98f9fd8f9b7adb1691d27dcdec76fdfbc55
 
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
@@ -379,6 +402,12 @@ ActiveRecord::Schema.define(:version => 20121120185217) do
   end
 
   add_index "telephones", ["entity_id"], :name => "index_telephones_on_entity_id"
+
+  create_table "type_of_personnel_actions", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
