@@ -1,6 +1,16 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :payrolls do
+    collection do
+      get 'get_activas'
+      get 'get_inactivas'
+      get 'get_payroll_types'
+      post 'reabrir'
+      post 'cerrar_planilla'
+    end
+  end
+
   resources :deductions
 
   resources :other_salaries

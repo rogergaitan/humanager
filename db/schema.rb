@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121115054344) do
+ActiveRecord::Schema.define(:version => 20121120185217) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -270,6 +270,18 @@ ActiveRecord::Schema.define(:version => 20121115054344) do
     t.datetime "created_at",                                                 :null => false
     t.datetime "updated_at",                                                 :null => false
   end
+
+  create_table "payrolls", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.date     "star_date"
+    t.date     "end_date"
+    t.date     "payment_date"
+    t.boolean  "state",           :default => true
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  add_index "payrolls", ["payroll_type_id"], :name => "index_payrolls_on_payroll_type_id"
 
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"

@@ -11,6 +11,8 @@ gem 'devise'
 gem 'rmagick'
 gem 'carrierwave'
 gem 'client_side_validations'
+gem 'therubyracer'
+gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 gem 'enum_column3'
 gem 'will_paginate'
@@ -25,7 +27,6 @@ gem 'rubyfb'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
 

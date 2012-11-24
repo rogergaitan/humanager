@@ -225,6 +225,16 @@ es:
                 blank: Este campo no puede quedar en blanco
               ledger_account_id:
                 blank: Este campo no puede quedar en blanco
+          payroll:
+            attributes:
+              payroll_type_id:
+                blank: Debe seleccionar un tipo de planilla
+              star_date:
+                blank: Debe seleccionar la fecha de inicio
+              end_date: 
+                blank: Debe seleccionar la fecha fin
+              payment_date: 
+                blank: Debe seleccionar la fecha de pago
       models:
         payroll_type:
           one: Tipo de planilla
@@ -258,6 +268,7 @@ es:
         deduction: Deducción
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
+        payroll: Planilla
       attributes:
         payroll_type:
           description: Descripción
@@ -402,6 +413,12 @@ es:
           calculation_type: Tipo de calculo
           calculation: Calculo
           ledger_account_id: Cuenta de crédito
+        payroll:
+          payroll_type_id: Tipo de Planilla
+          star_date: Desde
+          end_date: Hasta
+          payment_date: Fecha de Pago
+          state: Estado
         user:
           login:
   date:
