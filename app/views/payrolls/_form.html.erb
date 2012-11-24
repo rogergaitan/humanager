@@ -1,0 +1,62 @@
+<script type="text/javascript"> //todavia no se usa solo si se hace el modal
+  var tipo_planilla = [];
+  <%  @payroll_types.each do |tp| %>
+    tipo_planilla.push(new Array(<%= tp.id.blank? ? 0 : tp.id %>, '<%=h tp.description %>','<%=h tp.payroll_type %>'));
+  <% end %>
+</script>
+ <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />  -->
+<%= javascript_include_tag 'payroll/dinamic_files' %>
+<%= form_for @payroll, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :payroll_type_id, :class => 'control-label' %>
+    <div class="controls">
+        <%= collection_select(:payroll, :payroll_type_id, @payroll_types, :id, :description)   %> 
+         <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Seleccionar tipo de planilla"> <i class="icon-list"></i> </a>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :star_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :star_date, :class => 'date_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :end_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :end_date, :class => 'date_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :payment_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :payment_date, :class => 'date_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :state, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :state, :class => 'check_box' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                payrolls_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione el tipo de planilla</h3>
+  </div>
+  <div class="modal-body">
+    <div id="admin"> ADMINISTRATIVA </div> <ul  class='accordion-group' style="display:none" id="list"></ul>
+    <div id="campo"> CAMPO </div> <ul class='accordion-group' style="display:none" id="listCamp"></ul>
+    <div id="planta"> PLANTA<ul class='accordion-group' style="display:none" id="listPlanta"></ul> </div> 
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>

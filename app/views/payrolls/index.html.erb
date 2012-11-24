@@ -1,0 +1,62 @@
+<%- model_class = Payroll -%>
+<%= javascript_include_tag 'payroll/payroll' %>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+
+<div class="tabbable">
+  <div class="tabbable">
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.Iniciadas") %></a></li>
+        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.Cerradas") %></a></li>
+    </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+          <h2>Planillas Iniciadas</h2>
+
+          <table class="table table-striped" id="activas">
+            <thead>
+              <tr>
+                <div class="pull-right"> <input type="checkbox"  id="chkTodos"  /> Seleccionar Todos </div>
+                <th><%= model_class.human_attribute_name(:id) %></th>
+                <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
+                <th><%= model_class.human_attribute_name(:star_date) %></th>
+                <th><%= model_class.human_attribute_name(:end_date) %></th>
+                <th><%= model_class.human_attribute_name(:payment_date) %></th>
+                <th><%= model_class.human_attribute_name(:state) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+          <tbody>
+        
+          </tbody>
+        </table>
+         <%= link_to t('.new', :default => t("helpers.links.new")),
+            new_payroll_path,
+            :class => 'btn btn-primary' %>
+          <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
+        </div>
+
+        <div class="tab-pane" id="tab2">
+          <h2>Planillas Cerradas</h2>
+            <table class="table table-striped" id="inactivas">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:id) %></th>
+                <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
+                <th><%= model_class.human_attribute_name(:star_date) %></th>
+                <th><%= model_class.human_attribute_name(:end_date) %></th>
+                <th><%= model_class.human_attribute_name(:payment_date) %></th>
+                <th>Activar</th>
+              </tr>
+            </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+        <button id="seleccion" class="btn"> Reabrir Seleccionadas</button>
+        </div>
+
+      </div>
+</div>
