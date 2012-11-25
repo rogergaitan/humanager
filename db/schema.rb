@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20121120185217) do
-=======
-ActiveRecord::Schema.define(:version => 20121116165006) do
->>>>>>> bf4ce98f9fd8f9b7adb1691d27dcdec76fdfbc55
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -282,7 +278,6 @@ ActiveRecord::Schema.define(:version => 20121116165006) do
     t.datetime "updated_at",                                                 :null => false
   end
 
-<<<<<<< HEAD
   create_table "payrolls", :force => true do |t|
     t.integer  "payroll_type_id"
     t.date     "star_date"
@@ -294,7 +289,7 @@ ActiveRecord::Schema.define(:version => 20121116165006) do
   end
 
   add_index "payrolls", ["payroll_type_id"], :name => "index_payrolls_on_payroll_type_id"
-=======
+
   create_table "personalized_fields", :force => true do |t|
     t.integer  "type_of_personnel_action_id"
     t.integer  "fields_personnel_action_id"
@@ -304,7 +299,6 @@ ActiveRecord::Schema.define(:version => 20121116165006) do
 
   add_index "personalized_fields", ["fields_personnel_action_id"], :name => "index_personalized_fields_on_fields_personnel_action_id"
   add_index "personalized_fields", ["type_of_personnel_action_id"], :name => "index_personalized_fields_on_type_of_personnel_action_id"
->>>>>>> bf4ce98f9fd8f9b7adb1691d27dcdec76fdfbc55
 
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"

@@ -7,6 +7,15 @@ $(document).ready(function(){
   $('#campo').click(expanCampo);
   $('#planta').click(expanPlanta);
 
+  $('.node_link').bind({
+        click: set_account,
+        mouseenter: function() {
+          $(this).css("text-decoration", "underline");
+        },
+        mouseleave: function() {
+          $(this).css("text-decoration", "none");
+        }});
+
 });
 
 function DatePicker(){
@@ -38,29 +47,42 @@ function DateEs(){
 function loadPayrollTypes(tree_array, isPopup){
       $(tree_array).each(function(){
            if (this[2] == 'Administrativa') {
-            $('#list').append("<li style='list-style:none' id='" + this[0] +"><span  class='node_link'><p><i class='icon-minus'></i>" + 
+            $('#list').append("<li style='list-style:none' id='" + this[0] +"><p class='tree-hover'><span class='linkclass'><i class='icon-minus'></i>" + 
                  "<a>" + this[1] + "</a>" + "</p></span></li>");
             }
 
             if (this[2] == 'Campo') {
-            $('#listCamp').append("<li style='list-style:none' id='" + this[0] +"> <span class='node_link'><i class='icon-minus'></i>" + 
+            $('#listCamp').append("<li style='list-style:none' id='" + this[0] +"> <span class='linkclass'><i class='icon-minus'></i>" + 
                  "<a>" + this[1] + "</a>" + "</span></li>");
             }
 
             if (this[2] == 'Planta') {
-            $('#listPlanta').append("<li style='list-style:none' id='" + this[0] +"><span class='node_link'><i class='icon-minus'></i>" + 
+            $('#listPlanta').append("<li style='list-style:none' id='" + this[0] +"><span class='linkclass'><i class='icon-minus'></i>" + 
                  "<a>" + this[1] + "</a>" + "</span> </li>");
+            }
+            if (isPopup == true) {
+      $('span.linkclass span').addClass('node_link').attr("data-dismiss", "modal");
             }
       })
 }
 
 function expanAdmin(){
-   // $('#admin').children('i').toggleClass('icon-chevron-right icon-chevron-down');
-    $("#list").slideToggle("slow");
+    $('#admin').children('i').toggleClass('icon-chevron-right icon-chevron-down');
+    $("#list").slideToggle(400, 'linear');
 }
 function expanCampo(){
-    $("#listCamp").slideToggle("slow");
+  $('#campo').children('i').toggleClass('icon-chevron-right icon-chevron-down');
+    $("#listCamp").slideToggle(400, 'linear');
 }
 function expanPlanta(){
-    $("#listPlanta").slideToggle("slow");
+    $('#planta').children('i').toggleClass('icon-chevron-right icon-chevron-down');
+    $("#listPlanta").slideToggle(400, 'linear');
+}
+
+function set_account(e) {
+    e.preventDefault();
+    var accountId = $(this).closest('li').data('id');
+    var accountName = $(this).text();
+    $('#payroll_payroll_type_id').val(accountId);
+    $('#payroll_payroll_type').val(accountName);  
 }

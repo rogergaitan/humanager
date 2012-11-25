@@ -3,11 +3,13 @@ Reasapp::Application.routes.draw do
 
   resources :payrolls do
     collection do
-      get 'get_activas'
-      get 'get_inactivas'
-      get 'get_payroll_types'
-      post 'reabrir'
-      post 'cerrar_planilla'
+      get :get_activas
+      get :get_inactivas
+      get :get_payroll_types
+    end
+    collection do
+      post :reabrir
+      post :cerrar_planilla
     end
   end
 

@@ -6,7 +6,7 @@ class DeductionsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @deductions }
+      format.json { render json: @deductions, :include => :ledger_account}
     end
   end
 
@@ -17,7 +17,7 @@ class DeductionsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @deduction }
+      format.json { render json: @deduction, :include => :ledger_account}
     end
   end
 
@@ -36,6 +36,7 @@ class DeductionsController < ApplicationController
   # GET /deductions/1/edit
   def edit
     @deduction = Deduction.find(params[:id])
+    @credit_account = LedgerAccount.credit_accounts
   end
 
   # POST /deductions

@@ -10,7 +10,9 @@
   <div class="control-group">
     <%= f.label :payroll_type_id, :class => 'control-label' %>
     <div class="controls">
-        <%= collection_select(:payroll, :payroll_type_id, @payroll_types, :id, :description)   %> 
+     <!-- <%= f.hidden_field :payroll_type_id %>
+      <%= text_field_tag 'payroll_payroll_type',nil, :class => 'number_field required search-image-category', :for => :payroll_type_id %> -->
+      <%= collection_select(:payroll, :payroll_type_id, @payroll_types, :id, :description)   %> 
          <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Seleccionar tipo de planilla"> <i class="icon-list"></i> </a>
     </div>
   </div>
@@ -52,9 +54,9 @@
     <h3 id="myModalLabel">Seleccione el tipo de planilla</h3>
   </div>
   <div class="modal-body">
-    <div id="admin"> ADMINISTRATIVA </div> <ul  class='accordion-group' style="display:none" id="list"></ul>
-    <div id="campo"> CAMPO </div> <ul class='accordion-group' style="display:none" id="listCamp"></ul>
-    <div id="planta"> PLANTA<ul class='accordion-group' style="display:none" id="listPlanta"></ul> </div> 
+    <div id="admin"> <i class='icon-chevron-right'></i> ADMINISTRATIVA </div> <ul  class='accordion-group' style="display:none" id="list"></ul> <br>
+    <div id="campo"> <i class='icon-chevron-right'></i> CAMPO </div> <ul class='accordion-group' style="display:none" id="listCamp"></ul> <br>
+    <div id="planta"> <i class='icon-chevron-right'></i> PLANTA<ul class='accordion-group' style="display:none" id="listPlanta"></ul> </div> 
   </div>
   <div class="modal-footer">
     <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>

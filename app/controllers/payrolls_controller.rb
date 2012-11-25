@@ -87,7 +87,7 @@ class PayrollsController < ApplicationController
     @activas[:activa] = Payroll.activas
 
      respond_to do |format|
-      format.json { render json: @activas, :include => :payroll_type }
+      format.json { render json: @activas.to_json(include: :payroll_type)}
     end
   end
 
@@ -118,9 +118,9 @@ def reabrir
 
   payroll.each do |planilla|
     p = Payroll.find(planilla)
-    p.update_attributes( :state => true)
+    p.update_attributes(:state => true)
   end
-  render :action => 'index'
+  render :index
 end
 
 def cerrar_planilla
@@ -128,9 +128,9 @@ def cerrar_planilla
 
   payroll.each do |planilla|
     p = Payroll.find(planilla)
-    p.update_attributes( :state => false)
+    p.update_attributes(:state => false)
   end
-  render :action => 'index'
+  render :index
 end
 
 end
