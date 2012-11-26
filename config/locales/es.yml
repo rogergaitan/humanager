@@ -350,6 +350,7 @@ es:
           end_date: 'Hasta'
           payment_date: 'Fecha del pago'
         employee:
+          employee_id: Jefe Inmediato
           entity_id: Entidad
           join_date: Ingreso
           seller: Vendedor

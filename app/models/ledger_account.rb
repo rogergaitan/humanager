@@ -1,7 +1,7 @@
 class LedgerAccount < ActiveRecord::Base
   has_many :other_salaries
-  has_many :work_benefits, :class_name => "work_benefit"
-  has_many :benefits, :class_name => "work_benefit"
+  has_many :credit_benefits, class_name: "WorkBenefit", foreign_key: "credit_account"
+  has_many :debit_benefits, class_name: "WorkBenefit", foreign_key: "debit_account"
   attr_accessible :iaccount, :ifather, :naccount
   has_many :deductions
   

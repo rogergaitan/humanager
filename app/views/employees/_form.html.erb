@@ -129,6 +129,12 @@
             <%= f.collection_select(:position_id, @position, :id, :position , :prompt => true) %>
           </div>
         </div>
+				<div class="control-group">
+          <%= f.label :employee_id, :class => 'control-label' %>
+          <div class="controls">
+          	<%= f.collection_select(:employee_id, @superior, :id, :full_name , :prompt => true) %>
+          </div>
+        </div>
         <div class="control-group">
           <%= f.label :department_id, :class => 'control-label' %>
           <div class="controls">

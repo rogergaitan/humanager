@@ -13,6 +13,9 @@ $(jQuery(document).ready(function($) {
             }),
             select: function( event, ui ) {
                 $("#other_salary_ledger_account_id").val(ui.item.id);
+            },
+            focus: function(event, ui){
+                $( "#other_salary_ledger_account" ).val(ui.item.label);
             }
 
         })

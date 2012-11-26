@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120185217) do
+ActiveRecord::Schema.define(:version => 20121126012340) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -166,12 +166,15 @@ ActiveRecord::Schema.define(:version => 20121120185217) do
     t.integer  "payment_frequency_id"
     t.integer  "means_of_payment_id"
     t.decimal  "wage_payment",                                                                                    :precision => 12, :scale => 2
-    t.datetime "created_at",                                                                                                                     :null => false
-    t.datetime "updated_at",                                                                                                                     :null => false
+    t.datetime "created_at",                                                                                                                                        :null => false
+    t.datetime "updated_at",                                                                                                                                        :null => false
     t.string   "position_id"
+    t.integer  "employee_id"
+    t.boolean  "is_superior",                                                                                                                    :default => false
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
+  add_index "employees", ["employee_id"], :name => "index_employees_on_employee_id"
   add_index "employees", ["entity_id"], :name => "index_employees_on_entity_id"
   add_index "employees", ["means_of_payment_id"], :name => "index_employees_on_means_of_payment_id"
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
