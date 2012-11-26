@@ -101,5 +101,6 @@ class WorkBenefitsController < ApplicationController
     @credit_accounts = LedgerAccount.credit_accounts
     @employees = Employee.order_employees
     @department = Department.all
+    @superior = Employee.superior
   end
 end

@@ -157,5 +157,6 @@ class EmployeesController < ApplicationController
      @roles = Role.find(:all, :select =>['id','role'])
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
      @position = Position.find(:all, :select =>['id','position'])
+     @superior = Employee.all
    end
 end

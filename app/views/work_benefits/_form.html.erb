@@ -43,20 +43,16 @@
     <%= f.label :Empleados, :class => 'control-label' %>
     <div class="controls align-radio">
 			<div class="options-left">
-	      <%= radio_button_tag 'select_method', 'all', false, class: 'align-checkbox' %>
+	      <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
 				<%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method', 'none', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_none', "Ninguno", class: 'checkbox-label' %>
+				<%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+				<%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
 				<%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
 				<%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
 			</div>
 			<div class="options-right">
-	      <%= radio_button_tag 'select_method_right', 'all', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_right_all', "Todos", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method_right', 'none', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_right_none', "Ninguno", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method_right', 'default', true, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_right_default', "Reestablecer", class: 'checkbox-label' %>
+	      <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
+				<%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
 			</div>
 			<div style="clear:both"></div>
     </div>
@@ -65,15 +61,23 @@
 		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
   	<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
   </div>
+	<div class="controls" id="list-superior">
+		<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+  	<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
+  </div>
+	<div class="controls" id="marcar-desmarcar">
+		<%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
+		<%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+	</div>
 	<div class="controls lists">
-		<div class="employees-list">
-			<div class="employees-margin">
+		<div class="employees-list left-list">
+			<div class="employees-margin" id="no-save">
 				<% @employees.each do |employee| %>
 					<div class="checkbox-group">
 						<div class="checkbox-margin">
-							<%= check_box_tag 'work_benefit[employee_ids][]', employee.id, 
-											@work_benefit.employee_ids.include?(employee.id), id: dom_id(employee), class: 'align-checkbox', 'data-dep' => employee.department_id  %>
-							<%= label_tag dom_id(employee), "#{employee.entity.surname} #{employee.entity.name}", 
+							<%= check_box_tag 'left-list-employees', employee.id, 
+											@work_benefit.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
+							<%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
 									:class => 'checkbox-label' %>
 						</div>
 				  </div>
