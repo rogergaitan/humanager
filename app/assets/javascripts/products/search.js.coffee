@@ -49,8 +49,6 @@ jQuery(document).ready ($) ->
           $("span.spinner").show()
       complete: (data)->
         $("span.spinner").hide()
-
-        
        
   $(".pagination a").live "click", ->
     $.getScript @href
@@ -126,7 +124,7 @@ jQuery(document).ready ($) ->
               if llave == "code"
                 items.push("<td><a href='/products/#{valor}'>#{valor}</a></td>") if valor
               else  
-                items.push("<td>#{valor}</td>") if valor
+                items.push("<td>#{valor}</td>") if llave != "product"
             items.push("<td><button class='close'><i class='icon-remove'></i></button></td></tr>")
             $("#storage").append(items.join(""))
 
@@ -136,12 +134,15 @@ jQuery(document).ready ($) ->
   cart_to_array = () ->
     $("#storage tbody tr").map(->
       $row = $(@)
-      [
+      {
         'code': $row.find(":nth-child(1)").text()
+        'product': $row.find(":nth-child(1)").text()
         'description': $row.find(":nth-child(3)").text()
         'part_number': $row.find(":nth-child(4)").text()
-      ]
+      }
     ).get()
+  
+    
 
   get_cart()
 

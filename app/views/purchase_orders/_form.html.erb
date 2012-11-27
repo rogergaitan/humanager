@@ -64,11 +64,15 @@
         <td class="header_costunit">Costo Unit</td>
         <td class="header_costTotal">Costo Total</td>
       </tr>
-
-
+      <!-- FIELDS FOR SEARCHED PRODUCTS -->
+      <%if @search %>
+        <%= f.fields_for :items_purchase_order, @search do |items| %>
+          <%= render 'forms/items_purchase_order_form', :f => items %>
+        <% end %>
+      <% end %>
+      <!-- END OF FIELDS FOR SEARCHED PRODUCTS -->
       <%= f.fields_for :items_purchase_order do |items| %>
           <%= render 'forms/items_purchase_order_form', :f => items %>
-
       <% end %>
     </table>
   </div>

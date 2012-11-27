@@ -1,5 +1,5 @@
 set :application, "reasapp"
-set :repository,  "git@bitbucket.org:dotcreek/dcerp.git"
+set :repository,  "git@github.com:dotcreek/dcerp.git"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`

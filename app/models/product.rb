@@ -47,7 +47,8 @@ class Product < ActiveRecord::Base
 	#General Search
 	def self.search(search)
 		query = "%"
-		if search 
+		if search
+			search = search.split() if search.class != Array
 			search.each do |q|
 				query += "#{q}%" if !q.blank? and q.length >= 3
 			end		

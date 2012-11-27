@@ -32,7 +32,7 @@ var addFields_items = function(e) {
 /*Add the first fields*/
 var addField_newItem = function(e){
 	action_add_field(e);
-	
+	//
 };
 
 /*Validate if the fields have something for add to the table*/
@@ -52,6 +52,7 @@ var validation_add_item = function(element){
 /*Calulate the cost*/
 var item_cost_total = function(quantity,cost){
 	return quantity * cost;
+	//
 };
 
 /*Search the input into the rows for make the calculation*/
@@ -88,6 +89,7 @@ var calculate_subtotal = function(){
 /*Calculate the taxes*/
 var calculate_tax = function(){
 	return 0;
+	//
 };
 
 /*Calculate the total amount*/
@@ -229,4 +231,7 @@ $(document).ready(function(){
 		resetFieldsErrors('new_vendor');
 		$(".closeVendor").trigger("click");
 	});
+	$('#products_items').find('tbody tr  input').not('.calculate')
+							.attr('readonly',true).end();
+	$('#products_items').find("a").removeClass('none').end();
 });

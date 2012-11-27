@@ -26,6 +26,16 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders/new
   # GET /purchase_orders/new.json
   def new
+    
+    if params[:search] 
+      @search = []
+      @cart = Product.get_cart
+        if @cart
+          @cart.each do |key, value|
+            @search.push(OpenStruct.new(value))
+          end
+        end
+    end
     @purchase_order = PurchaseOrder.new
     @vendor = PurchaseOrder.get_vendor
     @new_vendor = Vendor.new
@@ -36,6 +46,8 @@ class PurchaseOrdersController < ApplicationController
   def edit
     @purchase_order = PurchaseOrder.find(params[:id])
     @vendor = PurchaseOrder.get_vendor(params[:id])
+    @new_vendor = Vendor.new
+    @new_vendor.build_entity
   end
 
   # POST /purchase_orders

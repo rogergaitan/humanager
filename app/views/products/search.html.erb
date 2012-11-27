@@ -68,13 +68,10 @@
     <h2>Productos Agregados</h2>
     <ul class="nav nav-pills">
       <li class="pull-right">
-        <a href="#" class="pull-right">PurchaseOrder</a>
+        <a href="/purchase_orders/new?search=purchase_order" class="btn pull-right purchase_order"><%= I18n.t('.activerecord.models.purchase_order')%></a>
       </li>
       <li class="pull-right">
-        <a href="#" class="pull-right">Quotation</a> 
-      </li>
-      <li class="pull-right">
-        <%= link_to "PDF", get_cart_products_path(format: "pdf"), class: "pull-right" %> 
+        <%= link_to "PDF", get_cart_products_path(format: "pdf"), class: "btn pull-right" %> 
       </li>    
     </ul>
     <table class="table table-condensed" id="storage">
