@@ -1,5 +1,6 @@
 class DistrictsController < ApplicationController
-before_filter :get_district, :only => [:edit, :update, :destroy]
+  respond_to :html, :json
+  before_filter :get_district, :only => [:edit, :update, :destroy]
 
   def get_district
      @district = District.find(params[:id])
@@ -9,22 +10,14 @@ before_filter :get_district, :only => [:edit, :update, :destroy]
   # GET /districts.json
   def index
     @districts = District.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @districts }
-    end
+    respond_with(@districts)
   end
 
   # GET /districts/1
   # GET /districts/1.json
   def show
     @district = District.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @district }
-    end
+    respond_with(@district)
   end
 
   # GET /districts/new
@@ -33,11 +26,7 @@ before_filter :get_district, :only => [:edit, :update, :destroy]
     @district = District.new
     @cantons = Canton.all
     @provinces = Province.all
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @district }
-    end
+    respond_with(@district)
   end
 
   # GET /districts/1/edit

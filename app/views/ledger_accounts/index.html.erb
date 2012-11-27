@@ -5,7 +5,7 @@
   <% end %>
 </script>
 <%- model_class = LedgerAccount -%>
-<%= javascript_include_tag 'ledgerAccount/accountscript' %>
+<%= javascript_include_tag 'ledgerAccount/accounts' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
@@ -16,20 +16,7 @@
 
 <div id="list"></div>
 
-<!-- PRUEBA CON LAS LISTAS -->
- <!-- <% @ledger_accounts.each do |ledger_account| %>
-<ul id="navegador" class="nav nav-list" >
-    <li><a href="#" class="desplegable"><%= model_class.human_attribute_name(:ifather) %> <%= ledger_account.ifather %> </a>
-      <ul class="subnavegador">
-        <li class="nav-header"><%= model_class.human_attribute_name(:iaccount) %> <%= ledger_account.iaccount %>
-         <%= model_class.human_attribute_name(:naccount) %> <%= ledger_account.naccount %>
-       </li>
-      </ul>
-    </li>    
-  </ul>
-   <% end %>
-
-<table class="table table-striped" id="account-data">
+<!-- <table class="table table-striped" id="account-data">
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
@@ -56,5 +43,4 @@
       </tr>
     <% end %>
   </tbody>
-</table> -->
-
+</table> --> 

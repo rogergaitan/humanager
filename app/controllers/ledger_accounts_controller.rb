@@ -1,4 +1,5 @@
 class LedgerAccountsController < ApplicationController
+  respond_to :html, :json
   before_filter :get_ledger, :only => [:edit, :update, :destroy]
 
   def get_ledger
@@ -7,33 +8,21 @@ class LedgerAccountsController < ApplicationController
 
   def index
     @ledger_accounts = LedgerAccount.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @ledger_accounts }
-    end
+    respond_with(@ledger_accounts)
   end
 
   # GET /ledger_accounts/1
   # GET /ledger_accounts/1.json
   def show
     @ledger_account = LedgerAccount.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @ledger_account }
-    end
+    respond_with(@ledger_account)
   end
 
   # GET /ledger_accounts/new
   # GET /ledger_accounts/new.json
   def new
     @ledger_account = LedgerAccount.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @ledger_account }
-    end
+    respond_with(@ledger_account)
   end
 
   # GET /ledger_accounts/1/edit

@@ -1,4 +1,5 @@
 class CantonsController < ApplicationController
+  respond_to :html, :json
   before_filter :get_canton, :only => [:edit, :update, :destroy]
 
   def get_canton
@@ -9,22 +10,14 @@ class CantonsController < ApplicationController
   # GET /cantons.json
   def index
     @cantons = Canton.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @cantons }
-    end
+    respond_with(@cantons)
   end
 
   # GET /cantons/1
   # GET /cantons/1.json
   def show
     @canton = Canton.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @canton }
-    end
+    respond_with(@canton)
   end
 
   # GET /cantons/new
@@ -32,11 +25,7 @@ class CantonsController < ApplicationController
   def new
     @canton = Canton.new
     @province = Province.all
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @canton }
-    end
+    respond_with(@canton)
   end
 
   # GET /cantons/1/edit

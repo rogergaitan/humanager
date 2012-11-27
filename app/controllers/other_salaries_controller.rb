@@ -1,40 +1,29 @@
 class OtherSalariesController < ApplicationController
+  respond_to :html, :json
   before_filter :accounts, :only => [:new, :edit]
   before_filter :get_account, :only => [:edit, :update, :destroy]
   
   def get_account
-        @other_salary = OtherSalary.find(params[:id])
+    @other_salary = OtherSalary.find(params[:id])
   end
 
   def index
     @other_salaries = OtherSalary.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @other_salaries }
-    end
+    respond_with(@other_salaries)
   end
 
   # GET /other_salaries/1
   # GET /other_salaries/1.json
   def show
     @other_salary = OtherSalary.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @other_salary }
-    end
+    respond_with(@other_salary)
   end
 
   # GET /other_salaries/new
   # GET /other_salaries/new.json
   def new
     @other_salary = OtherSalary.new
-    
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @other_salary }
-    end
+    respond_with(@other_salary)
   end
 
   # GET /other_salaries/1/edit

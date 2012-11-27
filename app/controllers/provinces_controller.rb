@@ -1,5 +1,6 @@
 class ProvincesController < ApplicationController
-before_filter :get_province, :only => [:edit, :update, :destroy]
+  respond_to :html, :json
+  before_filter :get_province, :only => [:edit, :update, :destroy]
 
   def get_province
     @province = Province.find(params[:id])
@@ -9,33 +10,21 @@ before_filter :get_province, :only => [:edit, :update, :destroy]
   # GET /provinces.json
   def index
     @provinces = Province.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @provinces }
-    end
+    respond_with(@provinces)
   end
 
   # GET /provinces/1
   # GET /provinces/1.json
   def show
     @province = Province.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @province }
-    end
+    respond_with(@province)
   end
 
   # GET /provinces/new
   # GET /provinces/new.json
   def new
     @province = Province.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @province }
-    end
+    respond_with(@province)
   end
 
   # GET /provinces/1/edit

@@ -1,24 +1,18 @@
 class DeductionsController < ApplicationController
+  respond_to :html, :json
+
   # GET /deductions
   # GET /deductions.json
   def index
     @deductions = Deduction.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @deductions, :include => :ledger_account}
-    end
+    respond_with(@deductions, :include => :ledger_account)
   end
 
   # GET /deductions/1
   # GET /deductions/1.json
   def show
     @deduction = Deduction.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @deduction, :include => :ledger_account}
-    end
+    respond_with(@deduction, :include => :ledger_account)
   end
 
   # GET /deductions/new
@@ -26,11 +20,7 @@ class DeductionsController < ApplicationController
   def new
     @deduction = Deduction.new
     @credit_account = LedgerAccount.credit_accounts
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @deduction }
-    end
+    respond_with(@deduction, :include => :ledger_account)
   end
 
   # GET /deductions/1/edit

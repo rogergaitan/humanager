@@ -1,36 +1,25 @@
 class PayrollsController < ApplicationController
+  respond_to :html, :json
   before_filter :get_payroll_types, :only => [:new, :edit]
+
   # GET /payrolls
   # GET /payrolls.json
   def index
-    @payrolls = Payroll.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @payrolls }
-    end
+    #@payrolls = Payroll.all
   end
 
   # GET /payrolls/1
   # GET /payrolls/1.json
   def show
     @payroll = Payroll.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @payroll, :include => :payroll_type }
-    end
+    respond_with(@payroll)
   end
 
   # GET /payrolls/new
   # GET /payrolls/new.json
   def new
     @payroll = Payroll.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @payroll }
-    end
+    respond_with(@payroll)
   end
 
   # GET /payrolls/1/edit
@@ -45,7 +34,7 @@ class PayrollsController < ApplicationController
 
     respond_to do |format|
       if @payroll.save
-        format.html { redirect_to @payroll, notice: 'Payroll was successfully created.' }
+        format.html { redirect_to @payroll, notice: 'Planilla creada exitosamente.' }
         format.json { render json: @payroll, status: :created, location: @payroll }
       else
         format.html { render action: "new" }
@@ -61,7 +50,7 @@ class PayrollsController < ApplicationController
 
     respond_to do |format|
       if @payroll.update_attributes(params[:payroll])
-        format.html { redirect_to @payroll, notice: 'Payroll was successfully updated.' }
+        format.html { redirect_to @payroll, notice: 'Planilla modificada exitosamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -82,6 +71,7 @@ class PayrollsController < ApplicationController
     end
   end
 
+  #Obtiene las planillas activas
   def get_activas
     @activas = {}
     @activas[:activa] = Payroll.activas
@@ -91,6 +81,7 @@ class PayrollsController < ApplicationController
     end
   end
 
+  #Obtiene las planillas inactivas
   def get_inactivas
     @inactivas = {}
     @inactivas[:inactiva] = Payroll.inactivas
@@ -100,37 +91,31 @@ class PayrollsController < ApplicationController
     end
   end
 
-  #obtiene todos los tipos de planillas
+  #Obtiene todos los tipos de planillas
   def get_payroll_types
     @payroll_types = PayrollType.tipo_planilla
-    #@payroll_types = {}
-
-     #@payroll_types[:tipos] = PayrollType.tipo_planilla
-
-    #respond_to do |format|
-     # format.json { render json: @payroll_types }
-    #end
   end
 
-#Reabre una o un conjunto de planillas cerradas
-def reabrir
-  payroll = JSON.parse(params[:reabrir_planilla])
+  #Reabre una o un conjunto de planillas cerradas
+  def reabrir
+    @payroll = JSON.parse(params[:reabrir_planilla])
 
-  payroll.each do |planilla|
-    p = Payroll.find(planilla)
-    p.update_attributes(:state => true)
+    @payroll.each do |planilla|
+      p = Payroll.find(planilla)
+      p.update_attributes(:state => true)
+    end
+    render :index
   end
-  render :index
-end
 
-def cerrar_planilla
-  payroll = JSON.parse(params[:cerrar_planilla])
+  #Cierra una planilla y realiza los calculos de prestaciones
+  def cerrar_planilla
+    @payroll = JSON.parse(params[:cerrar_planilla])
 
-  payroll.each do |planilla|
-    p = Payroll.find(planilla)
-    p.update_attributes(:state => false)
+    @payroll.each do |planilla|
+      p = Payroll.find(planilla)
+      p.update_attributes(:state => false)
+    end
+    render :index
   end
-  render :index
-end
 
 end
