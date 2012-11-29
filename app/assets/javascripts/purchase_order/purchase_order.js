@@ -156,6 +156,15 @@ var request_search_vendors = function(){
             },
             focus: function(event, ui){
                 $( this ).val(ui.item.label);
+            },
+            change: function(event, ui){
+								$(this).next('#not-found').remove();
+                if(!ui.item){
+										$(this).after('<label id="not-found" for="'+ $(this).attr('id') +'" class="error">Ningún resultado para: "' + $(this).val() +'"</label');
+                    //alert('Ningún resultado contiene ' + $( "#vendor_text" ).val());
+                    $( "#vendor_text" ).val("");
+                    $("#purchase_order_vendor_id").val("");    
+                } 
             }
     });
 };
@@ -218,17 +227,25 @@ $(document).ready(function(){
 	$('form').on('keyup', '.calculate', cost_live_calculate);
 	$('#products_items').find('label').remove();
 	$('form.new_purchase_order').submit(function(e){
+		var valid = true;
 		if (!$('table#products_items tr.items_purchase_orders_form').length) { 
 			$('div#container_new_item').effect('highlight', { color : '#F2DEDE', duration : 5000 });
 			$('div#message-products').html('<div class="alert alert-error">Debe agregar al menos un producto.</div>');
 			$('div.alert.alert-error').delay(4000).fadeOut();
-			return false;
+			valid = false;
 		} else if ($.trim($('table#products_items input.not_empty').val()).length == 0) {
 			$('table#products_items input.not_empty').filter(function() { return $(this).val() == ""; }).effect('highlight', { color : '#F2DEDE'});
-			return false;
+			valid = false;
 		};
-		if (!$('.field_with_errors').length) {
+		if ($.trim($('div.contentCellTable input#vendor_text').val()).length == 0) {
+			$('div.contentCellTable input#vendor_text').after('<label id="not-found" for="vendor_text" class="error">Este campo no puede quedar en blanco</label');
+			valid = false;
+		};
+		if (!$('.field_with_errors').length && valid == true) {
 			$('#container_new_item input').attr('disabled',true);
+		}
+		else {
+			return valid;
 		};
 	});	
   	request_search_vendors();
