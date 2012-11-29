@@ -18,8 +18,17 @@
       <%= f.label :deduction_type, :class => 'control-label' %>
       <div class='controls'>
         <%= f.enum_select :deduction_type, :include_blank =>false %>
+         <a href="#myModalPayroll" role="button" class="btn" id="btnModalPayroll" data-toggle="modal" rel="tooltip" title="Ver lista de planillas activas"> <i class="icon-list"></i> </a>
       </div>
     </div>
+
+  <div id="planilla" class="control-group">
+    <%= f.label 'Planilla', :class => 'control-label' %>
+    <div class="controls">
+      <%= hidden_field_tag 'deduction[payroll_ids][]', nil %>
+      <%= text_field_tag 'deduction_payroll',nil, :class => 'number_field required search-image-category' %>
+    </div>
+  </div>
 
   <div class="control-group">
     <%= f.label :amount_exhaust, :class => 'control-label' %>
@@ -57,7 +66,7 @@
   </div>
 <% end %>
 
-
+<!-- Modal de cuentas de credito-->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -65,6 +74,40 @@
   </div>
   <div class="modal-body">
     <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<!-- Modal de planillas-->
+<div id="myModalPayroll" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la planilla</h3>
+  </div>
+  <div id="loading"> <h5><p align="center" class="h5-with-shadown">Espere un momento mientras se cargan las planillas disponibles.</p></h5>
+    <p align="center" ><%= image_tag("ajax-loader.gif") %> </p>
+  </div>
+  <div id="error">
+ <h5><p align="center" class="h5-with-shadown">Imposible cargar las planillas</p></h5>
+  <p align="center"><a href='#'>Click Aqui</a> para volver a intentarlo<p>
+  </div>
+  <div class="modal-body">
+     <table class="table table-striped" id="activas">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>Tipo de planilla</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Fecha de pago</th>
+              </tr>
+            </thead>
+          <tbody>
+        
+          </tbody>
+        </table>
   </div>
   <div class="modal-footer">
     <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>

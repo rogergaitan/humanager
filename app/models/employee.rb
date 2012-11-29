@@ -44,6 +44,7 @@ class Employee < ActiveRecord::Base
   has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits
   has_many :employees
+  has_many :deductions, :through => :deduction_employees
   belongs_to :employees
   
   accepts_nested_attributes_for :entity, :allow_destroy => true

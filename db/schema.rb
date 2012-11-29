@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121126012340) do
+ActiveRecord::Schema.define(:version => 20121127034138) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -95,6 +95,26 @@ ActiveRecord::Schema.define(:version => 20121126012340) do
 
   add_index "customers", ["customer_profile_id"], :name => "index_customers_on_customer_profile_id"
   add_index "customers", ["entity_id"], :name => "index_customers_on_entity_id"
+
+  create_table "deduction_employees", :force => true do |t|
+    t.integer  "deduction_id"
+    t.integer  "employee_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "deduction_employees", ["deduction_id"], :name => "index_deduction_employees_on_deduction_id"
+  add_index "deduction_employees", ["employee_id"], :name => "index_deduction_employees_on_employee_id"
+
+  create_table "deduction_payrolls", :force => true do |t|
+    t.integer  "deduction_id"
+    t.integer  "payroll_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "deduction_payrolls", ["deduction_id"], :name => "index_deduction_payrolls_on_deduction_id"
+  add_index "deduction_payrolls", ["payroll_id"], :name => "index_deduction_payrolls_on_payroll_id"
 
   create_table "deductions", :force => true do |t|
     t.string   "description"

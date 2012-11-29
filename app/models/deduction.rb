@@ -1,4 +1,6 @@
 class Deduction < ActiveRecord::Base
-	belongs_to :ledger_account
   attr_accessible :amount_exhaust, :calculation, :calculation_type, :ledger_account_id, :deduction_type, :description
+  has_many :payrolls, :through => :deduction_payrolls
+  has_many :employees, :through => :deduction_employees
+  belongs_to :ledger_account
 end
