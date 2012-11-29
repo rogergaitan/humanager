@@ -49,10 +49,25 @@ var dynamic_fields = new function() {
 		};
 		e.preventDefault();
 	}
+	
+	this.countFields = function() {
+		var numberTelephoneFields = $('.telephone-field').length;
+		var numberEmailFields = $('.email-field').length;
+		$('input#count_phones_employees').val(numberTelephoneFields);
+		$('input#count_emails_employees').val(numberEmailFields);
+		if (numberTelephoneFields == 3) { 
+			$('a.add-fields-telephone').hide(); 
+		}; 
+		if (numberEmailFields == 3) {
+			$('a.add-fields-email').hide();
+		};
+	}
 };
 
 $(document).ready(function() {
-	$('div.employee_contact_fields a.remove_fields').remove();
+	dynamic_fields.countFields();
+	$('div.employee_contact_fields a.telephone-remove.remove_fields:eq(0)').remove();
+	$('div.employee_contact_fields a.email-remove.remove_fields:eq(0)').remove();
 	dynamic_fields.provinceSelected();
 	dynamic_fields.cantonSelected();
 	$('#employee_entity_attributes_addresses_attributes_0_province_id').change(dynamic_fields.provinceSelected);
