@@ -24,6 +24,8 @@ class PurchaseOrder < ActiveRecord::Base
   accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true
   accepts_nested_attributes_for :vendor, :allow_destroy => true
   
+  validates :vendor_id, :reference_info, :delivery_date, :presence => true
+  
   def self.get_vendor(vendor_id = nil)
     unless vendor_id.nil?
       @vendor = Vendor.find(vendor_id)

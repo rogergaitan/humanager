@@ -1,7 +1,6 @@
 
  <tr class="items_purchase_orders_form success">
     <td class="controls_item">
-
       <%= f.text_field :product, :class => 'text_field product input-mini code' %>
     </td>
     <td class="controls_item">
@@ -10,16 +9,17 @@
     </td>
     <td class="controls_item">
       <%= f.label :quantity, :class => '' %>
-      <%= f.text_field :quantity, :class => 'text_field input-small quantity calculate', :placeholder => 'Cantidad' %>
+      <%= f.text_field :quantity, :class => 'text_field input-small quantity calculate not_empty', :placeholder => 'Cantidad' %>
     </td>
     <td class="controls_item">
       <%= f.label :cost_unit, :class => '' %>
-      <%= f.text_field :cost_unit, :class => 'text_field input-small cost_unit calculate', :placeholder => 'Costo Unit' %>
+      <%= f.text_field :cost_unit, :class => 'text_field input-small cost_unit calculate not_empty', :placeholder => 'Costo Unit' %>
     </td>
     <td class="controls_item">
       <%= f.text_field :cost_total, :class => 'text_field input-mini cost_total' %>
     </td>
     <td>
+			<%= f.hidden_field :_destroy, :class => 'purchase_orders' %>
       <%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger none" %>
     </td>
 </tr>

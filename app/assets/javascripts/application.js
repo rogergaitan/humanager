@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require bootstrap-datepicker
 //= require rails.validations
 //= require autocomplete-rails
-//= require waypoints.min
 //= require_directory .

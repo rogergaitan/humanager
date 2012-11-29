@@ -58,6 +58,15 @@ es:
   activerecord:
       errors:
         models:
+          purchase_order:
+            attributes:
+              delivery_date:
+                blank: "Este campo no puede quedar en blanco"
+              reference_info:
+                blank: "Este campo no puede quedar en blanco"
+              vendor_text:
+                blank: "Este campo no puede quedar en blanco"
+                
           entity:
             attributes:
               entityid:
