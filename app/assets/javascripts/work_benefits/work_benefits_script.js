@@ -11,6 +11,9 @@ $(jQuery(document).ready(function($) {
 	//populates the autocompletes for the accounts
   fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
   fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
+	
+	//populates the filter for employees
+	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
 	//allows expand the treeview
 	$('#list').on("click", "span.expand_tree", treeviewhr.expand);
@@ -162,17 +165,20 @@ function moveEmployees () {
 function selectEmployeesLeft(selected) {
 	switch($(selected).val()) {
 		case 'all':
+			$('#employee-filter').show();
 			$('#list-departments').hide();
 			$('#list-superior').hide();	
 			$('div.employees-list.left-list input[type=checkbox]').prop('disabled', false);
 			$('.checkbox-group').show();
 			break;
 		case 'boss':
+			$('#employee-filter').hide();
 			$('#list-departments').hide();
 			filterSuperior($('#superiors_employees').val());
 			$('#list-superior').show();	
 			break;
 		case 'department':
+			$('#employee-filter').hide();
 			$('#list-superior').hide();	
 			filterDepartment($('#departments_employees').val());
 			$('#list-departments').show();			
@@ -203,6 +209,35 @@ function fetchPopulateAutocomplete(url, textField, idField) {
           $(document.getElementById(textField)).val(account);
       }        
   }); 
+}
+
+function populateEmployeesFilter(url, textField, idField) {
+  $.getJSON(url, function(employees) {
+      $(document.getElementById(textField)).autocomplete({
+          source: $.map(employees, function(item){
+              $.data(document.body, 'account_' + item.id+"", item.entity.name + ' ' + item.entity.surname);
+              return{
+                  label: item.entity.surname + ' ' + item.entity.name,                        
+                  id: item.id,
+									sup: item.employee_id,
+									dep: item.department_id,
+									data_id: 'employee_'+ item.id
+              }
+          }),
+          select: function( event, ui ) {
+							if (!$('#list-to-save input#'+ui.item.data_id).length) {
+								appendEmployees = "<div class='checkbox-group'>" +
+															"<div class='checkbox-margin'>" +
+																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='work_benefit[employee_ids][]' value='"+ ui.item.id +"' />" +
+																"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
+															"</div>" +
+														"</div>";	
+								$('#list-to-save').append(appendEmployees);
+								$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
+							}
+          }
+      })     
+  });	
 }
 
 function set_account(e) {

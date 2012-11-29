@@ -57,13 +57,16 @@
 			<div style="clear:both"></div>
     </div>
   </div>
-	<div class="controls" id="list-departments">
+	<div class="controls padding-filter" id="list-departments">
 		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
   	<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
   </div>
-	<div class="controls" id="list-superior">
+	<div class="controls padding-filter" id="list-superior">
 		<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
   	<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
+  </div>
+	<div class="controls padding-filter" id="employee-filter">
+  	<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
   </div>
 	<div class="controls" id="marcar-desmarcar">
 		<%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>

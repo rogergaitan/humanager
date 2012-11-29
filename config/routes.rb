@@ -24,6 +24,7 @@ Reasapp::Application.routes.draw do
     collection do
       get 'fetch_debit_accounts'
       get 'fetch_credit_accounts'
+      get 'fetch_employees'
     end
   end
 

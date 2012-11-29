@@ -96,6 +96,13 @@ class WorkBenefitsController < ApplicationController
     end
   end
   
+  def fetch_employees
+    @employees = Employee.includes(:entity).order_employees
+    respond_to do |format|
+      format.json { render json: @employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} } }
+    end
+  end
+  
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
     @credit_accounts = LedgerAccount.credit_accounts
