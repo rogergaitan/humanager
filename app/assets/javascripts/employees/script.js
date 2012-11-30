@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('#sync-fb').click(function() {
-    $.getJSON('/employees/sync', function(element) {
+    $.getJSON('employees/sync', function(element) {
       $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(); });
       $(element.employee).each(function() { add_employees(this, 'table#employee-data')});
       $('#sync-fb').hide();

@@ -14,7 +14,7 @@
     <% @departments.each do |department| %>
       <tr>
         <td><%= department.name %></td>
-        <td><%= department.employee.full_name %></td>
+        <td><%= department.employee.full_name if department.employee %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_department_path(department), :class => 'btn btn-mini' %>

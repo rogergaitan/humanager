@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#sync-cc').on("click", function() {
 		var cc_array = [];
-    $.getJSON('/centro_de_costos/sync_cc', function(element) {
+    $.getJSON('centro_de_costos/sync_cc', function(element) {
       $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(); });
       $(element.centrocostos).each(function() { 
 				cc_array.push(new Array(this.icentro_costo ? this.icentro_costo : 0, this.nombre_cc, this.icc_padre ? this.icc_padre : 0, this.id));

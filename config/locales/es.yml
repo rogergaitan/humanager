@@ -226,6 +226,8 @@ es:
               ledger_account_id:
                 blank: Este campo no puede quedar en blanco
       models:
+        payment_frequency: Frecuencias de Pago
+        means_of_payment: Medios de Pago
         payroll_type:
           one: Tipo de planilla
           other: Tipos de planillas
@@ -258,8 +260,18 @@ es:
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
         type_of_personnel_action: Tipo de Acción de Personal
+        payment_method: Métodos de Pago
         
       attributes:
+        payment_method: 
+          name: Nombre
+          description: Descripción
+        payment_frequency: 
+          name: Nombre
+          description: Descripción
+        means_of_payment: 
+          name: Nombre
+          description: Descripción
         payroll_type:
           description: Descripción
           payroll_type: Tipo de planilla

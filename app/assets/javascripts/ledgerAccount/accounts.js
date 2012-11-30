@@ -4,7 +4,7 @@ $(document).ready(function() {
 
   $('#account-fb').click(function() { 
     $('#account-fb').attr("disabled", true); //desabilito el boton
-    $.getJSON('/ledger_accounts/accountfb', function(resultado) {
+    $.getJSON('accountfb', function(resultado) {
       $('section.nav').append('<div class="notice">'+ resultado.notice +'</div>'); 
       $(resultado.account).each(function() { add_accounts(this, 'table#account-data')});
       $('#account-fb').hide();

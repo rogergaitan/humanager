@@ -10,12 +10,12 @@ $(document).ready(function(){
 
 //consulta los datos de las planillas activas y inactivas
  function index(){
-    $.getJSON('/payrolls/get_activas', function(resultado) {
+    $.getJSON('payrolls/get_activas', function(resultado) {
       $('table#activas > tbody').empty();
       $(resultado.activa).each(function() { add_activas(this, 'table#activas')});
     });
 
-    $.getJSON('/payrolls/get_inactivas', function(resultado) {
+    $.getJSON('payrolls/get_inactivas', function(resultado) {
       $('table#inactivas > tbody').empty();
       $(resultado.inactiva).each(function() { add_inactivas(this, 'table#inactivas')});
     });

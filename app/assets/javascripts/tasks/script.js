@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('#task-fb').click(function() { 
-    $.getJSON('/tasks/tasksfb', function(element) {
+    $.getJSON('tasks/tasksfb', function(element) {
       $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
       $(element.task).each(function() { add_tasks(this, 'table#task-data')});
       $('#task-fb').hide();
