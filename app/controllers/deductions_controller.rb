@@ -1,5 +1,6 @@
 class DeductionsController < ApplicationController
   respond_to :html, :json
+  before_filter :resources, :only => [:new, :edit]
 
   # GET /deductions
   # GET /deductions.json
@@ -72,4 +73,9 @@ class DeductionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def resources
+    @payrolls = Payroll.activas
+  end
+
 end

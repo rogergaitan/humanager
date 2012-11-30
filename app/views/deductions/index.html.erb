@@ -24,7 +24,7 @@
         <td><%= deduction.amount_exhaust %></td>
         <td><%= deduction.calculation_type %></td>
         <td><%= deduction.calculation %></td>
-        <td><%= deduction.ledger_account.naccount %></td>
+        <td><%= deduction.ledger_account.naccount if deduction.ledger_account %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_deduction_path(deduction), :class => 'btn btn-mini' %>

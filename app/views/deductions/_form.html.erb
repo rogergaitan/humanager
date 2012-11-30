@@ -21,15 +21,16 @@
          <a href="#myModalPayroll" role="button" class="btn" id="btnModalPayroll" data-toggle="modal" rel="tooltip" title="Ver lista de planillas activas"> <i class="icon-list"></i> </a>
       </div>
     </div>
-
-  
-
+<!--
+    <% @payrolls.each do |payroll| %>
+      <%= check_box_tag 'deduction[payroll_ids][]', payroll.id, @deduction.payroll_ids.include?(payroll.id), id: dom_id(payroll) %>
+    <% end %>
   <div class="control-group">
     <%= f.label :amount_exhaust, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field  :amount_exhaust, :class => 'text_field' %>
     </div>
-  </div>
+  </div> -->
 
   <div class="control-group">
     <%= f.label :calculation_type, :class => 'control-label' %>

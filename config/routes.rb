@@ -110,6 +110,7 @@ Reasapp::Application.routes.draw do
   match '/about', :to => 'pages#about'
   match '/404', :to => 'errors#not_found'
   match '/configuracion', :to  => 'pages#configuracion', :as  => 'dcerp_config'
+  match '/procesos', :to  => 'pages#procesos', :as  => 'dcerp_process'
 
   root :to => 'pages#index'
 
