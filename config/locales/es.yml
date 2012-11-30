@@ -225,16 +225,6 @@ es:
                 blank: Este campo no puede quedar en blanco
               ledger_account_id:
                 blank: Este campo no puede quedar en blanco
-          payroll:
-            attributes:
-              payroll_type_id:
-                blank: Debe seleccionar un tipo de planilla
-              star_date:
-                blank: Debe seleccionar la fecha de inicio
-              end_date: 
-                blank: Debe seleccionar la fecha fin
-              payment_date: 
-                blank: Debe seleccionar la fecha de pago
       models:
         payroll_type:
           one: Tipo de planilla
@@ -265,11 +255,10 @@ es:
         district: Distrito
         canton: Cantones
         task: Labor
-        deduction: Deducción
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
-        payroll: Planilla
         type_of_personnel_action: Tipo de Acción de Personal
+        
       attributes:
         payroll_type:
           description: Descripción
@@ -408,19 +397,6 @@ es:
           code: Codigo
           description: Descripción
           ledger_account_id: Cuenta Contable
-        deduction:
-          description: Descripción
-          deduction_type: Tipo de deducción
-          amount_exhaust: Monto a agotar
-          calculation_type: Tipo de calculo
-          calculation: Calculo
-          ledger_account_id: Cuenta de crédito
-        payroll:
-          payroll_type_id: Tipo de Planilla
-          star_date: Desde
-          end_date: Hasta
-          payment_date: Fecha de Pago
-          state: Estado
         user:
           login:
         type_of_personnel_action:
@@ -479,6 +455,5 @@ es:
       - :day
       - :month
       - :year
-
 
 

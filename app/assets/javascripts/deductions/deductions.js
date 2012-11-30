@@ -22,9 +22,7 @@ $(document).ready(function(){
 	TipoDeduccion();
   	$('#deduction_deduction_type').change(TipoDeduccion);
 
-  	$('#activas tbody tr td a').click(function(e) {
-  		set_payroll();
-  	});
+  	$('#activas').on("click", "td.payroll-type a", set_payroll);
 
 });
 
@@ -79,8 +77,8 @@ function ObtenerPlanillas(){
  function add_activas(payroll, target_table)
   {
     var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td>' + payroll.id +'</td>' +
-        '<td><a href="#">' + payroll.payroll_type.description +'</a></td>' +
+        '<td class="payroll-id">' + payroll.id +'</td>' +
+        '<td class="payroll-type"><a data-dismiss="modal" href="#">' + payroll.payroll_type.description +'</a></td>' +
         '<td>' +  payroll.star_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +
@@ -90,8 +88,8 @@ function ObtenerPlanillas(){
 
 function set_payroll(e) {
     e.preventDefault();
-    var payrollId = $('#activas tbody tr td:nth-child(1)').data('id');// $(this).closest('li').data('id');
-    var payrollName = $('#activas tbody tr:eq(3) a').text();
+    var payrollId = $(this).parent().prev().text();// $(this).closest('li').data('id');
+    var payrollName = $(this).text();
     $('#deduction_payroll_ids_').val(payrollId);
-    $('#deduction_payroll').text(payrollName);  
+    $('#deduction_payroll').val(payrollName);  
 }
