@@ -226,6 +226,9 @@ es:
               ledger_account_id:
                 blank: Este campo no puede quedar en blanco
       models:
+        work_benefit:
+          one: Prestación
+          other: Prestaciones
         payment_frequency: Frecuencias de Pago
         means_of_payment: Medios de Pago
         payroll_type:
@@ -263,6 +266,11 @@ es:
         payment_method: Métodos de Pago
         
       attributes:
+        work_benefit:
+          description: Descripción
+          percentage: Porcentaje
+          debit_account: Cuenta de Débito
+          credit_account: Cuenta de Crédito
         payment_method: 
           name: Nombre
           description: Descripción
