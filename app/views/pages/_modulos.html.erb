@@ -1,8 +1,8 @@
     <ul class="thumbnails">
           
-      <li class="span2">
+      <li class="span3">
         <div class="thumbnail">
-          <a href=<%=dcerp_config_path %>>
+          <a href=<%=dcerp_config_path %> class="thumbnail">
           <%= image_tag ("products_icon.png" ) %> 
           </a>
           
@@ -25,8 +25,6 @@
               <li><a href=<%= occupations_path%>><i class='icon-list-alt'></i> Ocupaciones</a></li>
               <li><a href=<%= means_of_payments_path%>><i class='icon-list-alt'></i> Medios de Pago</a></li>
               <li><a href=<%= payment_frequencies_path%>><i class='icon-list-alt'></i> Frecuencias de Pago</a></li>
-              <li><a href=<%= payment_methods_path%>><i class='icon-list-alt'></i> Metodos de Pago</a></li>
-              <li><a href=<%= payment_schedules_path%>><i class='icon-list-alt'></i> Calendarios de Pago</a></li>
               <li><a href=<%= type_of_personnel_actions_path%>><i class='icon-list-alt'></i> Tipos Acciones del personal</a></li>
 
               <li class="divider"></li>
@@ -38,9 +36,9 @@
       </li>
 
       <!-- PROCESOS -->
-       <li class="span2">
+       <li class="span3">
         <div class="thumbnail">
-          <a href=<%= dcerp_process_path %>>
+          <a href=<%= dcerp_process_path %> class="thumbnail">
           <%= image_tag ("products_icon.png" ) %> 
           </a>
           
@@ -59,9 +57,9 @@
       </li>
 
       <!-- INFORMES -->
-       <li class="span2">
+       <li class="span3">
         <div class="thumbnail">
-          <a href=<%=products_path %>>
+          <a href=<%=products_path %> class="thumbnail">
           <%= image_tag ("products_icon.png" ) %> 
           </a>
           

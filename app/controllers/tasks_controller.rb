@@ -2,7 +2,6 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-     @title = t('.activerecord.models.task').capitalize
     @tasks = Task.all
 
     respond_to do |format|

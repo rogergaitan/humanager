@@ -7,12 +7,7 @@
 <%= javascript_include_tag 'other_salaries/salaries' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
 <%= form_for @other_salary, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :code, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :code, :class => 'text_field' %>
-    </div>
-  </div>
+  
   <div class="control-group">
     <%= f.label :description, :class => 'control-label' %>
     <div class="controls">

@@ -1,1 +1,47 @@
 <h2>Procesos</h2>
+
+<ul class="thumbnails">
+      
+      <!-- Planillas -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=payrolls_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=payrolls_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.payroll').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_payroll_path%>><i class='icon-pencil'></i>  Nueva</a></li>
+              <li><a href=<%=payrolls_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+        </div>
+      </li>
+
+        <!--Prestaciones -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=work_benefits_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=work_benefits_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.work_benefit.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_work_benefit_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=work_benefits_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+        </div>
+      </li>
+
+</ul>

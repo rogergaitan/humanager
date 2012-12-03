@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:code) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -16,7 +15,6 @@
     <% @other_salaries.each do |other_salary| %>
       <tr>
         <td><%= link_to other_salary.id, other_salary_path(other_salary) %></td>
-        <td><%= other_salary.code %></td>
         <td><%= other_salary.description %></td>
         <td><%= other_salary.ledger_account.naccount if other_salary.ledger_account %></td>
         <td>

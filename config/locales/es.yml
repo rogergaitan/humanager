@@ -259,12 +259,31 @@ es:
         province: Provincia
         district: Distrito
         canton: Cantones
-        task: Labor
+        task: 
+          one: Labor
+          other: Labores
         other_salary: Otros Salarios
         ledger_account: Cuentas Contable
-        type_of_personnel_action: Tipo de Acción de Personal
         payment_method: Métodos de Pago
-        
+        type_of_personnel_action:
+          one: Tipo Acción Personal
+          other: Tipos Acciones Personal
+        payroll: Planilla
+        work_benefit: 
+          one: Prestación
+          other: Prestaciones
+        deduction:
+          one: Deduccion
+          other: Deducciones
+        occupation:
+          one: Ocupación
+          other: Ocupaciones
+        means_of_payment:
+          one: Medio de pago
+          other: Medios de pago
+        payment_frequency:
+          one: Frecuencia de pago
+          other: Frecuencias de pago
       attributes:
         work_benefit:
           description: Descripción
