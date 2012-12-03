@@ -1,14 +1,14 @@
 <% @product_i = @product_pricing.id %>
-<tr>
-    <td><%= @product_pricing.id %></td>
-    <td><%= link_to product_pricing.product_id, product_path(product_pricing.product_id) %></td>
-    <td><%= @product_pricing.utility %></td>
-    <td><%= @product_pricing.price_type %></td>
-    <td><%= @product_pricing.category %></td>
-    <td><%= @product_pricing.sell_price %></td>
+
+<tr class="success">
+    <td class="product_id"><%= link_to product_pricing.product_id, product_path(product_pricing.product_id) %><%= hidden_field :id, product_pricing.id, value: product_pricing.id  %></td>
+    <td class="utility"><%= @product_pricing.utility %></td>
+    <td class="price_type"><%= @product_pricing.price_type %></td>
+    <td class="category"><%= @product_pricing.category %></td>
+    <td class="sell_price"><%= @product_pricing.sell_price %></td>
     <td>
-    <a  href="#myModal<%=@product_pricing.id%>" role="button" 
-        class="btn btn-mini" data-toggle="modal">
+    <a  href="#modalnew" role="button" 
+        class="btn btn-mini edit_price" data-toggle="modal">
         <%=t('.edit', :default => t("helpers.links.edit"))%>
     </a>
 
@@ -17,13 +17,4 @@
             :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger' %>
     </td>
 </tr>
-<tr>
-    <td>
-        <div class="modal hide fade" id="myModal<%=@product_pricing.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-body">
-                <%- @edit_product_pricing = ProductPricing.find(@product_pricing.id) -%>
-                <%= render :partial => 'product_pricings/form_edit', :object => @edit_product_pricing %>
-            </div>            
-        </div>
-    </td>
-</tr>
+        

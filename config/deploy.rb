@@ -1,4 +1,4 @@
-set :application, "reasapp"
+
 set :repository,  "git@github.com:dotcreek/dcerp.git"
 
 set :scm, :git
@@ -10,17 +10,28 @@ set :user, "ec2-user"
 #role :db,  "your primary db-server here", :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
 
-set :deploy_to, "/home/ec2-user/reasapp"
 #set :deploy_subdir, 'Server/missionfig_game'
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"r
 #after 'deploy:update', 'bundle:install', 'deploy:migrate'
 
-after :deploy, "deploy:restart"
+#after :deploy, "deploy:restart"
 #after "deploy:update_swf", "deploy:restore_assets"
 #before :deploy, "deploy:backup_assets"
 
+task :reasapp do
+	set :application, "reasapp"
+  set :deploy_to, "/home/ec2-user/#{application}"
+  run "sudo service httpd restart"
+end
+
+task :hrerp do
+  puts "Trying to deploy hrerp"
+	set :branch, "hrerp"
+	set :application, 'hrerp'
+  set :deploy_to, "/home/ec2-user/#{application}"
+end
 
 namespace :deploy do
 

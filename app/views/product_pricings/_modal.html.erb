@@ -1,0 +1,19 @@
+<div class="hide fade modal" id="myModal<%=@product_pricing.id%>"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-idden="true">
+  <%= form_for @product_pricing, 
+    :validate => true, 
+    :url => "/product_pricings/#{@product_pricing.id}", 
+    :remote => true, 
+    :html => { :class => 'form-horizontal' } do |f| %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Actualizar Precio</h3>
+    </div>
+    <div class="modal-body">                  
+      <%= render 'forms/product_pricings_form', :f => f %>
+    </div>
+    <div class="modal-footer">
+      <button class="btn closeVendor" data-dismiss="modal" aria-hidden="true">Close</button>
+          <%= f.submit nil, :class => 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

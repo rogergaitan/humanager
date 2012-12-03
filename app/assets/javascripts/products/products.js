@@ -45,9 +45,6 @@ $(jQuery(document).ready(function($) {
 
     });
 
-    //validate
-   
-
     //Obtain sublines(id and name)
     $.getJSON('/sublines/fetch', function(subline_data) {
         var html_create='';
@@ -117,7 +114,36 @@ $(jQuery(document).ready(function($) {
         $('.click_cancel').trigger('click');
 
     });
+    
+    $(function() {
+        var hash = window.location.hash;
+        $('a[href="' + hash + '"]').tab("show")
+       //$('[href=' + window.location.hash + ']').click();
+        //activeTab && activeTab.tab('show');
 
+    });
 
+  $("#tableprices").on("click", ".edit_price", function() {
+    var row;
+    row = $(this).closest("tr");
+    $("#new_product_pricing").attr("action", "/product_pricings/" + row.find($(".product_id input")).val() );
+    $("#new_product_pricing div:first").append('<input id="hidden_put" type="hidden" value="put" name="_method">');
+    $("input.new-edit").val("Actualizar Precio");
+    $("#product_pricing_utility").val(row.find($(".utility")).text());
+    $("#product_pricing_price_type").val(row.find($(".price_type")).text());
+    $("#product_pricing_category").val(row.find($(".category")).text());
+    $("#product_pricing_sell_price").val(row.find($(".sell_price")).text());
+  });
+    
+    $("a.new_price").click(function() {
+    var row;
+    row = $(this).closest("tr");
+    $("#new_product_pricing").attr("action", "/product_pricings");
+    $("#new_product_pricing div input#hidden_put").replaceWith("");
+    $("input.new-edit").val("Crear Precio");
+    $("form#new_product_pricing input[type='text']").val("");
+  });
+    
+    
 }));
 

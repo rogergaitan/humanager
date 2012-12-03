@@ -32,7 +32,7 @@ es:
       destroy: Eliminar
       save_continue: Guardar y Continuar        
       edit: Editar
-      edit_price: Editar precio
+      edit_price: Ver precios
       new: Nuevo
       cancel: Cancelar  
       back: Regresar
@@ -70,6 +70,8 @@ es:
           product_pricing:
             attributes:
               utility: 
+                blank: "Este campo no puede quedar en blanco"
+              sell_price:
                 blank: "Este campo no puede quedar en blanco"
           product:
             attributes:

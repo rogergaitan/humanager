@@ -39,7 +39,8 @@ class ProductPricingsController < ApplicationController
   def edit
 
     #@product_pricing = ProductPricing.find(params[:product_id])
-    @product_pricing = ProductPricing.where(:product_id => params[:id])
+    #@product_pricing = ProductPricing.where(:product_id => params[:id])
+    @product_pricing = ProductPricing.find(params[:id])
   end
 
   # POST /product_pricings
@@ -70,11 +71,14 @@ class ProductPricingsController < ApplicationController
 
     respond_to do |format|
       if @product_pricing.update_attributes(params[:product_pricing])
+        flash[:notice] = t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_updated')
         format.html { redirect_to products_path, notice: t('.activerecord.models.product_pricing').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
+        format.js
       else
         format.html { render action: "edit" }
         format.json { render json: @product_pricing.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
