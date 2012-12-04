@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :payroll_logs
+
   resources :payrolls do
     collection do
       get :get_activas

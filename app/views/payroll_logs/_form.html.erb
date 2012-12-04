@@ -1,0 +1,134 @@
+<script type="text/javascript">
+  var centro_costos = [];
+  <% @centro_costos.each do |cc| %>
+    centro_costos.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
+  <% end %>
+</script>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'payroll_logs/payroll_logs_script' %>
+<%= javascript_include_tag 'employees/employee' %>
+
+<%= form_for @payroll_log, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :payroll_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :payroll_id %>
+      <%= text_field_tag 'load_employee',nil, :class => 'text_field required 
+                          search-image-employee', :for=>:payroll_id %>  
+    </div>
+    </div>
+    <h2></h2>
+    <hr>
+
+    <div class="control-group">
+    <%= f.label :Empleados, :class => 'control-label' %>
+    <div class="controls align-radio">
+      <div class="options-left">
+        <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
+        <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
+        <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
+      </div>
+      <div class="options-right">
+        <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
+        <%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+    </div>
+<!--    
+-->
+    <div class="controls padding-filter" id="employee-filter">
+    <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
+  </div>
+  <div class="controls" id="marcar-desmarcar">
+    <%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
+    <%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+  </div>
+  <div class="controls lists">
+    <div class="employees-list left-list">
+      <div class="employees-margin" id="no-save">
+        <!--Checkbox -->
+
+      </div>
+    </div>
+    <div class="control-buttons">
+      <a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+      <a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+    </div>
+    <div class="employees-list list-right">
+      <%= hidden_field_tag 'work_benefit[employee_ids][]', nil %>
+      <div class="employees-margin" id="list-to-save">        
+      </div>
+    </div>
+    
+  </div>
+  <div style="clear:both"></div>
+
+    <hr>
+  
+  <div class="control-group">
+    <%= f.label :date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.date_select :date, :class => 'date_select' %>
+    </div>
+  </div>
+
+  <div class="control-group-inline">
+    <%= f.label :task_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :task_id %>
+      <%= text_field_tag 'load_employee',nil, :class => 'text_field required 
+                          search-image-employee', :for=>:task_id %>  
+    </div>
+  </div>
+  <div class="control-group-inline">
+    <%= f.label :time_worked, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :time_worked, :class => 'input-small' %>
+    </div>
+  </div>
+
+  <div class="control-group-inline">
+    <%= f.label :centro_de_costo_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :centro_de_costo_id %>
+      <%= text_field_tag 'load_centro_de_costo',nil, :class => 'text_field required 
+                          search-image-employee', :for=>:centro_de_costo_id %> 
+    <a href="#myModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i> </a> 
+    </div>
+  </div>
+
+  <div class="control-group-inline">
+    <%= f.label :payment_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.enum_select :payment_type, :class => 'input-small', :include_blank =>false %>
+    </div>
+  </div>
+
+  <div style="clear:both"></div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary', :value => 'Incluir' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                payroll_logs_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione un Centro de Costos</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    <!--
+    <button class="btn btn-primary">Save changes</button>
+    -->
+  </div>
+</div>
