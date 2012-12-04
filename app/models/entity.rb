@@ -32,7 +32,7 @@ class Entity < ActiveRecord::Base
                   :emails_attributes, :addresses_attributes, 
                   :contacts_attributes, :bank_accounts_attributes
                   
-  validates :name, :surname, :entityid, :presence => true
+  validates :name, :surname, :entityid, :typeid, :presence => true
   validates :entityid, :uniqueness => true
   
   def create_vendor

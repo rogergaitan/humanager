@@ -41,16 +41,17 @@
               <%= ent.fields_for :addresses do |add| %>              
                 <%= render 'forms/address_form', :f => add %>
             <% end %>
+              <%= ent.fields_for :telephones do |pho| %>
+                  <%= render 'forms/telephone_form', :f => pho %>
+                  
+              <% end %>
+              <%= link_to_add_fields("Agregar otro teléfono", ent, :telephones) %>
             </div>
 
 <!-- Render Entity's phones information into partial to reuse code -->
             <div class="tab-pane" id="tab2">
 
-            <%= ent.fields_for :telephones do |pho| %>
-                <%= render 'forms/telephone_form', :f => pho %>
-                
-            <% end %>
-            <%= link_to_add_fields("Agregar otro teléfono", ent, :telephones) %>
+            
             <div class="control-label">
               
             </div>

@@ -66,7 +66,6 @@ es:
                 blank: "Este campo no puede quedar en blanco"
               vendor_text:
                 blank: "Este campo no puede quedar en blanco"
-                
           entity:
             attributes:
               entityid:
@@ -338,9 +337,9 @@ es:
           spouse: 'Cónyuge'
           wage_payment: Salario
         entity:
-          name: Nombre
-          surname: Apellidos
-          entityid: 'Cédula'
+          name: 'Nombre o Razón Social'
+          surname: Nombre Comercial
+          entityid: 'Identificación'
           typeid: 'Tipo Identificación'
         category:
           code: Código
