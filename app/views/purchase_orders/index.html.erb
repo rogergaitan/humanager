@@ -22,7 +22,7 @@
     <% @purchase_orders.each do |purchase_order| %>
       <tr>
         <td><%= link_to purchase_order.id, purchase_order_path(purchase_order) %></td>
-        <td><%= purchase_order.vendor.entity.name %></td>
+        <td><%= purchase_order.vendor.entity.name if purchase_order.vendor %></td>
         <td><%= purchase_order.reference_info %></td>
         <td><%= purchase_order.currency %></td>
         <td><%= purchase_order.observation %></td>

@@ -1,5 +1,5 @@
 <%= javascript_include_tag "purchase_order/purchase_order" %>
-<%= form_for @purchase_order, :html => { :class => 'form-horizontal new_purchase_order well' } do |f| %>
+<%= form_for @purchase_order, :validate => true, :html => { :class => 'form-horizontal new_purchase_order well' } do |f| %>
   <div class="warp_block_1 left">
     <div class="contentWidget" >
         <div class="labelCellTable">
@@ -15,7 +15,7 @@
           <%= f.label :delivery_date %>
         </div>
         <div class="contentCellTable">
-          <%= f.text_field :delivery_date, :class => 'text_field' %>
+          <%= f.text_field :delivery_date, :class => 'text_field', :readonly => true, :value => Time.now.to_date.to_s %>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
     </div>
   </div>
  <div class="clear_fix "></div>
-
+	<div id="message-products"></div>
   <div class="new_product_field control-group">
     <div class="add_field_fake"></div>
     

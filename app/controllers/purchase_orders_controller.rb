@@ -45,7 +45,7 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders/1/edit
   def edit
     @purchase_order = PurchaseOrder.find(params[:id])
-    @vendor = PurchaseOrder.get_vendor(params[:id])
+    @vendor = PurchaseOrder.get_vendor(@purchase_order.vendor_id)
     @new_vendor = Vendor.new
     @new_vendor.build_entity
   end

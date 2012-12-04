@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113231121) do
+ActiveRecord::Schema.define(:version => 20121129184805) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -174,11 +174,14 @@ ActiveRecord::Schema.define(:version => 20121113231121) do
     t.integer  "quantity"
     t.float    "cost_unit"
     t.float    "cost_total"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+    t.integer  "warehouse_id"
+    t.decimal  "discount",          :precision => 17, :scale => 2
   end
 
   add_index "items_purchase_orders", ["purchase_order_id"], :name => "index_items_purchase_orders_on_purchase_order_id"
+  add_index "items_purchase_orders", ["warehouse_id"], :name => "index_items_purchase_orders_on_warehouse_id"
 
   create_table "lines", :force => true do |t|
     t.string   "code"
