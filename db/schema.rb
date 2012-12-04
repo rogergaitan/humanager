@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121127034138) do
+ActiveRecord::Schema.define(:version => 20121203001419) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -140,9 +140,9 @@ ActiveRecord::Schema.define(:version => 20121127034138) do
   create_table "districts", :force => true do |t|
     t.string   "name"
     t.integer  "canton_id"
+    t.integer  "province_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "province_id"
   end
 
   add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
@@ -294,6 +294,31 @@ ActiveRecord::Schema.define(:version => 20121127034138) do
     t.date     "payment_date"
   end
 
+  create_table "payroll_employees", :force => true do |t|
+    t.integer  "employee_id"
+    t.integer  "payroll_log_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "payroll_employees", ["employee_id"], :name => "index_payroll_employees_on_employee_id"
+  add_index "payroll_employees", ["payroll_log_id"], :name => "index_payroll_employees_on_payroll_log_id"
+
+  create_table "payroll_logs", :force => true do |t|
+    t.integer  "payroll_id"
+    t.date     "date"
+    t.integer  "task_id"
+    t.decimal  "time_worked",                                                :precision => 10, :scale => 0
+    t.integer  "centro_de_costo_id"
+    t.enum     "payment_type",       :limit => [:Ordinario, :Extra, :Doble]
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+  end
+
+  add_index "payroll_logs", ["centro_de_costo_id"], :name => "index_payroll_logs_on_centro_de_costo_id"
+  add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
+  add_index "payroll_logs", ["task_id"], :name => "index_payroll_logs_on_task_id"
+
   create_table "payroll_types", :force => true do |t|
     t.string   "description"
     t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
@@ -336,10 +361,10 @@ ActiveRecord::Schema.define(:version => 20121127034138) do
   create_table "positions", :force => true do |t|
     t.string   "position"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
     t.string   "codigo_ins"
     t.string   "codigo_ccss"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "product_pricings", :force => true do |t|
@@ -385,12 +410,9 @@ ActiveRecord::Schema.define(:version => 20121127034138) do
   create_table "roles", :force => true do |t|
     t.string   "role"
     t.string   "description"
-    t.integer  "department_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
-
-  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"

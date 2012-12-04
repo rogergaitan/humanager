@@ -1,6 +1,7 @@
 class CentroDeCosto < ActiveRecord::Base
   
   has_many :departments
+  has_many :payroll_logs
   attr_accessible :icc_padre, :icentro_costo, :iempresa, :nombre_cc
   
 
