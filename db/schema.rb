@@ -11,9 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
 ActiveRecord::Schema.define(:version => 20121203153657) do
-
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -226,6 +224,22 @@ ActiveRecord::Schema.define(:version => 20121203153657) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "items_purchase_orders", :force => true do |t|
+    t.integer  "purchase_order_id"
+    t.string   "product"
+    t.string   "description"
+    t.integer  "quantity"
+    t.float    "cost_unit"
+    t.float    "cost_total"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+    t.integer  "warehouse_id"
+    t.decimal  "discount",          :precision => 17, :scale => 2
+  end
+
+  add_index "items_purchase_orders", ["purchase_order_id"], :name => "index_items_purchase_orders_on_purchase_order_id"
+  add_index "items_purchase_orders", ["warehouse_id"], :name => "index_items_purchase_orders_on_warehouse_id"
+
   create_table "ledger_accounts", :force => true do |t|
     t.string   "iaccount"
     t.string   "naccount"
@@ -371,7 +385,7 @@ ActiveRecord::Schema.define(:version => 20121203153657) do
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
     t.float    "utility"
-    t.enum     "type",       :limit => [:other, :credit, :cash]
+    t.enum     "price_type", :limit => [:other, :credit, :cash]
     t.enum     "category",   :limit => [:a, :b, :c]
     t.float    "sell_price"
     t.datetime "created_at",                                     :null => false
@@ -407,6 +421,22 @@ ActiveRecord::Schema.define(:version => 20121203153657) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "purchase_orders", :force => true do |t|
+    t.integer  "vendor_id"
+    t.string   "reference_info"
+    t.string   "currency"
+    t.text     "observation"
+    t.float    "subtotal"
+    t.float    "taxes"
+    t.float    "total"
+    t.date     "delivery_date"
+    t.string   "shipping_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
 
   create_table "roles", :force => true do |t|
     t.string   "role"
