@@ -23,7 +23,6 @@ set :user, "ec2-user"
 task :reasapp do
 	set :application, "reasapp"
   set :deploy_to, "/home/ec2-user/#{application}"
-  run "sudo service httpd restart"
 end
 
 task :hrerp do
