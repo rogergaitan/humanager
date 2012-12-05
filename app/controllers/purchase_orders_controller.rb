@@ -1,6 +1,6 @@
 class PurchaseOrdersController < ApplicationController
-  
-  respond_to :json
+
+  respond_to :json, :js
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
@@ -26,20 +26,22 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders/new
   # GET /purchase_orders/new.json
   def new
-    
-    if params[:search] 
-      @search = []
+    @cart_items = []
+    if params[:search]
+
       @cart = Product.get_cart
-        if @cart
-          @cart.each do |key, value|
-            @search.push(OpenStruct.new(value))
-          end
+      if @cart
+        @cart.each do |key, value|
+          @cart_items.push(OpenStruct.new(value))
+
         end
+      end
     end
     @purchase_order = PurchaseOrder.new
     @vendor = PurchaseOrder.get_vendor
     @new_vendor = Vendor.new
     @new_vendor.build_entity
+    @warehouses = fetch
   end
 
   # GET /purchase_orders/1/edit
@@ -48,6 +50,7 @@ class PurchaseOrdersController < ApplicationController
     @vendor = PurchaseOrder.get_vendor(@purchase_order.vendor_id)
     @new_vendor = Vendor.new
     @new_vendor.build_entity
+    @warehouses = fetch
   end
 
   # POST /purchase_orders
@@ -109,7 +112,7 @@ class PurchaseOrdersController < ApplicationController
     @new_vendor = Vendor.new(params[:vendor])
     @new_vendor.save
   end
-  
+
   def tovendor
     @entity = Entity.find_by_entityid(params[:entityid])
     respond_to do |format|
@@ -121,4 +124,26 @@ class PurchaseOrdersController < ApplicationController
       end
     end
   end
+
+  def fetch
+    @warehouses =  Warehouse.fetch
+  end
+
+  def cart_items
+    @cart_items = []
+    if params[:search]
+
+      @cart = Product.get_cart
+      if @cart
+        @cart.each do |key, value|
+          @cart_items.push(OpenStruct.new(value))
+
+        end
+      end
+    end
+    @warehouses = fetch
+    respond_with @cart_items
+    #Rails.logger.debug @cart_items
+  end
+
 end

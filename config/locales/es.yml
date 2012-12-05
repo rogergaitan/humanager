@@ -247,6 +247,8 @@ es:
           product: Producto
           quantity: Cantidad
           cost_unit: Costo Unit
+          warehouse_id: Bodega
+          discount: Descuento
         address:
           province_id: Provincia
           canton_id: Canton

@@ -108,7 +108,8 @@ jQuery(document).ready ($) ->
       data: {
         "cart_products" : cart_products
       }
-      beforeSend: ()->
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader "X-CSRF-Token", $('meta[name="csrf-token"]').attr('content')
 
   get_cart = ()->
     $.ajax
@@ -141,8 +142,6 @@ jQuery(document).ready ($) ->
         'part_number': $row.find(":nth-child(4)").text()
       }
     ).get()
-  
-    
 
   get_cart()
 

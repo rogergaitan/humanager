@@ -19,13 +19,15 @@
 class PurchaseOrder < ActiveRecord::Base
   belongs_to :vendor
   has_many :items_purchase_order, :dependent => :destroy
-  attr_accessible :vendor_id,:currency, :delivery_date, :observation, :reference_info,
-  				  :shipping_type, :subtotal, :taxes, :total, :items_purchase_order_attributes,:vendor_attributes
-  accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true
+  attr_accessible :vendor_id,:currency, :delivery_date, :observation,
+    :reference_info,:shipping_type, :subtotal, :taxes, :total,
+    :items_purchase_order_attributes,:vendor_attributes
+  accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true,
+    :reject_if => proc { |attributes| attributes["product"].blank? }
   accepts_nested_attributes_for :vendor, :allow_destroy => true
-  
-  validates :vendor_id, :reference_info, :delivery_date, :presence => true
-  
+
+  validates :vendor_id, :delivery_date,  :presence => true
+
   def self.get_vendor(vendor_id = nil)
     unless vendor_id.nil?
       @vendor = Vendor.find(vendor_id)

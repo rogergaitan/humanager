@@ -1,53 +1,6 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  
-
-  resources :districts
-
-  resources :cantons
-
-  resources :provinces
-
-  resources :roles
-
-  resources :departments
-
-  resources :means_of_payments
-
-  resources :payment_frequencies
-
-  resources :payment_methods
-
-  resources :payment_schedules
-
-  resources :employees do
-    collection do
-      get 'sync'
-    end
-    collection do
-      get 'load_employees'
-    end
-  end
-
-  resources :employees
-
-  resources :deductions
-
-  resources :work_benefits
-
-  resources :occupations
-
-
-
-  resources :customers
-
-  resources :entities
-  resources :product_pricings
-
-  resources :warehouses
-  devise_for :users
-
   get "pages/home"
   get "pages/about"
   get "pages/help"
@@ -59,6 +12,15 @@ Reasapp::Application.routes.draw do
   match '/404', :to => 'errors#not_found'
   
   root :to => 'pages#home'
+
+  resources :employees do
+    collection do
+      get 'sync'
+    end
+    collection do
+      get 'load_employees'
+    end
+  end
 
   resources :lines do
     collection do
@@ -81,13 +43,13 @@ Reasapp::Application.routes.draw do
   resources :purchase_orders do
     collection do
       get 'searchProduct'
+      get 'cart_items'
       get 'searchVendor'
       post 'createvendor'
       post 'tovendor'
     end
   end
 
-  
   resources :products do
     collection do
       get 'search'
@@ -95,7 +57,32 @@ Reasapp::Application.routes.draw do
       get 'get_cart'
     end
   end
-  
+
+  resources :warehouses do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  devise_for :users
+
+  resources :districts
+  resources :cantons
+  resources :provinces
+  resources :roles
+  resources :departments
+  resources :means_of_payments
+  resources :payment_frequencies
+  resources :payment_methods
+  resources :payment_schedules
+  resources :employees
+  resources :deductions
+  resources :work_benefits
+  resources :occupations
+  resources :customers
+  resources :entities
+  resources :product_pricings
+  resources :warehouses
   resources :purchase_orders
   resources :products
   resources :vendors
