@@ -7,6 +7,7 @@ gem 'jquery-rails'
 gem 'devise'
 gem 'carrierwave'
 gem "client_side_validations", "~> 3.1.4"
+gem 'less-rails'
 gem 'twitter-bootstrap-rails', "~> 2.1.6"
 gem 'enum_column3'
 gem 'will_paginate'
@@ -20,5 +21,6 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
+  gem 'therubyracer'
 end
 
