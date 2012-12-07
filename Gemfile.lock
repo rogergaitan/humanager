@@ -154,6 +154,6 @@ DEPENDENCIES
   rails (= 3.2.6)
   rails3-jquery-autocomplete
   sass-rails (~> 3.2.3)
-  twitter-bootstrap-rails
+  twitter-bootstrap-rails (~> 2.1.6)
   uglifier (>= 1.0.3)
   will_paginate

@@ -35,7 +35,7 @@ end
 namespace :deploy do
 
   task :restart do
-    run "service httpd restart"
+    run `service httpd restart`
   end
 
 
