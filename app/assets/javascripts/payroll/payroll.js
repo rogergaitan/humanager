@@ -27,7 +27,7 @@ $(document).ready(function(){
     var row = $(target_table + '> tbody:last').append('<tr>' + 
         '<td><a href="/payrolls/'+ payroll.id +'">'+ payroll.id +'</a></td>' +
         '<td>' + payroll.payroll_type.description + '</td>' +
-        '<td>' +  payroll.star_date + '</td>' +
+        '<td>' +  payroll.start_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +
         '<td> <input type="checkbox" class="ckActivas" id="'+payroll.id+'" value="'+payroll.id+'" /> </td>' +
@@ -46,7 +46,7 @@ $(document).ready(function(){
     	
         '<td><a href="/payrolls/'+ payroll.id +'">'+ payroll.id +'</a></td>' +
         '<td>' + payroll.payroll_type.description + '</td>' +
-        '<td>' +  payroll.star_date + '</td>' +
+        '<td>' +  payroll.start_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +
         '<td> <input type="checkbox" class="ck" id="'+payroll.id+'" value="'+payroll.id+'" /> </td>' +
