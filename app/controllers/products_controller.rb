@@ -20,7 +20,7 @@ class ProductsController < ApplicationController
       format.pdf do
         render :pdf => "file_name"
       end
-      format.json { render json: @product }
+      format.json { render json: @product.to_json, :callback => params[:callback] }
     end
   end
 

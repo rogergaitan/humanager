@@ -7,6 +7,7 @@ es:
     general: General
     prices: Precios
     other: Otros
+    conditions: Condiciones Comerciales
     contacts: Contactos
     contact: Contacto
   will_paginate:
@@ -58,6 +59,10 @@ es:
   activerecord:
       errors:
         models:
+          shipping_method:
+            attributes:
+              name:
+                blank: "Este campo no puede quedar en blanco"
           purchase_order:
             attributes:
               delivery_date:
@@ -209,6 +214,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        shipping_method: "Método de envío"
         purchase_order: Orden de compra
         bank_account: Cuenta Bancaria
         customer: Cliente
@@ -232,6 +238,9 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        shipping_method:
+          name: Nombre
+          description: Descripción
         purchase_order:
           vendor_id: Proveedor
           reference_info: Referencia
@@ -269,7 +278,7 @@ es:
           sinpe: Sinpe
           account_title: 'A nombre de'
         vendor:
-          credit_limit: Crédito
+          credit_limit: 'Límite Crédito'
         employee:
           join_date: Fecha ingreso
         product_pricing:

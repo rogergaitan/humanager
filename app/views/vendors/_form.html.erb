@@ -15,11 +15,11 @@
     <li class="active">
         <a href="#tab1" data-toggle="tab"><%=t("tabs.general")%></a>
     </li>
-    <li class="disabled">
+    <li class="">
       <a href="#tab2" data-toggle="tab"><%=t("tabs.contact")%></a>
     </li>
-    <li class="disabled">
-      <a href="#tab3" data-toggle="tab"><%=t("tabs.other")%></a>
+    <li class="">
+      <a href="#tab3" data-toggle="tab"><%=t("tabs.conditions")%></a>
     </li>
   </ul>
 
@@ -50,13 +50,7 @@
 
 <!-- Render Entity's phones information into partial to reuse code -->
             <div class="tab-pane" id="tab2">
-
-            
-            <div class="control-label">
-              
-            </div>
             <%= ent.fields_for :contacts do |cont| %>
-              <br /><br />
               <h2>Información de contacto</h2>
                 <%= render 'forms/contact_form', :f => cont %>
             <% end %>
@@ -65,17 +59,10 @@
 <!-- Render Entity's contacts information into partial to reuse code -->
             <div class="tab-pane" id="tab3">  
               <%= ent.fields_for :bank_accounts do |cont| %>
-              <br />
               <h2>Cuentas Bancarias</h2>
                 <%= render 'forms/bank_account_form', :f => cont %>
               <% end %>
             </div>
-
-<!-- Render Entity's address information -->
-            <div class="tab-pane" id="tab4">  
-            
-            </div>
-
 
     <% end %>
 

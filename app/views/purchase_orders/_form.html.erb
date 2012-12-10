@@ -24,7 +24,7 @@
           <%= f.label :shipping_type %>
         </div>
         <div class="contentCellTable">
-          <%= f.select :shipping_type,['Patito1','Patito2'],{}, :class => 'text_field' %>
+          <%= f.collection_select :shipping_type,  @shipping_type, :id, :name %>
         </div>
       </div>
   </div>

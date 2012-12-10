@@ -4,7 +4,7 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
-    @purchase_orders = PurchaseOrder.all
+    @purchase_orders = PurchaseOrder.includes(:vendor).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -26,22 +26,12 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders/new
   # GET /purchase_orders/new.json
   def new
-    @cart_items = []
-    if params[:search]
-
-      @cart = Product.get_cart
-      if @cart
-        @cart.each do |key, value|
-          @cart_items.push(OpenStruct.new(value))
-
-        end
-      end
-    end
+    cart_items
     @purchase_order = PurchaseOrder.new
     @vendor = PurchaseOrder.get_vendor
     @new_vendor = Vendor.new
     @new_vendor.build_entity
-    @warehouses = fetch
+    @shipping_type = ShippingMethod.all
   end
 
   # GET /purchase_orders/1/edit
@@ -51,6 +41,7 @@ class PurchaseOrdersController < ApplicationController
     @new_vendor = Vendor.new
     @new_vendor.build_entity
     @warehouses = fetch
+    @shipping_type = ShippingMethod.all
   end
 
   # POST /purchase_orders
@@ -142,8 +133,6 @@ class PurchaseOrdersController < ApplicationController
       end
     end
     @warehouses = fetch
-    respond_with @cart_items
-    #Rails.logger.debug @cart_items
   end
 
 end

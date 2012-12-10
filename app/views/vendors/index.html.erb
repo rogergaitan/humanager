@@ -1,13 +1,21 @@
 <%- model_class = Vendor -%>
 <%- model_entity = Entity -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h2><%=t '.title', :default => model_class.model_name.human %>  
+  <%= form_tag search_products_path,:id =>"search_form", :class => "form-search pull-right", :method => 'get' do %>
+      
+        <%= text_field_tag :search, params[:search], :class => "search-query" %>
+      
+    <% end %>
+    </h2>
+
+
 </div>
 <table class="table table-striped">
   <thead>
     <tr>
       <th><%= model_entity.human_attribute_name(:name) %></th>
-            <th><%= model_entity.human_attribute_name(:entityid) %></th>
+      <th><%= model_entity.human_attribute_name(:entityid) %></th>
       <th><%= model_class.human_attribute_name(:credit_limit) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -16,22 +24,20 @@
     <% @vendors.each do |vendor| %>
       <tr>
         <td><%= link_to vendor.entity.name, vendor_path(vendor) %></td>
-        <td><%= vendor.entity.entityid%></td>
+        <td><%= vendor.entity.entityid if vendor.entity %></td>
         <td><%= vendor.credit_limit %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_vendor_path(vendor), :class => 'btn btn-mini' %>
+            edit_vendor_path(vendor), :class => 'btn btn-mini' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      vendor_path(vendor),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+            vendor_path(vendor),
+            :method => :delete, 
+            :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
+            :class => 'btn btn-mini btn-danger' %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_vendor_path,
-            :class => 'btn btn-primary' %>
+<%= link_to t('.new', :default => t("helpers.links.new")), new_vendor_path, :class => 'btn btn-primary' %>
