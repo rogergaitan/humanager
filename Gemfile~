@@ -24,7 +24,7 @@ group :assets do
   gem 'therubyracer'
 end
 
-
+<<<<<<< HEAD
 group :test do
   gem 'cucumber-rails', :require => false
   # database_cleaner is not required, but highly recommended
@@ -52,4 +52,5 @@ end
 
 # To use debugger
 # gem 'debugger'
-
+=======
+>>>>>>> d48eb2324331e60a48a6a4678fd54d2155b9c6d1

@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 class WarehousesController < ApplicationController
-  # GET /warehouses
-  # GET /warehouses.json,
-  # index paginated
+
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
+
   def index
     @title = t('.activerecord.models.warehouse').pluralize
     @warehouses = Warehouse.all
@@ -91,4 +91,13 @@ class WarehousesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def fetch
+    Warehouse.fetch
+  end
+
+  def clean_cache
+    Warehouse.clean_cache
+  end
+
 end
