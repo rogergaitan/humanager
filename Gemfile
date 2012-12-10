@@ -37,6 +37,10 @@ group :test do
   gem 'database_cleaner'
   gem 'rspec-rails'
   gem 'webrat'
+  gem 'testingbot'
+  gem 'selenium-webdriver'
+  gem 'selenium-client'
+  gem 'selenium'
 end
 
 
