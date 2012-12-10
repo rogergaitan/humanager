@@ -8,6 +8,8 @@ class Payroll < ActiveRecord::Base
   validates :end_date, :presence => true
   validates :payment_date, :presence => true
 
+  has_many :payroll_logs
+
   scope :activas, where(state: true)
   scope :inactivas, where(state: false)
   #consulta todas las planillas para un tipo de planilla especifico especifico

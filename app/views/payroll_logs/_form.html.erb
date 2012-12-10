@@ -5,15 +5,16 @@
   <% end %>
 </script>
 <%= javascript_include_tag 'centro_costos/treeview' %>
-<%= javascript_include_tag 'payroll_logs/payroll_logs_script' %>
-<%= javascript_include_tag 'employees/employee' %>
+<%= javascript_include_tag "payroll_logs/payroll_logs_script" %>
+<%= javascript_include_tag "payroll_logs/centro_costos_script" %>
+<%= javascript_include_tag "payroll_logs/payrolls" %>
 
 <%= form_for @payroll_log, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :payroll_id, :class => 'control-label' %>
     <div class="controls">
       <%= f.hidden_field :payroll_id %>
-      <%= text_field_tag 'load_employee',nil, :class => 'text_field required 
+      <%= text_field_tag 'load_payroll',nil, :class => 'text_field required 
                           search-image-employee', :for=>:payroll_id %>  
     </div>
     </div>
@@ -37,9 +38,17 @@
       </div>
       <div style="clear:both"></div>
     </div>
-    </div>
-<!--    
--->
+  </div>
+
+  <div class="controls padding-filter" id="list-departments">
+    <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+    <%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
+  </div>
+  <div class="controls padding-filter" id="list-superior">
+    <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+    <%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
+  </div>
+
     <div class="controls padding-filter" id="employee-filter">
     <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
   </div>
@@ -51,6 +60,16 @@
     <div class="employees-list left-list">
       <div class="employees-margin" id="no-save">
         <!--Checkbox -->
+        <% @employees.each do |employee| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
+              <%= check_box_tag 'left-list-employees', employee.id, 
+                      @payroll_log.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
+              <%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
+                  :class => 'checkbox-label' %>
+            </div>
+          </div>
+        <% end %>
 
       </div>
     </div>

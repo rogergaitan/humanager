@@ -75,7 +75,8 @@
 	<div class="controls lists">
 		<div class="employees-list left-list">
 			<div class="employees-margin" id="no-save">
-				<% @employees.each do |employee| %>
+				
+        <% @employees.each do |employee| %>
 					<div class="checkbox-group">
 						<div class="checkbox-margin">
 							<%= check_box_tag 'left-list-employees', employee.id, 
@@ -85,6 +86,7 @@
 						</div>
 				  </div>
 				<% end %>
+      
 			</div>
 		</div>
 		<div class="control-buttons">

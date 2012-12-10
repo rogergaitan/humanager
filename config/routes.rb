@@ -1,13 +1,18 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :payroll_logs
+  resources :payroll_logs do
+    collection do
+      get 'fetch_employees'
+    end
+  end
 
   resources :payrolls do
     collection do
       get :get_activas
       get :get_inactivas
       get :get_payroll_types
+      get :load_payrolls
     end
     collection do
       post :reabrir

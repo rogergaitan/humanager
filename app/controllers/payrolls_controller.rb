@@ -81,6 +81,13 @@ class PayrollsController < ApplicationController
     end
   end
 
+  def load_payrolls
+    @payrolls = Payroll.activas
+    respond_to do |format|
+      format.json { render json: @payrolls, :include => :payroll_type }
+    end
+  end
+
   #Obtiene las planillas inactivas
   def get_inactivas
     @inactivas = {}
