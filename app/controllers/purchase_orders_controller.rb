@@ -20,7 +20,13 @@ class PurchaseOrdersController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @purchase_order }
+      format.pdf do
+        pdf = PurchaseOrderPDF.new(@purchase_order)
+        send_data pdf.render, filename: "OC-#{@purchase_order.id}.pdf", type: "application/pdf", disposition: "inline"
+
+      end
     end
+
   end
 
   # GET /purchase_orders/new
@@ -67,8 +73,13 @@ class PurchaseOrdersController < ApplicationController
 
     respond_to do |format|
       if @purchase_order.update_attributes(params[:purchase_order])
-        format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully updated.' }
-        format.json { head :no_content }
+        if params[:print_pdf]
+          redirect_to "/purchase_orders/#{@purchase_order.id}", :type => "application/pdf"
+
+        else
+          format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully updated.' }
+          format.json { head :no_content }
+        end
       else
         format.html { render action: "edit" }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }

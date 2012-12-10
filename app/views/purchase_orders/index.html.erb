@@ -28,6 +28,7 @@
         <td><%= purchase_order.delivery_date %></td>
         <td><%= purchase_order.shipping_type %></td>
         <td>
+          <%= link_to t('.pdf', :default => t("helpers.links.PDF")), purchase_order_path(purchase_order, :format => :pdf), :class => 'btn btn-mini btn-success' %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_purchase_order_path(purchase_order), :class => 'btn btn-mini' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
