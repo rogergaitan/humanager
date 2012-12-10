@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DeductionPayrollsTest < ActiveSupport::TestCase
+class DeductionEmployeeTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

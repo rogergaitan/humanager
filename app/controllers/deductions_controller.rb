@@ -1,6 +1,6 @@
 class DeductionsController < ApplicationController
-  respond_to :html, :json
   before_filter :resources, :only => [:new, :edit]
+  respond_to :html, :json
 
   # GET /deductions
   # GET /deductions.json
@@ -20,14 +20,13 @@ class DeductionsController < ApplicationController
   # GET /deductions/new.json
   def new
     @deduction = Deduction.new
-    @credit_account = LedgerAccount.credit_accounts
-    respond_with(@deduction, :include => :ledger_account)
+    respond_with(@deduction)
   end
 
   # GET /deductions/1/edit
   def edit
     @deduction = Deduction.find(params[:id])
-    @credit_account = LedgerAccount.credit_accounts
+    #@credit_account = LedgerAccount.credit_accounts
   end
 
   # POST /deductions
@@ -75,7 +74,11 @@ class DeductionsController < ApplicationController
   end
 
   def resources
-    @payrolls = Payroll.activas
+    @credit_account = LedgerAccount.credit_accounts
+    #@payrolls = Payroll.activas
+    @employees = Employee.order_employees
+    @department = Department.all
+    @superior = Employee.superior
   end
 
 end

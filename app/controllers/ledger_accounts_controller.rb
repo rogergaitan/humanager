@@ -1,6 +1,7 @@
 class LedgerAccountsController < ApplicationController
   respond_to :html, :json
   before_filter :get_ledger, :only => [:edit, :update, :destroy]
+  before_filter :get_parent_info, :only => [:new, :edit]
 
   def get_ledger
     @ledger_account = LedgerAccount.find(params[:id])
@@ -108,6 +109,10 @@ class LedgerAccountsController < ApplicationController
     respond_to do |format|
       format.json { render json: @names_ids }
     end
+  end
+
+  def get_parent_info
+    @cc_child ||= LedgerAccount.find(:all, :select =>['iaccount','ifather', 'naccount'])
   end
 
 end

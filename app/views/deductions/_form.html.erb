@@ -21,16 +21,6 @@
          <a href="#myModalPayroll" role="button" class="btn" id="btnModalPayroll" data-toggle="modal" rel="tooltip" title="Ver lista de planillas activas"> <i class="icon-list"></i> </a>
       </div>
     </div>
-<!--
-    <% @payrolls.each do |payroll| %>
-      <%= check_box_tag 'deduction[payroll_ids][]', payroll.id, @deduction.payroll_ids.include?(payroll.id), id: dom_id(payroll) %>
-    <% end %>
-  <div class="control-group">
-    <%= f.label :amount_exhaust, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field  :amount_exhaust, :class => 'text_field' %>
-    </div>
-  </div> -->
 
   <div class="control-group">
     <%= f.label :calculation_type, :class => 'control-label' %>
@@ -52,6 +42,67 @@
        <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field required search-image-category', :for => :ledger_account_id %>
       <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
     </div>
+  </div>
+
+
+<!-- Empledos Deducciones -->
+<div class="control-group">
+    <%= f.label :Empleados, :class => 'control-label' %>
+    <div class="controls align-radio">
+      <div class="options-left">
+        <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
+        <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
+        <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
+      </div>
+      <div class="options-right">
+        <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
+        <%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+  </div>
+  <div class="controls padding-filter" id="list-departments">
+    <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+    <%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
+  </div>
+  <div class="controls padding-filter" id="list-superior">
+    <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+    <%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
+  </div>
+  <div class="controls padding-filter" id="employee-filter">
+    <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
+  </div>
+  <div class="controls" id="marcar-desmarcar">
+    <%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
+    <%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+  </div>
+  <div class="controls lists">
+    <div class="employees-list left-list">
+      <div class="employees-margin" id="no-save">
+        <% @employees.each do |employee| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
+              <%= check_box_tag 'left-list-employees', employee.id, 
+                      @deduction.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), class: 'align-checkbox'  %>
+              <%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
+                  :class => 'checkbox-label' %>
+            </div>
+          </div>         <% end %>
+      </div>
+    </div>
+    <div class="control-buttons">
+      <a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+      <a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+    </div>
+    <div class="employees-list list-right">
+      <%= hidden_field_tag 'deduction[employee_ids][]', nil %>
+      <div class="employees-margin" id="list-to-save">        
+      </div>
+    </div>
+    <div style="clear:both"></div>
   </div>
 
   <div class="form-actions">

@@ -1,12 +1,12 @@
 <script type="text/javascript">
   var cuenta_contable = [];
   <%  @ledger_accounts.each do |cc| %>
-    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>));
+    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
   <% end %>
 </script>
 <%- model_class = LedgerAccount -%>
 <%= javascript_include_tag 'ledgerAccount/accounts' %>
-<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
     <button id="account-fb" class="btn btn-primary pull-right">
@@ -15,6 +15,9 @@
 </div>
 
 <div id="list"></div>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_ledger_account_path,
+            :class => 'btn btn-primary' %>
 
 <!-- <table class="table table-striped" id="account-data">
   <thead>

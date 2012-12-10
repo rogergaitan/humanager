@@ -15,6 +15,8 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               ledger_accounts_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_ledger_account_path(@ledger_account), :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               ledger_account_path(@ledger_account),
               :method => 'delete',

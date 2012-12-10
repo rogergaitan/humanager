@@ -1,20 +1,43 @@
+<script type="text/javascript" charset="utf-8">
+ var cc_child = [];
+  <%  @cc_child.each do |cc| %>
+      cc_child.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+  <% end %>
+ 
+  $(document).ready(function() {
+    dd_parent(cc_child);
+  })
+  
+  function dd_parent(cc_child) {
+    if (($('#ledger_account_iaccount').val() != '') || $('#ledger_account_naccount').val() != '') {
+      var parent = $('#ledger_account_iaccount').val();
+      $('#ledger_account_ifather').find('option').remove();
+      $(cc_child).each(function() {
+        if (!(this[0] == parent || this[2] == parent || parent == 0)) {
+          $('#ledger_account_ifather').append('<option value='+ this[2] + '>' + this[1] + '</option>');
+        }
+      });
+    } 
+  }
+</script>
 <%= form_for @ledger_account, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
-    <%= f.label :icuenta, :class => 'control-label' %>
+    <%= f.label :iaccount, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :icuenta, :class => 'text_field' %>
+      <%= f.text_field :iaccount, :class => 'text_field' %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :ncuenta, :class => 'control-label' %>
+    <%= f.label :naccount, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :ncuenta, :class => 'text_field' %>
+      <%= f.text_field :naccount, :class => 'text_field' %>
     </div>
   </div>
+
   <div class="control-group">
-    <%= f.label :ipadre, :class => 'control-label' %>
+    <%= f.label :ifather, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :ipadre, :class => 'text_field' %>
+      <%= f.collection_select(:ifather, @cc_child, :iaccount, :naccount , :prompt => '-') %>
     </div>
   </div>
 

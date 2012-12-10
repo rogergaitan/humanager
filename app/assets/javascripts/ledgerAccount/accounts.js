@@ -1,32 +1,30 @@
 $(document).ready(function() {
-  treeviewhr.cc_tree(cuenta_contable);
-  $('.expand_tree').click(treeviewhr.expand);
-
-  $('#account-fb').click(function() { 
+    $('#account-fb').on("click", function() {
     $('#account-fb').attr("disabled", true); //desabilito el boton
-    $.getJSON('accountfb', function(resultado) {
-      $('section.nav').append('<div class="notice">'+ resultado.notice +'</div>'); 
-      $(resultado.account).each(function() { add_accounts(this, 'table#account-data')});
-      $('#account-fb').hide();
+    var cc_array = [];
+    $.getJSON('ledger_accounts/accountfb', function(element) {
+      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(); });
+      $(element.account).each(function() { 
+        cc_array.push(new Array(this.iaccount ? this.iaccount : 0, this.naccount, this.ifather ? this.ifather : 0, this.id));
+      });
+      treeviewhr.cc_tree(cc_array);
+       $('#account-fb').hide();
     })
   });
 
-  function add_accounts(account, target_table)
-  {
-    var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/ledger_accounts/'+ account.id +'">'+ account.id +'</a></td>' +
-        '<td>' + replace_value(account.ifather) + '</td>' +
-        '<td>' + replace_value(account.iaccount) + '</td>' +
-        '<td>' + replace_value(account.naccount) + '</td>' +
-        '<td><a href="/ledger_accounts/'+ account.id +'" class="btn btn-mini btn-danger" ' +
-        'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
-      '</tr>');
-    return row;
-  }
+    treeviewhr.cc_tree(cuenta_contable);
+    $('.expand_tree').on('click', treeviewhr.expand);
+    $('a[rel=tooltip]').tooltip();
+    $('.tree-hover').on({
+      mouseenter: function() {
+      $(this).children('.tree-actions').show();
+    },
+    mouseleave: function() {
+      $('.tree-actions').hide();
+    }})    
+});
 
   function replace_value(value) {
     if (value == null) value = "";
     return value;
   }
-  
-})
