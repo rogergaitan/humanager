@@ -12,7 +12,6 @@
       <th><%= model_class.human_attribute_name(:time_worked) %></th>
       <th><%= model_class.human_attribute_name(:centro_de_costo_id) %></th>
       <th><%= model_class.human_attribute_name(:payment_type) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -26,7 +25,6 @@
         <td><%= payroll_log.time_worked %></td>
         <td><%= payroll_log.centro_de_costo_id %></td>
         <td><%= payroll_log.payment_type %></td>
-        <td><%=l payroll_log.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_payroll_log_path(payroll_log), :class => 'btn btn-mini' %>

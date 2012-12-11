@@ -46,6 +46,8 @@ class Employee < ActiveRecord::Base
   has_many :employees
   has_many :deduction_payrolls, :dependent => :destroy
   has_many :deductions, :through => :deduction_employees
+  has_many :payroll_employees, :dependent => :destroy
+  has_many :payroll_logs, :through => :payroll_employees
   belongs_to :employees
   
   has_many :payroll_employees

@@ -3,9 +3,11 @@ Reasapp::Application.routes.draw do
 
   resources :payroll_logs do
     collection do
-      get 'fetch_employees'
+      get :fetch_employees
     end
   end
+  
+  resources :payroll_logs
 
   resources :payrolls do
     collection do
