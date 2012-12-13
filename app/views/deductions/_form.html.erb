@@ -5,48 +5,12 @@
   <% end %>
 </script>
 <%= javascript_include_tag 'deductions/deductions' %>
-<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
 <%= form_for @deduction, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :description, :class => 'text_field' %>
-    </div>
-  </div>
-
-    <div class="control-group">
-      <%= f.label :deduction_type, :class => 'control-label' %>
-      <div class='controls'>
-        <%= f.enum_select :deduction_type, :include_blank =>false %>
-         <a href="#myModalPayroll" role="button" class="btn" id="btnModalPayroll" data-toggle="modal" rel="tooltip" title="Ver lista de planillas activas"> <i class="icon-list"></i> </a>
-      </div>
-    </div>
-
-  <div class="control-group">
-    <%= f.label :calculation_type, :class => 'control-label' %>
-    <div class='controls'>
-      <%= f.enum_select :calculation_type, :include_blank =>false %>
-    </div>
-    </div>
-
-  <div class="control-group">
-    <%= f.label :calculation, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :calculation, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :ledger_account_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.hidden_field :ledger_account_id %>
-       <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field required search-image-category', :for => :ledger_account_id %>
-      <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
-    </div>
-  </div>
-
 
 <!-- Empledos Deducciones -->
 <div class="control-group">
+  <p>Aplica a:</p>
     <%= f.label :Empleados, :class => 'control-label' %>
     <div class="controls align-radio">
       <div class="options-left">
@@ -86,11 +50,12 @@
           <div class="checkbox-group">
             <div class="checkbox-margin">
               <%= check_box_tag 'left-list-employees', employee.id, 
-                      @deduction.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), class: 'align-checkbox'  %>
+                      @deduction.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
               <%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
                   :class => 'checkbox-label' %>
             </div>
-          </div>         <% end %>
+          </div>         
+        <% end %>
       </div>
     </div>
     <div class="control-buttons">
@@ -103,6 +68,56 @@
       </div>
     </div>
     <div style="clear:both"></div>
+  </div>
+<br></br>
+
+  <div class="control-group">
+      <%= f.label :deduction_type, :class => 'control-label' %>
+      <div class='controls'>
+        <%= f.enum_select :deduction_type, :include_blank =>false %>
+      </div>
+      <div class="payrolls-all"> <!--de momento no hace falta esto para almacenar las planillas relacionadas a la deduccion-->
+        <%= hidden_field_tag 'deduction[payroll_ids][]', nil %>
+        <div class="payrolls-margin" id="payrolls-to-save">        
+        </div>
+      </div>
+    </div>
+
+    <div class="control-group">
+    <%= f.label :amount_exhaust, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :amount_exhaust, :class => 'text_field' %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :calculation_type, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.enum_select :calculation_type, :include_blank =>false %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :calculation, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :calculation, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :ledger_account_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :ledger_account_id %>
+       <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field required search-image-category', :for => :ledger_account_id %>
+      <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
+    </div>
   </div>
 
   <div class="form-actions">

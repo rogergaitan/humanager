@@ -73,6 +73,18 @@ class DeductionsController < ApplicationController
     end
   end
 
+  #Search for employees
+  def fetch_employees
+    @employees = Employee.includes(:entity).order_employees
+    respond_with(@employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} })
+  end
+
+    def get_activas
+    @activas = {}
+    @activas[:activa] = Payroll.activas
+    respond_with(@activas)
+  end
+
   def resources
     @credit_account = LedgerAccount.credit_accounts
     #@payrolls = Payroll.activas

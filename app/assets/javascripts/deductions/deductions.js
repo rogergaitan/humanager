@@ -1,8 +1,11 @@
 $(document).ready(function(){
 
+  //llena el filtro para los empleados
+  populateEmployeesFilter('/deductions/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
+
 	$('#planilla').hide();
 	treeviewhr.cc_tree(cuenta_credito, true);
-  	$('.expand_tree').click(treeviewhr.expand);
+  $('.expand_tree').click(treeviewhr.expand);
 
   	  $('#list').on({
 		click: set_account,
@@ -18,14 +21,11 @@ $(document).ready(function(){
 	e.preventDefault();
 	ObtenerPlanillas();
 	});
-
+  
 	TipoDeduccion();
-  	$('#deduction_deduction_type').change(TipoDeduccion);
+  	//$('#deduction_deduction_type').change(TipoDeduccion);
 
-  	$('#activas').on("click", "td.payroll-type a", set_payroll);
-
-    //populates the filter for employees
-  populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
+  	//$('#activas').on("click", "td.payroll-type a", set_payroll);
 
   //executes different options to select the employees
   $('input[name=select_method]').change(function() {
@@ -71,22 +71,27 @@ function selectEmployeesRight() {
   };
 }
 
-//function to filter results by department name 
-function filterDepartment (dropdown) {
-  var dep = dropdown ? dropdown : 0;
-  $('div.employees-list.left-list input[type=checkbox]').each(function() {
-    var empDep = $(this).data('dep') ? $(this).data('dep') : 0;
-    if (!(dep == 0)) {
-      if (!(dep == empDep)) {
+//resive el id del departamento 
+function filterDepartment (dropdown) { 
+  var empSelected = [];
+  var dep = dropdown ? dropdown : 0; //si se manda un id de departamento se almacena en dep de lo contrario se almacena 0
+  $('div.employees-list.left-list input[type=checkbox]').each(function() { //recorre cada checkbox
+    //en la sig linea si el empleado tiene un id de departamento es porque esta asigando a uno de lo 
+    //y se almacenaria en empDep de lo contrario si no tiene es porque el empleado no a sido asignado a ninguno
+    var empDep = $(this).data('dep') ? $(this).data('dep') : 0; 
+    if (!(dep == 0)) { //si el id del departamento es diferente de 0
+      if (!(dep == empDep)) { //si dep no es igual a empDep quiere decir que el empleado NO pertenece al departamento seleccionado
+        //En la siguiente linea se procede a guardar en un arreglo 
+        //otro arreglo con el id del empledo luego el id del departamento y despues el nombre del empleado
         empSelected.push(Array($(this).data('id'), empDep, $(this).next().text()));
-        $(this).closest('div.checkbox-group').hide();
+        $(this).closest('div.checkbox-group').hide(); //oculte el checkbox grup correspondiente a ese empleado
         $(this).prop('disabled', true);
-      } else {
-        $(this).prop('disabled', false);
-        $(this).closest('div.checkbox-group').show();
+      } else { //quiere decir que dep es igual a empDep ese empleado pertenece al departamente seleccionado
+        $(this).prop('disabled', false); //habilito el check
+        $(this).closest('div.checkbox-group').show(); //y muestro al empleado
       };
     }  else {
-        $(this).closest('div.checkbox-group').show();
+        $(this).closest('div.checkbox-group').show(); //que los muestre todos
       };
   });
 }
@@ -94,6 +99,7 @@ function filterDepartment (dropdown) {
 
 //function to filter results by superior name 
 function filterSuperior (dropdown) {
+  var empSelected = [];
   var sup = dropdown ? dropdown : 0;
   $('div.employees-list.left-list input[type=checkbox]').each(function() {
     var empSup = $(this).data('sup') ? $(this).data('sup') : 0;
@@ -222,17 +228,26 @@ function set_account(e) {
 
 function TipoDeduccion(e) {
 	if ($('#deduction_deduction_type').val() == 'unica'){
-		$('#btnModalPayroll').show();
-		$('#planilla').show();
-		ObtenerPlanillas();
+	 //CODIGO QUE VALIDA LAS PLANILLAS EN LAS QUE ESTA EL USUARIO
 	}
 	else{
-		$('#btnModalPayroll').hide();
-		$('#planilla').hide();
+		AllPlanillas();
 	}
 }
 
-//Obtiene las planillas activas
+//Agrega todas las planillas activas esta funcion se ejecuta cuando se selecciona constante
+function AllPlanillas(){
+    var planillas = new Array();
+    $.getJSON('/deductions/get_activas', function(result) {
+      $(result.activa).each(function() { 
+        appendPayrolls = "<input type='hidden" +"' name='deduction[payroll_ids][]' value='"+ this.id +"' />";
+      $('#payrolls-to-save').append(appendPayrolls);
+      }); //fin del each
+    });
+ }
+
+//EL CODIGO DE AQUI PARA ABAJO NO LO ESTOY NECESITANDO
+//Obtiene todas las planillas activas
 function ObtenerPlanillas(){
     $.ajax('/payrolls/get_activas', {
     	type: 'GET',
@@ -273,7 +288,7 @@ function ObtenerPlanillas(){
 
 function set_payroll(e) {
     e.preventDefault();
-    var payrollId = $(this).parent().prev().text();// $(this).closest('li').data('id');
+    var payrollId = $(this).parent().prev().text();
     var payrollName = $(this).text();
     $('#deduction_payroll_ids_').val(payrollId);
     $('#deduction_payroll').val(payrollName);  

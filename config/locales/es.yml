@@ -441,6 +441,13 @@ es:
         type_of_personnel_action:
           description: Descripción
           created_at: Creado
+        deduction:
+          description: Descripción
+          deduction_type: Tipo de deducción
+          amount_exhaust: Monto a agotar
+          calculation_type: Tipo de calculo
+          calculation: Calculo
+          ledger_account_id: Cuenta de Crédito
   date:
       abbr_day_names:
       - dom

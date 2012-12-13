@@ -1,7 +1,7 @@
 class Payroll < ActiveRecord::Base
   attr_accessible :end_date, :payment_date, :payroll_type_id, :star_date, :state
-  has_many :deduction_payrolls, :dependent => :destroy
   belongs_to :payroll_type
+  has_many :deduction_payrolls, :dependent => :destroy
   has_many :deductions, :through => :deduction_payrolls
   validates :payroll_type_id, :presence => true
   validates :star_date, :presence => true

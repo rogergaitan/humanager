@@ -13,7 +13,12 @@ Reasapp::Application.routes.draw do
     end
   end
 
-  resources :deductions
+  resources :deductions do
+    collection do
+      get :fetch_employees
+      get :get_activas
+    end
+  end
 
   resources :type_of_personnel_actions
 
