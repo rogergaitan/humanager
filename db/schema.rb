@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121205003534) do
+ActiveRecord::Schema.define(:version => 20121214055113) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -123,8 +123,9 @@ ActiveRecord::Schema.define(:version => 20121205003534) do
     t.enum     "calculation_type",  :limit => [:porcentual, :fija]
     t.decimal  "calculation",                                       :precision => 18, :scale => 4
     t.integer  "ledger_account_id"
-    t.datetime "created_at",                                                                       :null => false
-    t.datetime "updated_at",                                                                       :null => false
+    t.datetime "created_at",                                                                                         :null => false
+    t.datetime "updated_at",                                                                                         :null => false
+    t.boolean  "state",                                                                            :default => true
   end
 
   create_table "departments", :force => true do |t|
