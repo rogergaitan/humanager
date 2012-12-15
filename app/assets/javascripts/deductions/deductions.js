@@ -3,6 +3,8 @@ $(document).ready(function(){
   //llena el filtro para los empleados
   populateEmployeesFilter('/deductions/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
+  CContables();//Llama la funcion para el autocomplete de cuentas contables
+
 	$('#planilla').hide();
 	treeviewhr.cc_tree(cuenta_credito, true);
   $('.expand_tree').click(treeviewhr.expand);
@@ -53,6 +55,31 @@ $(document).ready(function(){
 
 });
 
+//Consulta las cuentas contables para hacer el autocomplete
+function CContables() {
+   $.getJSON('/ledger_accounts/fetch', function(category_data) {
+        $( "#deduction_ledger_account" ).autocomplete({
+            source: $.map(category_data, function(item){
+                $.data(document.body, 'category_' + item.id+"", item.naccount);
+                return{
+                    label: item.naccount,                        
+                    id: item.id
+                }
+            }),
+            select: function( event, ui ) {
+                $("#deduction_ledger_account_id").val(ui.item.id);
+            },
+            focus: function(event, ui){
+                $( "#deduction_ledger_account" ).val(ui.item.label);
+            }
+
+        })
+        if($("#deduction_ledger_account_id").val()){
+            var deducciones_cuentas = $.data(document.body, 'category_' + $("#deduction_ledger_account_id").val()+'');
+            $("#deduction_ledger_account").val(deducciones_cuentas);
+        }        
+    }); 
+}
 
 //function to check and uncheck all the employees at the left.
 function marcarDesmarcar () {

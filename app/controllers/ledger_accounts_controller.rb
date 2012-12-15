@@ -102,13 +102,11 @@ class LedgerAccountsController < ApplicationController
       end
   end 
 
-#Busca todas las cuentas contables pero solamente selecciona el ipadre y ncuenta 
-#Este metodo se utilza para crear o editar otros salarios(dropdowns)
+#Busca todas las cuentas contables pero solamente selecciona el id y ncuenta 
+#Este metodo se utilza para crear o editar otros salarios
   def fetch
     @names_ids = LedgerAccount.find(:all, :select =>['id','naccount'])
-    respond_to do |format|
-      format.json { render json: @names_ids }
-    end
+    respond_with(@names_ids)
   end
 
   def get_parent_info
