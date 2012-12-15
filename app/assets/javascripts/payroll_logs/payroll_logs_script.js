@@ -1,20 +1,22 @@
 $(jQuery(document).ready(function($) {
+	$('#dp3').datepicker();
 	
-	//generates the treeview with the different accounts
-	$('#debit-button').click(function(){
-		treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');
-	});
-	$('#credit-button').click(function(){
-		treeviewhr.cc_tree(credit_account, true, 'load_credit_account_name', 'work_benefit_credit_account');
+	$('.showTooltip').tooltip();
+	$('#remove-controls').tooltip();
+	
+	$('#add-more').click(addMoreEmployees);
+	
+	$('#remove-controls').click(removeControls);
+	
+	$('#centro-costo').click(function(){
+		treeviewhr.cc_tree(centro_costo, true, 'load_centro_de_costo', 'payroll_log_centro_de_costo_id');
 	});
 	
-	//populates the autocompletes for the accounts
-  fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
-  fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
 	//populates the filter for employees
-	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
-
-	//allows expand the treeview
+	populateEmployeesFilter('/payroll_logs/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
+	
+	populateCentroCostos('/centro_de_costos/load_cc', "load_centro_de_costo", "payroll_log_centro_de_costo_id");
+	
 	$('#list').on("click", "span.expand_tree", treeviewhr.expand);
 	
 	//delete the treeview after the user clicks on close
@@ -31,7 +33,7 @@ $(jQuery(document).ready(function($) {
 		mouseleave: function() {
 			$(this).css("text-decoration", "none");
 		}}, ".node_link");
-		
+	
 	//executes different options to select the employees
 	$('input[name=select_method]').change(function() {
 		selectEmployeesLeft($(this));
@@ -55,9 +57,11 @@ $(jQuery(document).ready(function($) {
 	});
 	
 	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
+	
 }));
 
-var empSelected = [];
+//FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
+
 
 //function to check and uncheck all the employees at the left.
 function marcarDesmarcar () {
@@ -83,7 +87,6 @@ function filterDepartment (dropdown) {
 		var empDep = $(this).data('dep') ? $(this).data('dep') : 0;
 		if (!(dep == 0)) {
 			if (!(dep == empDep)) {
-				empSelected.push(Array($(this).data('id'), empDep, $(this).next().text()));
 				$(this).closest('div.checkbox-group').hide();
 				$(this).prop('disabled', true);
 			} else {
@@ -95,7 +98,6 @@ function filterDepartment (dropdown) {
 			};
 	});
 }
-
 
 //function to filter results by superior name 
 function filterSuperior (dropdown) {
@@ -149,7 +151,7 @@ function moveEmployees () {
 		if (!$(this).is(':disabled')) {
 			appendEmployees = "<div class='checkbox-group'>" +
 										"<div class='checkbox-margin'>" +
-											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='work_benefit[employee_ids][]' value='"+ $(this).val() +"' />" +
+											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='payroll_log[employee_ids][]' value='"+ $(this).val() +"' />" +
 											"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
 										"</div>" +
 									"</div>";	
@@ -185,31 +187,6 @@ function selectEmployeesLeft(selected) {
 	}
 }
 
-function fetchPopulateAutocomplete(url, textField, idField) {
-  $.getJSON(url, function(accounts) {
-      $(document.getElementById(textField)).autocomplete({
-          source: $.map(accounts, function(item){
-              $.data(document.body, 'account_' + item.id+"", item.naccount);
-              return{
-                  label: item.naccount,                        
-                  id: item.id
-              }
-          }),
-          select: function( event, ui ) {
-              $(document.getElementById(idField)).val(ui.item.id);
-          },
-          focus: function(event, ui){
-              $(document.getElementById(textField)).val(ui.item.label);
-          }
-
-      })
-      if($(document.getElementById(idField)).val()){
-          var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
-          $(document.getElementById(textField)).val(account);
-      }        
-  }); 
-}
-
 function populateEmployeesFilter(url, textField, idField) {
   $.getJSON(url, function(employees) {
       $(document.getElementById(textField)).autocomplete({
@@ -227,7 +204,7 @@ function populateEmployeesFilter(url, textField, idField) {
 							if (!$('#list-to-save input#'+ui.item.data_id).length) {
 								appendEmployees = "<div class='checkbox-group'>" +
 															"<div class='checkbox-margin'>" +
-																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='work_benefit[employee_ids][]' value='"+ ui.item.id +"' />" +
+																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log[employee_ids][]' value='"+ ui.item.id +"' />" +
 																"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
 															"</div>" +
 														"</div>";	
@@ -238,6 +215,33 @@ function populateEmployeesFilter(url, textField, idField) {
       })     
   });	
 }
+//END FILTERS
+
+//function to fill autocompletes
+function populateCentroCostos(url, textField, idField) {
+  $.getJSON(url, function(accounts) {
+      $(document.getElementById(textField)).autocomplete({
+          source: $.map(accounts, function(item){
+              $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
+              return{
+                  label: item.nombre_cc,                        
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ) {
+              $(document.getElementById(idField)).val(ui.item.id);
+          },
+          focus: function(event, ui){
+              $(document.getElementById(textField)).val(ui.item.label);
+          }
+
+      })
+      if($(document.getElementById(idField)).val()){
+          var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
+          $(document.getElementById(textField)).val(account);
+      }        
+  }); 
+}
 
 function set_account(e) {
     e.preventDefault();
@@ -246,4 +250,29 @@ function set_account(e) {
     $(document.getElementById($('#idFieldPopup').val())).val(accountId);
     $(document.getElementById($('#textFieldPopup').val())).val(accountName);
 	$('#list').empty();
+}
+
+//function to show the controls for adding more employees
+function addMoreEmployees (e) {
+	e.preventDefault();
+	$('#add-more').hide();
+	$('#filter-controls').slideDown();
+	$('#employee-box').slideDown();
+	$('#add-more i').removeClass('icon-plus').addClass('icon-minus');
+	$('#employee-filter').animate({marginLeft: "160px"});
+	$('#employee-header').text('Empleados');
+}
+
+//function to remove the controls for adding more employees
+function removeControls (e) {
+	e.preventDefault();
+	$('#filter-controls').slideUp();
+	$('#employee-box').slideUp();
+	$('#add-more i').addClass('icon-plus').removeClass('icon-minus');
+	$('#add-more').show();
+	$('#employee-filter').animate({marginLeft: "0px"});
+	$('#employee-header').text('Empleado');
+	selectEmployeesRight();
+	moveToLeft(e);
+	$('#load_filter_employees_text').val("");
 }

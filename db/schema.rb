@@ -294,6 +294,31 @@ ActiveRecord::Schema.define(:version => 20121214055113) do
     t.date     "payment_date"
   end
 
+  create_table "payroll_employees", :force => true do |t|
+    t.integer  "employee_id"
+    t.integer  "payroll_log_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "payroll_employees", ["employee_id"], :name => "index_payroll_employees_on_employee_id"
+  add_index "payroll_employees", ["payroll_log_id"], :name => "index_payroll_employees_on_payroll_log_id"
+
+  create_table "payroll_logs", :force => true do |t|
+    t.integer  "payroll_id"
+    t.date     "date"
+    t.integer  "task_id"
+    t.decimal  "time_worked",                                                :precision => 10, :scale => 0
+    t.integer  "centro_de_costo_id"
+    t.enum     "payment_type",       :limit => [:Ordinario, :Extra, :Doble]
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+  end
+
+  add_index "payroll_logs", ["centro_de_costo_id"], :name => "index_payroll_logs_on_centro_de_costo_id"
+  add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
+  add_index "payroll_logs", ["task_id"], :name => "index_payroll_logs_on_task_id"
+
   create_table "payroll_types", :force => true do |t|
     t.string   "description"
     t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
@@ -303,7 +328,7 @@ ActiveRecord::Schema.define(:version => 20121214055113) do
 
   create_table "payrolls", :force => true do |t|
     t.integer  "payroll_type_id"
-    t.date     "star_date"
+    t.date     "start_date"
     t.date     "end_date"
     t.date     "payment_date"
     t.boolean  "state",           :default => true

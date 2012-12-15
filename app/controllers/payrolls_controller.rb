@@ -31,11 +31,12 @@ class PayrollsController < ApplicationController
   # POST /payrolls.json
   def create
     @payroll = Payroll.new(params[:payroll])
+    @payroll.build_payroll_log
 
     respond_to do |format|
       if @payroll.save
-        format.html { redirect_to @payroll, notice: 'Planilla creada exitosamente.' }
-        format.json { render json: @payroll, status: :created, location: @payroll }
+        format.html { redirect_to edit_payroll_log_path(@payroll.payroll_log), notice: 'Planilla creada exitosamente.' }
+        format.json { render json: @payroll, status: :created, location: edit_payroll_log_path(@payroll.payroll_log) }
       else
         format.html { render action: "new" }
         format.json { render json: @payroll.errors, status: :unprocessable_entity }
@@ -77,7 +78,14 @@ class PayrollsController < ApplicationController
     @activas[:activa] = Payroll.activas
 
      respond_to do |format|
-      format.json { render json: @activas.to_json(include: :payroll_type)}
+      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log])}
+    end
+  end
+
+  def load_payrolls
+    @payrolls = Payroll.activas
+    respond_to do |format|
+      format.json { render json: @payrolls, :include => :payroll_type }
     end
   end
 

@@ -47,8 +47,13 @@ class Employee < ActiveRecord::Base
   #has_many :deduction_payrolls, :dependent => :destroy
   has_many :deduction_employees, :dependent => :destroy
   has_many :deductions, :through => :deduction_employees
+  has_many :payroll_employees, :dependent => :destroy
+  has_many :payroll_logs, :through => :payroll_employees
   belongs_to :employees
   
+  has_many :payroll_employees
+  has_many :payroll_logs, :through => :payroll_employees
+
   accepts_nested_attributes_for :entity, :allow_destroy => true
   accepts_nested_attributes_for :photo, :allow_destroy => true
   

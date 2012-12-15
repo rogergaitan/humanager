@@ -25,14 +25,15 @@ $(document).ready(function(){
  function add_activas(payroll, target_table)
   {
     var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/payrolls/'+ payroll.id +'">'+ payroll.id +'</a></td>' +
-        '<td>' + payroll.payroll_type.description + '</td>' +
-        '<td>' +  payroll.star_date + '</td>' +
+        '<td><a href="/payrolls/'+ payroll.id +'">' + payroll.payroll_type.description + '</a></td>' +
+        '<td>' +  payroll.start_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +
         '<td> <input type="checkbox" class="ckActivas" id="'+payroll.id+'" value="'+payroll.id+'" /> </td>' +
-        '<td><a href="/payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
-        'data-method="get" rel="nofollow">Editar</a>' +
+        '<td><a href="/payroll_logs/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
+				'Digitar</a> ' + 
+				'<a href="/payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
+        'data-method="get" rel="nofollow">Editar</a> ' +
        '<a href="/payrolls/'+payroll.id +'" class="btn btn-mini btn-danger" ' +
         'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
       '</tr>');
@@ -46,7 +47,7 @@ $(document).ready(function(){
     	
         '<td><a href="/payrolls/'+ payroll.id +'">'+ payroll.id +'</a></td>' +
         '<td>' + payroll.payroll_type.description + '</td>' +
-        '<td>' +  payroll.star_date + '</td>' +
+        '<td>' +  payroll.start_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +
         '<td> <input type="checkbox" class="ck" id="'+payroll.id+'" value="'+payroll.id+'" /> </td>' +

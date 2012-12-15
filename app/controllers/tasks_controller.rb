@@ -81,6 +81,8 @@ class TasksController < ApplicationController
     end
   end
 
+  
+
   def tasksfb
     @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor'])
 

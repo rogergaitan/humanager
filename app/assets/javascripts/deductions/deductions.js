@@ -306,7 +306,7 @@ function ObtenerPlanillas(){
     var row = $(target_table + '> tbody:last').append('<tr>' + 
         '<td class="payroll-id">' + payroll.id +'</td>' +
         '<td class="payroll-type"><a data-dismiss="modal" href="#">' + payroll.payroll_type.description +'</a></td>' +
-        '<td>' +  payroll.star_date + '</td>' +
+        '<td>' +  payroll.start_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +
       '</tr>');
