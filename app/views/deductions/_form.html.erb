@@ -37,7 +37,7 @@
     <%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
   </div>
   <div class="controls padding-filter" id="employee-filter">
-    <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
+    <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee' %> 
   </div>
   <div class="controls" id="marcar-desmarcar">
     <%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
@@ -75,11 +75,18 @@
       <%= f.label :deduction_type, :class => 'control-label' %>
       <div class='controls'>
         <%= f.enum_select :deduction_type, :include_blank =>false %>
+         <a id="unicPayroll" href="#myModalPayroll" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Seleccionar planilla"> <i class="icon-list"></i> </a>
       </div>
-      <div class="payrolls-all"> <!--de momento no hace falta esto para almacenar las planillas relacionadas a la deduccion-->
+      <div class="payrolls-all">
         <%= hidden_field_tag 'deduction[payroll_ids][]', nil %>
         <div class="payrolls-margin" id="payrolls-to-save">        
         </div>
+      </div>
+    </div>
+    <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
+    <div class="control-group" id="deduction_payrolls">
+      <div class='controls'>
+        <%= text_field_tag 'deduction_payroll',nil, :class => 'search-image-category'%>
       </div>
     </div>
 
@@ -115,7 +122,7 @@
     <%= f.label :ledger_account_id, :class => 'control-label' %>
     <div class="controls">
       <%= f.hidden_field :ledger_account_id %>
-       <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field required search-image-category', :for => :ledger_account_id %>
+       <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field search-image-category', :for => :ledger_account_id %>
       <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
     </div>
   </div>

@@ -5,7 +5,8 @@ $(document).ready(function(){
 
   CContables();//Llama la funcion para el autocomplete de cuentas contables
 
-	$('#planilla').hide();
+	$('#unicPayroll').hide();
+  $('#deduction_payrolls').hide();
 	treeviewhr.cc_tree(cuenta_credito, true);
   $('.expand_tree').click(treeviewhr.expand);
 
@@ -24,10 +25,10 @@ $(document).ready(function(){
 	ObtenerPlanillas();
 	});
   
-	TipoDeduccion();
-  	//$('#deduction_deduction_type').change(TipoDeduccion);
+  TipoDeduccion();
+  $('#deduction_deduction_type').change(TipoDeduccion);
 
-  	//$('#activas').on("click", "td.payroll-type a", set_payroll);
+  $('#activas').on("click", "td.payroll-type a", set_payroll);
 
   //executes different options to select the employees
   $('input[name=select_method]').change(function() {
@@ -242,7 +243,6 @@ function populateEmployeesFilter(url, textField, idField) {
   }); 
 }
 
-//
 //settea el campo oculto con el id d la cuenta de credito y muestra el texto en el campo cuenta credito
 
 function set_account(e) {
@@ -255,9 +255,15 @@ function set_account(e) {
 
 function TipoDeduccion(e) {
 	if ($('#deduction_deduction_type').val() == 'unica'){
-	 //CODIGO QUE VALIDA LAS PLANILLAS EN LAS QUE ESTA EL USUARIO
+    $('#payrolls-to-save').empty(); //prueba
+    $('#unicPayroll').show();
+    $('#deduction_payrolls').show();
+    ObtenerPlanillas()
 	}
 	else{
+    $('#payrolls-to-save').empty(); //prueba
+    $('#unicPayroll').hide();
+    $('#deduction_payrolls').hide();
 		AllPlanillas();
 	}
 }
@@ -317,6 +323,7 @@ function set_payroll(e) {
     e.preventDefault();
     var payrollId = $(this).parent().prev().text();
     var payrollName = $(this).text();
-    $('#deduction_payroll_ids_').val(payrollId);
+    appendPayrolls = "<input type='hidden" +"' name='deduction[payroll_ids][]' value='"+ payrollId +"' />";
+    $('#payrolls-to-save').append(appendPayrolls);
     $('#deduction_payroll').val(payrollName);  
 }
