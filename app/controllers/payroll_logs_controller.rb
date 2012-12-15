@@ -82,7 +82,17 @@ class PayrollLogsController < ApplicationController
     end
   end
 
+  def fetch_employees
+    @employees = Employee.includes(:entity).order_employees
+    respond_to do |format|
+      format.json { render json: @employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} } }
+    end
+  end
+
   def resources
     @centro_costos = CentroDeCosto.all
+    @employees = Employee.order_employees
+    @department = Department.all
+    @superior = Employee.superior
   end
 end
