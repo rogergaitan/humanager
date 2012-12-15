@@ -9,10 +9,10 @@ $(jQuery(document).ready(function($) {
 	});
 	
 	//populates the autocompletes for the accounts
-  fetchPopulateAutocomplete('fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
-  fetchPopulateAutocomplete('fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
+  fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
+  fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
 	//populates the filter for employees
-	populateEmployeesFilter('fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
+	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
 	//allows expand the treeview
 	$('#list').on("click", "span.expand_tree", treeviewhr.expand);

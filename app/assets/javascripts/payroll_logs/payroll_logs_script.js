@@ -1,6 +1,13 @@
 $(jQuery(document).ready(function($) {
 	$('#dp3').datepicker();
 	
+	$('.showTooltip').tooltip();
+	$('#remove-controls').tooltip();
+	
+	$('#add-more').click(addMoreEmployees);
+	
+	$('#remove-controls').click(removeControls);
+	
 	$('#centro-costo').click(function(){
 		treeviewhr.cc_tree(centro_costo, true, 'load_centro_de_costo', 'payroll_log_centro_de_costo_id');
 	});
@@ -197,7 +204,7 @@ function populateEmployeesFilter(url, textField, idField) {
 							if (!$('#list-to-save input#'+ui.item.data_id).length) {
 								appendEmployees = "<div class='checkbox-group'>" +
 															"<div class='checkbox-margin'>" +
-																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='work_benefit[employee_ids][]' value='"+ ui.item.id +"' />" +
+																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log[employee_ids][]' value='"+ ui.item.id +"' />" +
 																"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
 															"</div>" +
 														"</div>";	
@@ -243,4 +250,29 @@ function set_account(e) {
     $(document.getElementById($('#idFieldPopup').val())).val(accountId);
     $(document.getElementById($('#textFieldPopup').val())).val(accountName);
 	$('#list').empty();
+}
+
+//function to show the controls for adding more employees
+function addMoreEmployees (e) {
+	e.preventDefault();
+	$('#add-more').hide();
+	$('#filter-controls').slideDown();
+	$('#employee-box').slideDown();
+	$('#add-more i').removeClass('icon-plus').addClass('icon-minus');
+	$('#employee-filter').animate({marginLeft: "160px"});
+	$('#employee-header').text('Empleados');
+}
+
+//function to remove the controls for adding more employees
+function removeControls (e) {
+	e.preventDefault();
+	$('#filter-controls').slideUp();
+	$('#employee-box').slideUp();
+	$('#add-more i').addClass('icon-plus').removeClass('icon-minus');
+	$('#add-more').show();
+	$('#employee-filter').animate({marginLeft: "0px"});
+	$('#employee-header').text('Empleado');
+	selectEmployeesRight();
+	moveToLeft(e);
+	$('#load_filter_employees_text').val("");
 }
