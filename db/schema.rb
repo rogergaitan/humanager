@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121214055113) do
+ActiveRecord::Schema.define(:version => 20121217163528) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -118,14 +118,14 @@ ActiveRecord::Schema.define(:version => 20121214055113) do
 
   create_table "deductions", :force => true do |t|
     t.string   "description"
-    t.enum     "deduction_type",    :limit => [:constante, :unica]
-    t.decimal  "amount_exhaust",                                    :precision => 10, :scale => 0
+    t.enum     "deduction_type",    :limit => [:Constante, :Unica, :Monto_Agotar]
+    t.decimal  "amount_exhaust",                                                   :precision => 10, :scale => 0
     t.enum     "calculation_type",  :limit => [:porcentual, :fija]
-    t.decimal  "calculation",                                       :precision => 18, :scale => 4
+    t.decimal  "calculation",                                                      :precision => 18, :scale => 4
     t.integer  "ledger_account_id"
-    t.datetime "created_at",                                                                                         :null => false
-    t.datetime "updated_at",                                                                                         :null => false
-    t.boolean  "state",                                                                            :default => true
+    t.datetime "created_at",                                                                                                        :null => false
+    t.datetime "updated_at",                                                                                                        :null => false
+    t.boolean  "state",                                                                                           :default => true
   end
 
   create_table "departments", :force => true do |t|
@@ -141,9 +141,9 @@ ActiveRecord::Schema.define(:version => 20121214055113) do
   create_table "districts", :force => true do |t|
     t.string   "name"
     t.integer  "canton_id"
+    t.integer  "province_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "province_id"
   end
 
   add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
@@ -361,10 +361,10 @@ ActiveRecord::Schema.define(:version => 20121214055113) do
   create_table "positions", :force => true do |t|
     t.string   "position"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
     t.string   "codigo_ins"
     t.string   "codigo_ccss"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "product_pricings", :force => true do |t|
@@ -410,12 +410,9 @@ ActiveRecord::Schema.define(:version => 20121214055113) do
   create_table "roles", :force => true do |t|
     t.string   "role"
     t.string   "description"
-    t.integer  "department_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
-
-  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"

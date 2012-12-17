@@ -9,7 +9,7 @@
   <dt><strong><%= model_class.human_attribute_name(:deduction_type) %>:</strong></dt>
   <dd><%= @deduction.deduction_type %></dd>
   <dt><strong><%= model_class.human_attribute_name(:amount_exhaust) %>:</strong></dt>
-  <dd><%= @deduction.amount_exhaust %></dd>
+  <dd><%= @deduction.amount_exhaust ? @deduction.amount_exhaust : 0 %></dd>
   <dt><strong><%= model_class.human_attribute_name(:calculation_type) %>:</strong></dt>
   <dd><%= @deduction.calculation_type %></dd>
   <dt><strong><%= model_class.human_attribute_name(:calculation) %>:</strong></dt>

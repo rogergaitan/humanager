@@ -6,6 +6,5 @@ class Deduction < ActiveRecord::Base
   has_many :employees, :through => :deduction_employees
   belongs_to :ledger_account
 
-  	validates :amount_exhaust, :presence => true
   	validates :calculation, :presence => true
 end

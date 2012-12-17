@@ -5,29 +5,40 @@ $(document).ready(function(){
 
   CContables();//Llama la funcion para el autocomplete de cuentas contables
 
+  //oculpa los campos porque dependiendo del tipo de planilla que se seleccione se van a mostrar
 	$('#unicPayroll').hide();
   $('#deduction_payrolls').hide();
+  $('#amount_exhaust_controls').hide();
+
+  //En caso de seleccionar una planilla unica si se quiere cambiar se limpia la anterios para que no se vayan a guardar 2 ids
+  $('#unicPayroll').on({ click: clearPayrolls });
+
+  //Carga el arbol de cuentas de credito
 	treeviewhr.cc_tree(cuenta_credito, true);
   $('.expand_tree').click(treeviewhr.expand);
 
-  	  $('#list').on({
+  //Cuando se da click en una cuenta de credito para que setee el id
+  $('#list').on({
 		click: set_account,
 		mouseenter: function() {
 			$(this).css("text-decoration", "underline");
 		},
 		mouseleave: function() {
 			$(this).css("text-decoration", "none");
-		}}, ".node_link");
+	}}, ".node_link");
 
   	 //en caso de que exista algun error al cargar las planillas si se preciona click en el enlase para volver a cargarlas
-  	$("#error a").click(function (e){
-	e.preventDefault();
-	ObtenerPlanillas();
+  $("#error a").click(function (e){
+	 e.preventDefault();
+	 ObtenerPlanillas();
 	});
   
-  TipoDeduccion();
-  $('#deduction_deduction_type').change(TipoDeduccion);
+  //Cuando cambia el valor del select se llama la funcion TipoDeduccion
+  $('#deduction_deduction_type').change(function() {
+    TipoDeduccion(this);
+  });
 
+  //Al precionar click sobre una planilla se settea el id de la planilla
   $('#activas').on("click", "td.payroll-type a", set_payroll);
 
   //executes different options to select the employees
@@ -99,7 +110,7 @@ function selectEmployeesRight() {
   };
 }
 
-//resive el id del departamento 
+//resive el id del departamento para hacer un filtro por departamento
 function filterDepartment (dropdown) { 
   var empSelected = [];
   var dep = dropdown ? dropdown : 0; //si se manda un id de departamento se almacena en dep de lo contrario se almacena 0
@@ -244,7 +255,6 @@ function populateEmployeesFilter(url, textField, idField) {
 }
 
 //settea el campo oculto con el id d la cuenta de credito y muestra el texto en el campo cuenta credito
-
 function set_account(e) {
     e.preventDefault();
     var accountId = $(this).closest('li').data('id');
@@ -253,31 +263,30 @@ function set_account(e) {
     $('#deduction_ledger_account').val(accountName);  
 }
 
-function TipoDeduccion(e) {
-	if ($('#deduction_deduction_type').val() == 'unica'){
-    $('#payrolls-to-save').empty(); //prueba
-    $('#unicPayroll').show();
-    $('#deduction_payrolls').show();
-    ObtenerPlanillas()
-	}
-	else{
-    $('#payrolls-to-save').empty(); //prueba
-    $('#unicPayroll').hide();
-    $('#deduction_payrolls').hide();
-		AllPlanillas();
-	}
+//Resive el tipo de deducicon de un select y dependiendo el valor ejecuta diferentes opciones
+function TipoDeduccion(selected) {
+  switch($(selected).val()) {
+    case 'Unica':
+      $('#amount_exhaust_controls').hide();
+      $('#payrolls-to-save').empty(); //prueba
+      $('#unicPayroll').show();
+      $('#deduction_payrolls').show();
+      ObtenerPlanillas();
+    break;
+    case 'Monto_Agotar':
+      $('#amount_exhaust_controls').show();
+      $('#payrolls-to-save').empty(); //prueba
+      $('#unicPayroll').hide();
+      $('#deduction_payrolls').hide();
+    break;
+    case 'Constante':
+    $('#amount_exhaust_controls').hide();
+      $('#payrolls-to-save').empty(); //prueba
+      $('#unicPayroll').hide();
+      $('#deduction_payrolls').hide();
+    break;
+  }
 }
-
-//Agrega todas las planillas activas esta funcion se ejecuta cuando se selecciona constante
-function AllPlanillas(){
-    var planillas = new Array();
-    $.getJSON('/deductions/get_activas', function(result) {
-      $(result.activa).each(function() { 
-        appendPayrolls = "<input type='hidden" +"' name='deduction[payroll_ids][]' value='"+ this.id +"' />";
-      $('#payrolls-to-save').append(appendPayrolls);
-      }); //fin del each
-    });
- }
 
 //EL CODIGO DE AQUI PARA ABAJO NO LO ESTOY NECESITANDO
 //Obtiene todas las planillas activas
@@ -319,11 +328,19 @@ function ObtenerPlanillas(){
     return row;
   }
 
+//Settea el campo oculto de con el id de la planilla unica seleccionada
 function set_payroll(e) {
     e.preventDefault();
-    var payrollId = $(this).parent().prev().text();
-    var payrollName = $(this).text();
+    var payrollId = $(e.target).parent().prev().text();
+    var payrollName = $(e.target).text();
     appendPayrolls = "<input type='hidden" +"' name='deduction[payroll_ids][]' value='"+ payrollId +"' />";
     $('#payrolls-to-save').append(appendPayrolls);
     $('#deduction_payroll').val(payrollName);  
+}
+
+//Limpia el id y el texto de la planilla UNICA seleccionada en caso de querer cambiar la planilla unica seleccionada
+//para que no se vayan varioss ids de planillas solo se tiene que guardar un unico id
+function clearPayrolls(){
+  $('#payrolls-to-save').empty(); //elimina el id de la planilla que ya no se quiere guardar
+  $('#deduction_payroll').val('');  
 }

@@ -227,8 +227,6 @@ es:
                 blank: Este campo no puede quedar en blanco
           deduction:
             attributes:
-              amount_exhaust: 
-                blank: Este campo no puede quedar en blanco
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
@@ -452,7 +450,7 @@ es:
           deduction_type: Tipo de deducción
           amount_exhaust: Monto a agotar
           calculation_type: Tipo de calculo
-          calculation: Calculo
+          calculation: Valor
           ledger_account_id: Cuenta de Crédito
   date:
       abbr_day_names:
