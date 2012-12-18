@@ -7,6 +7,7 @@
     <i class='icon-refresh'></i>
   </button></h1>
 </div>
+<%= will_paginate :class =>'pagination pagination-centered' %>
 <table class="table table-striped" id="employee-data">
   <thead>
     <tr>
@@ -14,7 +15,6 @@
       <th><%= model_class_entity.human_attribute_name(:name) %></th>
       <th><%= model_class_entity.human_attribute_name(:surname) %></th>
       <th><%= model_class.human_attribute_name(:department_id) %></th>
-      <th><%= model_class.human_attribute_name(:role_id) %></th>
       <th><%= model_class.human_attribute_name(:wage_payment) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -26,7 +26,6 @@
         <td><%= employee.entity.name %></td>
         <td><%= employee.entity.surname %></td>
         <td><%= employee.department.name if employee.department %></td>
-        <td><%= employee.role.role if employee.role %></td>
         <td><%= employee.wage_payment %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

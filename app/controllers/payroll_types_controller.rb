@@ -1,35 +1,24 @@
 class PayrollTypesController < ApplicationController
+  respond_to :html, :json
   # GET /payroll_types
   # GET /payroll_types.json
   def index
-    @payroll_types = PayrollType.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @payroll_types }
-    end
+    @payroll_types = PayrollType.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@payroll_types)
   end
 
   # GET /payroll_types/1
   # GET /payroll_types/1.json
   def show
     @payroll_type = PayrollType.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @payroll_type }
-    end
+    respond_with(@payroll_type)
   end
 
   # GET /payroll_types/new
   # GET /payroll_types/new.json
   def new
     @payroll_type = PayrollType.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @payroll_type }
-    end
+    respond_with(@payroll_type)
   end
 
   # GET /payroll_types/1/edit

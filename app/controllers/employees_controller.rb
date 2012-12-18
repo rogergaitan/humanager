@@ -4,7 +4,7 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.json
   def index
-    @employees = Employee.includes(:entity, :department, :role).all
+    @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -152,9 +152,7 @@ class EmployeesController < ApplicationController
    def get_employee_info
      @department = Department.find(:all, :select =>['id','name'])
      @occupation = Occupation.find(:all, :select =>['id','description'])
-     @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
      @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
-     @roles = Role.find(:all, :select =>['id','role'])
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
      @position = Position.find(:all, :select =>['id','position'])
      @superior = Employee.all

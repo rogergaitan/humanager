@@ -1,36 +1,25 @@
 class PayrollLogsController < ApplicationController
   before_filter :resources, :only => [:new, :edit]
+  respond_to :html, :json
   # GET /payroll_logs
   # GET /payroll_logs.json
   def index
-    @payroll_logs = PayrollLog.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @payroll_logs }
-    end
+    @payroll_logs = PayrollLog.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@payroll_logs)
   end
 
   # GET /payroll_logs/1
   # GET /payroll_logs/1.json
   def show
     @payroll_log = PayrollLog.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @payroll_log }
-    end
+    respond_with(@payroll_log)
   end
 
   # GET /payroll_logs/new
   # GET /payroll_logs/new.json
   def new
     @payroll_log = PayrollLog.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @payroll_log }
-    end
+    respond_with(@payroll_log)
   end
 
   # GET /payroll_logs/1/edit

@@ -1,35 +1,24 @@
 class PaymentFrequenciesController < ApplicationController
+  respond_to :html, :json
   # GET /payment_frequencies
   # GET /payment_frequencies.json
   def index
-    @payment_frequencies = PaymentFrequency.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @payment_frequencies }
-    end
+    @payment_frequencies = PaymentFrequency.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@payment_frequencies)
   end
 
   # GET /payment_frequencies/1
   # GET /payment_frequencies/1.json
   def show
     @payment_frequency = PaymentFrequency.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @payment_frequency }
-    end
+    respond_with(@payment_frequency)
   end
 
   # GET /payment_frequencies/new
   # GET /payment_frequencies/new.json
   def new
     @payment_frequency = PaymentFrequency.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @payment_frequency }
-    end
+    respond_with(@payment_frequency)
   end
 
   # GET /payment_frequencies/1/edit

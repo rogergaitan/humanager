@@ -77,11 +77,6 @@ es:
               position:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este puesto ya existe'
-          role:
-            attributes:
-              role:
-                blank: Este campo no puede quedar en blanco
-                taken: 'Este rol ya existe'
           department:
             attributes:
               name:

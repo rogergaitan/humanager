@@ -1,36 +1,25 @@
 class TypeOfPersonnelActionsController < ApplicationController
   before_filter :load_fields, :only => [:new, :edit]
+  respond_to :html, :json
   # GET /type_of_personnel_actions
   # GET /type_of_personnel_actions.json
   def index
-    @type_of_personnel_actions = TypeOfPersonnelAction.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @type_of_personnel_actions }
-    end
+    @type_of_personnel_actions = TypeOfPersonnelAction.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@type_of_personnel_actions)
   end
 
   # GET /type_of_personnel_actions/1
   # GET /type_of_personnel_actions/1.json
   def show
     @type_of_personnel_action = TypeOfPersonnelAction.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @type_of_personnel_action }
-    end
+    respond_with(@type_of_personnel_action)
   end
 
   # GET /type_of_personnel_actions/new
   # GET /type_of_personnel_actions/new.json
   def new
     @type_of_personnel_action = TypeOfPersonnelAction.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @type_of_personnel_action }
-    end
+    respond_with(@type_of_personnel_action)
   end
 
   # GET /type_of_personnel_actions/1/edit

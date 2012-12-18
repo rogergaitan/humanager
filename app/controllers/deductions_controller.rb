@@ -5,7 +5,7 @@ class DeductionsController < ApplicationController
   # GET /deductions
   # GET /deductions.json
   def index
-    @deductions = Deduction.all
+    @deductions = Deduction.paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
   end
 

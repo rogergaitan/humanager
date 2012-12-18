@@ -1,35 +1,25 @@
 class MeansOfPaymentsController < ApplicationController
+  respond_to :html, :json
+
   # GET /means_of_payments
   # GET /means_of_payments.json
   def index
-    @means_of_payments = MeansOfPayment.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @means_of_payments }
-    end
+    @means_of_payments = MeansOfPayment.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@means_of_payments)
   end
 
   # GET /means_of_payments/1
   # GET /means_of_payments/1.json
   def show
     @means_of_payment = MeansOfPayment.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @means_of_payment }
-    end
+    respond_with(@means_of_payment)
   end
 
   # GET /means_of_payments/new
   # GET /means_of_payments/new.json
   def new
     @means_of_payment = MeansOfPayment.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @means_of_payment }
-    end
+    respond_with(@means_of_payment)
   end
 
   # GET /means_of_payments/1/edit

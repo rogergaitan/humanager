@@ -9,7 +9,7 @@ class OtherSalariesController < ApplicationController
   end
 
   def index
-    @other_salaries = OtherSalary.all
+    @other_salaries = OtherSalary.paginate(:page => params[:page], :per_page => 15)
     respond_with(@other_salaries)
   end
 

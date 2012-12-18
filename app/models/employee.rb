@@ -16,7 +16,6 @@
 #  occupation_id        :integer
 #  role_id              :integer
 #  seller               :boolean
-#  payment_method_id    :integer
 #  payment_frequency_id :integer
 #  means_of_payment_id  :integer
 #  wage_payment         :decimal(12, 2)
@@ -28,15 +27,13 @@ class Employee < ActiveRecord::Base
   attr_accessible :gender, :birthday, :marital_status, :ccss_calculated, :join_date, 
   					:number_of_dependents, :seller, :social_insurance, :spouse, 
   					:wage_payment, :entity_attributes, :department_id, 
-  					:occupation_id, :role_id, :payment_method_id, :payment_frequency_id,
+  					:occupation_id, :payment_frequency_id,
   					:means_of_payment_id, :photo_attributes, :position_id, :employee_id, :is_superior
             
   has_one :department
   belongs_to :entity, :dependent => :destroy
   belongs_to :department
   belongs_to :occupation
-  belongs_to :role
-  belongs_to :payment_method
   belongs_to :payment_frequency
   belongs_to :means_of_payment
   belongs_to :position
