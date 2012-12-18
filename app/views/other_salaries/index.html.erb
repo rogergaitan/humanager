@@ -5,18 +5,18 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @other_salaries.each do |other_salary| %>
       <tr>
-        <td><%= link_to other_salary.id, other_salary_path(other_salary) %></td>
-        <td><%= other_salary.description %></td>
+        <td><%= link_to other_salary.description, other_salary_path(other_salary) %></td>
         <td><%= other_salary.ledger_account.naccount if other_salary.ledger_account %></td>
+        <td><%= other_salary.amount %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_other_salary_path(other_salary), :class => 'btn btn-mini' %>

@@ -32,7 +32,11 @@ Reasapp::Application.routes.draw do
   resources :type_of_personnel_actions
 
 
-  resources :other_salaries
+  resources :other_salaries do
+    collection do
+      get :fetch_employees
+    end
+  end
   
   resources :work_benefits do
     collection do

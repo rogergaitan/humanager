@@ -1,5 +1,6 @@
 class OtherSalariesController < ApplicationController
   respond_to :html, :json
+  before_filter :resources, :only => [:new, :edit]
   before_filter :accounts, :only => [:new, :edit]
   before_filter :get_account, :only => [:edit, :update, :destroy]
   
@@ -16,7 +17,7 @@ class OtherSalariesController < ApplicationController
   # GET /other_salaries/1.json
   def show
     @other_salary = OtherSalary.find(params[:id])
-    respond_with(@other_salary)
+    respond_with(@other_salary, :include => {:ledger_account => { :only => [:id, :naccount] }})
   end
 
   # GET /other_salaries/new
@@ -72,7 +73,20 @@ class OtherSalariesController < ApplicationController
     end
   end
   
+    #Search for employees
+  def fetch_employees
+    @employees = Employee.includes(:entity).order_employees
+    respond_with(@employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} })
+  end
+  
   def accounts
     @cuenta_contable = LedgerAccount.all
   end
+
+  def resources
+    @employees = Employee.order_employees
+    @department = Department.all
+    @superior = Employee.superior
+  end
+
 end

@@ -87,7 +87,6 @@ class DeductionsController < ApplicationController
 
   def resources
     @credit_account = LedgerAccount.credit_accounts
-    #@payrolls = Payroll.activas
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior

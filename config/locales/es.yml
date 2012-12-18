@@ -440,6 +440,7 @@ es:
           code: Codigo
           description: Descripción
           ledger_account_id: Cuenta Contable
+          amount: Monto
         user:
           login:
         type_of_personnel_action:

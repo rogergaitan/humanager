@@ -7,7 +7,9 @@
   <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
   <dd><%= @other_salary.description %></dd>
   <dt><strong><%= model_class.human_attribute_name(:ledger_account_id) %>:</strong></dt>
-  <dd><%= @other_salary.ledger_account_id %></dd>
+  <dd><%=  @other_salary.ledger_account.naccount ? @other_salary.ledger_account.naccount : '' %></dd>
+    <dt><strong><%= model_class.human_attribute_name(:amount) %>:</strong></dt>
+  <dd><%= @other_salary.amount %></dd>
 </dl>
 
 <div class="form-actions">
