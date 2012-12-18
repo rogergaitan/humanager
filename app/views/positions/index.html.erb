@@ -13,7 +13,7 @@
   <tbody>
     <% @positions.each do |position| %>
       <tr>
-        <td><%= position.position %></td>
+        <td><%= link_to position.position, position_path(position) %></td>
         <td><%= position.description %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

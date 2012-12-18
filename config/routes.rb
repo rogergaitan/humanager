@@ -85,17 +85,11 @@ Reasapp::Application.routes.draw do
 
   resources :provinces
 
-  resources :roles
-
   resources :departments
 
   resources :means_of_payments
 
   resources :payment_frequencies
-
-  resources :payment_methods
-
-  resources :payment_schedules
 
   resources :employees do
     collection do

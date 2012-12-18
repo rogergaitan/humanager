@@ -5,7 +5,6 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%= model_class.human_attribute_name(:deduction_type) %></th>
       <th><%= model_class.human_attribute_name(:amount_exhaust) %></th>
@@ -18,8 +17,7 @@
   <tbody>
     <% @deductions.each do |deduction| %>
       <tr>
-        <td><%= link_to deduction.id, deduction_path(deduction) %></td>
-        <td><%= deduction.description %></td>
+        <td><%= link_to deduction.description, deduction_path(deduction) %></td>
         <td><%= deduction.deduction_type %></td>
         <td><%= deduction.amount_exhaust %></td>
         <td><%= deduction.calculation_type %></td>

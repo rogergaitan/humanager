@@ -6,11 +6,12 @@
     <i class='icon-refresh'></i>
   </button></h1>
 </div>
+
+<%= will_paginate :class =>'pagination pagination-centered' %>
 <table class="table table-striped" id="task-data">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:iactivity) %></th>
+     <!--  <th><%= model_class.human_attribute_name(:iactivity) %></th> -->
       <th><%= model_class.human_attribute_name(:itask) %></th>
       <th><%= model_class.human_attribute_name(:ntask) %></th>
       <th><%= model_class.human_attribute_name(:iaccount) %></th>
@@ -21,10 +22,9 @@
   <tbody>
     <% @tasks.each do |task| %>
       <tr>
-        <td><%= link_to task.id, task_path(task) %></td>
-        <td><%= task.iactivity %></td>
+        <!-- <td><%= task.iactivity %></td> -->
         <td><%= task.itask %></td>
-        <td><%= task.ntask %></td>
+        <td><%= link_to task.ntask, task_path(task) %></td>
         <td><%= task.iaccount %></td>
         <td><%= task.mlaborcost %></td>
         <td>

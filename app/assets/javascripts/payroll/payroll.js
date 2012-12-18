@@ -44,9 +44,7 @@ $(document).ready(function(){
  function add_inactivas(payroll, target_table)
   {
     var row = $(target_table + '> tbody:last').append('<tr>' + 
-    	
-        '<td><a href="/payrolls/'+ payroll.id +'">'+ payroll.id +'</a></td>' +
-        '<td>' + payroll.payroll_type.description + '</td>' +
+        '<td><a href="/payrolls/'+ payroll.id +'">' + payroll.payroll_type.description +'</a></td>' +
         '<td>' +  payroll.start_date + '</td>' +
         '<td>' +  payroll.end_date + '</td>' +
         '<td>' +  payroll.payment_date + '</td>' +

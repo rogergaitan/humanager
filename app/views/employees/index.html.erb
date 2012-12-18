@@ -10,7 +10,6 @@
 <table class="table table-striped" id="employee-data">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class_entity.human_attribute_name(:entityid) %></th>
       <th><%= model_class_entity.human_attribute_name(:name) %></th>
       <th><%= model_class_entity.human_attribute_name(:surname) %></th>
@@ -23,8 +22,7 @@
   <tbody>
     <% @employees.each do |employee| %>
       <tr>
-        <td><%= link_to employee.id, employee_path(employee) %></td>
-        <td><%= employee.entity.entityid %></td>
+        <td><%= link_to employee.entity.entityid, employee_path(employee) %></td>
         <td><%= employee.entity.name %></td>
         <td><%= employee.entity.surname %></td>
         <td><%= employee.department.name if employee.department %></td>

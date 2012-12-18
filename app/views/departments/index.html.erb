@@ -13,7 +13,7 @@
   <tbody>
     <% @departments.each do |department| %>
       <tr>
-        <td><%= department.name %></td>
+        <td><%= link_to department.name, department_path(department) %></td>
         <td><%= department.employee.full_name if department.employee %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

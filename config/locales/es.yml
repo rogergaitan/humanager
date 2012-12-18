@@ -288,6 +288,9 @@ es:
         payment_frequency:
           one: Frecuencia de pago
           other: Frecuencias de pago
+        payroll_log:
+          one: planilla
+          other: Registro de planillas
       attributes:
         work_benefit:
           description: Descripción
@@ -432,6 +435,7 @@ es:
           itask: Codigo
           ntask: Descripción
           mlaborcost: Costo Labor
+          iaccount: Cuenta
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  
@@ -453,6 +457,18 @@ es:
           calculation_type: Tipo de calculo
           calculation: Valor
           ledger_account_id: Cuenta de Crédito
+        payroll:
+          payroll_type_id: Tipo de planilla
+          start_date: Desde
+          end_date: Hasta
+          payment_date: Fecha de pago
+          state: Cerrar
+        payroll_log:
+          date: Fecha
+          time_worked: Tiempo trabajado
+          task_id: Tarea
+          payment_type: Tipo de Pago
+          payroll_id: Planilla
   date:
       abbr_day_names:
       - dom
