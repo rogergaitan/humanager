@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121218020731) do
+ActiveRecord::Schema.define(:version => 20121218172930) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -99,12 +99,25 @@ ActiveRecord::Schema.define(:version => 20121218020731) do
   create_table "deduction_employees", :force => true do |t|
     t.integer  "deduction_id"
     t.integer  "employee_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "current_balance"
   end
 
   add_index "deduction_employees", ["deduction_id"], :name => "index_deduction_employees_on_deduction_id"
   add_index "deduction_employees", ["employee_id"], :name => "index_deduction_employees_on_employee_id"
+
+  create_table "deduction_payments", :force => true do |t|
+    t.integer  "deduction_employee_id"
+    t.date     "payment_date"
+    t.integer  "previous_balance"
+    t.integer  "payment"
+    t.integer  "current_balance"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+  end
+
+  add_index "deduction_payments", ["deduction_employee_id"], :name => "index_deduction_payments_on_deduction_employee_id"
 
   create_table "deduction_payrolls", :force => true do |t|
     t.integer  "deduction_id"
@@ -266,20 +279,32 @@ ActiveRecord::Schema.define(:version => 20121218020731) do
   create_table "other_salaries", :force => true do |t|
     t.string   "description"
     t.integer  "ledger_account_id"
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
     t.decimal  "amount",            :precision => 18, :scale => 2
+    t.boolean  "state",                                            :default => true
   end
 
   create_table "other_salary_employees", :force => true do |t|
     t.integer  "other_salary_id"
     t.integer  "employee_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.decimal  "amount",          :precision => 18, :scale => 2
   end
 
   add_index "other_salary_employees", ["employee_id"], :name => "index_other_salary_employees_on_employee_id"
   add_index "other_salary_employees", ["other_salary_id"], :name => "index_other_salary_employees_on_other_salary_id"
+
+  create_table "other_salary_payments", :force => true do |t|
+    t.integer  "other_salary_employee_id"
+    t.date     "payment_date"
+    t.integer  "payment"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "other_salary_payments", ["other_salary_employee_id"], :name => "index_other_salary_payments_on_other_salary_employee_id"
 
   create_table "payment_frequencies", :force => true do |t|
     t.string   "name"

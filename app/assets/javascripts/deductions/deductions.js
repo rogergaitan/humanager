@@ -288,7 +288,6 @@ function TipoDeduccion(selected) {
   }
 }
 
-//EL CODIGO DE AQUI PARA ABAJO NO LO ESTOY NECESITANDO
 //Obtiene todas las planillas activas
 function ObtenerPlanillas(){
     $.ajax('/payrolls/get_activas', {
