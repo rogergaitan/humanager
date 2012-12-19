@@ -16,10 +16,6 @@ es:
     personal_data: 'Datos Personales'
     employment_data: 'Empresa'
     contact: Contacto
-  routes:
-    new: nuevo
-    edit: editar
-    users: usuario
   helpers:
     actions: Acciones 
     select:
@@ -50,6 +46,11 @@ es:
     a_successfully_deleted: ' eliminada correctamente'
     a_successfully_created: ' creada correctamente'
     a_successfully_updated: ' actualizada correctamente'
+  dictionary:
+    blank: &BLANK "Este campo no puede quedar en blanco"
+    required: &REQUIRED "Requerido"
+    greater_than: &GREATER_THAN "Mayor a %{count}"
+    not_a_number: &NOT_A_NUMBER "Solo números"
   content:
     titles: 
       tools: Herramientas
@@ -59,33 +60,68 @@ es:
   activerecord:
       errors:
         models:
+          purchase_item:
+            attributes:
+              warehouse_id:
+                blank: *REQUIRED
+              discount:
+                blank: *REQUIRED
+                greater_than_or_equal_to: "Mayor o igual a %{count}"
+                not_a_number: *NOT_A_NUMBER
+                less_than: "Menor a %{count}" 
+              product_id:
+                blank: *REQUIRED
+              description:
+                blank: *BLANK
+              quantity:
+                blank: *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER  
+              cost_unit:
+                blank: *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER  
+              cost_total:
+                blank: *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER  
+          purchase:
+            attributes:
+              vendor_name:  #THIS IS A VIRTUAL ATTRIBUTE
+                blank: *BLANK
+              document_number:
+                blank: *BLANK
+              vendor_id:
+                blank: *BLANK
+              purchase_date:
+                blank: *BLANK
           shipping_method:
             attributes:
               name:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
           purchase_order:
             attributes:
               delivery_date:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
               reference_info:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
               vendor_text:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
           entity:
             attributes:
               entityid:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
                 taken: "La entidad ya se encuentra en el sistema"
               name:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
               surname:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
           product_pricing:
             attributes:
               utility: 
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
               sell_price:
-                blank: "Este campo no puede quedar en blanco"
+                blank: *BLANK
           product:
             attributes:
               code:
@@ -214,6 +250,8 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        purchase_item: Items de compra
+        purchase: Compra
         shipping_method: "Método de envío"
         purchase_order: Orden de compra
         bank_account: Cuenta Bancaria
@@ -238,6 +276,30 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        purchase_item:
+          warehouse_id: Bodega
+          discount: Descuento
+          product_id: Producto
+          description: Descripción
+          quantity: Cantidad
+          cost_unit: Costo Unitario
+          cost_total: Costo Total
+        purchase:
+          vendor_name: Proveedor #THIS IS A VIRTUAL ATTRIBUTE
+          document_number: Número
+          vendor_id: Proveedor
+          completed: Completada
+          purchase_date: Fecha
+          currency: Moneda
+          subtotal: Sub-total
+          taxes: Impuestos
+          total: Total
+          purchase_type: Tipo
+          purchase_types:
+            local: local
+            imported: Importada
+          dai_tax: DAI
+          isc_tax: ISC
         shipping_method:
           name: Nombre
           description: Descripción

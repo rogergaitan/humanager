@@ -77,7 +77,7 @@ class Product < ActiveRecord::Base
 	end
 
 	def self.set_cart(cart_products)
-			Rails.cache.write("Product.cart", cart_products )
+		Rails.cache.write("Product.cart", cart_products )
 	end
 
 	def self.get_cart

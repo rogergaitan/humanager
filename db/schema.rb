@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210151630) do
+ActiveRecord::Schema.define(:version => 20121219182130) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -246,6 +246,15 @@ ActiveRecord::Schema.define(:version => 20121210151630) do
 
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
 
+  create_table "product_aplications", :force => true do |t|
+    t.string   "name"
+    t.integer  "product_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "product_aplications", ["product_id"], :name => "index_product_aplications_on_product_id"
+
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
     t.float    "utility"
@@ -286,6 +295,23 @@ ActiveRecord::Schema.define(:version => 20121210151630) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "purchase_items", :force => true do |t|
+    t.integer  "purchase_id"
+    t.integer  "product_id"
+    t.string   "description"
+    t.float    "quantity"
+    t.float    "cost_unit"
+    t.float    "cost_total"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
+    t.integer  "warehouse_id"
+    t.decimal  "discount",     :precision => 17, :scale => 2
+  end
+
+  add_index "purchase_items", ["product_id"], :name => "index_purchase_items_on_product_id"
+  add_index "purchase_items", ["purchase_id"], :name => "index_purchase_items_on_purchase_id"
+  add_index "purchase_items", ["warehouse_id"], :name => "index_purchase_items_on_warehouse_id"
+
   create_table "purchase_orders", :force => true do |t|
     t.integer  "vendor_id"
     t.string   "reference_info"
@@ -301,6 +327,24 @@ ActiveRecord::Schema.define(:version => 20121210151630) do
   end
 
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
+
+  create_table "purchases", :force => true do |t|
+    t.string   "document_number"
+    t.integer  "vendor_id"
+    t.date     "purchase_date"
+    t.boolean  "completed"
+    t.string   "currency"
+    t.float    "subtotal"
+    t.float    "taxes"
+    t.float    "total"
+    t.enum     "purchase_type",   :limit => [:local, :imported]
+    t.string   "dai_tax"
+    t.string   "isc_tax"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+  end
+
+  add_index "purchases", ["vendor_id"], :name => "index_purchases_on_vendor_id"
 
   create_table "roles", :force => true do |t|
     t.string   "role"

@@ -1,0 +1,7 @@
+Rails.logger.debug @purchase_order
+Rails.logger.info "SHOW.PDF.ERB"
+pdf = PurchaseOrderPDF.new(@purchase_order)
+  send_data pdf.render, 
+  	filename: "OC-#{@purchase_order.id}.pdf", 
+  	type: "application/pdf", 
+  	disposition: "inline"

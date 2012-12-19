@@ -13,6 +13,7 @@
 
 class Entity < ActiveRecord::Base
 	
+  #ASSOCIATIONS
   has_one  :employee, :dependent => :destroy
 	has_many :telephones, :dependent => :destroy
   has_many :emails, :dependent => :destroy
@@ -21,7 +22,9 @@ class Entity < ActiveRecord::Base
   has_many :bank_accounts, :dependent => :destroy
   has_one  :customer
   has_one  :vendor
-	accepts_nested_attributes_for :telephones, :allow_destroy => true, 
+	
+  #ATTRIBUTES
+  accepts_nested_attributes_for :telephones, :allow_destroy => true, 
     :reject_if => proc { |attributes| attributes["telephone"].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
   accepts_nested_attributes_for :addresses, :allow_destroy => true 
@@ -32,9 +35,11 @@ class Entity < ActiveRecord::Base
                   :emails_attributes, :addresses_attributes, 
                   :contacts_attributes, :bank_accounts_attributes
                   
+  #VALIDATIONS
   validates :name, :surname, :entityid, :typeid, :presence => true
   validates :entityid, :uniqueness => true
   
+  #PUBLIC METHODS
   def create_vendor
     unless self.vendor
       self.build_vendor
@@ -43,5 +48,6 @@ class Entity < ActiveRecord::Base
       false
     end
   end
+
 end
 

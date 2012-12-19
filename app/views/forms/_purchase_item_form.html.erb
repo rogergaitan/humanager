@@ -1,0 +1,27 @@
+<tr class="">
+  <td>
+    <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, :include_blank => false, :class=>"span2" %>
+  </td>
+  <td>
+    <%= f.text_field :product_id, :class => 'text_field input-block-level product_code  ui-autocomplete-input' %>
+  </td>
+  <td >
+    <%= f.text_field :description, :class => 'text_field input-block-level product_description ui-autocomplete-input' %>
+  </td>
+  <td>
+    <%= f.text_field :quantity, :class => 'text_field quantity input-block-level' %>
+  </td>
+  <td>
+    <%= f.text_field :discount, :class => 'text_field input-block-level product_discount  ui-autocomplete-input' %>
+  </td>
+  <td>
+    <%= f.text_field :cost_unit, :class => 'text_field cost_unit input-block-level' %>
+  </td>
+  <td>
+    <%= f.text_field :cost_total, :class => 'text_field cost_total input-block-level', :readonly => true %>
+  </td>
+  <td>
+      <%= f.hidden_field :_destroy %>
+      <i class="icon-trash btn remove_row"></i>
+  </td>
+</tr>

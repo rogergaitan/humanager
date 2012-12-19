@@ -1,8 +1,6 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :shipping_methods
-
   get "pages/home"
   get "pages/about"
   get "pages/help"
@@ -66,8 +64,17 @@ Reasapp::Application.routes.draw do
     end
   end
 
+  resources :purchases do
+    collection do
+      get 'search_vendor'
+      get 'search'
+    end
+  end
+
   devise_for :users
 
+  resources :purchases
+  resources :shipping_methods
   resources :districts
   resources :cantons
   resources :provinces

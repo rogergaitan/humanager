@@ -18,9 +18,11 @@ class PurchaseOrdersController < ApplicationController
     @purchase_order = PurchaseOrder.find(params[:id])
 
     respond_to do |format|
+
       format.html # show.html.erb
       format.json { render json: @purchase_order }
       format.pdf do
+        ### lib/purchase_order.rb
         pdf = PurchaseOrderPDF.new(@purchase_order)
         send_data pdf.render, filename: "OC-#{@purchase_order.id}.pdf", type: "application/pdf", disposition: "inline"
 
@@ -57,8 +59,12 @@ class PurchaseOrdersController < ApplicationController
 
     respond_to do |format|
       if @purchase_order.save
-        format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully created.' }
-        format.json { render json: @purchase_order, status: :created, location: @purchase_order }
+        if params[:print_pdf]
+          format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf, notice: 'Purchase order was successfully created.' }
+        else
+          format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully created.' }
+          format.json { render json: @purchase_order, status: :created, location: @purchase_order }
+        end
       else
         format.html { render action: "new" }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }
@@ -74,8 +80,7 @@ class PurchaseOrdersController < ApplicationController
     respond_to do |format|
       if @purchase_order.update_attributes(params[:purchase_order])
         if params[:print_pdf]
-          redirect_to "/purchase_orders/#{@purchase_order.id}", :type => "application/pdf"
-
+          format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf }
         else
           format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully updated.' }
           format.json { head :no_content }
@@ -92,10 +97,11 @@ class PurchaseOrdersController < ApplicationController
   def destroy
     @purchase_order = PurchaseOrder.find(params[:id])
     @purchase_order.destroy
-
+    flash[:notice] = "Orden eliminada correctamente"
     respond_to do |format|
       format.html { redirect_to purchase_orders_url }
       format.json { head :no_content }
+      format.js
     end
   end
 
