@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121218172930) do
+ActiveRecord::Schema.define(:version => 20121219035303) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -340,20 +340,28 @@ ActiveRecord::Schema.define(:version => 20121218172930) do
   add_index "payroll_employees", ["employee_id"], :name => "index_payroll_employees_on_employee_id"
   add_index "payroll_employees", ["payroll_log_id"], :name => "index_payroll_employees_on_payroll_log_id"
 
-  create_table "payroll_logs", :force => true do |t|
-    t.integer  "payroll_id"
-    t.date     "date"
+  create_table "payroll_histories", :force => true do |t|
     t.integer  "task_id"
-    t.decimal  "time_worked",                                                :precision => 10, :scale => 0
+    t.string   "time_worked"
     t.integer  "centro_de_costo_id"
     t.enum     "payment_type",       :limit => [:Ordinario, :Extra, :Doble]
-    t.datetime "created_at",                                                                                :null => false
-    t.datetime "updated_at",                                                                                :null => false
+    t.integer  "payroll_log_id"
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
   end
 
-  add_index "payroll_logs", ["centro_de_costo_id"], :name => "index_payroll_logs_on_centro_de_costo_id"
+  add_index "payroll_histories", ["centro_de_costo_id"], :name => "index_payroll_histories_on_centro_de_costo_id"
+  add_index "payroll_histories", ["payroll_log_id"], :name => "index_payroll_histories_on_payroll_log_id"
+  add_index "payroll_histories", ["task_id"], :name => "index_payroll_histories_on_task_id"
+
+  create_table "payroll_logs", :force => true do |t|
+    t.integer  "payroll_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.date     "payroll_date"
+  end
+
   add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
-  add_index "payroll_logs", ["task_id"], :name => "index_payroll_logs_on_task_id"
 
   create_table "payroll_types", :force => true do |t|
     t.string   "description"

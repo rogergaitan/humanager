@@ -76,42 +76,22 @@
 <!-- End Checkbox functionality-->
 	<br /><hr>
 	<h2>Labores</h2>
-	<hr>
-	<div class="control-group">
-		<div class="">
-			<table>
-				<tr>
-					<td colspan="3"><%= f.label :date, :class => '' %></td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<div class="input-append date" id="dp3" data-date-format="dd/mm/yyyy">
-							<%= f.text_field :date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
-		  			</div>
-					</td>
-				</tr>
-				<tr>
-					<td><%= f.label :task_id, :class => '' %></td>
-					<td><%= f.label :time_worked, :class => '' %></td>
-					<td><%= f.label :centro_de_costo_id, :class => '' %></td>
-					<td><%= f.label :payment_type, :class => '' %></td>
-				</tr>
-				<tr>
-					<td><%= f.collection_select(:task_id, @tasks, :id,
-                                  :ntask , :prompt => true, :class => 'input-medium') %></td>
-					<td><%= f.number_field :time_worked, :class => 'input-medium' %></td>
-					<td>
-						<div class="input-append">
-							<%= f.hidden_field :centro_de_costo_id %>
-							<%= text_field_tag 'load_centro_de_costo', nil, :class => 'input-medium search-image-employee', :for => :centro_de_costo_id %><a id="centro-costo" data-keyboard="false" data-backdrop="static" href="#payrollModal" role="button" data-toggle="modal"><span class="add-on"><i class="icon-list"></i></span></a>
-						</div>
-					</td>
-					<td><%= f.enum_select :payment_type, :include_blank => false %></td>
-				</tr>
-			</table>
-		</div>
+	<hr>	
+	<%= f.label :payroll_date, :class => '' %>
+	<div class="input-append date payroll-date" id="dp3" data-date-format="dd/mm/yyyy">
+		<%= f.text_field :payroll_date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
 	</div>
-		
+	<table id="products_items" class=" table table-hover table-bordered table-striped">
+		<tr class="header_items">
+      <td class="header_task">Labor</td>
+      <td class="header_time">Tiempo Trabajado</td>
+      <td class="header_cc">Centro De Costo</td>
+      <td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log") %></td>
+    </tr>
+    	<%= f.fields_for :payroll_histories do |builder| %>
+			<%= render 'forms/payroll_history_form', :f => builder %>
+		<% end %>
+	</table>
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),

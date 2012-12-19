@@ -1,0 +1,20 @@
+<tr class="items_purchase_orders_form success">
+	<td class="controls_item"><%= f.label :task_id, :class => '' %>
+			<%= f.collection_select(:task_id, @tasks, :id,
+	                        :ntask , :prompt => true, :class => 'input-medium') %>
+	</td>
+	<td class="controls_item"><%= f.label :time_worked, :class => '' %>
+			<%= f.number_field :time_worked, :class => 'input-medium' %>
+	</td>
+	<td class="controls_item"><%= f.label :centro_de_costo_id, :class => '' %>
+			<div class="input-append">
+				<%= f.hidden_field :centro_de_costo_id, class: "cc-filter-id" %>
+				<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee', :for => :centro_de_costo_id %><a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#payrollModal" role="button" data-toggle="modal"><span class="add-on"><i class="icon-list"></i></span></a>
+			</div>
+	</td>
+	<td class="controls_item"><%= f.label :payment_type, :class => '' %>
+			<%= f.enum_select :payment_type, :include_blank => false %>
+			<%= f.hidden_field :_destroy, :class => 'payroll_histories' %>
+			<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
+	</td>
+</tr>

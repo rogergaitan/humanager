@@ -8,14 +8,18 @@ $(jQuery(document).ready(function($) {
 	
 	$('#remove-controls').click(removeControls);
 	
-	$('#centro-costo').click(function(){
-		treeviewhr.cc_tree(centro_costo, true, 'load_centro_de_costo', 'payroll_log_centro_de_costo_id');
+	$('#products_items').on('click', 'a.centro-costo', function(){
+		treeviewhr.cc_tree(centro_costo, true, $(this).prev().attr('id'), $(this).prev().prev().attr('id'));
 	});
+
+	$('#products_items').on('click', '.remove_fields', removeFields);
 	
 	//populates the filter for employees
 	populateEmployeesFilter('/payroll_logs/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 	
-	populateCentroCostos('/centro_de_costos/load_cc', "load_centro_de_costo", "payroll_log_centro_de_costo_id");
+	$('.items_purchase_orders_form .cc-filter-id').each(function() {
+		populateCentroCostos('/centro_de_costos/load_cc', $(this).next().attr('id'), $(this).attr('id'));
+	});
 	
 	$('#list').on("click", "span.expand_tree", treeviewhr.expand);
 	
@@ -58,7 +62,27 @@ $(jQuery(document).ready(function($) {
 	
 	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
 	
+	//Add logs to table
+	$('form').on('click', '.add_fields', addFields);
+	$('#products_items').find('label').remove();
+
+	checkNumberEmployees();
 }));
+
+	function removeFields(e) {
+		$(this).prev('input[type=hidden]').val(1);
+		$(this).closest('.success').hide();
+		e.preventDefault();
+	}
+
+	function addFields(e) {
+		var time = new Date().getTime();
+		var regexp = new RegExp($(this).data('id'), 'g');
+		$('.header_items').after($(this).data('fields').replace(regexp, time));
+		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id').attr('id'));
+		$('#products_items').find('label').remove();
+		e.preventDefault();
+	}	
 
 //FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
 
@@ -220,7 +244,7 @@ function populateEmployeesFilter(url, textField, idField) {
 //function to fill autocompletes
 function populateCentroCostos(url, textField, idField) {
   $.getJSON(url, function(accounts) {
-      $(document.getElementById(textField)).autocomplete({
+      $(document.getElementById(idField)).next().autocomplete({
           source: $.map(accounts, function(item){
               $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
               return{
@@ -232,13 +256,13 @@ function populateCentroCostos(url, textField, idField) {
               $(document.getElementById(idField)).val(ui.item.id);
           },
           focus: function(event, ui){
-              $(document.getElementById(textField)).val(ui.item.label);
+              $(document.getElementById(idField)).next().val(ui.item.label);
           }
 
-      })
+      });
       if($(document.getElementById(idField)).val()){
           var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
-          $(document.getElementById(textField)).val(account);
+          $(document.getElementById(idField)).next().val(account);
       }        
   }); 
 }
@@ -248,7 +272,7 @@ function set_account(e) {
     var accountId = $(this).closest('li').data('id');
     var accountName = $(this).text();
     $(document.getElementById($('#idFieldPopup').val())).val(accountId);
-    $(document.getElementById($('#textFieldPopup').val())).val(accountName);
+    $(document.getElementById($('#idFieldPopup').val())).next().val(accountName);
 	$('#list').empty();
 }
 
@@ -275,4 +299,8 @@ function removeControls (e) {
 	selectEmployeesRight();
 	moveToLeft(e);
 	$('#load_filter_employees_text').val("");
+}
+
+function checkNumberEmployees() {
+	$('#add-more').trigger('click');
 }

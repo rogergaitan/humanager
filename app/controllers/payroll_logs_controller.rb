@@ -34,7 +34,7 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.save
-        format.html { redirect_to @payroll_log, notice: 'Payroll log was successfully created.' }
+        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully created.' }
         format.json { render json: @payroll_log, status: :created, location: @payroll_log }
       else
         format.html { render action: "new" }
@@ -50,7 +50,7 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.update_attributes(params[:payroll_log])
-        format.html { redirect_to @payroll_log, notice: 'Payroll log was successfully updated.' }
+        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
