@@ -24,8 +24,9 @@ jQuery(document).ready ($) ->
     code = $("#code").val()
     name = $("#name").val()
     part_number = $("#part_number").val()
+    applications = $("#applications").val()
     validateFields(code, name, part_number)
-    if (code.length >= search_length) or (name.length >=search_length) or (part_number.length >=search_length)
+    if ((code.length >= search_length) or (name.length >=search_length) or (part_number.length >=search_length) or (applications.length >= search_length))
       $.ajax
         url: "/products/search"
         dataType: "script"
@@ -33,6 +34,7 @@ jQuery(document).ready ($) ->
           "code"        : code if code.length >=search_length
           "name"        : name if name.length >=search_length
           "part_number" : part_number if part_number.length >= search_length
+          "applications": applications if applications.length >= search_length
         }
         beforeSend: ()->
           $("span.spinner").show()

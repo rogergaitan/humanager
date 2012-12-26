@@ -10,6 +10,7 @@ es:
     conditions: Condiciones Comerciales
     contacts: Contactos
     contact: Contacto
+    applications: Aplicaciones
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -250,6 +251,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        product_application: Aplicaciones
         purchase_item: Items de compra
         purchase: Compra
         shipping_method: "Método de envío"

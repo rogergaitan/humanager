@@ -1,0 +1,2 @@
+$("#messages").html('<div class="flash notice"><%= escape_javascript(flash.discard(:notice)) %></div>');
+$("a[href='<%=product_application_path(@product_application.id)%>']").closest("li").remove();

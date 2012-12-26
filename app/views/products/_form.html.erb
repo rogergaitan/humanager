@@ -1,9 +1,11 @@
 <%= javascript_include_tag "pagination" %>
+<%= javascript_include_tag "products/product_applications" %>
 <div class="tabbable">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
             <% if @product.id %>
               <li><a href="#tab2" class="tab2" data-toggle="tab"><%= t("tabs.prices") %></a></li>
+              <li><a href="#tab3" class="tab3" data-toggle="tab"><%= t("tabs.applications") %></a></li>
             <% end %>  
         </ul>
     <div class="tab-content">
@@ -179,8 +181,30 @@
         </div>
         <% if @product.id %>
         <div class="tab-pane" id="tab2">
-          
             <%= render :template => 'product_pricings/index' %>
+        </div>
+        <div class="tab-pane" id="tab3">
+          <%= form_tag product_applications_path, :id =>"product_applications", :class => "", :method => 'get' do %>  
+            <div class="control-group">
+            <%= label_tag "Aplicaciones",nil, :class => 'control-label' %>
+            <div class="controls input-append">
+              <%= hidden_field_tag :app_product_id, nil, :value => params[:id] %>
+              <%= text_field_tag :product_application ,nil, :class => "text_field" %>
+              <button class="btn" type="submit"><i class="icon-plus"></i></button>
+            </div>
+          </div>
+          <% end %>
+        <div class="applications">
+          <ul class="thumbnails">
+          <% @applications.each do |app| %>
+            <%= fields_for :product_applications, app,  :validate => true do |applications| %>
+              <% @app_id = app.id %>
+              <%= render 'forms/product_application_form', :f => applications, :locals => {:id => @app_id} %>
+              <% Rails.logger.debug app.id %>
+            <% end %>
+          <% end %>
+          </ul>
+        </div>
         </div>
         <% end %>
     </div>

@@ -36,12 +36,10 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
-    # GET /products/1/edit
     @product_pricing = ProductPricing.new
     @product = Product.find(params[:id])
-    #@product_pricing = ProductPricing.where(:product_id => params[:id])
     @product_pricings = ProductPricing.where(:product_id => params[:id])
-
+    @applications = ProductApplication.where(:product_id => params[:id])
   end
 
   # POST /products
@@ -94,11 +92,14 @@ class ProductsController < ApplicationController
   end
 
   def search
-    if params[:name] or params[:code] or params[:part_number]
-      @products = Product.advancedSearch(params[:code], params[:name], params[:part_number]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
-    else
-      @products = Product.search(params[:search]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
-    end
+      if params[:applications] or params[:name] or params[:code] or params[:part_number]  
+        @products = Product.advance_search(params[:applications], params[:code], params[:name], params[:part_number]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
+        #Rails.logger.debug @products
+      else
+        @products = Product.search(params[:search]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
+      end  
+    
+    #Rails.logger.debug @products
     respond_with @products
   end
 
@@ -128,3 +129,10 @@ class ProductsController < ApplicationController
     Product.clean_cache
   end
 end
+=begin
+if 
+      @products = Product.applications_search(params[:applications], params[:code], params[:name], params[:part_number]).to_a.paginate(:page => params[:page])
+      Rails.logger.debug @products
+    else
+      
+=end
