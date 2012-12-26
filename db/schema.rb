@@ -427,15 +427,4 @@ ActiveRecord::Schema.define(:version => 20121219193709) do
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "work_benefits", :force => true do |t|
-    t.string   "description"
-    t.integer  "employee_id"
-    t.string   "frequency"
-    t.string   "calculation_method"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
-
-  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
-
 end
