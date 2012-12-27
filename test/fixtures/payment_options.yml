@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  related_account: MyString
+  use_expenses: false
+  use_incomes: false
+  require_transaction: false
+
+two:
+  name: MyString
+  related_account: MyString
+  use_expenses: false
+  use_incomes: false
+  require_transaction: false
