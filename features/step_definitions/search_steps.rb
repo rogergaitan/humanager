@@ -78,12 +78,17 @@
        default_wait_time = 30
     end  
 
-Then /^I click on pop$/ do 
+  Given /^I wait (\d+) seconds?$/ do |sec|
+       sleep(sec.to_i)
+    end
 
-        within("div#lines_list") do
-        find(:xpath, "//div[@id='lines_list']/div/div[2]/button").click
 
-        
-        end
-             default_wait_time = 30
-    end 
+
+  Then /^I select on "([^\"]*)" dropdown "([^\"]*)"$/ do |id, value|
+  
+           def select_second_option(id)
+           second_option_xpath = value
+           second_option = find(:xpath, second_option_xpath).text
+           select(second_option, :from => id)
+          end
+  end
