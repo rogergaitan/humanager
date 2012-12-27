@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :payment_options
+
   resources :product_applications
 
   get "pages/home"

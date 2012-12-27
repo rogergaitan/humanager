@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121219193709) do
+ActiveRecord::Schema.define(:version => 20121226210810) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -227,6 +227,16 @@ ActiveRecord::Schema.define(:version => 20121219193709) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "payment_options", :force => true do |t|
+    t.string   "name"
+    t.string   "related_account"
+    t.boolean  "use_expenses"
+    t.boolean  "use_incomes"
+    t.boolean  "require_transaction"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
   create_table "payment_schedules", :force => true do |t|
     t.string   "code"
     t.string   "description"
@@ -426,5 +436,16 @@ ActiveRecord::Schema.define(:version => 20121219193709) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "work_benefits", :force => true do |t|
+    t.string   "description"
+    t.integer  "employee_id"
+    t.string   "frequency"
+    t.string   "calculation_method"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
 
 end

@@ -61,6 +61,18 @@ es:
   activerecord:
       errors:
         models:
+          payment_option:
+            attributes:
+              name:
+                blank: *BLANK
+              related_account:
+                blank: *BLANK
+              use_expenses:
+                blank: *BLANK
+              use_incomes:
+                blank: *BLANK
+              require_transaction:
+                blank: *BLANK
           purchase_item:
             attributes:
               warehouse_id:
@@ -251,6 +263,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        payment_option: "Opción de Pago"
         product_application: Aplicaciones
         purchase_item: Items de compra
         purchase: Compra
@@ -278,6 +291,12 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        payment_option:
+          name: Nombre
+          related_account: Cuenta relacionada
+          use_expenses: "¿En gastos?"
+          use_incomes: "¿En ingresos?"
+          require_transaction: Requiere Transacción
         purchase_item:
           warehouse_id: Bodega
           discount: Descuento
