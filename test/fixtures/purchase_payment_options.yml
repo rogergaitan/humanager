@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  payment_option: 
+  payment_type: 
+  purchase: 
+  number: MyString
+  amount: 1.5
+
+two:
+  payment_option: 
+  payment_type: 
+  purchase: 
+  number: MyString
+  amount: 1.5

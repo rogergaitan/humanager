@@ -1,6 +1,10 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :purchase_payment_options
+
+  resources :payment_types
+
   resources :payment_options
 
   resources :product_applications

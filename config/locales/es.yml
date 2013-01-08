@@ -3,6 +3,8 @@
 
 es:
   hello: "Hello world"
+  'true': 'Si'
+  'false': 'No'
   tabs:
     general: General
     prices: Precios
@@ -26,6 +28,8 @@ es:
       submit: Guardar %{model}
       update: Actualizar %{model}
     links:
+      show: Información
+      index: Indice
       search: Buscar
       destroy: Eliminar
       save_continue: Guardar y Continuar        
@@ -61,6 +65,19 @@ es:
   activerecord:
       errors:
         models:
+          purchase_payment_option:
+            attributes:
+              number:
+                blank: *BLANK
+              amount:
+                blank: *BLANK
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+          payment_type:
+            attributes:
+              name:
+                blank: *BLANK
+                taken: "Este tipo de pago ya existe"
           payment_option:
             attributes:
               name:
@@ -263,6 +280,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        payment_type: Tipo de Pago
         payment_option: "Opción de Pago"
         product_application: Aplicaciones
         purchase_item: Items de compra
@@ -291,6 +309,14 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        purchase_payment_option:
+          payment_option_id: Método
+          payment_type_id: Tipo
+          number: Número
+          amount: Cantidad
+        payment_type:
+          id: Identificación
+          name: Descripción
         payment_option:
           name: Nombre
           related_account: Cuenta relacionada

@@ -1,5 +1,6 @@
 <%= javascript_include_tag "purchases/purchases" %>
 <%- model_subclass = PurchaseItem -%>
+<%- model_payment = PurchasePaymentOption -%>
 <%= form_for @purchase, :validate => true, 
   :html => { :class => 'form-horizontal' } do |f| %>
 
@@ -45,18 +46,17 @@
           <th class="span1"><%= model_subclass.human_attribute_name(:discount) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:cost_unit) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:cost_total) %></th>
-          <th class="span3"> <%= link_to_add_fields("", f, :purchase_items,"icon-plus") %></th>
+          <th class="span1"> <%= link_to_add_fields("", f, :purchase_items,"icon-plus add_item") %></th>
         </tr>
       </thead>
       <tbody>
         <%= f.fields_for :purchase_items, :validate => true do |items| %>
-          <%= render 'forms/purchase_item_form', :f => items, :locals => {:link => @link} %>
+          <%= render 'forms/purchase_item_form', :f => items %>
         <% end %>
       </tbody>
     </table>
-
   </div>
-
+  
   <div class="thumbnail pull-right"> 
     <div class="control-group">
       <%= f.label :subtotal, :class => 'control-label' %>    
@@ -82,7 +82,7 @@
         </div>
     </div>
   </div>
-    <div class="thumbnail pull-right hide imported"> 
+  <div class="thumbnail pull-right hide imported"> 
     <div class="control-group">
       <%= f.label :isc_tax, :class => 'control-label' %>    
       <div class="controls">
@@ -96,6 +96,26 @@
       </div>
      </div>
   </div>
+
+  <div class="well">
+    <table class="table payment_options">
+      <thead>
+        <tr>
+          <th class="span1"><%= model_payment.human_attribute_name(:payment_option_id) %></th>
+          <th class="span1"><%= model_payment.human_attribute_name(:payment_type_id) %></th>
+          <th class="span3"><%= model_payment.human_attribute_name(:number) %></th>
+          <th class="span3"><%= model_payment.human_attribute_name(:amount) %></th>
+          <th class="span3"> <%= link_to_add_fields("", f, :purchase_payment_options,"icon-plus add_payment") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= f.fields_for :purchase_payment_options, :validate => true do |items| %>
+          <%= render 'forms/purchase_payment_option_form', :f => items %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
   <div class="form-actions">
   <%= f.submit nil, :class => 'btn btn-primary' %>
   <%= link_to t('.cancel', :default => t("helpers.links.cancel")), purchases_path, :class => 'btn' %>
