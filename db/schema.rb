@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121226210810) do
+ActiveRecord::Schema.define(:version => 20130102210545) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -247,6 +247,12 @@ ActiveRecord::Schema.define(:version => 20121226210810) do
     t.date     "payment_date"
   end
 
+  create_table "payment_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "photos", :force => true do |t|
     t.integer  "employee_id"
     t.string   "url"
@@ -337,6 +343,20 @@ ActiveRecord::Schema.define(:version => 20121226210810) do
   end
 
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
+
+  create_table "purchase_payment_options", :force => true do |t|
+    t.integer  "payment_option_id"
+    t.integer  "payment_type_id"
+    t.integer  "purchase_id"
+    t.string   "number"
+    t.float    "amount"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "purchase_payment_options", ["payment_option_id"], :name => "index_purchase_payment_options_on_payment_option_id"
+  add_index "purchase_payment_options", ["payment_type_id"], :name => "index_purchase_payment_options_on_payment_type_id"
+  add_index "purchase_payment_options", ["purchase_id"], :name => "index_purchase_payment_options_on_purchase_id"
 
   create_table "purchases", :force => true do |t|
     t.string   "document_number"

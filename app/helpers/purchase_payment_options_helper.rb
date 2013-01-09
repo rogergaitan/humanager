@@ -1,0 +1,2 @@
+module PurchasePaymentOptionsHelper
+end

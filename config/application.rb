@@ -61,5 +61,6 @@ module Reasapp
     config.assets.version = '1.0'
     config.exceptions_app = self.routes
     config.autoload_paths += Dir["#{config.root}/lib/pdfs/"]
+    config.autoload_paths += Dir["#{config.root}/lib/"]
   end
 end

@@ -1,0 +1,52 @@
+<%= javascript_include_tag "payment_types/payment_type" %>
+<%- model_class = PaymentType -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped table-condensed table-hover">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payment_types.each do |payment_type| %>
+      <tr>
+        <td><%= payment_type.name %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_payment_type_path(payment_type), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      payment_type_path(payment_type),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :remote => true,
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<a href="#modalnew" role="button" class="btn btn-primary new_payment_type" data-toggle="modal"><%=t("helpers.links.new")%></a>
+
+<div id="modalnew" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <%= form_for @payment_type, 
+    :validate => true, 
+    :url => payment_types_path(@payment_type), 
+    :remote => true, 
+    :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><%=t '.title', :default => model_class.model_name.human %></h3>
+  </div>
+  <div class="modal-body">    
+    <%= render 'forms/payment_type_form', :f => f %>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <%= f.submit nil, :class => 'btn btn-primary new-edit' %>
+  </div>
+  <% end %>
+</div>
