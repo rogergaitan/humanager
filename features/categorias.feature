@@ -15,7 +15,7 @@
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/categories')])[2]"
     And I click on "//a[contains(@href, '/categories/new')]"
-    And I fill in "category_name" with "categoría-prueba"
+    And I fill in "category_name" with "categoría - " name
     And I fill in "category_code" code
     And I fill in "category_description" with "categoría-prueba"
     When I press on "//form[@id='new_category']/div[5]/input[1]"
@@ -29,7 +29,7 @@
     And I click on "(//a[contains(@href, '/categories')])[2]"
     And I click on "//tr[1]/td[4]/a[1]"
     And I fill in "category_code" code
-    And I fill in "category_description" with "editado"
+    And I fill in "category_description" with "editado - " name
     When I press on "//input[@name='commit']"
     And I should see "Categoría actualizada correctamente"
     And I should see code

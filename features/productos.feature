@@ -2,12 +2,13 @@ Feature: Productos
     As a user 
     I should be able to use "Producto" according the requirements
     
+
+
     Scenario: Add new producto
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/products')])[3]"
     And I click on "//a[contains(@href, '/products/new')]"
     And I fill in "product_code" code
-    And I select on "product_status" dropdown "//form[@id='edit_product_1']/div[20]/div/select"
     When I click on "//form[@id='new_product']/div[3]/div/a/div"
     And I wait 5 seconds
     And I click on "//div[@id='lines_list']/div[1]/div[1]/button"
@@ -19,7 +20,7 @@ Feature: Productos
     And I click on "//div[@id='category_list']/div[1]/div[1]/button"    
     And I wait a second
     And I fill in "product_part_number" code    
-    And I fill in "product_name" with "nombre producto"
+    And I fill in "product_name" with "producto - " name
     And I fill in "product_make" with "marca"
     And I fill in "product_model" with "modelo"
     And I fill in "product_year" with "2012"
@@ -32,13 +33,13 @@ Feature: Productos
     And I fill in "product_bar_code" with "126"
     And I fill in "product_market_price" with "12"
     And I fill in "product_stock" with "12356" 
+    And "inactive" should be selected for "product[status]"
     And I press on "//form[@id='new_product']/div[21]/input[1]"
     And I should see "Producto creado exitosamente"
     When I should see code
     And I press on "//div[2]/a[1]"
     Then I should see code
-      
-    
+
     Scenario: Access to the "Producto" module
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/products')])[3]"
@@ -51,12 +52,12 @@ Feature: Productos
     And I should see "Línea" 
     Then I should see "Sub-línea"
 
-
     Scenario: Edit product successfully
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/products')])[3]"
     And I click on "//tr[1]/td[8]/a[1]"
     And I fill in "product_code" code
+    And I fill in "product_name" with "producto editado - " name 
     When I press on "//div[21]/input[1]"
     And I should see "Producto actualizado exitosamente"
     And I should see code
@@ -65,24 +66,17 @@ Feature: Productos
     Then I should see code  
 
 
-    Scenario: Delete Product 
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/products')])[3]"
-    And I delete the row "//tr[1]/td[8]/a[3]"
-    And I assert confirmation
-    Then I should see "Producto eliminado correctamente"
-
-
     Scenario: View price successfully
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/products')])[3]"
-    And I delete the row "//tr[1]/td[8]/a[2]"
+    And I click on "//tr[1]/td[8]/a[2]"
     And I should see "Producto"
     And I should see "Utilidad"
     And I should see "Tipo de precio"
     And I should see "Categoría"
     And I should see "Precio Venta"
-    And I should see "Editar Producto"
+    And I should see "Acciones"
+    And I should see "Precios"
 
 
     Scenario: "Cancelar" button works as expected when add new product
@@ -99,6 +93,7 @@ Feature: Productos
     And I click on "//tr[1]/td[8]/a[1]"
     When I press on "(//a[contains(@href, '/products')])[2]"
     And I should see "Productos"
+
 
 
     Scenario: Access to "Otros" products module
@@ -127,15 +122,6 @@ Feature: Productos
     Then I should see code  
 
 
-    Scenario: Delete Product 
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/products')])[3]"
-    When I click on "//a[contains(text(),'Otros')]"
-    And I delete the row "//tr[1]/td[5]/a[2]"
-    And I assert confirmation
-    Then I should see "Producto eliminado correctamente"
-
-
     Scenario: "Cancelar" button works as expected when add new other product
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/products')])[3]"
@@ -152,3 +138,20 @@ Feature: Productos
     And I click on "//tr[1]/td[5]/a[1]"
     When I press on "(//a[contains(@href, '/products')])[2]"
     And I should see "Productos"
+
+    
+    Scenario: Delete other Product 
+    Given I am on "http://localhost:3000/" Home page
+    And I click on "(//a[contains(@href, '/products')])[3]"
+    When I click on "//a[contains(text(),'Otros')]"
+    And I delete the row "//tr[1]/td[5]/a[2]"
+    And I assert confirmation
+    Then I should see "Producto eliminado correctamente"
+
+
+    Scenario: Delete Product 
+    Given I am on "http://localhost:3000/" Home page
+    And I click on "(//a[contains(@href, '/products')])[3]"
+    And I delete the row "//tr[1]/td[8]/a[3]"
+    And I assert confirmation
+    Then I should see "Producto eliminado correctamente"

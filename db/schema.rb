@@ -256,15 +256,6 @@ ActiveRecord::Schema.define(:version => 20121226210810) do
 
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
 
-  create_table "product_aplications", :force => true do |t|
-    t.string   "name"
-    t.integer  "product_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "product_aplications", ["product_id"], :name => "index_product_aplications_on_product_id"
-
   create_table "product_applications", :force => true do |t|
     t.string   "name"
     t.integer  "product_id"
@@ -436,16 +427,5 @@ ActiveRecord::Schema.define(:version => 20121226210810) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
-
-  create_table "work_benefits", :force => true do |t|
-    t.string   "description"
-    t.integer  "employee_id"
-    t.string   "frequency"
-    t.string   "calculation_method"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
-
-  add_index "work_benefits", ["employee_id"], :name => "index_work_benefits_on_employee_id"
 
 end
