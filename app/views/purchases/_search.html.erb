@@ -16,7 +16,7 @@
     <% @purchases.each do |purchase| %>
       <tr>
         <td><%= link_to purchase.document_number, purchase_path(purchase) %></td>
-        <td><%= purchase.vendor_id %></td>
+        <td><%= purchase.vendor.entity.name %></td>
         <td><%= purchase.purchase_date %></td>
         <td><%= purchase.total %></td>
         <td>

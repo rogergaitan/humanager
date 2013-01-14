@@ -37,7 +37,7 @@ class Purchase < ActiveRecord::Base
   end
   private
   def quantity_amount
-    self.errors.add(:total, "Total debe ser igual a la suma de los metods de pago")  if !(self.total == purchase_payment_options.map(&:amount).sum)
+    errors.add :total, "Total debe ser igual a la suma de los metods de pago"  if !(self.total == purchase_payment_options.map(&:amount).sum)
     #self.total == purchase_payment_options.map(&:amount).sum
   end
 

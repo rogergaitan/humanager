@@ -14,4 +14,13 @@ class Canton < ActiveRecord::Base
   has_many :districts
   has_many :addresses
   attr_accessible :name, :province_id
+
+  def self.fetch
+		Rails.cache.fetch("Canton.all"){ find(:all, :select =>['id','name', 'province_id']) } 
+	end
+
+	def self.clean_cache
+		Rails.cache.delete("Canton.all")
+	end
+
 end
