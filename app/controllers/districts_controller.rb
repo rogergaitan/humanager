@@ -1,30 +1,16 @@
 class DistrictsController < ApplicationController
 
   after_filter :clean_cache, :only => [:new, :edit, :destroy]
-  # GET /districts
-  # GET /districts.json
+  respond_to :json, :html
+  
   def index
-    @districts = District.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @districts }
-    end
+    respond_with @districts = District.all
   end
 
-  # GET /districts/1
-  # GET /districts/1.json
   def show
-    @district = District.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @district }
-    end
+    respond_with @district = District.find(params[:id])
   end
 
-  # GET /districts/new
-  # GET /districts/new.json
   def new
     @district = District.new
     @cantons = Canton.all
@@ -36,15 +22,12 @@ class DistrictsController < ApplicationController
     end
   end
 
-  # GET /districts/1/edit
   def edit
     @district = District.find(params[:id])
     @cantons = Canton.all
     @provinces = Province.all
   end
 
-  # POST /districts
-  # POST /districts.json
   def create
     @district = District.new(params[:district])
 
@@ -85,6 +68,10 @@ class DistrictsController < ApplicationController
       format.html { redirect_to districts_url }
       format.json { head :no_content }
     end
+  end
+
+  def fetch
+    respond_with @district = District.fetch
   end
 
   def clean_cache
