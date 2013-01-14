@@ -1,4 +1,6 @@
 class DistrictsController < ApplicationController
+
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
   # GET /districts
   # GET /districts.json
   def index
@@ -83,5 +85,9 @@ class DistrictsController < ApplicationController
       format.html { redirect_to districts_url }
       format.json { head :no_content }
     end
+  end
+
+  def clean_cache
+    District.clean_cache
   end
 end

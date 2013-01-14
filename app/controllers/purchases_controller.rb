@@ -11,7 +11,7 @@ class PurchasesController < ApplicationController
   # GET /purchases
   # GET /purchases.json
   def index
-    @purchases = Purchase.paginate(:page => params[:page], :per_page => 1)
+    @purchases = Purchase.paginate(:page => params[:page], :per_page => 10)
     respond_with @purchases
   end
 
@@ -59,9 +59,12 @@ class PurchasesController < ApplicationController
         format.html { redirect_to purchases_path, notice: t('.activerecord.models.purchase').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @purchase, status: :created, location: @purchase }
       else
-        flash[:notice] = @purchase.errors.full_messages.to_sentence
-        Rails.logger.debug @purchase.errors.full_messages.to_sentence
-        Rails.logger.debug flash[:notice]
+        #flash[:alert] = @purchase.errors.full_messages.to_sentence
+        #Rails.logger.debug @purchase.errors.full_messages.to_sentence
+        #Rails.logger.debug flash[:notice]
+        fetch_warehouses
+        fetch_payment_options
+        fetch_payment_types
         format.html { render action: "new" }
         format.json { render json: @purchase.errors, status: :unprocessable_entity }
         
@@ -119,7 +122,7 @@ class PurchasesController < ApplicationController
   end
 
   def search
-    @purchases = Purchase.search(params[:search]).to_a.paginate(:page => params[:page], :per_page => 1) if params[:search] and params[:search].length >= 3
+    @purchases = Purchase.search(params[:search]).to_a.paginate(:page => params[:page], :per_page => 10) if params[:search] and params[:search].length >= 3
     respond_with @purchases
   end
 

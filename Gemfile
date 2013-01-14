@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.11'
 
 gem 'mysql2'
 gem 'jquery-rails'
 gem 'devise'
 gem 'carrierwave'
-gem "client_side_validations", "~> 3.1.4"
+gem "client_side_validations", "~> 3.2.1"
 gem 'less-rails'
 gem 'twitter-bootstrap-rails', "~> 2.1.6"
 gem 'enum_column3'

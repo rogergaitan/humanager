@@ -8,7 +8,7 @@ numericality =
 
 presence =
 	presence:
-		message : "Este campo no puede quedar en blanco"
+		message: "Campo requerido"
 
 validations = 
 	numericality: numericality.numericality 
@@ -16,46 +16,48 @@ validations =
 
 discount_validations =
 	numericality:
-		greater_than_or_equal_to: 0
-		less_than: 100
+		#greater_than_or_equal_to: 0
+		#less_than: 100
 		messages:
-			greater_than_or_equal_to: "Mayor o igual a 0"
+			#greater_than_or_equal_to: "Mayor o igual a 0"
 			numericality: "Solo números"
 			less_than: "Menor a 100"
 
 action_add_field = (e)->
-		form = $("form").attr("id")
-		time = new Date().getTime()
-		regexp = new RegExp($('.add_item').data('id'), 'g')
-		$('.table_items').append($('.add_item').data('fields').replace(regexp, time))
-		e.preventDefault()
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][product_id]"] =
-			presence
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][warehouse_id]"] =
-			presence
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][description]"] =
-			presence
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][quantity]"] =
-			validations
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][cost_unit]"] =
-			validations
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][cost_total]"] =
-			validations
-		window[form].validators["purchase[purchase_items_attributes]["+time+"][discount]"] =
-			discount_validations
-		return false
+	form = $("form").attr("id")
+	time = new Date().getTime()
+	regexp = new RegExp($('.add_item').data('id'), 'g')
+	$('.table_items').append($('.add_item').data('fields').replace(regexp, time))
+	
+	e.preventDefault()
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][product_id]"] =
+		presence
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][warehouse_id]"] =
+		presence
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][description]"] =
+		presence
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][quantity]"] =
+		validations
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][cost_unit]"] =
+		validations
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][cost_total]"] =
+		validations
+	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][discount]"] =
+		discount_validations
+	$("form").enableClientSideValidations()
+	return false
 
 add_payment = (e)->
-		form = $("form").attr("id")
-		time = new Date().getTime()
-		regexp = new RegExp($('.add_payment').data('id'), 'g')
-		$('.payment_options').append($('.add_payment').data('fields').replace(regexp, time))
-		e.preventDefault()
-		window[form].validators["purchase[purchase_payment_options_attributes]["+time+"][number]"] =
-			presence
-		window[form].validators["purchase[purchase_payment_options_attributes]["+time+"][amount]"] =
-			validations
-		return false
+	form = $("form").attr("id")
+	time = new Date().getTime()
+	regexp = new RegExp($('.add_payment').data('id'), 'g')
+	$('.payment_options').append($('.add_payment').data('fields').replace(regexp, time))
+	e.preventDefault()
+	ClientSideValidations.forms[form].validators["purchase[purchase_payment_options_attributes]["+time+"][number]"] =
+		presence
+	ClientSideValidations.forms[form].validators["purchase[purchase_payment_options_attributes]["+time+"][amount]"] =
+		validations
+	return false
 
 remove_row = () ->
 	$(@).closest("tr").hide() if (!$(@).closest("tr").is($(".table tbody tr:first")))
@@ -84,7 +86,7 @@ row_total = (row) ->
 sub_total = () ->
 	sum_subtotal = null;
 	$('.table_items .cost_total').each ()->
-			sum_subtotal += parseFloat($(@).val())
+		sum_subtotal += parseFloat($(@).val())
 	$("#purchase_subtotal").val(sum_subtotal) 
 
 total = () ->
@@ -96,10 +98,25 @@ show_imported_fields = () ->
 	else
 		$(".imported").hide() 
 
+submitPurchase = () ->
+	sum_amount = 0;
+	valid = true;
+	$(".amount").each () ->
+		sum_amount += parseFloat($(@).val())
+	if (sum_amount == parseFloat($(".total").val())) and sum_amount != 0
+		return valid
+	else
+		valid = false
+		$('#messages').html('<div class="alert alert-error">El total debe coincidir con la suma de los pagos.</div>');
+		return valid
+
+
 $(document).ready ->
+	$("form").submit () ->
+		console.log "Inside submit acction"
+		submitPurchase()
 	id = $("form").attr("id")
-	form = $("form")
-	
+	#form = $("form")
 	$('form').on 'click', '.add_item', action_add_field
 	$('form').on 'click', '.add_payment', add_payment	
 	$('form').on('click', '.remove_row', remove_row)
@@ -107,17 +124,9 @@ $(document).ready ->
 	$('form').on 'keyup', '.cost_unit', () ->
 		row_total($(@).closest("tr"))
 	$("table tr").eq(1).find(".remove_row").remove()
-	$("form").submit (e)->
-		sum_amount = 0;
-		valid = true;
-		$(".amount").each () ->
-			sum_amount += parseFloat($(@).val())
-		if sum_amount == parseFloat($(".total").val())
-			return valid
-		else
-			valid = false
-			$('#messages').html('<div class="alert alert-error">El total debe coincidir con la suma de los pagos.</div>');
-			return valid
+	console.log "PRUEBA"
+
+		
 	$('form').on 'keypress', '.cost_total', (event)->
 		key = event.keyCode or event.which
 		if (key == 13)
@@ -225,6 +234,6 @@ $(document).ready ->
 	      data:
 	      	search : $("#search").val()
 	      beforeSend: ()->
-	          $("span.spinner").show()
+	        $("span.spinner").show()
 	      complete: (data)->
 	        $("span.spinner").hide()

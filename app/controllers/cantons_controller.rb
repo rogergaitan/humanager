@@ -1,4 +1,6 @@
 class CantonsController < ApplicationController
+  
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
   # GET /cantons
   # GET /cantons.json
   def index
@@ -80,5 +82,9 @@ class CantonsController < ApplicationController
       format.html { redirect_to cantons_url }
       format.json { head :no_content }
     end
+  end
+
+  def clean_cache
+    Canton.clean_cache
   end
 end

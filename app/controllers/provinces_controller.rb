@@ -1,4 +1,6 @@
 class ProvincesController < ApplicationController
+  
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
   # GET /provinces
   # GET /provinces.json
   def index
@@ -79,5 +81,8 @@ class ProvincesController < ApplicationController
       format.html { redirect_to provinces_url }
       format.json { head :no_content }
     end
+  end
+  def clean_cache
+    Province.clean_cache
   end
 end

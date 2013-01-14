@@ -1,26 +1,26 @@
 <tr class="items_purchase_orders_form success">
   <td class="controls_item">
-    <%= f.text_field :product, :class => 'text_field product input-mini code none' %>
+    <%= f.text_field :product, :class => "text_field product input-mini code none" %>
   </td>
   <td class="controls_item">
-    <%= f.label :product, :class => '' %>
+    <%= f.label :product %>
     <%= f.text_field :description, :class => 'text_field input-small description'%>
     
   </td>
   <td class="controls_item">
-    <%= f.label :quantity, :class => '' %>
+    <%= f.label :quantity %>
     <%= f.number_field :quantity, :class => 'text_field input-small quantity calculate not_empty', :min => 1 %>
   </td>
 	<td class="controls_item">
-    <%= f.label :discount, :class => '' %>
+    <%= f.label :discount %>
     <%= f.number_field :discount, :class => 'text_field input-small calculate discount', :min => 0 %>
   </td>
   <td class="controls_item">
-    <%= f.label :warehouse_id, :class => '' %>
+    <%= f.label :warehouse_id %>
     <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, :class=>"dropdown-menu" %>
   </td>
   <td class="controls_item">
-    <%= f.label :cost_unit, :class => '' %>
+    <%= f.label :cost_unit %>
     <%= f.number_field :cost_unit, :class => 'text_field input-small cost_unit calculate not_empty', :min => 0 %>
   </td>
   <td class="controls_item">

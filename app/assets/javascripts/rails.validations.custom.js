@@ -1,4 +1,4 @@
-window.clientSideValidations.callbacks.element.fail = function(element, message, callback) {
+window.ClientSideValidations.callbacks.element.fail = function(element, message, callback) {
 	callback();
 	if (element.data('valid') !== false) {
 	    element.parent().find('.message');
