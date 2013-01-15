@@ -66,6 +66,18 @@ es:
   activerecord:
       errors:
         models:
+          company:
+            attributes:
+              name:
+                blank: *BLANK
+              surname:
+                blank: *BLANK
+              company_id:
+                blank: *BLANK
+              telephone:
+                blank: *BLANK
+              address:
+                blank: *BLANK
           contact:
             attributes:
               name:
@@ -285,6 +297,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        company: Compañía
         payment_type: Tipo de Pago
         payment_option: "Opción de Pago"
         product_application: Aplicaciones
@@ -314,6 +327,16 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        company:
+          name: Nombre / Razón social
+          surname: Nombre comercial
+          company_id: Identificación
+          telephone: Teléfono
+          address: Dirección
+          email: Correo electrónico
+          web_site: Página web
+          logo: Logotipo
+          default: Usar siempre
         purchase_payment_option:
           payment_option_id: Método
           payment_type_id: Tipo

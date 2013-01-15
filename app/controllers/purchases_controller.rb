@@ -11,7 +11,9 @@ class PurchasesController < ApplicationController
   # GET /purchases
   # GET /purchases.json
   def index
-    @purchases = Purchase.paginate(:page => params[:page], :per_page => 10)
+    @purchases = Purchase.includes(:vendor).paginate(:page => params[:page], :per_page => 10)
+    Rails.logger.debug session[:company]
+    Rails.logger.debug session[:company_id]
     respond_with @purchases
   end
 

@@ -8,20 +8,24 @@
 
       <ul class="dropdown-menu">
   	    <li><a href="#">Profile</a></li>
-          <li class="divider"></li>
-          <li><%= link_to 'Cerrar Sesión', destroy_user_session_path, :method => 'delete' %></li>
+        <li class="divider"></li>
+        <li><%= link_to 'Cerrar Sesión', destroy_user_session_path, :method => 'delete' %></li>
       </ul>    
 		<% else%>
+		
+		<a class="btn btn-info">  
+			<i class="icon-globe"> </i><%= session[:company] and session[:company_id] ? session[:company] : default_company %>				  
+		</a>
 		
 		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">  
 			<i class="icon-user"></i>Usuario	
 			<span class="caret"></span>						  
 		</a>
-		  <ul class="dropdown-menu">
-		  	<li><%= link_to "Iniciar Sesión", new_user_session_path %></li>
-		  	<li class="divider"></li>
-		  	<li><%= link_to "Registrarse", new_user_registration_path %> </li>
-			</ul>   		
+	  <ul class="dropdown-menu">
+	  	<li><%= link_to "Iniciar Sesión", new_user_session_path %></li>
+	  	<li class="divider"></li>
+	  	<li><%= link_to "Registrarse", new_user_registration_path %> </li>
+		</ul>   		
 		<%end%>	
                 
 </div>
