@@ -1,0 +1,8 @@
+<tr>
+  <td><%= f.enum_select :item_type, {:include_blank => false}, {:class => 'text_field input-block-level item_type'} %></td>
+  <td>
+  	<%= f.text_field :name, :class => 'text_field input-block-level item_name ui-autocomplete-input' %>
+  	<%= f.hidden_field :item_id, :class => 'item_id'%>
+  </td>
+  <td><%= f.text_field :discount, :class => 'text_field input-block-level discount' %></td>
+</tr>
