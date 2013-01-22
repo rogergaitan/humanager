@@ -14,4 +14,12 @@ class Province < ActiveRecord::Base
   has_many :districts
 
   attr_accessible :name
+
+  def self.fetch
+		Rails.cache.fetch("Province.all"){ find(:all, :select =>['id','name']) } 
+	end
+
+	def self.clean_cache
+		Rails.cache.delete("Province.all")
+	end
 end

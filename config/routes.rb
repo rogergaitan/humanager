@@ -86,6 +86,24 @@ Reasapp::Application.routes.draw do
     end
   end
 
+  resources :provinces do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :cantons do
+    collection do
+      get 'fetch'
+    end
+  end
+
+  resources :districts do
+    collection do
+      get 'fetch'
+    end
+  end
+
   devise_for :users
 
   resources :purchases

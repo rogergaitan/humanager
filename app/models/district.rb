@@ -15,4 +15,13 @@ class District < ActiveRecord::Base
   belongs_to :canton
   has_many :addresses
   attr_accessible :name, :canton_id, :province_id
+
+  def self.fetch
+		Rails.cache.fetch("District.all"){ find(:all, :select =>['id','name', 'canton_id']) } 
+	end
+
+	def self.clean_cache
+		Rails.cache.delete("District.all")
+	end
+
 end

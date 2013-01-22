@@ -36,6 +36,7 @@ es:
       edit: Editar
       edit_price: Ver precios
       new: Nuevo
+      create: Nuevo
       cancel: Cancelar  
       back: Regresar
       confirm: '¿Está seguro(a)?'
@@ -53,7 +54,7 @@ es:
     a_successfully_updated: ' actualizada correctamente'
   dictionary:
     blank: &BLANK "Este campo no puede quedar en blanco"
-    required: &REQUIRED "Requerido"
+    required: &REQUIRED "Campo requerido"
     greater_than: &GREATER_THAN "Mayor a %{count}"
     less_than_or_equal_to: &LESS_THAN_OR_EQUAL_TO "Menor o igual a %{count}"
     not_a_number: &NOT_A_NUMBER "Solo números"
@@ -66,6 +67,10 @@ es:
   activerecord:
       errors:
         models:
+          contact:
+            attributes:
+              name:
+                blank: *BLANK
           discount_profile_item:
             attributes:
               item_id:
@@ -123,13 +128,13 @@ es:
                 blank: *REQUIRED
               discount:
                 blank: *REQUIRED
-                greater_than_or_equal_to: "Mayor o igual a %{count}"
+                greater_than: *GREATER_THAN
                 not_a_number: *NOT_A_NUMBER
                 less_than: "Menor a %{count}" 
               product_id:
                 blank: *REQUIRED
               description:
-                blank: *BLANK
+                blank: *REQUIRED
               quantity:
                 blank: *REQUIRED
                 greater_than: *GREATER_THAN

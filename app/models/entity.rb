@@ -27,9 +27,14 @@ class Entity < ActiveRecord::Base
   accepts_nested_attributes_for :telephones, :allow_destroy => true, 
     :reject_if => proc { |attributes| attributes["telephone"].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
+  
   accepts_nested_attributes_for :addresses, :allow_destroy => true 
-  accepts_nested_attributes_for :contacts, :allow_destroy => true
-  accepts_nested_attributes_for :bank_accounts, :allow_destroy => true   
+  
+  accepts_nested_attributes_for :contacts, :allow_destroy => true, 
+    :reject_if => proc { |attributes| attributes["name"].blank? }
+
+  accepts_nested_attributes_for :bank_accounts, :allow_destroy => true,
+    :reject_if => proc { |attributes| attributes["bank_account"].blank? }   
   
   attr_accessible :entityid, :name, :surname, :typeid, :telephones_attributes, 
                   :emails_attributes, :addresses_attributes, 
@@ -39,7 +44,6 @@ class Entity < ActiveRecord::Base
   validates :name, :surname, :entityid, :typeid, :presence => true
   validates :entityid, :uniqueness => true
   
-  #PUBLIC METHODS
   def create_vendor
     unless self.vendor
       self.build_vendor

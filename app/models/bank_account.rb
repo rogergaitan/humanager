@@ -15,4 +15,7 @@
 class BankAccount < ActiveRecord::Base
   belongs_to :entity
   attr_accessible :account_title, :bank, :bank_account, :sinpe
+
+  ## VALIDATIONS
+  #validates :bank_account, :presence => true
 end

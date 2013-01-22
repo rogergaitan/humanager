@@ -81,9 +81,9 @@ class VendorsController < ApplicationController
 
   # Before filter method to get provinces, cantons and districts
   def get_address_info
-    @province ||= Province.find(:all, :select =>['id','name'])
-    @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
-    @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
+    @province ||= Province.fetch
+    @canton ||= Canton.fetch
+    @district ||= District.fetch
   end
 
 end

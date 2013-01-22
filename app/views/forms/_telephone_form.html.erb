@@ -1,12 +1,10 @@
-<div class="employee_contact_fields">
+<div class="telephone">
 	<div class="control-group">
 		<%= f.label :telephone, :class => 'control-label' %>
 		<div class="controls">
 			<div class="input-prepend">
 				<span class="add-on"><i class="icon-phone"></i></span><%= f.text_field :telephone, :class => 'text_field' %>
 			</div>
-			<%= f.hidden_field :_destroy, :class => 'telephones' %>
-			<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
 		</div>
 	</div>
 	<div class="control-group">
@@ -15,6 +13,9 @@
 			<div class="input-prepend">
 				<span class="add-on">T</span><%= f.enum_select :typephone, :include_blank => false %>
 			</div>
+			<%= f.hidden_field :_destroy, :class => 'telephones' %>
+			<%= link_to "remove", '#', class: "remove_fields remove_telephone btn btn-mini btn-danger" %>
 		</div>
 	</div>
+<hr />
 </div>
