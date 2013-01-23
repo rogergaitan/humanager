@@ -23,6 +23,11 @@ class Subline < ActiveRecord::Base
 	validates :code, :name,
 						:presence => true		
 
+  ##GENERAL SEARCH
+    def self.search(search)
+    	where("name like '%#{search}%'") if search.length >= 3
+    end
+
 	def self.fetch
 		Rails.cache.fetch("Subline.all"){ find(:all, :select =>['id','name']).to_json } 
 	end

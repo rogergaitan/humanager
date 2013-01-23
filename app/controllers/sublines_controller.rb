@@ -81,6 +81,15 @@ class SublinesController < ApplicationController
     end
   end
 
+  def search
+      if params[:name]
+        @sublines = Subline.search(params[:name])
+      end  
+    
+    #Rails.logger.debug @subline
+    respond_with @sublines
+  end
+
   # SHORT /subline/short
   # Get All sublines including just the id and the name. 
   # We use this method on: *create* or *edit* products(dropdowns)
