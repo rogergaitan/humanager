@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130115144338) do
+ActiveRecord::Schema.define(:version => 20130115170937) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -196,6 +196,29 @@ ActiveRecord::Schema.define(:version => 20130115144338) do
 
   add_index "items_purchase_orders", ["purchase_order_id"], :name => "index_items_purchase_orders_on_purchase_order_id"
   add_index "items_purchase_orders", ["warehouse_id"], :name => "index_items_purchase_orders_on_warehouse_id"
+
+  create_table "kardexes", :force => true do |t|
+    t.integer  "company_id"
+    t.date     "mov_date"
+    t.integer  "mov_id"
+    t.enum     "mov_type",     :limit => [:input, :output]
+    t.string   "doc_type"
+    t.string   "doc_number"
+    t.integer  "entity_id"
+    t.string   "current_user"
+    t.string   "code"
+    t.string   "cost_unit"
+    t.string   "discount"
+    t.string   "tax"
+    t.string   "cost_total"
+    t.string   "price_list"
+    t.string   "quantity"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "kardexes", ["company_id"], :name => "index_kardexes_on_company_id"
+  add_index "kardexes", ["entity_id"], :name => "index_kardexes_on_entity_id"
 
   create_table "lines", :force => true do |t|
     t.string   "code"

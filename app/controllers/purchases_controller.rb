@@ -4,21 +4,15 @@ class PurchasesController < ApplicationController
 
   before_filter :title
   before_filter :fetch_warehouses, :only => [:new, :edit]
-  before_filter :fetch_payment_types, :only => [:new, :edit] 
+  before_filter :fetch_payment_types, :only => [:new, :edit]
   before_filter :fetch_payment_options, :only => [:new, :edit]
   respond_to :json, :js, :html
 
-  # GET /purchases
-  # GET /purchases.json
   def index
     @purchases = Purchase.includes(:vendor).paginate(:page => params[:page], :per_page => 10)
-    Rails.logger.debug session[:company]
-    Rails.logger.debug session[:company_id]
     respond_with @purchases
   end
 
-  # GET /purchases/1
-  # GET /purchases/1.json
   def show
     @purchase = Purchase.find(params[:id])
 
@@ -33,49 +27,38 @@ class PurchasesController < ApplicationController
     end
   end
 
-  # GET /purchases/new
-  # GET /purchases/new.json
   def new
     @purchase = Purchase.new
     @purchase.purchase_items.build
-    @purchase.purchase_payment_options.build 
+    @purchase.purchase_payment_options.build
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @purchase }
     end
   end
 
-  # GET /purchases/1/edit
   def edit
     @purchase = Purchase.find(params[:id])
     @vendor = Purchase.get_vendor(@purchase.vendor_id)
   end
 
-  # POST /purchases
-  # POST /purchases.json
   def create
     @purchase = Purchase.new(params[:purchase])
-
     respond_to do |format|
       if @purchase.errors.empty? && @purchase.save
         format.html { redirect_to purchases_path, notice: t('.activerecord.models.purchase').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @purchase, status: :created, location: @purchase }
       else
-        #flash[:alert] = @purchase.errors.full_messages.to_sentence
-        #Rails.logger.debug @purchase.errors.full_messages.to_sentence
-        #Rails.logger.debug flash[:notice]
         fetch_warehouses
         fetch_payment_options
         fetch_payment_types
         format.html { render action: "new" }
         format.json { render json: @purchase.errors, status: :unprocessable_entity }
-        
+
       end
     end
   end
 
-  # PUT /purchases/1
-  # PUT /purchases/1.json
   def update
     @purchase = Purchase.find(params[:id])
 
@@ -90,8 +73,6 @@ class PurchasesController < ApplicationController
     end
   end
 
-  # DELETE /purchases/1
-  # DELETE /purchases/1.json
   def destroy
     @purchase = Purchase.find(params[:id])
     @purchase.destroy
@@ -103,7 +84,7 @@ class PurchasesController < ApplicationController
   end
 
   def title
-    @title = t('.activerecord.models.purchase').capitalize + " - " + t(".helpers.links.#{action_name}" ) 
+    @title = t('.activerecord.models.purchase').capitalize + " - " + t(".helpers.links.#{action_name}" )
   end
 
   def search_vendor

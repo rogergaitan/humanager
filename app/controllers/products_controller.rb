@@ -92,14 +92,12 @@ class ProductsController < ApplicationController
   end
 
   def search
-      if params[:applications] or params[:name] or params[:code] or params[:part_number]  
-        @products = Product.advance_search(params[:applications], params[:code], params[:name], params[:part_number]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
-        #Rails.logger.debug @products
-      else
-        @products = Product.search(params[:search]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
-      end  
-    
-    #Rails.logger.debug @products
+    if params[:applications] or params[:name] or params[:code] or params[:part_number]  
+      @products = Product.advance_search(params[:applications], params[:code], params[:name], params[:part_number]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
+      #Rails.logger.debug @products
+    else
+      @products = Product.search(params[:search]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
+    end  
     respond_with @products
   end
 

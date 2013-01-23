@@ -1,6 +1,9 @@
 <div class='btn-group pull-right'>
     
 			<% if user_signed_in? %>
+			<a class="btn btn-info">  
+				<i class="icon-globe"> </i><%= session[:company_id] ? session[:company] : default_company %>				  
+			</a>
 			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">              
         <i class="icon-user"></i> <%=current_user.email %>
         <span class="caret"></span>
@@ -12,10 +15,6 @@
         <li><%= link_to 'Cerrar Sesión', destroy_user_session_path, :method => 'delete' %></li>
       </ul>    
 		<% else%>
-		
-		<a class="btn btn-info">  
-			<i class="icon-globe"> </i><%= session[:company] and session[:company_id] ? session[:company] : default_company %>				  
-		</a>
 		
 		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">  
 			<i class="icon-user"></i>Usuario	

@@ -66,6 +66,32 @@ es:
   activerecord:
       errors:
         models:
+          kardex:
+            attributes:
+              code:
+                blank: *BLANK
+              cost_total:
+                blank: *BLANK
+              cost_unit:
+                blank: *BLANK
+              current_user:
+                blank: *BLANK
+              doc_number:
+                blank: *BLANK
+              doc_type:
+                blank: *BLANK
+              mov_date:
+                blank: *BLANK
+              mov_id:
+                blank: *BLANK
+              mov_type:
+                blank: *BLANK
+              quantity:
+                blank:  *BLANK
+              entity_id:
+                blank: *BLANK
+              company_id:
+                blank: *BLANK
           company:
             attributes:
               name:
@@ -90,6 +116,10 @@ es:
                 blank: *BLANK
                 greater_than: *GREATER_THAN
                 not_a_number: *NOT_A_NUMBER
+              payment_option_id:
+                blank: *BLANK
+              payment_type_id:
+                blank: *BLANK
           payment_type:
             attributes:
               name:
