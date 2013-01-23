@@ -67,6 +67,44 @@ es:
   activerecord:
       errors:
         models:
+          kardex:
+            attributes:
+              code:
+                blank: *BLANK
+              cost_total:
+                blank: *BLANK
+              cost_unit:
+                blank: *BLANK
+              current_user:
+                blank: *BLANK
+              doc_number:
+                blank: *BLANK
+              doc_type:
+                blank: *BLANK
+              mov_date:
+                blank: *BLANK
+              mov_id:
+                blank: *BLANK
+              mov_type:
+                blank: *BLANK
+              quantity:
+                blank:  *BLANK
+              entity_id:
+                blank: *BLANK
+              company_id:
+                blank: *BLANK
+          company:
+            attributes:
+              name:
+                blank: *BLANK
+              surname:
+                blank: *BLANK
+              company_id:
+                blank: *BLANK
+              telephone:
+                blank: *BLANK
+              address:
+                blank: *BLANK
           contact:
             attributes:
               name:
@@ -105,6 +143,10 @@ es:
                 blank: *BLANK
                 greater_than: *GREATER_THAN
                 not_a_number: *NOT_A_NUMBER
+              payment_option_id:
+                blank: *BLANK
+              payment_type_id:
+                blank: *BLANK
           payment_type:
             attributes:
               name:
@@ -312,6 +354,7 @@ es:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
       models:
+        company: Compañía
         discount_profile_item: Artículos del Perfil de Descuento
         discount_profile: Perfil de Descuento
         taxis: Impuesto
@@ -344,6 +387,16 @@ es:
         district: Distrito
         canton: Cantones
       attributes:
+        company:
+          name: Nombre / Razón social
+          surname: Nombre comercial
+          company_id: Identificación
+          telephone: Teléfono
+          address: Dirección
+          email: Correo electrónico
+          web_site: Página web
+          logo: Logotipo
+          default: Usar siempre
         discount_profile_item:
           item_type: Tipo de producto
           item_types:

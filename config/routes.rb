@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :companies
+
   resources :discount_profile_items
 
   resources :discount_profiles

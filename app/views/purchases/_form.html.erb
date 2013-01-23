@@ -18,6 +18,8 @@
       <%= f.label :purchase_type, :class => 'control-label' %>
       <div class="controls">
         <%= f.enum_select :purchase_type,:include_blank => false, :class => 'text_field' %>
+        <%= f.hidden_field :current_user, :value => current_user ? current_user.email : "NO USER" %>
+        <%= f.hidden_field :default_company, :value => session[:company_id] ? session[:company_id] : default_company %>
       </div>
       <%= f.label :document_number, :class => 'control-label' %>
       <div class="controls">
@@ -43,8 +45,8 @@
           <th class="span1"><%= model_subclass.human_attribute_name(:product_id) %></th>
           <th class="span8"><%= model_subclass.human_attribute_name(:description) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:quantity) %></th>
-          <th class="span1"><%= model_subclass.human_attribute_name(:discount) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:cost_unit) %></th>
+          <th class="span1"><%= model_subclass.human_attribute_name(:discount) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:cost_total) %></th>
           <th class="span1"> <%= link_to_add_fields("", f, :purchase_items,"icon-plus add_item") %></th>
         </tr>

@@ -123,9 +123,11 @@ $(document).ready ->
 	$('form').on 'change', '#purchase_purchase_type', show_imported_fields
 	$('form').on 'keyup', '.cost_unit', () ->
 		row_total($(@).closest("tr"))
+		$(@).closest("tr").find("input.cost_total").trigger("change")
+	$('form').on 'keyup', '.quantity', () ->
+		row_total($(@).closest("tr"))
+		$(@).closest("tr").find("input.cost_total").trigger("change")
 	$("table tr").eq(1).find(".remove_row").remove()
-	console.log "PRUEBA"
-
 		
 	$('form').on 'keypress', '.cost_total', (event)->
 		key = event.keyCode or event.which
