@@ -56,6 +56,7 @@ es:
     blank: &BLANK "Este campo no puede quedar en blanco"
     required: &REQUIRED "Campo requerido"
     greater_than: &GREATER_THAN "Mayor a %{count}"
+    less_than_or_equal_to: &LESS_THAN_OR_EQUAL_TO "Menor o igual a %{count}"
     not_a_number: &NOT_A_NUMBER "Solo números"
   content:
     titles: 
@@ -108,6 +109,32 @@ es:
             attributes:
               name:
                 blank: *BLANK
+          discount_profile_item:
+            attributes:
+              item_id:
+                blank: *BLANK
+              discount:
+                blank: *BLANK
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+                less_than_or_equal_to: *LESS_THAN_OR_EQUAL_TO
+          discount_profile:
+            attributes:
+              description:
+                blank: *BLANK
+          taxis:
+            attributes:
+              name:
+                blank: *BLANK
+              percentage:
+                blank: *BLANK
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+                less_than_or_equal_to: *LESS_THAN_OR_EQUAL_TO
+              cc_id:
+                blank: *BLANK
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN                
           purchase_payment_option:
             attributes:
               number:
@@ -328,6 +355,9 @@ es:
                 taken: 'Este distrito ya existe'
       models:
         company: Compañía
+        discount_profile_item: Artículos del Perfil de Descuento
+        discount_profile: Perfil de Descuento
+        taxis: Impuesto
         payment_type: Tipo de Pago
         payment_option: "Opción de Pago"
         product_application: Aplicaciones
@@ -367,6 +397,24 @@ es:
           web_site: Página web
           logo: Logotipo
           default: Usar siempre
+        discount_profile_item:
+          item_type: Tipo de producto
+          item_types:
+            product: Producto
+            subline: Sub-Línea
+          item_id: Nombre
+          discount: Descuento
+        discount_profile:
+          description: Descripción
+          category: Categoría
+          categories:
+            a: A
+            b: B
+            c: C
+        taxis:
+          name: Nombre
+          percentage: Porcentaje
+          cc_id: Cuenta contable
         purchase_payment_option:
           payment_option_id: Método
           payment_type_id: Tipo

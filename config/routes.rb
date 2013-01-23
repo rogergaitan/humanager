@@ -3,6 +3,11 @@ Reasapp::Application.routes.draw do
 
   resources :companies
 
+  resources :discount_profile_items
+
+  resources :discount_profiles
+
+  resources :taxes
 
   resources :purchase_payment_options
 
@@ -48,6 +53,7 @@ Reasapp::Application.routes.draw do
   resources :sublines do
     collection do
       get 'fetch'
+      get 'search'
     end
   end
 
