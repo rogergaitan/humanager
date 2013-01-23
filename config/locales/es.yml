@@ -111,10 +111,12 @@ es:
                 blank: *BLANK
           discount_profile_item:
             attributes:
+              name:
+                blank: *BLANK
               item_id:
                 blank: *BLANK
               discount:
-                blank: *BLANK
+                blank: *REQUIRED
                 not_a_number: *NOT_A_NUMBER
                 greater_than: *GREATER_THAN
                 less_than_or_equal_to: *LESS_THAN_OR_EQUAL_TO
@@ -398,11 +400,12 @@ es:
           logo: Logotipo
           default: Usar siempre
         discount_profile_item:
+          name: Nombre
           item_type: Tipo de producto
           item_types:
             product: Producto
             subline: Sub-Línea
-          item_id: Nombre
+          item_id: Item ID
           discount: Descuento
         discount_profile:
           description: Descripción
