@@ -24,9 +24,9 @@ module ApplicationHelper
 
   def default_company
   	@company ||= Company.find_by_default(true)
-  	session[:company] = @company.surname
-  	session[:company_id] = @company.id
-  	@company.surname
+    @company ? session[:company] = @company.surname : session[:company] = "Seleccionar empresa"  
+  	@company ? session[:company_id] = @company.id : session[:company_id] = 0
+    @company ? @company.surname : ""
   end
 end
 

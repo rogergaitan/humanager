@@ -1,4 +1,3 @@
-#If you don't know coffeescript, you should learn and to check this file as JS, compile it on Sublime-Text or go to the browser.
 numericality =
 	numericality:
 		greater_than: 0
@@ -16,10 +15,7 @@ validations =
 
 discount_validations =
 	numericality:
-		#greater_than_or_equal_to: 0
-		#less_than: 100
 		messages:
-			#greater_than_or_equal_to: "Mayor o igual a 0"
 			numericality: "Solo números"
 			less_than: "Menor a 100"
 
@@ -45,6 +41,7 @@ action_add_field = (e)->
 	ClientSideValidations.forms[form].validators["purchase[purchase_items_attributes]["+time+"][discount]"] =
 		discount_validations
 	$("form").enableClientSideValidations()
+	$(".cost_total").disableClientSideValidations();
 	return false
 
 add_payment = (e)->
@@ -112,6 +109,8 @@ submitPurchase = () ->
 
 
 $(document).ready ->
+	#SINCE THEY DO NO LOVE CLIENT SIDE VALIDATION ON COST_TOTAL, DISABLE IT
+	$(".cost_total").disableClientSideValidations();
 	$("form").submit () ->
 		console.log "Inside submit acction"
 		submitPurchase()
@@ -121,12 +120,22 @@ $(document).ready ->
 	$('form').on 'click', '.add_payment', add_payment	
 	$('form').on('click', '.remove_row', remove_row)
 	$('form').on 'change', '#purchase_purchase_type', show_imported_fields
+	
+
 	$('form').on 'keyup', '.cost_unit', () ->
 		row_total($(@).closest("tr"))
 		$(@).closest("tr").find("input.cost_total").trigger("change")
+	
+
+	$('form').on 'keyup', '.product_discount', () ->
+		row_total($(@).closest("tr"))
+		$(@).closest("tr").find("input.cost_total").trigger("change")
+	
 	$('form').on 'keyup', '.quantity', () ->
 		row_total($(@).closest("tr"))
 		$(@).closest("tr").find("input.cost_total").trigger("change")
+	
+
 	$("table tr").eq(1).find(".remove_row").remove()
 		
 	$('form').on 'keypress', '.cost_total', (event)->

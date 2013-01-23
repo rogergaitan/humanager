@@ -22,7 +22,7 @@ class PurchaseItem < ActiveRecord::Base
   
   attr_accessor :product_code
   attr_accessible :cost_total, :cost_unit, :description, :quantity, :product_id,
-  	:warehouse_id, :discount, :purchase_id
+  	:warehouse_id, :discount, :purchase_id, :tax
 
   validates :product_id, :cost_unit, :description, :quantity, 
   	:warehouse_id, :presence => true 

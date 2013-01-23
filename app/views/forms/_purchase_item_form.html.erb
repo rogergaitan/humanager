@@ -1,6 +1,6 @@
 <tr>
   <td>
-    <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, :include_blank => false, :class=>"span2" %>
+    <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, {:include_blank => false}, {:class=>"input-block-level"} %>
   </td>
   <td>
     <%= f.text_field :product_id, :class => 'text_field input-block-level product_code  ui-autocomplete-input' %>
@@ -17,7 +17,9 @@
   <td>
     <%= f.text_field :discount, :class => 'text_field input-block-level product_discount' %>
   </td>
- 
+  <td>
+    <%= f.text_field :tax, :class => 'text_field input-block-level tax', :readonly => true %>
+  </td>
   <td>
     <%= f.text_field :cost_total, :class => 'text_field cost_total input-block-level', :readonly => true %>
   </td>
