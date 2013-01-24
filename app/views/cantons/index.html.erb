@@ -5,7 +5,6 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:province_id) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -14,8 +13,7 @@
   <tbody>
     <% @cantons.each do |canton| %>
       <tr>
-        <td><%= link_to canton.id, canton_path(canton) %></td>
-        <td><%= canton.name %></td>
+        <td><%= link_to canton.name, canton_path(canton) %></td>
         <td><%= canton.province_id %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

@@ -15,12 +15,16 @@
 
 one:
   description: MyString
-  employee: 
-  frequency: MyString
-  calculation_method: MyString
+  deduction_type: 1
+  amount_exhaust: 9.99
+  calculation_type: 1
+  calculation: 9.99
+  credit_account: 1
 
 two:
   description: MyString
-  employee: 
-  frequency: MyString
-  calculation_method: MyString
+  deduction_type: 1
+  amount_exhaust: 9.99
+  calculation_type: 1
+  calculation: 9.99
+  credit_account: 1

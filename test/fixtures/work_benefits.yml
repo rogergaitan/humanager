@@ -15,12 +15,12 @@
 
 one:
   description: MyString
-  employee: 
-  frequency: MyString
-  calculation_method: MyString
+  percentage: 9.99
+  debit_account: 1
+  credit_account: 1
 
 two:
   description: MyString
-  employee: 
-  frequency: MyString
-  calculation_method: MyString
+  percentage: 9.99
+  debit_account: 1
+  credit_account: 1

@@ -1,0 +1,79 @@
+    <ul class="thumbnails">
+          
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=dcerp_config_path %> class="thumbnail">
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=dcerp_config_path %> class='btn btn-info'><i class='icon-picture'></i> Configuración</a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%= provinces_path%>><i class='icon-list-alt'></i> Provincias</a></li>
+              <li><a href=<%= cantons_path%>><i class='icon-list-alt'></i> Cantones</a></li>
+              <li><a href=<%= districts_path%>><i class='icon-list-alt'></i> Distritos</a></li>
+              <li><a href=<%= employees_path%>><i class='icon-list-alt'></i> Empleados</a></li>
+              <li><a href=<%= departments_path%>><i class='icon-list-alt'></i> Departamentos</a></li>
+              <li><a href=<%= roles_path%>><i class='icon-list-alt'></i> Roles</a></li>
+              <li><a href=<%= positions_path%>><i class='icon-list-alt'></i> Puestos</a></li>
+              <li><a href=<%= tasks_path%>><i class='icon-list-alt'></i> Labores</a></li> 
+              <li><a href=<%= deductions_path%>><i class='icon-list-alt'></i> Deducciones</a></li> <!--aqui -->
+              <li><a href=<%= centro_de_costos_path%>><i class='icon-list-alt'></i> Centro de Costos</a></li>
+              <li><a href=<%= ledger_accounts_path%>><i class='icon-list-alt'></i> Cuentas Contables</a></li>
+              <li><a href=<%= other_salaries_path%>><i class='icon-list-alt'></i> Otros Salarios</a></li>
+              <li><a href=<%= occupations_path%>><i class='icon-list-alt'></i> Ocupaciones</a></li>
+              <li><a href=<%= means_of_payments_path%>><i class='icon-list-alt'></i> Medios de Pago</a></li>
+              <li><a href=<%= payment_frequencies_path%>><i class='icon-list-alt'></i> Frecuencias de Pago</a></li>
+              <li><a href=<%= type_of_personnel_actions_path%>><i class='icon-list-alt'></i> Tipos Acciones del personal</a></li>
+
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+            
+        </div>
+      </li>
+
+      <!-- PROCESOS -->
+       <li class="span3">
+        <div class="thumbnail">
+          <a href=<%= dcerp_process_path %> class="thumbnail">
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=dcerp_process_path %> class='btn btn-info'><i class='icon-picture'></i>Procesos</a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+
+              <li><a href=<%= payrolls_path%>><i class='icon-list-alt'></i> Planillas</a></li>
+              <li><a href=<%= work_benefits_path%>><i class='icon-list-alt'></i> Prestaciones</a></li>
+
+            </ul>
+            </div>
+            
+        </div>
+      </li>
+
+      <!-- INFORMES -->
+       <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=products_path %> class="thumbnail">
+          <%= image_tag ("products_icon.png" ) %> 
+          </a>
+          
+          <div class='btn-group'>
+           <a href=<%=products_path %> class='btn btn-info'><i class='icon-picture'></i> Informes </a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+             
+              <li><a href="#">Lista de menus</a></li>
+
+            </ul>
+            </div>
+            
+        </div>
+      </li>
+
+</ul>

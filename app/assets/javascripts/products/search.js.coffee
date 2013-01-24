@@ -52,11 +52,11 @@ jQuery(document).ready ($) ->
       complete: (data)->
         $("span.spinner").hide()
        
-  $(".pagination a").live "click", ->
+  $(".pagination").on "click", "a", ->
     $.getScript @href
     false
 
-  $(".case").live "click", ->
+  $("#table_products").on "click",".case", ->
     $("#storage").append($(@).closest("tr")).find("input").remove()
     set_cart( cart_to_array() )
     false

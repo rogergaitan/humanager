@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  iactivity: MyString
+  itask: MyString
+  ntask: MyString
+  iaccount: MyString
+  mlaborcost: 
+  mlaborcost: 
+  description: MyString
+
+two:
+  code: MyString
+  iactivity: MyString
+  itask: MyString
+  ntask: MyString
+  iaccount: MyString
+  mlaborcost: 
+  mlaborcost: 
+  description: MyString

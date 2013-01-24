@@ -1,0 +1,1 @@
+other_salaries.js.coffee

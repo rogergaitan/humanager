@@ -18,7 +18,7 @@ class WorkBenefitsControllerTest < ActionController::TestCase
 
   test "should create work_benefit" do
     assert_difference('WorkBenefit.count') do
-      post :create, work_benefit: { calculation_method: @work_benefit.calculation_method, description: @work_benefit.description, frequency: @work_benefit.frequency }
+      post :create, work_benefit: { credit_account: @work_benefit.credit_account, debit_account: @work_benefit.debit_account, description: @work_benefit.description, percentage: @work_benefit.percentage }
     end
 
     assert_redirected_to work_benefit_path(assigns(:work_benefit))
@@ -35,7 +35,7 @@ class WorkBenefitsControllerTest < ActionController::TestCase
   end
 
   test "should update work_benefit" do
-    put :update, id: @work_benefit, work_benefit: { calculation_method: @work_benefit.calculation_method, description: @work_benefit.description, frequency: @work_benefit.frequency }
+    put :update, id: @work_benefit, work_benefit: { credit_account: @work_benefit.credit_account, debit_account: @work_benefit.debit_account, description: @work_benefit.description, percentage: @work_benefit.percentage }
     assert_redirected_to work_benefit_path(assigns(:work_benefit))
   end
 

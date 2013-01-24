@@ -1,40 +1,32 @@
 class DeductionsController < ApplicationController
+  before_filter :resources, :only => [:new, :edit]
+  respond_to :html, :json
+
   # GET /deductions
   # GET /deductions.json
   def index
-    @deductions = Deduction.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @deductions }
-    end
+    @deductions = Deduction.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@deductions, :include => :ledger_account)
   end
 
   # GET /deductions/1
   # GET /deductions/1.json
   def show
     @deduction = Deduction.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @deduction }
-    end
+    respond_with(@deduction, :include => :ledger_account)
   end
 
   # GET /deductions/new
   # GET /deductions/new.json
   def new
     @deduction = Deduction.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @deduction }
-    end
+    respond_with(@deduction)
   end
 
   # GET /deductions/1/edit
   def edit
     @deduction = Deduction.find(params[:id])
+    #@credit_account = LedgerAccount.credit_accounts
   end
 
   # POST /deductions
@@ -80,4 +72,24 @@ class DeductionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  #Search for employees
+  def fetch_employees
+    @employees = Employee.includes(:entity).order_employees
+    respond_with(@employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} })
+  end
+
+    def get_activas
+    @activas = {}
+    @activas[:activa] = Payroll.activas
+    respond_with(@activas)
+  end
+
+  def resources
+    @credit_account = LedgerAccount.credit_accounts
+    @employees = Employee.order_employees
+    @department = Department.all
+    @superior = Employee.superior
+  end
+
 end

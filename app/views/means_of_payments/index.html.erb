@@ -1,11 +1,12 @@
 <%- model_class = MeansOfPayment -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
 </div>
+
+<%= will_paginate :class =>'pagination pagination-centered' %>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -14,8 +15,7 @@
   <tbody>
     <% @means_of_payments.each do |means_of_payment| %>
       <tr>
-        <td><%= link_to means_of_payment.id, means_of_payment_path(means_of_payment) %></td>
-        <td><%= means_of_payment.name %></td>
+        <td><%= link_to means_of_payment.name, means_of_payment_path(means_of_payment) %></td>
         <td><%= means_of_payment.description %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

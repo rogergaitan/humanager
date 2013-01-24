@@ -20,3 +20,5 @@ doc/app
 * ̃
 .DS_Store
 Gemfile.lock
+#ignore uploaded photos
+public/uploads/photo

@@ -1,29 +1,44 @@
-<h1>Listing deductions</h1>
+<%- model_class = Deduction -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
+</div>
 
-<table>
-  <tr>
-    <th>Description</th>
-    <th>Employee</th>
-    <th>Frequency</th>
-    <th>Calculation method</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @deductions.each do |deduction| %>
-  <tr>
-    <td><%= deduction.description %></td>
-    <td><%= deduction.employee %></td>
-    <td><%= deduction.frequency %></td>
-    <td><%= deduction.calculation_method %></td>
-    <td><%= link_to 'Show', deduction %></td>
-    <td><%= link_to 'Edit', edit_deduction_path(deduction) %></td>
-    <td><%= link_to 'Destroy', deduction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+<%= will_paginate :class =>'pagination pagination-centered' %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:deduction_type) %></th>
+      <th><%= model_class.human_attribute_name(:amount_exhaust) %></th>
+      <th><%= model_class.human_attribute_name(:calculation_type) %></th>
+      <th><%= model_class.human_attribute_name(:calculation) %></th>
+      <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @deductions.each do |deduction| %>
+      <tr>
+        <td><%= link_to deduction.description, deduction_path(deduction) %></td>
+        <td><%= deduction.deduction_type %></td>
+        <td><%= deduction.amount_exhaust %></td>
+        <td><%= deduction.calculation_type %></td>
+        <td><%= deduction.calculation %></td>
+        <td><%= deduction.ledger_account.naccount if deduction.ledger_account %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_deduction_path(deduction), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      deduction_path(deduction),
+                      :method => :delete,
+                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<br />
-
-<%= link_to 'New Deduction', new_deduction_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_deduction_path,
+            :class => 'btn btn-primary' %>

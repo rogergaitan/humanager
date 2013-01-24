@@ -1,0 +1,49 @@
+<script type="text/javascript" charset="utf-8">
+ var cc_child = [];
+  <%  @cc_child.each do |cc| %>
+      cc_child.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+  <% end %>
+ 
+  $(document).ready(function() {
+    dd_parent(cc_child);
+  })
+  
+  function dd_parent(cc_child) {
+    if (($('#ledger_account_iaccount').val() != '') || $('#ledger_account_naccount').val() != '') {
+      var parent = $('#ledger_account_iaccount').val();
+      $('#ledger_account_ifather').find('option').remove();
+      $(cc_child).each(function() {
+        if (!(this[0] == parent || this[2] == parent || parent == 0)) {
+          $('#ledger_account_ifather').append('<option value='+ this[2] + '>' + this[1] + '</option>');
+        }
+      });
+    } 
+  }
+</script>
+<%= form_for @ledger_account, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :iaccount, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :iaccount, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :naccount, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :naccount, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :ifather, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select(:ifather, @cc_child, :iaccount, :naccount , :prompt => '-') %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                ledger_accounts_path, :class => 'btn' %>
+  </div>
+<% end %>

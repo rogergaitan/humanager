@@ -11,8 +11,8 @@
 
 class Canton < ActiveRecord::Base
   belongs_to :province
-  has_many :districts
-  has_many :addresses
+  has_many :districts, :dependent => :destroy
+  has_many :addresses, :dependent => :destroy
   attr_accessible :name, :province_id
 
   def self.fetch

@@ -1,35 +1,24 @@
 class OccupationsController < ApplicationController
+  respond_to :html, :json
   # GET /occupations
   # GET /occupations.json
   def index
-    @occupations = Occupation.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @occupations }
-    end
+    @occupations = Occupation.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@occupations)
   end
 
   # GET /occupations/1
   # GET /occupations/1.json
   def show
     @occupation = Occupation.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @occupation }
-    end
+    respond_with(@occupation)
   end
 
   # GET /occupations/new
   # GET /occupations/new.json
   def new
     @occupation = Occupation.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @occupation }
-    end
+    respond_with(@occupation)
   end
 
   # GET /occupations/1/edit

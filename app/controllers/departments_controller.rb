@@ -1,35 +1,25 @@
 class DepartmentsController < ApplicationController
+  before_filter :resources, :only => [:new, :edit]
+  respond_to :html, :json
   # GET /departments
   # GET /departments.json
   def index
-    @departments = Department.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @departments }
-    end
+    @departments = Department.paginate(:page => params[:page], :per_page => 15)
+    respond_with(@departments)
   end
 
   # GET /departments/1
   # GET /departments/1.json
   def show
     @department = Department.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @department }
-    end
+    respond_with(@department)
   end
 
   # GET /departments/new
   # GET /departments/new.json
   def new
     @department = Department.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @department }
-    end
+    respond_with(@department)
   end
 
   # GET /departments/1/edit
@@ -44,7 +34,7 @@ class DepartmentsController < ApplicationController
 
     respond_to do |format|
       if @department.save
-        format.html { redirect_to @department, notice: 'Department was successfully created.' }
+        format.html { redirect_to departments_url, notice: 'Department was successfully created.' }
         format.json { render json: @department, status: :created, location: @department }
       else
         format.html { render action: "new" }
@@ -79,5 +69,9 @@ class DepartmentsController < ApplicationController
       format.html { redirect_to departments_url }
       format.json { head :no_content }
     end
+  end
+  
+  def resources
+    @centro_costos = CentroDeCosto.all
   end
 end
