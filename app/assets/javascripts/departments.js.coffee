@@ -1,1 +1,0 @@
-departments.js.coffee

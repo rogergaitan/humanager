@@ -1,1 +1,0 @@
-payroll_logs.js.coffee

@@ -1,1 +1,0 @@
-purchase_payment_options.js.coffee
