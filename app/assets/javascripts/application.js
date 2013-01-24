@@ -15,5 +15,5 @@
 //= require twitter/bootstrap
 //= require bootstrap-datepicker
 //= require rails.validations
-//= require autocomplete-rails
+//= require bootstrap-datepicker
 //= require_directory .

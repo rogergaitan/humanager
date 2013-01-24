@@ -44,5 +44,8 @@ firebird:
   username: SYSDBA
   password: '12345678'
   host: 127.0.0.1
+
 cucumber:
   <<: *test
+  password: 'root'
+  host: localhost

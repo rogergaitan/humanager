@@ -1,33 +1,183 @@
-<%= form_for(@deduction) do |f| %>
-  <% if @deduction.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@deduction.errors.count, "error") %> prohibited this deduction from being saved:</h2>
-
-      <ul>
-      <% @deduction.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+<script type="text/javascript">
+  var cuenta_credito = [];
+  <%  @credit_account.each do |cc| %>
+    cuenta_credito.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
   <% end %>
+</script>
+<%= javascript_include_tag 'deductions/deductions' %>
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
+<%= form_for @deduction, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
+<!-- Empledos Deducciones -->
+<div class="control-group">
+  <p>Aplica a:</p>
+    <%= f.label :Empleados, :class => 'control-label' %>
+    <div class="controls align-radio">
+      <div class="options-left">
+        <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
+        <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
+        <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+        <%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
+      </div>
+      <div class="options-right">
+        <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
+        <%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+      </div>
+      <div style="clear:both"></div>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :employee %><br />
-    <%= f.text_field :employee %>
+  <div class="controls padding-filter" id="list-departments">
+    <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+    <%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
   </div>
-  <div class="field">
-    <%= f.label :frequency %><br />
-    <%= f.text_field :frequency %>
+  <div class="controls padding-filter" id="list-superior">
+    <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+    <%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
   </div>
-  <div class="field">
-    <%= f.label :calculation_method %><br />
-    <%= f.text_field :calculation_method %>
+  <div class="controls padding-filter" id="employee-filter">
+    <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee' %> 
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="controls" id="marcar-desmarcar">
+    <%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
+    <%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+  </div>
+  <div class="controls lists">
+    <div class="employees-list left-list">
+      <div class="employees-margin" id="no-save">
+        <% @employees.each do |employee| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
+              <%= check_box_tag 'left-list-employees', employee.id, 
+                      @deduction.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
+              <%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
+                  :class => 'checkbox-label' %>
+            </div>
+          </div>         
+        <% end %>
+      </div>
+    </div>
+    <div class="control-buttons">
+      <a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+      <a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+    </div>
+    <div class="employees-list list-right">
+      <%= hidden_field_tag 'deduction[employee_ids][]', nil %>
+      <div class="employees-margin" id="list-to-save">        
+      </div>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<br></br>
+
+  <div class="control-group">
+      <%= f.label :deduction_type, :class => 'control-label' %>
+      <div class='controls'>
+        <%= f.enum_select :deduction_type, :include_blank =>false %>
+         <a id="unicPayroll" href="#myModalPayroll" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Seleccionar planilla"> <i class="icon-list"></i> </a>
+      </div>
+      <div class="payrolls-all">
+        <%= hidden_field_tag 'deduction[payroll_ids][]', nil %>
+        <div class="payrolls-margin" id="payrolls-to-save">        
+        </div>
+      </div>
+    </div>
+    <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
+    <div class="control-group" id="deduction_payrolls">
+      <div class='controls'>
+        <%= text_field_tag 'deduction_payroll',nil, :class => 'search-image-category'%>
+      </div>
+    </div>
+
+    <div class="control-group" id="amount_exhaust_controls">
+    <%= f.label :amount_exhaust, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :amount_exhaust, :class => 'text_field' %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :calculation_type, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.enum_select :calculation_type, :include_blank =>false %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :calculation, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :calculation, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :ledger_account_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :ledger_account_id %>
+       <%= text_field_tag 'deduction_ledger_account',nil, :class => 'number_field search-image-category', :for => :ledger_account_id %>
+      <a href="#myModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary', :id => "member_submit"  %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                deductions_path, :class => 'btn' %>
   </div>
 <% end %>
+
+<!-- Modal de cuentas de credito-->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la cuenta de crédito</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<!-- Modal de planillas-->
+<div id="myModalPayroll" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la planilla</h3>
+  </div>
+  <div id="loading"> <h5><p align="center" class="h5-with-shadown">Espere un momento mientras se cargan las planillas disponibles.</p></h5>
+    <p align="center" ><%= image_tag("ajax-loader.gif") %> </p>
+  </div>
+  <div id="error">
+ <h5><p align="center" class="h5-with-shadown">Imposible cargar las planillas</p></h5>
+  <p align="center"><a href='#'>Click Aqui</a> para volver a intentarlo<p>
+  </div>
+  <div class="modal-body">
+     <table class="table table-striped" id="activas">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>Tipo de planilla</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Fecha de pago</th>
+              </tr>
+            </thead>
+          <tbody>
+        
+          </tbody>
+        </table>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>

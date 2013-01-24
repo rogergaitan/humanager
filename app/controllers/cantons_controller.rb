@@ -1,7 +1,17 @@
 class CantonsController < ApplicationController
-  
+
   after_filter :clean_cache, :only => [:new, :edit, :destroy]
+  before_filter :get_canton, :only => [:edit, :update, :destroy]
+
   respond_to :json, :html
+
+  def index
+    respond_with @cantons = Canton.all
+  end
+
+  def get_canton
+    @canton = Canton.find(params[:id])
+  end
 
   def index
     respond_with @cantons = Canton.all
@@ -14,16 +24,12 @@ class CantonsController < ApplicationController
   def new
     @canton = Canton.new
     @province = Province.all
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @canton }
-    end
+    respond_with(@canton)
   end
 
   # GET /cantons/1/edit
   def edit
-    @canton = Canton.find(params[:id])
+    @province = Province.all
   end
 
   def create
@@ -41,8 +47,6 @@ class CantonsController < ApplicationController
   end
 
   def update
-    @canton = Canton.find(params[:id])
-
     respond_to do |format|
       if @canton.update_attributes(params[:canton])
         format.html { redirect_to @canton, notice: 'Canton was successfully updated.' }
@@ -55,7 +59,6 @@ class CantonsController < ApplicationController
   end
 
   def destroy
-    @canton = Canton.find(params[:id])
     @canton.destroy
 
     respond_to do |format|
@@ -67,7 +70,7 @@ class CantonsController < ApplicationController
   def fetch
     respond_with @canton = Canton.fetch
   end
-  
+
   def clean_cache
     Canton.clean_cache
   end

@@ -1,0 +1,38 @@
+<%- model_class = OtherSalary -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+
+<%= will_paginate :class =>'pagination pagination-centered' %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @other_salaries.each do |other_salary| %>
+      <tr>
+        <td><%= link_to other_salary.description, other_salary_path(other_salary) %></td>
+        <td><%= other_salary.ledger_account.naccount if other_salary.ledger_account %></td>
+        <td><%= other_salary.amount %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_other_salary_path(other_salary), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      other_salary_path(other_salary),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_other_salary_path,
+            :class => 'btn btn-primary' %>

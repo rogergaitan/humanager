@@ -1,33 +1,70 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :companies
+  resources :payroll_logs do
+    collection do
+      get :fetch_employees
+    end
+  end
 
-  resources :discount_profile_items
+  resources :payrolls do
+    collection do
+      get :get_activas
+      get :get_inactivas
+      get :get_payroll_types
+      get :load_payrolls
+    end
+    collection do
+      post :reabrir
+      post :cerrar_planilla
+    end
+  end
 
-  resources :discount_profiles
+  resources :deductions do
+    collection do
+      get :fetch_employees
+      get :get_activas
+    end
+  end
 
-  resources :taxes
-
-  resources :purchase_payment_options
-
-  resources :payment_types
-
-  resources :payment_options
-
-  resources :product_applications
-
-  get "pages/home"
-  get "pages/about"
-  get "pages/help"
-  get "pages/contact"
-
-  match '/contact', :to => 'pages#contact'
-  match '/help', :to => 'pages#help'
-  match '/about', :to => 'pages#about'
-  match '/404', :to => 'errors#not_found'
+  resources :other_salaries do
+    collection do
+      get :fetch_employees
+    end
+  end
   
-  root :to => 'pages#home'
+  resources :work_benefits do
+    collection do
+      get 'fetch_debit_accounts'
+      get 'fetch_credit_accounts'
+      get 'fetch_employees'
+    end
+  end
+
+  resources :centro_de_costos do
+    collection do
+      get 'sync_cc'
+    end
+    collection do
+      get 'load_cc'
+    end
+  end
+
+  resources :ledger_accounts do
+    collection do
+      get 'accountfb'
+      get 'fetch'
+    end
+    collection do
+      get 'accountfb'
+    end
+  end
+
+  resources :tasks do
+    collection do
+      get 'tasksfb'
+    end
+  end
 
   resources :employees do
     collection do
@@ -106,8 +143,35 @@ Reasapp::Application.routes.draw do
     end
   end
 
-  devise_for :users
+  match '/contact', :to => 'pages#contact'
+  match '/help', :to => 'pages#help'
+  match '/about', :to => 'pages#about'
+  match '/404', :to => 'errors#not_found'
+  match '/configuracion', :to  => 'pages#configuracion', :as  => 'dcerp_config'
+  match '/procesos', :to  => 'pages#procesos', :as  => 'dcerp_process'
 
+  root :to => 'pages#index'
+
+  devise_for :users
+  
+  resources :payroll_logs
+  resources :work_benefits
+  resources :payroll_types
+  resources :districts
+  resources :type_of_personnel_actions
+  resources :discount_profile_items
+  resources :companies
+  resources :discount_profiles
+  resources :occupations
+  resources :centro_de_costos
+  resources :positions
+  resources :customers
+  resources :taxes
+  resources :purchase_payment_options
+  resources :departments
+  resources :payment_types
+  resources :payment_options
+  resources :product_applications
   resources :purchases
   resources :shipping_methods
   resources :districts

@@ -105,7 +105,7 @@ $(jQuery(document).ready(function($) {
         return false;
     });
 
-    $(".bind_select_btn").live('click',function(){
+    $("#lines_list").on('click',"bind_select_btn",function(){
         var name_type = $(this).attr('name_type');
         var id = $(this).attr("id_"+name_type);
         var name_item = $(this).next('span').text();
@@ -114,6 +114,15 @@ $(jQuery(document).ready(function($) {
         $('.click_cancel').trigger('click');
 
     });
+    // $(".bind_select_btn").live('click',function(){
+    //     var name_type = $(this).attr('name_type');
+    //     var id = $(this).attr("id_"+name_type);
+    //     var name_item = $(this).next('span').text();
+    //     $("#product_"+name_type+"_id").val(id);
+    //     $("#product_"+name_type+"").val(name_item);
+    //     $('.click_cancel').trigger('click');
+
+    // });
     
     $(function() {
         var hash = window.location.hash;

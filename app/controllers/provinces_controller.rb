@@ -1,45 +1,37 @@
 class ProvincesController < ApplicationController
   
   after_filter :clean_cache, :only => [:new, :edit, :destroy]
+  before_filter :get_province, :only => [:edit, :update, :destroy]
   
-  respond_to :json
+  respond_to :html, :json
+
+  def get_province
+    @province = Province.find(params[:id])
+  end
 
   # GET /provinces
   # GET /provinces.json
   def index
     @provinces = Province.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @provinces }
-    end
+    respond_with(@provinces)
   end
 
   # GET /provinces/1
   # GET /provinces/1.json
   def show
     @province = Province.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @province }
-    end
+    respond_with(@province)
   end
 
   # GET /provinces/new
   # GET /provinces/new.json
   def new
     @province = Province.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @province }
-    end
+    respond_with(@province)
   end
 
   # GET /provinces/1/edit
   def edit
-    @province = Province.find(params[:id])
   end
 
   # POST /provinces
@@ -61,8 +53,6 @@ class ProvincesController < ApplicationController
   # PUT /provinces/1
   # PUT /provinces/1.json
   def update
-    @province = Province.find(params[:id])
-
     respond_to do |format|
       if @province.update_attributes(params[:province])
         format.html { redirect_to @province, notice: 'Province was successfully updated.' }
@@ -77,7 +67,6 @@ class ProvincesController < ApplicationController
   # DELETE /provinces/1
   # DELETE /provinces/1.json
   def destroy
-    @province = Province.find(params[:id])
     @province.destroy
 
     respond_to do |format|
@@ -89,6 +78,7 @@ class ProvincesController < ApplicationController
   def fetch
     respond_with @province = Province.fetch
   end
+  
   def clean_cache
     Province.clean_cache
   end

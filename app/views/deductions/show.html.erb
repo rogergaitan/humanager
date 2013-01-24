@@ -1,25 +1,31 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Deduction -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
 
-<p>
-  <b>Description:</b>
-  <%= @deduction.description %>
-</p>
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @deduction.description %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:deduction_type) %>:</strong></dt>
+  <dd><%= @deduction.deduction_type %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:amount_exhaust) %>:</strong></dt>
+  <dd><%= @deduction.amount_exhaust ? @deduction.amount_exhaust : 0 %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:calculation_type) %>:</strong></dt>
+  <dd><%= @deduction.calculation_type %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:calculation) %>:</strong></dt>
+  <dd><%= @deduction.calculation %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:ledger_account_id) %>:</strong></dt>
+  <dd><%= @deduction.ledger_account.naccount %></dd>
+</dl>
 
-<p>
-  <b>Employee:</b>
-  <%= @deduction.employee %>
-</p>
-
-<p>
-  <b>Frequency:</b>
-  <%= @deduction.frequency %>
-</p>
-
-<p>
-  <b>Calculation method:</b>
-  <%= @deduction.calculation_method %>
-</p>
-
-
-<%= link_to 'Edit', edit_deduction_path(@deduction) %> |
-<%= link_to 'Back', deductions_path %>
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              deductions_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_deduction_path(@deduction), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              deduction_path(@deduction),
+              :method => 'delete',
+              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+              :class => 'btn btn-danger' %>
+</div>

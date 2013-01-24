@@ -4,7 +4,7 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.json
   def index
-    @employees = Employee.all
+    @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -28,6 +28,7 @@ class EmployeesController < ApplicationController
   def new
     @employee = Employee.new
     @entity = @employee.build_entity
+    @employee.build_photo
     @entity.telephones.build
     @entity.emails.build
     @entity.addresses.build
@@ -93,6 +94,7 @@ class EmployeesController < ApplicationController
     @c = 0 
     @syn_data = {}
     @employees = []
+    @notice = []
     @abanits.each do |employee|
       if Entity.where("entityid = ?", employee.init).empty?
         full_name = splitname(firebird_encoding(employee.ntercero).split)
@@ -100,6 +102,7 @@ class EmployeesController < ApplicationController
         @entity = @new_employee.build_entity(:name => full_name[:name], :surname => 
                                 full_name[:surname], :entityid => employee.init)
         @entity.telephones.build
+        @new_employee.build_photo
         @entity.emails.build
         @entity.addresses.build
         if @new_employee.save
@@ -107,14 +110,14 @@ class EmployeesController < ApplicationController
             @c += 1
         else
           @new_employee.errors.each do |error|
-            Rails.logger.error "Error Creating employee: #{employee.init}, 
-                                Description: #{error}"
+            @notice << "Error creando empleado: #{employee.init}, el nombre no ha sido especificado"
           end
         end        
       end
-        @syn_data[:employee] = @employees
-        @syn_data[:notice] = "#{t('helpers.titles.sync').capitalize}: #{@c}"
     end
+    @syn_data[:employee] = @employees
+    @notice << "#{t('helpers.titles.sync').capitalize}: #{@c}"
+    @syn_data[:notice] = @notice
     respond_to do |format|
         format.json { render json: @syn_data, :include => :entity}
       end
@@ -149,9 +152,10 @@ class EmployeesController < ApplicationController
    def get_employee_info
      @department = Department.find(:all, :select =>['id','name'])
      @occupation = Occupation.find(:all, :select =>['id','description'])
-     @payment_method = PaymentMethod.find(:all, :select =>['id','name'])
      @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
      @roles = Role.find(:all, :select =>['id','role'])
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
+     @position = Position.find(:all, :select =>['id','position'])
+     @superior = Employee.all
    end
 end

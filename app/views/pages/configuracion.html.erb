@@ -1,0 +1,341 @@
+<h2>Configuraciones</h2>
+
+    <ul class="thumbnails">
+      
+      <!-- Provincias -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=provinces_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=provinces_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.province').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_province_path%>><i class='icon-pencil'></i>  Nueva</a></li>
+              <li><a href=<%=provinces_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+        </div>
+      </li>
+
+        <!-- Cantones -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=cantons_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=cantons_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.canton').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_canton_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=cantons_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+        </div>
+      </li>
+
+         <!-- Distritos -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=districts_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=districts_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.district').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_district_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=districts_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+        </div>
+      </li>
+
+      <!--employees-->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=employees_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=employees_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.employee').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_employee_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=employees_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+</ul>
+
+<!-- Segunda Linea -->
+<ul class="thumbnails">
+
+  <!-- roles -->
+       <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=roles_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+            <a href=<%=roles_path %> class='btn btn-info btn-info hrbox'><i class='icon-picture'></i>Roles</a>
+            <button class="btn btn-info btn-info hrbox dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_role_path %> ><i  class='icon-pencil'></i> Nuevo</a></li>
+              <li><a href=<%=roles_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+          </div>     
+      </div>
+  </li>
+
+  <!--puestos -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=positions_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=employees_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.position').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_position_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=positions_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+  <!--deducciones -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=deductions_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=deductions_path %> class='btn btn-info btn-info'><i class='icon-picture'></i> <%= I18n.t('.activerecord.models.deduction.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_deduction_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=deductions_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+
+      </div>
+  </li>
+
+  <!-- centro de costos-->
+      <li class="span3">
+            <div class='thumbnail'>
+              <div class='btn-group'>
+              <a href=<%=centro_de_costos_path %> class="thumbnail">
+          <%= image_tag ("line_icon.png" ) %> 
+          </a>
+            <a href=<%=centro_de_costos_path %> class='btn btn-info'><i class='icon-picture'></i> <%= I18n.t('.activerecord.models.centro_de_costo').pluralize %></a>
+            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li>
+                <a href=<%=centro_de_costos_path %>>
+                  <i class='icon-list-alt'></i> Lista
+                </a>
+              </li>              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+      </li>
+
+</ul>
+
+<!-- Tercera Linea -->
+<ul class="thumbnails">
+     <!-- cuentas contables-->
+       <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=ledger_accounts_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=ledger_accounts_path %> class='btn btn-info btn-info hrbox'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.ledger_account').pluralize %></a>
+            <button class="btn btn-info btn-info hrbox dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=ledger_accounts_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+      <!--otros salarios-->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=other_salaries_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=other_salaries_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.other_salary').pluralize %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_other_salary_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=other_salaries_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+      
+  <!--ocupaciones-->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=occupations_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%= occupations_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.occupation.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_occupation_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=occupations_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+ <!--medios de pago-->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=means_of_payments_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%= means_of_payments_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.means_of_payment.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_means_of_payment_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=means_of_payments_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+</ul>
+
+<!-- Cuarta linea Linea -->
+<ul class="thumbnails">
+
+  <!--frecuencias de pago-->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=payment_frequencies_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=payment_frequencies_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.payment_frequency.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_payment_frequency_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=payment_frequencies_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+     <!--tipos de acciones del personal-->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=type_of_personnel_actions_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=type_of_personnel_actions_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.type_of_personnel_action.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_type_of_personnel_action_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=type_of_personnel_actions_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+           
+        </div>
+      </li>
+
+  <!-- Labores -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=tasks_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=tasks_path %> class='btn btn-info btn-info'><i class='icon-picture'></i> <%= I18n.t('.activerecord.models.task.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_task_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=tasks_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+
+      </div>
+  </li>
+
+</ul>

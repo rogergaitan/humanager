@@ -1,0 +1,25 @@
+<%- model_class = OtherSalary -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @other_salary.description %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:ledger_account_id) %>:</strong></dt>
+  <dd><%=  @other_salary.ledger_account.naccount ? @other_salary.ledger_account.naccount : '' %></dd>
+    <dt><strong><%= model_class.human_attribute_name(:amount) %>:</strong></dt>
+  <dd><%= @other_salary.amount %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              other_salaries_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_other_salary_path(@other_salary), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              other_salary_path(@other_salary),
+              :method => 'delete',
+              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+              :class => 'btn btn-danger' %>
+</div>

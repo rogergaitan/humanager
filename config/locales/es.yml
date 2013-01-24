@@ -13,6 +13,7 @@ es:
     contacts: Contactos
     contact: Contacto
     applications: Aplicaciones
+    employment_data: Datos de empleado
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
@@ -43,6 +44,7 @@ es:
       show_accounting_info: 'Información Contable'   
     titles:
       sync: datos sincronizados
+      tasksfb: datos sincronizados
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
   notice:
@@ -226,6 +228,31 @@ es:
                 blank: *BLANK
               sell_price:
                 blank: *BLANK
+          payroll_type:
+            attributes:
+              description:
+                blank: Este campo no puede quedar en blanco
+                taken: La descripción especificada ya existe
+          entity:
+            attributes:
+              name:
+                blank: Este campo no puede quedar en blanco
+              surname:
+                blank: Este campo no puede quedar en blanco
+              entityid:
+                blank: Este campo no puede quedar en blanco
+          position:
+            attributes:
+              position:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este puesto ya existe'
+          department:
+            attributes:
+              name:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+              employee_id:
+                blank: Este campo no puede quedar en blanco
           product:
             attributes:
               code:
@@ -353,6 +380,21 @@ es:
               district:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este distrito ya existe'
+          other_salary:
+            attributes:
+              code:
+                blank: Este campo no puede quedar en blanco
+                taken: 'Este código ya existe'
+                too_short: Código demasiado corto
+                too_long: Código demasiado largo
+              description:
+                blank: Este campo no puede quedar en blanco
+              ledger_account_id:
+                blank: Este campo no puede quedar en blanco
+          deduction:
+            attributes:
+              calculation:
+                blank: Este campo no puede quedar en blanco
       models:
         company: Compañía
         discount_profile_item: Artículos del Perfil de Descuento
@@ -366,6 +408,20 @@ es:
         shipping_method: "Método de envío"
         purchase_order: Orden de compra
         bank_account: Cuenta Bancaria
+        work_benefit:
+          one: Prestación
+          other: Prestaciones
+        payment_frequency: Frecuencias de Pago
+        means_of_payment: Medios de Pago
+        payroll_type:
+          one: Tipo de planilla
+          other: Tipos de planillas
+        centro_de_costo: Centro De Costos
+        position: Puesto
+        role:
+          one: Rol
+          other: Roles
+        department: Departamento
         customer: Cliente
         vendor: Proveedor
         vendors: Proveedores
@@ -386,6 +442,34 @@ es:
         province: Provincia
         district: Distrito
         canton: Cantones
+        task: 
+          one: Labor
+          other: Labores
+        other_salary: Otros Salarios
+        ledger_account: Cuentas Contable
+        payment_method: Métodos de Pago
+        type_of_personnel_action:
+          one: Tipo Acción Personal
+          other: Tipos Acciones Personal
+        payroll: Planilla
+        work_benefit: 
+          one: Prestación
+          other: Prestaciones
+        deduction:
+          one: Deduccion
+          other: Deducciones
+        occupation:
+          one: Ocupación
+          other: Ocupaciones
+        means_of_payment:
+          one: Medio de pago
+          other: Medios de pago
+        payment_frequency:
+          one: Frecuencia de pago
+          other: Frecuencias de pago
+        payroll_log:
+          one: planilla
+          other: Registro de planillas
       attributes:
         company:
           name: Nombre / Razón social
@@ -424,6 +508,44 @@ es:
           id: Identificación
           name: Descripción
         payment_option:
+        work_benefit:
+          description: Descripción
+          percentage: Porcentaje
+          debit_account: Cuenta de Débito
+          credit_account: Cuenta de Crédito
+        payment_method: 
+          name: Nombre
+          description: Descripción
+        payment_frequency: 
+          name: Nombre
+          description: Descripción
+        means_of_payment: 
+          name: Nombre
+          description: Descripción
+        payroll_type:
+          description: Descripción
+          payroll_type: Tipo de planilla
+        centro_de_costo:
+          iempresa: Empresa
+          icentro_costo: Id Centro de Costos
+          nombre_cc: Nombre
+          icc_padre: Padre
+        email:
+          typeemail: Tipo de email
+        position:
+          position: Puesto
+          description: Descripción
+          codigo_ins: Código INS
+          codigo_ccss: Código CCSS
+        role:
+          role: Rol
+          description: 'Descripción'
+        department:
+          name: Departamento
+          employee_id: Encargado
+        vendor:
+          credit_limit: Crédito
+        entity:
           name: Nombre
           related_account: Cuenta relacionada
           use_expenses: "¿En gastos?"
@@ -545,6 +667,7 @@ es:
           end_date: 'Hasta'
           payment_date: 'Fecha del pago'
         employee:
+          employee_id: Jefe Inmediato
           entity_id: Entidad
           join_date: Ingreso
           seller: Vendedor
@@ -562,6 +685,7 @@ es:
           social_insurance: Seguro Social
           spouse: 'Cónyuge'
           wage_payment: Salario
+          position_id: Puesto
         entity:
           name: 'Nombre o Razón Social'
           surname: Nombre Comercial
@@ -589,8 +713,44 @@ es:
         district:
           district: Distrito
           canton_id: Cantón
+        task:
+          itask: Codigo
+          ntask: Descripción
+          mlaborcost: Costo Labor
+          iaccount: Cuenta
+        ledger_account:
+          iaccount: Cuenta
+          naccount: Descripción Cuenta  
+          ifather: Cuenta Padre       
+        other_salary:
+          code: Codigo
+          description: Descripción
+          ledger_account_id: Cuenta Contable
+          amount: Monto
         user:
           login:
+        type_of_personnel_action:
+          description: Descripción
+          created_at: Creado
+        deduction:
+          description: Descripción
+          deduction_type: Tipo de deducción
+          amount_exhaust: Monto a agotar
+          calculation_type: Tipo de calculo
+          calculation: Valor
+          ledger_account_id: Cuenta de Crédito
+        payroll:
+          payroll_type_id: Tipo de planilla
+          start_date: Desde
+          end_date: Hasta
+          payment_date: Fecha de pago
+          state: Cerrar
+        payroll_log:
+          date: Fecha
+          time_worked: Tiempo trabajado
+          task_id: Tarea
+          payment_type: Tipo de Pago
+          payroll_id: Planilla
   date:
       abbr_day_names:
       - dom
@@ -644,7 +804,4 @@ es:
       - :day
       - :month
       - :year
-
-
-
 

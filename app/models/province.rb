@@ -9,9 +9,9 @@
 #
 
 class Province < ActiveRecord::Base
-  has_many :addresses
-  has_many :cantons
-  has_many :districts
+  has_many :addresses, :dependent => :destroy
+  has_many :cantons, :dependent => :destroy
+  has_many :districts, :dependent => :destroy
 
   attr_accessible :name
 

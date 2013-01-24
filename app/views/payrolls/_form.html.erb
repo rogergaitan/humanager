@@ -1,0 +1,33 @@
+<%= javascript_include_tag 'payroll/dinamic_fields' %>
+<%= form_for @payroll, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :payroll_type_id, :class => 'control-label' %>
+    <div class="controls">
+			<%= f.collection_select(:payroll_type_id, @payroll_types, :id, :description , :prompt => true) %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :start_date, :class => 'control-label' %>
+    <div class="controls">
+			<%= f.text_field :start_date, :class => 'text_field', :readonly => true %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :end_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :end_date, :class => 'text_field', :readonly => true %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :payment_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :payment_date, :class => 'text_field', :readonly => true %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                payrolls_path, :class => 'btn' %>
+  </div>
+<% end %>

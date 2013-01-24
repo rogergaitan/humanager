@@ -26,8 +26,6 @@
   <dd><%= @employee.department_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:occupation_id) %>:</strong></dt>
   <dd><%= @employee.occupation_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:role_id) %>:</strong></dt>
-  <dd><%= @employee.role_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:seller) %>:</strong></dt>
   <dd><%= @employee.seller %></dd>
   <dt><strong><%= model_class.human_attribute_name(:payment_method_id) %>:</strong></dt>
@@ -38,6 +36,7 @@
   <dd><%= @employee.means_of_payment_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:wage_payment) %>:</strong></dt>
   <dd><%= @employee.wage_payment %></dd>
+	<dd><%= image_tag @employee.photo.photo_url(:thumb).to_s if @employee.photo %></dd>
 </dl>
 
 <div class="form-actions">

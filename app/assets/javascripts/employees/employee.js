@@ -3,7 +3,7 @@ $(document).ready(function($) {
     $.getJSON('/employees/load_employees', function(employee_data) {
         $( "#load_employee" ).autocomplete({
             source: $.map(employee_data, function(item){
-                $.data(document.body, 'employee'+ item.id+"", item.entity.name + ' ' + item.entity.surname);
+                $.data(document.body, 'employee_'+ item.id+"", item.entity.name + ' ' + item.entity.surname);
                 return{
                     label: item.entity.name + ' ' + item.entity.surname,                        
                     id: item.id
@@ -25,8 +25,8 @@ $(document).ready(function($) {
                 } 
             }
         }) 
-        if($("#load_employee_id").val()){
-            var load_employee_name = $.data(document.body, 'employee' + $("#load_employee_id").val()+'');
+        if($("#department_employee_id").val()){
+            var load_employee_name = $.data(document.body, 'employee_' + $("#department_employee_id").val()+'');
             $("#load_employee").val(load_employee_name);
         }      
     });

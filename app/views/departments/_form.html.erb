@@ -1,5 +1,13 @@
-<%= javascript_include_tag "employees/employee" %>
-<%= form_for @department, :html => { :class => 'form-horizontal' } do |f| %>
+<script type="text/javascript">
+  var centro_costos = [];
+  <% @centro_costos.each do |cc| %>
+    centro_costos.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
+  <% end %>
+</script>
+<%= javascript_include_tag 'employees/employee' %>
+<%= javascript_include_tag 'departments/department' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= form_for @department, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :name, :class => 'control-label' %>
     <div class="controls">
@@ -14,6 +22,15 @@
                           search-image-employee', :for=>:employee_id %>  
     </div>
   </div>
+  <div class="control-group">
+    <%= f.label :centro_de_costos_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :centro_de_costos_id %>
+      <%= text_field_tag 'load_centro_de_costo',nil, :class => 'text_field required 
+                          search-image-employee', :for=>:centro_de_costos_id %> 
+    <a href="#myModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i> </a> 
+    </div>
+  </div>
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
@@ -21,3 +38,19 @@
                 departments_path, :class => 'btn' %>
   </div>
 <% end %>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione un Centro de Costos</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    <!--
+    <button class="btn btn-primary">Save changes</button>
+    -->
+  </div>
+</div>
