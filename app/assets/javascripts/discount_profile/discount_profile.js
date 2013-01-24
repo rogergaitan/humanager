@@ -1,13 +1,45 @@
+
+	action_add_item = function(e) {
+		var form, regexp, time;
+		form = $("form").attr("id");
+		time = new Date().getTime();
+		regexp = new RegExp($('.add_item').data('id'), 'g');
+		$('.table_items').append($('.add_item').data('fields').replace(regexp, time));
+		e.preventDefault();		
+		$("form").enableClientSideValidations();
+		return false;
+	}; 
+
+	action_remove_item = function() {
+		if (!$(this).closest("tr").is($(".table tbody tr:first"))) {
+				$(this).closest("tr").hide();
+		}
+		$(this).closest("tr").find(".item_type").remove();
+		$(this).prev('input[type=hidden]').val(1);
+		$(this).closest("tr").find(".item_name").remove();
+		$(this).closest("tr").find(".item_id").remove();
+		$(this).closest("tr").find(".discount").remove();
+	};
+
+	action_reset_type = function() {
+		$(this).closest("tr").find(".item_name").val("");
+		$(this).closest("tr").find(".item_id").val("");
+		$(this).closest("tr").find(".discount").val("");
+	}
+
 $(document).ready(function() {
-	$(".item_type").change(function() {
-		$(".item_name").val("");
-		$(".item_id").val("");
-		$(".discount").val("");
-	});
+
+	$('form').on('change', '.item_type', action_reset_type);
+
+	$('form').on('click', '.add_item', action_add_item);
+
+	$('form').on('click', '.remove_item', action_remove_item);
 	
-	$("form").on('focus', '.item_name', function() {
+	$("table tr").eq(1).find(".remove_item").remove();
+	
+	$('form').on('focus', '.item_name', function() {
 		var URL = '/products/search.json';
-		if($(".item_type").val() != "product") {
+		if($(this).closest("tr").find(".item_type").val() != 'product') {
 			URL = '/sublines/search.json';
 		}
 		return $(this).autocomplete({
@@ -31,7 +63,6 @@ $(document).ready(function() {
 			},
 			minLength: 3,
 			select: function(event, ui) {
-				//$("#purchase_product_id").val(ui.item.id);
 				$(this).closest("tr").find("input.item_id").val(ui.item.code);
 				$(this).closest("tr").find("input.item_id").trigger("change");
 				return $(this).val(ui.item.label);
