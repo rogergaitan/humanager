@@ -3,8 +3,8 @@ require 'will_paginate/array'
 class PurchasesController < ApplicationController
 
   before_filter :title
-  before_filter :fetch_warehouses, :only => [:new, :edit]
-  before_filter :fetch_payment_types, :only => [:new, :edit]
+  before_filter :fetch_warehouses, :only      => [:new, :edit]
+  before_filter :fetch_payment_types, :only   => [:new, :edit]
   before_filter :fetch_payment_options, :only => [:new, :edit]
   respond_to :json, :js, :html
 
