@@ -28,12 +28,13 @@ attr_accessible :code, :description, :income, :inventory,
 									:purchase_tax, :sale_cost, :sale_tax, 
 									:sales_return, :utility_adjusment
 
-validates 	:code, 
-							:length => { :within => 1..10 },
-							:uniqueness => { :case_sensitive => false }
+validates :code, :length => { :within => 1..10 },:uniqueness => { :case_sensitive => false }
 
-validates 	:code, :name, 
-							:presence => true	
+validates :code, :name, :presence => true	
+
+validates  :inventory, :sale_cost, :utility_adjusment, :lost_adjustment, :income, :sales_return, 
+		   :purchase_return, :sale_tax, :purchase_tax, :format => { :with => /[0-9]/, 
+		   	:message => :not_a_number }, :allow_blank => true
 =begin
 validates 	:income, :inventory, :lost_adjustment, :purchase_return, 
 						:purchase_tax, :sale_cost, :sale_tax, :sales_return, :utility_adjusment,		

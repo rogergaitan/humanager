@@ -61,8 +61,10 @@
 
     <div class="form-actions">
           <%= f.submit nil, :class => 'btn btn-primary' %>
-          <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                      vendors_path, :class => 'btn' %>
+          <% if !@vendor.id  %>
+            <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-primary btn-info' %>
+          <% end %>
+          <%= link_to t('.cancel', :default => t("helpers.links.cancel")), vendors_path, :class => 'btn' %>
     </div>
   </div>
 </div>
