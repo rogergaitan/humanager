@@ -19,7 +19,7 @@ class Warehouse < ActiveRecord::Base
     :length => { :within => 4..10 },
     :uniqueness => { :case_sensitive => false }
 
-  validates :code, :name, :manager, :description, :presence => true
+  validates :code, :name, :manager, :presence => true
 
   def self.fetch
     Rails.cache.fetch("Warehouse.all"){ find(:all, :select =>['id','name']) }

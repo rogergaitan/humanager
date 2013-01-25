@@ -48,6 +48,9 @@ class Product < ActiveRecord::Base
   validates :code, :line_id, :subline_id, :category_id, :part_number, :name,
     :presence => true
 
+  validates :max_discount, :max_cant, :min_cant, :market_price, :stock, 
+            :format => { :with => /[0-9]/, :message => :not_a_number }, :allow_blank => true
+
   ##GENERAL SEARCH
   def self.search(search)
     query = ""

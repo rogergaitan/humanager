@@ -293,8 +293,6 @@ es:
                 blank: Este campo no puede quedar en blanco
               part_number:
                 blank: Este campo no puede quedar en blanco
-              name: 
-                blank: Este campo no puede quedar en blanco
               make:
                 blank: Este campo no puede quedar en blanco
               model:
@@ -309,6 +307,16 @@ es:
                 blank: Este campo no puede quedar en blanco
               product_subline:
                 blank: Este campo no puede quedar en blanco
+              max_discount:
+                not_a_number: *NOT_A_NUMBER
+              max_cant:
+                not_a_number: *NOT_A_NUMBER
+              min_cant:
+                not_a_number: *NOT_A_NUMBER
+              market_price:
+                not_a_number: *NOT_A_NUMBER
+              stock:
+                not_a_number: *NOT_A_NUMBER
           line:
             attributes:
               code:
@@ -316,62 +324,37 @@ es:
                 too_long: Código demasiado largo
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
-              description:
-                blank: Este campo no puede quedar en blanco
               name:
-                blank: Este campo no puede quedar en blanco
-              description:
                 blank: Este campo no puede quedar en blanco
               income:
-                blank: Este campo no puede quedar en blanco
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               inventory:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               lost_adjustment:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
-              name:
-                blank: Este campo no puede quedar en blanco
+                not_a_number: *NOT_A_NUMBER
               purchase_return:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               purchase_tax:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               sale_cost:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               sale_tax:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               sales_return:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               utility_adjusment:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
           warehouse:
             attributes:
               code:
                 too_short: Código demasiado corto
                 too_long: Código demasiado largo
-                blank: Este campo no puede quedar en blanco
+                blank: *BLANK
                 taken: 'Este código ya existe'
-              description:
-                blank: Este campo no puede quedar en blanco
               name:
-                blank: Este campo no puede quedar en blanco
+                blank: *BLANK
               manager:
-                blank: Este campo no puede quedar en blanco
+                blank: *BLANK
           subline:
             attributes:
               code:

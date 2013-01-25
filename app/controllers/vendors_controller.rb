@@ -43,8 +43,13 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.save
-        format.html { redirect_to @vendor, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_created') }
-        format.json { render json: @vendor, status: :created, location: @vendor }
+        if params['continue']
+          format.html { redirect_to new_vendor_path, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_created') }
+          format.json { render json: @vendor, status: :created, location: @vendor }
+        else
+          format.html { redirect_to @vendor, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_created') }
+          format.json { render json: @vendor, status: :created, location: @vendor }
+        end
       else
         format.html { render action: "new" }
         format.json { render json: @vendor.errors, status: :unprocessable_entity }

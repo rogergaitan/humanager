@@ -14,14 +14,14 @@ class Category < ActiveRecord::Base
   
   attr_accessible :code, :description, :name
   
-  validates :code, 
-  	:length => { :within => 4..10 }, 
+  validates :code,
+  	:length => { :within => 4..10 },
   	:uniqueness => { :case_sensitive => false }
 
-	validates :code, :name, :presence => true		
-					
+	validates :code, :name, :presence => true
+
 	def self.fetch
-		Rails.cache.fetch("Category.all"){ find(:all, :select =>['id','name']).to_json } 
+		Rails.cache.fetch("Category.all"){ find(:all, :select =>['id','name']).to_json }
 	end
 
 	def self.clean_cache

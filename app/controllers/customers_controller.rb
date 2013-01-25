@@ -45,8 +45,13 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to @customer, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_created') }
-        format.json { render json: @customer, status: :created, location: @customer }
+        if params['continue']
+          format.html { redirect_to new_customer_path, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_created') }
+          format.json { render json: @customer, status: :created, location: @customer }
+        else
+          format.html { redirect_to @customer, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_created') }
+          format.json { render json: @customer, status: :created, location: @customer }
+        end        
       else
         format.html { render action: "new" }
         format.json { render json: @customer.errors, status: :unprocessable_entity }
