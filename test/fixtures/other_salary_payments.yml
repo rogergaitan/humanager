@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  other_salary_employee: 
+  payment_date: 
+  payment: 1
+
+two:
+  other_salary_employee: 
+  payment_date: 
+  payment: 1

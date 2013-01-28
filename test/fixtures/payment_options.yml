@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: payment_options
+#
+#  id                  :integer          not null, primary key
+#  name                :string(255)
+#  related_account     :string(255)
+#  use_expenses        :boolean
+#  use_incomes         :boolean
+#  require_transaction :boolean
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:

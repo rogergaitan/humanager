@@ -22,5 +22,11 @@ module ApplicationHelper
     link_to(name, '#', class: "add_fields btn btn-mini btn-success "+option_class, data: {id: id, fields: fields.gsub("\n", "")})
   end
 
+  def default_company
+  	@company ||= Company.find_by_default(true)
+    @company ? session[:company] = @company.surname : session[:company] = "Seleccionar empresa"  
+  	@company ? session[:company_id] = @company.id : session[:company_id] = 0
+    @company ? @company.surname : ""
+  end
 end
 

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  discount_profile_id: 1
+  item_type: MyString
+  item_id: 1
+  category: MyString
+  discount: 1.5
+
+two:
+  discount_profile_id: 1
+  item_type: MyString
+  item_id: 1
+  category: MyString
+  discount: 1.5

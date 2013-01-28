@@ -1,0 +1,113 @@
+<script type="text/javascript">
+  var centro_costo = [];
+	<% @centro_costos.each do |cc| %>
+		centro_costo.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
+	<% end %>
+</script>
+<%= javascript_include_tag "payroll_logs/payroll_logs_script" %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= form_for @payroll_log, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+<!-- Checkbox functionality -->
+<h2 id="employee-header">Empleado</h2>
+<hr>
+	<div class="control-group">
+	  <div class="controls align-radio" id="filter-controls">
+			<div class="options-left">
+	      <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
+				<%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
+				<%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+				<%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
+				<%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+				<%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
+			</div>
+			<div class="options-right">
+	      <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
+				<%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+				<a title="Remover controles" data-placement="left" id="remove-controls" href="#" class="btn" style="float:right;"><i class="icon-remove-sign"></i></a>
+			</div>
+			<div style="clear:both"></div>
+	  </div>
+	</div>
+	<div class="controls padding-filter" id="list-departments">
+		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+		<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
+	</div>
+	<div class="controls padding-filter" id="list-superior">
+		<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+		<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
+	</div>
+	<div class="padding-filter" id="employee-filter">
+		<%= label_tag 'load_filter_employees_text', 'Empleado', :id => 'employee-label' %>
+		<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee' %>
+		<a title='Añadir más empleados' id="add-more" href="#" class="btn showTooltip"> <i class="icon-plus"></i></a>
+	</div>
+	<div id="employee-box">
+		<div class="controls" id="marcar-desmarcar">
+			<%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
+			<%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+		</div>
+		<div class="controls lists">
+			<div class="employees-list left-list">
+				<div class="employees-margin" id="no-save">
+					<% @employees.each do |employee| %>
+						<div class="checkbox-group">
+							<div class="checkbox-margin">
+								<%= check_box_tag 'left-list-employees', employee.id, 
+												@payroll_log.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
+								<%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
+										:class => 'checkbox-label' %>
+							</div>
+					  </div>
+					<% end %>
+				</div>
+			</div>
+			<div class="control-buttons">
+				<a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+				<a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+			</div>
+			<div class="employees-list list-right">
+				<%= hidden_field_tag 'payroll_log[employee_ids][]', nil %>
+				<div class="employees-margin" id="list-to-save">				
+				</div>
+			</div>
+			<div style="clear:both"></div>
+		</div>
+	</div>
+<!-- End Checkbox functionality-->
+	<br /><hr>
+	<h2>Labores</h2>
+	<hr>	
+	<%= f.label :payroll_date, :class => '' %>
+	<div class="input-append date payroll-date" id="dp3" data-date-format="dd/mm/yyyy">
+		<%= f.text_field :payroll_date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
+	</div>
+	<table id="products_items" class=" table table-hover table-bordered table-striped">
+		<tr class="header_items">
+      <td class="header_task">Labor</td>
+      <td class="header_time">Tiempo Trabajado</td>
+      <td class="header_cc">Centro De Costo</td>
+      <td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log") %></td>
+    </tr>
+    	<%= f.fields_for :payroll_histories do |builder| %>
+			<%= render 'forms/payroll_history_form', :f => builder %>
+		<% end %>
+	</table>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                payrolls_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+<div id="payrollModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>

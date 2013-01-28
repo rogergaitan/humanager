@@ -5,6 +5,7 @@ gem 'rails', '3.2.11'
 gem 'mysql2'
 gem 'jquery-rails'
 gem 'devise'
+gem 'rmagick'
 gem 'carrierwave'
 gem "client_side_validations", "~> 3.2.1"
 gem 'less-rails'
@@ -16,6 +17,7 @@ gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'dalli'
 gem 'prawn'
+#gem 'rubyfb'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

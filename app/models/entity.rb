@@ -52,6 +52,5 @@ class Entity < ActiveRecord::Base
       false
     end
   end
-
 end
 

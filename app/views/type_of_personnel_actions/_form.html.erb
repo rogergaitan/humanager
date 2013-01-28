@@ -1,0 +1,39 @@
+<%= form_for @type_of_personnel_action, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on">D</span><%= f.text_field :description, :class => 'text_field' %>
+      </div>
+    </div>
+  </div>
+
+  <h2>Campos</h2>
+  <hr>
+
+  
+
+  <%= hidden_field_tag 'type_of_personnel_action[fields_personnel_action_ids][]', nil %>
+  
+  <% @fields_personnel.each do |fields_personnel_actions| %> 
+     
+     <div class="control-group" style='width: auto;' >
+       
+     <!-- <div class="controls" style='width: auto;' > -->
+
+        <%= check_box_tag 'type_of_personnel_action[fields_personnel_action_ids][]', fields_personnel_actions.id, @type_of_personnel_action.fields_personnel_action_ids.include?(fields_personnel_actions.id), id: dom_id(fields_personnel_actions), class: 'align-checkbox', :style => 'margin-top: 0px;' %>
+     <!-- </div> -->
+
+     <%= label_tag dom_id(fields_personnel_actions), fields_personnel_actions.name, 
+      :class => 'checkbox-label', :style => 'width: 143px; height: 20px; text-align: right; display: inline;' %>
+
+    </div>
+    
+    <% end %>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                type_of_personnel_actions_path, :class => 'btn' %>
+  </div>
+<% end %>

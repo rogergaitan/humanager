@@ -1,35 +1,25 @@
 class WorkBenefitsController < ApplicationController
+  before_filter :resources, :only => [:new, :edit]
+  respond_to :html, :json
   # GET /work_benefits
   # GET /work_benefits.json
   def index
-    @work_benefits = WorkBenefit.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @work_benefits }
-    end
+    @work_benefits = WorkBenefit.paginate(:page => params[:page], :per_page => 15).includes(:credit, :debit)
+    respond_with(@work_benefits)
   end
 
   # GET /work_benefits/1
   # GET /work_benefits/1.json
   def show
     @work_benefit = WorkBenefit.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @work_benefit }
-    end
+    respond_with(@work_benefit)
   end
 
   # GET /work_benefits/new
   # GET /work_benefits/new.json
   def new
     @work_benefit = WorkBenefit.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @work_benefit }
-    end
+    respond_with(@work_benefit)
   end
 
   # GET /work_benefits/1/edit
@@ -79,5 +69,34 @@ class WorkBenefitsController < ApplicationController
       format.html { redirect_to work_benefits_url }
       format.json { head :no_content }
     end
+  end
+  
+  def fetch_debit_accounts
+    @debit_accounts = LedgerAccount.debit_accounts
+    respond_to do |format|
+      format.json { render json: @debit_accounts }
+    end
+  end
+  
+  def fetch_credit_accounts
+    @credit_accounts = LedgerAccount.credit_accounts
+    respond_to do |format|
+      format.json { render json: @credit_accounts }
+    end
+  end
+  
+  def fetch_employees
+    @employees = Employee.includes(:entity).order_employees
+    respond_to do |format|
+      format.json { render json: @employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} } }
+    end
+  end
+  
+  def resources
+    @debit_accounts = LedgerAccount.debit_accounts
+    @credit_accounts = LedgerAccount.credit_accounts
+    @employees = Employee.order_employees
+    @department = Department.all
+    @superior = Employee.superior
   end
 end

@@ -1,0 +1,28 @@
+<script type="text/javascript">
+  var cuenta_contable = [];
+  <%  @ledger_accounts.each do |cc| %>
+    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+  <% end %>
+</script>
+<%- model_class = LedgerAccount -%>
+<%= javascript_include_tag 'ledgerAccount/accounts' %>
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <button id="account-fb" class="btn btn-primary pull-right">
+    <i class='icon-refresh'></i>
+  </button> </h1>
+</div>
+
+   <div id="loading"> <h3><p align="center" class="h5-with-shadown">Espere un momento mientras se cargan las cuentas contables disponibles.</p></h3>
+    <p align="center" ><%= image_tag("ajax-loader.gif") %> </p>
+  </div>
+  <div id="error">
+ <h3><p align="center" class="h5-with-shadown">Imposible cargar las cuentas contables</p></h3>
+  <p align="center"><a href='#'>Click Aqui</a> para volver a intentarlo<p>
+  </div>
+
+<div id="list"></div>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_ledger_account_path,
+            :class => 'btn btn-primary' %>
