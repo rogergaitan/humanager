@@ -10,6 +10,18 @@
 #
 
 class ShippingMethod < ActiveRecord::Base
+
+	##ATTRIBUTES
   attr_accessible :description, :name
+
+  ##VALIDATIONS
   validates :name, :presence => true
+
+  def self.fetch_all
+		Rails.cache.fetch("ShippingMethod.all"){ all } 
+	end
+
+	def self.clean_cache
+		Rails.cache.delete("ShippingMethod.all")
+	end
 end

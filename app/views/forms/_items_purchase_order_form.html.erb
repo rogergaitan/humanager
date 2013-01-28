@@ -1,34 +1,30 @@
-<tr class="items_purchase_orders_form success">
+<tr class="items_purchase_orders_form">
   <td class="controls_item">
-    <%= f.text_field :product, :class => "text_field product input-mini code none" %>
+    <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, {:class=>"dropdown-menu"} %>
   </td>
   <td class="controls_item">
-    <%= f.label :product %>
-    <%= f.text_field :description, :class => 'text_field input-small description'%>
-    
+    <%= f.text_field :product, :class => "text_field product input-mini ui-autocomplete-input code" %>
   </td>
   <td class="controls_item">
-    <%= f.label :quantity %>
-    <%= f.number_field :quantity, :class => 'text_field input-small quantity calculate not_empty', :min => 1 %>
+    <%= f.text_field :description, :class => 'text_field input-small ui-autocomplete-input description'%> 
+  </td>
+  <td class="controls_item">
+    <%= f.text_field :quantity, :class => 'text_field input-small quantity calculate' %>
   </td>
 	<td class="controls_item">
-    <%= f.label :discount %>
-    <%= f.number_field :discount, :class => 'text_field input-small calculate discount', :min => 0 %>
+    <%= f.text_field :discount, :class => 'text_field input-small calculate discount'%>
+  </td>
+  
+  <td class="controls_item">
+    <%= f.text_field :cost_unit, :class => 'text_field input-small cost_unit calculate' %>
   </td>
   <td class="controls_item">
-    <%= f.label :warehouse_id %>
-    <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, :class=>"dropdown-menu" %>
-  </td>
-  <td class="controls_item">
-    <%= f.label :cost_unit %>
-    <%= f.number_field :cost_unit, :class => 'text_field input-small cost_unit calculate not_empty', :min => 0 %>
-  </td>
-  <td class="controls_item">
-    <%= f.text_field :cost_total, :class => 'text_field input-mini cost_total none' %>
+    <%= f.text_field :cost_total, 
+      :class => 'text_field input-mini cost_total', :readonly => true %>
   </td>
   <td>
 		<%= f.hidden_field :_destroy, :class => 'purchase_orders' %>
-    <%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger none" %>
+    <%= link_to "", '#', class: "remove_row btn btn-danger icon-trash" %>
   </td>
 </tr>
 

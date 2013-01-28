@@ -1,44 +1,24 @@
 class ShippingMethodsController < ApplicationController
-  # GET /shipping_methods
-  # GET /shipping_methods.json
+  
+  respond_to :json, :html
+  after_filter :clean_cache, :only => [:new, :edit, :destroy]
+
   def index
-    @shipping_methods = ShippingMethod.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @shipping_methods }
-    end
+    respond_with @shipping_methods = ShippingMethod.fetch_all
   end
 
-  # GET /shipping_methods/1
-  # GET /shipping_methods/1.json
   def show
-    @shipping_method = ShippingMethod.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @shipping_method }
-    end
+    respond_with @shipping_method = ShippingMethod.find(params[:id])
   end
 
-  # GET /shipping_methods/new
-  # GET /shipping_methods/new.json
   def new
-    @shipping_method = ShippingMethod.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @shipping_method }
-    end
+    respond_with @shipping_method = ShippingMethod.new
   end
 
-  # GET /shipping_methods/1/edit
   def edit
     @shipping_method = ShippingMethod.find(params[:id])
   end
 
-  # POST /shipping_methods
-  # POST /shipping_methods.json
   def create
     @shipping_method = ShippingMethod.new(params[:shipping_method])
 
@@ -53,8 +33,6 @@ class ShippingMethodsController < ApplicationController
     end
   end
 
-  # PUT /shipping_methods/1
-  # PUT /shipping_methods/1.json
   def update
     @shipping_method = ShippingMethod.find(params[:id])
 
@@ -69,8 +47,6 @@ class ShippingMethodsController < ApplicationController
     end
   end
 
-  # DELETE /shipping_methods/1
-  # DELETE /shipping_methods/1.json
   def destroy
     @shipping_method = ShippingMethod.find(params[:id])
     @shipping_method.destroy
@@ -79,5 +55,9 @@ class ShippingMethodsController < ApplicationController
       format.html { redirect_to shipping_methods_url }
       format.json { head :no_content }
     end
+  end
+
+  def clean_cache
+    ShippingMethod.clean_cache
   end
 end

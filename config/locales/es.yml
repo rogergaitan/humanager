@@ -60,6 +60,7 @@ es:
     greater_than: &GREATER_THAN "Mayor a %{count}"
     less_than_or_equal_to: &LESS_THAN_OR_EQUAL_TO "Menor o igual a %{count}"
     not_a_number: &NOT_A_NUMBER "Solo números"
+    less_than: &LESS_THAN "Menor a %{count}"
   content:
     titles: 
       tools: Herramientas
@@ -207,8 +208,34 @@ es:
             attributes:
               name:
                 blank: *BLANK
+          items_purchase_order:
+            attributes:
+              product:
+                blank:  *REQUIRED
+              description:
+                blank:  *REQUIRED
+              quantity:
+                blank:  *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+              warehouse_id:
+                blank: *REQUIRED
+              cost_unit:
+                blank:  *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+              cost_total:
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+                blank:  *REQUIRED
+              discount:
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+                less_than: *LESS_THAN
           purchase_order:
             attributes:
+              vendor_name:
+                blank: *BLANK
               delivery_date:
                 blank: *BLANK
               reference_info:
@@ -266,8 +293,6 @@ es:
                 blank: Este campo no puede quedar en blanco
               part_number:
                 blank: Este campo no puede quedar en blanco
-              name: 
-                blank: Este campo no puede quedar en blanco
               make:
                 blank: Este campo no puede quedar en blanco
               model:
@@ -282,6 +307,16 @@ es:
                 blank: Este campo no puede quedar en blanco
               product_subline:
                 blank: Este campo no puede quedar en blanco
+              max_discount:
+                not_a_number: *NOT_A_NUMBER
+              max_cant:
+                not_a_number: *NOT_A_NUMBER
+              min_cant:
+                not_a_number: *NOT_A_NUMBER
+              market_price:
+                not_a_number: *NOT_A_NUMBER
+              stock:
+                not_a_number: *NOT_A_NUMBER
           line:
             attributes:
               code:
@@ -289,62 +324,37 @@ es:
                 too_long: Código demasiado largo
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
-              description:
-                blank: Este campo no puede quedar en blanco
               name:
-                blank: Este campo no puede quedar en blanco
-              description:
                 blank: Este campo no puede quedar en blanco
               income:
-                blank: Este campo no puede quedar en blanco
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               inventory:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               lost_adjustment:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
-              name:
-                blank: Este campo no puede quedar en blanco
+                not_a_number: *NOT_A_NUMBER
               purchase_return:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               purchase_tax:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               sale_cost:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               sale_tax:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               sales_return:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
               utility_adjusment:
-                blank: Este campo no puede quedar en blanco
-                not_a_number: 'Este campo solo puede contener números'
-                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+                not_a_number: *NOT_A_NUMBER
           warehouse:
             attributes:
               code:
                 too_short: Código demasiado corto
                 too_long: Código demasiado largo
-                blank: Este campo no puede quedar en blanco
+                blank: *BLANK
                 taken: 'Este código ya existe'
-              description:
-                blank: Este campo no puede quedar en blanco
               name:
-                blank: Este campo no puede quedar en blanco
+                blank: *BLANK
               manager:
-                blank: Este campo no puede quedar en blanco
+                blank: *BLANK
           subline:
             attributes:
               code:

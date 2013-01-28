@@ -1,5 +1,7 @@
-<%= javascript_include_tag "purchase_order/purchase_order" %>
-<%= form_for @purchase_order, :validate => true, :html => { :class => 'form-horizontal new_purchase_order well' } do |f| %>
+<%= javascript_include_tag "purchase_order/purchase_orders" %>
+<%- model_class = ItemsPurchaseOrder -%>
+<%= form_for @purchase_order, :validate => true, 
+  :html => { :class => 'form-horizontal new_purchase_order well' } do |f| %>
   <div class="warp_block_1 left">
     <div class="contentWidget" >
         <div class="labelCellTable">
@@ -7,7 +9,8 @@
         </div>
         <div class="contentCellTable">
           <%= f.hidden_field :vendor_id %>
-            <%= text_field_tag "vendor_text", @vendor, :class => 'text_field' %> <%= link_to('', '#newVendor', class: "icon-plus btn_plus right", 'data-toggle' => 'modal')  %>
+          <%= f.text_field :vendor_name, :class => 'text_field vendor_name' %> 
+          <%= link_to('', '#newVendor', class: "icon-plus btn_plus right", 'data-toggle' => 'modal')  %>
         </div>
     </div>
        <div class="contentWidget" >
@@ -15,7 +18,7 @@
           <%= f.label :delivery_date %>
         </div>
         <div class="contentCellTable">
-          <%= f.text_field :delivery_date, :class => 'text_field', :readonly => true, :value => Time.now.to_date.to_s %>
+          <%= f.text_field :delivery_date, :class => 'text_field' %>
         </div>
       </div>
 
@@ -53,29 +56,44 @@
   <div class="new_product_field control-group">
     <div class="add_field_fake"></div>
     
-    <div id="container_new_item">
-      <%= link_to_add_fields("", f, :items_purchase_order,"icon-plus btn_plus right") %>
-    </div>
-    <table id="products_items" class=" table table-hover table-bordered table-striped">
+<!--     <div id="container_new_item">
+      
+    </div> -->
+    <table id="products_items" class="table table-hover table-striped">
       <tr class="header_items">
-        <td class="header_code">Código</td>
-        <td class="header_description">Descripción</td>
-        <td class="header_quantiy">Cantidad</td>
-        <td>Descuento</td>
-        <td>Bodega</td>
-        <td class="header_costunit">Costo Unit</td>
-        <td class="header_costTotal">Costo Total</td>
+        <td>
+          <%= model_class.human_attribute_name(:warehouse_id) %>
+        </td>
+        <td class="header_code">
+          <%= model_class.human_attribute_name(:product) %>
+        </td>
+        <td class="header_description">
+          <%= model_class.human_attribute_name(:description) %>
+        </td>
+        <td class="header_quantiy">
+          <%= model_class.human_attribute_name(:quantity) %>
+        </td>
+        <td>
+          <%= model_class.human_attribute_name(:discount) %>
+        </td>
+        <td class="header_costunit">
+          <%= model_class.human_attribute_name(:cost_unit) %>
+        </td>
+        <td class="header_costTotal">
+          <%= model_class.human_attribute_name(:cost_total) %>
+        </td>
+        <td>
+          <%= link_to_add_fields("", f, :items_purchase_order,"icon-plus btn_plus add_items") %>
+        </td>
       </tr>
-      <!-- FIELDS FOR SEARCHED PRODUCTS -->
+
       <%if params[:search] %>
         <%= f.fields_for :items_purchase_order, @cart_items, :validate => false do |items| %>
           <%= render 'forms/items_purchase_order_form', :f => items %>
         <% end %>
-
       <% end %>
-      <!-- END OF FIELDS FOR SEARCHED PRODUCTS -->
-      <%= f.fields_for :items_purchase_order do |items| %>
-      
+
+      <%= f.fields_for :items_purchase_order, :validate => true do |items| %>
           <%= render 'forms/items_purchase_order_form', :f => items %>
       <% end %>
     </table>
@@ -98,7 +116,7 @@
         <%= f.label :subtotal %>
       </div>
       <div class="contentCellTable">
-        <%= f.text_field :subtotal, :class => 'text_field subtotal' , :readonly => "readonly"%>
+        <%= f.text_field :subtotal, :class => 'text_field subtotal', :readonly => true %>
       </div>
      </div>
 
@@ -107,7 +125,7 @@
         <%= f.label :taxes %>
       </div>
       <div class="contentCellTable">
-        <%= f.text_field :taxes, :class => 'text_field' , :readonly => "readonly"%>
+        <%= f.text_field :taxes, :class => 'text_field' , :readonly => true %>
       </div>
      </div>
     <div class="contentWidget" >
@@ -115,15 +133,11 @@
           <%= f.label :total %>
         </div>
         <div class="contentCellTable">
-          <%= f.text_field :total, :class => 'text_field total', :readonly => "readonly" %>
+          <%= f.text_field :total, :class => 'text_field total', :readonly => true %>
         </div>
     </div>
 
   </div>
-
-
-
-
   <div class="clear_fix"></div>
   </div>
   <div class="form-actions">
@@ -134,9 +148,11 @@
   </div>
 <% end %>
 
-<!-- Modal -->
-<div id="newVendor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<%= form_for @new_vendor, :validate => true, :url => createvendor_purchase_orders_path(@new_vendor), :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
+<div id="newVendor" class="modal hide fade" tabindex="-1" role="dialog" 
+  aria-labelledby="myModalLabel" aria-hidden="true">
+	<%= form_for @new_vendor, :validate => true, 
+    :url => create_vendor_purchase_orders_path(@new_vendor), 
+    :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Crear Proveedor</h3>
