@@ -24,10 +24,14 @@ class PurchaseItem < ActiveRecord::Base
   attr_accessible :cost_total, :cost_unit, :description, :quantity, :product_id,
   	:warehouse_id, :discount, :purchase_id, :tax
 
-  validates :product_id, :cost_unit, :description, :quantity, 
-  	:warehouse_id, :presence => true 
-  validates :cost_unit, :cost_total, :quantity, :numericality => { :greater_than => 0 }
-  validates :discount, :numericality => { :greater_than => 0, :less_than => 100 }, :allow_nil => true
+  validates :product_id, :cost_unit, :description, :quantity, :warehouse_id, 
+    :presence => true 
+  
+  validates :cost_unit, :cost_total, :quantity, 
+    :numericality => { :greater_than => 0 }
+  
+  validates :discount, 
+    :numericality => { :greater_than => 0, :less_than => 100 }, :allow_nil => true
 
   after_destroy :destroy_kardex
 

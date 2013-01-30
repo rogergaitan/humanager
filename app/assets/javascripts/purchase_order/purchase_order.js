@@ -125,7 +125,7 @@ var request_search_products = function() {
 	}
 
 var request_search_vendors = function() {
-		$("#vendor_text").autocomplete({
+		$(".vendor_name").autocomplete({
 			source: function(request, response) {
 				$.ajax({
 					url: "/purchase_orders/searchVendor.json",
@@ -200,7 +200,7 @@ var convertEntityToVendor = function(e) {
 				}
 			}
 		})
-	}
+}
 
 function resetFieldsErrors(form) {
 	$('form#' + form)[0].reset();
@@ -218,7 +218,7 @@ $(document).ready(function() {
 	$('form').on('click', '.add_fields', addFields_items);
 	$('form').on('click', '.add_field_fake', addField_newItem);
 	$('form').on('click', '.remove_fields', removeFields);
-	$('.add_field_fake').trigger('click');
+	//$('.add_field_fake').trigger('click');
 	$('form').on('keyup', '.calculate', cost_live_calculate);
 	$('#products_items').find('label').remove();
 	$('form.new_purchase_order').submit(function(e) {

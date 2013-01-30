@@ -1,59 +1,45 @@
 class PurchaseOrdersController < ApplicationController
 
-  respond_to :json, :js
-  # GET /purchase_orders
-  # GET /purchase_orders.json
-  def index
-    @purchase_orders = PurchaseOrder.includes(:vendor).all
+  respond_to :json, :js, :html
+  before_filter :fetch_shipping_types, :only => [:new, :edit]
+  before_filter :title
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @purchase_orders }
-    end
+  def index
+    respond_with @purchase_orders = PurchaseOrder.includes(:vendor).all
   end
 
-  # GET /purchase_orders/1
-  # GET /purchase_orders/1.json
   def show
     @purchase_order = PurchaseOrder.find(params[:id])
 
     respond_to do |format|
-
-      format.html # show.html.erb
+      format.html
       format.json { render json: @purchase_order }
       format.pdf do
         ### lib/purchase_order.rb
         pdf = PurchaseOrderPDF.new(@purchase_order)
-        send_data pdf.render, filename: "OC-#{@purchase_order.id}.pdf", type: "application/pdf", disposition: "inline"
-
+        send_data pdf.render, filename: "OC-#{@purchase_order.id}.pdf",
+          type: "application/pdf", disposition: "inline"
       end
     end
-
   end
 
-  # GET /purchase_orders/new
-  # GET /purchase_orders/new.json
   def new
     cart_items
     @purchase_order = PurchaseOrder.new
-    @vendor = PurchaseOrder.get_vendor
+    @purchase_order.items_purchase_order.build
     @new_vendor = Vendor.new
     @new_vendor.build_entity
-    @shipping_type = ShippingMethod.all
+    #@shipping_type = ShippingMethod.fetch_all
   end
 
-  # GET /purchase_orders/1/edit
   def edit
-    @purchase_order = PurchaseOrder.find(params[:id])
-    @vendor = PurchaseOrder.get_vendor(@purchase_order.vendor_id)
+    @purchase_order = PurchaseOrder.includes(:items_purchase_order).find(params[:id])
+    @vendor = PurchaseOrder.get_vendor(@purchase_order)
     @new_vendor = Vendor.new
     @new_vendor.build_entity
-    @warehouses = fetch
-    @shipping_type = ShippingMethod.all
+    @warehouses = fetch_warehouses
   end
 
-  # POST /purchase_orders
-  # POST /purchase_orders.json
   def create
     @purchase_order = PurchaseOrder.new(params[:purchase_order])
 
@@ -62,18 +48,19 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf, notice: 'Purchase order was successfully created.' }
         else
-          format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully created.' }
+          format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_created') }
           format.json { render json: @purchase_order, status: :created, location: @purchase_order }
         end
       else
+        fetch_shipping_types
+        fetch_warehouses
+        @new_vendor = Vendor.new
         format.html { render action: "new" }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PUT /purchase_orders/1
-  # PUT /purchase_orders/1.json
   def update
     @purchase_order = PurchaseOrder.find(params[:id])
 
@@ -82,46 +69,48 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf }
         else
-          format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully updated.' }
+          format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_updated') }
           format.json { head :no_content }
         end
       else
+        fetch_shipping_types
+        fetch_warehouses
+        @new_vendor = Vendor.new
         format.html { render action: "edit" }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /purchase_orders/1
-  # DELETE /purchase_orders/1.json
   def destroy
     @purchase_order = PurchaseOrder.find(params[:id])
     @purchase_order.destroy
     flash[:notice] = "Orden eliminada correctamente"
     respond_to do |format|
-      format.html { redirect_to purchase_orders_url }
+      format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
       format.js
     end
   end
 
-
-  def searchProduct
-    @products = Product.search(params[:search])
-    respond_with @products
+  def title
+    @title = t('.activerecord.models.purchase').capitalize + " - " + t(".helpers.links.#{action_name}" )
   end
 
-  def searchVendor
-    @Vendor = Vendor.search(params[:search])
-    respond_with @Vendor
+  def search_product
+    respond_with @products = Product.search(params[:search])
   end
 
-  def createvendor
+  def search_vendor
+    respond_with @vendor = Vendor.search(params[:search])
+  end
+
+  def create_vendor
     @new_vendor = Vendor.new(params[:vendor])
     @new_vendor.save
   end
 
-  def tovendor
+  def to_vendor
     @entity = Entity.find_by_entityid(params[:entityid])
     respond_to do |format|
       if @entity.create_vendor
@@ -133,7 +122,7 @@ class PurchaseOrdersController < ApplicationController
     end
   end
 
-  def fetch
+  def fetch_warehouses
     @warehouses =  Warehouse.fetch
   end
 
@@ -149,7 +138,11 @@ class PurchaseOrdersController < ApplicationController
         end
       end
     end
-    @warehouses = fetch
+    @warehouses = fetch_warehouses
+  end
+
+  def fetch_shipping_types
+    @shipping_type = ShippingMethod.fetch_all
   end
 
 end

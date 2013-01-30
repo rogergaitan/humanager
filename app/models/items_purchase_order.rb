@@ -17,6 +17,18 @@
 
 class ItemsPurchaseOrder < ActiveRecord::Base
   belongs_to :purchase_order
-  attr_accessible :cost_total, :cost_unit, :description, :product, :quantity, 
-  	:warehouse_id, :discount
+  attr_accessible :cost_total, :cost_unit, :description, :product, :quantity,
+    :warehouse_id, :discount
+
+  ##VALIDATIONS
+  validates :cost_total, :cost_unit, :description, :product, :quantity,
+    :warehouse_id,
+    :presence => true
+
+  validates :cost_unit, :cost_total, :quantity,
+    :numericality => { :greater_than => 0 }
+
+  validates :discount,
+    :numericality => { :only_integer => true, :greater_than => 0, :less_than => 100 }, :allow_nil => true
+  
 end

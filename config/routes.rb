@@ -96,11 +96,11 @@ Reasapp::Application.routes.draw do
 
   resources :purchase_orders do
     collection do
-      get 'searchProduct'
+      get 'search_product'
       get 'cart_items'
-      get 'searchVendor'
-      post 'createvendor'
-      post 'tovendor'
+      get 'search_vendor'
+      post 'create_vendor'
+      post 'to_vendor'
     end
   end
 

@@ -86,46 +86,5 @@ class Purchase < ActiveRecord::Base
   def update_kardex
     Kardex.update_kardex(self, self.purchase_items, current_info)
   end
-  
-  # def destroy_kardex
-  #   Kardex.destroy_all(:mov_id => self.id)
-  # end
-
-  # def create_kardex
-  #   purchase_items.each do |item|
-  #     kardex_object = kardex_item(item)
-  #     @kardex = Kardex.create(kardex_object) if kardex_object
-  #   end
-  # end
-
-  # def update_kardex
-  #   purchase_items.each do |item|
-  #     kardex_object = kardex_item(item)
-  #     @kardex = Kardex.find_by_mov_id_and_code(self.id, item[:product_id])
-  #     @kardex ? @kardex.update_attributes(kardex_object) : Kardex.create(kardex_object)
-  #   end
-  # end
-
-  # def kardex_item(item)
-  #   kardex_object = {}
-  #   kardex_object = {
-  #     :company_id   => self.default_company,
-  #     :mov_date     => self.purchase_date,
-  #     :mov_id       => self.id,
-  #     :mov_type     => "input",
-  #     :doc_type     => Purchase.model_name.downcase,
-  #     :doc_number   => self.document_number,
-  #     :entity_id    => self.vendor_id,
-  #     :current_user => self.current_user,
-  #     :code         => item[:product_id],
-  #     :cost_unit    => item[:cost_unit],
-  #     :discount     => item[:discount],
-  #     :tax          => "EMPTY FOR NOW",
-  #     :cost_total   => item[:cost_total],
-  #     :price_list   => "PRICE LIST EMPTY",
-  #     :quantity     => item[:quantity]
-  #   }
-  #   kardex_object
-  # end
 
 end

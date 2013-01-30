@@ -60,6 +60,7 @@ es:
     greater_than: &GREATER_THAN "Mayor a %{count}"
     less_than_or_equal_to: &LESS_THAN_OR_EQUAL_TO "Menor o igual a %{count}"
     not_a_number: &NOT_A_NUMBER "Solo números"
+    less_than: &LESS_THAN "Menor a %{count}"
   content:
     titles: 
       tools: Herramientas
@@ -207,8 +208,34 @@ es:
             attributes:
               name:
                 blank: *BLANK
+          items_purchase_order:
+            attributes:
+              product:
+                blank:  *REQUIRED
+              description:
+                blank:  *REQUIRED
+              quantity:
+                blank:  *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+              warehouse_id:
+                blank: *REQUIRED
+              cost_unit:
+                blank:  *REQUIRED
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+              cost_total:
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+                blank:  *REQUIRED
+              discount:
+                greater_than: *GREATER_THAN
+                not_a_number: *NOT_A_NUMBER
+                less_than: *LESS_THAN
           purchase_order:
             attributes:
+              vendor_name:
+                blank: *BLANK
               delivery_date:
                 blank: *BLANK
               reference_info:

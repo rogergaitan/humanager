@@ -17,23 +17,29 @@
 #
 
 class PurchaseOrder < ActiveRecord::Base
+
+  ##ASSOCIATIONS
   belongs_to :vendor
   has_many :items_purchase_order, :dependent => :destroy
+
+  ##ATTRIBUTES
+  attr_accessor :vendor_name
+
   attr_accessible :vendor_id,:currency, :delivery_date, :observation,
     :reference_info,:shipping_type, :subtotal, :taxes, :total,
-    :items_purchase_order_attributes,:vendor_attributes
+    :items_purchase_order_attributes,:vendor_attributes, :vendor_name
+
   accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes["product"].blank? }
+
   accepts_nested_attributes_for :vendor, :allow_destroy => true
 
-  validates :vendor_id, :delivery_date,  :presence => true
+  validates :vendor_id, :delivery_date, :vendor_name,
+    :presence => true
 
-  def self.get_vendor(vendor_id = nil)
-    unless vendor_id.nil?
-      @vendor = Vendor.find(vendor_id)
-      "#{@vendor.entity.name} #{@vendor.entity.surname}"
-    else
-      ""
-    end
+  def self.get_vendor(purchase_order)
+    @vendor = Entity.find(purchase_order.vendor_id)
+    puts purchase_order.vendor_name
+    purchase_order.vendor_name = "#{@vendor.name} #{@vendor.surname}"
   end
 end
