@@ -18,7 +18,7 @@
 class ItemsPurchaseOrder < ActiveRecord::Base
   belongs_to :purchase_order
   attr_accessible :cost_total, :cost_unit, :description, :product, :quantity,
-    :warehouse_id, :discount
+    :warehouse_id, :discount, :tax
 
   ##VALIDATIONS
   validates :cost_total, :cost_unit, :description, :product, :quantity,

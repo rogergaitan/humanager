@@ -22,7 +22,7 @@ class PurchasesController < ApplicationController
       format.pdf do
         ### lib/purchase_pdf.rb
         pdf = PurchasePDF.new(@purchase)
-        send_data pdf.render, filename: "C-#{@purchase.id}.pdf", type: "application/pdf", disposition: "inline"
+        send_data pdf.render, filename: "C-#{@purchase.id}.pdf", type: "application/pdf" #, disposition: "inline"
       end
     end
   end

@@ -234,6 +234,8 @@ es:
                 less_than: *LESS_THAN
           purchase_order:
             attributes:
+              document_date:
+                blank: *BLANK
               vendor_name:
                 blank: *BLANK
               delivery_date:
@@ -592,6 +594,7 @@ es:
           name: Nombre
           description: Descripción
         purchase_order:
+          document_date: Fecha
           vendor_id: Proveedor
           reference_info: Referencia
           currency: Moneda
@@ -603,6 +606,7 @@ es:
           shipping_type: Forma de envío
           created_at: Fecha
         items_purchase_order:
+          tax: Impuesto
           product: Producto
           quantity: Cantidad
           cost_unit: Costo Unit

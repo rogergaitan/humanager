@@ -11,12 +11,14 @@
   <td class="controls_item">
     <%= f.text_field :quantity, :class => 'text_field input-small quantity calculate' %>
   </td>
+  <td class="controls_item">
+    <%= f.text_field :cost_unit, :class => 'text_field input-small cost_unit calculate' %>
+  </td>
 	<td class="controls_item">
     <%= f.text_field :discount, :class => 'text_field input-small calculate discount'%>
   </td>
-  
   <td class="controls_item">
-    <%= f.text_field :cost_unit, :class => 'text_field input-small cost_unit calculate' %>
+    <%= f.text_field :tax, :class => 'text_field input-small tax', :readonly => true %>
   </td>
   <td class="controls_item">
     <%= f.text_field :cost_total, 

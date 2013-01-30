@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130123203220) do
+ActiveRecord::Schema.define(:version => 20130130172743) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(:version => 20130123203220) do
     t.datetime "updated_at",                                       :null => false
     t.integer  "warehouse_id"
     t.decimal  "discount",          :precision => 17, :scale => 2
+    t.float    "tax"
   end
 
   add_index "items_purchase_orders", ["purchase_order_id"], :name => "index_items_purchase_orders_on_purchase_order_id"
@@ -584,6 +585,7 @@ ActiveRecord::Schema.define(:version => 20130123203220) do
     t.string   "shipping_type"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.date     "document_date"
   end
 
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"

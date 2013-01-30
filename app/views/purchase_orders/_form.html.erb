@@ -41,7 +41,14 @@
         <%= f.text_field :reference_info,:class => 'text_field' %>
       </div>
     </div>
-
+    <div class="contentWidget" >
+      <div class="labelCellTable">
+        <%= f.label :document_date %>
+      </div>
+      <div class="contentCellTable">
+        <%= f.text_field :document_date, :class => 'text_field', :type => :date %>
+      </div>
+    </div>
     <div class="contentWidget" >
       <div class="labelCellTable">
         <%= f.label :currency %>
@@ -73,11 +80,14 @@
         <td class="header_quantiy">
           <%= model_class.human_attribute_name(:quantity) %>
         </td>
+        <td class="header_costunit">
+          <%= model_class.human_attribute_name(:cost_unit) %>
+        </td>
         <td>
           <%= model_class.human_attribute_name(:discount) %>
         </td>
-        <td class="header_costunit">
-          <%= model_class.human_attribute_name(:cost_unit) %>
+        <td class="header_tax">
+          <%= model_class.human_attribute_name(:tax) %>
         </td>
         <td class="header_costTotal">
           <%= model_class.human_attribute_name(:cost_total) %>

@@ -34,6 +34,10 @@ GEM
       rake
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    better_errors (0.3.2)
+      coderay (>= 1.0.0)
+      erubis (>= 2.7.0)
+    binding_of_caller (0.6.8)
     bootstrap-will_paginate (0.0.9)
       will_paginate
     builder (3.0.4)
@@ -50,6 +54,7 @@ GEM
     childprocess (0.3.7)
       ffi (~> 1.0, >= 1.0.6)
     client_side_validations (3.2.1)
+    coderay (1.0.8)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -227,6 +232,8 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+  better_errors
+  binding_of_caller
   bootstrap-will_paginate
   carrierwave
   client_side_validations (~> 3.2.1)

@@ -27,14 +27,14 @@ class PurchaseOrder < ActiveRecord::Base
 
   attr_accessible :vendor_id,:currency, :delivery_date, :observation,
     :reference_info,:shipping_type, :subtotal, :taxes, :total,
-    :items_purchase_order_attributes,:vendor_attributes, :vendor_name
+    :items_purchase_order_attributes,:vendor_attributes, :vendor_name, :document_date
 
   accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes["product"].blank? }
 
   accepts_nested_attributes_for :vendor, :allow_destroy => true
 
-  validates :vendor_id, :delivery_date, :vendor_name,
+  validates :vendor_id, :delivery_date, :vendor_name, :document_date,
     :presence => true
 
   def self.get_vendor(purchase_order)
