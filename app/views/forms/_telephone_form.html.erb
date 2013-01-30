@@ -11,10 +11,11 @@
 		<%= f.label :typephone, :class => 'control-label' %>
 		<div class="controls">
 			<div class="input-prepend">
-				<span class="add-on">T</span><%= f.enum_select :typephone, :include_blank => false %>
+				<span class="add-on">T</span>
+				<%= f.enum_select :typephone, {:include_blank => false}, {:class => 'typephone'} %>
 			</div>
 			<%= f.hidden_field :_destroy, :class => 'telephones' %>
-			<%= link_to "remove", '#', class: "remove_fields remove_telephone btn btn-mini btn-danger" %>
+			<%= link_to t("helpers.links.destroy"),'#',class: "remove_fields remove_telephone btn btn-mini btn-danger" %>
 		</div>
 	</div>
 <hr />
