@@ -105,7 +105,25 @@ $(jQuery(document).ready(function($) {
         return false;
     });
 
-    $("#lines_list").on('click',"bind_select_btn",function(){
+    $("#lines_list").on('click',".bind_select_btn",function(){
+        var name_type = $(this).attr('name_type');
+        var id = $(this).attr("id_"+name_type);
+        var name_item = $(this).next('span').text();
+        $("#product_"+name_type+"_id").val(id);
+        $("#product_"+name_type+"").val(name_item);
+        $('.click_cancel').trigger('click');
+
+    });
+    $("#sublines_list").on('click',".bind_select_btn",function(){
+        var name_type = $(this).attr('name_type');
+        var id = $(this).attr("id_"+name_type);
+        var name_item = $(this).next('span').text();
+        $("#product_"+name_type+"_id").val(id);
+        $("#product_"+name_type+"").val(name_item);
+        $('.click_cancel').trigger('click');
+
+    });
+    $("#category_list").on('click',".bind_select_btn",function(){
         var name_type = $(this).attr('name_type');
         var id = $(this).attr("id_"+name_type);
         var name_item = $(this).next('span').text();

@@ -24,7 +24,7 @@
               <%= f.hidden_field :line_id %>
               <%= hidden_field_tag 'product_line_name' %>
               <%= hidden_field_tag 'product_line_full' %>
-              <%= text_field_tag 'product_line',nil, :class => 'text_field required search-image-line', :for=>:line_id%>  
+              <%= text_field_tag 'product_line',nil, :class => 'text_field required search-image-line', :for=>:line_id, :disabled => true %>
               <a href="#lines_list" role="button" class="btn btn-info btn-small" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
@@ -32,7 +32,7 @@
             <%= f.label :subline_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :subline_id %>
-              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required search-image-subline', :for =>:subline_id, :type =>'text' %>
+              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required search-image-subline', :for =>:subline_id, :type =>'text', :disabled => true  %>
               <a href="#sublines_list" role="button" class="btn btn-info btn-small" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
@@ -40,7 +40,7 @@
             <%= f.label :category_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :category_id %>
-              <%= text_field_tag 'product_category',nil, :class => 'number_field required search-image-category', :for => :category_id %>
+              <%= text_field_tag 'product_category',nil, :class => 'number_field required search-image-category', :for => :category_id, :disabled => true  %>
               <a href="#category_list" role="button" class="btn btn-info btn-small" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
