@@ -1,5 +1,6 @@
 <%= javascript_include_tag "purchase_order/purchase_orders" %>
 <%- model_class = ItemsPurchaseOrder -%>
+<%- model_payment = PurchaseOrderPayment -%>
 <%= form_for @purchase_order, :validate => true, 
   :html => { :class => 'form-horizontal new_purchase_order well' } do |f| %>
   <div class="warp_block_1 left">
@@ -27,7 +28,7 @@
           <%= f.label :shipping_type %>
         </div>
         <div class="contentCellTable">
-          <%= f.collection_select :shipping_type,  @shipping_type, :id, :name %>
+          <%= f.collection_select :shipping_type,  @shipping_types, :id, :name %>
         </div>
       </div>
   </div>
@@ -57,7 +58,12 @@
         <%= f.select :currency,['Colones','Dolares'],{},:class => 'text_field' %>
       </div>
     </div>
+    <div>
+      <br>
+      Registrar Anticipo <%= check_box_tag "order_payment" %>
+    </div>
   </div>
+
  <div class="clear_fix "></div>
 	<div id="message-products"></div>
   <div class="new_product_field control-group">
@@ -93,7 +99,7 @@
           <%= model_class.human_attribute_name(:cost_total) %>
         </td>
         <td>
-          <%= link_to_add_fields("", f, :items_purchase_order,"icon-plus btn_plus add_items") %>
+          <%= link_to_add_fields("", f, :items_purchase_order,"add_fields btn btn-mini btn-success icon-plus btn_plus add_items") %>
         </td>
       </tr>
 
@@ -108,8 +114,21 @@
       <% end %>
     </table>
   </div>
+  <div class ="purchase_order_payments hide">
+    <%= link_to_add_fields("", f, :purchase_order_payments,"hide add_payment") %>
+    <table id="order_payment_table" class="table table-condensed">
+      <thead class="header_items">
+        <th><%= model_payment.human_attribute_name(:payment_option_id) %></th>
+        <th><%= model_payment.human_attribute_name(:payment_type_id) %></th>
+        <th><%= model_payment.human_attribute_name(:number) %></th>
+        <th><%= model_payment.human_attribute_name(:amount) %></th>
+      </thead>
+      <%= f.fields_for :purchase_order_payments, :validate => true do |items| %>
+          <%= render 'forms/purchase_order_payment_form', :f => items %>
+      <% end %>
+    </table>
+  </div>
   <div class="clear_fix top_space_15"></div>
-
   <div class="warp_block_3 left ">
      <div class="contentWidget" >
       <div class="labelCellTable">

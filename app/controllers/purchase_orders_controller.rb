@@ -1,9 +1,9 @@
 class PurchaseOrdersController < ApplicationController
 
   respond_to :json, :js, :html
-  before_filter :fetch_shipping_types, :only => [:new, :edit]
   before_filter :title
-
+  before_filter :fetch_payment_info, :only => [:new, :edit]
+  before_filter :fetch_shipping_types, :only => [:new, :edit]
   def index
     respond_with @purchase_orders = PurchaseOrder.includes(:vendor).all
   end
@@ -27,6 +27,7 @@ class PurchaseOrdersController < ApplicationController
     cart_items
     @purchase_order = PurchaseOrder.new
     @purchase_order.items_purchase_order.build
+    @purchase_order.purchase_order_payments.build
     @new_vendor = Vendor.new
     @new_vendor.build_entity
     #@shipping_type = ShippingMethod.fetch_all
@@ -54,6 +55,7 @@ class PurchaseOrdersController < ApplicationController
       else
         fetch_shipping_types
         fetch_warehouses
+        fetch_payment_info
         @new_vendor = Vendor.new
         format.html { render action: "new" }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }
@@ -142,7 +144,12 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def fetch_shipping_types
-    @shipping_type = ShippingMethod.fetch_all
+    @shipping_types   =  ShippingMethod.fetch_all    
+  end
+  
+  def fetch_payment_info
+    @payment_options  =  PaymentOption.fetch
+    @payment_types    =  PaymentType.all
   end
 
 end

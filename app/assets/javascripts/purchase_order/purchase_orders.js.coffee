@@ -49,6 +49,16 @@ $(document).ready ->
     row_total($(this).closest("tr"))
   $("#products_items").on "change", ".cost_unit", () ->
     row_total($(this).closest("tr"))
+  if $(".payment_number").val()
+    $("div.purchase_order_payments").show()
+  
+  $("form").on "change", "#order_payment", ()->
+    $("div.purchase_order_payments").toggle()
+    if $("table#order_payment_table tbody tr").length is 0
+      add_payment()
+    #   $("#order_payment_table").append $(".add_payment").data("fields")
+    $("form.new_purchase_order").enableClientSideValidations()
+    $(".cost_total").disableClientSideValidations();
   false
 
 search_length = 3
@@ -86,6 +96,11 @@ convertEntityToVendor = (e) ->
     error: (vendor) ->
       $("section.nav").html("<div class=\"alert alert-error\">Error: La entidad especificada es un proveedor</div>").delay(10000).fadeOut()  unless vendor.statusText is "abort"
   )
+
+add_payment = () ->
+  time = new Date().getTime()
+  regexp = new RegExp($(".add_payment").data("id"), "g")
+  $("#order_payment_table").append $(".add_payment").data("fields").replace(regexp, time)
 
 add_items = (e) ->
   time = new Date().getTime()

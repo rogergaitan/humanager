@@ -21,16 +21,21 @@ class PurchaseOrder < ActiveRecord::Base
   ##ASSOCIATIONS
   belongs_to :vendor
   has_many :items_purchase_order, :dependent => :destroy
+  has_many :purchase_order_payments, :dependent => :destroy
 
   ##ATTRIBUTES
   attr_accessor :vendor_name
 
   attr_accessible :vendor_id,:currency, :delivery_date, :observation,
     :reference_info,:shipping_type, :subtotal, :taxes, :total,
-    :items_purchase_order_attributes,:vendor_attributes, :vendor_name, :document_date
+    :items_purchase_order_attributes,:vendor_attributes, :vendor_name, 
+    :document_date, :purchase_order_payments_attributes
 
   accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes["product"].blank? }
+
+  accepts_nested_attributes_for :purchase_order_payments, :allow_destroy => true,
+    :reject_if => proc { |attributes| attributes[:number].blank? }
 
   accepts_nested_attributes_for :vendor, :allow_destroy => true
 

@@ -19,7 +19,8 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, child_index: id) do |builder|
       render("forms/" + association.to_s.singularize + "_form", f: builder)
     end
-    link_to(name, '#', class: "add_fields btn btn-mini btn-success "+option_class, data: {id: id, fields: fields.gsub("\n", "")})
+    #WE'LL USE CSS CLASSES AS PARAMETER NOT BY DEFAULT TO KEEP THIS MORE CLEANER
+    link_to(name, '#', class: " "+option_class, data: {id: id, fields: fields.gsub("\n", "")})
   end
 
   def default_company
