@@ -156,7 +156,7 @@ es:
             attributes:
               name:
                 blank: *BLANK
-                taken: "La entidad ya se encuentra en el sistema"
+                taken: "La aplicacion ya existe en el sistema"
               product_id:
                 blank: *BLANK
           purchase_payment_option:
