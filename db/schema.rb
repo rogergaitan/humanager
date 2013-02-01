@@ -487,8 +487,6 @@ ActiveRecord::Schema.define(:version => 20130123203220) do
 
   add_index "photos", ["employee_id"], :name => "index_photos_on_employee_id"
 
-<<<<<<< HEAD
-=======
   create_table "positions", :force => true do |t|
     t.string   "position"
     t.string   "description"
@@ -507,7 +505,6 @@ ActiveRecord::Schema.define(:version => 20130123203220) do
 
   add_index "product_aplications", ["product_id"], :name => "index_product_aplications_on_product_id"
 
->>>>>>> 61642a78a56de5ff4aa314f0f352404dc6b41838
   create_table "product_applications", :force => true do |t|
     t.string   "name"
     t.integer  "product_id"
@@ -719,8 +716,6 @@ ActiveRecord::Schema.define(:version => 20130123203220) do
     t.datetime "updated_at",  :null => false
   end
 
-<<<<<<< HEAD
-=======
   create_table "work_benefits", :force => true do |t|
     t.string   "description"
     t.decimal  "percentage",     :precision => 12, :scale => 2
@@ -733,5 +728,4 @@ ActiveRecord::Schema.define(:version => 20130123203220) do
   add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
   add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"
 
->>>>>>> 61642a78a56de5ff4aa314f0f352404dc6b41838
 end

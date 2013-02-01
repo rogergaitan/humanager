@@ -17,7 +17,8 @@ Feature: Productos
     And I click on "//div[@id='sublines_list']/div[1]/div[1]/button"
     When I click on "//form[@id='new_product']/div[5]/div/a/div"
     And I wait 5 seconds
-    And I click on "//div[@id='category_list']/div[1]/div[1]/button"    
+    And I click on "//div[@id='category_list']/div[1]/div[1]/button" 
+       
     And I wait a second
     And I fill in "product_part_number" code    
     And I fill in "product_name" with "producto - " name

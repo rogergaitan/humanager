@@ -2,6 +2,7 @@ Feature: Agregar
     As a user 
     I should be able to add according the requirements
     
+    Scenarrio: Add new "linea"
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/lines')])[2]"
     And I click on "//a[contains(@href, '/lines/new')]"
@@ -22,51 +23,6 @@ Feature: Agregar
     When I should see "Información general"
     And I press on "//div[3]/a[1]"
     Then I should see "General"
-      
-    Scenario: Edit line successfully
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/lines')])[2]"
-    And I click on "//tr[1]/td[4]/a[2]"
-    And I fill in "line_code" code
-    And I fill in "line_description" with "editado " name
-    And I fill in "line_inventory" with "555"
-    And I fill in "line_sale_cost" with "6666"
-    And I fill in "line_lost_adjustment" with "54545"
-    And I fill in "line_sales_return" with "4545"
-    And I fill in "line_purchase_return" with "4545"
-    And I fill in "line_sale_tax" with "12216"
-    When I press on "//input[@name='commit']"
-    And I should see "Línea actualizada correctamente"
-    And I should see code
-    And I should see "Descripción: editado"
-    And I should see "Información contable"
-    And I press on "//a[contains(text(),'Regresar')]"
-    Then I should see code  
-    
-
-    Scenario: Add new line when press "Guardar y Continuar" 
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/lines')])[2]"
-    And I click on "//a[contains(@href, '/lines/new')]"
-    And I fill in "line_name" with "linea gc " name
-    And I fill in "line_code" code
-    And I fill in "line_description" with "descrip"
-    And I fill in "line_utility_adjusment" with "12356"
-    When I press on "//form[@id='new_line']/div[5]/input[2]"
-    And I should see "Línea creada correctamente"
-    And I should see "Nuevo registro de Línea"
-    And I fill in "line_name" with "linea de prueba"
-    And I fill in "line_code" code
-    And I fill in "line_description" with "descrip"
-    And I fill in "line_inventory" with "12345"
-    And I fill in "line_sale_cost" with "123456"
-    And I fill in "line_lost_adjustment" with "123453"
-    When I press on "//form[@id='new_line']/div[5]/input[2]"
-    And I should see "Línea creada correctamente"
-    And I should see "Nuevo registro de Línea"
-    And I click on "//form[@id='new_line']/div[5]/a"
-    Then I should see "General"
-
   
     Scenario: Add new "Categories" successfully
     Given I am on "http://localhost:3000/" Home page
@@ -81,32 +37,6 @@ Feature: Agregar
     And I click on "//a[contains(text(),'Regresar')]"
     Then I should see code 
 
-    Scenario: Edit Categories successfully
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/categories')])[2]"
-    And I click on "//tr[1]/td[4]/a[1]"
-    And I fill in "category_code" code
-    And I fill in "category_description" with "editado " name
-    When I press on "//input[@name='commit']"
-    And I should see "Categoría actualizada correctamente"
-    And I should see code
-    And I should see "Descripción: editado"
-    And I press on "//a[contains(text(),'Regresar')][1]"
-    Then I should see code 
-
-     Scenario: Save and Continuo when create a warehouse
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/warehouses')])[2]"
-    And I click on "//a[contains(@href, '/warehouses/new')]"
-    And I fill in "warehouse_name" with "bodega sc " name
-    And I fill in "warehouse_code" code
-    And I fill in "warehouse_manager" with "manager 1"
-    And I fill in "warehouse_description" with "44"
-    And I fill in "warehouse_address" with "San Pedro"
-    And I press on "//form[@id='new_warehouse']/div[7]/input[2]"
-    And I should see "Bodega creada correctamente"
-    Then I should see "Nuevo registro de Bodega"
-
     Scenario: Add new "bodega" successfully
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/warehouses')])[2]"
@@ -119,20 +49,6 @@ Feature: Agregar
     And I press on "//form[@id='new_warehouse']/div[7]/input[1]"
     Then I should see "Bodega creada correctamente" 
 
-    Scenario: Edit code "bodega" successfully
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/warehouses')])[2]"
-    And I click on "//tr[1]/td[6]/a[1]"
-    And I fill in "warehouse_code" code
-    And I fill in "warehouse_manager" with "editada " name
-    And I fill in "warehouse_address" with "lourdes"
-    And I press on "//input[@name='commit']"
-    And I should see "Bodega actualizada correctamente"
-    And I should see code
-    And I press on "//a[contains(text(),'Regresar')]"
-    Then I should see code
-
-
     Scenario: Add new "Sub-línea" successfully
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/sublines')])[2]"
@@ -144,20 +60,6 @@ Feature: Agregar
     And I should see code 
     And I click on "//a[contains(text(),'Regresar')]"
     Then I should see code 
-
-    Scenario: Edit subline successfully
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/sublines')])[2]"
-    And I click on "//tr[1]/td[4]/a[1]"
-    And I fill in "subline_code" code
-    And I fill in "subline_description" with "editado " name
-    When I press on "//input[@name='commit']"
-    And I should see "Sub-línea actualizada correctamente"
-    And I should see code
-    And I should see "Descripción: editado"
-    And I press on "//a[contains(text(),'Regresar')][1]"
-    Then I should see code 
-
 
     Scenario: Add new producto
     Given I am on "http://localhost:3000/" Home page
