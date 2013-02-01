@@ -1,17 +1,17 @@
 <%= javascript_include_tag "pagination" %>
 <%= javascript_include_tag "products/product_applications" %>
 <div class="tabbable">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs products_tabs">
             <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
             <% if @product.id %>
               <li><a href="#tab2" class="tab2" data-toggle="tab"><%= t("tabs.prices") %></a></li>
-              <li><a href="#tab3" class="tab3" data-toggle="tab"><%= t("tabs.applications") %></a></li>
+              <li><a href="#tab3" class="tab3"><%= t("tabs.applications") %></a></li>
             <% end %>  
         </ul>
     <div class="tab-content">
 
         <div class="tab-pane active" id="tab1">
-            <%= form_for @product, :validate => true,:html => { :class => 'form-horizontal' } do |f| %>
+            <%= form_for @product, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
           <div class="control-group">
             <%= f.label :code, :class => 'control-label' %>
             <div class="controls">
@@ -24,7 +24,7 @@
               <%= f.hidden_field :line_id %>
               <%= hidden_field_tag 'product_line_name' %>
               <%= hidden_field_tag 'product_line_full' %>
-              <%= text_field_tag 'product_line',nil, :class => 'text_field required search-image-line', :for=>:line_id%>  
+              <%= text_field_tag 'product_line',nil, :class => 'text_field required search-image-line', :for=>:line_id, :disabled => true %>
               <a href="#lines_list" role="button" class="btn btn-info btn-small" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
@@ -32,7 +32,7 @@
             <%= f.label :subline_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :subline_id %>
-              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required search-image-subline', :for =>:subline_id, :type =>'text' %>
+              <%= text_field_tag 'product_subline', nil,  :class => 'number_field required search-image-subline', :for =>:subline_id, :type =>'text', :disabled => true  %>
               <a href="#sublines_list" role="button" class="btn btn-info btn-small" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
@@ -40,7 +40,7 @@
             <%= f.label :category_id, :class => 'control-label' %>
             <div class="controls">
               <%= f.hidden_field :category_id %>
-              <%= text_field_tag 'product_category',nil, :class => 'number_field required search-image-category', :for => :category_id %>
+              <%= text_field_tag 'product_category',nil, :class => 'number_field required search-image-category', :for => :category_id, :disabled => true  %>
               <a href="#category_list" role="button" class="btn btn-info btn-small" data-toggle="modal"><div class="icon-eye-open"></div></a>
             </div>
           </div>
@@ -184,15 +184,17 @@
             <%= render :template => 'product_pricings/index' %>
         </div>
         <div class="tab-pane" id="tab3">
-          <%= form_tag product_applications_path, :id =>"product_applications", :class => "", :method => 'get' do %>  
+          <%= form_for @application, :validate => true, :html => { :class => 'form-horizontal' } do |a| %>  
             <div class="control-group">
-            <%= label_tag "Aplicaciones",nil, :class => 'control-label' %>
-            <div class="controls input-append">
-              <%= hidden_field_tag :app_product_id, nil, :value => params[:id] %>
-              <%= text_field_tag :product_application ,nil, :class => "text_field" %>
-              <button class="btn" type="submit"><i class="icon-plus"></i></button>
+              <%= label_tag "Aplicaciones",nil, :class => 'control-label' %>
+              <div class="controls">
+                <%= a.hidden_field :product_id, :class => 'form_application', :value => params[:id] %>
+                <%= a.text_field :name, :class => "text_field form_application" %>             
+              </div>
             </div>
-          </div>
+            <div class="form-actions">
+              <%= a.submit nil, :class => 'btn btn-primary' %>
+            </div>          
           <% end %>
         <div class="applications">
           <ul class="thumbnails">

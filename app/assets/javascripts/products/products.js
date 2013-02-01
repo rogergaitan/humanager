@@ -5,6 +5,18 @@ $(jQuery(document).ready(function($) {
         return '<div><button class="btn btn-success bind_select_btn icon-check btn-mini" id_'+type+' ="'+id+'" name_type="'+type+'">  </button><span>'+name+'</span></div>';
     }
 
+    // $("ul.products_tabs").on("click", "a", function(e) {
+    //     if (!($('form[data-validate]').isValid(ClientSideValidations.forms[form].validators))) {
+    //         e.preventDefault();
+    //         return false;
+    //     }
+
+    // }); 
+    $('a.tab3').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $("form#new_product_application").enableClientSideValidations();
+    })
     //Obtain lines(id and name).
     $.getJSON('/lines/fetch', function(line_data) {
         var html_create='';
@@ -105,7 +117,25 @@ $(jQuery(document).ready(function($) {
         return false;
     });
 
-    $("#lines_list").on('click',"bind_select_btn",function(){
+    $("#lines_list").on('click',".bind_select_btn",function(){
+        var name_type = $(this).attr('name_type');
+        var id = $(this).attr("id_"+name_type);
+        var name_item = $(this).next('span').text();
+        $("#product_"+name_type+"_id").val(id);
+        $("#product_"+name_type+"").val(name_item);
+        $('.click_cancel').trigger('click');
+
+    });
+    $("#sublines_list").on('click',".bind_select_btn",function(){
+        var name_type = $(this).attr('name_type');
+        var id = $(this).attr("id_"+name_type);
+        var name_item = $(this).next('span').text();
+        $("#product_"+name_type+"_id").val(id);
+        $("#product_"+name_type+"").val(name_item);
+        $('.click_cancel').trigger('click');
+
+    });
+    $("#category_list").on('click',".bind_select_btn",function(){
         var name_type = $(this).attr('name_type');
         var id = $(this).attr("id_"+name_type);
         var name_item = $(this).next('span').text();

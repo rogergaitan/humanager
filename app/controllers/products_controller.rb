@@ -37,6 +37,7 @@ class ProductsController < ApplicationController
   # GET /products/1/edit
   def edit
     @product_pricing = ProductPricing.new
+    @application = ProductApplication.new
     @product = Product.find(params[:id])
     @product_pricings = ProductPricing.where(:product_id => params[:id])
     @applications = ProductApplication.where(:product_id => params[:id])

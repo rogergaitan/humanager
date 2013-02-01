@@ -54,6 +54,14 @@ class ProductApplicationsController < ApplicationController
         format.json { render json: @product_application.errors, status: :unprocessable_entity }
         format.js
       end
+#    respond_to do |format|
+#      if @product_application.save
+#        format.html { redirect_to @product_application, notice: t('.activerecord.models.product_application').capitalize + t('.notice.successfully_created') }
+#        format.json { render json: @product_application, status: :created, location: @product_application }
+#      else
+#        format.html { render action: "new" }
+#        format.json { render json: @product_application.errors, status: :unprocessable_entity }
+#      end
     end
   end
 
