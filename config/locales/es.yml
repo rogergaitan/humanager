@@ -139,7 +139,14 @@ es:
               cc_id:
                 blank: *BLANK
                 not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN                
+                greater_than: *GREATER_THAN
+          product_application:
+            attributes:
+              name:
+                blank: *BLANK
+                taken: "La entidad ya se encuentra en el sistema"
+              product_id:
+                blank: *BLANK
           purchase_payment_option:
             attributes:
               number:
