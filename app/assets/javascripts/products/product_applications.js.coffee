@@ -1,8 +1,9 @@
 $(document).ready ->
-  $("form#new_product_application").submit ->
+  $("form#new_product_application").submit (e)->
     e.preventDefault()
     ajaxCall()
     $("#product_application").val("")
+    false
 	$("div.applications").on "click", ".remove_application", ()->
 		$(@).closest("li").remove()
   false
