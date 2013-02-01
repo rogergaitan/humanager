@@ -20,7 +20,8 @@ class PurchasePaymentOption < ActiveRecord::Base
   belongs_to :purchase
   
   #ATTRIBUTES
-  attr_accessible :amount, :number, :payment_option_id, :payment_type_id, :purchase_id
+  attr_accessible :amount, :number, :payment_option_id, :payment_type_id, 
+    :purchase_id
 
   ##VALIDATIONS
   validates :amount, :number, :payment_option_id, :payment_type_id,

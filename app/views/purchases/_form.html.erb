@@ -49,7 +49,7 @@
           <th class="span2"><%= model_subclass.human_attribute_name(:discount) %></th>
           <th class="span2"><%= model_subclass.human_attribute_name(:tax) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:cost_total) %></th>
-          <th class="span1"> <%= link_to_add_fields("", f, :purchase_items,"icon-plus add_item") %></th>
+          <th class="span1"> <%= link_to_add_fields("", f, :purchase_items,"add_fields btn btn-mini btn-success icon-plus add_item") %></th>
         </tr>
       </thead>
       <tbody>
@@ -108,7 +108,7 @@
           <th class="span1"><%= model_payment.human_attribute_name(:payment_type_id) %></th>
           <th class="span3"><%= model_payment.human_attribute_name(:number) %></th>
           <th class="span3"><%= model_payment.human_attribute_name(:amount) %></th>
-          <th class="span3"> <%= link_to_add_fields("", f, :purchase_payment_options,"icon-plus add_payment") %></th>
+          <th class="span3"> <%= link_to_add_fields("", f, :purchase_payment_options,"add_fields btn btn-mini btn-success icon-plus add_payment") %></th>
         </tr>
       </thead>
       <tbody>

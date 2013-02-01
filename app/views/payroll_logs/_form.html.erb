@@ -86,7 +86,7 @@
       <td class="header_task">Labor</td>
       <td class="header_time">Tiempo Trabajado</td>
       <td class="header_cc">Centro De Costo</td>
-      <td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log") %></td>
+      <td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "add_fields btn btn-mini btn-success icon-plus btn_plus right add-payroll-log") %></td>
     </tr>
     	<%= f.fields_for :payroll_histories do |builder| %>
 			<%= render 'forms/payroll_history_form', :f => builder %>
