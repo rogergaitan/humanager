@@ -24,14 +24,14 @@
           <%= builder.fields_for :telephones do |phone| %>
 						<%= render 'forms/telephone_form', :f => phone %>
           <% end %>
-          <%= link_to_add_fields("Agregar otro teléfono", builder, :telephones, 'add-fields-telephone') %>
+          <%= link_to_add_fields("Agregar otro teléfono", builder, :telephones, 'add_fields btn btn-mini btn-success add-fields-telephone') %>
 					<%= hidden_field 'count_phones', 'employees', :value => "1", :class => "hidden_fields"  %>
 					<h2>Emails</h2>
 					<hr>
           <%= builder.fields_for :emails do |email| %>
 						<%= render 'forms/email_form', :f => email %>
           <% end %>
-					<%= link_to_add_fields("Agregar otro email", builder, :emails, 'add-fields-email') %>
+					<%= link_to_add_fields("Agregar otro email", builder, :emails, 'add_fields btn btn-mini btn-success add-fields-email') %>
 					<%= hidden_field 'count_emails', 'employees', :value => "1", :class => "hidden_fields" %>
 					<h2>Dirección</h2>
 					<hr>

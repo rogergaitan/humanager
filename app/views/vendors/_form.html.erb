@@ -31,7 +31,7 @@
               <%= ent.fields_for :addresses do |add| %>              
                 <%= render 'forms/address_form', :f => add %>
             <% end %>
-              <h3>Teléfonos <%= link_to_add_fields("Agregar teléfono", ent, :telephones, "add_telephone") %></h3>
+              <h3>Teléfonos <%= link_to_add_fields("Agregar teléfono", ent, :telephones, "add_fields btn btn-mini btn-success add_telephone") %></h3>
               <div id="telephones">
                 <%= ent.fields_for :telephones, :validate => true do |pho| %>
                     <%= render 'forms/telephone_form', :f => pho %>
@@ -40,7 +40,7 @@
             </div>
 
             <div class="tab-pane" id="tab2">
-              <h2>Información de contacto <%= link_to_add_fields("Agregar contacto", ent, :contacts, "add_contact") %></h2>
+              <h2>Información de contacto <%= link_to_add_fields("Agregar contacto", ent, :contacts, "add_fields btn btn-mini btn-success add_contact") %></h2>
               <div id="contacts">
               <%= ent.fields_for :contacts, :validate => true do |cont| %>
                   <%= render 'forms/contact_form', :f => cont %>
@@ -50,7 +50,7 @@
 
 <!-- Render Entity's contacts information into partial to reuse code -->
             <div class="tab-pane" id="tab3">  
-              <h2>Cuentas Bancarias <%= link_to_add_fields("Agregar cuenta", ent, :bank_accounts, "add_bank_account") %></h2>
+              <h2>Cuentas Bancarias <%= link_to_add_fields("Agregar cuenta", ent, :bank_accounts, "add_fields btn btn-mini btn-success add_bank_account") %></h2>
               <div id="bank_accounts">
               <%= ent.fields_for :bank_accounts, :validate => true do |cont| %>
                     <%= render 'forms/bank_account_form', :f => cont %>

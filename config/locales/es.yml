@@ -41,7 +41,7 @@ es:
       cancel: Cancelar  
       back: Regresar
       confirm: '¿Está seguro(a)?'
-      show_accounting_info: 'Información Contable'   
+      show_accounting_info: 'Información Contable' 
     titles:
       sync: datos sincronizados
       tasksfb: datos sincronizados
@@ -70,6 +70,18 @@ es:
   activerecord:
       errors:
         models:
+          purchase_order_payment:
+            attributes:
+              payment_option_id:
+                blank: *BLANK
+              payment_type_id:
+                blank: *BLANK
+              number:
+                blank: *REQUIRED
+              amount:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
           kardex:
             attributes:
               code:
@@ -241,6 +253,8 @@ es:
                 less_than: *LESS_THAN
           purchase_order:
             attributes:
+              document_date:
+                blank: *BLANK
               vendor_name:
                 blank: *BLANK
               delivery_date:
@@ -492,6 +506,11 @@ es:
           one: planilla
           other: Registro de planillas
       attributes:
+        purchase_order_payment:
+          payment_option_id: Método
+          payment_type_id: Tipo
+          number: Número
+          amount: Monto
         company:
           name: Nombre / Razón social
           surname: Nombre comercial
@@ -601,6 +620,7 @@ es:
           name: Nombre
           description: Descripción
         purchase_order:
+          document_date: Fecha
           vendor_id: Proveedor
           reference_info: Referencia
           currency: Moneda
@@ -612,6 +632,7 @@ es:
           shipping_type: Forma de envío
           created_at: Fecha
         items_purchase_order:
+          tax: Impuesto
           product: Producto
           quantity: Cantidad
           cost_unit: Costo Unit

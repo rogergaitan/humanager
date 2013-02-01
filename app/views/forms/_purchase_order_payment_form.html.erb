@@ -1,0 +1,14 @@
+<tr>
+  <td>
+    <%= f.collection_select :payment_option_id,  @payment_options, :id, :name, :include_blank => false%>
+  </td>
+  <td>
+    <%= f.collection_select :payment_type_id,  @payment_types, :id, :name, :include_blank => false %>
+  </td>
+   <td>
+    <%= f.text_field :number, :class => 'text_field input-block-level payment_number' %>
+  </td>
+  <td>
+    <%= f.text_field :amount, :class => 'text_field input-block-level amount' %>
+  </td>
+</tr>
