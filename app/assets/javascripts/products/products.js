@@ -29,23 +29,29 @@ $(jQuery(document).ready(function($) {
                     id: item.id
                 }
             }),
+            minLength: 3,
+            autoFocus: true, 
             select: function( event, ui ) {
-                if(ui.item.id){
-                    $("#product_line_id").val(ui.item.id);    
-                }
+                //if(ui.item.id){
+                  //  $("#product_line_id").val(ui.item.id);    
+                //}
                 
                 //$("#product_line_id").val(ui.item.id);
                 //$("#product_line_name").val(ui.item.label);
+                $("#product_line_id").val(ui.item.id);
+                return $(this).val(ui.item.label);
             },
             focus: function(event, ui){
-                $( "#product_line" ).val(ui.item.label);
+                //$("#product_line").val(ui.item.label);
+                return $(this).val(ui.item.label)
             },
-            change: function(event, ui){
+            change: function(event, ui){                
                 if(!ui.item){
-                    alert('Ningún resultado contiene ' + $( "#product_line" ).val());
-                    $( "#product_line" ).val("");
-                    $("#product_line_id").val("");    
-                } 
+                    //alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $("#product_line").val("");
+                    $("#product_line_id").val("");
+
+                }
             }
         }) 
         if($("#product_line_id").val()){
@@ -60,17 +66,30 @@ $(jQuery(document).ready(function($) {
     //Obtain sublines(id and name)
     $.getJSON('/sublines/fetch', function(subline_data) {
         var html_create='';
-        $( "#product_subline" ).autocomplete({
+        $("#product_subline").autocomplete({
             source: $.map(subline_data, function(item){
-                            $.data(document.body, 'subline_'+ item.id+"", item.name);
-                            html_create += create_html_generic('subline',item.id,item.name);
-                            return{
-                                label: item.name,                        
-                                id: item.id
-                            }
+                $.data(document.body, 'subline_'+ item.id+"", item.name);
+                html_create += create_html_generic('subline',item.id,item.name);
+                return{
+                    label: item.name,
+                    id: item.id
+                }
             }),
+            minLength: 3,
+            autoFocus: true, 
             select: function( event, ui ) {
                 $("#product_subline_id").val(ui.item.id);
+                return $(this).val(ui.item.label);
+            },
+            focus: function(event, ui){
+                return $(this).val(ui.item.label);
+            },
+            change: function(event, ui){                
+                if(!ui.item){
+                    //alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $("#product_subline").val("");
+                    $("#product_subline_id").val("");
+                }
             }
         })
         if($("#product_subline_id").val()){
@@ -93,10 +112,22 @@ $(jQuery(document).ready(function($) {
                     id: item.id
                 }
             }),
+            minLength: 3,
+            autoFocus: true, 
             select: function( event, ui ) {
                 $("#product_category_id").val(ui.item.id);
+                return $(this).val(ui.item.label);
+            },
+            focus: function(event, ui){
+                return $(this).val(ui.item.label);
+            },
+            change: function(event, ui){                
+                if(!ui.item){
+                    //alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $("#product_category").val("");
+                    $("#product_category_id").val("");
+                }
             }
-
         })
         if($("#product_category_id").val()){
             var product_category_name = $.data(document.body, 'category_' + $("#product_category_id").val()+'');
