@@ -1,6 +1,9 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :cost_centers
+
+
   resources :purchase_order_payments
 
 
