@@ -5,6 +5,18 @@ $(jQuery(document).ready(function($) {
         return '<div><button class="btn btn-success bind_select_btn icon-check btn-mini" id_'+type+' ="'+id+'" name_type="'+type+'">  </button><span>'+name+'</span></div>';
     }
 
+    // $("ul.products_tabs").on("click", "a", function(e) {
+    //     if (!($('form[data-validate]').isValid(ClientSideValidations.forms[form].validators))) {
+    //         e.preventDefault();
+    //         return false;
+    //     }
+
+    // }); 
+    $('a.tab3').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        $("form#new_product_application").enableClientSideValidations();
+    })
     //Obtain lines(id and name).
     $.getJSON('/lines/fetch', function(line_data) {
         var html_create='';
@@ -17,23 +29,29 @@ $(jQuery(document).ready(function($) {
                     id: item.id
                 }
             }),
+            minLength: 3,
+            autoFocus: true, 
             select: function( event, ui ) {
-                if(ui.item.id){
-                    $("#product_line_id").val(ui.item.id);    
-                }
+                //if(ui.item.id){
+                  //  $("#product_line_id").val(ui.item.id);    
+                //}
                 
                 //$("#product_line_id").val(ui.item.id);
                 //$("#product_line_name").val(ui.item.label);
+                $("#product_line_id").val(ui.item.id);
+                return $(this).val(ui.item.label);
             },
             focus: function(event, ui){
-                $( "#product_line" ).val(ui.item.label);
+                //$("#product_line").val(ui.item.label);
+                return $(this).val(ui.item.label)
             },
-            change: function(event, ui){
+            change: function(event, ui){                
                 if(!ui.item){
-                    alert('Ningún resultado contiene ' + $( "#product_line" ).val());
-                    $( "#product_line" ).val("");
-                    $("#product_line_id").val("");    
-                } 
+                    //alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $("#product_line").val("");
+                    $("#product_line_id").val("");
+
+                }
             }
         }) 
         if($("#product_line_id").val()){
@@ -48,17 +66,30 @@ $(jQuery(document).ready(function($) {
     //Obtain sublines(id and name)
     $.getJSON('/sublines/fetch', function(subline_data) {
         var html_create='';
-        $( "#product_subline" ).autocomplete({
+        $("#product_subline").autocomplete({
             source: $.map(subline_data, function(item){
-                            $.data(document.body, 'subline_'+ item.id+"", item.name);
-                            html_create += create_html_generic('subline',item.id,item.name);
-                            return{
-                                label: item.name,                        
-                                id: item.id
-                            }
+                $.data(document.body, 'subline_'+ item.id+"", item.name);
+                html_create += create_html_generic('subline',item.id,item.name);
+                return{
+                    label: item.name,
+                    id: item.id
+                }
             }),
+            minLength: 3,
+            autoFocus: true, 
             select: function( event, ui ) {
                 $("#product_subline_id").val(ui.item.id);
+                return $(this).val(ui.item.label);
+            },
+            focus: function(event, ui){
+                return $(this).val(ui.item.label);
+            },
+            change: function(event, ui){                
+                if(!ui.item){
+                    //alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $("#product_subline").val("");
+                    $("#product_subline_id").val("");
+                }
             }
         })
         if($("#product_subline_id").val()){
@@ -81,10 +112,22 @@ $(jQuery(document).ready(function($) {
                     id: item.id
                 }
             }),
+            minLength: 3,
+            autoFocus: true, 
             select: function( event, ui ) {
                 $("#product_category_id").val(ui.item.id);
+                return $(this).val(ui.item.label);
+            },
+            focus: function(event, ui){
+                return $(this).val(ui.item.label);
+            },
+            change: function(event, ui){                
+                if(!ui.item){
+                    //alert('Ningún resultado contiene ' + $( "#product_line" ).val());
+                    $("#product_category").val("");
+                    $("#product_category_id").val("");
+                }
             }
-
         })
         if($("#product_category_id").val()){
             var product_category_name = $.data(document.body, 'category_' + $("#product_category_id").val()+'');
@@ -105,7 +148,25 @@ $(jQuery(document).ready(function($) {
         return false;
     });
 
-    $("#lines_list").on('click',"bind_select_btn",function(){
+    $("#lines_list").on('click',".bind_select_btn",function(){
+        var name_type = $(this).attr('name_type');
+        var id = $(this).attr("id_"+name_type);
+        var name_item = $(this).next('span').text();
+        $("#product_"+name_type+"_id").val(id);
+        $("#product_"+name_type+"").val(name_item);
+        $('.click_cancel').trigger('click');
+
+    });
+    $("#sublines_list").on('click',".bind_select_btn",function(){
+        var name_type = $(this).attr('name_type');
+        var id = $(this).attr("id_"+name_type);
+        var name_item = $(this).next('span').text();
+        $("#product_"+name_type+"_id").val(id);
+        $("#product_"+name_type+"").val(name_item);
+        $('.click_cancel').trigger('click');
+
+    });
+    $("#category_list").on('click',".bind_select_btn",function(){
         var name_type = $(this).attr('name_type');
         var id = $(this).attr("id_"+name_type);
         var name_item = $(this).next('span').text();
