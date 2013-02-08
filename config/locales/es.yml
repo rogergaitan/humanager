@@ -70,6 +70,12 @@ es:
   activerecord:
       errors:
         models:
+          document_number:
+            attributes:
+              start_number:
+                blank: *BLANK
+              document_type:
+                taken: "Ya existe un registro con el elemento seleccionado"
           purchase_order_payment:
             attributes:
               payment_option_id:
@@ -422,6 +428,7 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
+        document_number: Número Documento
         company: Compañía
         discount_profile_item: Artículos del Perfil de Descuento
         discount_profile: Perfil de Descuento
@@ -497,6 +504,14 @@ es:
           one: planilla
           other: Registro de planillas
       attributes:
+        document_number:
+          company_id: Compañia
+          description: Descripción
+          document_type: Tipo Documento
+          number_type: Tipo Número
+          start_number: Número inicio
+          mask: Máscara
+          terminal_restriction: Restricción
         purchase_order_payment:
           payment_option_id: Método
           payment_type_id: Tipo

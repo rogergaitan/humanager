@@ -1,0 +1,25 @@
+<%
+paths = []
+routes = Rails.application.routes.routes.map do |route|
+
+  paths.push route.path.spec.to_s.gsub(/\(.:format\)/) { "" } if route.defaults[:action] == "index"
+  { 
+  	#alias: route.name, 
+  	#path: route.path.spec.to_s, 
+  	path: route.path.spec, 
+  	# controller: route.defaults[:controller], 
+  	action: route.defaults[:action]
+  	
+}
+end
+%>
+<dl class="dl-horizontal">
+<% paths.each  do |print| %>
+<dt>
+	<%=	print.camelcase %> 
+</dt>
+<dd>
+	<%= link_to print, print, :class => "" %>
+</dd>
+<% end %>
+<dl>

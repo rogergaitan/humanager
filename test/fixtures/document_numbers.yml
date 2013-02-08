@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  company: 
+  description: MyString
+  document_type: MyString
+  number_type: MyString
+  start_number: MyString
+  mask: MyString
+  terminal_restriction: false
+
+two:
+  company: 
+  description: MyString
+  document_type: MyString
+  number_type: MyString
+  start_number: MyString
+  mask: MyString
+  terminal_restriction: false

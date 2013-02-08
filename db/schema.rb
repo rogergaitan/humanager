@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131173441) do
+ActiveRecord::Schema.define(:version => 20130201195005) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -191,6 +191,20 @@ ActiveRecord::Schema.define(:version => 20130131173441) do
 
   add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
   add_index "districts", ["province_id"], :name => "index_districts_on_province_id"
+
+  create_table "document_numbers", :force => true do |t|
+    t.integer  "company_id"
+    t.string   "description"
+    t.enum     "document_type",        :limit => [:purchase, :purchase_order]
+    t.enum     "number_type",          :limit => [:auto_increment, :manual]
+    t.integer  "start_number"
+    t.string   "mask"
+    t.boolean  "terminal_restriction"
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+  end
+
+  add_index "document_numbers", ["company_id"], :name => "index_document_numbers_on_company_id"
 
   create_table "emails", :force => true do |t|
     t.integer  "entity_id"
