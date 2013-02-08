@@ -1,0 +1,46 @@
+<%= javascript_include_tag "document_numbers/document_numbers" %>
+<%= form_for @document_number, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :company_id, :class => 'number_field', :value =>  session[:company_id] ? session[:company_id] : default_company %>
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :document_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.enum_select :document_type, :include_blank => false %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :number_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.enum_select :number_type, :include_blank => false %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :start_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :start_number, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :mask, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :mask, :class => 'text_field', :maxlength => 3 %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :terminal_restriction, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :terminal_restriction, :class => 'check_box' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                document_numbers_path, :class => 'btn' %>
+  </div>
+<% end %>

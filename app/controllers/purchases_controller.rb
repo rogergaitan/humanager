@@ -6,6 +6,7 @@ class PurchasesController < ApplicationController
   before_filter :fetch_warehouses, :only      => [:new, :edit]
   before_filter :fetch_payment_types, :only   => [:new, :edit]
   before_filter :fetch_payment_options, :only => [:new, :edit]
+  before_filter :check_numbering, :only => [:new]
   respond_to :json, :js, :html
 
   def index
@@ -109,4 +110,8 @@ class PurchasesController < ApplicationController
     respond_with @purchases
   end
 
+  def check_numbering
+    @doc_number = DocumentNumber.find_by_document_type(:purchase)
+    @auto_increment = @doc_number.number_type.eql?(:auto_increment) 
+  end
 end
