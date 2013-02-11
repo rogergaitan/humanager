@@ -70,6 +70,12 @@ es:
   activerecord:
       errors:
         models:
+          document_number:
+            attributes:
+              start_number:
+                blank: *BLANK
+              document_type:
+                taken: "Ya existe un registro con el elemento seleccionado"
           purchase_order_payment:
             attributes:
               payment_option_id:
@@ -152,6 +158,12 @@ es:
                 blank: *BLANK
                 not_a_number: *NOT_A_NUMBER
                 greater_than: *GREATER_THAN
+          cost_center:
+            attributes:
+              code:
+                blank: *BLANK
+              description:
+                blank: *BLANK
           product_application:
             attributes:
               name:
@@ -431,10 +443,12 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
+        document_number: Número Documento
         company: Compañía
         discount_profile_item: Artículos del Perfil de Descuento
         discount_profile: Perfil de Descuento
         taxis: Impuesto
+        cost_center: Centros de Costo
         payment_type: Tipo de Pago
         payment_option: "Opción de Pago"
         product_application: Aplicaciones
@@ -506,6 +520,14 @@ es:
           one: planilla
           other: Registro de planillas
       attributes:
+        document_number:
+          company_id: Compañia
+          description: Descripción
+          document_type: Tipo Documento
+          number_type: Tipo Número
+          start_number: Número inicio
+          mask: Máscara
+          terminal_restriction: Restricción
         purchase_order_payment:
           payment_option_id: Método
           payment_type_id: Tipo
@@ -540,6 +562,10 @@ es:
           name: Nombre
           percentage: Porcentaje
           cc_id: Cuenta contable
+        cost_center:
+          code: Codigo
+          description: Descripción
+          employee_id: Empleado
         purchase_payment_option:
           payment_option_id: Método
           payment_type_id: Tipo

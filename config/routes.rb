@@ -3,7 +3,6 @@ Reasapp::Application.routes.draw do
 
   resources :purchase_order_payments
 
-
   resources :payroll_logs do
     collection do
       get :fetch_employees
@@ -152,11 +151,15 @@ Reasapp::Application.routes.draw do
   match '/404', :to => 'errors#not_found'
   match '/configuracion', :to  => 'pages#configuracion', :as  => 'dcerp_config'
   match '/procesos', :to  => 'pages#procesos', :as  => 'dcerp_process'
+  match '/links', :to => "pages#links"
 
   root :to => 'pages#index'
 
   devise_for :users
   
+  resources :cost_centers
+  resources :document_numbers
+  resources :purchase_order_payments
   resources :payroll_logs
   resources :work_benefits
   resources :payroll_types
