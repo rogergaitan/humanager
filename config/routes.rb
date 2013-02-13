@@ -3,13 +3,14 @@ Reasapp::Application.routes.draw do
 
   resources :quotation_items
 
-
   resources :quotations do
     collection do
       get :search_customer
       get :search
     end
   end
+
+  resources :purchase_order_payments
 
   resources :payroll_logs do
     collection do
@@ -165,6 +166,7 @@ Reasapp::Application.routes.draw do
 
   devise_for :users
   
+  resources :cost_centers
   resources :document_numbers
   resources :purchase_order_payments
   resources :payroll_logs
