@@ -1,0 +1,54 @@
+<%- model_class = QuotationItem -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:quotation_id) %></th>
+      <th><%= model_class.human_attribute_name(:product_id) %></th>
+      <th><%= model_class.human_attribute_name(:code) %></th>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:quantity) %></th>
+      <th><%= model_class.human_attribute_name(:unit_price) %></th>
+      <th><%= model_class.human_attribute_name(:discount) %></th>
+      <th><%= model_class.human_attribute_name(:tax) %></th>
+      <th><%= model_class.human_attribute_name(:total) %></th>
+      <th><%= model_class.human_attribute_name(:warehouse_id) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @quotation_items.each do |quotation_item| %>
+      <tr>
+        <td><%= link_to quotation_item.id, quotation_item_path(quotation_item) %></td>
+        <td><%= quotation_item.quotation_id %></td>
+        <td><%= quotation_item.product_id %></td>
+        <td><%= quotation_item.code %></td>
+        <td><%= quotation_item.description %></td>
+        <td><%= quotation_item.quantity %></td>
+        <td><%= quotation_item.unit_price %></td>
+        <td><%= quotation_item.discount %></td>
+        <td><%= quotation_item.tax %></td>
+        <td><%= quotation_item.total %></td>
+        <td><%= quotation_item.warehouse_id %></td>
+        <td><%=l quotation_item.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_quotation_item_path(quotation_item), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      quotation_item_path(quotation_item),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_quotation_item_path,
+            :class => 'btn btn-primary' %>
