@@ -699,6 +699,7 @@ es:
           name: Nombre
           description: Descripción
         purchase_order:
+          document_number: Número
           document_date: Fecha
           vendor_id: Proveedor
           reference_info: Referencia

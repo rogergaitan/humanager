@@ -4,6 +4,8 @@ class PurchaseOrdersController < ApplicationController
   before_filter :title
   before_filter :fetch_payment_info, :only => [:new, :edit]
   before_filter :fetch_shipping_types, :only => [:new, :edit]
+  before_filter :check_number, :only => [:new]
+  
   def index
     respond_with @purchase_orders = PurchaseOrder.includes(:vendor).all
   end
@@ -30,7 +32,6 @@ class PurchaseOrdersController < ApplicationController
     @purchase_order.purchase_order_payments.build
     @new_vendor = Vendor.new
     @new_vendor.build_entity
-    #@shipping_type = ShippingMethod.fetch_all
   end
 
   def edit
@@ -49,7 +50,10 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf, notice: 'Purchase order was successfully created.' }
         else
-          format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_created') }
+          format.html { redirect_to purchase_orders_url, 
+            notice: t('.activerecord.models.purchase_order').capitalize +
+            " #{@purchase_order.document_number} " +
+            t('.notice.a_successfully_created') }
           format.json { render json: @purchase_order, status: :created, location: @purchase_order }
         end
       else
@@ -71,7 +75,10 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf }
         else
-          format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_updated') }
+          format.html { redirect_to purchase_orders_url, 
+            notice: t('.activerecord.models.purchase_order').capitalize +
+            " #{@purchase_order.document_number} " +
+            t('.notice.a_successfully_updated') }
           format.json { head :no_content }
         end
       else
@@ -96,7 +103,8 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def title
-    @title = t('.activerecord.models.purchase').capitalize + " - " + t(".helpers.links.#{action_name}" )
+    @title = t('.activerecord.models.purchase_order').capitalize + " - " +
+     t(".helpers.links.#{action_name}" )
   end
 
   def search_product
@@ -152,4 +160,7 @@ class PurchaseOrdersController < ApplicationController
     @payment_types    =  PaymentType.all
   end
 
+  def check_number
+    @document_number = DocumentNumber.check_number(:purchase_order)
+  end
 end

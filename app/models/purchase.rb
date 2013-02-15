@@ -52,8 +52,10 @@ class Purchase < ActiveRecord::Base
 
   ##CALLBACKS
   #after_destroy :destroy_kardex TRIGGERED ON DESTROY purchase_item
-  after_create  :create_kardex
+  after_create  :create_kardex, :increment_document_number
+  after_create  :increment_document_number
   after_update  :update_kardex
+  before_validation :next_number, :if => proc { |a| a[:document_number].blank? }
 
   def self.get_vendor(id = nil)
     @vendor = Vendor.joins(:entity).select("name, surname").find(id) unless id.nil?
@@ -67,7 +69,7 @@ class Purchase < ActiveRecord::Base
   private
 
   def quantity_amount
-    errors.add :total, "Total debe ser igual a la suma de los metods de pago"  if !(self.total == purchase_payment_options.map(&:amount).sum)
+    errors.add :total, "Total debe ser igual a la suma de los metods de pago" unless (self.total == purchase_payment_options.map(&:amount).sum)
   end
 
   def current_info
@@ -87,4 +89,11 @@ class Purchase < ActiveRecord::Base
     Kardex.update_kardex(self, self.purchase_items, current_info)
   end
 
+  def next_number
+    self.document_number = DocumentNumber.next_number(:purchase)  
+  end
+
+  def increment_document_number
+    DocumentNumber.increment_document_number(:purchase)
+  end
 end

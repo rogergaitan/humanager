@@ -7,7 +7,8 @@ class QuotationsController < ApplicationController
   before_filter :check_number, :only => [:new]
 
   def index
-    respond_with @quotations = Quotation.includes(:customer => :entity).paginate(page: params[:page], per_page: 1)
+    respond_with @quotations = Quotation.includes(:customer => :entity)
+      .paginate(page: params[:page], per_page: params[:per_page])
   end
 
   def show
@@ -85,19 +86,22 @@ class QuotationsController < ApplicationController
   end
 
   def check_number
-    @document_number = CheckDocumentNumber.check_number(:quotation)
+    @document_number = DocumentNumber.check_number(:quotation)
   end
 
   def search
-    if params[:customer] and params[:customer].length >= 3
-      @quotations = Quotation.search(nil, params[:customer])
-        .to_a.paginate(:page => params[:page], :per_page => params[:per_page]) 
-    else 
-      if params[:number]
-        @quotations = Quotation.search(params[:number], nil)
-        .to_a.paginate(:page => params[:page], :per_page => params[:per_page]) 
-      end
-    end
-    respond_with @quotations
+    # @quotations = nil
+    # if params[:customer] and params[:customer].length >= 3
+    #   @quotations = Quotation.search(nil, params[:customer])
+    #     .to_a.paginate(:page => params[:page], :per_page => params[:per_page]) 
+    # else 
+    #   if params[:number]
+    #     @quotations = Quotation.search(params[:number], nil)
+    #     .to_a.paginate(:page => params[:page], :per_page => params[:per_page]) 
+    #   end
+    # end
+    @quotations = Quotation.search(params[:search])
+      .to_a.paginate(:page => params[:page], :per_page => params[:per_page]) unless params[:search].empty?
+    respond_with @quotations 
   end
 end

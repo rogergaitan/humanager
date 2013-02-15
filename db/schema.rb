@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130208205812) do
+ActiveRecord::Schema.define(:version => 20130215151544) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -92,6 +92,14 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
   end
 
   add_index "contacts", ["entity_id"], :name => "index_contacts_on_entity_id"
+
+  create_table "cost_centers", :force => true do |t|
+    t.string   "code"
+    t.string   "description"
+    t.integer  "employee_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "customer_profiles", :force => true do |t|
     t.string   "name"
@@ -195,13 +203,13 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
   create_table "document_numbers", :force => true do |t|
     t.integer  "company_id"
     t.string   "description"
-    t.enum     "document_type",        :limit => [:purchase, :purchase_order]
+    t.enum     "document_type",        :limit => [:purchase, :purchase_order, :quotation]
     t.enum     "number_type",          :limit => [:auto_increment, :manual]
     t.integer  "start_number"
     t.string   "mask"
     t.boolean  "terminal_restriction"
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+    t.datetime "created_at",                                                               :null => false
+    t.datetime "updated_at",                                                               :null => false
   end
 
   add_index "document_numbers", ["company_id"], :name => "index_document_numbers_on_company_id"
@@ -611,9 +619,10 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
     t.float    "total"
     t.date     "delivery_date"
     t.string   "shipping_type"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.date     "document_date"
+    t.string   "document_number"
   end
 
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
