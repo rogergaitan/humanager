@@ -98,6 +98,7 @@ Reasapp::Application.routes.draw do
 
   resources :purchase_orders do
     collection do
+      get 'fetch'
       get 'search_product'
       get 'cart_items'
       get 'search_vendor'
