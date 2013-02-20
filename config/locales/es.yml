@@ -70,6 +70,33 @@ es:
   activerecord:
       errors:
         models:
+          quotation_item:
+            attributes:
+              code:
+                blank: *REQUIRED
+              description:
+                blank: *REQUIRED
+              quantity:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              unit_price:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              discount:
+                not_a_number: *NOT_A_NUMBER
+                less_than: *LESS_THAN
+                greater_than: *GREATER_THAN
+              tax:
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              total:
+                blank: *REQUIRED
+          quotation:
+            attributes:
+              customer_name:
+                blank: *BLANK
           document_number:
             attributes:
               start_number:
@@ -443,6 +470,9 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
+        quotation:
+          one: Cotización
+          other: Cotizaciones
         document_number: Número Documento
         company: Compañía
         discount_profile_item: Artículos del Perfil de Descuento
@@ -520,6 +550,29 @@ es:
           one: planilla
           other: Registro de planillas
       attributes:
+        quotation_item:
+          warehouse_id: Bodega
+          code: Código
+          description: Descripción
+          quantity: Cantidad
+          unit_price: Preicio Unitario
+          discount: Descuento
+          tax: Impuesto
+          total: Total
+        quotation:
+          customer_name: Cliente #attr_accessor
+          document_number: Número
+          customer_id: Cliente
+          currency: Moneda
+          document_date: Fecha
+          valid_to: Valido hasta
+          payment_term: Término de pago
+          sub_total_free: Sub-Total exento
+          sub_total_taxed: Sub-Total gravado
+          tax_total: Impuesto total
+          discount_total: Descuento total
+          total: Total
+          notes: Observaciones
         document_number:
           company_id: Compañia
           description: Descripción
