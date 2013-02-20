@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130204222715) do
+=======
+ActiveRecord::Schema.define(:version => 20130208205812) do
+>>>>>>> c00508545ab04aa5d8ee53ee3c93a2aa9695d884
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -657,6 +661,44 @@ ActiveRecord::Schema.define(:version => 20130204222715) do
   end
 
   add_index "purchases", ["vendor_id"], :name => "index_purchases_on_vendor_id"
+
+  create_table "quotation_items", :force => true do |t|
+    t.integer  "quotation_id"
+    t.integer  "product_id"
+    t.string   "code"
+    t.string   "description"
+    t.float    "quantity"
+    t.float    "unit_price"
+    t.float    "discount"
+    t.float    "tax"
+    t.float    "total"
+    t.integer  "warehouse_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "quotation_items", ["product_id"], :name => "index_quotation_items_on_product_id"
+  add_index "quotation_items", ["quotation_id"], :name => "index_quotation_items_on_quotation_id"
+  add_index "quotation_items", ["warehouse_id"], :name => "index_quotation_items_on_warehouse_id"
+
+  create_table "quotations", :force => true do |t|
+    t.string   "document_number"
+    t.integer  "customer_id"
+    t.string   "currency"
+    t.date     "document_date"
+    t.date     "valid_to"
+    t.string   "payment_term"
+    t.float    "sub_total_free"
+    t.float    "sub_total_taxed"
+    t.float    "tax_total"
+    t.float    "discount_total"
+    t.float    "total"
+    t.text     "notes"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "quotations", ["customer_id"], :name => "index_quotations_on_customer_id"
 
   create_table "roles", :force => true do |t|
     t.string   "role"

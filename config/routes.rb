@@ -1,6 +1,15 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :quotation_items
+
+  resources :quotations do
+    collection do
+      get :search_customer
+      get :search
+    end
+  end
+
   resources :purchase_order_payments
 
   resources :payroll_logs do
