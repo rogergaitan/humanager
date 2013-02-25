@@ -262,7 +262,7 @@ es:
                 blank: *BLANK
               purchase_date:
                 blank: *BLANK
-          shipping_method:
+              shipping_method:
             attributes:
               name:
                 blank: *BLANK
