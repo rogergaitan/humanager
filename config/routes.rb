@@ -1,6 +1,12 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :invoices do
+    collection do 
+      get :search
+    end
+  end
+
   resources :quotation_items
 
   resources :quotations do
@@ -118,6 +124,7 @@ Reasapp::Application.routes.draw do
   resources :products do
     collection do
       get 'search'
+      get 'quantity_available'
       post 'set_cart'
       get 'get_cart'
     end
@@ -153,7 +160,13 @@ Reasapp::Application.routes.draw do
       get 'fetch'
     end
   end
-
+  
+  resources :customers do
+    collection do 
+      get 'search_customer'
+    end
+  end
+  
   match '/contact', :to => 'pages#contact'
   match '/help', :to => 'pages#help'
   match '/about', :to => 'pages#about'
@@ -180,7 +193,6 @@ Reasapp::Application.routes.draw do
   resources :occupations
   resources :centro_de_costos
   resources :positions
-  resources :customers
   resources :taxes
   resources :purchase_payment_options
   resources :departments

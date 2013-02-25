@@ -10,6 +10,10 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+CONSTANTS = YAML.load(File.read(File.expand_path('../constants.yml', __FILE__)))
+CONSTANTS.merge! CONSTANTS.fetch(Rails.env, {})
+CONSTANTS.symbolize_keys!
+
 module Reasapp
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

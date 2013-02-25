@@ -1,0 +1,18 @@
+<%= javascript_include_tag "invoices/invoices" %>
+<%- model_class = Invoice -%>
+<legend>
+  <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <%= form_tag search_invoices_path, :id =>"search_form", 
+      :class => "form-search pull-right", :method => 'get' do %>
+    <button class="btn" id="default_index">Limpiar busquedas</button>
+    <%= text_field_tag :search, params[:search], :class => "search-query", 
+      :placeholder => model_class.human_attribute_name(:document_number) +
+        " ó "+ model_class.human_attribute_name(:customer_name)
+    %>      
+  <% end %>
+</legend>
+
+<%= render "invoices" %>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+  new_invoice_path, :class => 'btn btn-primary' %>

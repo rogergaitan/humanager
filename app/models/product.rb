@@ -110,4 +110,9 @@ class Product < ActiveRecord::Base
     Rails.cache.delete("Product.cart")
   end
 
+  def self.quantity_available(product_id)
+    @product = find(product_id) unless product_id.nil?
+    @product.stock.nil? ? @product.stock = 0 : @product.stock
+    @product 
+  end
 end

@@ -20,17 +20,14 @@
 
 class Purchase < ActiveRecord::Base
 
-  ##ASSOCIATIONS
   belongs_to :vendor
   has_many :purchase_items, :dependent => :destroy
   has_many :purchase_payment_options, :dependent => :destroy
 
-  #ATTRIBUTES
   attr_accessor :vendor_name
   attr_accessor :default_company
   attr_accessor :current_user
   
-  ##ATTRIBUTES ACCESIBLES
   attr_accessible :completed, :currency, :dai_tax, :document_number, :isc_tax,
     :purchase_type, :purchase_date, :subtotal, :taxes, :total, :vendor_id,
     :purchase_items_attributes, :vendor_name, :purchase_payment_options_attributes,
@@ -44,16 +41,13 @@ class Purchase < ActiveRecord::Base
     :allow_destroy => true,
     :reject_if => proc { |attributes| attributes[:product_id].blank? }
 
-  #VALIDATIONS
   validates :vendor_id, :document_number, :purchase_date, :vendor_name,
     :presence => true
 
   validate :quantity_amount, :on => :create
 
-  ##CALLBACKS
   #after_destroy :destroy_kardex TRIGGERED ON DESTROY purchase_item
   after_create  :create_kardex, :increment_document_number
-  after_create  :increment_document_number
   after_update  :update_kardex
   before_validation :next_number, :if => proc { |a| a[:document_number].blank? }
 
@@ -77,7 +71,9 @@ class Purchase < ActiveRecord::Base
       :default_company => self.default_company.to_i,
       :current_user    => self.current_user,
       :doc_type        => Purchase.model_name.downcase,
-      :mov_type        => "input"
+      :mov_type        => "input",
+      :mov_date       => self.purchase_date,
+      :entity_id      => self.vendor_id
     }
   end
   

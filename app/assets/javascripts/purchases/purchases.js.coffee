@@ -1,5 +1,8 @@
 Purchase = {
 	search_length: 3
+	option_imported: "imported" #ENUM
+	product_code: '.product_code'
+	product_description: '.product_description'
 }
 $(document).ready ->
 	Purchase.disable_validations()
@@ -11,10 +14,10 @@ $(document).ready ->
 	$('form').on 'change', '#purchase_purchase_type', ()-> Purchase.imported()
 	$('form').on 'change', '.cost_unit, .product_discount, .quantity', () ->
 		Purchase.row_total($(@).closest("tr"))
-  $("table.table_items").on "focus", "input.product_description", () ->  
-    Purchase.search_products(".product_description")
+	$("table.table_items").on "focus", "input.product_description", () ->  
+    Purchase.search_products(Purchase.product_description, this)
 	$("table.table_items").on "focus", "input.product_code", () ->  
-    Purchase.search_products(".product_code")
+    Purchase.search_products(Purchase.product_code, this)
 	$('form').on 'keypress', '.cost_total', (event)->
 		key = event.keyCode or event.which
 		if (key == 13)
@@ -35,8 +38,12 @@ $(document).ready ->
 	      data:
 	      	search : $("#search").val()
 
-Purchase.search_products = (field)->
-  $("table.table_items " + field ).autocomplete
+Purchase.search_products = (field, input) ->
+	that = $(input).closest("tr")
+	description = that.find("input.product_description")
+	code = that.find("input.product_code")
+	product_id = that.find("input.product_id")
+	$("table.table_items " + field ).autocomplete
     minLength: Purchase.search_length
     source: (request, response) ->
       $.ajax
@@ -45,33 +52,34 @@ Purchase.search_products = (field)->
         data:
           search: request.term
         success: (data) ->
-          if field is ".product_code"
+          if field is Purchase.product_code
             response $.map(data, (item) ->
               label:item.code 
               id:   item.code
               name: item.name
+              product_id: item.id
             )
-          if field is ".product_description"
+          if field is Purchase.product_description
             response $.map(data, (item) ->
               label:  item.name 
               id:   item.code
+              product_id: item.id
             )
     select: (event, ui) ->
-      that = $(this).closest("tr")
-      that.find("input.product_description").val ui.item.name if field is ".product_code"
-      that.find("input.product_code").val ui.item.id if field is ".product_description"
-      that.find("input.product_description").trigger("change") if field is ".product_code"
-      that.find("input.product_code").trigger("change") if field is ".product_description"
+      product_id.val ui.item.product_id
+      description.val ui.item.name if field is Purchase.product_code
+      description.trigger("change") if field is Purchase.product_code
+      code.val ui.item.id if field is Purchase.product_description
+      code.trigger("change") if field is Purchase.product_description
     focus:  (event, ui) ->
-      that = $(this).closest("tr")
-      that.find("input.product_description").val ui.item.name if field is ".product_code"
-      that.find("input.product_code").val ui.item.id if field is ".product_description"
+      description.val ui.item.name if field is Purchase.product_code
+      code.val ui.item.id if field is Purchase.product_description
     change: (event, ui) ->
       unless ui.item
-        that = $(this).closest("tr")
         $(this).val ""
-        that.find("input.product_description").val ""
-        that.find("input.product_code").val ""
+        description.val ""
+        code.val ""
+        product_id.val ""
 
 Purchase.search_vendor = ()->
 	$("#purchase_vendor_name").autocomplete
@@ -144,7 +152,7 @@ Purchase.sub_total = () ->
 Purchase.total = () -> $("#purchase_total").val($("#purchase_subtotal").val())	
 
 Purchase.imported = () ->
-	if ($("#purchase_purchase_type").val() == "imported")
+	if ($("#purchase_purchase_type").val() == Purchase.option_imported)
 		$(".imported").show() 
 	else
 		$(".imported").hide() 
