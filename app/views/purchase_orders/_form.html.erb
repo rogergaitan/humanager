@@ -59,7 +59,7 @@
         <%= f.label :document_date %>
       </div>
       <div class="contentCellTable">
-        <%= f.text_field :document_date, :class => 'text_field', :type => :date %>
+        <%= f.text_field :document_date, :class => 'text_field current_date', :type => :date %>
       </div>
     </div>
     <div class="contentWidget" >
@@ -184,7 +184,7 @@
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                purchase_orders_path, :class => 'btn' %>
+                root_path, :class => 'btn' %>
     Imprimir PDF después de guardar <%= check_box_tag "print_pdf", :class => "pull-right" %>
   </div>
 <% end %>

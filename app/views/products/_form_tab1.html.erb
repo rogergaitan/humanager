@@ -1,0 +1,162 @@
+<%= form_for @product, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :code, :class => 'text_field' %>
+    </div>
+  </div>
+   <div class="control-group">
+    <%= f.label :line_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :line_id %>
+      <%= text_field_tag 'product_line', nil, :class => 'text_field required search-image-line', :for=>:line_id %>
+      <a href="#lines_list" role="button" class="btn btn-info btn-small a_white" data-toggle="modal"><div class="icon-eye-open"></div></a>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :subline_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :subline_id %>
+      <%= text_field_tag 'product_subline', nil,  :class => 'text_field required search-image-subline', :for =>:subline_id %>
+      <a href="#sublines_list" role="button" class="btn btn-info btn-small a_white" data-toggle="modal"><div class="icon-eye-open"></div></a>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :category_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :category_id %>
+      <%= text_field_tag 'product_category', nil, :class => 'text_field required search-image-category', :for => :category_id %>
+      <a href="#category_list" role="button" class="btn btn-info btn-small a_white" data-toggle="modal"><div class="icon-eye-open"></div></a>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :part_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :part_number, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :make, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :make, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :model, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :model, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :year, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :year, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :version, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :version, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :max_discount, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :max_discount, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :address, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :max_cant, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :max_cant, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :min_cant, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :min_cant, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :cost, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :cost, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bar_code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bar_code, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :market_price, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :market_price, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :stock, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :stock, :class => 'text_field' %>
+    </div>
+  </div>
+    <div class="control-group">
+      <%= f.label :status, :class => 'control-label' %>
+      <div class='controls'>
+        <%= f.enum_select :status, :include_blank =>false %>
+      </div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary btn-maniadmin-1' %>
+    <% if !@product.id %>
+      <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-maniadmin-2' %>
+    <%end %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), products_path, :class => 'btn btn-maniadmin-8' %>
+  </div>
+<% end %>
+<div class="modal hide fade pagination_product" id="lines_list" tabindex="-1" role="dialog" aria-labelledby="mylines_listlLabel" aria-hidden="true"> 
+  <input type='hidden' class='current_page' />  
+  <input type='hidden' class='show_per_page' /> 
+  <div class="modal-body  pagination " type_name = "lines_list"></div> 
+  <div class='page_navigation' ></div>  
+  <div class="form-actions" align="center">
+    <button class="btn click_cancel" data-dismiss="modal" aria-hidden="true" align="center">
+      Cancel
+    </button>   
+  </div>
+</div>
+<div class="modal hide fade pagination_product" id="sublines_list" tabindex="-1" role="dialog" aria-labelledby="mysublines_listlLabel" aria-hidden="true"> 
+  <input type='hidden' class='current_page' />  
+  <input type='hidden' class='show_per_page' /> 
+  <div class="modal-body pagination "></div>   
+  <div class='page_navigation' ></div>  
+  <div class="form-actions " align="center">
+    <button class="btn click_cancel" data-dismiss="modal" aria-hidden="true" align="center">
+      Cancel
+    </button>   
+  </div>             
+</div>
+<div class="modal hide fade pagination_product" id="category_list" tabindex="-1" role="dialog" aria-labelledby="mycategory_listLabel" aria-hidden="true"> 
+  <input type='hidden' class='current_page' />  
+  <input type='hidden' class='show_per_page' /> 
+  <div class="modal-body pagination"></div> 
+  <div class='page_navigation' ></div>  
+  <div class="form-actions" align="center">
+    <button class="btn click_cancel" data-dismiss="modal" aria-hidden="true" align="center">
+      Cancel
+    </button>   
+  </div>               
+</div>

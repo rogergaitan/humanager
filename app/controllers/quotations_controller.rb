@@ -31,7 +31,7 @@ class QuotationsController < ApplicationController
 
     respond_to do |format|
       if @quotation.save
-        format.html { redirect_to quotations_url, 
+        format.html { redirect_to root_path, 
           notice: t('.activerecord.models.quotation.one').capitalize + 
             " #{@quotation.document_number} "+ 
             t('.notice.a_successfully_created') }
@@ -48,7 +48,7 @@ class QuotationsController < ApplicationController
     @quotation = Quotation.find(params[:id])
     respond_to do |format|
       if @quotation.update_attributes(params[:quotation])
-        format.html { redirect_to quotations_url, 
+        format.html { redirect_to root_path, 
           notice: t('.activerecord.models.quotation.one').capitalize + 
             " #{@quotation.document_number} " +
             t('.notice.a_successfully_updated') }

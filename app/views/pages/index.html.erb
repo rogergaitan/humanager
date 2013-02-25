@@ -1,8 +1,44 @@
-<h2>Inventario</h2>
-<%= render 'pages/inventory' %>
-<hr>
-<h2>Entidades</h2>
-<%= render 'pages/entities' %>
-<hr>
-<h2>Compras</h2>
-<%= render 'pages/purchase' %>
+<div id="section-body" class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a data-toggle="tab" id="load_purchase_orders" href="#purchase_orders_tab">
+        <%= I18n.t('.activerecord.models.purchase_order') %>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" id="load_purchases" href="#purchase_tab">
+        <%= I18n.t('.activerecord.models.purchase') %>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" id="load_quotations" href="#quotations_tab">
+        Cotizaciones
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#sales">
+        Ventas
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+		<div id="purchase_orders_tab" class="tab-pane active">
+      <div id="purchase_orders">
+      </div>
+      <%= link_to t('.new', :default => t("helpers.links.new")), new_purchase_order_path, :class => 'btn btn-primary' %>
+    </div>
+		<div id="purchase_tab" class="tab-pane">
+      <div id="purchases">
+      </div>
+      <%= link_to t('.new', :default => t("helpers.links.new")), new_purchase_path, :class => 'btn btn-primary' %>
+    </div>
+    <div id="quotations_tab" class="tab-pane">
+      <div id="quotations">
+      </div>
+      <%= link_to t('.new', :default => t("helpers.links.new")), new_quotation_path, :class => 'btn btn-primary' %>
+    </div>
+    <div id="sales" class="tab-pane">
+    </div>
+	</div>
+</div>
+
