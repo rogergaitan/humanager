@@ -26,7 +26,7 @@
         </div>
         <%= f.label :document_date, :class => 'control-label' %>
         <div class="controls">
-          <%= f.text_field :document_date, :class => 'date', :type => :date %>
+          <%= f.text_field :document_date, :class => 'date current_date', :type => :date %>
         </div>
         <%= f.label :valid_to, :class => 'control-label' %>
         <div class="controls">
@@ -96,7 +96,6 @@
   <br>
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                quotations_path, :class => 'btn' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), root_path, :class => 'btn' %>
   </div>
 <% end %>

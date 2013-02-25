@@ -12,11 +12,10 @@
       <%= f.label :category, :class => 'control-label' %>
       <div class="controls">
         <%= f.enum_select :category, :include_blank => false %>
-      </div>
+        </div>
     </div>
   </div>
-
-  <div class="well">
+  <div class="thumbnail">
     <table class="table table_items">
       <thead>
         <tr>
@@ -33,11 +32,8 @@
       </tbody>
     </table>
   </div>
-
   <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                discount_profiles_path, :class => 'btn' %>
+    <%= f.submit nil, :class => 'btn btn-maniadmin-2' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")), discount_profiles_path, :class => 'btn btn-maniadmin-8' %>
   </div>
-  
 <% end %>

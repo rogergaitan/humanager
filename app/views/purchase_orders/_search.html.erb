@@ -1,0 +1,41 @@
+<%- model_class = PurchaseOrder -%>
+<div id="purchase_orders" class="dataTables_wrapper" role="grid">
+  <table id="example" class="table table-bordered" aria-describedby="example_info">
+    <thead>
+      <tr role="row">
+        <th><%= model_class.human_attribute_name(:vendor_id) %></th>
+        <th><%= model_class.human_attribute_name(:reference_info) %></th>
+        <th><%= model_class.human_attribute_name(:currency) %></th>
+        <th><%= model_class.human_attribute_name(:subtotal) %></th>
+        <th><%= model_class.human_attribute_name(:taxes) %></th>
+        <th><%= model_class.human_attribute_name(:total) %></th>
+        <th><%= model_class.human_attribute_name(:delivery_date) %></th>
+        <th><%= model_class.human_attribute_name(:shipping_type) %></th>
+        <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      </tr>
+    </thead>
+    <tbody role="alert" aria-live="polite" aria-relevant="all">
+      <% unless @purchase_orders.empty? %>
+        <% @purchase_orders.each do |purchase_order| %>
+          <tr>
+            <td><%= purchase_order.vendor.entity.name if purchase_order.vendor %></td>
+            <td><%= link_to purchase_order.reference_info, purchase_order_path(purchase_order) %></td>
+            <td><%= purchase_order.currency %></td>
+            <td><%= purchase_order.subtotal %></td>
+            <td><%= purchase_order.taxes %></td>
+            <td><%= purchase_order.total %></td>
+            <td><%= purchase_order.delivery_date %></td>
+            <td><%= purchase_order.shipping_type %></td>
+            <td><%= link_to t('.pdf', :default => t("helpers.links.PDF")), purchase_order_path(purchase_order, :format => :pdf), :class => 'btn btn-mini btn-success' %>
+              <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_purchase_order_path(purchase_order), :class => 'btn btn-mini' %>
+              <%= link_to t('.destroy', :default => t("helpers.links.destroy")), purchase_order_path(purchase_order), :method => :delete, :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))}, :class => 'btn btn-mini btn-danger' %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr><td colspan="5"><p class="info">Ninguna orden de compra encontrada</p></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+</div>

@@ -1,0 +1,24 @@
+<%= javascript_include_tag "products/product_applications" %>
+<%= form_for @application, :validate => true, :html => { :class => 'form-horizontal' } do |a| %>  
+  <div class="control-group">
+    <%= label_tag "Aplicaciones",nil, :class => 'control-label' %>
+    <div class="controls">
+      <%= a.hidden_field :product_id, :class => 'form_application_product_id', :value => params[:id] %>
+      <%= a.text_field :name, :class => "input_produc_application_form text_field form_application_name" %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= a.submit nil, :class => 'btn btn-maniadmin-2' %>
+  </div>
+<% end %>
+<div class="applications">
+  <ul class="thumbnails">
+  <% @applications.each do |app| %>
+    <%= fields_for :product_applications, app,  :validate => true do |applications| %>
+      <% @app_id = app.id %>
+      <%= render 'forms/product_application_form', :f => applications, :locals => {:id => @app_id} %>
+      <% Rails.logger.debug app.id %>
+    <% end %>
+  <% end %>
+  </ul>
+</div>

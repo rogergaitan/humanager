@@ -49,7 +49,7 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf, notice: 'Purchase order was successfully created.' }
         else
-          format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_created') }
+          format.html { redirect_to root_path, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_created') }
           format.json { render json: @purchase_order, status: :created, location: @purchase_order }
         end
       else
@@ -71,7 +71,7 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf }
         else
-          format.html { redirect_to purchase_orders_url, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_updated') }
+          format.html { redirect_to root_path, notice: t('.activerecord.models.purchase_order').capitalize + t('.notice.a_successfully_updated') }
           format.json { head :no_content }
         end
       else
@@ -151,5 +151,4 @@ class PurchaseOrdersController < ApplicationController
     @payment_options  =  PaymentOption.fetch
     @payment_types    =  PaymentType.all
   end
-
 end

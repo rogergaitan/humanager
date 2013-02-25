@@ -1,95 +1,156 @@
 <%- model_class = Product -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
-</div>
-
-<div class="tabbable"> <!-- Only required for left/right tabs -->
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
-            <li><a href="#tab2"  data-toggle="tab"><%= t("tabs.other") %></a></li>
-        </ul>
-    <%= will_paginate :class =>'pagination pagination-centered' %>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab1">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><%= model_class.human_attribute_name(:code) %></th>
-                        <th><%= model_class.human_attribute_name(:part_number) %></th>
-                        <th><%= model_class.human_attribute_name(:name) %></th>
-                        <th><%= model_class.human_attribute_name(:line_id) %></th>
-                        <th><%= model_class.human_attribute_name(:subline_id) %></th>
-                        <th><%= model_class.human_attribute_name(:category_id) %></th>
-                        <th><%= model_class.human_attribute_name(:stock) %></th>
-                        <th><%=t '.actions', :default => t("helpers.actions") %></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% @products.each do |product| %>
-                    <tr>
+<div id="section-body" class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a data-toggle="tab" href="#tab1">
+        <%= t("tabs.general") %>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#tab2">
+        <%= t("tabs.other") %>
+      </a>
+    </li>
+  </ul>
+  <%= will_paginate :class =>'pagination pagination-centered' %>
+  <div class="tab-content">
+    <div id="tab1" class="tab-pane active">
+      <div class="row-fluid">
+        <div id="accordion1" class="accordion">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-original-title="" href="#products_tab1" data-toggle="collapse">
+                <i class="icon-th icon-white"></i>
+                <span class="divider-vertical"></span>
+                <%=t '.title', :default => model_class.model_name.human.pluralize %>
+                <i class="icon-chevron-down icon-white pull-right"></i>
+              </a>
+            </div>
+            <div id="products_tab1" class="accordion-body collapse in">
+              <div class="accordion-inner paddind">
+                <div id="example_wrapper" class="dataTables_wrapper" role="grid">
+                  <table class="table table-bordered" aria-describedby="example_info">
+                    <thead>
+                      <tr role="row">
+                        <th style="width: 50px;">
+                          <%= model_class.human_attribute_name(:code) %>
+                        </th>
+                        <th style="width: 70px;">
+                          <%= model_class.human_attribute_name(:part_number) %>
+                        </th>
+                        <th style="width: 250px;">
+                          <%= model_class.human_attribute_name(:name) %>
+                        </th>
+                        <th style="width: 50px;">
+                          <%= model_class.human_attribute_name(:line_id) %>
+                        </th>
+                        <th style="width: 50px;">
+                          <%= model_class.human_attribute_name(:subline_id) %>
+                        </th>
+                        <th style="width: 50px;">
+                          <%= model_class.human_attribute_name(:category_id) %>
+                        </th>
+                        <th style="width: 50px;">
+                          <%= model_class.human_attribute_name(:stock) %>
+                        </th>
+                        <th style="width: 120px;">
+                          <%=t '.actions', :default => t("helpers.actions") %>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                      <% @products.each do |product| %>
+                      <tr>
                         <td><%= link_to product.code, product_path(product) %></td>
                         <td><%= product.part_number %></td>
                         <td><%= product.name %><%= hidden_field_tag product.id %></td>
                         <td><%= product.line_id %></td>
                         <td><%= product.subline_id %></td>
                         <td><%= product.category_id %></td>
-                        <td><%= product.stock %></td>                                    
+                        <td><%= product.stock %></td>  
                         <td>
                           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                                      edit_product_path(product), :class => 'btn btn-mini' %>
-
+                                      edit_product_path(product), :class => 'btn btn-mini btn-maniadmin-8' %>
                           <%= link_to t('.edit_price', :default => t("helpers.links.edit_price")),
-                                      edit_product_path(product)+'#tab2', :class => 'btn btn-mini' %>
-
+                                      edit_product_path(product)+'#tab2', :class => 'btn btn-mini btn-maniadmin-1' %>
                           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                                      product_path(product),
-                                      :method => :delete,
-                                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
-                                      :class => 'btn btn-mini btn-danger' %>
+                                      product_path(product), :method => :delete,
+                                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                                      :class => 'btn btn-mini btn-maniadmin-5' %>
                         </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>            
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                </br>
+                <div>
+                  <%= link_to t('.new', :default => t("helpers.links.new")), new_product_path, :class => 'btn btn-maniadmin-2' %>
+                </div>
+                </br>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="tab-pane" id="tab2">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                    <th><%= model_class.human_attribute_name(:min_cant) %></th>
-                  <th><%= model_class.human_attribute_name(:max_cant) %></th>
-                  <th><%= model_class.human_attribute_name(:address) %></th>
-                  <th><%= model_class.human_attribute_name(:bar_code) %></th>
-                  <th><%=t '.actions', :default => t("helpers.actions") %></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @products.each do |product| %>
-                  <tr>
-                    <td><%= product.min_cant %></td>
-                    <td><%= product.max_cant %></td>
-                    <td><%= product.address %></td>
-                    <td><%= product.bar_code %></td>
-                    <td>
-                      <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                                  edit_product_path(product), :class => 'btn btn-mini' %>
-                      <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                                  product_path(product),
-                                  :method => :delete,
-                                  :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
-                                  :class => 'btn btn-mini btn-danger' %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>    
-        </div>
+      </div>
     </div>
+    <div id="tab2" class="tab-pane">
+      <div class="row-fluid">
+        <div id="accordion1" class="accordion">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-original-title="" href="#products_tab2" data-toggle="collapse">
+                <i class="icon-th icon-white"></i>
+                <span class="divider-vertical"></span>
+                <%=t '.title', :default => model_class.model_name.human.pluralize %>
+                <i class="icon-chevron-down icon-white pull-right"></i>
+              </a>
+            </div>
+            <div id="products_tab2" class="accordion-body collapse in">
+              <div class="accordion-inner paddind">
+                <div id="example_wrapper" class="dataTables_wrapper" role="grid">
+                  <table class="table table-bordered" aria-describedby="example_info">
+                    <thead>
+                      <tr role="row">
+                        <th style="width: 70px;">
+                          <%= model_class.human_attribute_name(:min_cant) %>
+                        </th>
+                        <th style="width: 70px;">
+                          <%= model_class.human_attribute_name(:max_cant) %>
+                        </th>
+                        <th style="width: 250px;">
+                          <%= model_class.human_attribute_name(:address) %>
+                        </th>
+                        <th style="width: 130px;">
+                          <%= model_class.human_attribute_name(:bar_code) %>
+                        </th>
+                        <th style="width: 130px;">
+                          <%=t '.actions', :default => t("helpers.actions") %>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                      <% @products.each do |product| %>
+                      <tr>
+                        <td><%= product.min_cant %></td>
+                        <td><%= product.max_cant %></td>
+                        <td><%= product.address %></td>
+                        <td><%= product.bar_code %></td>
+                        <td>
+                        <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_product_path(product), :class => 'btn btn-mini btn-maniadmin-8' %>
+                        <%= link_to t('.destroy', :default => t("helpers.links.destroy")), product_path(product), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm",:default => 'Are you sure?'))}, :class => 'btn btn-mini btn-maniadmin-5' %>
+                        </td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                </br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_product_path,
-            :class => 'btn btn-primary' %>

@@ -1,29 +1,119 @@
-<div class='well sidebar-nav'>
+<div class="sidebar-nav">
   <ul class="nav nav-list">
-    <li class="nav-header"><%= I18n.t('.content.titles.tools')%></li>
-    
-    <li><a href=<%=root_path %> ><i class='icon-white icon-home'></i><%= I18n.t('.content.titles.home')%></a></li>
-    
-    
-    <%if user_signed_in? %>
-    <li class="divider"></li>
-        <li class="nav-header"><%= I18n.t('.activerecord.models.user') %></li>
-            <li><a href=<%=edit_user_registration_path %>><i class='icon-user'></i>Perfil</a></li>
-        <%if !@warehouses.nil? %>
-        <li class="divider"></li>
-            <li class="nav-header"><%= I18n.t('.activerecord.models.warehouse').pluralize %></li>
-            
-        <%end%>
-        <%if !@sublines.nil? %>
-        <li class="divider"></li>
-            <li class="nav-header"><%= I18n.t('.activerecord.models.subline').pluralize %></li>
-            
-        <%end%>
-
-    <%end%>
-    <li class="divider"></li>
-    <li class="nav-header">Otros</li>
-    <li><a href=<%=help_path %>><i class='icon-flag'></i>Ayuda</a></li>
-    <li><a href=<%=search_products_path %> ><i class='icon-search'></i>Buscar Productos</a></li>
+    <li>
+      <a href=<%= root_path %>>
+      <i class="icon-home"></i>
+        <span>
+          Inicio
+        </span>
+      </a>
+    </li>
+    <li class="accordion-menu">
+      <a class="accordion-toggle" data-toggle="collapse" href="#inventory" data-original-title="">
+        <i class="icon-list"></i>
+        <span>
+          Inventario
+          <i class="icon-chevron-down pull-right"></i>
+        </span>
+      </a>
+      <div id="inventory" class="accordion-body collapse dropdown">
+        <div class="accordion-inner">
+          <ul class="nav nav-list">
+            <li>
+              <a href=<%= warehouses_path %>>
+                <%= I18n.t('.activerecord.models.warehouse').pluralize %>
+              </a>
+            </li>
+            <li>
+              <a href=<%= lines_path %>>
+                <%= I18n.t('.activerecord.models.line').pluralize %>
+              </a>
+            </li>
+            <li>
+              <a href=<%= sublines_path %>>
+                <%= I18n.t('.activerecord.models.subline').pluralize %>
+              </a>
+            </li>
+            <li>
+              <a href=<%= categories_path %>>
+                <%= I18n.t('.activerecord.models.category').pluralize %>
+              </a>
+            </li>
+            <li>
+              <a href=<%= products_path %>>
+                <%= I18n.t('.activerecord.models.product').pluralize %>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li class="accordion-menu">
+      <a class="accordion-toggle" data-toggle="collapse" href="#entities" data-original-title="">
+        <i class="icon-user"></i>
+        <span>
+          Entidades
+          <i class="icon-chevron-down pull-right"></i>
+        </span>
+      </a>
+      <div id="entities" class="accordion-body collapse dropdown">
+        <div class="accordion-inner">
+          <ul class="nav nav-list">
+            <li>
+              <a href=<%= vendors_path %>>
+                <%= I18n.t('.activerecord.models.vendors') %>
+              </a>
+            </li>
+            <li>
+              <a href=<%= customers_path %>>
+                <%= I18n.t('.activerecord.models.customer').pluralize %>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a href="">
+      <i class="icon-th"></i>
+        <span>
+          Cuentas por cobrar
+        </span>
+      </a>
+    </li>
+    <li>
+      <a href="">
+      <i class="icon-th"></i>
+        <span>
+          Cuentas por pagar
+        </span>
+      </a>
+    </li>
+    <li>
+      <a href="">
+        <i class="icon-th"></i>
+        <span>
+          Contabilidad
+        </span>
+      </a>
+    </li>
+    </li>
+    <li>
+      <a href="">
+        <i class="icon-th"></i>
+        <span>
+          Caja y bancos
+        </span>
+      </a>
+    </li>
+    </li>
+    <li>
+      <a class="last" href="">
+        <i class="icon-check"></i>
+        <span>
+          Configuracion
+        </span>
+      </a>
+    </li>
   </ul>
 </div>

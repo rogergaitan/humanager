@@ -1,6 +1,31 @@
 <%- model_class = Taxis -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
-                                   :default => "Edit #{model_class.model_name.human}") %></h1>
+<div id="section-body" class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a data-toggle="tab" href="#tab1">
+				<%=t '.title', :default => model_class.model_name.human.pluralize %>
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="row-fluid">
+			<div id="accordion1" class="accordion">
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-original-title="" href="#form" data-toggle="collapse">
+							<i class="icon-list-alt icon-white"></i>
+							<span class="divider-vertical"></span>
+							<%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human, :default => "Edit #{model_class.model_name.human}") %>
+							<i class="icon-chevron-down icon-white pull-right"></i>
+						</a>
+					</div>
+					<div id="form" class="accordion-body in collapse" style="height: auto;">
+						<div class="accordion-inner paddind">
+							<%= render :partial => 'form' %>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<%= render :partial => 'form' %>
