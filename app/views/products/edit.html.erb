@@ -1,8 +1,90 @@
 <%= javascript_include_tag "products/products" %>
 <%- model_class = Product -%>
-<div class="page-header">
-  <h1><%=@product.name %></h1>
+<div id="section-body" class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a data-toggle="tab" href="#tab1">
+        <%= t("tabs.general") %>
+      </a>
+    </li>
+    <% if @product.id %>
+    <li>
+      <a data-toggle="tab" href="#tab2">
+        <%= t("tabs.prices") %>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#tab3">
+        <%= t("tabs.applications") %>
+      </a>
+    </li>
+    <% end %> 
+  </ul>
+  <div class="tab-content">
+		<div id="tab1" class="tab-pane active">
+      <div class="row-fluid">
+        <div id="accordion1" class="accordion">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-original-title="" href="#products_tab1" data-toggle="collapse">
+                <i class="icon-th icon-white"></i>
+                <span class="divider-vertical"></span>
+                <%= @product.name %>
+                <i class="icon-chevron-down icon-white pull-right"></i>
+              </a>
+            </div>
+            <div id="products_tab1" class="accordion-body collapse in">
+              <div class="accordion-inner paddind">
+              	<%= render :partial => 'form_tab1' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if @product.id %>
+		<div id="tab2" class="tab-pane">
+      <div class="row-fluid">
+        <div id="accordion2" class="accordion">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-original-title="" href="#products_tab2" data-toggle="collapse">
+                <i class="icon-th icon-white"></i>
+                <span class="divider-vertical"></span>
+                <%= @product.name %>
+                <i class="icon-chevron-down icon-white pull-right"></i>
+              </a>
+            </div>
+            <div id="products_tab2" class="accordion-body collapse in">
+              <div class="accordion-inner paddind">
+              	<%= render :partial => 'form_tab2' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tab3" class="tab-pane">
+      <div class="row-fluid">
+        <div id="accordion3" class="accordion">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-original-title="" href="#products_tab3" data-toggle="collapse">
+                <i class="icon-th icon-white"></i>
+                <span class="divider-vertical"></span>
+                <%= @product.name %>
+                <i class="icon-chevron-down icon-white pull-right"></i>
+              </a>
+            </div>
+            <div id="products_tab3" class="accordion-body collapse in">
+              <div class="accordion-inner paddind">
+              	<%= render :partial => 'form_tab3' %>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+	</div>
 </div>
-<%= render :partial => 'form' %>
-
-

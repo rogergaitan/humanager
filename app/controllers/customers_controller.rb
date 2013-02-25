@@ -93,4 +93,8 @@ class CustomersController < ApplicationController
     @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
     @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
   end
+
+  def search_customer
+    respond_with Customer.search(params[:search]) if params[:search]
+  end
 end

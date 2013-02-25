@@ -70,6 +70,44 @@ es:
   activerecord:
       errors:
         models:
+          invoice:
+            attributes:
+              invoice_items:
+                blank: "Debe existir al menos un ítem"
+              customer_name:
+                blank: *BLANK
+              total:
+                blank: *BLANK
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+          invoice_item:
+            attributes:
+              warehouse_id:
+                blank: *REQUIRED
+              code:
+                blank: *REQUIRED
+              description:
+                blank: *REQUIRED
+              cost_unit:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              total:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              discount:
+                greater_than: *GREATER_THAN
+                less_than: *LESS_THAN
+                not_a_number: *NOT_A_NUMBER
+              ordered_quantity:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              quantity:
+                blank: *REQUIRED
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
           quotation_item:
             attributes:
               code:
@@ -229,6 +267,8 @@ es:
                 blank: *BLANK
           purchase_item:
             attributes:
+              code:
+                blank: *REQUIRED
               warehouse_id:
                 blank: *REQUIRED
               discount:
@@ -470,6 +510,7 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
+        invoice: Factura
         quotation:
           one: Cotización
           other: Cotizaciones
@@ -550,6 +591,32 @@ es:
           one: planilla
           other: Registro de planillas
       attributes:
+        invoice_item:
+          warehouse_id: Bodega
+          code: Código
+          description: Descripción
+          ordered_quantity: Cantidad Ordenada
+          available_quantity: Cantidad Disponible
+          quantity_sale: Cantidad Vender
+          unit_price: Precio Unitario
+          discount: Descuento
+          tax: Impuesto
+          total: Total
+        invoice:
+          customer_name: Cliente
+          document_number: Número
+          document_date: Fecha
+          currency: Moneda
+          price_list: Lista Precio
+          payment_term: Termino Pago
+          due_date: Fecha expira
+          quotation_id: Cotización
+          closed: Cerrada
+          sub_total_free: Sub-Total exento
+          sub_total_taxed: Sub-Total gravado
+          discount_total: Total Descuento
+          tax_total: Impueto Total
+          total: Total
         quotation_item:
           warehouse_id: Bodega
           code: Código
@@ -699,6 +766,7 @@ es:
           name: Nombre
           description: Descripción
         purchase_order:
+          document_number: Número
           document_date: Fecha
           vendor_id: Proveedor
           reference_info: Referencia

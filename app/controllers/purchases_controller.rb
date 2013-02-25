@@ -2,16 +2,17 @@ require 'will_paginate/array'
 
 class PurchasesController < ApplicationController
 
+  respond_to :json, :js, :html
   before_filter :title
   before_filter :fetch_warehouses, :only      => [:new, :edit]
   before_filter :fetch_payment_types, :only   => [:new, :edit]
   before_filter :fetch_payment_options, :only => [:new, :edit]
-  before_filter :check_numbering, :only => [:new]
+  before_filter :check_number, :only => [:new, :edit]
   respond_to :json, :js, :html
 
   def index
-    @purchases = Purchase.includes(:vendor).paginate(:page => params[:page], :per_page => 10)
-    respond_with @purchases
+    respond_with @purchases = Purchase.includes(:vendor)
+      .paginate(:page => params[:page], :per_page => 10)
   end
 
   def show
@@ -32,10 +33,7 @@ class PurchasesController < ApplicationController
     @purchase = Purchase.new
     @purchase.purchase_items.build
     @purchase.purchase_payment_options.build
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @purchase }
-    end
+    respond_with @purchase
   end
 
   def edit
@@ -47,7 +45,10 @@ class PurchasesController < ApplicationController
     @purchase = Purchase.new(params[:purchase])
     respond_to do |format|
       if @purchase.errors.empty? && @purchase.save
-        format.html { redirect_to purchases_path, notice: t('.activerecord.models.purchase').capitalize + t('.notice.a_successfully_created') }
+        format.html { redirect_to purchases_path, 
+          notice: t('.activerecord.models.purchase').capitalize +
+          " #{@purchase.document_number} " +
+          t('.notice.a_successfully_created') }
         format.json { render json: @purchase, status: :created, location: @purchase }
       else
         fetch_warehouses
@@ -65,7 +66,10 @@ class PurchasesController < ApplicationController
 
     respond_to do |format|
       if @purchase.update_attributes(params[:purchase])
-        format.html { redirect_to purchases_path, notice: t('.activerecord.models.purchase').capitalize + t('.notice.a_successfully_updated') }
+        format.html { redirect_to purchases_path, 
+          notice: t('.activerecord.models.purchase').capitalize +
+          " #{@purchase.document_number} " +
+          t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -79,13 +83,15 @@ class PurchasesController < ApplicationController
     @purchase.destroy
 
     respond_to do |format|
-      format.html { redirect_to purchases_url, notice: t('.activerecord.models.purchase').capitalize + t('.notice.a_successfully_deleted') }
+      format.html { redirect_to purchases_url, notice: 
+        t('.activerecord.models.purchase').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end
 
   def title
-    @title = t('.activerecord.models.purchase').capitalize + " - " + t(".helpers.links.#{action_name}" )
+    @title = t('.activerecord.models.purchase').capitalize + " - " +
+      t(".helpers.links.#{action_name}" )
   end
 
   def search_vendor
@@ -106,12 +112,11 @@ class PurchasesController < ApplicationController
   end
 
   def search
-    @purchases = Purchase.search(params[:search]).to_a.paginate(:page => params[:page], :per_page => 10) if params[:search] and params[:search].length >= 3
-    respond_with @purchases
+    respond_with @purchases = Purchase.search(params[:search])
+      .to_a.paginate(:page => params[:page], :per_page => params[:per_page]) if params[:search] and params[:search].length >= 3
   end
 
-  def check_numbering
-    @doc_number = DocumentNumber.find_by_document_type(:purchase)
-    @auto_increment = @doc_number.number_type.eql?(:auto_increment) 
+  def check_number
+    @auto_increment = DocumentNumber.check_number(:purchase)
   end
 end

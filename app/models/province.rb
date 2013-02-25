@@ -14,8 +14,8 @@ class Province < ActiveRecord::Base
   has_many :districts, :dependent => :destroy
 
   attr_accessible :name
-
-  def self.fetch
+  validates :name, :presence => true
+    def self.fetch
 		Rails.cache.fetch("Province.all"){ find(:all, :select =>['id','name']) } 
 	end
 

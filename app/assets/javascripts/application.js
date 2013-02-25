@@ -11,9 +11,9 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require rails.validations
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require bootstrap-datepicker
-//= require rails.validations
-//= require bootstrap-datepicker
+//= require date/date
 //= require_directory .

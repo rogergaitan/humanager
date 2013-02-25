@@ -4,16 +4,7 @@ $(jQuery(document).ready(function($) {
     function create_html_generic(type,id,name){
         return '<div><button class="btn btn-success bind_select_btn icon-check btn-mini" id_'+type+' ="'+id+'" name_type="'+type+'">  </button><span>'+name+'</span></div>';
     }
-
-    // $("ul.products_tabs").on("click", "a", function(e) {
-    //     if (!($('form[data-validate]').isValid(ClientSideValidations.forms[form].validators))) {
-    //         e.preventDefault();
-    //         return false;
-    //     }
-
-    // }); 
-    $('a.tab3').click(function (e) {
-        e.preventDefault();
+    $('div#tab3').click(function (e) {
         $(this).tab('show');
         $("form#new_product_application").enableClientSideValidations();
     })

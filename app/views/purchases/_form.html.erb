@@ -15,19 +15,19 @@
   </div>
   <div class="thumbnail pull-right">
     <div class="control-group">
+      <%= f.label :document_number, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :document_number,
+          :class => @auto_increment ? "auto text_field" : "text_field", 
+          :readonly => @auto_increment ? true : false,
+          :placeholder =>  @purchase.document_number ? "" : "auto"
+        %>
+      </div>
       <%= f.label :purchase_type, :class => 'control-label' %>
       <div class="controls">
         <%= f.enum_select :purchase_type,:include_blank => false, :class => 'text_field' %>
         <%= f.hidden_field :current_user, :value => current_user ? current_user.email : "NO USER" %>
         <%= f.hidden_field :default_company, :value => session[:company_id] ? session[:company_id] : default_company %>
-      </div>
-      <%= f.label :document_number, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :document_number,
-          :class => 'text_field', 
-          :readonly => @auto_increment ? true : false,
-          :placeholder =>  @auto_increment ? "Auto" : ""
-        %>
       </div>
       <%= f.label :currency, :class => 'control-label' %>    
       <div class="controls">
@@ -35,7 +35,7 @@
       </div>
       <%= f.label :purchase_date, :class => 'control-label' %> 
       <div class="controls">
-        <%= f.text_field :purchase_date,:class => 'text_field datetime', :type => "date"%>
+        <%= f.text_field :purchase_date,:class => 'text_field datetime current_date', :type => "date"%>
       <!-- ,:readonly => true, :value => Time.now.to_date.to_s -->
       </div>
     </div>
@@ -44,7 +44,6 @@
   <div class="well">
     <table class="table table_items">
       <thead>
-        <tr>
           <th class="span2"><%= model_subclass.human_attribute_name(:warehouse_id) %></th>
           <th class="span1"><%= model_subclass.human_attribute_name(:product_id) %></th>
           <th class="span8"><%= model_subclass.human_attribute_name(:description) %></th>
@@ -54,7 +53,6 @@
           <th class="span2"><%= model_subclass.human_attribute_name(:tax) %></th>
           <th class="span3"><%= model_subclass.human_attribute_name(:cost_total) %></th>
           <th class="span1"> <%= link_to_add_fields("", f, :purchase_items,"add_fields btn btn-mini btn-success icon-plus add_item") %></th>
-        </tr>
       </thead>
       <tbody>
         <%= f.fields_for :purchase_items, :validate => true do |items| %>
@@ -125,7 +123,7 @@
 
   <div class="form-actions">
   <%= f.submit nil, :class => 'btn btn-primary' %>
-  <%= link_to t('.cancel', :default => t("helpers.links.cancel")), purchases_path, :class => 'btn' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")), root_path, :class => 'btn' %>
   </div>
 
 <% end %>

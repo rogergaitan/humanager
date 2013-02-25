@@ -35,10 +35,13 @@
 
   </tbody>
 </table>
+</br>
+<div>
 
-
-<a href="#modalnew" role="button" class="btn btn-primary new_price" data-toggle="modal"><%=t("helpers.links.new")%></a>
-
+<a href="#modalnew" role="button" class="btn btn-maniadmin-2 new_price" data-toggle="modal"><%=t("helpers.links.new")%>
+</a>
+</div>
+</br>
 <div id="modalnew" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <%= form_for @product_pricing, 
     :validate => true, 

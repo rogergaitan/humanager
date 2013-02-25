@@ -6,7 +6,7 @@
 		regexp = new RegExp($('.add_item').data('id'), 'g');
 		$('.table_items').append($('.add_item').data('fields').replace(regexp, time));
 		e.preventDefault();		
-		$("form").enableClientSideValidations();
+		$('form').enableClientSideValidations();
 		return false;
 	}; 
 
@@ -25,9 +25,11 @@
 		$(this).closest("tr").find(".item_name").val("");
 		$(this).closest("tr").find(".item_id").val("");
 		$(this).closest("tr").find(".discount").val("");
-	}
+	};
 
 $(document).ready(function() {
+
+	$('form').enableClientSideValidations();
 
 	$('form').on('change', '.item_type', action_reset_type);
 

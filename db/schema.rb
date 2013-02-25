@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130208205812) do
+ActiveRecord::Schema.define(:version => 20130225212921) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -203,13 +203,13 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
   create_table "document_numbers", :force => true do |t|
     t.integer  "company_id"
     t.string   "description"
-    t.enum     "document_type",        :limit => [:purchase, :purchase_order]
+    t.enum     "document_type",        :limit => [:purchase, :purchase_order, :quotation, :invoice]
     t.enum     "number_type",          :limit => [:auto_increment, :manual]
     t.integer  "start_number"
     t.string   "mask"
     t.boolean  "terminal_restriction"
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+    t.datetime "created_at",                                                                         :null => false
+    t.datetime "updated_at",                                                                         :null => false
   end
 
   add_index "document_numbers", ["company_id"], :name => "index_document_numbers_on_company_id"
@@ -290,6 +290,49 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "invoice_items", :force => true do |t|
+    t.integer  "invoice_id"
+    t.integer  "warehouse_id"
+    t.string   "code"
+    t.string   "description"
+    t.float    "ordered_quantity"
+    t.float    "available_quantity"
+    t.float    "quantity"
+    t.float    "cost_unit"
+    t.float    "discount"
+    t.float    "tax"
+    t.float    "cost_total"
+    t.integer  "product_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "invoice_items", ["invoice_id"], :name => "index_invoice_items_on_invoice_id"
+  add_index "invoice_items", ["product_id"], :name => "index_invoice_items_on_product_id"
+  add_index "invoice_items", ["warehouse_id"], :name => "index_invoice_items_on_warehouse_id"
+
+  create_table "invoices", :force => true do |t|
+    t.string   "document_number"
+    t.date     "document_date"
+    t.integer  "customer_id"
+    t.string   "currency"
+    t.string   "price_list"
+    t.string   "payment_term"
+    t.date     "due_date"
+    t.integer  "quotation_id"
+    t.boolean  "closed"
+    t.float    "sub_total_free"
+    t.float    "sub_total_taxed"
+    t.float    "discount_total"
+    t.float    "tax_total"
+    t.float    "total"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "invoices", ["customer_id"], :name => "index_invoices_on_customer_id"
+  add_index "invoices", ["quotation_id"], :name => "index_invoices_on_quotation_id"
+
   create_table "items_purchase_orders", :force => true do |t|
     t.integer  "purchase_order_id"
     t.string   "product"
@@ -322,7 +365,7 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
     t.string   "tax"
     t.string   "cost_total"
     t.string   "price_list"
-    t.string   "quantity"
+    t.float    "quantity"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
@@ -589,6 +632,7 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
     t.integer  "warehouse_id"
     t.decimal  "discount",     :precision => 17, :scale => 2
     t.float    "tax"
+    t.string   "code"
   end
 
   add_index "purchase_items", ["product_id"], :name => "index_purchase_items_on_product_id"
@@ -619,9 +663,10 @@ ActiveRecord::Schema.define(:version => 20130208205812) do
     t.float    "total"
     t.date     "delivery_date"
     t.string   "shipping_type"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.date     "document_date"
+    t.string   "document_number"
   end
 
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
