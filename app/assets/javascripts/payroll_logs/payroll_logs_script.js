@@ -6,8 +6,6 @@ $(jQuery(document).ready(function($) {
 	
 	$('#add-more').click(addMoreEmployees);
 	
-	$('#remove-controls').click(removeControls);
-	
 	$('#products_items').on('click', 'a.centro-costo', function(){
 		treeviewhr.cc_tree(centro_costo, true, $(this).prev().attr('id'), $(this).prev().prev().attr('id'));
 	});
@@ -43,6 +41,20 @@ $(jQuery(document).ready(function($) {
 		selectEmployeesLeft($(this));
 	});
 	
+	$('form').submit(function(e) {
+		var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
+		var centroCosto = $.trim($('#products_items tr:eq(1) input.centro-costo').val()).length;
+		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
+		if((timeWorked != 0 || centroCosto != 0) && rowIsDisabled == false) { 
+			$('div#message').html('<div class="alert alert-error">Por favor guarde esta línea antes de guardar</div>');
+			$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
+			$('div.alert.alert-error').delay(4000).fadeOut();
+			e.preventDefault();
+		} else {
+			$('#products_items input, select').attr('disabled', false);
+		}
+	});
+	
 	$('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
 	
 	//when the employees are loaded in the page move the selected to the right
@@ -67,22 +79,60 @@ $(jQuery(document).ready(function($) {
 	$('#products_items').find('label').remove();
 
 	checkNumberEmployees();
+	
+	$('#products_items input, select').attr('disabled', true);
 }));
 
 	function removeFields(e) {
 		$(this).prev('input[type=hidden]').val(1);
-		$(this).closest('.success').hide();
+		var deletedRow = $(this).closest('.success');
+		deletedRow.removeClass('success').addClass('deleted').hide();
 		e.preventDefault();
 	}
 
 	function addFields(e) {
-		var time = new Date().getTime();
-		var regexp = new RegExp($(this).data('id'), 'g');
-		$('.header_items').after($(this).data('fields').replace(regexp, time));
-		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id').attr('id'));
-		$('#products_items').find('label').remove();
-		e.preventDefault();
-	}	
+		//valida si hay campos en blanco
+		var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
+		var centroCosto = $.trim($('#products_items tr:eq(1) input.centro-costo').val()).length;
+		var numberRows = $('#products_items tr').length;
+		if((timeWorked == 0 || centroCosto == 0) && numberRows > 1) { 
+			$('div#message').html('<div class="alert alert-error">Por favor complete los espacios en blanco</div>');
+			$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
+			$('div.alert.alert-error').delay(4000).fadeOut();
+			e.preventDefault();
+		} else {
+			var numberEmployees = $('div.employees-list.list-right input').length;
+			var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
+			var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
+			if (numberRows == 1) { rowIsDisabled = true; };
+			//valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
+			if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
+				$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
+				$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
+				$('div.alert.alert-error').delay(4000).fadeOut();
+				return false;
+			}
+			$('#products_items tr input, select').attr('disabled', true);
+			var time = new Date().getTime();
+			var regexp = new RegExp($(this).data('id'), 'g');
+			$('.header_items').after($(this).data('fields').replace(regexp, time));
+			populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id').attr('id'));
+			$('#products_items').find('label').remove();
+			saveEmployees(rowIsDisabled);
+			e.preventDefault();
+		}
+	}
+	
+	function saveEmployees(isDisabled) {
+		if (!isDisabled) {
+			var name = $('#products_items tr:eq(2) td:first select').attr('name');
+			var num = name.match(/\d/g);
+			num = num.join('');
+			$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
+				$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ $(this).val() +'" >');
+			});
+		};
+	}
 
 //FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
 
@@ -175,7 +225,7 @@ function moveEmployees () {
 		if (!$(this).is(':disabled')) {
 			appendEmployees = "<div class='checkbox-group'>" +
 										"<div class='checkbox-margin'>" +
-											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='payroll_log[employee_ids][]' value='"+ $(this).val() +"' />" +
+											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='payroll_log_employees' value='"+ $(this).val() +"' />" +
 											"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
 										"</div>" +
 									"</div>";	
@@ -228,7 +278,7 @@ function populateEmployeesFilter(url, textField, idField) {
 							if (!$('#list-to-save input#'+ui.item.data_id).length) {
 								appendEmployees = "<div class='checkbox-group'>" +
 															"<div class='checkbox-margin'>" +
-																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log[employee_ids][]' value='"+ ui.item.id +"' />" +
+																"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log_employees' value='"+ ui.item.id +"' />" +
 																"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
 															"</div>" +
 														"</div>";	

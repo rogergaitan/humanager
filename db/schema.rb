@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121219035303) do
+ActiveRecord::Schema.define(:version => 20130110005010) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -332,13 +332,13 @@ ActiveRecord::Schema.define(:version => 20121219035303) do
 
   create_table "payroll_employees", :force => true do |t|
     t.integer  "employee_id"
-    t.integer  "payroll_log_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.integer  "payroll_history_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   add_index "payroll_employees", ["employee_id"], :name => "index_payroll_employees_on_employee_id"
-  add_index "payroll_employees", ["payroll_log_id"], :name => "index_payroll_employees_on_payroll_log_id"
+  add_index "payroll_employees", ["payroll_history_id"], :name => "index_payroll_employees_on_payroll_history_id"
 
   create_table "payroll_histories", :force => true do |t|
     t.integer  "task_id"

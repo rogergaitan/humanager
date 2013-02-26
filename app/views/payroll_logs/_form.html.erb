@@ -23,7 +23,6 @@
 			<div class="options-right">
 	      <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
 				<%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-				<a title="Remover controles" data-placement="left" id="remove-controls" href="#" class="btn" style="float:right;"><i class="icon-remove-sign"></i></a>
 			</div>
 			<div style="clear:both"></div>
 	  </div>
@@ -53,7 +52,7 @@
 						<div class="checkbox-group">
 							<div class="checkbox-margin">
 								<%= check_box_tag 'left-list-employees', employee.id, 
-												@payroll_log.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
+												false, id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
 								<%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
 										:class => 'checkbox-label' %>
 							</div>
@@ -66,7 +65,6 @@
 				<a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
 			</div>
 			<div class="employees-list list-right">
-				<%= hidden_field_tag 'payroll_log[employee_ids][]', nil %>
 				<div class="employees-margin" id="list-to-save">				
 				</div>
 			</div>
@@ -81,6 +79,7 @@
 	<div class="input-append date payroll-date" id="dp3" data-date-format="dd/mm/yyyy">
 		<%= f.text_field :payroll_date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
 	</div>
+	<div id="message" style="height:40px;"></div>
 	<table id="products_items" class=" table table-hover table-bordered table-striped">
 		<tr class="header_items">
       <td class="header_task">Labor</td>
@@ -89,8 +88,8 @@
       <td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log") %></td>
     </tr>
     	<%= f.fields_for :payroll_histories do |builder| %>
-			<%= render 'forms/payroll_history_form', :f => builder %>
-		<% end %>
+				<%= render 'forms/payroll_history_form', :f => builder %>
+			<% end %>
 	</table>
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
