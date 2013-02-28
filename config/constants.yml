@@ -1,0 +1,19 @@
+development:
+  invoice: invoice #Document Number Type
+  purchase: purchase
+  purchase_order: purchase_order
+  quotation: quotation
+  input: input
+  output:	output
+
+test: &test
+  invoice: invoice #Document Number Type
+  purchase: purchase
+  purchase_order: purchase_order
+  quotation: quotation
+
+production:
+  invoice: invoice #Document Number Type
+  purchase: purchase
+  purchase_order: purchase_order
+  quotation: quotation

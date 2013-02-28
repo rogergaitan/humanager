@@ -11,15 +11,19 @@ class DocumentNumber < ActiveRecord::Base
     @increment.number_type.eql? :auto_increment if @increment
   end
 
+  def self.check_number(document_type)
+    @increment = find_by_document_type(document_type)
+    @increment.number_type.eql? :auto_increment if @increment
+  end  
+
   def self.next_number(document_type)
     @increment = find_by_document_type(document_type)
     if @increment and @increment.number_type.eql? :auto_increment
-      @increment.start_number + 1 
+      "#{@increment.mask}-#{@increment.start_number + 1}"
     end
   end
-
+  
   private
-
   def self.increment_document_number(document_type)
     @increment = find_by_document_type(document_type)
     if @increment and @increment.number_type.eql? :auto_increment

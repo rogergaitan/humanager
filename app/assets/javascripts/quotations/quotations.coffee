@@ -15,7 +15,7 @@ $(document).ready ->
     Quotation.search_customer("customer")
   $("table.quotation_items").on "change", ".quantity, .discount, .cost_unit", ->
     Quotation.row_total($(this).closest("tr"))
-  $("#search").keyup () -> Quotation.prepare_search()
+  $("#search").keyup () -> Quotation.search()
 
   $("div#quotations").on "click",".pag a", ->
     $.getScript @href
@@ -28,27 +28,24 @@ $(document).ready ->
       complete: (data)->
         $("#search").val("")
   false
-Quotation.prepare_search = ()->
+
+Quotation.search = () -> 
   term = $("#search").val()
-  if term.length > 0
-    if parseInt(term) > 0
-      Quotation.search(term, null)
-    else if term.length >= Quotation.search_length
-      Quotation.search(null, term)
-Quotation.search = (number, customer) -> 
-  $.ajax
-    url: "/quotations/search"
-    dataType: "script"
-    data:{
-      customer: customer
-      number: number
-    }
+  if term.length >= Quotation.search_length 
+    $.ajax
+      url: "/quotations/search"
+      dataType: "script"
+      data:{
+        search: term
+      }
+
 Quotation.remove_fields = (e) ->
   $(this).prev("input[type=hidden]").val 1
   $(this).closest("tr").hide()
   $(this).closest("tr").find(".cost_total").val(0)
   Quotation.quotation_total()
   e.preventDefault()
+
 Quotation.search_products = (field)->
   $("table.quotation_items " + field ).autocomplete
     minLength: Quotation.search_length
@@ -92,10 +89,10 @@ Quotation.search_products = (field)->
         that.find("input.code").val ""
         that.find("input.product_id").val ""
   false
+
 Quotation.search_customer = (customer) ->
   $("#quotation_customer_name").autocomplete
     minLength: Quotation.search_length
-
     autoFocus: true
     source: (request, response) ->
       $.ajax
@@ -118,6 +115,7 @@ Quotation.search_customer = (customer) ->
       unless ui.item
         $(this).val ""
         $("#quotation_customer_id").val ""
+
 Quotation.add_items = (e) ->
   time = new Date().getTime()
   regexp = new RegExp($(".add_item").data("id"), "g")
@@ -126,6 +124,7 @@ Quotation.add_items = (e) ->
   $("form").enableClientSideValidations()
   $(".cost_total").disableClientSideValidations();
   $(".tax").disableClientSideValidations();
+
 Quotation.row_total = (row) ->
   row_quantity = parseFloat($(row).find(".quantity").val())
   row_discount = parseFloat($(row).find(".discount").val()) / 100
@@ -140,6 +139,7 @@ Quotation.row_total = (row) ->
     _total = 0
   $(row).find(".cost_total").val(_total)
   Quotation.quotation_total()
+
 Quotation.quotation_total = () ->
   sum_total = null;
   $('table.quotation_items .cost_total').each ()->

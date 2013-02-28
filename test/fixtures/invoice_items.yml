@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  invoice: 
+  warehouse: 
+  code: MyString
+  description: MyString
+  ordered_quantity: 1.5
+  available_quantity: 1.5
+  quantity: 1.5
+  cost_unit: 1.5
+  discount: 1.5
+  tax: 1.5
+  cost_total: 1.5
+  product: 
+
+two:
+  invoice: 
+  warehouse: 
+  code: MyString
+  description: MyString
+  ordered_quantity: 1.5
+  available_quantity: 1.5
+  quantity: 1.5
+  cost_unit: 1.5
+  discount: 1.5
+  tax: 1.5
+  cost_total: 1.5
+  product: 

@@ -20,11 +20,10 @@ class PurchaseItem < ActiveRecord::Base
   belongs_to :purchase
   belongs_to :product
   
-  attr_accessor :product_code
   attr_accessible :cost_total, :cost_unit, :description, :quantity, :product_id,
-  	:warehouse_id, :discount, :purchase_id, :tax
+  	:warehouse_id, :discount, :purchase_id, :tax, :code
 
-  validates :product_id, :cost_unit, :description, :quantity, :warehouse_id, 
+  validates :product_id, :cost_unit, :description, :quantity, :warehouse_id, :code, 
     :presence => true 
   
   validates :cost_unit, :cost_total, :quantity, 
@@ -39,5 +38,6 @@ class PurchaseItem < ActiveRecord::Base
   	@kardex = Kardex.where(:mov_id => self.purchase_id, :code => self.product_id)
   	@kardex.each { |item| Kardex.destroy(item.id) if item }
   end
+  
 
 end

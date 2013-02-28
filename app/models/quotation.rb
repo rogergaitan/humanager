@@ -1,9 +1,8 @@
 class Quotation < ActiveRecord::Base
-  ###ASSOCIATIONS
-  belongs_to :customer
-  has_many :quotation_items
 
-  ##ATTRIBUTES
+  belongs_to :customer
+  has_many :quotation_items, :dependent => :destroy
+
   attr_accessor :customer_name
   attr_accessible :currency, :discount_total, :document_date, :document_number,
     :notes, :payment_term, :sub_total_free, :sub_total_taxed, :tax_total,
@@ -13,16 +12,13 @@ class Quotation < ActiveRecord::Base
     :allow_destroy => true,
     :reject_if => proc { |attributes| attributes[:product_id].blank? }
 
-  ###VALIDATIONS
   validates :customer_name, :presence => true
 
-  ###CALLBACKS
   before_create :next_number, :if => proc { |a| a[:document_number].blank? }
-
   after_create :increment_document_number
 
   def next_number
-    self.document_number = CheckDocumentNumber.next_number(:quotation)
+    self.document_number = DocumentNumber.next_number(:quotation)
   end
 
   def increment_document_number
@@ -34,10 +30,13 @@ class Quotation < ActiveRecord::Base
     quotation.customer_name = "#{@customer.entity.name} #{@customer.entity.surname}"
   end
 
-  def self.search(number = nil, customer = nil)
-    @quotations = where(:document_number => number) if !number.nil?
-    @quotations = joins(:customer => :entity).where("entities.name like '%#{customer}%'") if !customer.nil?
-    @quotations
+  def self.search(search)
+    # @quotations = where(:document_number => number) unless number.nil?
+    # @quotations = joins(:customer => :entity).where("entities.name like '%#{customer}%'") unless customer.nil?
+    # # joins(:customer => :entity).where("entities.name like '%duo%' or quotations.document_number like '%145%'")
+    # @quotations
+    joins(:customer => :entity)
+    .where("entities.name like ? or quotations.document_number like ?", "%#{search}%", "%#{search}%")
   end
 
 end

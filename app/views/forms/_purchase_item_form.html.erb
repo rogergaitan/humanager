@@ -3,7 +3,8 @@
     <%= f.collection_select :warehouse_id,  @warehouses, :id, :name, {:include_blank => false}, {:class=>"input-block-level"} %>
   </td>
   <td>
-    <%= f.text_field :product_id, :class => 'text_field input-block-level product_code  ui-autocomplete-input' %>
+    <%= f.hidden_field :product_id, :class => 'product_id' %>
+    <%= f.text_field :code, :class => 'text_field input-block-level product_code  ui-autocomplete-input' %>
   </td>
   <td >
     <%= f.text_field :description, :class => 'text_field input-block-level product_description ui-autocomplete-input' %>

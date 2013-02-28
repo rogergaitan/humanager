@@ -29,7 +29,7 @@ class PurchaseOrder < ActiveRecord::Base
   attr_accessible :vendor_id,:currency, :delivery_date, :observation,
     :reference_info,:shipping_type, :subtotal, :taxes, :total,
     :items_purchase_order_attributes,:vendor_attributes, :vendor_name, 
-    :document_date, :purchase_order_payments_attributes
+    :document_date, :purchase_order_payments_attributes, :document_number
 
   accepts_nested_attributes_for :items_purchase_order, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes["product"].blank? }
@@ -42,9 +42,20 @@ class PurchaseOrder < ActiveRecord::Base
   validates :vendor_id, :delivery_date, :vendor_name, :document_date,
     :presence => true
 
+  before_create :next_number, :if => proc { |a| a[:document_number].blank? }
+  after_create :increment_document_number
+
   def self.get_vendor(purchase_order)
     @vendor = Entity.find(purchase_order.vendor_id)
     puts purchase_order.vendor_name
     purchase_order.vendor_name = "#{@vendor.name} #{@vendor.surname}"
+  end
+
+  def next_number
+    self.document_number = DocumentNumber.next_number(:purchase_order)
+  end
+
+  def increment_document_number
+    DocumentNumber.increment_document_number(:purchase_order)
   end
 end
