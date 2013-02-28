@@ -5,6 +5,10 @@ es:
   hello: "Hello world"
   'true': 'Si'
   'false': 'No'
+  typephone:
+    personal: Personal
+    home: Casa
+    work: Trabajo
   tabs:
     general: General
     prices: Precios
