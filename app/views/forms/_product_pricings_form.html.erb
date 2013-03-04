@@ -21,7 +21,7 @@
 
   <%= f.label :price_type, :class => 'control-label' %>
   <div class='controls'>
-    <%= f.enum_select :price_type, :include_blank =>false %>
+      <%= f.select :price_type, translate_enum(:price_type) %>
   </div>
   </div>
   <div class="control-group">    

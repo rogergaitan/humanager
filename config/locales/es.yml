@@ -9,6 +9,14 @@ es:
     personal: Personal
     home: Casa
     work: Trabajo
+  typeid:
+    national: Nacional
+    foreign: Extranjero
+    campany: Compañia
+  price_type:
+   credit: Crédito
+   debit: Débito
+   other: Otros
   tabs:
     general: General
     prices: Precios
