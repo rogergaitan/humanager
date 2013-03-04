@@ -29,5 +29,9 @@ module ApplicationHelper
   	@company ? session[:company_id] = @company.id : session[:company_id] = 0
     @company ? @company.surname : ""
   end
+
+  def translate_enum(enum)
+    I18n.t(enum).map { |key, value| [ value, key ] }
+  end
 end
 

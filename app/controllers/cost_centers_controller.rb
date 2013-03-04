@@ -2,8 +2,7 @@ class CostCentersController < ApplicationController
   # GET /cost_centers
   # GET /cost_centers.json
   def index
-    @cost_centers = CostCenter.all
-
+    @cost_centers = CostCenter.includes(:employee => :entity).all
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @cost_centers }

@@ -1,6 +1,8 @@
 class CostCenter < ActiveRecord::Base
-	
-  attr_accessible :code, :description, :employee_id
 
+	belongs_to :employee
+
+  attr_accessible :code, :description, :employee_id
+  
   validates :code, :description, :presence => true
 end

@@ -5,6 +5,10 @@ es:
   hello: "Hello world"
   'true': 'Si'
   'false': 'No'
+  typephone:
+    personal: Personal
+    home: Casa
+    work: Trabajo
   tabs:
     general: General
     prices: Precios
@@ -37,6 +41,10 @@ es:
       edit: Editar
       edit_price: Ver precios
       new: Nuevo
+      news:
+        purchase_order: Nueva orden de compra
+        purchase: Nueva compra
+        quotation: Nueva cotización
       create: Nuevo
       cancel: Cancelar  
       back: Regresar
