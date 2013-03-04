@@ -1,0 +1,2 @@
+module DetailPersonnelActionsHelper
+end

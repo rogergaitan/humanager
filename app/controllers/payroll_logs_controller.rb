@@ -25,6 +25,7 @@ class PayrollLogsController < ApplicationController
   # GET /payroll_logs/1/edit
   def edit
     @payroll_log = PayrollLog.find(params[:id])
+    respond_with @result = PayrollLog.history(@payroll_log.id)
   end
 
   # POST /payroll_logs
@@ -92,4 +93,5 @@ class PayrollLogsController < ApplicationController
     @superior = Employee.superior
     @tasks = Task.all
   end
+
 end

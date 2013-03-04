@@ -59,6 +59,16 @@ es:
   activerecord:
       errors:
         models:
+          payroll:
+            attributes:
+              start_date:
+                blank: Este campo no puede quedar en blanco
+              end_date:
+                blank: Este campo no puede quedar en blanco
+              payment_date:
+                blank: Este campo no puede quedar en blanco
+              payroll_type_id:
+                blank: Por favor seleccionar alguna de las opciones
           payroll_type:
             attributes:
               description:
@@ -225,6 +235,8 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
+        detail_personnel_actions:
+          other: Acciones de Personal
         work_benefit:
           one: Prestación
           other: Prestaciones
@@ -314,8 +326,10 @@ es:
         position:
           position: Puesto
           description: Descripción
-          codigo_ins: Código INS
-          codigo_ccss: Código CCSS
+        occupation:
+          description: Descripción
+          ins_code: Código INS
+          ccss_code: Código CCSS
         role:
           role: Rol
           description: 'Descripción'

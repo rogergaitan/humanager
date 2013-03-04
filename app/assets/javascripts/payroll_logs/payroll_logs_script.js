@@ -80,7 +80,10 @@ $(jQuery(document).ready(function($) {
 
 	checkNumberEmployees();
 	
-	$('#products_items input, select').attr('disabled', true);
+	if( $('.controls_item:eq(1) input').val() != "" ) {
+		$('#products_items input').attr('disabled', true);
+		$('#products_items select').attr('disabled', true);
+	}
 }));
 
 	function removeFields(e) {

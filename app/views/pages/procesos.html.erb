@@ -23,7 +23,7 @@
         </div>
       </li>
 
-        <!--Prestaciones -->
+      <!--Prestaciones -->
       <li class="span3">
         <div class="thumbnail">
           <a href=<%=work_benefits_path %> class="thumbnail">
@@ -36,6 +36,27 @@
             <ul class="dropdown-menu">
               <li><a href=<%=new_work_benefit_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
               <li><a href=<%=work_benefits_path %> ><i class='icon-list-alt'></i> Lista</a></li>
+              
+              <li class="divider"></li>
+              <li><a href="#">Información</a></li>
+            </ul>
+            </div>
+        </div>
+      </li>
+    
+    <!--Acciones de Personal -->
+      <li class="span3">
+        <div class="thumbnail">
+          <a href=<%=detail_personnel_actions_path %> class="thumbnail">
+          <%= image_tag ("bodega.png" ) %> 
+          </a>
+          <div class='btn-group'>
+
+           <a href=<%=detail_personnel_actions_path %> class='btn btn-info btn-info'><i class='icon-picture'></i><%= I18n.t('.activerecord.models.detail_personnel_actions.other') %></a>
+            <button class="btn btn-info btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href=<%=new_detail_personnel_action_path%>><i class='icon-pencil'></i>  Nuevo</a></li>
+              <li><a href=<%=detail_personnel_actions_path %> ><i class='icon-list-alt'></i> Lista</a></li>
               
               <li class="divider"></li>
               <li><a href="#">Información</a></li>

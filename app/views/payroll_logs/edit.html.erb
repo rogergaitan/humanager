@@ -4,3 +4,41 @@
                                    :default => "Edit #{model_class.model_name.human}") %></h1>
 </div>
 <%= render :partial => 'form' %>
+
+ <div class="accordion" id="accordion">
+	<% @count = 0 %>
+	<% @result.each do |e| %>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+ 			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<%= @count %>">
+ 				<%= e[0] %>
+ 			</a>
+ 		</div>
+		<div id="collapse<%= @count %>" class="accordion-body collapse">
+ 			<div class="accordion-inner">
+				<table class="table table-hover table-bordered table-striped">
+					<thead>
+						<td>Fecha</td>
+						<td>Labor</td>
+						<td>Cantidad</td>
+						<td>Centro de Costos</td>
+						<td>Tipo de Pago</td>
+					</thead>
+					<tbody>
+					<% e[1].each do |h| %>
+						<tr>
+							<td><%= h.created_at %></td>
+							<td><%= h.task.ntask %></td>
+							<td><%= h.time_worked %></td>
+							<td><%= h.centro_de_costo.nombre_cc %></td>
+							<td><%= h.payment_type %></td>
+						</tr>
+						<% end %>
+					</tbody>
+				</table>
+ 			</div>
+ 		</div>
+	</div>
+	<% @count += 1 %>
+	<% end %>
+</div>

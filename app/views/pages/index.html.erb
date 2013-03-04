@@ -1,2 +1,44 @@
-<h2>Menu Principal HR</h2>
-<%= render 'pages/modulos' %>
+<!--<div class="btn-group">
+	<a href=<%= payrolls_path%> class="btn">Planillas</a>
+	<a href=<%= work_benefits_path%> class="btn">Prestaciones</a>
+	<a href=<%= detail_personnel_actions_path%> class="btn">Acciones de Personal</a>
+</div>-->
+
+<div id="block-top">
+	<ul id="block-top">
+		<ul class="thumbnails">
+			<li>
+				<a href=<%= payrolls_path%> class="btn btn-maniadmin-6 btn-large" data-original-title="Planillas" >
+					<img src="assets/icon/iconset-info.png" alt="">
+					<span class="label label-success">Planillas</span>
+				</a>
+			</li>
+			<li>
+				<a href=<%= work_benefits_path%> class="btn btn-maniadmin-6 btn-large" data-original-title="Prestaciones" >
+					<img src="assets/icon/iconset-travel.png" alt="">
+					<span class="label label-success">Prestaciones</span>
+				</a>
+			</li>
+			<li>
+				<a href=<%= detail_personnel_actions_path%> class="btn btn-maniadmin-6 btn-large" data-original-title="Acciones de Personal" >
+					<img src="assets/icon/iconset-users.png" alt="">
+					<span class="label label-success">Acciones de Personal</span>
+				</a>
+			</li>
+		</ul>
+	</ul>
+</div>
+
+<br><br>
+<div id="section-body" class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#payroll" id="payroll_tab">Planillas</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div id="payroll_tab" class="tab-pane active">
+			<%= render :template => 'payrolls/index'  %>
+		</div>
+	</div>
+</div>

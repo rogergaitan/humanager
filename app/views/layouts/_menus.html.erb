@@ -1,32 +1,63 @@
-<div class='well sidebar-nav'>
+<div class='sidebar-nav'>
   <ul class="nav nav-list">
-    <li class="nav-header"><%= I18n.t('.content.titles.tools')%></li>
-    
-    <li><a href=<%=root_path %> ><i class='icon-white icon-home'></i><%= I18n.t('.content.titles.home')%></a></li>
-    <!-- <li><a href=<%=warehouses_path %> ><i class='icon-picture'></i> Bodegas</a></li> -->
-    
-    <%if user_signed_in? %>
-    <li class="divider"></li>
-        <li class="nav-header"><%= I18n.t('.activerecord.models.user') %></li>
-            <li><a href=<%=edit_user_registration_path %>><i class='icon-user'></i>Perfil</a></li>
-        <%if !@warehouses.nil? %>
-        <li class="divider"></li>
-            <li class="nav-header"><%= I18n.t('.activerecord.models.warehouse').pluralize %></li>
-            
-        <%end%>
-        <%if !@sublines.nil? %>
-        <li class="divider"></li>
-            <li class="nav-header"><%= I18n.t('.activerecord.models.subline').pluralize %></li>
-            
-        <%end%>
 
-    <%end%>
     <li>
-                    
-            </li>
-    <li class="divider"></li>
-    <li class="nav-header">Otros</li>
-        <li><a href=<%=help_path %>><i class='icon-flag'></i>Ayuda</a></li>
+        <a href=<%=root_path %>>
+            <i class='icon-white icon-home'></i>
+            <span><%= I18n.t('.content.titles.home')%></span>
+        </a>
+    </li>
+
+    <li class="accordion-menu">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="#configuration" data-original-title>
+            <i class="icon-wrench"></i>
+            <span>Configuración <i class="icon-chevron-down pull-right"></i> </span>
+        </a>
+        <div id="configuration" class="accordion-body dropdown collapse">
+            <div class="accordion-inner">
+                <ul class="nav nav-list">
+                    <li><a href=<%= provinces_path%>> Provincias</a></li>
+                    <li><a href=<%= cantons_path%>> Cantones</a></li>
+                    <li><a href=<%= districts_path%>> Distritos</a></li>
+                    <li><a href=<%= employees_path%>> Empleados</a></li>
+                    <li><a href=<%= departments_path%>> Departamentos</a></li>
+                    <li><a href=<%= positions_path%>> Puestos</a></li>
+                    <li><a href=<%= tasks_path%>> Labores</a></li> 
+                    <li><a href=<%= deductions_path%>> Deducciones</a></li>
+                    <li><a href=<%= centro_de_costos_path%>> Centro de Costos</a></li>
+                    <li><a href=<%= ledger_accounts_path%>> Cuentas Contables</a></li>
+                    <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
+                    <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
+                    <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
+                    <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
+                    <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
+                </ul>
+            </div>
+        </div>
+    </li>
+
+    <li class="accordion-menu">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="#process" data-original-title>
+            <i class="icon-pencil"></i>
+            <span>Procesos <i class="icon-chevron-down pull-right"></i></span>
+        </a>
+        <div id="process" class="accordion-body dropdown collapse">
+            <div class="accordion-inner">
+                <ul class="nav nav-list">
+                    <li><a href=<%= payrolls_path%>>Planillas</a></li>
+                    <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
+                    <li><a href=<%= detail_personnel_actions_path%>>Acciones de Personal</a></li>
+                </ul>
+            </div>
+        </div>
+    </li>
+
+    <li>
+        <a href=<%=products_path %> class="last">
+            <i class="icon-list"></i>
+            <span>Informes</span>
+        </a>
+    </li>
     
   </ul>
 </div>

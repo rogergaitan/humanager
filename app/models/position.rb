@@ -1,5 +1,5 @@
 class Position < ActiveRecord::Base
-  attr_accessible :description, :position, :codigo_ins, :codigo_ccss
+  attr_accessible :description, :position
   has_many :employees
   
   validates :position,  :presence => true,

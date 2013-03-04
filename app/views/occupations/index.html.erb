@@ -7,6 +7,8 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:ins_code) %></th>
+      <th><%= model_class.human_attribute_name(:ccss_code) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -14,6 +16,8 @@
     <% @occupations.each do |occupation| %>
       <tr>
         <td><%= link_to occupation.description, occupation_path(occupation) %></td>
+        <td><%= occupation.ins_code %></td>
+        <td><%= occupation.ccss_code %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_occupation_path(occupation), :class => 'btn btn-mini' %>
