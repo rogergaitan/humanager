@@ -97,6 +97,8 @@ Reasapp::Application.routes.draw do
   resources :employees do
     collection do
       get 'sync'
+      get :search
+      get :search_all
     end
     collection do
       get 'load_employees'

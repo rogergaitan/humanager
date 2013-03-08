@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130110005010) do
+ActiveRecord::Schema.define(:version => 20130308210418) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -151,6 +151,17 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
 
   add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
 
+  create_table "detail_personnel_actions", :force => true do |t|
+    t.integer  "type_of_personnel_action_id"
+    t.integer  "fields_personnel_action_id"
+    t.string   "value"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "detail_personnel_actions", ["fields_personnel_action_id"], :name => "index_detail_personnel_actions_on_fields_personnel_action_id"
+  add_index "detail_personnel_actions", ["type_of_personnel_action_id"], :name => "index_detail_personnel_actions_on_type_of_personnel_action_id"
+
   create_table "districts", :force => true do |t|
     t.string   "name"
     t.integer  "canton_id"
@@ -184,14 +195,13 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
 
   create_table "employees", :force => true do |t|
     t.integer  "entity_id"
-    t.enum     "gender",               :limit => [:male, :female]
+    t.enum     "gender",                  :limit => [:male, :female]
     t.date     "birthday"
-    t.enum     "marital_status",       :limit => [:single, :married, :divorced, :widowed, :civil_union, :engage]
+    t.enum     "marital_status",          :limit => [:single, :married, :divorced, :widowed, :civil_union, :engage]
     t.integer  "number_of_dependents"
     t.string   "spouse"
     t.date     "join_date"
     t.string   "social_insurance"
-    t.boolean  "ccss_calculated"
     t.integer  "department_id"
     t.integer  "occupation_id"
     t.integer  "role_id"
@@ -199,12 +209,15 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
     t.integer  "payment_method_id"
     t.integer  "payment_frequency_id"
     t.integer  "means_of_payment_id"
-    t.decimal  "wage_payment",                                                                                    :precision => 12, :scale => 2
-    t.datetime "created_at",                                                                                                                                        :null => false
-    t.datetime "updated_at",                                                                                                                                        :null => false
+    t.decimal  "wage_payment",                                                                                       :precision => 12, :scale => 2
+    t.datetime "created_at",                                                                                                                                           :null => false
+    t.datetime "updated_at",                                                                                                                                           :null => false
     t.string   "position_id"
     t.integer  "employee_id"
-    t.boolean  "is_superior",                                                                                                                    :default => false
+    t.boolean  "is_superior",                                                                                                                       :default => false
+    t.integer  "payment_unit_id"
+    t.boolean  "price_defined_work"
+    t.integer  "payroll_type_default_id"
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
@@ -214,6 +227,8 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
   add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
   add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
+  add_index "employees", ["payment_unit_id"], :name => "index_employees_on_payment_unit_id"
+  add_index "employees", ["payroll_type_default_id"], :name => "index_employees_on_payroll_type_default_id"
   add_index "employees", ["position_id"], :name => "index_employees_on_position_id"
   add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
 
@@ -274,6 +289,8 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "ins_code"
+    t.string   "ccss_code"
   end
 
   create_table "other_salaries", :force => true do |t|
@@ -328,6 +345,12 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.date     "payment_date"
+  end
+
+  create_table "payment_units", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "payroll_employees", :force => true do |t|
@@ -405,8 +428,6 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
   create_table "positions", :force => true do |t|
     t.string   "position"
     t.string   "description"
-    t.string   "codigo_ins"
-    t.string   "codigo_ccss"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -449,13 +470,6 @@ ActiveRecord::Schema.define(:version => 20130110005010) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "roles", :force => true do |t|
-    t.string   "role"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
   end
 
   create_table "sublines", :force => true do |t|

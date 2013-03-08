@@ -65,6 +65,9 @@ var dynamic_fields = new function() {
 };
 
 $(document).ready(function() {
+	check_input_price_defined();
+	$('#employee_birthday').datepicker();
+	$('#employee_join_date').datepicker();
 	dynamic_fields.countFields();
 	$('div.employee_contact_fields a.telephone-remove.remove_fields:eq(0)').remove();
 	$('div.employee_contact_fields a.email-remove.remove_fields:eq(0)').remove();
@@ -74,4 +77,50 @@ $(document).ready(function() {
 	$('#employee_entity_attributes_addresses_attributes_0_canton_id').change(dynamic_fields.cantonSelected);	
 	$('form').on('click', '.add_fields', dynamic_fields.addFields);	
 	$('form').on('click', '.remove_fields', dynamic_fields.removeFields);
+
+	$('#employee_price_defined_work').click(function(){
+		check_input_price_defined();
+	});
+
+	function check_input_price_defined(){
+		if($('#employee_price_defined_work').is(':checked')){
+			$('#employee_wage_payment').attr('disabled','disabled');
+			$('#employee_wage_payment').val('');
+		} else {
+			$('#employee_wage_payment').removeAttr('disabled');
+		}
+	}
+
+	//Gets all data from employees
+    $.getJSON('/employees/load_employees', function(employee_data) {
+        $( "#load_employee" ).autocomplete({
+            source: $.map(employee_data, function(item){
+                $.data(document.body, 'employee_'+ item.id+"", item.entity.name + ' ' + item.entity.surname);
+                return{
+                    label: item.entity.name + ' ' + item.entity.surname,
+                    id: item.id
+                }
+            }),
+            select: function( event, ui ) {
+                if(ui.item.id){
+                    $("#employee_employee_id").val(ui.item.id);
+                }
+            },
+            focus: function(event, ui){
+                $( "#load_employee" ).val(ui.item.label);
+            },
+            change: function(event, ui){
+                if(!ui.item){
+                    alert('Ningún resultado contiene ' + $( "#load_employee" ).val());
+                    $( "#load_employee" ).val("");
+                    $("#load_employee_id").val("");
+                }
+            }
+        })
+        if($("#employee_employee_id").val()){
+            var load_employee_name = $.data(document.body, 'employee_' + $("#employee_employee_id").val()+'');
+            $("#load_employee").val(load_employee_name);
+        }
+    });
+	
 })

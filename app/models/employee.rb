@@ -24,11 +24,12 @@
 
 
 class Employee < ActiveRecord::Base
-  attr_accessible :gender, :birthday, :marital_status, :ccss_calculated, :join_date, 
+  attr_accessible :gender, :birthday, :marital_status, :join_date, 
   					:number_of_dependents, :seller, :social_insurance, :spouse, 
   					:wage_payment, :entity_attributes, :department_id, 
   					:occupation_id, :payment_frequency_id,
-  					:means_of_payment_id, :photo_attributes, :position_id, :employee_id, :is_superior
+  					:means_of_payment_id, :photo_attributes, :position_id, :employee_id, :is_superior,
+            :payment_unit_id, :price_defined_work, :payroll_type_default_id
             
   has_one :department
   belongs_to :entity, :dependent => :destroy
@@ -37,6 +38,8 @@ class Employee < ActiveRecord::Base
   belongs_to :payment_frequency
   belongs_to :means_of_payment
   belongs_to :position
+  belongs_to :payment_unit
+  belongs_to :payroll_type
   has_one :photo, :dependent => :destroy
   has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits
@@ -69,8 +72,50 @@ class Employee < ActiveRecord::Base
     end    
   end
   
-
   def full_name
     "#{entity.name} #{entity.surname}"
   end
+
+  def self.all_payment_unit
+    @payment_unit = PaymentUnit.all
+  end
+
+  def self.all_payroll_type
+    @payroll_type = PayrollType.all
+  end
+  
+  def self.all_departments
+    puts 'as'
+    @departments = Department.all
+  end
+
+  def self.search(search_id, search_name, search_surname, search_department, search_entities, page, per_page = nil)
+    puts 'as'
+    query = ""
+    params = []
+    params.push(" entities.entityid like '%#{search_id}%' ") unless search_id.empty?
+    params.push(" entities.name like '%#{search_name}%' ") unless search_name.empty?
+    params.push(" entities.surname like '%#{search_surname}%' ") unless search_surname.empty?
+    params.push(" employees.department_id = '#{search_department}' ") unless search_department.empty?
+    params.push(" employees.employee_id = '#{search_entities}' ") unless search_entities.empty?
+    query = build_query(params)
+    
+    Employee.joins(:entity).where(query).paginate(:page => page, :per_page => 15)
+    
+  end
+
+  def self.build_query(data)
+    query = ""
+    if data
+      data.each_with_index do |q, i|
+        if i < data.length - 1
+          query += q + " AND "
+        else
+          query += q
+        end
+      end
+    end
+    query
+  end
+
 end

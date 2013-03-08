@@ -1,46 +1,44 @@
 <%- model_class = Employee -%>
 <%- model_class_entity = Entity -%>
 <%= javascript_include_tag 'employees/script' %>
+
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
   <button id="sync-fb" class="btn btn-primary pull-right">
     <i class='icon-refresh'></i>
   </button></h1>
 </div>
-<%= will_paginate :class =>'pagination pagination-centered' %>
-<table class="table table-striped" id="employee-data">
-  <thead>
-    <tr>
-      <th><%= model_class_entity.human_attribute_name(:entityid) %></th>
-      <th><%= model_class_entity.human_attribute_name(:name) %></th>
-      <th><%= model_class_entity.human_attribute_name(:surname) %></th>
-      <th><%= model_class.human_attribute_name(:department_id) %></th>
-      <th><%= model_class.human_attribute_name(:wage_payment) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @employees.each do |employee| %>
-      <tr>
-        <td><%= link_to employee.entity.entityid, employee_path(employee) %></td>
-        <td><%= employee.entity.name %></td>
-        <td><%= employee.entity.surname %></td>
-        <td><%= employee.department.name if employee.department %></td>
-        <td><%= employee.wage_payment %></td>
-        <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_employee_path(employee), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      employee_path(employee),
-                      :method => :delete,
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-mini btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_employee_path,
-            :class => 'btn btn-primary' %>
+<!-- search -->
+<legend>  
+  <%= form_tag :search_employees, :id => "search_form", :class => "form-search", :method => "get" do %>
+    <div class="control-group search">
+      <%= text_field_tag :search_id, params[:search_id], :class => "search-query",
+       :placeholder => model_class.human_attribute_name(:id) %>
+
+      <%= text_field_tag :search_name, params[:search_name], :class => "search-query",
+       :placeholder => model_class.human_attribute_name(:name) %>
+
+      <%= text_field_tag :search_surname, params[:search_surname], :class => "search-query",
+       :placeholder => model_class.human_attribute_name(:surname) %>
+    </div>
+
+    <div class="control-group search">
+      <%= select_tag(:search_department, options_from_collection_for_select(@all_departments, :id, :name), 
+      {:prompt => 'Departamento'}) %>
+
+      <%= select_tag(:search_entities, options_for_select(@employees.map {|s| [s.entity.name, s.id] }),
+      {:prompt => 'Jefe Inmediato'}) %>
+
+
+      <button class="btn" id="clear" type="button">Limpiar</button>
+    </div>
+  <% end %>
+</legend>
+<!-- search -->
+
+<%= render "employees" %>
+
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_employee_path,
+              :class => 'btn btn-primary' %>

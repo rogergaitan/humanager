@@ -1,15 +1,19 @@
 class EmployeesController < ApplicationController
   before_filter :get_address_info, :only => [:new, :edit]
   before_filter :get_employee_info, :only => [:new, :edit]
+  respond_to :json, :html, :js
   # GET /employees
   # GET /employees.json
   def index
     @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
 
+    @all_departments = Employee.all_departments
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @employees }
     end
+
   end
 
   # GET /employees/1
@@ -156,5 +160,19 @@ class EmployeesController < ApplicationController
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
      @position = Position.find(:all, :select =>['id','position'])
      @superior = Employee.all
+     @payment_unit = Employee.all_payment_unit
+     @payroll_type = Employee.all_payroll_type
    end
+
+   def search
+    @employees = Employee.search(params[:search_id], params[:search_name], params[:search_surname], 
+      params[:search_department], params[:search_entities], params[:page], params[:per_page])
+    respond_with @employees
+   end
+
+   def search_all
+    @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
+    respond_with @employees
+   end
+
 end

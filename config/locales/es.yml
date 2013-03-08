@@ -37,7 +37,8 @@ es:
       cancel: Cancelar  
       back: Regresar
       confirm: '¿Está seguro(a)?'
-      show_accounting_info: 'Información Contable'   
+      show_accounting_info: 'Información Contable'
+      personnel_action: 'Accion de Personal'
     titles:
       sync: datos sincronizados
       tasksfb: datos sincronizados
@@ -50,6 +51,7 @@ es:
     a_successfully_deleted: ' eliminada correctamente'
     a_successfully_created: ' creada correctamente'
     a_successfully_updated: ' actualizada correctamente'
+    no_results: 'No se encontraron resultados'
   content:
     titles: 
       tools: Herramientas
@@ -411,8 +413,11 @@ es:
           role_id: Rol
           social_insurance: Seguro Social
           spouse: 'Cónyuge'
-          wage_payment: Salario
+          wage_payment: Precio Unidad de Pago
           position_id: Puesto
+          price_defined_work: Precio definido en Labor
+          payment_unit_id: Unidad de Pago
+          payroll_type_default_id: Tipo de Planilla Predeterminada
         entity:
           name: Nombre
           surname: Apellidos
