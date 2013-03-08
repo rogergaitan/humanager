@@ -26,9 +26,6 @@
                   <table id="example" class="table table-bordered" aria-describedby="example_info">
                     <thead>
                       <tr role="row">
-                        <th style="width: 50px;">
-                          <%= model_class.human_attribute_name(:id) %>
-                        </th>
                         <th style="width: 250px;">
                           <%= model_class.human_attribute_name(:name) %>
                         </th>
@@ -46,7 +43,6 @@
                     <tbody role="alert" aria-live="polite" aria-relevant="all">
                       <% @taxes.each do |taxis| %>
                         <tr class="gradeA odd">
-                          <td><%= link_to taxis.id, taxis_path(taxis) %></td>
                           <td><%= taxis.name %></td>
                           <td><%= taxis.percentage %></td>
                           <td><%= taxis.cc_id %></td>

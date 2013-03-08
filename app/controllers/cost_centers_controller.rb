@@ -43,7 +43,7 @@ class CostCentersController < ApplicationController
 
     respond_to do |format|
       if @cost_center.save
-        format.html { redirect_to @cost_center, notice: 'Cost center was successfully created.' }
+        format.html { redirect_to @cost_center, notice: t('.activerecord.models.cost_center').capitalize + t('.notice.successfully_created') }
         format.json { render json: @cost_center, status: :created, location: @cost_center }
       else
         format.html { render action: "new" }
@@ -59,7 +59,7 @@ class CostCentersController < ApplicationController
 
     respond_to do |format|
       if @cost_center.update_attributes(params[:cost_center])
-        format.html { redirect_to @cost_center, notice: 'Cost center was successfully updated.' }
+        format.html { redirect_to @cost_center, notice: t('.activerecord.models.cost_center').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -75,7 +75,7 @@ class CostCentersController < ApplicationController
     @cost_center.destroy
 
     respond_to do |format|
-      format.html { redirect_to cost_centers_url }
+      format.html { redirect_to cost_centers_url, notice: t('activerecord.models.cost_center').capitalize + t('.notice.successfully_deleted')}
       format.json { head :no_content }
     end
   end

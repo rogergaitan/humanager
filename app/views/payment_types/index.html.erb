@@ -45,7 +45,7 @@
     <%= render 'forms/payment_type_form', :f => f %>
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><%=I18n.t(".helpers.links.cancel")%></button>
         <%= f.submit nil, :class => 'btn btn-primary new-edit' %>
   </div>
   <% end %>

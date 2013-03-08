@@ -16,7 +16,7 @@
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/lines')])[2]"
     And I click on "//a[contains(@href, '/lines/new')]"
-    And I fill in "line_name" with "linea de prueba"
+    And I fill in "line_name" with "linea - " name
     And I fill in "line_code" code
     And I fill in "line_description" with "descrip"
     And I fill in "line_inventory" with "12345"
@@ -39,7 +39,7 @@
     And I click on "(//a[contains(@href, '/lines')])[2]"
     And I click on "//tr[1]/td[4]/a[2]"
     And I fill in "line_code" code
-    And I fill in "line_description" with "editado"
+    And I fill in "line_description" with "editado - " name
     And I fill in "line_inventory" with "555"
     And I fill in "line_sale_cost" with "6666"
     And I fill in "line_lost_adjustment" with "54545"
@@ -75,14 +75,6 @@
     And I press on "//a[contains(text(),'Regresar')]"
     Then I should see "General"
 
-    Scenario: Delete Lines 
-    Given I am on "http://localhost:3000/" Home page
-    And I click on "(//a[contains(@href, '/lines')])[2]"
-    And I can see the row "//td[4]/a[3]"
-    And I delete the row "//tr[2]/td[4]/a[3]"
-    And I assert confirmation
-    Then I should see "Línea eliminada correctamente"
-
     Scenario: "Cancelar" button works as expected in "Nuevo registro de línea"
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/lines')])[2]"
@@ -101,7 +93,7 @@
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/lines')])[2]"
     And I click on "//a[contains(@href, '/lines/new')]"
-    And I fill in "line_name" with "linea de prueba"
+    And I fill in "line_name" with "linea gc- " name
     And I fill in "line_code" code
     And I fill in "line_description" with "descrip"
     And I fill in "line_utility_adjusment" with "12356"
@@ -120,7 +112,13 @@
     And I click on "//form[@id='new_line']/div[5]/a"
     Then I should see "General"
 
-
+    Scenario: Delete Lines 
+    Given I am on "http://localhost:3000/" Home page
+    And I click on "(//a[contains(@href, '/lines')])[2]"
+    And I can see the row "//td[4]/a[3]"
+    And I delete the row "//tr[2]/td[4]/a[3]"
+    And I assert confirmation
+    Then I should see "Línea eliminada correctamente"
 
 
 

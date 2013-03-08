@@ -24,7 +24,7 @@ class ShippingMethodsController < ApplicationController
 
     respond_to do |format|
       if @shipping_method.save
-        format.html { redirect_to @shipping_method, notice: 'Shipping method was successfully created.' }
+        format.html { redirect_to @shipping_method, notice: t('activerecord.models.shipping_method').capitalize + t('.notice.successfully_created') }
         format.json { render json: @shipping_method, status: :created, location: @shipping_method }
       else
         format.html { render action: "new" }
@@ -38,7 +38,7 @@ class ShippingMethodsController < ApplicationController
 
     respond_to do |format|
       if @shipping_method.update_attributes(params[:shipping_method])
-        format.html { redirect_to @shipping_method, notice: 'Shipping method was successfully updated.' }
+        format.html { redirect_to @shipping_method, notice: t('activerecord.models.shipping_method').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -52,10 +52,12 @@ class ShippingMethodsController < ApplicationController
     @shipping_method.destroy
 
     respond_to do |format|
-      format.html { redirect_to shipping_methods_url }
+      format.html { redirect_to shipping_methods_url, notice: t('activerecord.models.shipping_method').capitalize + t('.notice.successfully_deleted')}
       format.json { head :no_content }
     end
   end
+
+
 
   def clean_cache
     ShippingMethod.clean_cache
