@@ -9,7 +9,7 @@
     <div class="control-group">
       <%= f.label :account_type, :class => 'control-label' %>
       <div class="controls">
-        <%= f.enum_select :account_type,{:include_blank => false}, {:class => 'text_field'} %>
+        <%= f.select :account_type, translate_enum(:account_type) %>
       </div>
     </div>
     <div class="control-group">
