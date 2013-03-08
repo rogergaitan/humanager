@@ -89,7 +89,7 @@ class ProductsController < ApplicationController
       #Rails.logger.debug @products
     else
       @products = Product.search(params[:search]).to_a.paginate(:per_page => params[:per_page], :page => params[:page])
-    end  
+    end
     respond_with @products
   end
 
