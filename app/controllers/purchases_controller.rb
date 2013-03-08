@@ -45,7 +45,7 @@ class PurchasesController < ApplicationController
     @purchase = Purchase.new(params[:purchase])
     respond_to do |format|
       if @purchase.errors.empty? && @purchase.save
-        format.html { redirect_to purchases_path, 
+        format.html { redirect_to root_path, 
           notice: t('.activerecord.models.purchase').capitalize +
           " #{@purchase.document_number} " +
           t('.notice.a_successfully_created') }

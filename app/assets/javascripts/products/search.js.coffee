@@ -8,14 +8,14 @@ jQuery(document).ready ($) ->
   $("#advanced_search_form").submit (e) ->
     e.preventDefault()
     prepareAdvancedSearch()
-    
-    
+
+
   prepareSearch =()->
     search = $("#search").val()
     validateFields("","","",search)
     if search
       if search.length > search_length
-        search = $("#search").val().split(",")      
+        search = $("#search").val().split(",")
         ajaxCall(search)
         $("#products_notice").hide()
         $(".storage").show();
@@ -68,6 +68,15 @@ jQuery(document).ready ($) ->
   $("div#table_products").on "click", "button.close", ->
     $(@).closest("tr").remove()
   #$('#list').on("click", "span.expand_tree", treeviewhr.expand);
+
+  $(document).on "ready", ->
+    if $("#query").val() == "normal"
+      prepareSearch()
+    else if $("#query").val() == "advance"
+      $("#advanced").toggle()
+      $("#search_form").toggle()
+      prepareAdvancedSearch()
+    false
 
   $(".span2").html("")
   $(".row-fluid div").removeClass("span2")

@@ -4,9 +4,9 @@
   <table id="example" class="table table-bordered" aria-describedby="example_info">
     <thead>
       <tr role="row">
-        <th><%= model_class.human_attribute_name(:document_number) %></th>
-        <th><%= model_class.human_attribute_name(:vendor_id) %></th>
         <th><%= model_class.human_attribute_name(:purchase_date) %></th>
+        <th><%= model_class.human_attribute_name(:vendor_id) %></th>
+        <th><%= model_class.human_attribute_name(:document_number) %></th>        
         <th><%= model_class.human_attribute_name(:total) %></th>
         <th><%=t '.actions', :default => t("helpers.actions") %></th>
       </tr>
@@ -14,10 +14,10 @@
     <tbody role="alert" aria-live="polite" aria-relevant="all">
       <% unless @purchases.empty? %>
         <% @purchases.each do |purchase| %>
-          <tr>
-            <td><%= link_to purchase.document_number, purchase_path(purchase) %></td>
-            <td><%= purchase.vendor.entity.name %></td>
+          <tr>            
             <td><%= purchase.purchase_date %></td>
+            <td><%= purchase.vendor.entity.name %></td>
+            <td><%= link_to purchase.document_number, purchase_path(purchase) %></td>
             <td><%= purchase.total %></td>
             <td><%= link_to t('.pdf', :default => t("helpers.links.PDF")), purchase_path(purchase, :format => :pdf), :class => 'btn btn-mini btn-success' %>
               <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_purchase_path(purchase), :class => 'btn btn-mini' %>
