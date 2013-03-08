@@ -22,3 +22,4 @@ doc/app
 Gemfile.lock
 #ignore uploaded photos
 public/uploads/photo
+config/constants.yml

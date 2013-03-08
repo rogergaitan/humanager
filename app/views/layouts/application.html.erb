@@ -12,8 +12,8 @@
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container-fluid">
-					<%= render 'layouts/calendar'%>
-					<%= render 'layouts/header'%>
+					<%= render 'layouts/calendar' %>
+					<%= render 'layouts/header' %>
 				</div>
 		  </div>
 		</div>
@@ -30,6 +30,9 @@
 				<div id="content" class="span9 section-body">
 					<%= yield %>
 				</div>
+			</div>
+			<div class="flap_search">				
+				<%= render 'layouts/product_search' %>
 			</div>
 		</div>
 		<%= javascript_include_tag "dashboard/dashboard" %>

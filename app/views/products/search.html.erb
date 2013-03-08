@@ -5,6 +5,9 @@
   <h1>Busqueda de Productos</h1>
 </div>
 <div>
+
+<%= hidden_field_tag "query", params[:query] %>
+
 <%= form_tag search_products_path,:id =>"search_form", :class => "form-search", :method => 'get' do %>
   <div class="control-group search">
     <label class="control-label" for="code">Productos</label>

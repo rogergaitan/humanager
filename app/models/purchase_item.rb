@@ -13,6 +13,8 @@
 #  updated_at   :datetime         not null
 #  warehouse_id :integer
 #  discount     :decimal(17, 2)
+#  tax          :float
+#  code         :string(255)
 #
 
 class PurchaseItem < ActiveRecord::Base

@@ -1,7 +1,7 @@
 <div clas="group-menu nav-collapse">
 	<div class='btn-group pull-right'>
 		<% if user_signed_in? %>
-			<a class="btn btn-info">
+			<a id="user_logged" class="btn btn-info">
 				<i class="icon-globe"></i>
 				<%= session[:company_id] ? session[:company] : default_company %>
 			</a>
@@ -10,17 +10,17 @@
 		    <%=current_user.email %>
 		    <span class="caret"></span>
 		  </a>
-		    <ul class="dropdown-menu">
-		  	  <li>
-		  	  	<a href="#">
-		  	  		Profile
-		  	  	</a>
-		  	 	</li>
-		      <li class="divider"></li>
-		      <li>
-		      	<%= link_to 'Cerrar Sesión', destroy_user_session_path, :method => 'delete' %>
-		      </li>
-		    </ul>
+	    <ul class="dropdown-menu">
+	  	  <li>
+	  	  	<a href="#">
+	  	  		Profile
+	  	  	</a>
+	  	 	</li>
+	      <li class="divider"></li>
+	      <li>
+	      	<%= link_to 'Cerrar Sesión', destroy_user_session_path, :method => 'delete' %>
+	      </li>
+	    </ul>
 		<% else%>	
 			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">  
 				<i class="icon-user"></i>
@@ -41,9 +41,7 @@
 	<ul class="nav pull-right">
 		<li class="divider-vertical"></li>
 	</ul>
-	<form id="product_search" class="navbar-search pull-right">
-		<input id="product_id" type="hidden">
-		<input id="product_code" type="hidden">
-		<input id="product_name" class="search-query" type="text" placeholder="Productos">
-	</form>
+	<div class="navbar-search pull-right">
+		<a id="desplegar">Más</a>
+	</div>
 </div>

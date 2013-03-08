@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: discount_profiles
+#
+#  id          :integer          not null, primary key
+#  description :string(255)
+#  category    :enum([:a, :b, :c
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class DiscountProfile < ActiveRecord::Base
   
   has_many :discount_profile_items, :dependent => :destroy

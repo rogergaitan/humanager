@@ -50,7 +50,7 @@ class PurchaseOrdersController < ApplicationController
         if params[:print_pdf]
           format.html { redirect_to :action => "show", :id => @purchase_order.id, :format => :pdf, notice: 'Purchase order was successfully created.' }
         else
-          format.html { redirect_to purchase_orders_url, 
+          format.html { redirect_to root_path, 
             notice: t('.activerecord.models.purchase_order').capitalize +
             " #{@purchase_order.document_number} " +
             t('.notice.a_successfully_created') }

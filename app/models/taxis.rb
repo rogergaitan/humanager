@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: taxes
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  percentage :float
+#  cc_id      :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Taxis < ActiveRecord::Base
   attr_accessible :percentage, :cc_id, :name
 

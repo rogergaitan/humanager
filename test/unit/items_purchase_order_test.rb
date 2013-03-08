@@ -13,6 +13,7 @@
 #  updated_at        :datetime         not null
 #  warehouse_id      :integer
 #  discount          :decimal(17, 2)
+#  tax               :float
 #
 
 require 'test_helper'

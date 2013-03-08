@@ -125,6 +125,7 @@ Reasapp::Application.routes.draw do
   resources :products do
     collection do
       get 'search'
+      post 'search'
       get 'quantity_available'
       post 'set_cart'
       get 'get_cart'
