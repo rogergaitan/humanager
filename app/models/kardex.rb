@@ -17,7 +17,7 @@
 #  tax          :string(255)
 #  cost_total   :string(255)
 #  price_list   :string(255)
-#  quantity     :string(255)
+#  quantity     :float
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

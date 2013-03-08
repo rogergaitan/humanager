@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: payroll_types
+#
+#  id           :integer          not null, primary key
+#  description  :string(255)
+#  payroll_type :enum([:Administr
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 class PayrollType < ActiveRecord::Base
   attr_accessible :description, :payroll_type
   validates :description, :presence => true, :uniqueness => true

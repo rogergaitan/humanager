@@ -22,6 +22,9 @@
 #  wage_payment         :decimal(12, 2)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  position_id          :string(255)
+#  employee_id          :integer
+#  is_superior          :boolean          default(FALSE)
 #
 
 require 'test_helper'

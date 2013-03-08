@@ -41,7 +41,8 @@ es:
       cancel: Cancelar  
       back: Regresar
       confirm: '¿Está seguro(a)?'
-      show_accounting_info: 'Información Contable' 
+      show_accounting_info: 'Información Contable'
+      save: Guardar 
     titles:
       sync: datos sincronizados
       tasksfb: datos sincronizados
@@ -67,9 +68,19 @@ es:
       messages: Mensajes
       home: Inicio
       other: Otros
+      create_sub_account: Nueva Sub-Cuenta
   activerecord:
       errors:
         models:
+          ledger_account:
+            attributes:
+              account_type:
+                blank: *BLANK
+              naccount:
+                blank: *BLANK
+              iaccount:
+                blank: *BLANK
+                taken: "Ya existe un registro con este código"
           invoice:
             attributes:
               invoice_items:
@@ -911,7 +922,11 @@ es:
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  
-          ifather: Cuenta Padre       
+          ifather: Cuenta Padre
+          account_type: Tipo Cuenta
+          cost_center: Centro Costo
+          foreign_currency: Moneda Extrangera
+          request_entity: Entidad       
         other_salary:
           code: Codigo
           description: Descripción

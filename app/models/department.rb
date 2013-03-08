@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: departments
+#
+#  id                  :integer          not null, primary key
+#  name                :string(255)
+#  employee_id         :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  centro_de_costos_id :integer
+#
+
 class Department < ActiveRecord::Base
 
   attr_accessible :name, :employee_id, :centro_de_costos_id

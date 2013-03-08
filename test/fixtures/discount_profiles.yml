@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: discount_profiles
+#
+#  id          :integer          not null, primary key
+#  description :string(255)
+#  category    :enum([:a, :b, :c
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:

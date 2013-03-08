@@ -1,0 +1,4 @@
+$("#messages").html('<div class="flash notice"><%= escape_javascript(flash.discard(:notice)) %></div>');
+$("#<%= @ledger_account.iaccount %>")
+	.closest("tr")
+	.replaceWith("<%= escape_javascript(render(:partial => 'ledger_account')) %>");

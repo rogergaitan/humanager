@@ -1,49 +1,55 @@
-<script type="text/javascript" charset="utf-8">
- var cc_child = [];
-  <%  @cc_child.each do |cc| %>
-      cc_child.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
-  <% end %>
- 
-  $(document).ready(function() {
-    dd_parent(cc_child);
-  })
-  
-  function dd_parent(cc_child) {
-    if (($('#ledger_account_iaccount').val() != '') || $('#ledger_account_naccount').val() != '') {
-      var parent = $('#ledger_account_iaccount').val();
-      $('#ledger_account_ifather').find('option').remove();
-      $(cc_child).each(function() {
-        if (!(this[0] == parent || this[2] == parent || parent == 0)) {
-          $('#ledger_account_ifather').append('<option value='+ this[2] + '>' + this[1] + '</option>');
-        }
-      });
-    } 
-  }
-</script>
-<%= form_for @ledger_account, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :iaccount, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :iaccount, :class => 'text_field' %>
+<%- model_class = LedgerAccount -%>
+<%= form_for @ledger_account, :validate => true,  :html => { :class => 'form-horizontal', :id => "account_form" } do |f| %>
+  <div id="form_edit"></div>
+  <div class="modal-header">
+    <a aria-hidden="true" data-dismiss="modal" class="close" href="#">&times;</a>
+    <%=t '.title', :default => model_class.model_name.human %>
+  </div>
+  <div class="modal-body">
+    <div class="control-group">
+      <%= f.label :account_type, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.enum_select :account_type,{:include_blank => false}, {:class => 'text_field'} %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :iaccount, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.hidden_field :ifather, :class => 'text_field' %>
+        <%= f.text_field :iaccount, :class => 'text_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :naccount, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :naccount, :class => 'text_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :cost_center, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :cost_center, :class => 'text_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :foreign_currency, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :foreign_currency, :class => 'text_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :request_entity, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :request_entity, :class => 'text_field' %>
+      </div>
     </div>
   </div>
-  <div class="control-group">
-    <%= f.label :naccount, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :naccount, :class => 'text_field' %>
-    </div>
+  <div class="modal-footer">
+    <input type="submit" value="<%= t('helpers.links.save')%>" name="commit" 
+      class="btn btn-primary">
+    <button aria-hidden="true" data-dismiss="modal" class="btn cancel_submit">
+      <%= t("helpers.links.cancel")%>
+    </button>    
   </div>
 
-  <div class="control-group">
-    <%= f.label :ifather, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select(:ifather, @cc_child, :iaccount, :naccount , :prompt => '-') %>
-    </div>
-  </div>
-
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                ledger_accounts_path, :class => 'btn' %>
-  </div>
 <% end %>

@@ -5,7 +5,7 @@ class InvoicesController < ApplicationController
   respond_to :json, :html, :js
   
   def index
-    respond_with @invoices = Invoice.invoices_all(params[:page], params[:per_page])
+    respond_with @invoices = Invoice.invoices_all(params[:page], 3)
   end
 
   def show
@@ -31,32 +31,11 @@ class InvoicesController < ApplicationController
     respond_with(@invoice, :location => invoices_url)  
     else
       flash[:error] = @invoice.errors[:invoice_items][0] unless @invoice.errors[:invoice_items].empty?
-      # flash[:error] = @invoice.errors.invoice_items
       check_number
       fetch
       respond_with @invoice  
     end
   end
-
-=begin
-  def create
-    @invoice = Invoice.new(params[:invoice])
-
-    respond_to do |format|
-      if @invoice.save
-        format.html { redirect_to invoices_url, 
-          notice: t('.activerecord.models.invoice').capitalize + 
-            " #{@invoice.document_number} "+ 
-            t('.notice.a_successfully_created') }
-        format.json { render json: @invoice, status: :created, location: @invoice }
-      else
-        fetch
-        format.html { render action: "new" }
-        format.json { render json: @invoice.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-=end
 
   def update
     @invoice = Invoice.find(params[:id])
@@ -70,25 +49,6 @@ class InvoicesController < ApplicationController
     end
   end
 
-=begin  
-  def update
-    @invoice = Invoice.find(params[:id])
-
-    respond_to do |format|
-      if @invoice.update_attributes(params[:invoice])
-        format.html { redirect_to invoices_url, 
-          notice: t('.activerecord.models.invoice').capitalize + 
-            " #{@invoice.document_number} " +
-            t('.notice.a_successfully_updated') }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @invoice.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-=end
-
   def destroy
     @invoice = Invoice.find(params[:id])
     @invoice.destroy
@@ -96,20 +56,6 @@ class InvoicesController < ApplicationController
       " #{@invoice.document_number} " + t('.notice.a_successfully_deleted')
     respond_with(@invoice, :location => invoices_url)
   end
-
-=begin
-  def destroy
-    @invoice = Invoice.find(params[:id])
-    @invoice.destroy
-    respond_to do |format|
-      format.html { redirect_to invoices_url,
-        notice: t('.activerecord.models.invoice').capitalize + 
-          " #{@invoice.document_number} " +
-          t('.notice.a_successfully_deleted') }
-      format.json { head :no_content }
-    end
-  end
-=end
 
   def fetch
     @warehouses ||=  Warehouse.fetch
@@ -127,7 +73,6 @@ class InvoicesController < ApplicationController
   
   def search
     @invoices = Invoice.search(params[:search], params[:page], params[:per_page]) unless params[:search].empty?
-      # .to_a.paginate(:page => params[:page], :per_page => 5) unless params[:search].empty?
     respond_with @invoices 
   end
 end

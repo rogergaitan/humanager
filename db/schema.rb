@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130225212921) do
+ActiveRecord::Schema.define(:version => 20130307154458) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -377,8 +377,12 @@ ActiveRecord::Schema.define(:version => 20130225212921) do
     t.string   "iaccount"
     t.string   "naccount"
     t.string   "ifather"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                                                                               :null => false
+    t.datetime "updated_at",                                                                               :null => false
+    t.enum     "account_type",     :limit => [:asset, :liability, :equity, :income, :expense, :cost_sale]
+    t.boolean  "cost_center"
+    t.boolean  "foreign_currency"
+    t.boolean  "request_entity"
   end
 
   create_table "lines", :force => true do |t|

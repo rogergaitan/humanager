@@ -17,6 +17,7 @@ gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'dalli'
 gem 'prawn'
+gem 'hirb'
 #gem 'rubyfb'
 
 group :assets do
