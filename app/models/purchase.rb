@@ -36,7 +36,7 @@ class Purchase < ActiveRecord::Base
   accepts_nested_attributes_for :purchase_payment_options,
     :allow_destroy => true,
     :reject_if => proc { |a| a[:amount].blank? }
-
+    
   accepts_nested_attributes_for :purchase_items,
     :allow_destroy => true,
     :reject_if => proc { |attributes| attributes[:product_id].blank? }
@@ -45,15 +45,26 @@ class Purchase < ActiveRecord::Base
     :presence => true
 
   validate :quantity_amount, :on => :create
+  
 
   #after_destroy :destroy_kardex TRIGGERED ON DESTROY purchase_item
   after_create  :create_kardex, :increment_document_number
   after_update  :update_kardex
   before_validation :next_number, :if => proc { |a| a[:document_number].blank? }
 
+  
+  def vendor_id
+   @vendor = Vendor.select("name").find(id) unless id.nil?
+  end
+
   def self.get_vendor(id = nil)
     @vendor = Vendor.joins(:entity).select("name, surname").find(id) unless id.nil?
     @vendor.nil? ? "" : "#{@vendor.name} #{@vendor.surname}"
+  end
+
+    def self.vendor_name(purchase)
+    @vendor = Vendor.includes(:entity).find(purchase.vendor_id) if purchase
+    purchase.vendor_name = "#{@vendor.entity.name} #{@vendor.entity.surname}"
   end
 
   def self.search(search)

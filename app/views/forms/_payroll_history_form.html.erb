@@ -15,6 +15,6 @@
 	<td class="controls_item"><%= f.label :payment_type, :class => '' %>
 			<%= f.enum_select :payment_type, :include_blank => false %>
 			<%= f.hidden_field :_destroy, :class => 'payroll_histories' %>
-			<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
+			<%= link_to t("helpers.links.destroy"), '#', class: "remove_fields btn btn-mini btn-danger" %>
 	</td>
 </tr>

@@ -25,9 +25,10 @@
       </div>
       <%= f.label :purchase_type, :class => 'control-label' %>
       <div class="controls">
-        <%= f.enum_select :purchase_type,:include_blank => false, :class => 'text_field' %>
+          <%= f.select :purchase_type, translate_enum(:purchase_type) %>
         <%= f.hidden_field :current_user, :value => current_user ? current_user.email : "NO USER" %>
         <%= f.hidden_field :default_company, :value => session[:company_id] ? session[:company_id] : default_company %>
+       
       </div>
       <%= f.label :currency, :class => 'control-label' %>    
       <div class="controls">

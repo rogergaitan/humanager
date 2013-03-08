@@ -36,7 +36,7 @@ class DeductionsController < ApplicationController
 
     respond_to do |format|
       if @deduction.save
-        format.html { redirect_to @deduction, notice: 'Deduction was successfully created.' }
+        format.html { redirect_to @deduction, notice: t('activerecord.models.deduction.one').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @deduction, status: :created, location: @deduction }
       else
         format.html { render action: "new" }
@@ -52,7 +52,7 @@ class DeductionsController < ApplicationController
 
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
-        format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
+        format.html { redirect_to @deduction, notice: t('activerecord.models.deduction.one').capitalize + t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -68,7 +68,7 @@ class DeductionsController < ApplicationController
     @deduction.destroy
 
     respond_to do |format|
-      format.html { redirect_to deductions_url }
+      format.html { redirect_to deductions_url, notice: t('activerecord.models.deduction.one').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end

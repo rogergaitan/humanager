@@ -34,8 +34,8 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.save
-        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully created.' }
-        format.json { render json: @payroll_log, status: :created, location: @payroll_log }
+        format.html { redirect_to payrolls_path, notice: t('activerecord.models.payroll_log.one').capitalize + t('.notice.a_successfully_created') }
+                format.json { render json: @payroll_log, status: :created, location: @payroll_log }
       else
         format.html { render action: "new" }
         format.json { render json: @payroll_log.errors, status: :unprocessable_entity }
@@ -50,7 +50,7 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.update_attributes(params[:payroll_log])
-        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
+        format.html { redirect_to payrolls_path, notice: t('activerecord.models.payroll_log.one').capitalize + t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

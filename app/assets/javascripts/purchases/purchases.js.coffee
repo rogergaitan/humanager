@@ -101,10 +101,12 @@ Purchase.search_vendor = ()->
 	    $(@).val ui.item.label
 	  focus: (event, ui) ->
 	    $(@).val ui.item.label
+	    $("#purchase_vendor_id").val ui.item.id
 	  change: (event, ui) ->
 	    unless ui.item
-	      $("#vendor_text").val ""
+	      $(this).val ""
 	      $("#purchase_vendor_id").val ""
+	      $(@).val ui.item.label
 
 Purchase.add_field = (e)->
 	form = $("form").attr("id")

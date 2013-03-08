@@ -37,7 +37,7 @@ class LedgerAccountsController < ApplicationController
 
     respond_to do |format|
       if @ledger_account.save
-        format.html { redirect_to @ledger_account, notice: 'Ledger account was successfully created.' }
+        format.html { redirect_to @ledger_account, notice: t('activerecord.models.ledger_account').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @ledger_account, status: :created, location: @ledger_account }
       else
         format.html { render action: "new" }
@@ -52,8 +52,7 @@ class LedgerAccountsController < ApplicationController
 
     respond_to do |format|
       if @ledger_account.update_attributes(params[:ledger_account])
-        format.html { redirect_to @ledger_account, notice: 'Ledger account was successfully updated.' }
-        format.json { head :no_content }
+        format.html { redirect_to @ledger_account, notice: t('activerecord.models.ledger_account').capitalize + t('.notice.a_successfully_updated') }
       else
         format.html { render action: "edit" }
         format.json { render json: @ledger_account.errors, status: :unprocessable_entity }
@@ -67,7 +66,7 @@ class LedgerAccountsController < ApplicationController
     @ledger_account.destroy
 
     respond_to do |format|
-      format.html { redirect_to ledger_accounts_url }
+      format.html { redirect_to ledger_accounts_url, notice: t('activerecord.models.ledger_account').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end
