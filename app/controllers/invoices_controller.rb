@@ -28,7 +28,7 @@ class InvoicesController < ApplicationController
     if @invoice.save
     flash[:notice] =  t('.activerecord.models.invoice').capitalize + 
       " #{@invoice.document_number} " + t('.notice.a_successfully_created') 
-    respond_with(@invoice, :location => invoices_url)  
+    respond_with(@invoice, :location => root_path)  
     else
       flash[:error] = @invoice.errors[:invoice_items][0] unless @invoice.errors[:invoice_items].empty?
       check_number

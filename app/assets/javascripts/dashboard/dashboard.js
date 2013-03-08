@@ -36,6 +36,16 @@ load_quotations = function(e) {
 	}
 };
 
+load_invoices = function(e) {
+	e.preventDefault();
+	if(!$('#invoices').is(':empty')) {
+		$.ajax({
+			url: '/invoices',
+			dataType: 'script',
+		});
+	}
+};
+
 show_hide_advance_search = function() {
 	if($('.flap_search form#normal-search').is(':visible')) {
 		$('div.navbar-search a#desplegar').text('Menos');
@@ -70,10 +80,6 @@ submit_advance_search = function(e) {
 	}
 };
 
-logged_user = function() {
-
-}
-
 $(document).ready(function() {
 	
 	$(document).on('ready', load_purchase_orders);
@@ -83,6 +89,8 @@ $(document).ready(function() {
 	$('ul.nav').on('click', '#load_purchases', load_purchases);
 
 	$('ul.nav').on('click', '#load_quotations', load_quotations);
+
+	$('ul.nav').on('click', '#load_invoices', load_invoices);
 
 	$('.flap_search form#normal-search').on('submit', submit_normal_search);
 
