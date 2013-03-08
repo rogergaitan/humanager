@@ -5,7 +5,6 @@ Accounts =
 
 Accounts.save_account = (action, row) ->
   values = $(row).find('input').data()
-  console.log values
   $("#new_account label.message").remove()
   $("#new_account input[type='text']").val("")
   $("#new_account .modal-body input[type='hidden']").val("")
@@ -14,8 +13,6 @@ Accounts.save_account = (action, row) ->
   $("#new_account .modal-body input[type='checkbox']").prop('checked', false)
   $("#ledger_account_account_type").val("")
   $("#ledger_account_ifather").val(values.iaccount)
-  if action is Accounts.create
-    console.log "CREATING A NEW ACCOUNT"
 
   if action is Accounts.update
     $("form #form_edit").html("<input type='hidden' value='put' name='_method'>")
@@ -33,7 +30,6 @@ Accounts.ajax = (form) ->
     url: $(form).attr("action")
     data: $(form).serialize()
     dataType: "script"
-    success: (data) ->
     complete: (data) ->
       $("button.cancel_submit").trigger("click")
 

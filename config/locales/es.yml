@@ -5,6 +5,13 @@ es:
   hello: "Hello world"
   'true': 'Si'
   'false': 'No'
+  account_type:
+    asset: Activo
+    liability: Pasivo
+    equity: Patrimonio
+    income: Ingresos
+    expense: Gastos
+    cost_sale: Costo Ventas
   typephone:
     personal: Personal
     home: Casa
