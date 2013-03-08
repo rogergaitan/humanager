@@ -33,7 +33,8 @@ class PayrollTypesController < ApplicationController
 
     respond_to do |format|
       if @payroll_type.save
-        format.html { redirect_to @payroll_type, notice: 'Payroll type was successfully created.' }
+
+        format.html { redirect_to @payroll_type, notice: t('activerecord.models.payroll_type.one').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @payroll_type, status: :created, location: @payroll_type }
       else
         format.html { render action: "new" }
@@ -49,7 +50,7 @@ class PayrollTypesController < ApplicationController
 
     respond_to do |format|
       if @payroll_type.update_attributes(params[:payroll_type])
-        format.html { redirect_to @payroll_type, notice: 'Payroll type was successfully updated.' }
+        format.html { redirect_to @payroll_type, notice: t('activerecord.models.payroll_type.one').capitalize + t('notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -65,7 +66,7 @@ class PayrollTypesController < ApplicationController
     @payroll_type.destroy
 
     respond_to do |format|
-      format.html { redirect_to payroll_types_url }
+      format.html { redirect_to payroll_types_url, notice: t('activerecord.models.payroll_type.one').capitalize + t('notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end

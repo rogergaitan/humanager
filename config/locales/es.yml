@@ -5,6 +5,18 @@ es:
   hello: "Hello world"
   'true': 'Si'
   'false': 'No'
+  typephone:
+    personal: Personal
+    home: Casa
+    work: Trabajo
+  typeid:
+    national: Nacional
+    foreign: Extranjero
+    campany: Compañia
+  price_type:
+   credit: Crédito
+   debit: Débito
+   other: Otros
   tabs:
     general: General
     prices: Precios
@@ -37,6 +49,10 @@ es:
       edit: Editar
       edit_price: Ver precios
       new: Nuevo
+      news:
+        purchase_order: Nueva orden de compra
+        purchase: Nueva compra
+        quotation: Nueva cotización
       create: Nuevo
       cancel: Cancelar  
       back: Regresar
@@ -305,7 +321,7 @@ es:
                 not_a_number: *NOT_A_NUMBER  
           purchase:
             attributes:
-              vendor_name:  #THIS IS A VIRTUAL ATTRIBUTE
+              vendor_name:
                 blank: *BLANK
               document_number:
                 blank: *BLANK
@@ -521,6 +537,7 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
+        configuration: Configuración
         invoice: Factura
         quotation:
           one: Cotización
@@ -530,7 +547,7 @@ es:
         discount_profile_item: Artículos del Perfil de Descuento
         discount_profile: Perfil de Descuento
         taxis: Impuesto
-        cost_center: Centros de Costo
+        cost_center: Centro de Costo
         payment_type: Tipo de Pago
         payment_option: "Opción de Pago"
         product_application: Aplicaciones
@@ -615,6 +632,7 @@ es:
           total: Total
         invoice:
           customer_name: Cliente
+          customer_id: Cliente
           document_number: Número
           document_date: Fecha
           currency: Moneda
@@ -633,7 +651,7 @@ es:
           code: Código
           description: Descripción
           quantity: Cantidad
-          unit_price: Preicio Unitario
+          unit_price: Precio Unitario
           discount: Descuento
           tax: Impuesto
           total: Total
@@ -706,6 +724,11 @@ es:
           id: Identificación
           name: Descripción
         payment_option:
+          name: Nombre
+          related_account: Cuenta relacionada
+          use_expenses: En gastos
+          use_incomes: En ingresos
+          require_transaction: Requiere Transacción
         work_benefit:
           description: Descripción
           percentage: Porcentaje

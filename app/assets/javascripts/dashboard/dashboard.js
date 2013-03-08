@@ -1,16 +1,18 @@
 load_purchase_orders = function(e) {
-	e.preventDefault();
-	if(!$('#purchase').is(':empty')) {
-		$.ajax({
-			url: '/purchase_orders',
-			dataType: 'script',
-		});
-	}
-}; 
+	if($('#purchase_orders').length > 0) {
+		e.preventDefault();
+		if(!$('#purchase_orders').is(':empty')) {
+			$.ajax({
+				url: '/purchase_orders',
+				dataType: 'script',
+			});
+		}
+	}	
+};
 
 load_purchases = function(e) {
 	e.preventDefault();
-	if(!$('#purchase').is(':empty')) {
+	if(!$('#purchases').is(':empty')) {
 		$.ajax({
 			url: '/purchases',
 			dataType: 'script',

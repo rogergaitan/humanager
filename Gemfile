@@ -42,6 +42,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'selenium-client'
   gem 'selenium'
+  gem 'jeweler'
 end
 
 

@@ -18,7 +18,8 @@
   <%= f.label :typeid, :class => 'control-label' %>
   <div class="controls">
 		<div class="input-prepend">
-			<span class="add-on">T</span><%= f.enum_select :typeid, :include_blank => false %>
+			<span class="add-on">T</span>
+			<%= f.select :typeid, translate_enum(:typeid) %>
 		</div>
   </div>
 </div>

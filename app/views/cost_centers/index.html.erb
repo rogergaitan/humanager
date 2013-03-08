@@ -26,9 +26,6 @@
                   <table id="example" class="table table-bordered" aria-describedby="example_info">
                     <thead>
                       <tr role="row">
-                        <th style="width: 50px;">
-                          <%= model_class.human_attribute_name(:id) %>
-                        </th>
                         <th style="width: 70px;">
                           <%= model_class.human_attribute_name(:code) %>
                         </th>
@@ -46,10 +43,9 @@
                     <tbody role="alert" aria-live="polite" aria-relevant="all">
                       <% @cost_centers.each do |cost_center| %>
                         <tr class="gradeA odd">
-                          <td><%= link_to cost_center.id, cost_center_path(cost_center) %></td>
                           <td><%= cost_center.code %></td>
                           <td><%= cost_center.description %></td>
-                          <td><%= cost_center.employee_id %></td>
+                          <td><%= cost_center.employee.entity.name if cost_center.employee_id %></td>
                           <td>
                             <%= link_to t('.edit', :default => t("helpers.links.edit")),
                                         edit_cost_center_path(cost_center), :class => 'btn btn-mini btn-maniadmin-8' %>

@@ -1,3 +1,10 @@
+<div class="btn-group">
+  <%= link_to t('.new', :default => t("helpers.links.news.purchase_order")), new_purchase_order_path, :class => 'btn' %>
+  <%= link_to t('.new', :default => t("helpers.links.news.purchase")), new_purchase_path, :class => 'btn' %>
+  <%= link_to t('.new', :default => t("helpers.links.news.quotation")), new_quotation_path, :class => 'btn' %>
+</div>
+</br>
+</br>
 <div id="section-body" class="tabbable">
   <ul class="nav nav-tabs">
     <li class="active">
@@ -25,19 +32,18 @@
 		<div id="purchase_orders_tab" class="tab-pane active">
       <div id="purchase_orders">
       </div>
-      <%= link_to t('.new', :default => t("helpers.links.new")), new_purchase_order_path, :class => 'btn btn-primary' %>
     </div>
 		<div id="purchase_tab" class="tab-pane">
       <div id="purchases">
       </div>
-      <%= link_to t('.new', :default => t("helpers.links.new")), new_purchase_path, :class => 'btn btn-primary' %>
     </div>
     <div id="quotations_tab" class="tab-pane">
       <div id="quotations">
       </div>
-      <%= link_to t('.new', :default => t("helpers.links.new")), new_quotation_path, :class => 'btn btn-primary' %>
     </div>
-    <div id="sales" class="tab-pane">
+    <div id="sales_tab" class="tab-pane">
+      <div id="sales">
+      </div>
     </div>
 	</div>
 </div>

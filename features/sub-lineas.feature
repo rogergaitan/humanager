@@ -16,7 +16,7 @@
     Given I am on "http://localhost:3000/" Home page
     And I click on "(//a[contains(@href, '/sublines')])[2]"
     And I click on "//a[contains(@href, '/sublines/new')]"
-    And I fill in "subline_description" with "Sublinea-prueba"
+    And I fill in "subline_description" with "Sublinea - " name
     And I fill in "subline_code" code
     And I fill in "subline_name" with "Sublinea-prueba"
     When I press on "//form[@id='new_subline']/div[5]/input[1]"
@@ -29,7 +29,7 @@
     And I click on "(//a[contains(@href, '/sublines')])[2]"
     And I click on "//tr[1]/td[4]/a[1]"
     And I fill in "subline_code" code
-    And I fill in "subline_description" with "editado"
+    And I fill in "subline_description" with "editado - " name
     When I press on "//input[@name='commit']"
     And I should see "Sub-línea actualizada correctamente"
     And I should see code

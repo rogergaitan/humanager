@@ -34,6 +34,7 @@ class Employee < ActiveRecord::Base
     :occupation_id, :payment_frequency_id,
     :means_of_payment_id, :photo_attributes, :position_id, :employee_id, :is_superior
 
+  has_many :cost_center
   has_one :department
   belongs_to :entity, :dependent => :destroy
   belongs_to :department

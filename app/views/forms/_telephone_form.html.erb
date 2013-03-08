@@ -12,8 +12,7 @@
 		<div class="controls">
 			<div class="input-prepend">
 				<span class="add-on">T</span>
-				<% Rails.logger.debug (f.enum_select :typephone )%>
-				<%= f.enum_select :typephone, {:include_blank => false}, {:class => 'typephone'} %>
+				<%= f.select :typephone, translate_enum(:typephone) %>
 			</div>
 			<%= f.hidden_field :_destroy, :class => 'telephones' %>
 			<%= link_to t("helpers.links.destroy"),'#',class: "remove_fields remove_telephone btn btn-mini btn-danger" %>

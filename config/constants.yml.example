@@ -1,3 +1,5 @@
+##You should create a file like this one named constants.yml to keep your 
+##constants and configuration values.
 development:
   invoice: invoice #Document Number Type
   purchase: purchase

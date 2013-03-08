@@ -203,13 +203,13 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   create_table "document_numbers", :force => true do |t|
     t.integer  "company_id"
     t.string   "description"
-    t.enum     "document_type",        :limit => [:purchase, :purchase_order, :quotation, :invoice]
+    t.enum     "document_type",        :limit => [:purchase, :purchase_order]
     t.enum     "number_type",          :limit => [:auto_increment, :manual]
     t.integer  "start_number"
     t.string   "mask"
     t.boolean  "terminal_restriction"
-    t.datetime "created_at",                                                                         :null => false
-    t.datetime "updated_at",                                                                         :null => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
   end
 
   add_index "document_numbers", ["company_id"], :name => "index_document_numbers_on_company_id"
