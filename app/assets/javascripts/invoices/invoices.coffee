@@ -27,16 +27,19 @@ Invoice.search_customer = () ->
             label: item.name + " " + item.surname
             id: item.id
           )
-    select: (event, ui) ->
+    select: (event, ui) ->      
+      $("#invoice_customer_name").val ui.item.label
+      $("#invoice_customer_name").trigger("change")
       $("#invoice_customer_id").val ui.item.id
-      $(this).val ui.item.label
+      $("#invoice_customer_id").trigger("change")
     focus: (event, ui) ->
-      $(this).val ui.item.label
+      $("#invoice_customer_name").val ui.item.label
       $("#invoice_customer_id").val ui.item.id
     change: (event, ui) ->
       unless ui.item
-        $(this).val ""
-        $("#invoice_customer_id").val ""
+        $("#invoice_customer_name").val("")
+        $("#invoice_customer_id").val("")
+  false
 
 Invoice.remove_fields = (e) ->
   $(this).prev("input[type=hidden]").val 1

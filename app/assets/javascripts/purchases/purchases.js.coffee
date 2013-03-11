@@ -98,7 +98,9 @@ Purchase.search_vendor = ()->
 	        )
 	  select: (event, ui) ->
 	    $("#purchase_vendor_id").val ui.item.id
+	    $("#purchase_vendor_id").trigger("change")
 	    $(@).val ui.item.label
+	    $(@).trigger("change")
 	  focus: (event, ui) ->
 	    $(@).val ui.item.label
 	  change: (event, ui) ->
