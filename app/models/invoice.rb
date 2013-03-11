@@ -47,8 +47,7 @@ class Invoice < ActiveRecord::Base
   after_update :update_kardex
 
   def self.invoices_all(page, per_page = nil)
-    includes(:customer => :entity)
-    .paginate(:page => page, :per_page => per_page)#.order("document_date DESC")
+    includes(:customer => :entity).paginate(:page => page, :per_page => per_page)
   end
 
   def next_number
@@ -88,6 +87,13 @@ class Invoice < ActiveRecord::Base
 
   def update_kardex
     Kardex.update_kardex(self, self.invoice_items, current_info)
+  end
+
+  def self.date_range(date, page, per_page = nil)
+    rev = date.split('/')
+    par = rev[2] + '/' + rev[1] + '/' + rev[0]
+    includes(:customer => :entity).where("document_date <= ?", "#{par}")
+    .paginate(:page => page, :per_page => per_page)
   end
 
 end

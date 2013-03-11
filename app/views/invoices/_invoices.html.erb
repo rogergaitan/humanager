@@ -7,6 +7,7 @@
         <th><%= model_class.human_attribute_name(:customer_id) %></th>
         <th><%= model_class.human_attribute_name(:document_number) %></th>        
         <th><%= model_class.human_attribute_name(:total) %></th>
+        <th><%= model_class.human_attribute_name(:due_date) %></th>
         <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </thead>
     <tbody>
@@ -15,8 +16,9 @@
           <tr>
             <td><%= invoice.document_date %></td>
             <td><%= invoice.customer.entity.name %></td>
-            <td><%= invoice.document_number %></td>          
+            <td><%= invoice.document_number %></td>
             <td><%= number_to_currency(invoice.total, :unit => '₡') %></td>
+            <td><%= invoice.due_date %></td>
             <td>
               <%= link_to t('.edit', :default => t("helpers.links.edit")),
                 edit_invoice_path(invoice), :class => 'btn btn-mini' %>

@@ -52,9 +52,8 @@ class Purchase < ActiveRecord::Base
   after_update  :update_kardex
   before_validation :next_number, :if => proc { |a| a[:document_number].blank? }
 
-  
-  def vendor_id
-   @vendor = Vendor.select("name").find(id) unless id.nil?
+  def self.purchase_all(page, per_page = nil)
+    includes(:vendor).paginate(:page => page, :per_page => per_page)
   end
 
   def self.get_vendor(id = nil)
@@ -62,7 +61,7 @@ class Purchase < ActiveRecord::Base
     @vendor.nil? ? "" : "#{@vendor.name} #{@vendor.surname}"
   end
 
-    def self.vendor_name(purchase)
+  def self.vendor_name(purchase)
     @vendor = Vendor.includes(:entity).find(purchase.vendor_id) if purchase
     purchase.vendor_name = "#{@vendor.entity.name} #{@vendor.entity.surname}"
   end
@@ -102,5 +101,10 @@ class Purchase < ActiveRecord::Base
 
   def increment_document_number
     DocumentNumber.increment_document_number(:purchase)
+  end
+  def self.date_range(date, page, per_page = nil)
+    rev = date.split('/')
+    par = rev[2] + '/' + rev[1] + '/' + rev[0]
+    includes(:vendor).where("purchase_date <= ?", "#{par}").paginate(:page => page, :per_page => per_page)
   end
 end

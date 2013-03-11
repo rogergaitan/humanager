@@ -7,8 +7,12 @@ class QuotationsController < ApplicationController
   before_filter :check_number, :only => [:new]
 
   def index
-    respond_with @quotations = Quotation.includes(:customer => :entity)
-      .paginate(page: params[:page], per_page: params[:per_page])
+    if params[:date] != ''
+      @quotations = Quotation.date_range(params[:date], params[:page], params[:per_page])
+    else
+      @quotations = Quotation.quotations_all(params[:page], params[:per_page])
+    end
+    respond_with @quotations
   end
 
   def show

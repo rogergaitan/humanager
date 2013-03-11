@@ -11,8 +11,12 @@ class PurchasesController < ApplicationController
   respond_to :json, :js, :html
 
   def index
-    respond_with @purchases = Purchase.includes(:vendor)
-      .paginate(:page => params[:page], :per_page => 10)
+    if params[:date] != ''
+      @purchases = Purchase.date_range(params[:date], params[:page], params[:per_page])
+    else
+      @purchases = Purchase.purchase_all(params[:page], params[:per_page])
+    end
+    respond_with @purchases
   end
 
   def show
@@ -66,7 +70,7 @@ class PurchasesController < ApplicationController
 
     respond_to do |format|
       if @purchase.update_attributes(params[:purchase])
-        format.html { redirect_to purchases_path, 
+        format.html { redirect_to root_path, 
           notice: t('.activerecord.models.purchase').capitalize +
           " #{@purchase.document_number} " +
           t('.notice.a_successfully_updated') }

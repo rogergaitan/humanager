@@ -47,6 +47,10 @@ class PurchaseOrder < ActiveRecord::Base
   before_create :next_number, :if => proc { |a| a[:document_number].blank? }
   after_create :increment_document_number
 
+  def self.purchase_orders_all(page, per_page = nil)
+    includes(:vendor).paginate(:page => page, :per_page => per_page)
+  end
+
   def self.get_vendor(purchase_order)
     @vendor = Entity.find(purchase_order.vendor_id)
     puts purchase_order.vendor_name
@@ -60,4 +64,11 @@ class PurchaseOrder < ActiveRecord::Base
   def increment_document_number
     DocumentNumber.increment_document_number(:purchase_order)
   end
+
+  def self.date_range(date, page, per_page = nil)
+    rev = date.split('/')
+    par = rev[2] + '/' + rev[1] + '/' + rev[0]
+    includes(:vendor).where("document_date <= ?", "#{par}").paginate(:page => page, :per_page => per_page)
+  end
+
 end

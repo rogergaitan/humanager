@@ -5,7 +5,13 @@ class InvoicesController < ApplicationController
   respond_to :json, :html, :js
   
   def index
-    respond_with @invoices = Invoice.invoices_all(params[:page], 3)
+    if params[:date] != ''
+      @invoices = Invoice.date_range(params[:date], params[:page], params[:per_page])
+
+    else
+      @invoices = Invoice.invoices_all(params[:page], params[:per_page])
+    end
+    respond_with @invoices
   end
 
   def show
@@ -42,7 +48,7 @@ class InvoicesController < ApplicationController
     if @invoice.update_attributes(params[:invoice])
       flash[:notice] = t('.activerecord.models.invoice').capitalize + 
         " #{@invoice.document_number} " + t('.notice.a_successfully_updated')
-      respond_with(@invoice, :location => invoices_url)
+      respond_with(@invoice, :location => root_path)
     else
       fetch
       respond_with @invoice  

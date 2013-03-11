@@ -38,6 +38,10 @@ class Quotation < ActiveRecord::Base
   before_create :next_number, :if => proc { |a| a[:document_number].blank? }
   after_create :increment_document_number
 
+  def self.quotations_all(page, per_page = nil)
+    includes(:customer => :entity).paginate(:page => page, :per_page => per_page)
+  end
+
   def next_number
     self.document_number = DocumentNumber.next_number(:quotation)
   end
@@ -60,4 +64,10 @@ class Quotation < ActiveRecord::Base
     .where("entities.name like ? or quotations.document_number like ?", "%#{search}%", "%#{search}%")
   end
 
+  def self.date_range(date, page, per_page = nil)
+    rev = date.split('/')
+    par = rev[2] + '/' + rev[1] + '/' + rev[0]
+    includes(:customer => :entity)
+    .where("document_date <= ?", "#{par}").paginate(:page => page, :per_page => per_page)
+  end
 end
