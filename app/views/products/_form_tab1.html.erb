@@ -116,7 +116,7 @@
     <div class="control-group">
       <%= f.label :status, :class => 'control-label' %>
       <div class='controls'>
-        <%= f.enum_select :status, :include_blank =>false %>
+        <%= f.select :status, translate_enum(:status) %>
       </div>
   </div>
   <div class="form-actions">

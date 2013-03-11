@@ -39,6 +39,7 @@ class Invoice < ActiveRecord::Base
 
   validates :customer_name,  :presence => true
   validates :invoice_items, :presence => true
+  
   #validates :total, :numericality => {:greater_than => 0}
   
   before_create :next_number, :if => proc { |a| a[:document_number].blank? }
@@ -62,6 +63,7 @@ class Invoice < ActiveRecord::Base
     @customer = Customer.includes(:entity).find(invoice.customer_id) if invoice
     invoice.customer_name = "#{@customer.entity.name} #{@customer.entity.surname}"
   end
+
 
   def self.search(search, page, per_page = nil)
     joins(:customer => :entity)

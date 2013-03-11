@@ -1,4 +1,5 @@
 class OccupationsController < ApplicationController
+  
   respond_to :html, :json
   # GET /occupations
   # GET /occupations.json
@@ -6,6 +7,8 @@ class OccupationsController < ApplicationController
     @occupations = Occupation.paginate(:page => params[:page], :per_page => 15)
     respond_with(@occupations)
   end
+
+  
 
   # GET /occupations/1
   # GET /occupations/1.json
@@ -33,7 +36,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.save
-        format.html { redirect_to @occupation, notice: 'Occupation was successfully created.' }
+        format.html { redirect_to @occupation, notice: t('activerecord.models.occupation.one').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @occupation, status: :created, location: @occupation }
       else
         format.html { render action: "new" }
@@ -49,7 +52,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.update_attributes(params[:occupation])
-        format.html { redirect_to @occupation, notice: 'Occupation was successfully updated.' }
+        format.html { redirect_to @occupation, notice: t('activerecord.models.occupation.one').capitalize + t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -65,7 +68,8 @@ class OccupationsController < ApplicationController
     @occupation.destroy
 
     respond_to do |format|
-      format.html { redirect_to occupations_url }
+      format.html { redirect_to occupations_url, notice: t('.activerecord.models.occupation.one').capitalize + t('.notice.a_successfully_deleted') }
+      format.json { head :no_content } 
       format.json { head :no_content }
     end
   end

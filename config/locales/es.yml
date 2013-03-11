@@ -21,9 +21,16 @@ es:
     foreign: Extranjero
     campany: Compañia
   price_type:
-   credit: Crédito
-   debit: Débito
-   other: Otros
+    credit: Crédito
+    debit: Débito
+    other: Otros
+  status:
+    active: Activo
+    inactive: Inactivo
+    out_no_stock: No existente
+  purchase_type:
+    local: local
+    imported: Importado
   tabs:
     general: General
     prices: Precios
@@ -95,6 +102,11 @@ es:
   activerecord:
       errors:
         models:
+          occupation:
+            attributes:
+              description:
+                blank: *BLANK
+                taken: 'Está ocupación ya existe'
           ledger_account:
             attributes:
               account_type:
@@ -112,6 +124,9 @@ es:
                 blank: *BLANK
               total:
                 blank: *BLANK
+                not_a_number: *NOT_A_NUMBER
+                greater_than: *GREATER_THAN
+              quotation_id:
                 not_a_number: *NOT_A_NUMBER
                 greater_than: *GREATER_THAN
           invoice_item:
@@ -267,7 +282,7 @@ es:
             attributes:
               name:
                 blank: *BLANK
-                taken: "La aplicacion ya existe en el sistema"
+                taken: "La aplicación ya existe en el sistema"
               product_id:
                 blank: *BLANK
           purchase_payment_option:
@@ -329,6 +344,8 @@ es:
           purchase:
             attributes:
               vendor_name:
+                blank: *BLANK
+              vendor_id:
                 blank: *BLANK
               document_number:
                 blank: *BLANK
@@ -544,11 +561,14 @@ es:
               calculation:
                 blank: Este campo no puede quedar en blanco
       models:
-        configuration: Configuración
+        configuration:
+          one: Configuración
+          other: Configuraciones
         invoice: Factura
         quotation:
           one: Cotización
           other: Cotizaciones
+        description: Descripción
         document_number: Número Documento
         company: Compañía
         discount_profile_item: Artículos del Perfil de Descuento
@@ -596,7 +616,9 @@ es:
         category: Categoría
         province: Provincia
         district: Distrito
-        canton: Cantones
+        canton: 
+          one: Cantones
+          other: Cantón
         task: 
           one: Labor
           other: Labores
@@ -787,6 +809,7 @@ es:
           quantity: Cantidad
           cost_unit: Costo Unitario
           cost_total: Costo Total
+          tax: Impuesto
         purchase:
           vendor_name: Proveedor #THIS IS A VIRTUAL ATTRIBUTE
           document_number: Número
@@ -826,6 +849,7 @@ es:
           cost_unit: Costo Unit
           warehouse_id: Bodega
           discount: Descuento
+          description: Descripción
         address:
           province_id: Provincia
           canton_id: Canton
@@ -937,12 +961,15 @@ es:
           manager:  Responsable
           address: Dirección
         province:
+          name: Nombre   
           province: Provincia
         canton:
           canton: Cantón
+          name: Nombre   
           province_id: Provincia
         district:
           district: Distrito
+          name: Nombre   
           canton_id: Cantón
         task:
           itask: Codigo
@@ -969,7 +996,7 @@ es:
           created_at: Creado
         deduction:
           description: Descripción
-          deduction_type: Tipo de deducción
+          deduction_type: Tipo deducción
           amount_exhaust: Monto a agotar
           calculation_type: Tipo de calculo
           calculation: Valor

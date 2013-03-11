@@ -41,7 +41,7 @@ class ProvincesController < ApplicationController
 
     respond_to do |format|
       if @province.save
-        format.html { redirect_to @province, notice: 'Province was successfully created.' }
+        format.html { redirect_to @province, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_created') }
         format.json { render json: @province, status: :created, location: @province }
       else
         format.html { render action: "new" }
@@ -55,7 +55,7 @@ class ProvincesController < ApplicationController
   def update
     respond_to do |format|
       if @province.update_attributes(params[:province])
-        format.html { redirect_to @province, notice: 'Province was successfully updated.' }
+        format.html { redirect_to @province, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -70,7 +70,7 @@ class ProvincesController < ApplicationController
     @province.destroy
 
     respond_to do |format|
-      format.html { redirect_to provinces_url }
+      format.html { redirect_to provinces_url, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_deleted') }
       format.json { head :no_content }
     end
   end

@@ -37,7 +37,7 @@ class CantonsController < ApplicationController
 
     respond_to do |format|
       if @canton.save
-        format.html { redirect_to @canton, notice: 'Canton was successfully created.' }
+        format.html { redirect_to @canton, notice: t('.activerecord.models.canton.other').capitalize + t('.notice.successfully_created') }
         format.json { render json: @canton, status: :created, location: @canton }
       else
         format.html { render action: "new" }
@@ -49,7 +49,7 @@ class CantonsController < ApplicationController
   def update
     respond_to do |format|
       if @canton.update_attributes(params[:canton])
-        format.html { redirect_to @canton, notice: 'Canton was successfully updated.' }
+        format.html { redirect_to @canton, notice: t('.activerecord.models.canton.other').capitalize + t('.notice.successfully_updated') }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -62,8 +62,8 @@ class CantonsController < ApplicationController
     @canton.destroy
 
     respond_to do |format|
-      format.html { redirect_to cantons_url }
-      format.json { head :no_content }
+      format.html { redirect_to cantons_url,  notice: t('.activerecord.models.canton.other').capitalize + t('.notice.successfully_deleted') }
+      format.json { head :no_content } 
     end
   end
 
