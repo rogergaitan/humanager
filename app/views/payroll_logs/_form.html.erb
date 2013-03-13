@@ -36,8 +36,8 @@
 		<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
 	</div>
 	<div class="padding-filter" id="employee-filter">
-		<%= label_tag 'load_filter_employees_text', 'Empleado', :id => 'employee-label' %>
-		<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee' %>
+		<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee',
+		:placeholder => 'Empleado' %>
 		<a title='Añadir más empleados' id="add-more" href="#" class="btn showTooltip"> <i class="icon-plus"></i></a>
 	</div>
 	<div id="employee-box">
@@ -82,20 +82,19 @@
 	<div id="message" style="height:40px;"></div>
 	<table id="products_items" class=" table table-hover table-bordered table-striped">
 		<tr class="header_items">
-      <td class="header_task">Labor</td>
-      <td class="header_time">Tiempo Trabajado</td>
-      <td class="header_cc">Centro De Costo</td>
-      <td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log") %></td>
-    </tr>
-    	<%= f.fields_for :payroll_histories do |builder| %>
-				<%= render 'forms/payroll_history_form', :f => builder %>
-			<% end %>
+	    	<td class="header_task">Labor</td>
+	      	<td class="header_time">Tiempo Trabajado</td>
+	      	<td class="header_cc">Centro De Costo</td>
+	      	<td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log") %></td>
+    	</tr>
+    	
+
 	</table>
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                payrolls_path, :class => 'btn' %>
-  </div>
+	<div class="form-actions">
+		<%= f.submit nil, :class => 'btn btn-primary' %>
+		<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+		            payrolls_path, :class => 'btn' %>
+	</div>
 <% end %>
 
 <div id="payrollModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -110,3 +109,70 @@
     <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
   </div>
 </div>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="myModalLabel">Modal header</h3>
+    </div>
+    <div class="modal-body">
+    	<p>One fine body…</p>
+    </div>
+    <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    <button class="btn btn-primary">Save changes</button>
+    </div>
+</div>
+
+<%= javascript_tag  do %>
+	
+	/************************ 
+		Tasks 
+	************************/
+	<% list_code = ''  %>
+	<% list_id = ''  %>
+
+	<% @tasks.each do |task| %>
+		<% list_code += "#{task.itask}," %>
+		<% list_id += "#{task.id}," %>
+  	<% end %>
+	
+	var list_code = '<%= list_code %>';
+	var list_id = '<%= list_id %>';
+
+	list_code = list_code.substring(0, list_code.length-1);
+	list_id = list_id.substring(0, list_id.length-1);
+	
+	var task_code, task_id = new Array();
+	task_code = list_code.split(",");
+	task_id = list_id.split(",");
+    
+    /************************ 
+    	Cost Center
+    ************************/
+
+	<% list_code = ''  %>
+	<% list_id = ''  %>
+	<% list_desc = ''  %>
+
+	<% @centro_costos.each do |costo| %>
+		<% list_id += "#{costo.id}," %>
+		<% list_code += "#{costo.icentro_costo}," %>
+		<% list_desc += "#{costo.nombre_cc}," %>
+  	<% end %>
+
+	var list_id = '<%= list_id %>';
+  	var list_code = '<%= list_code %>';
+  	var list_description = '<%= list_desc %>';
+
+	list_id = list_id.substring(0, list_id.length-1);
+	list_code = list_code.substring(0, list_code.length-1);
+	list_description = list_description.substring(0, list_description.length-1);
+	
+	var cost_id, cost_code, cost_desc = new Array();
+	cost_id = list_id.split(",");
+	cost_code = list_code.split(",");
+	cost_desc = list_description.split(",");
+
+<% end -%>
+<%= javascript_include_tag "payroll_logs/payroll_logs_functions" %>

@@ -2,9 +2,14 @@
 <div class="page-header">
   <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
                                    :default => "Edit #{model_class.model_name.human}") %></h1>
+  <h3> 
+	<%= @payroll_log.payroll.payroll_type.description %> del 
+	<%= @payroll_log.payroll.start_date %> al 
+	<%= @payroll_log.payroll.end_date %>
+  </h3>
 </div>
 <%= render :partial => 'form' %>
-
+<%= @result %>
  <div class="accordion" id="accordion">
 	<% @count = 0 %>
 	<% @result.each do |e| %>
@@ -27,7 +32,7 @@
 					<tbody>
 					<% e[1].each do |h| %>
 						<tr>
-							<td><%= h.created_at %></td>
+							<td><%= @payroll_log.payroll_date %></td>
 							<td><%= h.task.ntask %></td>
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>

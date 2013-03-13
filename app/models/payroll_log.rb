@@ -12,7 +12,7 @@ class PayrollLog < ActiveRecord::Base
   	
   	@employees = Entity.joins(:employee => {:payroll_employees => :payroll_history})
   	.where('payroll_histories.payroll_log_id = ?', id)
-  	.select('entities.id, entities.name, entities.surname')   
+  	.select('entities.id, entities.name, entities.surname')
 
     result = {}
     

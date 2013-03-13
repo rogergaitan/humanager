@@ -1,4 +1,30 @@
 $(jQuery(document).ready(function($) {
+
+	hideEmployess();
+
+	$('#select_method_all').click(function(){
+		$('#superiors_employees option:eq(0)').attr('selected','selected');
+		$('#departments_employees option:eq(0)').attr('selected','selected');
+		hideEmployess();
+	});
+
+	$('#select_method_boss').click(function(){
+		hide($('#superiors_employees').val());
+		$('#superiors_employees').removeAttr('disabled');
+	});
+
+	$('#select_method_department').click(function(){
+		hide($('#departments_employees').val());
+		$('#departments_employees').removeAttr('disabled');
+	});
+
+	$('#superiors_employees').click(function(){
+		hide($(this).val());
+	});
+	$('#departments_employees').click(function(){
+		hide($(this).val());
+	});
+
 	$('#dp3').datepicker();
 	
 	$('.showTooltip').tooltip();
@@ -86,56 +112,79 @@ $(jQuery(document).ready(function($) {
 	}
 }));
 
-	function removeFields(e) {
-		$(this).prev('input[type=hidden]').val(1);
-		var deletedRow = $(this).closest('.success');
-		deletedRow.removeClass('success').addClass('deleted').hide();
+
+function hideEmployess() {
+	$('.employees-list:eq(0) div:eq(0)').hide();
+	$('.employees-list:eq(0)').css('min-height', '218px');
+	$('.employees-list:eq(0)').css('min-width', '218px');
+	$('.employees-list:eq(0)').css('float', 'left');
+	$('.employees-list:eq(0)').removeClass('employees-list');
+}
+
+function hide(element) {
+	$('.left-list').removeAttr('style');
+	$('.left-list').addClass('employees-list');
+
+	if( element === "" ) {
+		$('.employees-list:eq(0) div:eq(0)').hide();
+	} else {
+		$('.employees-list:eq(0) div:eq(0)').show();
+	}
+}
+
+function removeFields(e) {
+	$(this).prev('input[type=hidden]').val(1);
+	var deletedRow = $(this).closest('.success');
+	deletedRow.removeClass('success').addClass('deleted').hide();
+	e.preventDefault();
+}
+
+function addFields(e) {
+	//valida si hay campos en blanco
+	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
+	var centroCosto = $.trim($('#products_items tr:eq(1) input.centro-costo').val()).length;
+	var numberRows = $('#products_items tr').length;
+	if((timeWorked == 0 || centroCosto == 0) && numberRows > 1) { 
+		$('div#message').html('<div class="alert alert-error">Por favor complete los espacios en blanco</div>');
+		$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
+		$('div.alert.alert-error').delay(4000).fadeOut();
+		e.preventDefault();
+	} else {
+		var numberEmployees = $('div.employees-list.list-right input').length;
+		var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
+		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
+		if (numberRows == 1) { rowIsDisabled = true; };
+		//valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
+		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
+			$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
+			$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
+			$('div.alert.alert-error').delay(4000).fadeOut();
+			return false;
+		}
+		$('#products_items tr input, select').attr('disabled', true);
+		var time = new Date().getTime();
+		var regexp = new RegExp($(this).data('id'), 'g');
+		$('.header_items').after($(this).data('fields').replace(regexp, time));
+		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id').attr('id'));
+		$('#products_items').find('label').remove();
+		saveEmployees(rowIsDisabled);
+		payroll_logs.reloadSelectorsEvents();
 		e.preventDefault();
 	}
+}
 
-	function addFields(e) {
-		//valida si hay campos en blanco
-		var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
-		var centroCosto = $.trim($('#products_items tr:eq(1) input.centro-costo').val()).length;
-		var numberRows = $('#products_items tr').length;
-		if((timeWorked == 0 || centroCosto == 0) && numberRows > 1) { 
-			$('div#message').html('<div class="alert alert-error">Por favor complete los espacios en blanco</div>');
-			$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
-			$('div.alert.alert-error').delay(4000).fadeOut();
-			e.preventDefault();
-		} else {
-			var numberEmployees = $('div.employees-list.list-right input').length;
-			var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
-			var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
-			if (numberRows == 1) { rowIsDisabled = true; };
-			//valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
-			if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
-				$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
-				$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
-				$('div.alert.alert-error').delay(4000).fadeOut();
-				return false;
-			}
-			$('#products_items tr input, select').attr('disabled', true);
-			var time = new Date().getTime();
-			var regexp = new RegExp($(this).data('id'), 'g');
-			$('.header_items').after($(this).data('fields').replace(regexp, time));
-			populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id').attr('id'));
-			$('#products_items').find('label').remove();
-			saveEmployees(rowIsDisabled);
-			e.preventDefault();
-		}
-	}
-	
-	function saveEmployees(isDisabled) {
-		if (!isDisabled) {
-			var name = $('#products_items tr:eq(2) td:first select').attr('name');
-			var num = name.match(/\d/g);
-			num = num.join('');
-			$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
-				$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ $(this).val() +'" >');
-			});
-		};
-	}
+function saveEmployees(isDisabled) {
+	if (!isDisabled) {
+		var name = $('#products_items tr:eq(2) td:first select').attr('name');
+		var num = name.match(/\d/g);
+		num = num.join('');
+		$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
+			$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ $(this).val() +'" >');
+			payroll_logs.addDetailsToEmployee(num,$(this).val());
+		});
+		alert('LOL '+num);
+	};
+}
 
 //FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
 
@@ -307,6 +356,7 @@ function populateCentroCostos(url, textField, idField) {
           }),
           select: function( event, ui ) {
               $(document.getElementById(idField)).val(ui.item.id);
+              payroll_logs.setCostCode(ui.item.id);
           },
           focus: function(event, ui){
               $(document.getElementById(idField)).next().val(ui.item.label);
@@ -327,6 +377,7 @@ function set_account(e) {
     $(document.getElementById($('#idFieldPopup').val())).val(accountId);
     $(document.getElementById($('#idFieldPopup').val())).next().val(accountName);
 	$('#list').empty();
+	payroll_logs.setCostCode(accountId);
 }
 
 //function to show the controls for adding more employees
