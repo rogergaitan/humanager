@@ -7,6 +7,8 @@ Reasapp::Application.routes.draw do
   resources :payroll_logs do
     collection do
       get :fetch_employees
+      get :search_task
+      get :search_cost
     end
   end
   
@@ -79,6 +81,7 @@ Reasapp::Application.routes.draw do
   resources :tasks do
     collection do
       get 'tasksfb'
+      get 'load_cc'
     end
   end
 

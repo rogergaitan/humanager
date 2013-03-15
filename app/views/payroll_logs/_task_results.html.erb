@@ -1,0 +1,31 @@
+<%- model_class = Task -%>
+
+<div id="task">
+  <%= will_paginate @tasks, :class =>'pagination pagination-centered' %>
+  <table class="table table-striped" id="employee-data">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:itask) %></th>
+        <th><%= model_class.human_attribute_name(:ntask) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @tasks.empty?  %>
+        <% @tasks.each do |task| %>
+          <tr>
+            <td>
+              <%= "#{task.itask}" %>
+            </td>
+            <td>
+              <%= "#{task.ntask}"  %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <div class="alert alert-block alert-error">
+          <%= t("notice.no_results") %>
+        </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>

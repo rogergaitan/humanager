@@ -90,7 +90,6 @@ class Employee < ActiveRecord::Base
   end
 
   def self.search(search_id, search_name, search_surname, search_department, search_entities, page, per_page = nil)
-    puts 'as'
     query = ""
     params = []
     params.push(" entities.entityid like '%#{search_id}%' ") unless search_id.empty?
@@ -101,7 +100,6 @@ class Employee < ActiveRecord::Base
     query = build_query(params)
     
     Employee.joins(:entity).where(query).paginate(:page => page, :per_page => 15)
-    
   end
 
   def self.build_query(data)

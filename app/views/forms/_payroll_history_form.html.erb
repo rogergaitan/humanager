@@ -2,7 +2,23 @@
 	<td class="controls_item">
 		<%= f.label :task_id, :class => '' %>
 		<%= text_field 'search_task_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
-		<%= f.collection_select(:task_id, @tasks, :id, :ntask , :class => 'input-medium') %>
+		
+
+		<!--kalfaro-->
+
+		<!--<%= f.collection_select(:task_id, @tasks, :id, :ntask , :class => 'input-medium') %>-->
+
+		<%= f.hidden_field :task_id, class: "cc-filter-id" %>
+		<%= text_field_tag 'load_task', nil, :class => 'cc-filter input-medium search-image-employee', 
+		:for => :task_id %>
+		
+		<!--kalfaro-->
+
+
+		<a class="btn" data-keyboard="false" data-backdrop="static" href="#taskModal" 
+		role="button" data-toggle="modal">
+			<span class="add-on"><i class="icon-list"></i></span>
+		</a>
 
 	</td>
 	<td class="controls_item">
@@ -14,10 +30,11 @@
 			<div class="input-append">
 				<%= text_field 'search_cost_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
 				<%= f.hidden_field :centro_de_costo_id, class: "cc-filter-id centro-costo" %>
-				<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee centro-costo', :for => :centro_de_costo_id %><a class="centro-costo" 
-				data-keyboard="false" data-backdrop="static" href="#payrollModal" role="button" 
-				data-toggle="modal">
-				<span class="add-on"><i class="icon-list"></i></span></a>
+				<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee centro-costo', :for => :centro_de_costo_id %>
+				<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#payrollModal" 
+				role="button" data-toggle="modal">
+					<span class="add-on"><i class="icon-list"></i></span>
+				</a>
 			</div>
 	</td>
 	<td class="save-employees" style="display:none;"></td>

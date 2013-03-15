@@ -1,6 +1,6 @@
 class PayrollLogsController < ApplicationController
   before_filter :resources, :only => [:new, :edit]
-  respond_to :html, :json
+  respond_to :html, :json, :js
   # GET /payroll_logs
   # GET /payroll_logs.json
   def index
@@ -92,6 +92,16 @@ class PayrollLogsController < ApplicationController
     @department = Department.all
     @superior = Employee.superior
     @tasks = Task.all
+  end
+
+  def search_task
+    @tasks = PayrollLog.search_task(params[:search_task_name], params[:page], params[:per_page])
+    respond_with @tasks
+  end
+
+  def search_cost
+    @cost = PayrollLog.search_cost(params[:search_cost_name], params[:page], params[:per_page])
+    respond_with @cost
   end
 
 end

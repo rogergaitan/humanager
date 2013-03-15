@@ -15,14 +15,26 @@ class PayrollLog < ActiveRecord::Base
   	.select('entities.id, entities.name, entities.surname')
 
     result = {}
+    employee_detail = {}
     
     @employees.each do |em|
-      @history = PayrollHistory.includes(:payroll_employees, :task, :centro_de_costo)
+      @history = PayrollHistory.includes(:payroll_employees, :centro_de_costo)
       .where('payroll_employees.employee_id = ? and payroll_histories.payroll_log_id = ?', em.id, id)
-      .select('payroll_histories.created_at, tasks.ntask, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type')
-      result["#{em.name} #{em.surname}"] = @history
+      .select('payroll_histories.created_at, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type')
+      employee_detail = ["#{em.id}", "#{em.name} #{em.surname}"]
+      result[employee_detail] = @history
     end
     result
+  end
+
+  def self.search_task(search_task_name, page, per_page = nil)
+    @tasks = Task.where(" tasks.ntask like '%#{search_task_name}%' " )
+    .paginate(:page => page, :per_page => 5)
+  end
+
+  def self.search_cost(search_cost_name, page, per_page = nil)
+    @cost = CentroDeCosto.where(" centro_de_costo.nombre_cc like '%#{search_cost_name}%' " )
+    .paginate(:page => page, :per_page => 5)
   end
 
 end

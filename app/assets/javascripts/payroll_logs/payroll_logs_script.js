@@ -41,7 +41,11 @@ $(jQuery(document).ready(function($) {
 	//populates the filter for employees
 	populateEmployeesFilter('/payroll_logs/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 	
-	$('.items_purchase_orders_form .cc-filter-id').each(function() {
+	$('.items_purchase_orders_form .cc-filter-id:eq(0)').each(function() {
+		populateTasks('/tasks/load_cc', $(this).attr('id'));
+	});
+
+	$('.items_purchase_orders_form .cc-filter-id:eq(1)').each(function() {
 		populateCentroCostos('/centro_de_costos/load_cc', $(this).next().attr('id'), $(this).attr('id'));
 	});
 	
@@ -165,7 +169,8 @@ function addFields(e) {
 		var time = new Date().getTime();
 		var regexp = new RegExp($(this).data('id'), 'g');
 		$('.header_items').after($(this).data('fields').replace(regexp, time));
-		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id').attr('id'));
+		populateTasks('/tasks/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id'));
+		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(1)').attr('id'));
 		$('#products_items').find('label').remove();
 		saveEmployees(rowIsDisabled);
 		payroll_logs.reloadSelectorsEvents();
@@ -175,14 +180,13 @@ function addFields(e) {
 
 function saveEmployees(isDisabled) {
 	if (!isDisabled) {
-		var name = $('#products_items tr:eq(2) td:first select').attr('name');
+		var name = $('#products_items tr:eq(2) td:first input:hidden').attr('name');
 		var num = name.match(/\d/g);
 		num = num.join('');
 		$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
 			$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ $(this).val() +'" >');
 			payroll_logs.addDetailsToEmployee(num,$(this).val());
 		});
-		alert('LOL '+num);
 	};
 }
 
@@ -348,20 +352,46 @@ function populateCentroCostos(url, textField, idField) {
   $.getJSON(url, function(accounts) {
       $(document.getElementById(idField)).next().autocomplete({
           source: $.map(accounts, function(item){
+          	$('kenneth').html(item);
               $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
               return{
-                  label: item.nombre_cc,                        
+                  label: item.nombre_cc,
                   id: item.id
               }
           }),
-          select: function( event, ui ) {
+          select: function( event, ui ){
               $(document.getElementById(idField)).val(ui.item.id);
               payroll_logs.setCostCode(ui.item.id);
           },
           focus: function(event, ui){
               $(document.getElementById(idField)).next().val(ui.item.label);
           }
+      });
+      if($(document.getElementById(idField)).val()){
+          var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
+          $(document.getElementById(idField)).next().val(account);
+      }        
+  }); 
+}
 
+//function to fill autocompletes
+function populateTasks(url, idField) {
+  $.getJSON(url, function(accounts) {
+      $(document.getElementById(idField)).next().autocomplete({
+          source: $.map(accounts, function(item){
+              $.data(document.body, 'cc_' + item.id+"", item.ntask);
+              return{
+                  label: item.ntask,
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ){
+              $(document.getElementById(idField)).val(ui.item.id);
+              payroll_logs.setTaskCode(ui.item.id);
+          },
+          focus: function(event, ui){
+              $(document.getElementById(idField)).next().val(ui.item.label);
+          }
       });
       if($(document.getElementById(idField)).val()){
           var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
