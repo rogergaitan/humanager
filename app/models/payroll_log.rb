@@ -33,8 +33,12 @@ class PayrollLog < ActiveRecord::Base
   end
 
   def self.search_cost(search_cost_name, page, per_page = nil)
-    @costs = CentroDeCosto.where(" centro_de_costos.nombre_cc like '%#{search_cost_name}%' " )
+    @costs = CentroDeCosto.where(" centro_de_costos.nombre_cc like '%#{search_cost_name}%' ")
     .paginate(:page => page, :per_page => 5)
+  end
+
+  def self.delete_employee_to_payment(employee_id, payroll_history_id)
+    PayrollEmployee.find_by_payroll_history_id_and_employee_id(payroll_history_id, employee_id).destroy()
   end
 
 end

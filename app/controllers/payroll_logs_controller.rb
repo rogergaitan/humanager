@@ -104,4 +104,16 @@ class PayrollLogsController < ApplicationController
     respond_with @costs
   end
 
+  def delete_employee_to_payment
+
+    PayrollLog.delete_employee_to_payment(params[:employee_id], params[:payroll_history_id])
+
+    if PayrollEmployee.where("payroll_employees.employee_id = ? AND payroll_employees.payroll_history_id = ?", params[:employee_id], params[:payroll_history_id]).exists?
+      render :json => {:data => 'true'}
+    else 
+      render :json => {:data => 'false', :status => :unprocessable_entity}
+    end
+
+  end
+
 end

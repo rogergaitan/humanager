@@ -2,18 +2,10 @@
 	<td class="controls_item">
 		<%= f.label :task_id, :class => '' %>
 		<%= text_field 'search_task_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
-		
-
-		<!--kalfaro-->
-
-		<!--<%= f.collection_select(:task_id, @tasks, :id, :ntask , :class => 'input-medium') %>-->
 
 		<%= f.hidden_field :task_id, class: "cc-filter-id" %>
 		<%= text_field_tag 'load_task', nil, :class => 'cc-filter input-medium search-image-employee', 
 		:for => :task_id %>
-		
-		<!--kalfaro-->
-
 
 		<a class="btn" data-keyboard="false" data-backdrop="static" href="#taskModal" 
 		role="button" data-toggle="modal">

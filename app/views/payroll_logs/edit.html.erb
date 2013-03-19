@@ -9,7 +9,6 @@
   </h3>
 </div>
 <%= render :partial => 'form' %>
-
  <div class="accordion" id="accordion">
 	<% @count = 0 %>
 	<% @result.each do |e| %>
@@ -32,13 +31,17 @@
 					</thead>
 					<tbody>
 					<% e[1].each do |h| %>
-						<tr>
+						<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
 							<td><%= @payroll_log.payroll_date %></td>
 							<td><%= h.task.ntask %></td>
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>
 							<td><%= h.payment_type %></td>
-							<td><button type="button" class="btn btn-mini btn-danger">remove</button></td>
+							<td>
+								<button type="button" class="btn btn-mini btn-danger">remove</button>
+								<input type="hidden" value="<%= e[0][0] %>">
+								<input type="hidden" value="<%= h.id %>">
+							</td>
 						</tr>
 						<% end %>
 					</tbody>
@@ -49,5 +52,3 @@
 	<% @count += 1 %>
 	<% end %>
 </div>
-
-<div id="kenneth"></div>

@@ -245,8 +245,30 @@ $(jQuery(document).ready(function($) {
   	// Delete a Row - Employee (server)
 
   	$('#accordion').on("click", "tr:not(.tr_info) button", function() {
-  		alert('hola');
+  		
+  		var employee_id = $(this).next().val();					// employee_id
+  		var payroll_history_id = $(this).next().next().val();	// payroll_history_id
+  		
+  		$.ajax({
+			type: "GET",
+			url: "/payroll_logs/delete_employee_to_payment",
+			dataType: "json",
+	        data: {
+	        	employee_id : employee_id,
+	        	payroll_history_id : payroll_history_id
+	        },
+	        success: function(msg){
+	        	// Remove the row from the table
+  				$('#tr_' + employee_id + '_' + payroll_history_id).remove();
+  				$('div#message').html('<div class="alert alert-info">Borrado con exito</div>');
+				$('div.alert.alert-error').delay(4000).fadeOut();
+	        },
+			error: function(response, textStatus, errorThrown){
+				$('div#message').html('<div class="alert alert-error">Error al intentar borrar registro</div>');
+				$('div.alert.alert-error').delay(4000).fadeOut();
+			}
+      	});
+
   	});
   	
-
 }));

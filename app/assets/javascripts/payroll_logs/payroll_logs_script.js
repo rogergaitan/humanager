@@ -124,18 +124,12 @@ function removeFields(e) {
 	$(this).prev('input[type=hidden]').val(1);
 	var deletedRow = $(this).closest('.success');
 	deletedRow.removeClass('success').addClass('deleted').hide();
-	
-	//kalfaro	
 
 	var name = $(this).prev().attr('name');
 	var num = name.match(/\d/g);
 	num = num.join('');
 	payroll_logs.deleteAllEmployeesView(num);
-	//kalfaro
-
 	e.preventDefault();
-
-	
 }
 
 function addFields(e) {
