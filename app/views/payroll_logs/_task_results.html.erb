@@ -17,7 +17,8 @@
               <%= "#{task.itask}" %>
             </td>
             <td>
-              <%= "#{task.ntask}"  %>
+              <%= link_to "#{task.ntask}" %>
+              <%= hidden_field_tag "task_num_#{task.id}", "#{task.id}" %>
             </td>
           </tr>
         <% end %>

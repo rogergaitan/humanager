@@ -1,9 +1,3 @@
-<script type="text/javascript">
-  var centro_costo = [];
-	<% @centro_costos.each do |cc| %>
-		centro_costo.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
-	<% end %>
-</script>
 <%= javascript_include_tag "payroll_logs/payroll_logs_script" %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
 <%= form_for @payroll_log, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
@@ -101,7 +95,20 @@
     <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
   </div>
   <div class="modal-body">
-    <div id="list"></div>
+  	<div>
+	<!-- search -->
+	<legend>  
+	  <%= form_tag :search_cost_payroll_logs, :id => "search_cost_form", :class => "form-search", :method => "get" do %>
+	    <div class="control-group search">
+	      <%= text_field_tag :search_cost_name, params[:search_cost_name], :class => "search-query",
+	       :placeholder => 'Nombre' %>
+	       <button class="btn" id="clear_cost" type="button">Limpiar</button>
+	    </div>
+	  <% end %>
+	</legend>
+	<!-- search -->
+    </div>
+    <div id="search_cost_results"></div>	
   </div>
   <div class="modal-footer">
     <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
@@ -120,7 +127,8 @@
 	  <%= form_tag :search_task_payroll_logs, :id => "search_task_form", :class => "form-search", :method => "get" do %>
 	    <div class="control-group search">
 	      <%= text_field_tag :search_task_name, params[:search_task_name], :class => "search-query",
-	       :placeholder => 'model_class.human_attribute_name(:id)' %>
+	       :placeholder => 'Nombre' %>
+	       <button class="btn" id="clear_task" type="button">Limpiar</button>
 	    </div>
 	  <% end %>
 	</legend>

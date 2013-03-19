@@ -33,7 +33,7 @@ class PayrollLog < ActiveRecord::Base
   end
 
   def self.search_cost(search_cost_name, page, per_page = nil)
-    @cost = CentroDeCosto.where(" centro_de_costo.nombre_cc like '%#{search_cost_name}%' " )
+    @costs = CentroDeCosto.where(" centro_de_costos.nombre_cc like '%#{search_cost_name}%' " )
     .paginate(:page => page, :per_page => 5)
   end
 

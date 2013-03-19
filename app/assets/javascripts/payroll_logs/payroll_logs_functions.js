@@ -17,6 +17,9 @@ $(jQuery(document).ready(function($) {
 		$('#search_cost_code_').focusout(function() {
 			payroll_logs.searchCostCode( $(this).val() );
 		});
+
+		payroll_logs.searchAll( $('#search_task_name').val(), "/payroll_logs/search_task", "task" );
+		payroll_logs.searchAll( $('#search_cost_name').val(), "/payroll_logs/search_cost", "cost" );
 	}
 
 	// Task
@@ -30,7 +33,8 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( task_code.length-1 == index ) {
-				alert('Codigo no fue encontrado');
+				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
+				$('div.alert.alert-error').delay(4000).fadeOut();
 				$('.success td:eq(0) input:hidden').val( task_id[0] );
 				$('#load_task').val( task_desc[0] );
 				payroll_logs.setTaskCode( task_id[0] );
@@ -59,7 +63,8 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( cost_code.length-1 === index ) {
-				alert('Codigo no fue encontrado');
+				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
+				$('div.alert.alert-error').delay(4000).fadeOut();
 				$('.success td:eq(2) input:eq(1)').val(''); //hidden (id)
 				$('#search_cost_code_').val(''); 			//text (code)
 				$('.success td:eq(2) input:eq(2)').val(''); //text (description)
@@ -81,27 +86,31 @@ $(jQuery(document).ready(function($) {
 	payroll_logs.addDetailsToEmployee = function(num, employee_id) {
 
 		if ( !$('#employee_table_'+employee_id).length ) {
-			payroll_logs.addNewSelection(num, employee_id);
+			payroll_logs.addNewSelection( num, employee_id );
 		}
 		
-		payroll_logs.addNewColumn(num, employee_id);
+		payroll_logs.addNewColumn( num, employee_id );
 	}
 
 	payroll_logs.addNewColumn = function(num, employee_id) {
 
 		var date = $('#payroll_log_payroll_date').val();
-		var task = $('#payroll_log_payroll_histories_attributes_'+num+'_task_id').next().val()
-		var mount = $('#payroll_log_payroll_histories_attributes_'+num+'_time_worked').val();
-		var cost = $('#payroll_log_payroll_histories_attributes_'+num+'_centro_de_costo_id').next('input').val();
-		var payment = $('#payroll_log_payroll_histories_attributes_'+num+'_payment_type option:selected').html();
+		var task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val()
+		var mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val();
+		var cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val();
+		var payment = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type option:selected').html();
 		
-		$('#employee_table_'+employee_id).append('<tr class="tr_info">' +
-													'<td>'+date+'</td>' +
-													'<td>'+task+'</td>' +
-													'<td>'+mount+'</td>' +
-													'<td>'+cost+'</td>' +
-													'<td>'+payment+'</td>' +
-													'<td>delete</td>' +
+		$('#employee_table_'+employee_id).append('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
+													'<td>'+ date +'</td>' +
+													'<td>'+ task +'</td>' +
+													'<td>'+ mount +'</td>' +
+													'<td>'+ cost +'</td>' +
+													'<td>'+ payment +'</td>' +
+													'<td>' +
+														'<button type="button" class="btn btn-mini btn-danger">remove</button>' +
+														'<input type="hidden" value="' + num + '"  />' +
+														'<input type="hidden" value="' + employee_id + '"  />' +
+													'</td>' +
 												'</tr>');
 	}
 
@@ -123,33 +132,121 @@ $(jQuery(document).ready(function($) {
 			'<tbody></tbody></table></div></div></div>');
 	}
 
-	// Search Tasks
-
-	$('#search_task_form input').keyup(function() {
-    	return payroll_logs.search_task();
-  	});
-
-  	payroll_logs.search_task = function() {
+  	payroll_logs.search = function(name, url, type) {
 		
-		var name;
-		name = $('#search_task_name').val();
+		var d = {};
 
 		if( name.length >= payroll_logs.search_length ) {
+
+			if( type == 'cost' ) {
+				d = { search_cost_name: name };
+			} 
+			if( type == 'task' ) {
+				d = { search_task_name: name };
+			}
+
 			return $.ajax({
-				url: "/payroll_logs/search_task",
+				url: url,
 				dataType: "script",
-				data: {
-					search_task_name: name,
-				}
+				data: d
 			});
 		}
   	}
+
+  	payroll_logs.searchAll = function(name, url, type) {
+		
+		var d = {};
+
+		if( type == 'cost' ) {
+			d = { search_cost_name: name };
+		} 
+		if( type == 'task' ) {
+			d = { search_task_name: name };
+		}
+
+		return $.ajax({
+			url: url,
+			dataType: "script",
+			data: d
+		});
+  	}
+
+  	payroll_logs.deleteAllEmployeesView = function(num) {
+
+  		$("tr[id^='tr_" + num + "_']").each(function( index ) {
+  			$(this).remove();
+		});
+  	}
+
+	// Search Tasks
+
+	$('#search_task_form input').keyup(function() {
+    	return payroll_logs.search( $('#search_task_name').val(), "/payroll_logs/search_task", "task" );
+  	});
 
   	$("#search_task_results").on("click", ".pag a", function() {
     	$.getScript(this.href);
 		return false;
   	});
 
+  	$("#search_task_results").on("click", "table tr a", function(e) {
+  		$('#load_task').val( $(this).html() );
+    	payroll_logs.setTaskCode( $(this).next().val() );
+    	$('#taskModal button:eq(2)').trigger('click');
+  		e.preventDefault();
+  	});
+
+  	$('#clear_task').click(function() {
+  		$('#search_task_name').val('');
+  		payroll_logs.searchAll( $('#search_task_name').val(), "/payroll_logs/search_task", "task" );
+	});
+
   	// Search Costs
+
+  	$('#search_cost_form input').keyup(function() {
+    	return payroll_logs.search( $('#search_cost_name').val(), "/payroll_logs/search_cost", "cost" );
+  	});
+
+  	$("#search_cost_results").on("click", ".pag a", function() {
+    	$.getScript(this.href);
+		return false;
+  	});
+  	
+  	$("#search_cost_results").on("click", "table tr a", function(e) {
+  		$('#load_centro_de_costo').val( $(this).html() );
+    	payroll_logs.setCostCode( $(this).next().val() );
+    	$('#payrollModal button:eq(2)').trigger('click');
+  		e.preventDefault();
+  	});
+
+  	$('#clear_cost').click(function() {
+  		$('#search_cost_name').val('');
+		payroll_logs.searchAll( $('#search_cost_name').val(), "/payroll_logs/search_cost", "cost" );
+  	});
+
+  	// Delete a Row - Employee (local)
+
+  	$('#accordion').on("click", ".tr_info button", function() {
+
+  		var num = $(this).next().val();					// Number
+  		var employee_id = $(this).next().next().val();	// Employee_id
+  		
+  		if( $("tr[id^='tr_" + num + "_']").length == 1 ) {
+  			
+  			$('#payroll_log_payroll_histories_attributes_' + num + '__destroy').val(1)
+			var deletedRow = $('#payroll_log_payroll_histories_attributes_' + num + '__destroy').closest('.success');
+			deletedRow.removeClass('success').addClass('deleted').hide();
+  		}
+
+  		$('#tr_' + num + '_' + employee_id).remove();
+  		$("input[name='payroll_log[payroll_histories_attributes][" + num + "][employee_ids][]'][value='" + employee_id + "']").remove();
+  	});
+
+  	// Delete a Row - Employee (server)
+
+  	$('#accordion').on("click", "tr:not(.tr_info) button", function() {
+  		alert('hola');
+  	});
+  	
 
 }));

@@ -100,8 +100,8 @@ class PayrollLogsController < ApplicationController
   end
 
   def search_cost
-    @cost = PayrollLog.search_cost(params[:search_cost_name], params[:page], params[:per_page])
-    respond_with @cost
+    @costs = PayrollLog.search_cost(params[:search_cost_name], params[:page], params[:per_page])
+    respond_with @costs
   end
 
 end
