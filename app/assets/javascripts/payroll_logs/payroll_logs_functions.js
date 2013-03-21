@@ -178,6 +178,79 @@ $(jQuery(document).ready(function($) {
 		});
   	}
 
+  	payroll_logs.validateEmployeeTask = function(num) {
+  		// kalfaro
+
+  		var v_cost, v_date, v_task, v_payment_type, username;
+  		var b_cost, b_date, b_task, b_payment_type, exists = false;
+  		var result, data, employee_id = new Array();
+  		v_cost = $('#load_centro_de_costo').val();
+  		v_date = $('#payroll_log_payroll_date').val();
+  		v_task = $('#load_task').val();
+  		v_payment_type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type').val();
+
+  		data = {
+			"date": v_date,
+		    "task": v_task,
+		    "cost": v_cost,
+		    "type_payment": v_payment_type
+		};
+
+  		$('#employee-box .lists .list-right input').each(function() {
+		  
+		  var id = $(this).val();
+		  employee_id.push(id);
+
+  			for( var i=0; i<=employees_info.length-1; i++ ) {
+
+  				if( employees_info[i]['id'] == id ) {
+
+  					$.each(employees_info[i]['data'], function(obj,index) {
+
+  						( v_cost == index.cost ) ? b_cost = true : b_cost = false;
+
+  						( v_date == index.date ) ? b_date = true : b_date = false;
+
+  						( v_task == index.task ) ? b_task = true : b_task = false;
+
+  						( v_payment_type == index.type_payment ) ? b_payment_type = true : b_payment_type = false;
+
+  						if( b_cost && b_date && b_task && b_payment_type ) {
+  							exists = true;
+  							username = employees_info[i]['name'];
+  							return false;
+  						}
+					}); // End each employees data
+  				} // End if
+				if( exists ) {
+					return false;
+				}
+  			} // End for employees id
+  			if( exists ) {
+				return false;
+			}
+		}); // End each selectot ids
+
+		if( exists ) {
+			return result = { "status": true, "username": username };
+		} else {
+			payroll_logs.addEmployeeTaskData(data, employee_id);
+			return result = { "status": false, "username": username };
+		}
+  	}
+
+  	payroll_logs.addEmployeeTaskData = function(data, employees) {
+
+  		for( var x=0; x<=employees.length-1; x++ ) {
+  			for( var i=0; i<=employees_info.length-1; i++ ) {
+	  			if( employees_info[i]['id'] == employees[x] ) {
+	  				employees_info[i]['data'].push(data);
+	  				return false;
+				}
+	  		}
+	  	}
+  	}
+
 	// Search Tasks
 
 	$('#search_task_form input').keyup(function() {
@@ -268,7 +341,6 @@ $(jQuery(document).ready(function($) {
 				$('div.alert.alert-error').delay(4000).fadeOut();
 			}
       	});
-
   	});
   	
 }));

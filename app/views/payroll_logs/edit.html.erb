@@ -52,3 +52,46 @@
 	<% @count += 1 %>
 	<% end %>
 </div>
+
+<%= javascript_tag  do %>
+	
+	/************************ 
+	Employees Information 
+	************************/
+	<% id = ''  %>
+	<% date = ''  %>
+	<% task = ''  %>
+	<% cost = ''  %>
+	<% type_payment = ''  %>
+	
+	var employees_info = []
+	var data = []
+
+	<% @result.each do |e| %>
+		
+		<% id = e[0][0]  %>
+		<% name = e[0][1]  %>
+		
+		<% e[1].each do |h| %>
+			<% date = "#{@payroll_log.payroll_date}" %>
+			<% task = "#{h.task.ntask}" %>
+			<% cost = "#{h.centro_de_costo.nombre_cc}" %>
+			<% type_payment = "#{h.payment_type}" %>
+
+			data.push({
+			    "date": "<%= date %>",
+			    "task": "<%= task %>",
+			    "cost": "<%= cost %>",
+			    "type_payment": "<%= type_payment %>"
+			});
+		<% end %>
+
+		employees_info.push({
+			    "id":"<%= id %>",
+			    "name":"<%= name %>",
+			    "data": data
+			});
+		data = []
+	<% end %>
+
+<% end %>

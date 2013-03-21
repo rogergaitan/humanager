@@ -152,6 +152,20 @@ function addFields(e) {
 			$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
 			$('div.alert.alert-error').delay(4000).fadeOut();
 			return false;
+		} else {
+			// Validate Duplicate Records
+			if(!rowIsDisabled){
+				var name = $('#products_items tr:eq(1) td:first input:hidden').attr('name');
+				var num = name.match(/\d/g);
+				num = num.join('');
+				result = payroll_logs.validateEmployeeTask(num);
+				if( result.status ) {
+					$('div#message').html('<div class="alert alert-error">Existe al menos un empleado esta con datos duplicados ['+result.username+']</div>');
+					$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
+					$('div.alert.alert-error').delay(4000).fadeOut();
+					return false;
+				}
+			}
 		}
 		$('#products_items tr input, select').attr('disabled', true);
 		var time = new Date().getTime();
