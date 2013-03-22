@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130308210418) do
+ActiveRecord::Schema.define(:version => 20130322233204) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -369,8 +369,9 @@ ActiveRecord::Schema.define(:version => 20130308210418) do
     t.integer  "centro_de_costo_id"
     t.enum     "payment_type",       :limit => [:Ordinario, :Extra, :Doble]
     t.integer  "payroll_log_id"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                                                                :null => false
+    t.datetime "updated_at",                                                                                :null => false
+    t.decimal  "total",                                                      :precision => 18, :scale => 4
   end
 
   add_index "payroll_histories", ["centro_de_costo_id"], :name => "index_payroll_histories_on_centro_de_costo_id"
@@ -470,6 +471,13 @@ ActiveRecord::Schema.define(:version => 20130308210418) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "roles", :force => true do |t|
+    t.string   "role"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "sublines", :force => true do |t|

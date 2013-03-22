@@ -27,6 +27,7 @@
 						<td>Cantidad</td>
 						<td>Centro de Costos</td>
 						<td>Tipo de Pago</td>
+						<td>Total</td>
 						<td>Accion</td>
 					</thead>
 					<tbody>
@@ -37,6 +38,7 @@
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>
 							<td><%= h.payment_type %></td>
+							<td><%= h.task.mlaborcost.to_f + 10.2 %></td>
 							<td>
 								<button type="button" class="btn btn-mini btn-danger">remove</button>
 								<input type="hidden" value="<%= e[0][0] %>">
@@ -90,7 +92,7 @@
 			    "id":"<%= id %>",
 			    "name":"<%= name %>",
 			    "data": data
-			});
+			}); 
 		data = []
 	<% end %>
 

@@ -128,6 +128,7 @@ function removeFields(e) {
 	var name = $(this).prev().attr('name');
 	var num = name.match(/\d/g);
 	num = num.join('');
+	payroll_logs.removeAllEmployeeTaskData(num);
 	payroll_logs.deleteAllEmployeesView(num);
 	e.preventDefault();
 }
@@ -160,7 +161,7 @@ function addFields(e) {
 				num = num.join('');
 				result = payroll_logs.validateEmployeeTask(num);
 				if( result.status ) {
-					$('div#message').html('<div class="alert alert-error">Existe al menos un empleado esta con datos duplicados ['+result.username+']</div>');
+					$('div#message').html('<div class="alert alert-error">Existe al menos un empleado con datos duplicados ['+result.username+']</div>');
 					$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
 					$('div.alert.alert-error').delay(4000).fadeOut();
 					return false;

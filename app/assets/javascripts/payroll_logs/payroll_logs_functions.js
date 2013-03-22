@@ -178,10 +178,11 @@ $(jQuery(document).ready(function($) {
 		});
   	}
 
-  	payroll_logs.validateEmployeeTask = function(num) {
-  		// kalfaro
+  	// Validation data employees
 
-  		var v_cost, v_date, v_task, v_payment_type, username;
+  	payroll_logs.validateEmployeeTask = function(num) {
+
+  		var v_cost, v_date, v_task, v_payment_type, username, id;
   		var b_cost, b_date, b_task, b_payment_type, exists = false;
   		var result, data, employee_id = new Array();
   		v_cost = $('#load_centro_de_costo').val();
@@ -198,7 +199,7 @@ $(jQuery(document).ready(function($) {
 
   		$('#employee-box .lists .list-right input').each(function() {
 		  
-		  var id = $(this).val();
+		  id = $(this).val();
 		  employee_id.push(id);
 
   			for( var i=0; i<=employees_info.length-1; i++ ) {
@@ -222,13 +223,9 @@ $(jQuery(document).ready(function($) {
   						}
 					}); // End each employees data
   				} // End if
-				if( exists ) {
-					return false;
-				}
+				if( exists ) { return false; }
   			} // End for employees id
-  			if( exists ) {
-				return false;
-			}
+  			if( exists ) { return false; }
 		}); // End each selectot ids
 
 		if( exists ) {
@@ -241,15 +238,71 @@ $(jQuery(document).ready(function($) {
 
   	payroll_logs.addEmployeeTaskData = function(data, employees) {
 
+  		var exists = false;
+
   		for( var x=0; x<=employees.length-1; x++ ) {
+
   			for( var i=0; i<=employees_info.length-1; i++ ) {
+
 	  			if( employees_info[i]['id'] == employees[x] ) {
 	  				employees_info[i]['data'].push(data);
-	  				return false;
+	  				exists = true;
+	  				i = employees_info.length-1;
 				}
 	  		}
+		  	if( !exists ) {
+		  		employees_info.push({
+				    "id": employees[x],
+				    "name": $('#employee-box .lists .list-right input[value="' + employees[x] + '"]').next().html(),
+				    "data": [data]
+				});
+		  		exists = false;
+		  	}
 	  	}
   	}
+
+  	payroll_logs.removeEmployeeTaskData = function(num, employee_id, payroll_history_id) {
+
+  		var array, deleted = false;
+
+  		if( num != "" ) {
+  			array = {
+			    "date": $('#tr_' + num + '_' + employee_id + ' td:eq(0)').html(),
+			    "task": $('#tr_' + num + '_' + employee_id + ' td:eq(1)').html(),
+			    "cost": $('#tr_' + num + '_' + employee_id + ' td:eq(3)').html(),
+			    "type_payment": $('#tr_' + num + '_' + employee_id + ' td:eq(4)').html() 
+			}
+  		} else {
+  			array = {
+			    "date": $('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(0)').html(),
+			    "task": $('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(1)').html(),
+			    "cost": $('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(3)').html(),
+			    "type_payment": $('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(4)').html()
+			}
+  		}
+
+  		for( var i=0; i<=employees_info.length-1; i++ ) {
+  			if( employees_info[i]['id'] == employee_id ) {
+	  			for( var x=0; x<=employees_info[i]['data'].length-1; x++ ) {
+	  				if( payroll_logs.arrays_equal(employees_info[i]['data'][x], array) ) {
+	  					employees_info[i]['data'].splice($.inArray(array, employees_info[i]['data'][x]),1);
+	  					deleted = true;
+  						return false;
+	  				}
+	  			}
+	  			if( deleted ) { return false; }
+			}
+  		}
+  	}
+
+  	payroll_logs.removeAllEmployeeTaskData = function(num) {
+
+  		$('input[name="payroll_log[payroll_histories_attributes][' + num + '][employee_ids][]"]').each(function() {
+  			payroll_logs.removeEmployeeTaskData(num, $(this).val(), '');
+  		});
+  	}
+
+  	payroll_logs.arrays_equal = function (a,b) { return !(a<b || b<a); }
 
 	// Search Tasks
 
@@ -306,11 +359,12 @@ $(jQuery(document).ready(function($) {
   		
   		if( $("tr[id^='tr_" + num + "_']").length == 1 ) {
   			
-  			$('#payroll_log_payroll_histories_attributes_' + num + '__destroy').val(1)
+  			$('#payroll_log_payroll_histories_attributes_' + num + '__destroy').val(1);
 			var deletedRow = $('#payroll_log_payroll_histories_attributes_' + num + '__destroy').closest('.success');
 			deletedRow.removeClass('success').addClass('deleted').hide();
   		}
-
+  		
+		payroll_logs.removeEmployeeTaskData(num, employee_id, "");
   		$('#tr_' + num + '_' + employee_id).remove();
   		$("input[name='payroll_log[payroll_histories_attributes][" + num + "][employee_ids][]'][value='" + employee_id + "']").remove();
   	});
@@ -330,13 +384,14 @@ $(jQuery(document).ready(function($) {
 	        	employee_id : employee_id,
 	        	payroll_history_id : payroll_history_id
 	        },
-	        success: function(msg){
+	        success: function(msg) {
 	        	// Remove the row from the table
+	        	payroll_logs.removeEmployeeTaskData("", employee_id, payroll_history_id);
   				$('#tr_' + employee_id + '_' + payroll_history_id).remove();
   				$('div#message').html('<div class="alert alert-info">Borrado con exito</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
 	        },
-			error: function(response, textStatus, errorThrown){
+			error: function(response, textStatus, errorThrown) {
 				$('div#message').html('<div class="alert alert-error">Error al intentar borrar registro</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
 			}
