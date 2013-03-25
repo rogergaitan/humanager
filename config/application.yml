@@ -5,14 +5,6 @@ INPUT_RADIO: "radio"
 INPUT_SELECT: "select"
 INPUT_TEXTAREA: "textarea"
 INPUT_DATE: "datepicture"
-ORDINARIO: "1"
-EXTRA: "1.5"
-DOBLE: "2"
-
-#INPUT_RESET: "reset"
-#INPUT_HIDDEN: "hidden"
-#INPUT_FILE: "file"
-#INPUT_BUTTON: "button"
-#INPUT_IMAGE: "image"
-#INPUT_SUBMIT: "submit"
-#INPUT_IMAGE: "image"
+PAYMENT: [{name: "Ordinario", type: "1"},
+          {name: "Extra", type: "1.5"},
+          {name: "Doble", type: "2"}]

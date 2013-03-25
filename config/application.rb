@@ -10,7 +10,9 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-ENV.update YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+CONSTANTS = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+CONSTANTS.merge! CONSTANTS.fetch(Rails.env, {})
+CONSTANTS.symbolize_keys!
 
 module Reasapp
   class Application < Rails::Application

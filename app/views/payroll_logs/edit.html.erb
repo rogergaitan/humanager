@@ -11,6 +11,7 @@
 <%= render :partial => 'form' %>
  <div class="accordion" id="accordion">
 	<% @count = 0 %>
+	<% @total = 0 %>
 	<% @result.each do |e| %>
 	<div class="accordion-group">
 		<div class="accordion-heading">
@@ -38,7 +39,8 @@
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>
 							<td><%= h.payment_type %></td>
-							<td><%= h.task.mlaborcost.to_f + 10.2 %></td>
+							<td><%= h.total.to_f %></td>
+							<% @total += h.total.to_f %>
 							<td>
 								<button type="button" class="btn btn-mini btn-danger">remove</button>
 								<input type="hidden" value="<%= e[0][0] %>">
@@ -46,16 +48,33 @@
 							</td>
 						</tr>
 						<% end %>
+						<tr id="total_<%= e[0][0] %>">
+							<td colspan="5" class="align_right">Total:</td>
+							<td colspan="2"><%= @total %></td>
+						</tr>
 					</tbody>
 				</table>
  			</div>
  		</div>
 	</div>
+	<% @total = 0 %>
 	<% @count += 1 %>
 	<% end %>
 </div>
 
 <%= javascript_tag  do %>
+
+	/************************ 
+		Type payment 
+	************************/
+	var type_payment = []
+	
+	<% CONSTANTS[:PAYMENT].each do |payment| %>
+	    type_payment.push({
+		    "name": "<%= payment["name"] %>",
+			"value": "<%= payment["type"] %>"
+		});
+	<% end %>
 	
 	/************************ 
 	Employees Information 

@@ -35,5 +35,6 @@
 		<%= f.enum_select :payment_type, :include_blank => false %>
 		<%= f.hidden_field :_destroy, :class => 'payroll_histories' %>
 		<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
+		<%= f.hidden_field :total %>
 	</td>
 </tr>

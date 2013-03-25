@@ -99,13 +99,17 @@ $(jQuery(document).ready(function($) {
 		var mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val();
 		var cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val();
 		var payment = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type option:selected').html();
+		var totalRow = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_total').val());
+		var subTotal = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
+		$('#total_' + employee_id + ' td:eq(1)').html((totalRow + subTotal));
 		
-		$('#employee_table_'+employee_id).append('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
+		$('#employee_table_'+employee_id+' #total_'+employee_id).before('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
 													'<td>'+ date +'</td>' +
 													'<td>'+ task +'</td>' +
 													'<td>'+ mount +'</td>' +
 													'<td>'+ cost +'</td>' +
 													'<td>'+ payment +'</td>' +
+													'<td>'+ totalRow  + '</td>' +
 													'<td>' +
 														'<button type="button" class="btn btn-mini btn-danger">remove</button>' +
 														'<input type="hidden" value="' + num + '"  />' +
@@ -127,9 +131,14 @@ $(jQuery(document).ready(function($) {
 			'<div id="collapse'+total+'" class="accordion-body collapse" style="height: 0px; "><div class="accordion-inner">'+
 			'<table class="table table-hover table-bordered table-striped" id="employee_table_'+employee_id+'">'+
 				'<thead><tr>'+
-					'<td>Fecha</td><td>Labor</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Accion</td>'+
+					'<td>Fecha</td><td>Labor</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
 				'</tr></thead>'+
-			'<tbody></tbody></table></div></div></div>');
+			'<tbody>'+
+			'<tr id="total_'+employee_id+'">'+
+					'<td colspan="5" class="align_right">Total:</td>'+
+					'<td colspan="2">00.00</td>'+
+				'</tr>'+
+			'</tbody></table></div></div></div>');
 	}
 
   	payroll_logs.search = function(name, url, type) {
@@ -304,6 +313,52 @@ $(jQuery(document).ready(function($) {
 
   	payroll_logs.arrays_equal = function (a,b) { return !(a<b || b<a); }
 
+  	payroll_logs.setTotal = function(num) {
+
+  		var hours, cost, id, index, type, payment;
+
+  		hours = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val());
+  		id = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').val();
+  		// Search the index where the id are equals
+  		index = $.inArray(id, task_id);
+  		// Get the value
+  		cost = parseFloat(task_cost[index]);
+  		// Get the type payment selected
+  		type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type').val();
+  		
+  		// Search the type payment and get the value (%)
+  		for( var x=0; x<=type_payment.length-1; x++ ) {
+  			if( type_payment[x].name === type ) {
+		  		payment = parseFloat(type_payment[x].value);
+		  		x = type_payment.length-1;
+  			}
+  		}
+  		
+  		$('#payroll_log_payroll_histories_attributes_' + num + '_total').val(cost*hours*payment);
+  	}
+
+  	payroll_logs.removeTotalRow = function(num, employee_id, payroll_history_id) {
+
+  		var subtotal, total;
+
+  		if( num != "" ) {
+  			subtotal = parseFloat($('#tr_' + num + '_' + employee_id + ' td:eq(5)').html());
+  		} else {
+  			subtotal = parseFloat($('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(5)').html());
+  		}
+
+  		total = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
+  		total = (total-subtotal);
+  		$('#total_' + employee_id + ' td:eq(1)').html(total);
+  	}
+
+  	payroll_logs.removeAllTotalRows = function(num) {
+
+		$('input[name="payroll_log[payroll_histories_attributes][' + num + '][employee_ids][]"]').each(function() {
+			payroll_logs.removeTotalRow(num, $(this).val(), '');
+  		});  		
+  	}
+
 	// Search Tasks
 
 	$('#search_task_form input').keyup(function() {
@@ -365,6 +420,7 @@ $(jQuery(document).ready(function($) {
   		}
   		
 		payroll_logs.removeEmployeeTaskData(num, employee_id, "");
+		payroll_logs.removeTotalRow(num, employee_id, "");
   		$('#tr_' + num + '_' + employee_id).remove();
   		$("input[name='payroll_log[payroll_histories_attributes][" + num + "][employee_ids][]'][value='" + employee_id + "']").remove();
   	});
@@ -387,6 +443,7 @@ $(jQuery(document).ready(function($) {
 	        success: function(msg) {
 	        	// Remove the row from the table
 	        	payroll_logs.removeEmployeeTaskData("", employee_id, payroll_history_id);
+	        	payroll_logs.removeTotalRow("", employee_id, payroll_history_id);
   				$('#tr_' + employee_id + '_' + payroll_history_id).remove();
   				$('div#message').html('<div class="alert alert-info">Borrado con exito</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();

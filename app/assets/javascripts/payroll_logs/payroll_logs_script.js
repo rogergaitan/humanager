@@ -129,6 +129,7 @@ function removeFields(e) {
 	var num = name.match(/\d/g);
 	num = num.join('');
 	payroll_logs.removeAllEmployeeTaskData(num);
+	payroll_logs.removeAllTotalRows(num);
 	payroll_logs.deleteAllEmployeesView(num);
 	e.preventDefault();
 }
@@ -155,10 +156,11 @@ function addFields(e) {
 			return false;
 		} else {
 			// Validate Duplicate Records
-			if(!rowIsDisabled){
+			if( !rowIsDisabled ) {
 				var name = $('#products_items tr:eq(1) td:first input:hidden').attr('name');
 				var num = name.match(/\d/g);
 				num = num.join('');
+				payroll_logs.setTotal(num);
 				result = payroll_logs.validateEmployeeTask(num);
 				if( result.status ) {
 					$('div#message').html('<div class="alert alert-error">Existe al menos un empleado con datos duplicados ['+result.username+']</div>');
