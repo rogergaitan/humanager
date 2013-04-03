@@ -73,7 +73,7 @@ class PayrollsController < ApplicationController
     end
   end
 
-  #Obtiene las planillas activas
+  # Obtiene las planillas activas
   def get_activas
     @activas = {}
     @activas[:activa] = Payroll.activas
@@ -90,7 +90,7 @@ class PayrollsController < ApplicationController
     end
   end
 
-  #Obtiene las planillas inactivas
+  # Obtiene las planillas inactivas
   def get_inactivas
     @inactivas = {}
     @inactivas[:inactiva] = Payroll.inactivas
@@ -100,12 +100,12 @@ class PayrollsController < ApplicationController
     end
   end
 
-  #Obtiene todos los tipos de planillas
+  # Obtiene todos los tipos de planillas
   def get_payroll_types
     @payroll_types = PayrollType.tipo_planilla
   end
 
-  #Reabre una o un conjunto de planillas cerradas
+  # Reabre una o un conjunto de planillas cerradas
   def reabrir
     @payroll = JSON.parse(params[:reabrir_planilla])
 
@@ -116,14 +116,19 @@ class PayrollsController < ApplicationController
     render :index
   end
 
-  #Cierra una planilla y realiza los calculos de prestaciones
-  def cerrar_planilla
-    @payroll = JSON.parse(params[:cerrar_planilla])
+  # Cierra una planilla y realiza los calculos necesarios
+  # Closes a payroll and performs the necessary calculations
+  def close_payroll
 
-    @payroll.each do |planilla|
-      p = Payroll.find(planilla)
-      p.update_attributes(:state => false)
-    end
+    payroll_id = params[:payroll_id]
+
+    payroll.close_payroll(payroll_id)
+
+    #@payroll.each do |planilla|
+    #  p = Payroll.find(planilla)
+    #  p.update_attributes(:state => false)
+    #end
+
     render :index
   end
 

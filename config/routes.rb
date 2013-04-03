@@ -24,7 +24,7 @@ Reasapp::Application.routes.draw do
     end
     collection do
       post :reabrir
-      post :cerrar_planilla
+      post :close_payroll
     end
   end
 

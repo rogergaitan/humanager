@@ -1,107 +1,164 @@
-$(document).ready(function(){
+var payroll = {}
 
-	index();
+$(document).ready(function() {
 
-	$('#seleccion').click(Reactivar);
-  $('#cerrar').click(Cerrar);
-	$('#chkTodos').click(MarcarTodosIniciadas);
+  payroll.index();
+
+  $('#seleccion').click(Reactivar);
+
+  // Event click the button to close the payroll
+  $('#cerrar').click(function() {
+
+    var id = $('#activas .ckActive:checked').val();
+    payroll.closePayrollSelected(id);
+  });
+	
+  // Enable and Disabled the checkbox
+  $("#activas").on("change", ".ckActive", function() {
+    
+    if( $('#activas .ckActive:checked').length === 1 ) {
+      $('#activas .ckActive').attr('disabled','disabled');
+      $('#activas .ckActive:checked').removeAttr('disabled','disabled');
+    } else {
+      $('#activas .ckActive').removeAttr('disabled','disabled');
+    }
+  });
 
 });
 
-//consulta los datos de las planillas activas y inactivas
- function index(){
-    $.getJSON('payrolls/get_activas', function(resultado) {
-      $('table#activas > tbody').empty();
-      $(resultado.activa).each(function() { add_activas(this, 'table#activas')});
+// Consulta los datos de las planillas activas y inactivas
+// Get the data of active and inactive payrolls
+payroll.index = function() {
+
+  $.getJSON('payrolls/get_activas', function(resultado) {
+
+    $('table#activas > tbody').empty();
+    $(resultado.activa).each(function() { 
+      payroll.add_activas(this, 'table#activas');
     });
+  });
 
-    $.getJSON('payrolls/get_inactivas', function(resultado) {
-      $('table#inactivas > tbody').empty();
-      $(resultado.inactiva).each(function() { add_inactivas(this, 'table#inactivas')});
+  $.getJSON('payrolls/get_inactivas', function(resultado) {
+
+    $('table#inactivas > tbody').empty();
+    $(resultado.inactiva).each(function() { 
+      payroll.add_inactivas(this, 'table#inactivas');
     });
- }
-
-//carga las planillas activas en una tabla
- function add_activas(payroll, target_table)
-  {
-    var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/payrolls/'+ payroll.id +'">' + payroll.payroll_type.description + '</a></td>' +
-        '<td>' +  payroll.start_date + '</td>' +
-        '<td>' +  payroll.end_date + '</td>' +
-        '<td>' +  payroll.payment_date + '</td>' +
-        '<td> <input type="checkbox" class="ckActivas" id="'+payroll.id+'" value="'+payroll.id+'" /> </td>' +
-        '<td><a href="/payroll_logs/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
-				'Digitar</a> ' + 
-				'<a href="/payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
-        'data-method="get" rel="nofollow">Editar</a> ' +
-       '<a href="/payrolls/'+payroll.id +'" class="btn btn-mini btn-danger" ' +
-        'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
-      '</tr>');
-    return row;
-  }
-
-//carga las planillas inactivas en una tabla
- function add_inactivas(payroll, target_table)
-  {
-    var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/payrolls/'+ payroll.id +'">' + payroll.payroll_type.description +'</a></td>' +
-        '<td>' +  payroll.start_date + '</td>' +
-        '<td>' +  payroll.end_date + '</td>' +
-        '<td>' +  payroll.payment_date + '</td>' +
-        '<td> <input type="checkbox" class="ck" id="'+payroll.id+'" value="'+payroll.id+'" /> </td>' +
-      '</tr>');
-    return row;
-  }
-
-  //reabre planillas cerradas
-  function Reactivar(){
-    if (Confirmar() == true) {
-      var planillas = new Array();
-      $('#inactivas tbody tr td:nth-child(6) .ck').each(function () {
-        if ($(this).is(":checked")){
-          planillas.push($(this).val());
-        };
-      });
-
-      $.ajax({
-        type: "POST",
-        url: "/payrolls/reabrir",
-        data: { reabrir_planilla: JSON.stringify(planillas) },
-        success: function() { index(); }
-      });
-    };
+  });
 }
 
-//cierra una o un conjunto de planillas
- function Cerrar(){
-  if (Confirmar() == true) {
-    var planillas = new Array(); //hago un each de la 6ta columna d la tabla y guardo los chequeados en un arreglo
-    $('#activas tbody tr td:nth-child(6) .ckActivas').each(function () {
-      if ($(this).is(":checked")){
+// Carga las planillas activas en una tabla
+// Load the active payroll in a table
+payroll.add_activas = function (payroll, target_table) {
+
+  var row = $(target_table + '> tbody:last').append(
+    '<tr>' + 
+      '<td><a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a></td>' +
+      '<td>' + payroll.start_date + '</td>' +
+      '<td>' + payroll.end_date + '</td>' +
+      '<td>' + payroll.payment_date + '</td>' +
+      '<td>' +
+        '<input type="checkbox" class="ckActive" id="' + payroll.id + '" value="' + payroll.id + '" />' +
+      '</td>' +
+      '<td><a href="/payroll_logs/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
+			'Digitar</a> ' + 
+			'<a href="/payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
+      'data-method="get" rel="nofollow">Editar</a> ' +
+     '<a href="/payrolls/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
+      'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
+    '</tr>');
+  return row;
+}
+
+// Carga las planillas inactivas en una tabla
+// Load the inactive payroll in a table
+payroll.add_inactivas = function (payroll, target_table) {
+
+  var row = $(target_table + '> tbody:last').append('<tr>' + 
+      '<td>' +
+        '<a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a>' +
+      '</td>' +
+      '<td>' +  payroll.start_date + '</td>' +
+      '<td>' +  payroll.end_date + '</td>' +
+      '<td>' +  payroll.payment_date + '</td>' +
+      '<td>' +
+        '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '"/>' +
+      '</td>' +
+    '</tr>');
+  return row;
+}
+
+// Process to close a payroll Selected
+payroll.closePayrollSelected = function(payroll_id) {
+  
+  if( payroll.confirm() ) {
+    
+    $.ajax({
+      type: "POST",
+      url: "/payrolls/close_payroll",
+      data: { 
+        payroll_id: payroll_id 
+      },
+      success: function() { 
+        payroll.index();
+      }
+    });
+  }
+
+}
+
+
+// Reabre planillas cerradas
+function Reactivar() {
+
+  if (Confirmar() == true ) {
+    var planillas = new Array();
+    $('#inactivas tbody tr td:nth-child(6) .ck').each(function () {
+      if( $(this).is(":checked") ) {
         planillas.push($(this).val());
       };
     });
 
     $.ajax({
       type: "POST",
-      url: "/payrolls/cerrar_planilla",
-      data: { cerrar_planilla: JSON.stringify(planillas) },
-      success: function() { index(); }
+      url: "/payrolls/reabrir",
+      data: { 
+        reabrir_planilla: JSON.stringify(planillas) 
+      },
+      success: function() { 
+        index(); 
+      }
     });
   };
 }
 
-//marca o desmarca todos los checkbox de planillas iniciadas
-function MarcarTodosIniciadas(){
-    if($(this).is(":checked")) {
-	 	$(".ckActivas:checkbox:not(:checked)").attr("checked", "checked");
-	}else{
-		$(".ckActivas:checkbox:checked").removeAttr("checked");
-	}
-}
+// Confirm the action to rum the user
+payroll.confirm = function () {
 
-//confirma una accion a ejecutar por el usuario
-function Confirmar(){
   var resp = confirm("Realmente desea ejecutar esta acción ?");
   return resp;
 }
+
+// Cierra una o un conjunto de planillas
+/*function Cerrar() {
+
+  if( Confirmar() == true ) {
+    var planillas = new Array(); // hago un each de la 6ta columna d la tabla y guardo los chequeados en un arreglo
+    $('#activas tbody tr td:nth-child(6) .ckActive').each(function () {
+      if( $(this).is(":checked") ) {
+        planillas.push($(this).val());
+      }
+    });
+
+    $.ajax({
+      type: "POST",
+      url: "/payrolls/cerrar_planilla",
+      data: { 
+        cerrar_planilla: JSON.stringify(planillas) 
+      },
+      success: function() { 
+        index(); 
+      }
+    });
+  }
+}*/

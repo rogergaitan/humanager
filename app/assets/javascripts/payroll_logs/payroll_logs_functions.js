@@ -109,7 +109,7 @@ $(jQuery(document).ready(function($) {
 													'<td>'+ mount +'</td>' +
 													'<td>'+ cost +'</td>' +
 													'<td>'+ payment +'</td>' +
-													'<td>'+ totalRow  + '</td>' +
+													'<td>'+ totalRow  +'</td>' +
 													'<td>' +
 														'<button type="button" class="btn btn-mini btn-danger">remove</button>' +
 														'<input type="hidden" value="' + num + '"  />' +
@@ -235,7 +235,7 @@ $(jQuery(document).ready(function($) {
 				if( exists ) { return false; }
   			} // End for employees id
   			if( exists ) { return false; }
-		}); // End each selectot ids
+		}); // End each selector ids
 
 		if( exists ) {
 			return result = { "status": true, "username": username };
@@ -323,6 +323,8 @@ $(jQuery(document).ready(function($) {
   		index = $.inArray(id, task_id);
   		// Get the value
   		cost = parseFloat(task_cost[index]);
+  		// Set task_cost (history)
+  		$('#payroll_log_payroll_histories_attributes_' + num + '_task_total').val(cost);
   		// Get the type payment selected
   		type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type').val();
   		

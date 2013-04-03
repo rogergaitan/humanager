@@ -8,3 +8,8 @@ INPUT_DATE: "datepicture"
 PAYMENT: [{name: "Ordinario", type: "1"},
           {name: "Extra", type: "1.5"},
           {name: "Doble", type: "2"}]
+DEDUCTION: [{name: "Constante"},
+			 {name: "Unica"},
+			 {name: "Monto_Agotar"}]
+CALCULATION_TYPE: [{name: "porcentual"},
+					{name: "fija"}]
