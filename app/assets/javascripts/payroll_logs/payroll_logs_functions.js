@@ -47,6 +47,7 @@ $(jQuery(document).ready(function($) {
 		$.each(task_id, function(index, value) {
 			if( value == id ) {
 				$("#search_task_code_").val( task_code[index] );
+				$('.success td:eq(0) input:hidden').val( task_id[index] );
 				return false;
 			}
 		});
@@ -73,10 +74,10 @@ $(jQuery(document).ready(function($) {
 	}
 
 	payroll_logs.setCostCode = function(id) {
-
 		$.each(cost_id, function(index, value) {
 			if( value == id ) {
 				$("#search_cost_code_").val(cost_code[index]);
+				$('.success td:eq(2) input:eq(1)').val(cost_id[index]);
 				return false;
 			}
 		});

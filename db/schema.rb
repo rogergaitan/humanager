@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401214808) do
+ActiveRecord::Schema.define(:version => 20130424161234) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -99,8 +99,9 @@ ActiveRecord::Schema.define(:version => 20130401214808) do
   create_table "deduction_employees", :force => true do |t|
     t.integer  "deduction_id"
     t.integer  "employee_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.boolean  "state",        :default => true
   end
 
   add_index "deduction_employees", ["deduction_id"], :name => "index_deduction_employees_on_deduction_id"
@@ -564,5 +565,18 @@ ActiveRecord::Schema.define(:version => 20130401214808) do
 
   add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
   add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"
+
+  create_table "work_benefits_payments", :force => true do |t|
+    t.integer  "employee_benefits_id"
+    t.integer  "payroll_id"
+    t.date     "payment_date"
+    t.decimal  "percentage",           :precision => 10, :scale => 0
+    t.decimal  "payment",              :precision => 10, :scale => 0
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+  end
+
+  add_index "work_benefits_payments", ["employee_benefits_id"], :name => "index_work_benefits_payments_on_employee_benefits_id"
+  add_index "work_benefits_payments", ["payroll_id"], :name => "index_work_benefits_payments_on_payroll_id"
 
 end

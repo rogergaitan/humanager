@@ -154,7 +154,13 @@
 		<% list_id += "#{task.id}," %>
 		<% list_code += "#{task.itask}," %>
 		<% list_desc += "#{task.ntask}," %>
-		<% list_cost += "#{task.mlaborcost}," %>
+		
+		<% if task.mlaborcost.blank? %>
+			<% list_cost += "0," %>
+		<% else %>
+			<% list_cost += "#{task.mlaborcost}," %>
+		<% end %>
+
   	<% end %>
 	
 	var list_id = '<%= list_id %>';

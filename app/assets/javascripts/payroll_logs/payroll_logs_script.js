@@ -357,7 +357,6 @@ function populateCentroCostos(url, textField, idField) {
   $.getJSON(url, function(accounts) {
       $(document.getElementById(idField)).next().autocomplete({
           source: $.map(accounts, function(item){
-          	$('kenneth').html(item);
               $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
               return{
                   label: item.nombre_cc,

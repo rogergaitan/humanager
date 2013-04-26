@@ -1,5 +1,5 @@
 class Deduction < ActiveRecord::Base
-  attr_accessible :payroll_ids, :amount_exhaust, :calculation, :calculation_type, :ledger_account_id, :deduction_type, :description, :employee_ids, :current_balance
+  attr_accessible :payroll_ids, :amount_exhaust, :calculation, :calculation_type, :ledger_account_id, :deduction_type, :description, :employee_ids, :current_balance, :state
   has_many :deduction_payrolls, :dependent => :destroy
   has_many :deduction_employees, :dependent => :destroy
   has_many :payrolls, :through => :deduction_payrolls

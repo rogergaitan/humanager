@@ -3,6 +3,7 @@ class WorkBenefit < ActiveRecord::Base
   
   has_many :employee_benefits, :dependent => :destroy
   has_many :employees, :through => :employee_benefits
+  has_many :work_benefits_payments
   belongs_to :debit, class_name: 'LedgerAccount', foreign_key: "debit_account"
   belongs_to :credit, class_name: 'LedgerAccount', foreign_key: "credit_account"
 end

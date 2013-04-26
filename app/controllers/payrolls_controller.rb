@@ -1,5 +1,5 @@
 class PayrollsController < ApplicationController
-  respond_to :html, :json
+  respond_to :html, :json, :js
   before_filter :get_payroll_types, :only => [:new, :edit]
 
   # GET /payrolls
@@ -122,14 +122,15 @@ class PayrollsController < ApplicationController
 
     payroll_id = params[:payroll_id]
 
-    payroll.close_payroll(payroll_id)
+    @result = Payroll.close_payroll(payroll_id)
 
-    #@payroll.each do |planilla|
-    #  p = Payroll.find(planilla)
-    #  p.update_attributes(:state => false)
-    #end
+    # Json
+    respond_to do |format|
+      format.json { render json: @result }
+    end
 
-    render :index
+    
+    # render :index
   end
 
 end

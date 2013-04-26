@@ -90,21 +90,52 @@ payroll.add_inactivas = function (payroll, target_table) {
 
 // Process to close a payroll Selected
 payroll.closePayrollSelected = function(payroll_id) {
-  
+
   if( payroll.confirm() ) {
     
     $.ajax({
       type: "POST",
       url: "/payrolls/close_payroll",
-      data: { 
-        payroll_id: payroll_id 
+      data: {
+        payroll_id: payroll_id
       },
-      success: function() { 
-        payroll.index();
+      success: function(data) {
+        
+        if(data['status']) {
+          $('#table_results_close_payroll').hide();
+          $('#results_close_payroll').html('La Planilla fue cerrada con exito');
+          $('#myModalLabel').html('Mensaje');
+          $("#payrollModal").modal('show');
+        } else {
+          payroll.show_details_erros(data['data']);
+        }
+
       }
     });
   }
 
+}
+
+payroll.show_details_erros = function(data) {
+
+  $('#table_results_close_payroll > tbody').html('');
+
+  $.each(data, function(index, array) {
+
+    $('#table_results_close_payroll > tbody').append(
+      '<tr>' +
+        '<td>' + array['employee_name'] + '</td>' +
+        '<td>' + array['total_salary'] + '</td>' +
+        '<td>' + array['total_deductions'] + '</td>' +
+      '</tr>'
+    );
+
+  });
+
+  $('#myModalLabel').html('Mensaje: Error salario insuficiente');
+  $('#table_results_close_payroll').show();
+  $("#payrollModal").modal('show');
+  
 }
 
 
@@ -138,27 +169,3 @@ payroll.confirm = function () {
   var resp = confirm("Realmente desea ejecutar esta acción ?");
   return resp;
 }
-
-// Cierra una o un conjunto de planillas
-/*function Cerrar() {
-
-  if( Confirmar() == true ) {
-    var planillas = new Array(); // hago un each de la 6ta columna d la tabla y guardo los chequeados en un arreglo
-    $('#activas tbody tr td:nth-child(6) .ckActive').each(function () {
-      if( $(this).is(":checked") ) {
-        planillas.push($(this).val());
-      }
-    });
-
-    $.ajax({
-      type: "POST",
-      url: "/payrolls/cerrar_planilla",
-      data: { 
-        cerrar_planilla: JSON.stringify(planillas) 
-      },
-      success: function() { 
-        index(); 
-      }
-    });
-  }
-}*/
