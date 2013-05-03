@@ -85,7 +85,6 @@ class Employee < ActiveRecord::Base
   end
   
   def self.all_departments
-    puts 'as'
     @departments = Department.all
   end
 

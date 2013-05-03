@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-  //llena el filtro para los empleados
+  // llena el filtro para los empleados
   populateEmployeesFilter('/deductions/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
   CContables();//Llama la funcion para el autocomplete de cuentas contables
@@ -134,7 +134,6 @@ function filterDepartment (dropdown) {
       };
   });
 }
-
 
 //function to filter results by superior name 
 function filterSuperior (dropdown) {
@@ -314,18 +313,17 @@ function ObtenerPlanillas(){
 	});
 }
 
-//carga las planillas activas en una tabla
- function add_activas(payroll, target_table)
-  {
-    var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td class="payroll-id">' + payroll.id +'</td>' +
-        '<td class="payroll-type"><a data-dismiss="modal" href="#">' + payroll.payroll_type.description +'</a></td>' +
-        '<td>' +  payroll.start_date + '</td>' +
-        '<td>' +  payroll.end_date + '</td>' +
-        '<td>' +  payroll.payment_date + '</td>' +
-      '</tr>');
-    return row;
-  }
+// carga las planillas activas en una tabla
+function add_activas(payroll, target_table) {
+  var row = $(target_table + '> tbody:last').append('<tr>' + 
+      '<td class="payroll-id">' + payroll.id +'</td>' +
+      '<td class="payroll-type"><a data-dismiss="modal" href="#">' + payroll.payroll_type.description +'</a></td>' +
+      '<td>' +  payroll.start_date + '</td>' +
+      '<td>' +  payroll.end_date + '</td>' +
+      '<td>' +  payroll.payment_date + '</td>' +
+    '</tr>');
+  return row;
+}
 
 //Settea el campo oculto de con el id de la planilla unica seleccionada
 function set_payroll(e) {

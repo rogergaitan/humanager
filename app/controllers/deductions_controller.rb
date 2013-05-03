@@ -5,7 +5,7 @@ class DeductionsController < ApplicationController
   # GET /deductions
   # GET /deductions.json
   def index
-    @deductions = Deduction.paginate(:page => params[:page], :per_page => 15)
+    @deductions = Deduction.where('state = ?', 1).paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
   end
 
@@ -26,6 +26,12 @@ class DeductionsController < ApplicationController
   # GET /deductions/1/edit
   def edit
     @deduction = Deduction.find(params[:id])
+
+    @employee_ids = []
+
+    @deduction.deduction_employees.where('state=1').select('employee_id').each do |e|
+      @employee_ids << e['employee_id']
+    end
     #@credit_account = LedgerAccount.credit_accounts
   end
 
@@ -49,9 +55,64 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1.json
   def update
     @deduction = Deduction.find(params[:id])
+    
+    # kalfaro
+    current_employees = []
+    delete_employees = []
+    add_employees = []
+    list_employees = params[:deduction][:employee_ids].to_a
+
+    DeductionEmployee.where('deduction_id = ?', params[:id]).select('employee_id').each do |id|
+      employee_id = id['employee_id']
+      current_employees << "#{employee_id}"
+    end
+
+    delete_employees = current_employees - list_employees
+
+    if delete_employees.length > 0
+      # Here delete or update state deduction employees
+      delete_employees.each do |id_employee|
+
+        de = DeductionEmployee.find_by_deduction_id_and_employee_id(params[:id], id_employee)
+      
+        if de.deduction_payments.empty?
+          # No there are records.
+          de.delete
+        else
+          # if there are records.
+          de.state = 0
+          de.save
+        end
+      end # End each delete_employees
+
+    else
+      # Here add new employees
+      add_employees = list_employees - current_employees
+      
+      add_employees.each do |new_id|
+        # NOTA: Falta si agrega a un empleado q se quito se debe volver a
+        # cambiar el estado a 1, cuando viene de regreso con mas usuarios
+        unless new_id.empty?
+
+          new_deduction_employee = DeductionEmployee.new
+          new_deduction_employee.deduction_id = params[:id]
+          new_deduction_employee.employee_id = new_id
+          new_deduction_employee.state = 1
+          new_deduction_employee.save
+        end
+      end # End each add_employees
+
+    end # End each delete_employees
+
+    @deduction.description = params[:deduction][:description]
+    @deduction.deduction_type = params[:deduction][:deduction_type]
+    @deduction.amount_exhaust = params[:deduction][:amount_exhaust]
+    @deduction.calculation_type = params[:deduction][:calculation_type]
+    @deduction.calculation = params[:deduction][:calculation]
+    @deduction.ledger_account_id = params[:deduction][:ledger_account_id]
 
     respond_to do |format|
-      if @deduction.update_attributes(params[:deduction])
+      if @deduction.save
         format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
         format.json { head :no_content }
       else
@@ -59,6 +120,19 @@ class DeductionsController < ApplicationController
         format.json { render json: @deduction.errors, status: :unprocessable_entity }
       end
     end
+
+    # kalfaro
+
+    # respond_to do |format|
+    #   if @deduction.update_attributes(params[:deduction])
+    #     format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
+    #     format.json { head :no_content }
+    #   else
+    #     format.html { render action: "edit" }
+    #     format.json { render json: @deduction.errors, status: :unprocessable_entity }
+    #   end
+    # end
+
   end
 
   # DELETE /deductions/1
@@ -79,7 +153,7 @@ class DeductionsController < ApplicationController
     respond_with(@employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} })
   end
 
-    def get_activas
+  def get_activas
     @activas = {}
     @activas[:activa] = Payroll.activas
     respond_with(@activas)

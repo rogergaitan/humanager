@@ -25,7 +25,7 @@ class Payroll < ActiveRecord::Base
 
   # Close the payroll
   def self.close_payroll(payroll_id)
-    
+
     list_employees_salary = get_salary_empoyees(payroll_id)
     list_employees_deductions = get_deductions_employees(list_employees_salary)
     list_employees_work_benefits = get_work_benefits(list_employees_salary)
@@ -39,7 +39,7 @@ class Payroll < ActiveRecord::Base
       # Deductions
       save_information_payroll(payroll_id, list_employees_deductions)
       
-      #Work Benefits
+      # Work Benefits
       save_work_benefits_payments(payroll_id, list_employees_work_benefits)
 
       result['status'] = true
@@ -133,19 +133,23 @@ class Payroll < ActiveRecord::Base
                   deduction_details['payment'] = de.deduction.calculation.to_f
                 else
 
-                  deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
-
                   if de.deduction_payments.last.current_balance.to_f >= de.deduction.calculation.to_f
                     deduction_details['current_balance'] = (de.deduction_payments.last.current_balance.to_f - de.deduction.calculation.to_f)
+                    deduction_details['payment'] = de.deduction.calculation.to_f
+                    deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
                   else
-                    deduction_details['current_balance'] = de.deduction_payments.last.current_balance.to_f
+                    deduction_details['current_balance'] = 0
                     deduction_details['payment'] = de.deduction_payments.last.current_balance.to_f
-                    deduction_details['state'] = true
-                    deduction_details['state_deduction_employee'] = true
+                    deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
                   end 
 
+                  if deduction_details['current_balance'].to_f == 0
+                    deduction_details['state_deduction_employee'] = false
+                    deduction_details['state'] = false
+                  end
+
                 end
-                
+
               end
               
           end # end case
@@ -213,7 +217,7 @@ class Payroll < ActiveRecord::Base
           d.update_attributes(:state => false)
         end
 
-        if deduction['state_deduction_employee']
+        if deduction['state_deduction_employee'] == false
           de = DeductionEmployee.find(deduction['deduction_employee_id'])
           de.update_attributes(:state => false)
         end
@@ -238,7 +242,6 @@ class Payroll < ActiveRecord::Base
       EmployeeBenefit.where(:employee_id => id).each do |eb|
         
         work_benefits_details['employee_benefits_id'] = eb.id
-        # work_benefits_details['description'] = eb.work_benefit.description
         work_benefits_details['percentage'] = eb.work_benefit.percentage.to_f
         work_benefits_details['payment'] = (salary.to_f*eb.work_benefit.percentage.to_f/100)
 
@@ -273,6 +276,23 @@ class Payroll < ActiveRecord::Base
 
       end # End each work_benefits
     end # End each list_employees_work_benefits
+  end
+
+  # Get the number operation to save information into the database firebird
+  def self.get_number_operation
+
+    # Get actual db
+    current_database = ActiveRecord::Base.connection_config
+    
+    # Change the database and create the query
+    co = ActiveRecord::Base.establish_connection :firebird
+    result = co.connection.exec_query('SELECT GEN_ID(GEN_OPRMAEST_INUMOPER,1) FROM RDB$DATABASE').to_a
+
+    # Restore the previous database
+    ActiveRecord::Base.establish_connection(current_database)
+
+    # Return the ID
+    result[0][0]
   end
 
 end

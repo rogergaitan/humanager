@@ -312,7 +312,7 @@ $(jQuery(document).ready(function($) {
   		});
   	}
 
-  	payroll_logs.arrays_equal = function (a,b) { return !(a<b || b<a); }
+  	payroll_logs.arrays_equal = function (a, b) { return !(a<b || b<a); }
 
   	payroll_logs.setTotal = function(num) {
 
@@ -452,7 +452,7 @@ $(jQuery(document).ready(function($) {
 				$('div.alert.alert-error').delay(4000).fadeOut();
 	        },
 			error: function(response, textStatus, errorThrown) {
-				$('div#message').html('<div class="alert alert-error">Error al intentar borrar registro</div>');
+				$('div#message').html('<div class="alert alert-error">Error al intentar borrar el registro</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
 			}
       	});

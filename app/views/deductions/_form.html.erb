@@ -49,8 +49,9 @@
         <% @employees.each do |employee| %>
           <div class="checkbox-group">
             <div class="checkbox-margin">
+              <% @deduction_ids %>
               <%= check_box_tag 'left-list-employees', employee.id, 
-                      @deduction.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
+                      @employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
               <%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
                   :class => 'checkbox-label' %>
             </div>
@@ -64,7 +65,7 @@
     </div>
     <div class="employees-list list-right">
       <%= hidden_field_tag 'deduction[employee_ids][]', nil %>
-      <div class="employees-margin" id="list-to-save">        
+      <div class="employees-margin" id="list-to-save">
       </div>
     </div>
     <div style="clear:both"></div>
