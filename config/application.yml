@@ -5,11 +5,60 @@ INPUT_RADIO: "radio"
 INPUT_SELECT: "select"
 INPUT_TEXTAREA: "textarea"
 INPUT_DATE: "datepicture"
-PAYMENT: [{name: "Ordinario", type: "1"},
-          {name: "Extra", type: "1.5"},
-          {name: "Doble", type: "2"}]
-DEDUCTION: [{name: "Constante"},
-			 {name: "Unica"},
-			 {name: "Monto_Agotar"}]
-CALCULATION_TYPE: [{name: "porcentual"},
-					{name: "fija"}]
+PAYMENT: [
+	{ name: "Ordinario", type: "1" },
+    { name: "Extra", type: "1.5" },
+	{ name: "Doble", type: "2" }
+]
+DEDUCTION: [
+	{ name: "Constante" },
+	{ name: "Unica" },
+	{ name: "Monto_Agotar" }
+]
+CALCULATION_TYPE: [
+	{ name: "porcentual" },
+	{ name: "fija" }
+]
+FIREBIRD: [
+	{ IEMP: 1,
+	ITDOPER: "MOV1",
+	ITDSOP: 13,
+	ICLASIFOP: "1",
+	ICCBASE: "",
+	ISEDE: "01",
+	IUSUARIOULT: "RRHH",
+	INIT: "",
+	IPROCESS: "0",
+	IESTADO: "0",
+	INUMOPERULTIMP: "",
+	FPROCESAM: "",
+	QERROR: "",
+	QWARNING: "",
+	BUSRDETAIL: "",
+	BNODESPROCESO: "",
+	BANULADA: "F",
+	BIMPRESA: "F",
+	QIMPRESIONES: "",
+	MINGRESOS: "",
+	MEGRESOS: "",
+	MDEBITOS: 0,
+	MCREDITOS: 0,
+	QMOVCNT: 0,
+	QMOVINV: 0,
+	QMOVORD: 0,
+	ZLOG: "",
+	ZCOMENTAR: "",
+	IDRVVERSION: "",
+	IIMAGEN: "",
+	IRELEASE: "",
+	SGRUPOUSR: "",
+	ITDFORMATOPRINTED: "",
+	INUMOPERV3: "",
+	IWS: "",
+	IWSULT: "",
+	IUSUARIO: "RRHH",
+	IEJECUCION: 0,
+	IMONEDA: "10",
+	BMOVMANUAL: "F",
+	ISUCURSAL: "" }
+]

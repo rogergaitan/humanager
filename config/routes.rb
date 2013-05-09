@@ -25,6 +25,7 @@ Reasapp::Application.routes.draw do
     collection do
       post :reabrir
       post :close_payroll
+      post :send_to_firebird
     end
   end
 

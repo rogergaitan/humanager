@@ -133,4 +133,14 @@ class PayrollsController < ApplicationController
     # render :index
   end
 
+  def send_to_firebird
+
+    payroll_id = params[:payroll_id]
+
+    Payroll.send_to_firebird(payroll_id)
+
+    render :index
+
+  end
+
 end

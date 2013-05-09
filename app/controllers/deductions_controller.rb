@@ -83,25 +83,31 @@ class DeductionsController < ApplicationController
           de.state = 0
           de.save
         end
-      end # End each delete_employees
-
+      end # End each delete_employeest
     else
-      # Here add new employees
+      # Here add new employees what not exist into the DB
       add_employees = list_employees - current_employees
-      
-      add_employees.each do |new_id|
-        # NOTA: Falta si agrega a un empleado q se quito se debe volver a
-        # cambiar el estado a 1, cuando viene de regreso con mas usuarios
-        unless new_id.empty?
+      add_employees.delete("")
+      list_employees.delete("")
 
-          new_deduction_employee = DeductionEmployee.new
-          new_deduction_employee.deduction_id = params[:id]
-          new_deduction_employee.employee_id = new_id
-          new_deduction_employee.state = 1
-          new_deduction_employee.save
-        end
-      end # End each add_employees
-
+      if add_employees.length > 0
+        add_employees.each do |new_id|
+          unless new_id.empty?
+            new_deduction_employee = DeductionEmployee.new
+            new_deduction_employee.deduction_id = params[:id]
+            new_deduction_employee.employee_id = new_id
+            new_deduction_employee.state = 1
+            new_deduction_employee.save
+          end
+        end # End each add_employees
+      else
+        # Here update state for all employees
+        list_employees.each do |id_list_employee|
+          deduction = DeductionEmployee.find_by_deduction_id_and_employee_id(params[:id], id_list_employee)
+          deduction.state = 1
+          deduction.save
+        end # End each list_employees
+      end # End if add_employees.length
     end # End each delete_employees
 
     @deduction.description = params[:deduction][:description]

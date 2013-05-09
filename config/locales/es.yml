@@ -477,6 +477,7 @@ es:
           end_date: Hasta
           payment_date: Fecha de pago
           state: Cerrar
+          num_oper: Numero de Operación
         payroll_log:
           date: Fecha
           time_worked: Tiempo trabajado

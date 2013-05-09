@@ -1,6 +1,6 @@
 class Payroll < ActiveRecord::Base
 
-  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state
+  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper
   belongs_to :payroll_type
   belongs_to :deduction_payment
   has_many :deduction_payrolls, :dependent => :destroy
@@ -278,6 +278,35 @@ class Payroll < ActiveRecord::Base
     end # End each list_employees_work_benefits
   end
 
+  def self.send_to_firebird(payroll_id)
+    
+    num_oper = get_number_operation
+    puts 'num_oper'
+    puts num_oper
+
+    payroll = Payroll.find(payroll_id)
+    puts 'part-1'
+
+    # Save into OPRMAEST
+    result_oprmaest =  save_in_oprmaest(num_oper, payroll)
+    puts 'part-2'
+    # Save into OPRMAEST
+    
+    # Save into Oprmov1Base
+    result_oprmov1_base = save_in_oprmov1_base(num_oper)
+    puts 'part-3'
+    # Save into Oprmov1Base
+
+    # Save into Oprmov1Detalle
+    # result_oprmov1_detalle = save_in_oprmov1_detalle
+    # Save into Oprmov1Detalle
+
+    if result_oprmaest and result_oprmov1_base
+      # INSERTAR DENTRO DEL PAYROLL EL NUM_OPER Y REFRESCAR LA PAGINA
+    end
+
+  end
+
   # Get the number operation to save information into the database firebird
   def self.get_number_operation
 
@@ -291,8 +320,116 @@ class Payroll < ActiveRecord::Base
     # Restore the previous database
     ActiveRecord::Base.establish_connection(current_database)
 
-    # Return the ID
+    # Return the ID (INUMOPER)
     result[0][0]
   end
+
+  def self.save_in_oprmaest(num_oper, payroll)
+
+    t = Time.new
+    date = t.strftime("%d.%m.%Y, %T.%L")
+
+    transaction do
+      oprmaest = Oprmaest.new
+      oprmaest.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+      oprmaest.inumoper = num_oper
+      oprmaest.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
+      oprmaest.itdoper = CONSTANTS[:FIREBIRD][0]['ITDOPER']
+      oprmaest.itdsop = CONSTANTS[:FIREBIRD][0]['ITDSOP']
+      oprmaest.inumsop = payroll['id']
+      oprmaest.snumsop = "MRH-"+ (sprintf '%04d', payroll['id'])
+      oprmaest.iclasifop = CONSTANTS[:FIREBIRD][0]['ICLASIFOP']
+      # oprmaest.fanio = payroll['end_date'].year AUTOMATICO
+      # oprmaest.fmes = payroll['end_date'].month AUTOMATICO
+      # oprmaest.fdia = payroll['end_date'].day AUTOMATICO
+      oprmaest.fsemana = payroll['end_date'].cweek
+      oprmaest.tdetalle = payroll.payroll_type.description+" del "+payroll['start_date'].to_s+" al "+payroll['end_date'].to_s
+      # oprmaest.iccbase = CONSTANTS[:FIREBIRD][0]['ICCBASE']
+      oprmaest.imoneda = CONSTANTS[:FIREBIRD][0]['IMONEDA']
+      oprmaest.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
+      oprmaest.iusuarioult = CONSTANTS[:FIREBIRD][0]['IUSUARIOULT']
+      # oprmaest.init = CONSTANTS[:FIREBIRD][0]['INIT']
+      oprmaest.iprocess = CONSTANTS[:FIREBIRD][0]['IPROCESS']
+      oprmaest.iestado = CONSTANTS[:FIREBIRD][0]['IESTADO']
+      # oprmaest.inumoperultimp ['INUMOPERULTIMP'] = CONSTANTS[:FIREBIRD][0]['INUMOPERULTIMP']
+      # oprmaest.fprocesam = CONSTANTS[:FIREBIRD][0]['FPROCESAM']
+      # oprmaest.qerror = CONSTANTS[:FIREBIRD][0]['QERROR']
+      # oprmaest.qwarning = CONSTANTS[:FIREBIRD][0]['QWARNING']
+      # oprmaest.busdetail = CONSTANTS[:FIREBIRD][0]['BUSRDETAIL']
+      # oprmaest.bnodesproceso = CONSTANTS[:FIREBIRD][0]['BNODESPROCESO']
+      oprmaest.banulada = CONSTANTS[:FIREBIRD][0]['BANULADA']
+      oprmaest.bimpresa = CONSTANTS[:FIREBIRD][0]['BIMPRESA']
+      # oprmaest.qimpresiones = CONSTANTS[:FIREBIRD][0]['QIMPRESIONES']
+      # oprmaest.mingresos = CONSTANTS[:FIREBIRD][0]['MINGRESOS']
+      # oprmaest.megresos = CONSTANTS[:FIREBIRD][0]['MEGRESOS']
+      oprmaest.mdebitos = CONSTANTS[:FIREBIRD][0]['MDEBITOS']
+      oprmaest.mcreditos = CONSTANTS[:FIREBIRD][0]['MCREDITOS']
+      oprmaest.qmovcnt = CONSTANTS[:FIREBIRD][0]['QMOVCNT']
+      oprmaest.qmovinv = CONSTANTS[:FIREBIRD][0]['QMOVINV']
+      oprmaest.qmovord = CONSTANTS[:FIREBIRD][0]['QMOVORD']
+      # oprmaest.zlog = CONSTANTS[:FIREBIRD][0]['ZLOG']
+      # oprmaest.zcomentar = CONSTANTS[:FIREBIRD][0]['ZCOMENTAR']
+      # oprmaest.idrvversion = CONSTANTS[:FIREBIRD][0]['IDRVVERSION']
+      oprmaest.iimagen = CONSTANTS[:FIREBIRD][0]['IIMAGEN']
+      # oprmaest.irelease = CONSTANTS[:FIREBIRD][0]['IRELEASE']
+      # oprmaest.sgrupousr = CONSTANTS[:FIREBIRD][0]['SGRUPOUSR']
+      # oprmaest.itdformatoprinted = CONSTANTS[:FIREBIRD][0]['ITDFORMATOPRINTED']
+      oprmaest.fcreacionusr = date
+      # oprmaest.inumoperv3  = CONSTANTS[:FIREBIRD][0]['INUMOPERV3']
+      oprmaest.iws = CONSTANTS[:FIREBIRD][0]['IWS']
+      oprmaest.fcreacion = date
+      # oprmaest.iwsult = CONSTANTS[:FIREBIRD][0]['IWSULT']
+      oprmaest.fultima = date
+      oprmaest.iusuario = CONSTANTS[:FIREBIRD][0]['IUSUARIO']
+      oprmaest.iejecucion = CONSTANTS[:FIREBIRD][0]['IEJECUCION']
+      oprmaest.bmovmanual = CONSTANTS[:FIREBIRD][0]['BMOVMANUAL']
+      # oprmaest.isucurs = CONSTANTS[:FIREBIRD][0]['ISUCURS']
+      oprmaest.save
+    end
+  end
+
+  def self.save_in_oprmov1_base(num_oper)
+
+    transaction do
+      oprmov1_base = Oprmov1Base.new
+      oprmov1_base.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+      oprmov1_base.inumoper = num_oper
+      oprmov1_base.save
+    end
+  end
+
+  def self.save_in_oprmov1_detalle(num_oper)
+
+    # transaction do
+    #   oprmov1_detalle = Oprmov1Detalle.new
+    #   oprmov1_detalle.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+    #   oprmov1_detalle.inumoper = num_oper
+    #   oprmov1_detalle.ilinea = 
+    #   oprmov1_detalle.icc = 
+    #   oprmov1_detalle.icuenta = 
+    #   oprmov1_detalle.tdetalle = 
+    #   oprmov1_detalle.mvrbase = 
+    #   oprmov1_detalle.ibanco = 
+    #   oprmov1_detalle.icheque = 
+    #   oprmov1_detalle.init = 
+    #   oprmov1_detalle.fsoport = 
+    #   oprmov1_detalle.initcxx = 
+    #   oprmov1_detalle.fpagocxx = 
+    #   oprmov1_detalle.fvencimcxx = 
+    #   oprmov1_detalle.mdebito = 
+    #   oprmov1_detalle.mcredito = 
+    #   oprmov1_detalle.iactivo = 
+    #   oprmov1_detalle.inumsopcxx = 
+    #   oprmov1_detalle.iflujoefec = 
+    #   oprmov1_detalle.mvrotramoneda = 
+    #   oprmov1_detalle.scomandos = 
+    #   oprmov1_detalle.ilineamov = 
+    #   oprmov1_detalle.valor1 = 
+    #   oprmov1_detalle.valor2 = 
+    #   oprmov1_detalle.clase1 = 
+    #   oprmov1_detalle.clase2 = 
+    # end # End transaction
+  end
+
 
 end

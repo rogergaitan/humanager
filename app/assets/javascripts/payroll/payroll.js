@@ -24,6 +24,17 @@ $(document).ready(function() {
     }
   });
 
+  $("#inactivas").on("click", "[id^='send_firebird_']", function(e) { 
+
+    e.stopPropagation();
+
+    if( payroll.confirm() ) {
+      var payroll_id = $(this).next().val();
+      payroll.send_to_firebird(payroll_id);
+    }
+
+  });
+
 });
 
 // Consulta los datos de las planillas activas y inactivas
@@ -74,6 +85,17 @@ payroll.add_activas = function (payroll, target_table) {
 // Load the inactive payroll in a table
 payroll.add_inactivas = function (payroll, target_table) {
 
+  var num_oper = '';
+  var checked = '';
+  if (payroll.num_oper != null ) {
+    num_oper = payroll.num_oper;
+    checked = 'disabled="disabled"';
+  } else { 
+    num_oper = '<a href="#" id="send_firebird_'+payroll.id+'" class="btn btn-mini btn-danger"'+
+    ' data-method="delete" rel="nofollow">Enviar a FIREBIRD</a>'+
+    '<input type="hidden" value="'+payroll.id+'">';
+  }
+
   var row = $(target_table + '> tbody:last').append('<tr>' + 
       '<td>' +
         '<a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a>' +
@@ -82,8 +104,9 @@ payroll.add_inactivas = function (payroll, target_table) {
       '<td>' +  payroll.end_date + '</td>' +
       '<td>' +  payroll.payment_date + '</td>' +
       '<td>' +
-        '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '"/>' +
+        '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '" '+checked+'/>' +
       '</td>' +
+      '<td>' + num_oper +'</td>' +
     '</tr>');
   return row;
 }
@@ -136,6 +159,31 @@ payroll.show_details_erros = function(data) {
   $('#table_results_close_payroll').show();
   $("#payrollModal").modal('show');
   
+}
+
+// Process that sends information to firebird
+payroll.send_to_firebird = function(payroll_id) {
+
+  $.ajax({
+    type: "POST",
+    url: "/payrolls/send_to_firebird",
+    data: {
+      payroll_id: payroll_id
+    },
+    success: function(data) {
+      
+      // if(data['status']) {
+      //   $('#table_results_close_payroll').hide();
+      //   $('#results_close_payroll').html('La Planilla fue cerrada con exito');
+      //   $('#myModalLabel').html('Mensaje');
+      //   $("#payrollModal").modal('show');
+      // } else {
+      //   payroll.show_details_erros(data['data']);
+      // }
+
+    }
+  });
+
 }
 
 
