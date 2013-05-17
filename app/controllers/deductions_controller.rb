@@ -1,6 +1,6 @@
 class DeductionsController < ApplicationController
   before_filter :resources, :only => [:new, :edit]
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   # GET /deductions
   # GET /deductions.json
@@ -20,6 +20,13 @@ class DeductionsController < ApplicationController
   # GET /deductions/new.json
   def new
     @deduction = Deduction.new
+
+    @employee_ids = []
+
+    @deduction.deduction_employees.where('state=1').select('employee_id').each do |e|
+      @employee_ids << e['employee_id']
+    end
+
     respond_with(@deduction)
   end
 
@@ -54,9 +61,9 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1
   # PUT /deductions/1.json
   def update
+
     @deduction = Deduction.find(params[:id])
     
-    # kalfaro
     current_employees = []
     delete_employees = []
     add_employees = []
@@ -116,6 +123,8 @@ class DeductionsController < ApplicationController
     @deduction.calculation_type = params[:deduction][:calculation_type]
     @deduction.calculation = params[:deduction][:calculation]
     @deduction.ledger_account_id = params[:deduction][:ledger_account_id]
+    @deduction.is_beneficiary = params[:deduction][:is_beneficiary]
+    @deduction.beneficiary_id = params[:deduction][:beneficiary_id]
 
     respond_to do |format|
       if @deduction.save
@@ -126,8 +135,6 @@ class DeductionsController < ApplicationController
         format.json { render json: @deduction.errors, status: :unprocessable_entity }
       end
     end
-
-    # kalfaro
 
     # respond_to do |format|
     #   if @deduction.update_attributes(params[:deduction])

@@ -65,7 +65,20 @@ $(document).ready(function(){
   
   $('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
 
+  is_beneficiary( $('#deduction_is_beneficiary').is(':checked') );
+
+  $('#deduction_is_beneficiary').change(function() { is_beneficiary($('#deduction_is_beneficiary').is(':checked')) });
+
 });
+
+function is_beneficiary(value) {
+  if( value ) {
+    $('#beneficiary_id').attr('disabled', 'disabled');
+    $('#deduction_beneficiary_id').val('');
+  } else {
+    $('#beneficiary_id').removeAttr('disabled', 'disabled');
+  }
+}
 
 //Consulta las cuentas contables para hacer el autocomplete
 function CContables() {
@@ -292,25 +305,21 @@ function ObtenerPlanillas(){
     $.ajax('/payrolls/get_activas', {
     	type: 'GET',
     	timeout: 8000,
-
-    	beforeSend: function() {
-		$('#error').hide();
-		$('#loading').show();
-		},
-
-		complete: function() {
-		$('#loading').hide();
-		},
-
-    	success: function(result) {
-    	$('table#activas > tbody').empty();
-      	$(result.activa).each(function() { add_activas(this, 'table#activas')});
-    	},
-
-    	error: function(result) {
-		$('#error').show();
-		}
-	});
+      beforeSend: function() {
+  		  $('#error').hide();
+  		  $('#loading').show();
+  		},
+  		complete: function() {
+  		  $('#loading').hide();
+  		},
+      success: function(result) {
+      	$('table#activas > tbody').empty();
+        	$(result.activa).each(function() { add_activas(this, 'table#activas')});
+      	},
+      error: function(result) {
+  		  $('#error').show();
+  		}
+	 });
 }
 
 // carga las planillas activas en una tabla

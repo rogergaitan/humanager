@@ -27,8 +27,8 @@ class Employee < ActiveRecord::Base
   attr_accessible :gender, :birthday, :marital_status, :join_date, 
   					:number_of_dependents, :seller, :social_insurance, :spouse, 
   					:wage_payment, :entity_attributes, :department_id, 
-  					:occupation_id, :payment_frequency_id,
-  					:means_of_payment_id, :photo_attributes, :position_id, :employee_id, :is_superior,
+  					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
+            :photo_attributes, :position_id, :employee_id, :is_superior,
             :payment_unit_id, :price_defined_work, :payroll_type_default_id
             
   has_one :department

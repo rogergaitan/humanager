@@ -306,6 +306,9 @@ es:
           percentage: Porcentaje
           debit_account: Cuenta de Débito
           credit_account: Cuenta de Crédito
+          is_beneficiary: Es Beneficiario
+          beneficiary_id: Beneficiario
+          centro_de_costo_id: Centro de Costo
         payment_method: 
           name: Nombre
           description: Descripción
@@ -471,6 +474,8 @@ es:
           calculation_type: Tipo de calculo
           calculation: Valor
           ledger_account_id: Cuenta de Crédito
+          is_beneficiary: Es Beneficiario
+          beneficiary_id: Beneficiario
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde

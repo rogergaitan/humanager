@@ -1,6 +1,6 @@
 class WorkBenefitsController < ApplicationController
   before_filter :resources, :only => [:new, :edit]
-  respond_to :html, :json
+  respond_to :html, :json, :js
   # GET /work_benefits
   # GET /work_benefits.json
   def index
@@ -84,6 +84,13 @@ class WorkBenefitsController < ApplicationController
       format.json { render json: @credit_accounts }
     end
   end
+
+  def fetch_cost_center
+    @cost_center = CentroDeCosto.all
+    respond_to do |format|
+      format.json { render json: @cost_center }
+    end
+  end
   
   def fetch_employees
     @employees = Employee.includes(:entity).order_employees
@@ -91,10 +98,16 @@ class WorkBenefitsController < ApplicationController
       format.json { render json: @employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} } }
     end
   end
+
+  def search_cost_center
+    @cost_center = WorkBenefit.search_cost_center(params[:search_cost_center_name], params[:page], params[:per_page])
+    respond_with @cost_center
+  end
   
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
     @credit_accounts = LedgerAccount.credit_accounts
+    @payroll_types = PayrollType.all
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior

@@ -285,26 +285,24 @@ class Payroll < ActiveRecord::Base
     puts num_oper
 
     payroll = Payroll.find(payroll_id)
-    puts 'part-1'
 
     # Save into OPRMAEST
     result_oprmaest =  save_in_oprmaest(num_oper, payroll)
-    puts 'part-2'
     # Save into OPRMAEST
     
     # Save into Oprmov1Base
     result_oprmov1_base = save_in_oprmov1_base(num_oper)
-    puts 'part-3'
     # Save into Oprmov1Base
 
     # Save into Oprmov1Detalle
-    # result_oprmov1_detalle = save_in_oprmov1_detalle
+    result_oprmov1_detalle = save_in_oprmov1_detalle_deductions(num_oper, payroll)
+    puts 'result_oprmov1_detalle'
+    puts result_oprmov1_detalle
     # Save into Oprmov1Detalle
 
     if result_oprmaest and result_oprmov1_base
       # INSERTAR DENTRO DEL PAYROLL EL NUM_OPER Y REFRESCAR LA PAGINA
     end
-
   end
 
   # Get the number operation to save information into the database firebird
@@ -337,13 +335,13 @@ class Payroll < ActiveRecord::Base
       oprmaest.itdoper = CONSTANTS[:FIREBIRD][0]['ITDOPER']
       oprmaest.itdsop = CONSTANTS[:FIREBIRD][0]['ITDSOP']
       oprmaest.inumsop = payroll['id']
-      oprmaest.snumsop = "MRH-"+ (sprintf '%04d', payroll['id'])
+      oprmaest.snumsop = "MRH-" + (sprintf '%04d', payroll['id'])
       oprmaest.iclasifop = CONSTANTS[:FIREBIRD][0]['ICLASIFOP']
       # oprmaest.fanio = payroll['end_date'].year AUTOMATICO
       # oprmaest.fmes = payroll['end_date'].month AUTOMATICO
       # oprmaest.fdia = payroll['end_date'].day AUTOMATICO
       oprmaest.fsemana = payroll['end_date'].cweek
-      oprmaest.tdetalle = payroll.payroll_type.description+" del "+payroll['start_date'].to_s+" al "+payroll['end_date'].to_s
+      oprmaest.tdetalle = payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " al " + payroll['end_date'].to_s
       # oprmaest.iccbase = CONSTANTS[:FIREBIRD][0]['ICCBASE']
       oprmaest.imoneda = CONSTANTS[:FIREBIRD][0]['IMONEDA']
       oprmaest.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
@@ -398,38 +396,79 @@ class Payroll < ActiveRecord::Base
     end
   end
 
-  def self.save_in_oprmov1_detalle(num_oper)
+  def self.save_in_oprmov1_detalle_deductions(num_oper, payroll)
 
-    # transaction do
-    #   oprmov1_detalle = Oprmov1Detalle.new
-    #   oprmov1_detalle.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
-    #   oprmov1_detalle.inumoper = num_oper
-    #   oprmov1_detalle.ilinea = 
-    #   oprmov1_detalle.icc = 
-    #   oprmov1_detalle.icuenta = 
-    #   oprmov1_detalle.tdetalle = 
-    #   oprmov1_detalle.mvrbase = 
-    #   oprmov1_detalle.ibanco = 
-    #   oprmov1_detalle.icheque = 
-    #   oprmov1_detalle.init = 
-    #   oprmov1_detalle.fsoport = 
-    #   oprmov1_detalle.initcxx = 
-    #   oprmov1_detalle.fpagocxx = 
-    #   oprmov1_detalle.fvencimcxx = 
-    #   oprmov1_detalle.mdebito = 
-    #   oprmov1_detalle.mcredito = 
-    #   oprmov1_detalle.iactivo = 
-    #   oprmov1_detalle.inumsopcxx = 
-    #   oprmov1_detalle.iflujoefec = 
-    #   oprmov1_detalle.mvrotramoneda = 
-    #   oprmov1_detalle.scomandos = 
-    #   oprmov1_detalle.ilineamov = 
-    #   oprmov1_detalle.valor1 = 
-    #   oprmov1_detalle.valor2 = 
-    #   oprmov1_detalle.clase1 = 
-    #   oprmov1_detalle.clase2 = 
-    # end # End transaction
+    # DEDUCTIONS
+
+    transaction do
+      count = 1
+      total_deductions = 0
+
+      DeductionPayment.where('payroll_id = ?', payroll.id).each do |dp|
+
+        od = Oprmov1Detalle.new
+        od.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+        od.inumoper = num_oper
+        od.ilinea = count
+        od.icuenta = dp.deduction_employee.deduction_id
+        od.init = dp.deduction_employee.employee_id
+        od.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
+
+        if dp.deduction_employee.deduction.is_beneficiary
+          od.initcxx = dp.deduction_employee.employee_id
+        else
+          od.initcxx = dp.deduction_employee.deduction.beneficiary_id
+        end
+
+        od.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
+        od.mdebito = dp.payment
+        total_deductions = total_deductions + dp.payment
+        od.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
+        od.save
+
+        count = count + 1
+      end # End each DeductionPayment
+
+      od_last = Oprmov1Detalle.new
+      od_last.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+      od_last.inumoper = num_oper
+      od_last.ilinea = count + 1
+      od_last.icuenta = CONSTANTS[:FIREBIRD][0]['ICUENTA']
+      od_last.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
+      od_last.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
+      od_last.mdebito = total_deductions
+      od_last.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
+      od_last.save
+    end # End transaction
+
+    # DEDUCTIONS
   end
 
+  def self.save_in_oprmov1_detalle_work_benefits(num_oper, payroll)
+    
+    # WORK BENEFITS
+
+    transaction do
+      count = 1
+      WorkBenefitsPayment.where('payroll_id = ?', payroll.id).each do |wb|
+
+        od = Oprmov1Detalle.new
+        od.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+        od.inumoper = num_oper
+        od.ilinea = count
+        od.icuenta = wb.employee_benefit.work_benefit_id
+        od.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
+        od.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
+        od.init = # Beneficiario
+        od.initcxx = # Beneficiario
+
+        od.mcreditos = wb.payment
+        od.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
+        count = count + 1
+      end # End each WorkBenefitsPayments
+    end # End transaction
+
+    # WORK BENEFITS
+  end
 
 end

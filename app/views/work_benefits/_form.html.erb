@@ -1,15 +1,21 @@
 <script type="text/javascript">
   var debit_account = [];
 	var credit_account = [];
+  var payroll_types = [];
+ 
   <%  @debit_accounts.each do |cc| %>
     debit_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
   <% end %>
+
   <%  @credit_accounts.each do |cc| %>
     credit_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
   <% end %>
+
 </script>
+
 <%= javascript_include_tag "work_benefits/work_benefits_script" %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
+
 <%= form_for @work_benefit, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :description, :class => 'control-label' %>
@@ -39,6 +45,30 @@
 			<a id="credit-button" data-keyboard="false" data-backdrop="static" href="#accountsModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i></a>
     </div>
   </div>
+  
+  <!-- kalfaro -->
+  <div class="control-group">
+    <%= f.label :centro_de_costo_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :centro_de_costo_id %>
+      <%= text_field_tag 'load_centro_de_costo_name', nil, :class => 'text_field required search-image-employee', :for => :centro_de_costo_id %>
+      <a id="cost-centrt-button" data-keyboard="false" data-backdrop="static" href="#costCenterModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i></a>
+    </div>
+  </div>
+  <!-- kalfaro -->
+
+  <div class="control-group">  
+    <%= f.label :is_beneficiary, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.check_box :is_beneficiary %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :beneficiary_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :beneficiary_id, :class => 'text_field' %>
+    </div>
+  </div>
 	<div class="control-group">
     <%= f.label :Empleados, :class => 'control-label' %>
     <div class="controls align-radio">
@@ -57,6 +87,7 @@
 			<div style="clear:both"></div>
     </div>
   </div>
+
 	<div class="controls padding-filter" id="list-departments">
 		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
   	<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
@@ -93,11 +124,13 @@
 			<a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
 			<a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
 		</div>
+
 		<div class="employees-list list-right">
 			<%= hidden_field_tag 'work_benefit[employee_ids][]', nil %>
 			<div class="employees-margin" id="list-to-save">				
 			</div>
 		</div>
+
 		<div style="clear:both"></div>
 	</div>
   <div class="form-actions">
@@ -107,13 +140,53 @@
   </div>
 <% end %>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div id="accountsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
   </div>
   <div class="modal-body">
-    <div id="list"></div>
+    <div id="list
+    "></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<div id="costCenterModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione un Centro de costo</h3>
+  </div>
+  <div class="modal-body">
+    <div>
+  <!-- search -->
+  <legend>  
+    <%= form_tag :search_cost_center_work_benefits, :id => "search_cost_center_form", :class => "form-search", :method => "get" do %>
+      <div class="control-group search">
+        <%= text_field_tag :cost_center_name, params[:cost_center_name], :class => "search-query",
+         :placeholder => 'Nombre' %>
+         <button class="btn" id="clear_task" type="button">Limpiar</button>
+      </div>
+    <% end %>
+  </legend>
+  <!-- search -->
+    </div>
+    <div id="search_cost_center_results"></div>
   </div>
   <div class="modal-footer">
     <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>

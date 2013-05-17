@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130506232638) do
+ActiveRecord::Schema.define(:version => 20130516213846) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -141,7 +141,11 @@ ActiveRecord::Schema.define(:version => 20130506232638) do
     t.datetime "created_at",                                                                                                        :null => false
     t.datetime "updated_at",                                                                                                        :null => false
     t.boolean  "state",                                                                                           :default => true
+    t.boolean  "is_beneficiary",                                                                                  :default => true
+    t.integer  "beneficiary_id"
   end
+
+  add_index "deductions", ["beneficiary_id"], :name => "index_deductions_on_beneficiary_id"
 
   create_table "departments", :force => true do |t|
     t.string   "name"
@@ -390,6 +394,16 @@ ActiveRecord::Schema.define(:version => 20130506232638) do
 
   add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
 
+  create_table "payroll_type_benefits", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.integer  "work_benefit_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "payroll_type_benefits", ["payroll_type_id"], :name => "index_payroll_type_benefits_on_payroll_type_id"
+  add_index "payroll_type_benefits", ["work_benefit_id"], :name => "index_payroll_type_benefits_on_work_benefit_id"
+
   create_table "payroll_types", :force => true do |t|
     t.string   "description"
     t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
@@ -557,13 +571,17 @@ ActiveRecord::Schema.define(:version => 20130506232638) do
 
   create_table "work_benefits", :force => true do |t|
     t.string   "description"
-    t.decimal  "percentage",     :precision => 12, :scale => 2
+    t.decimal  "percentage",         :precision => 12, :scale => 2
     t.integer  "debit_account"
     t.integer  "credit_account"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
+    t.boolean  "is_beneficiary",                                    :default => true
+    t.integer  "beneficiary_id"
+    t.integer  "centro_de_costo_id"
   end
 
+  add_index "work_benefits", ["centro_de_costo_id"], :name => "index_work_benefits_on_centro_de_costo_id"
   add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
   add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"
 

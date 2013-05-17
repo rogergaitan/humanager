@@ -1,29 +1,31 @@
 $(jQuery(document).ready(function($) {
 	
-	//generates the treeview with the different accounts
+	// Generates the treeview with the different accounts
 	$('#debit-button').click(function(){
 		treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');
 	});
+
 	$('#credit-button').click(function(){
 		treeviewhr.cc_tree(credit_account, true, 'load_credit_account_name', 'work_benefit_credit_account');
 	});
 	
-	//populates the autocompletes for the accounts
-  fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
-  fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
-	//populates the filter for employees
+	// Populates the autocompletes for the accounts
+  	fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
+  	fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
+  	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "load_centro_de_costo_name", "work_benefit_centro_de_costo_id"); // url, textField, idField
+	// Populates the filter for employees
 	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
-	//allows expand the treeview
+	// Allows expand the treeview
 	$('#list').on("click", "span.expand_tree", treeviewhr.expand);
 	
-	//delete the treeview after the user clicks on close
+	// Delete the treeview after the user clicks on close
 	$('button.delete-accounts').click(function() {
 		$('#list').empty();
 	});	
 	
-	//allows add the selected account to the textfield	
-  $('#list').on({
+	// Allows add the selected account to the textfield	
+  	$('#list').on({
 		click: set_account,
 		mouseenter: function() {
 			$(this).css("text-decoration", "underline");
@@ -32,17 +34,17 @@ $(jQuery(document).ready(function($) {
 			$(this).css("text-decoration", "none");
 		}}, ".node_link");
 		
-	//executes different options to select the employees
+	// Executes different options to select the employees
 	$('input[name=select_method]').change(function() {
 		selectEmployeesLeft($(this));
 	});
 	
 	$('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
 	
-	//when the employees are loaded in the page move the selected to the right
+	// When the employees are loaded in the page move the selected to the right
 	moveEmployees();
 	
-	//moves the selected employees to the list at the right
+	// Moves the selected employees to the list at the right
 	$('#add-to-list').click(moveToRight);
 	$('#remove-to-list').click(moveToLeft);
 	
@@ -55,11 +57,50 @@ $(jQuery(document).ready(function($) {
 	});
 	
 	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
+
+	is_beneficiary( $('#work_benefit_is_beneficiary').is(':checked') );
+
+	$('#work_benefit_is_beneficiary').change(function() { is_beneficiary($('#work_benefit_is_beneficiary').is(':checked')) });
+
+	// Seach Cost Centro
+	searchCostCentro( $('#cost_center_name').val(), "/work_benefits/search_cost_center");
+
+	$("#search_cost_center_results").on("click", ".pag a", function() {
+    	$.getScript(this.href);
+		return false;
+  	});
+
+  	$('#search_cost_center_form input').keyup(function() {
+    	return searchCostCentro( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
+  	});
+
+  	$('#clear_task').click(function() {
+		$('#cost_center_name').val('');
+		searchCostCentro( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
+	});
+
+	$("#search_cost_center_results").on("click", "table tr a", function(e) {
+  		$('#load_centro_de_costo_name').val( $(this).html() );
+  		$('#work_benefit_centro_de_costo_id').val( $(this).next().val() );
+    	$('#costCenterModal button:eq(2)').trigger('click');
+  		e.preventDefault();
+  	});
+  	// Seach Cost Centro
+
 }));
 
 var empSelected = [];
 
-//function to check and uncheck all the employees at the left.
+function is_beneficiary(value) {
+	if( value ) {
+		$('#work_benefit_beneficiary_id').attr('disabled', 'disabled');
+		$('#work_benefit_beneficiary_id').val('');
+	} else {
+		$('#work_benefit_beneficiary_id').removeAttr('disabled', 'disabled');
+	}
+}
+
+// Function to check and uncheck all the employees at the left.
 function marcarDesmarcar () {
 	if ($(this).is(':checked')) {
 		$("div.left-list input[type='checkbox']").attr('checked', true);
@@ -76,7 +117,7 @@ function selectEmployeesRight() {
 	};
 }
 
-//function to filter results by department name 
+// Function to filter results by department name 
 function filterDepartment (dropdown) {
 	var dep = dropdown ? dropdown : 0;
 	$('div.employees-list.left-list input[type=checkbox]').each(function() {
@@ -96,8 +137,7 @@ function filterDepartment (dropdown) {
 	});
 }
 
-
-//function to filter results by superior name 
+// Function to filter results by superior name 
 function filterSuperior (dropdown) {
 	var sup = dropdown ? dropdown : 0;
 	$('div.employees-list.left-list input[type=checkbox]').each(function() {
@@ -116,13 +156,13 @@ function filterSuperior (dropdown) {
 	});
 }
 
-//function to move the employees to the right
+// Function to move the employees to the right
 function moveToRight(e) {
 	e.preventDefault();
 	moveEmployees();
 }
 
-//Function to move employees to the left
+// Function to move employees to the left
 function moveToLeft (e) {
 	e.preventDefault();
 	var appendEmployees = "";
@@ -188,7 +228,7 @@ function selectEmployeesLeft(selected) {
 function fetchPopulateAutocomplete(url, textField, idField) {
   $.getJSON(url, function(accounts) {
       $(document.getElementById(textField)).autocomplete({
-          source: $.map(accounts, function(item){
+          source: $.map(accounts, function(item) {
               $.data(document.body, 'account_' + item.id+"", item.naccount);
               return{
                   label: item.naccount,                        
@@ -198,12 +238,12 @@ function fetchPopulateAutocomplete(url, textField, idField) {
           select: function( event, ui ) {
               $(document.getElementById(idField)).val(ui.item.id);
           },
-          focus: function(event, ui){
+          focus: function(event, ui) {
               $(document.getElementById(textField)).val(ui.item.label);
           }
 
       })
-      if($(document.getElementById(idField)).val()){
+      if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
           $(document.getElementById(textField)).val(account);
       }        
@@ -246,4 +286,38 @@ function set_account(e) {
     $(document.getElementById($('#idFieldPopup').val())).val(accountId);
     $(document.getElementById($('#textFieldPopup').val())).val(accountName);
 	$('#list').empty();
+}
+
+function fetchCostCenterAutocomplete(url, textField, idField) {
+	$.getJSON(url, function(accounts) {
+      $(document.getElementById(textField)).autocomplete({
+          source: $.map(accounts, function(item) {
+              $.data(document.body, 'account_' + item.id + "", item.nombre_cc);
+              return{
+                  label: item.nombre_cc,                        
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ) {
+              $(document.getElementById(idField)).val(ui.item.id);
+          },
+          focus: function(event, ui) {
+              $(document.getElementById(textField)).val(ui.item.nombre_cc);
+          }
+
+      })
+      if($(document.getElementById(idField)).val()) {
+          var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
+          $(document.getElementById(textField)).val(account);
+      }        
+  }); 
+}
+
+function searchCostCentro (name, url, type) {
+
+	return $.ajax({
+		url: url,
+		dataType: "script",
+		data: { search_cost_center_name: name }
+	});
 }
