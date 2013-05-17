@@ -46,7 +46,6 @@
     </div>
   </div>
   
-  <!-- kalfaro -->
   <div class="control-group">
     <%= f.label :centro_de_costo_id, :class => 'control-label' %>
     <div class="controls">
@@ -55,7 +54,6 @@
       <a id="cost-centrt-button" data-keyboard="false" data-backdrop="static" href="#costCenterModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i></a>
     </div>
   </div>
-  <!-- kalfaro -->
 
   <div class="control-group">  
     <%= f.label :is_beneficiary, :class => 'control-label' %>
@@ -92,17 +90,21 @@
 		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
   	<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
   </div>
+
 	<div class="controls padding-filter" id="list-superior">
 		<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
   	<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
   </div>
+
 	<div class="controls padding-filter" id="employee-filter">
-  	<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
+    <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
   </div>
+
 	<div class="controls" id="marcar-desmarcar">
 		<%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
 		<%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
 	</div>
+
 	<div class="controls lists">
 		<div class="employees-list left-list">
 			<div class="employees-margin" id="no-save">
@@ -133,25 +135,37 @@
 
 		<div style="clear:both"></div>
 	</div>
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                work_benefits_path, :class => 'btn' %>
-  </div>
+
+
+
+
+
+
+
+
+
+
+
+<p>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="form-actions">
+  <%= f.submit nil, :class => 'btn btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+              work_benefits_path, :class => 'btn' %>
+</div>
+
 <% end %>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <div id="accountsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">

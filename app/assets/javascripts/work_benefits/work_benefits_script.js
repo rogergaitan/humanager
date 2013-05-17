@@ -12,7 +12,7 @@ $(jQuery(document).ready(function($) {
 	// Populates the autocompletes for the accounts
   	fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
   	fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
-  	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "load_centro_de_costo_name", "work_benefit_centro_de_costo_id"); // url, textField, idField
+  	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "load_centro_de_costo_name", "work_benefit_centro_de_costo_id");
 	// Populates the filter for employees
 	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
@@ -50,7 +50,7 @@ $(jQuery(document).ready(function($) {
 	
 	$('#departments_employees').change(function() {
 		filterDepartment($(this).val());
-		});
+	});
 	
 	$('#superiors_employees').change(function() {
 		filterSuperior($(this).val());
@@ -62,8 +62,8 @@ $(jQuery(document).ready(function($) {
 
 	$('#work_benefit_is_beneficiary').change(function() { is_beneficiary($('#work_benefit_is_beneficiary').is(':checked')) });
 
-	// Seach Cost Centro
-	searchCostCentro( $('#cost_center_name').val(), "/work_benefits/search_cost_center");
+	// Seach Cost center
+	searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center");
 
 	$("#search_cost_center_results").on("click", ".pag a", function() {
     	$.getScript(this.href);
@@ -71,12 +71,12 @@ $(jQuery(document).ready(function($) {
   	});
 
   	$('#search_cost_center_form input').keyup(function() {
-    	return searchCostCentro( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
+    	return searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
   	});
 
   	$('#clear_task').click(function() {
 		$('#cost_center_name').val('');
-		searchCostCentro( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
+		searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
 	});
 
 	$("#search_cost_center_results").on("click", "table tr a", function(e) {
@@ -85,7 +85,7 @@ $(jQuery(document).ready(function($) {
     	$('#costCenterModal button:eq(2)').trigger('click');
   		e.preventDefault();
   	});
-  	// Seach Cost Centro
+  	// Seach Cost center
 
 }));
 
@@ -313,7 +313,7 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
   }); 
 }
 
-function searchCostCentro (name, url, type) {
+function searchCostCenter (name, url, type) {
 
 	return $.ajax({
 		url: url,
