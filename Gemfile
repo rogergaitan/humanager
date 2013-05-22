@@ -17,7 +17,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'rails3-jquery-autocomplete'
 gem 'annotate'
-# gem 'rubyfb'
+gem 'rubyfb'
 
 
 # Gems used only for assets and not required

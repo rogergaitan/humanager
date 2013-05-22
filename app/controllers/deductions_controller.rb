@@ -125,6 +125,7 @@ class DeductionsController < ApplicationController
     @deduction.ledger_account_id = params[:deduction][:ledger_account_id]
     @deduction.is_beneficiary = params[:deduction][:is_beneficiary]
     @deduction.beneficiary_id = params[:deduction][:beneficiary_id]
+    @deduction.payroll_type_ids = params[:deduction][:payroll_type_ids]
 
     respond_to do |format|
       if @deduction.save
@@ -172,11 +173,19 @@ class DeductionsController < ApplicationController
     respond_with(@activas)
   end
 
+  def fetch_payroll_type
+    @fetch_payroll_type = PayrollType.all
+    respond_to do |format|
+      format.json { render json: @fetch_payroll_type, :only => [:id, :description] }
+    end
+  end
+
   def resources
     @credit_account = LedgerAccount.credit_accounts
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
+    @payroll_types = PayrollType.all
   end
 
 end

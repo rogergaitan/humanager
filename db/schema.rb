@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130516213846) do
+ActiveRecord::Schema.define(:version => 20130521160017) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -403,6 +403,16 @@ ActiveRecord::Schema.define(:version => 20130516213846) do
 
   add_index "payroll_type_benefits", ["payroll_type_id"], :name => "index_payroll_type_benefits_on_payroll_type_id"
   add_index "payroll_type_benefits", ["work_benefit_id"], :name => "index_payroll_type_benefits_on_work_benefit_id"
+
+  create_table "payroll_type_deductions", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.integer  "deduction_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "payroll_type_deductions", ["deduction_id"], :name => "index_payroll_type_deductions_on_deduction_id"
+  add_index "payroll_type_deductions", ["payroll_type_id"], :name => "index_payroll_type_deductions_on_payroll_type_id"
 
   create_table "payroll_types", :force => true do |t|
     t.string   "description"

@@ -16,6 +16,8 @@ $(jQuery(document).ready(function($) {
 	// Populates the filter for employees
 	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
+	populatePayrollTypesFilter('/work_benefits/fetch_payroll_type', 'load_filter_payroll_types_text', 'load_filter_payroll_types_id');
+
 	// Allows expand the treeview
 	$('#list').on("click", "span.expand_tree", treeviewhr.expand);
 	
@@ -40,13 +42,20 @@ $(jQuery(document).ready(function($) {
 	});
 	
 	$('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
+
+	$('#check-payroll-types-right').change(selectPayrollTypesRight);
 	
 	// When the employees are loaded in the page move the selected to the right
 	moveEmployees();
+	movePayrollTypes();
 	
 	// Moves the selected employees to the list at the right
 	$('#add-to-list').click(moveToRight);
 	$('#remove-to-list').click(moveToLeft);
+
+	// Moves the selected payroll types to the list at the right
+	$('#add-to-list-payroll-types').click(moveToRightPayrollTypes);
+	$('#remove-to-list-payroll-types').click(moveToLeftPayrollTypes);
 	
 	$('#departments_employees').change(function() {
 		filterDepartment($(this).val());
@@ -57,6 +66,8 @@ $(jQuery(document).ready(function($) {
 	});
 	
 	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
+	
+	$('div#marcar-desmarcar-payroll-types input[name=check-payroll-types]').change(checkUncheck);
 
 	is_beneficiary( $('#work_benefit_is_beneficiary').is(':checked') );
 
@@ -103,17 +114,34 @@ function is_beneficiary(value) {
 // Function to check and uncheck all the employees at the left.
 function marcarDesmarcar () {
 	if ($(this).is(':checked')) {
-		$("div.left-list input[type='checkbox']").attr('checked', true);
+		$("div.employees-list.left-list input[type='checkbox']").attr('checked', true);
 	} else {
-		$("div.left-list input[type='checkbox']").attr('checked', false);
+		$("div.employees-list.left-list input[type='checkbox']").attr('checked', false);
 	};
+}
+
+// Function to check and uncheck all the payroll types at the left.
+function checkUncheck() {
+	if ($(this).is(':checked')) {
+		$("div.payroll-types-list.left-list input[type='checkbox']").attr('checked', true);
+	} else {
+		$("div.payroll-types-list.left-list input[type='checkbox']").attr('checked', false);
+	};	
 }
 
 function selectEmployeesRight() {
 	if ($(this).is(':checked')) {
-		$("div.list-right input[type='checkbox']").attr('checked', true);
+		$("div.employees-list.list-right input[type='checkbox']").attr('checked', true);
 	} else {
-		$("div.list-right input[type='checkbox']").attr('checked', false);
+		$("div.employees-list.list-right input[type='checkbox']").attr('checked', false);
+	};
+}
+
+function selectPayrollTypesRight() {
+	if ($(this).is(':checked')) {
+		$("div.payroll-types-list.list-right input[type='checkbox']").attr('checked', true);
+	} else {
+		$("div.payroll-types-list.list-right input[type='checkbox']").attr('checked', false);
 	};
 }
 
@@ -162,6 +190,12 @@ function moveToRight(e) {
 	moveEmployees();
 }
 
+// Function to move the payroll-types to the right
+function moveToRightPayrollTypes(e) {
+	e.preventDefault();
+	movePayrollTypes();
+}
+
 // Function to move employees to the left
 function moveToLeft (e) {
 	e.preventDefault();
@@ -183,6 +217,27 @@ function moveToLeft (e) {
 	};
 }
 
+// Function to move payroll-types to the left
+function moveToLeftPayrollTypes(e) {
+	e.preventDefault();
+	var appendPayrollTypes = "";
+	$('div.payroll-types-list.list-right input[type=checkbox]:not(:checked)').each(function() {
+		appendPayrollTypes = "<div class='checkbox-group'>" +
+									"<div class='checkbox-margin'>" +
+										"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' data-id='"+ $(this).attr('id') +"' class='align-checkbox right' id='"+ $(this).attr('id')+'_left' +"' name='left-list-payroll-types' value='"+ $(this).val() +"' />" +
+										"<label class='checkbox-label' for='"+ $(this).attr('id')+'_left' +"'>"+ $(this).next().text() +"</label>" +
+									"</div>" +
+								"</div>";	
+		$('#no-save-payroll-types').append(appendPayrollTypes);
+		$(this).closest('.checkbox-group').remove();
+	});
+	// if ($('input[name=select_method]:checked').val() == 'department') {
+	// 	filterDepartment($('#departments_employees').val());
+	// } else if ($('input[name=select_method]:checked').val() == 'boss') {
+	// 	filterSuperior($('#superiors_employees').val())
+	// };
+}
+
 function moveEmployees () {
 	var appendEmployees = "";
 	$('div.employees-list.left-list input[type=checkbox]:checked').each(function() {
@@ -199,6 +254,24 @@ function moveEmployees () {
 	});
 	$('div#marcar-desmarcar input[name=check-employees]').attr('checked', false);
 	$('div.options-right input[name=check-employees-right]').attr('checked', true);
+}
+
+function movePayrollTypes () {
+	var appendPayrollTypes = "";
+	$('div.payroll-types-list.left-list input[type=checkbox]:checked').each(function() {
+		if (!$(this).is(':disabled')) {
+			appendPayrollTypes = "<div class='checkbox-group'>" +
+										"<div class='checkbox-margin'>" +
+											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='work_benefit[payroll_type_ids][]' value='"+ $(this).val() +"' />" +
+											"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
+										"</div>" +
+									"</div>";	
+			$('#list-payroll-types-to-save').append(appendPayrollTypes);
+			$(this).closest('.checkbox-group').remove();
+		};
+	});
+	$('div#marcar-desmarcar-payroll-types input[name=check-payroll-types]').attr('checked', false);
+	$('div.options-right input[name=check-payroll-types-right]').attr('checked', true);
 }
 
 function selectEmployeesLeft(selected) {
@@ -274,6 +347,35 @@ function populateEmployeesFilter(url, textField, idField) {
 								$('#list-to-save').append(appendEmployees);
 								$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
 							}
+          }
+      })     
+  });	
+}
+
+function populatePayrollTypesFilter(url, textField, idField) {
+  $.getJSON(url, function(payrollTypes) {
+      $(document.getElementById(textField)).autocomplete({
+          source: $.map(payrollTypes, function(item){
+              $.data(document.body, 'account_' + item.id + "", item.description );
+              return{
+                  label: item.description,                        
+                  id: item.id,
+				  sup: item.id,
+				  dep: item.id,
+				  data_id: 'payroll_type_'+ item.id
+              }
+          }),
+          select: function( event, ui ) {
+				if (!$('#list-to-save input#'+ui.item.data_id).length) {
+					appendPayrollTypes = "<div class='checkbox-group'>" +
+												"<div class='checkbox-margin'>" +
+													"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='work_benefit[payroll_type_ids][]' value='"+ ui.item.id +"' />" +
+													"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
+												"</div>" +
+											"</div>";	
+					$('#list-payroll-types-to-save').append(appendPayrollTypes);
+					$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
+				}
           }
       })     
   });	

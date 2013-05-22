@@ -2,8 +2,8 @@ class WorkBenefit < ActiveRecord::Base
   attr_accessible :credit_account, :debit_account, :description, :percentage, :employee_ids,
   			:payroll_type_ids, :is_beneficiary, :beneficiary_id, :centro_de_costo_id
   
-  has_many :payroll_type_benefits, :dependent => :destroy # kalfaro
-  has_many :payroll_type, :through => :payroll_type_benefits # kalfaro
+  has_many :payroll_type_benefits, :dependent => :destroy
+  has_many :payroll_type, :through => :payroll_type_benefits
 
   has_many :employee_benefits, :dependent => :destroy
   has_many :employees, :through => :employee_benefits

@@ -34,6 +34,7 @@ Reasapp::Application.routes.draw do
       get :fetch_employees
       get :get_activas
       get :search_employee
+      get 'fetch_payroll_type'
     end
   end
 
@@ -51,6 +52,7 @@ Reasapp::Application.routes.draw do
       get 'fetch_debit_accounts'
       get 'fetch_credit_accounts'
       get 'fetch_employees'
+      get 'fetch_payroll_type'
       get 'fetch_cost_center'
       get 'search_cost_center'
     end

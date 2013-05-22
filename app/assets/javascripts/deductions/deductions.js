@@ -1,23 +1,23 @@
 $(document).ready(function(){
 
-  // llena el filtro para los empleados
+  // Llena el filtro para los empleados
   populateEmployeesFilter('/deductions/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
-  CContables();//Llama la funcion para el autocomplete de cuentas contables
+  CContables(); // Llama la funcion para el autocomplete de cuentas contables
 
-  //oculpa los campos porque dependiendo del tipo de planilla que se seleccione se van a mostrar
+  // Oculpa los campos porque dependiendo del tipo de planilla que se seleccione se van a mostrar
 	$('#unicPayroll').hide();
   $('#deduction_payrolls').hide();
   $('#amount_exhaust_controls').hide();
 
-  //En caso de seleccionar una planilla unica si se quiere cambiar se limpia la anterios para que no se vayan a guardar 2 ids
+  // En caso de seleccionar una planilla unica si se quiere cambiar se limpia la anterios para que no se vayan a guardar 2 ids
   $('#unicPayroll').on({ click: clearPayrolls });
 
-  //Carga el arbol de cuentas de credito
+  // Carga el arbol de cuentas de credito
 	treeviewhr.cc_tree(cuenta_credito, true);
   $('.expand_tree').click(treeviewhr.expand);
 
-  //Cuando se da click en una cuenta de credito para que setee el id
+  // Cuando se da click en una cuenta de credito para que setee el id
   $('#list').on({
 		click: set_account,
 		mouseenter: function() {
@@ -27,33 +27,38 @@ $(document).ready(function(){
 			$(this).css("text-decoration", "none");
 	}}, ".node_link");
 
-  	 //en caso de que exista algun error al cargar las planillas si se preciona click en el enlase para volver a cargarlas
+  // En caso de que exista algun error al cargar las planillas si se preciona click en el enlase para volver a cargarlas
   $("#error a").click(function (e){
-	 e.preventDefault();
-	 ObtenerPlanillas();
+    e.preventDefault();
+    ObtenerPlanillas();
 	});
   
-  //Cuando cambia el valor del select se llama la funcion TipoDeduccion
+  // Cuando cambia el valor del select se llama la funcion TipoDeduccion
   $('#deduction_deduction_type').change(function() {
     TipoDeduccion(this);
   });
 
-  //Al precionar click sobre una planilla se settea el id de la planilla
+  // Al precionar click sobre una planilla se settea el id de la planilla
   $('#activas').on("click", "td.payroll-type a", set_payroll);
 
-  //executes different options to select the employees
+  // Executes different options to select the employees
   $('input[name=select_method]').change(function() {
     selectEmployeesLeft($(this));
   });
 
   $('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
   
-  //when the employees are loaded in the page move the selected to the right
+  // When the employees are loaded in the page move the selected to the right
   moveEmployees();
+  movePayrollTypes();
 
-  //moves the selected employees to the list at the right
+  // Moves the selected employees to the list at the right
   $('#add-to-list').click(moveToRight);
   $('#remove-to-list').click(moveToLeft);
+
+  // Moves the selected payroll types to the list at the right
+  $('#add-to-list-payroll-types').click(moveToRightPayrollTypes);
+  $('#remove-to-list-payroll-types').click(moveToLeftPayrollTypes);
   
   $('#departments_employees').change(function() {
     filterDepartment($(this).val());
@@ -69,6 +74,12 @@ $(document).ready(function(){
 
   $('#deduction_is_beneficiary').change(function() { is_beneficiary($('#deduction_is_beneficiary').is(':checked')) });
 
+  populatePayrollTypesFilter('/deductions/fetch_payroll_type', 'load_filter_payroll_types_text', 'load_filter_payroll_types_id');
+
+  $('div#marcar-desmarcar-payroll-types input[name=check-payroll-types]').change(checkUncheck);
+
+  $('#check-payroll-types-right').change(selectPayrollTypesRight);
+
 });
 
 function is_beneficiary(value) {
@@ -80,7 +91,7 @@ function is_beneficiary(value) {
   }
 }
 
-//Consulta las cuentas contables para hacer el autocomplete
+// Consulta las cuentas contables para hacer el autocomplete
 function CContables() {
    $.getJSON('/ledger_accounts/fetch', function(category_data) {
         $( "#deduction_ledger_account" ).autocomplete({
@@ -106,7 +117,7 @@ function CContables() {
     }); 
 }
 
-//function to check and uncheck all the employees at the left.
+// Function to check and uncheck all the employees at the left.
 function marcarDesmarcar () {
   if ($(this).is(':checked')) {
     $("div.left-list input[type='checkbox']").attr('checked', true);
@@ -123,7 +134,7 @@ function selectEmployeesRight() {
   };
 }
 
-//resive el id del departamento para hacer un filtro por departamento
+// Resive el id del departamento para hacer un filtro por departamento
 function filterDepartment (dropdown) { 
   var empSelected = [];
   var dep = dropdown ? dropdown : 0; //si se manda un id de departamento se almacena en dep de lo contrario se almacena 0
@@ -148,7 +159,7 @@ function filterDepartment (dropdown) {
   });
 }
 
-//function to filter results by superior name 
+// Function to filter results by superior name 
 function filterSuperior (dropdown) {
   var empSelected = [];
   var sup = dropdown ? dropdown : 0;
@@ -168,13 +179,13 @@ function filterSuperior (dropdown) {
   });
 }
 
-//function to move the employees to the right
+// Function to move the employees to the right
 function moveToRight(e) {
   e.preventDefault();
   moveEmployees();
 }
 
-//Function to move employees to the left
+// Function to move employees to the left
 function moveToLeft (e) {
   e.preventDefault();
   var appendEmployees = "";
@@ -266,7 +277,7 @@ function populateEmployeesFilter(url, textField, idField) {
   }); 
 }
 
-//settea el campo oculto con el id d la cuenta de credito y muestra el texto en el campo cuenta credito
+// Settea el campo oculto con el id d la cuenta de credito y muestra el texto en el campo cuenta credito
 function set_account(e) {
     e.preventDefault();
     var accountId = $(this).closest('li').data('id');
@@ -275,7 +286,7 @@ function set_account(e) {
     $('#deduction_ledger_account').val(accountName);  
 }
 
-//Resive el tipo de deducicon de un select y dependiendo el valor ejecuta diferentes opciones
+// Resive el tipo de deducicon de un select y dependiendo el valor ejecuta diferentes opciones
 function TipoDeduccion(selected) {
   switch($(selected).val()) {
     case 'Unica':
@@ -300,7 +311,7 @@ function TipoDeduccion(selected) {
   }
 }
 
-//Obtiene todas las planillas activas
+// Obtiene todas las planillas activas
 function ObtenerPlanillas(){
     $.ajax('/payrolls/get_activas', {
     	type: 'GET',
@@ -322,7 +333,7 @@ function ObtenerPlanillas(){
 	 });
 }
 
-// carga las planillas activas en una tabla
+// Carga las planillas activas en una tabla
 function add_activas(payroll, target_table) {
   var row = $(target_table + '> tbody:last').append('<tr>' + 
       '<td class="payroll-id">' + payroll.id +'</td>' +
@@ -334,7 +345,7 @@ function add_activas(payroll, target_table) {
   return row;
 }
 
-//Settea el campo oculto de con el id de la planilla unica seleccionada
+// Settea el campo oculto de con el id de la planilla unica seleccionada
 function set_payroll(e) {
     e.preventDefault();
     var payrollId = $(e.target).parent().prev().text();
@@ -344,9 +355,99 @@ function set_payroll(e) {
     $('#deduction_payroll').val(payrollName);  
 }
 
-//Limpia el id y el texto de la planilla UNICA seleccionada en caso de querer cambiar la planilla unica seleccionada
-//para que no se vayan varioss ids de planillas solo se tiene que guardar un unico id
+// Limpia el id y el texto de la planilla UNICA seleccionada en caso de querer cambiar la planilla unica seleccionada
+// para que no se vayan varioss ids de planillas solo se tiene que guardar un unico id
 function clearPayrolls(){
   $('#payrolls-to-save').empty(); //elimina el id de la planilla que ya no se quiere guardar
   $('#deduction_payroll').val('');  
+}
+
+function populatePayrollTypesFilter(url, textField, idField) {
+  $.getJSON(url, function(payrollTypes) {
+      $(document.getElementById(textField)).autocomplete({
+          source: $.map(payrollTypes, function(item){
+              $.data(document.body, 'account_' + item.id + "", item.description );
+              return{
+                  label: item.description,                        
+                  id: item.id,
+          sup: item.id,
+          dep: item.id,
+          data_id: 'payroll_type_'+ item.id
+              }
+          }),
+          select: function( event, ui ) {
+        if (!$('#list-to-save input#'+ui.item.data_id).length) {
+          appendPayrollTypes = "<div class='checkbox-group'>" +
+                        "<div class='checkbox-margin'>" +
+                          "<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='deduction[payroll_type_ids][]' value='"+ ui.item.id +"' />" +
+                          "<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
+                        "</div>" +
+                      "</div>"; 
+          $('#list-payroll-types-to-save').append(appendPayrollTypes);
+          $('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
+        }
+          }
+      })     
+  }); 
+}
+
+function movePayrollTypes () {
+  var appendPayrollTypes = "";
+  $('div.payroll-types-list.left-list input[type=checkbox]:checked').each(function() {
+    if (!$(this).is(':disabled')) {
+      appendPayrollTypes = "<div class='checkbox-group'>" +
+                    "<div class='checkbox-margin'>" +
+                      "<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='deduction[payroll_type_ids][]' value='"+ $(this).val() +"' />" +
+                      "<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
+                    "</div>" +
+                  "</div>"; 
+      $('#list-payroll-types-to-save').append(appendPayrollTypes);
+      $(this).closest('.checkbox-group').remove();
+    };
+  });
+  $('div#marcar-desmarcar-payroll-types input[name=check-payroll-types]').attr('checked', false);
+  $('div.options-right input[name=check-payroll-types-right]').attr('checked', true);
+}
+
+// Function to move the payroll-types to the right
+function moveToRightPayrollTypes(e) {
+  e.preventDefault();
+  movePayrollTypes();
+}
+
+// Function to move payroll-types to the left
+function moveToLeftPayrollTypes(e) {
+  e.preventDefault();
+  var appendPayrollTypes = "";
+  $('div.payroll-types-list.list-right input[type=checkbox]:not(:checked)').each(function() {
+    appendPayrollTypes = "<div class='checkbox-group'>" +
+                  "<div class='checkbox-margin'>" +
+                    "<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' data-id='"+ $(this).attr('id') +"' class='align-checkbox right' id='"+ $(this).attr('id')+'_left' +"' name='left-list-payroll-types' value='"+ $(this).val() +"' />" +
+                    "<label class='checkbox-label' for='"+ $(this).attr('id')+'_left' +"'>"+ $(this).next().text() +"</label>" +
+                  "</div>" +
+                "</div>"; 
+    $('#no-save-payroll-types').append(appendPayrollTypes);
+    $(this).closest('.checkbox-group').remove();
+  });
+  // if ($('input[name=select_method]:checked').val() == 'department') {
+  //  filterDepartment($('#departments_employees').val());
+  // } else if ($('input[name=select_method]:checked').val() == 'boss') {
+  //  filterSuperior($('#superiors_employees').val())
+  // };
+}
+
+function checkUncheck() {
+  if ($(this).is(':checked')) {
+    $("div.payroll-types-list.left-list input[type='checkbox']").attr('checked', true);
+  } else {
+    $("div.payroll-types-list.left-list input[type='checkbox']").attr('checked', false);
+  };  
+}
+
+function selectPayrollTypesRight() {
+  if ($(this).is(':checked')) {
+    $("div.payroll-types-list.list-right input[type='checkbox']").attr('checked', true);
+  } else {
+    $("div.payroll-types-list.list-right input[type='checkbox']").attr('checked', false);
+  };
 }

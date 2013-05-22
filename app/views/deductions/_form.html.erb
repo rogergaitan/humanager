@@ -71,6 +71,70 @@
     <div style="clear:both"></div>
   </div>
 <br></br>
+<hr></hr>
+<!-- P A Y R O L L    T Y P E S -->
+
+<div class="control-group">
+    <%= f.label :payroll_types, :class => 'control-label' %>
+    <div class="controls align-radio">
+      <div class="options-left">
+        <%= text_field_tag 'load_filter_payroll_types_text', nil, :class => 'text_field required search-image-employee' %> 
+      </div>
+
+      <div class="options-right">
+        <%= check_box_tag 'check-payroll-types-right', '1', true, class: 'align-checkbox' %>
+        <%= label_tag 'check-payroll-types-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+      </div>
+
+      <div style="clear:both"></div>
+    </div>
+  </div>
+  
+  <div class="controls" id="marcar-desmarcar-payroll-types">
+    <%= check_box_tag 'check-payroll-types', '1', false, class: 'align-checkbox' %>
+    <%= label_tag 'check-payroll-types', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+  </div>
+  
+  <div class="controls lists">
+    <div class="payroll-types-list left-list">
+      <div class="payroll-types-margin" id="no-save-payroll-types">
+        
+        <% @payroll_types.each do |payroll_type| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
+
+              <%= check_box_tag 'left-list-payroll-type', payroll_type.id, 
+                @deduction.payroll_type_ids.include?(payroll_type.id),
+                id: dom_id(payroll_type) + '_left', 
+                'data-id' => dom_id(payroll_type), 
+                'data-sup' => payroll_type.id, 
+                class: 'align-checkbox', 'data-dep' => payroll_type.id %>
+
+              <%= label_tag dom_id(payroll_type) + '_left', "#{payroll_type.description}", 
+                  :class => 'checkbox-label' %>
+            </div>
+          </div>
+        <% end %>
+      
+      </div>
+    </div>
+    <div class="control-buttons">
+      <a href="#" id="add-to-list-payroll-types" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+      <a href="#" id="remove-to-list-payroll-types" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+    </div>
+
+    <div class="payroll-types-list list-right">
+      <%= hidden_field_tag 'deduction[payroll_type_ids][]', nil %>
+      <div class="employees-margin" id="list-payroll-types-to-save">        
+      </div>
+    </div>
+
+    <div style="clear:both"></div>
+  </div>
+
+<!-- P A Y R O L L    T Y P E S -->
+<p></p>
+<hr></hr>
   <div class="control-group">  
     <%= f.label :is_beneficiary, :class => 'control-label' %>
     <div class='controls'>
@@ -94,7 +158,7 @@
         <div class="payrolls-margin" id="payrolls-to-save">        
         </div>
       </div>
-    </div>
+  </div>
     <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
     <div class="control-group" id="deduction_payrolls">
       <div class='controls'>
@@ -102,7 +166,7 @@
       </div>
     </div>
 
-    <div class="control-group" id="amount_exhaust_controls">
+  <div class="control-group" id="amount_exhaust_controls">
     <%= f.label :amount_exhaust, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :amount_exhaust, :class => 'text_field' %>

@@ -309,6 +309,7 @@ es:
           is_beneficiary: Es Beneficiario
           beneficiary_id: Beneficiario
           centro_de_costo_id: Centro de Costo
+          payroll_types: Tipos de planillas
         payment_method: 
           name: Nombre
           description: Descripción
@@ -476,6 +477,7 @@ es:
           ledger_account_id: Cuenta de Crédito
           is_beneficiary: Es Beneficiario
           beneficiary_id: Beneficiario
+          payroll_types: Tipos de planillas
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde

@@ -71,11 +71,11 @@ payroll.add_activas = function (payroll, target_table) {
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payroll.id + '" value="' + payroll.id + '" />' +
       '</td>' +
-      '<td><a href="/payroll_logs/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
+      '<td><a href="payroll_logs/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
 			'Digitar</a> ' + 
-			'<a href="/payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
+			'<a href="payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
       'data-method="get" rel="nofollow">Editar</a> ' +
-     '<a href="/payrolls/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
+     '<a href="payrolls/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
       'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
     '</tr>');
   return row;

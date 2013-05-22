@@ -99,6 +99,13 @@ class WorkBenefitsController < ApplicationController
     end
   end
 
+  def fetch_payroll_type
+    @fetch_payroll_type = PayrollType.all
+    respond_to do |format|
+      format.json { render json: @fetch_payroll_type, :only => [:id, :description] }
+    end
+  end
+
   def search_cost_center
     @cost_center = WorkBenefit.search_cost_center(params[:search_cost_center_name], params[:page], params[:per_page])
     respond_with @cost_center

@@ -1,14 +1,23 @@
 <script type="text/javascript">
   var debit_account = [];
 	var credit_account = [];
-  var payroll_types = [];
  
-  <%  @debit_accounts.each do |cc| %>
-    debit_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+  <% @debit_accounts.each do |cc| %>
+    debit_account.push(new Array(
+        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+        '<%=h cc.naccount %>', 
+        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+        <%= cc.id %>
+    ));
   <% end %>
 
-  <%  @credit_accounts.each do |cc| %>
-    credit_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+  <% @credit_accounts.each do |cc| %>
+    credit_account.push(new Array(
+        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+        '<%=h cc.naccount %>', 
+        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+        <%= cc.id %>
+    ));
   <% end %>
 
 </script>
@@ -67,6 +76,7 @@
       <%= f.text_field :beneficiary_id, :class => 'text_field' %>
     </div>
   </div>
+  <hr></hr>
 	<div class="control-group">
     <%= f.label :Empleados, :class => 'control-label' %>
     <div class="controls align-radio">
@@ -135,29 +145,68 @@
 
 		<div style="clear:both"></div>
 	</div>
+<p></p>
+<hr></hr>
+<!-- payroll types -->
 
+  <div class="control-group">
+    <%= f.label :payroll_types, :class => 'control-label' %>
+    <div class="controls align-radio">
+      <div class="options-left">
+        <%= text_field_tag 'load_filter_payroll_types_text', nil, :class => 'text_field required search-image-employee' %> 
+      </div>
 
+      <div class="options-right">
+        <%= check_box_tag 'check-payroll-types-right', '1', true, class: 'align-checkbox' %>
+        <%= label_tag 'check-payroll-types-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+      </div>
 
+      <div style="clear:both"></div>
+    </div>
+  </div>
+  
+  <div class="controls" id="marcar-desmarcar-payroll-types">
+    <%= check_box_tag 'check-payroll-types', '1', false, class: 'align-checkbox' %>
+    <%= label_tag 'check-payroll-types', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+  </div>
+  
+  <div class="controls lists">
+    <div class="payroll-types-list left-list">
+      <div class="payroll-types-margin" id="no-save-payroll-types">
+        
+        <% @payroll_types.each do |payroll_type| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
 
+              <%= check_box_tag 'left-list-payroll-type', payroll_type.id, 
+                @work_benefit.payroll_type_ids.include?(payroll_type.id),
+                id: dom_id(payroll_type) + '_left', 
+                'data-id' => dom_id(payroll_type), 
+                'data-sup' => payroll_type.id, 
+                class: 'align-checkbox', 'data-dep' => payroll_type.id %>
 
+              <%= label_tag dom_id(payroll_type) + '_left', "#{payroll_type.description}", 
+                  :class => 'checkbox-label' %>
+            </div>
+          </div>
+        <% end %>
+      
+      </div>
+    </div>
+    <div class="control-buttons">
+      <a href="#" id="add-to-list-payroll-types" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+      <a href="#" id="remove-to-list-payroll-types" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+    </div>
 
+    <div class="payroll-types-list list-right">
+      <%= hidden_field_tag 'work_benefit[payroll_type_ids][]', nil %>
+      <div class="employees-margin" id="list-payroll-types-to-save">        
+      </div>
+    </div>
 
-
-
-
-
-<p>
-
-
-
-
-
-
-
-
-
-
-
+    <div style="clear:both"></div>
+  </div>
+<!-- payroll types -->
 
 <div class="form-actions">
   <%= f.submit nil, :class => 'btn btn-primary' %>
@@ -173,8 +222,7 @@
     <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
   </div>
   <div class="modal-body">
-    <div id="list
-    "></div>
+    <div id="list"></div>
   </div>
   <div class="modal-footer">
     <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
@@ -188,17 +236,17 @@
   </div>
   <div class="modal-body">
     <div>
-  <!-- search -->
-  <legend>  
-    <%= form_tag :search_cost_center_work_benefits, :id => "search_cost_center_form", :class => "form-search", :method => "get" do %>
-      <div class="control-group search">
-        <%= text_field_tag :cost_center_name, params[:cost_center_name], :class => "search-query",
-         :placeholder => 'Nombre' %>
-         <button class="btn" id="clear_task" type="button">Limpiar</button>
-      </div>
-    <% end %>
-  </legend>
-  <!-- search -->
+      <!-- search -->
+      <legend>  
+        <%= form_tag :search_cost_center_work_benefits, :id => "search_cost_center_form", :class => "form-search", :method => "get" do %>
+          <div class="control-group search">
+            <%= text_field_tag :cost_center_name, params[:cost_center_name], :class => "search-query",
+             :placeholder => 'Nombre' %>
+             <button class="btn" id="clear_task" type="button">Limpiar</button>
+          </div>
+        <% end %>
+      </legend>
+      <!-- search -->
     </div>
     <div id="search_cost_center_results"></div>
   </div>
