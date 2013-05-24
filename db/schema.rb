@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521160017) do
+ActiveRecord::Schema.define(:version => 20130524163327) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -192,8 +192,9 @@ ActiveRecord::Schema.define(:version => 20130521160017) do
   create_table "employee_benefits", :force => true do |t|
     t.integer  "work_benefit_id"
     t.integer  "employee_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.boolean  "state",           :default => true
   end
 
   add_index "employee_benefits", ["employee_id"], :name => "index_employee_benefits_on_employee_id"
@@ -589,6 +590,7 @@ ActiveRecord::Schema.define(:version => 20130521160017) do
     t.boolean  "is_beneficiary",                                    :default => true
     t.integer  "beneficiary_id"
     t.integer  "centro_de_costo_id"
+    t.boolean  "state",                                             :default => true
   end
 
   add_index "work_benefits", ["centro_de_costo_id"], :name => "index_work_benefits_on_centro_de_costo_id"

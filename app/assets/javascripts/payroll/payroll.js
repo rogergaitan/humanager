@@ -61,7 +61,7 @@ payroll.index = function() {
 // Carga las planillas activas en una tabla
 // Load the active payroll in a table
 payroll.add_activas = function (payroll, target_table) {
-
+  var url = $('#tab1').data('url');
   var row = $(target_table + '> tbody:last').append(
     '<tr>' + 
       '<td><a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a></td>' +
@@ -71,11 +71,11 @@ payroll.add_activas = function (payroll, target_table) {
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payroll.id + '" value="' + payroll.id + '" />' +
       '</td>' +
-      '<td><a href="payroll_logs/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
+      '<td><a href="'+ url +'/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
 			'Digitar</a> ' + 
-			'<a href="payrolls/' + payroll.id +'/edit" class="btn btn-mini" ' +
+			'<a href="'+ url +'/' + payroll.id +'/edit" class="btn btn-mini" ' +
       'data-method="get" rel="nofollow">Editar</a> ' +
-     '<a href="payrolls/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
+     '<a href="'+ url +'/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
       'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
     '</tr>');
   return row;

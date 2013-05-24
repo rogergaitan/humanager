@@ -146,14 +146,22 @@ class DeductionsController < ApplicationController
     #     format.json { render json: @deduction.errors, status: :unprocessable_entity }
     #   end
     # end
-
   end
 
   # DELETE /deductions/1
   # DELETE /deductions/1.json
   def destroy
+      
     @deduction = Deduction.find(params[:id])
-    @deduction.destroy
+
+    if DeductionEmployee.find_by_deduction_id(params[:id]).deduction_payments.empty?
+      # There are no records.
+      @deduction.destroy
+    else
+      # There are records.
+      @deduction.state = 0
+      @deduction.save
+    end
 
     respond_to do |format|
       format.html { redirect_to deductions_url }

@@ -1,5 +1,6 @@
 class WorkBenefitsPayment < ActiveRecord::Base
-  attr_accessible :employee_benefits_id, :payroll_id, :payment_date, :percentage, :payment
+  attr_accessible :employee_benefits_id, :payroll_id, :payment_date, :percentage, :payment, 
+  :state
 
   # has_many :employee_benefits
   # has_many :payrolls
