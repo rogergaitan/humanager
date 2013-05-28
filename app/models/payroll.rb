@@ -150,7 +150,6 @@ class Payroll < ActiveRecord::Base
                 end
 
               end
-              
           end # end case
 
           list_deductions << deduction_details
@@ -308,7 +307,13 @@ class Payroll < ActiveRecord::Base
     # Save into OPRMAEST (Process number 2)
     r5 = save_in_oprmaest_2(num_oper_2, payroll)
 
-    if r1 and r2 and r3 and r4 and r5
+    # Save into OPRPLA5_BASE (Process number 2)
+    r6 = save_in_oprpla5_base(num_oper_2)
+
+    # Save into OPRPLA5_DETALLE (Process number 2)
+    r7 = save_in_oprpla5_detalle(num_oper_2, payroll)
+
+    if r1 and r2 and r3 and r4 and r5 and r6 and r7
       puts 'todo BIEN guardado'
       # INSERTAR DENTRO DEL PAYROLL EL NUM_OPER Y REFRESCAR LA PAGINA
     else 
@@ -525,6 +530,59 @@ class Payroll < ActiveRecord::Base
       oprm.bmovmanual = CONSTANTS[:FIREBIRD][0]['BMOVMANUAL']
       oprm.save
     end
+  end
+
+  # Save into Firebird: OPRPLA5_BASE (Process number 2)
+  def self.save_in_oprpla5_base(num_oper)
+    
+    transaction do
+      oprpla5_base = Oprpla5Base.new
+      oprpla5_base.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+      oprpla5_base.inumoper = num_oper
+      oprpla5_base.icuentacaja = CONSTANTS[:FIREBIRD][0]['ICUENTA']
+      oprpla5_base.bpagocxp = CONSTANTS[:FIREBIRD][0]['BPAGOCXP']
+      oprpla5_base.itipocosteo = CONSTANTS[:FIREBIRD][0]['ITIPOCOSTEO']
+      oprpla5_base.bprocesopordia = CONSTANTS[:FIREBIRD][0]['BPROCESOPORDIA']
+      oprpla5_base.brendimcmp = CONSTANTS[:FIREBIRD][0]['BRENDIMCMP']
+      oprpla5_base.qregctolabor = CONSTANTS[:FIREBIRD][0]['QREGCTOLABOR']
+      oprpla5_base.qregctos = CONSTANTS[:FIREBIRD][0]['QREGCTOS']
+      oprpla5_base.qregfpagodcto1 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO1']
+      oprpla5_base.qregfpagodcto2 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO2']
+      oprpla5_base.qregfpagodcto3 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO3']
+      oprpla5_base.qregfpagodcto4 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO4']
+      oprpla5_base.qregfpagopagador = CONSTANTS[:FIREBIRD][0]['QREGFPAGOPAGADOR']
+      oprpla5_base.save
+    end # End transaction
+  end
+
+  # Save into Firebird: OPRPLA5_DETALLE (Process number 2)
+  def self.save_in_oprpla5_detalle(num_oper, payroll)
+
+    count = 0
+    transaction do      
+
+      PayrollHistory.list_to_oprpla5_detalle(payroll['id']).each do |a|
+
+        od = Oprpla5Detalle.new
+        od.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+        od.inumoper = num_oper
+        od.ilinea = count
+        od.itdcontrato = a['payment_type']
+        od.icclunes = a['centro_de_costo_id']
+        od.iactividadlunes = CONSTANTS[:FIREBIRD][0]['IACTIVIDADLUNES']
+        od.ilaborlunes = a['task_id']
+        od.qjorslunes = a['time_worked']
+        od.qcantlunes = CONSTANTS[:FIREBIRD][0]['QCANTLUNES']
+        od.bcantdesclunes = CONSTANTS[:FIREBIRD][0]['BCANTDESCLUNES']
+        od.qtotaljors = a['time_worked']
+        od.mvrtotal = a['total']
+        od.mtotalapagar = a['total']
+        od.qfactor = CONSTANTS[:FIREBIRD][0]['QFACTOR']
+        od.ilineamov = CONSTANTS[:FIREBIRD][0]['ILINEAMOV']
+        od.save
+        count = count + 1
+      end # End each PayrollHistory
+    end # End transaction
   end
 
 end
