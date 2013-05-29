@@ -72,8 +72,8 @@ class TasksController < ApplicationController
   end
 
   def tasksfb
-    @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor'])
-
+    @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'])
+    # nunidad
     @c = 0
     @tasks = []
     @tasks_fb = {}
@@ -81,7 +81,8 @@ class TasksController < ApplicationController
     @labmaests.each  do |task|
         if Task.where("itask = ?", task.ilabor).empty?
           @new_task = Task.new(:iactivity => task.iactividad, :itask => task.ilabor, :ntask =>
-            firebird_encoding(task.nlabor), :iaccount => task.icuenta, :mlaborcost => task.mcostolabor)
+            firebird_encoding(task.nlabor), :iaccount => task.icuenta, :mlaborcost => task.mcostolabor,
+            :nunidad => task.nunidad)
 
           if @new_task.save
             @tasks <<  @new_task

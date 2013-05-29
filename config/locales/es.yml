@@ -454,6 +454,7 @@ es:
           ntask: Descripción
           mlaborcost: Costo Labor
           iaccount: Cuenta
+          nunidad: Unidad
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  

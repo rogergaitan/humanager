@@ -25,14 +25,11 @@ class PayrollHistory < ActiveRecord::Base
 
 				# 1 si es ordinario, 2 extra, 3 doble (tipo de pago)
 				case ph.payment_type.to_s
-		            # Ordinario
-		            when CONSTANTS[:PAYMENT][0]['name'].to_s
+		            when CONSTANTS[:PAYMENT][0]['name'].to_s # Ordinario
 		            	payment_type_id = 1
-		            # Extra
-		            when CONSTANTS[:PAYMENT][1]['name'].to_s
+		            when CONSTANTS[:PAYMENT][1]['name'].to_s # Extra
 		            	payment_type_id = 2
-		            # Doble
-		            when CONSTANTS[:PAYMENT][2]['name'].to_s
+		            when CONSTANTS[:PAYMENT][2]['name'].to_s # Doble
 		            	payment_type_id = 3
           		end # end case
 

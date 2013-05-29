@@ -32,7 +32,6 @@ $(document).ready(function() {
       var payroll_id = $(this).next().val();
       payroll.send_to_firebird(payroll_id);
     }
-
   });
 
 });
@@ -62,6 +61,7 @@ payroll.index = function() {
 // Load the active payroll in a table
 payroll.add_activas = function (payroll, target_table) {
   var url = $('#tab1').data('url');
+  var url_payrolls = $('#payrolls_path').val();
   var row = $(target_table + '> tbody:last').append(
     '<tr>' + 
       '<td><a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a></td>' +
@@ -75,7 +75,7 @@ payroll.add_activas = function (payroll, target_table) {
 			'Digitar</a> ' + 
 			'<a href="'+ url +'/' + payroll.id +'/edit" class="btn btn-mini" ' +
       'data-method="get" rel="nofollow">Editar</a> ' +
-     '<a href="'+ url +'/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
+     '<a href="'+ url_payrolls +'/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
       'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
     '</tr>');
   return row;
@@ -136,7 +136,6 @@ payroll.closePayrollSelected = function(payroll_id) {
       }
     });
   }
-
 }
 
 payroll.show_details_erros = function(data) {
@@ -152,13 +151,11 @@ payroll.show_details_erros = function(data) {
         '<td>' + array['total_deductions'] + '</td>' +
       '</tr>'
     );
-
   });
 
   $('#myModalLabel').html('Mensaje: Error salario insuficiente');
   $('#table_results_close_payroll').show();
   $("#payrollModal").modal('show');
-  
 }
 
 // Process that sends information to firebird
@@ -183,9 +180,7 @@ payroll.send_to_firebird = function(payroll_id) {
 
     }
   });
-
 }
-
 
 // Reabre planillas cerradas
 function Reactivar() {

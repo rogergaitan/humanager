@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   $('#task-fb').click(function() { 
     $.getJSON('tasks/tasksfb', function(element) {
       $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
@@ -7,8 +8,16 @@ $(document).ready(function() {
     })
   });
 
-  function add_tasks(task, target_table)
-  {
+  $('#task-data a').click( function(e) {
+    e.preventDefault();
+  });
+
+  $('#task-data a').dblclick( function(e) {
+    var url = $(this).next().val();
+    document.location.href = url;
+  });
+
+  function add_tasks(task, target_table) {
     var row = $(target_table + '> tbody:last').append('<tr>' + 
         '<td><a href="/tasks/'+ task.id +'">'+ task.id +'</a></td>' +
         '<td>' + replace_value(task.iactivity) + '</td>' +
@@ -22,8 +31,7 @@ $(document).ready(function() {
     return row;
   }
 
-  function replace_value(value)
-  {
+  function replace_value(value) {
     if (value == null) value = "";
     return value;
   }

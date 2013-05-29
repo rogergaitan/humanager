@@ -13,7 +13,6 @@ class EmployeesController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @employees }
     end
-
   end
 
   # GET /employees/1
@@ -71,7 +70,7 @@ class EmployeesController < ApplicationController
 
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
-        format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
+        format.html { redirect_to employees_path, notice: 'Employee was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -151,9 +150,9 @@ class EmployeesController < ApplicationController
      @province ||= Province.find(:all, :select =>['id','name'])
      @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
      @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
-   end
+  end
    
-   def get_employee_info
+  def get_employee_info
      @department = Department.find(:all, :select =>['id','name'])
      @occupation = Occupation.find(:all, :select =>['id','description'])
      @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
@@ -162,17 +161,17 @@ class EmployeesController < ApplicationController
      @superior = Employee.all
      @payment_unit = Employee.all_payment_unit
      @payroll_type = Employee.all_payroll_type
-   end
+  end
 
-   def search
+  def search
     @employees = Employee.search(params[:search_id], params[:search_name], params[:search_surname], 
       params[:search_department], params[:search_entities], params[:page], params[:per_page])
     respond_with @employees
-   end
+  end
 
-   def search_all
+  def search_all
     @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
     respond_with @employees
-   end
+  end
 
 end

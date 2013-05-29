@@ -9,10 +9,11 @@
     <ul class="nav nav-pills">
         <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.Iniciadas") %></a></li>
         <li><a href="#tab2" data-toggle="tab"><%= t("tabs.Cerradas") %></a></li>
-    </ul>
+    </ul> 
 
       <div class="tab-content">
         <div class="tab-pane active" id="tab1" data-url="<%= payroll_logs_path %>">
+          <input id="payrolls_path" type="hidden" value="<%= payrolls_path %>">
           <h2>Planillas Iniciadas</h2>
           <table class="table table-bordered" id="activas">
             <thead>
