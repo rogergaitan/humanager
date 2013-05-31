@@ -5,7 +5,7 @@ class PayrollHistory < ActiveRecord::Base
   has_many :payroll_employees, :dependent => :destroy
   has_many :employees, :through => :payroll_employees
   attr_accessible :time_worked, :task_id, :centro_de_costo_id, :payment_type, 
-  		:payroll_log_id, :employee_ids, :total, :task_total
+  		:payroll_log_id, :employee_ids, :total, :task_total, :task_unidad
 
 
 	def self.list_to_oprpla5_detalle(payroll_log_id)

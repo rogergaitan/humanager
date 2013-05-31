@@ -27,7 +27,8 @@ $(jQuery(document).ready(function($) {
 		
 		$.each(task_code, function(index, value) {
 			if( value === code ) {
-				$('.success td:eq(0) input:hidden').val( task_id[index] );
+				$('.success td:eq(0) input:hidden:eq(0)').val( task_id[index] );
+				$('.success td:eq(0) input:hidden:eq(1)').val( task_unidad[index] );
 				$('#load_task').val( task_desc[index] );
 				return false;
 			}
@@ -35,7 +36,8 @@ $(jQuery(document).ready(function($) {
 			if( task_code.length-1 == index ) {
 				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
-				$('.success td:eq(0) input:hidden').val( task_id[0] );
+				$('.success td:eq(0) input:hidden:eq(0)').val( task_id[0] );
+				$('.success td:eq(0) input:hidden:eq(1)').val( task_unidad[0] );
 				$('#load_task').val( task_desc[0] );
 				payroll_logs.setTaskCode( task_id[0] );
 			}
@@ -47,7 +49,8 @@ $(jQuery(document).ready(function($) {
 		$.each(task_id, function(index, value) {
 			if( value == id ) {
 				$("#search_task_code_").val( task_code[index] );
-				$('.success td:eq(0) input:hidden').val( task_id[index] );
+				$('.success td:eq(0) input:hidden:eq(0)').val( task_id[index] );
+				$('.success td:eq(0) input:hidden:eq(1)').val( task_unidad[index] );
 				return false;
 			}
 		});

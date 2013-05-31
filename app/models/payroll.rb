@@ -585,4 +585,30 @@ class Payroll < ActiveRecord::Base
     end # End transaction
   end
 
+  def self.search_payrolls_to_reports(start_date, end_date, page, per_page)
+      
+      query = ""
+      params = []
+      params.push(" start_date >= '#{start_date}' ") unless start_date.empty?
+      params.push(" end_date <= '#{end_date}' ") unless end_date.empty?
+      params.push(" state = 0 ")
+      query = build_query(params)
+
+      @payrolls = Payroll.where(query).paginate(:page => page, :per_page => per_page)
+  end
+
+  def self.build_query(data)
+    query = ""
+      if data
+        data.each_with_index do |q, i|
+            if i < data.length - 1
+              query += q + " AND "
+            else
+          query += q
+            end
+          end
+      end
+      query
+  end
+
 end

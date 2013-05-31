@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
   // Llena el filtro para los empleados
   populateEmployeesFilter('/deductions/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
@@ -62,7 +62,7 @@ $(document).ready(function(){
   
   $('#departments_employees').change(function() {
     filterDepartment($(this).val());
-    });
+  });
   
   $('#superiors_employees').change(function() {
     filterSuperior($(this).val());

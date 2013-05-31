@@ -1,0 +1,39 @@
+<%- model_class = Payroll -%>
+
+<div id="task">
+  <%= will_paginate @payrolls, :class =>'pagination pagination-centered' %>
+  <table class="table table-striped" id="employee-data">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
+        <th><%= model_class.human_attribute_name(:start_date) %></th>
+        <th><%= model_class.human_attribute_name(:end_date) %></th>
+        <th>Seleccionar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @payrolls.empty?  %>
+        <% @payrolls.each do |payroll| %>
+          <tr>
+            <td>
+              <%= "#{payroll.payroll_type.description}" %>
+            </td>
+            <td>
+              <%= "#{payroll.start_date}" %>
+            </td>
+            <td>
+              <%= "#{payroll.end_date}" %>
+            </td>
+            <td>
+              <%= check_box_tag '', "#{payroll.id}" %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <div class="alert alert-block alert-error">
+          <%= t("notice.no_results") %>
+        </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>

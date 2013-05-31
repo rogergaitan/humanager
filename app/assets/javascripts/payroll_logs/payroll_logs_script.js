@@ -2,26 +2,26 @@ $(jQuery(document).ready(function($) {
 
 	hideEmployess();
 
-	$('#select_method_all').click(function(){
+	$('#select_method_all').click(function() {
 		$('#superiors_employees option:eq(0)').attr('selected','selected');
 		$('#departments_employees option:eq(0)').attr('selected','selected');
 		hideEmployess();
 	});
 
-	$('#select_method_boss').click(function(){
+	$('#select_method_boss').click(function() {
 		hide($('#superiors_employees').val());
 		$('#superiors_employees').removeAttr('disabled');
 	});
 
-	$('#select_method_department').click(function(){
+	$('#select_method_department').click(function() {
 		hide($('#departments_employees').val());
 		$('#departments_employees').removeAttr('disabled');
 	});
 
-	$('#superiors_employees').click(function(){
+	$('#superiors_employees').click(function() {
 		hide($(this).val());
 	});
-	$('#departments_employees').click(function(){
+	$('#departments_employees').click(function() {
 		hide($(this).val());
 	});
 

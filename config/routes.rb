@@ -1,6 +1,14 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :reports do
+    collection do
+      get :search_payrolls
+    end
+  end
+  get "reports/index"
+  match 'reports/index', :to => 'reports#index'
+
   resources :detail_personnel_actions
 
 

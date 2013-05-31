@@ -53,12 +53,26 @@
         </div>
     </li>
 
-    <li>
-        <a href=<%=products_path %> class="last">
+    <li class="accordion-menu">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="#planillas" data-original-title>
+            <i class="icon-list"></i>
+            <span>Informes<i class="icon-chevron-down pull-right"></i></span>
+        </a>
+        <div id="planillas" class="accordion-body dropdown collapse">
+            <div class="accordion-inner">
+                <ul class="nav nav-list">
+                    <li><a href=<%= reports_path %> >Comprobante Pago trabajadores</a></li>
+                </ul>
+            </div>
+        </div>
+    </li>
+
+    <!-- <li>
+        <a href=<%= reports_path %> class="last">
             <i class="icon-list"></i>
             <span>Informes</span>
         </a>
-    </li>
+    </li> -->
     
   </ul>
 </div>
