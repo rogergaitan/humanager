@@ -1,8 +1,8 @@
 reports_payment_proof = { }
 
 $(document).ready(function() {
-	
-	reports_payment_proof.datePicker();
+
+  reports_payment_proof.datePicker();
 
 	reports_payment_proof.searchInfoPayrolls();
 
@@ -11,36 +11,43 @@ $(document).ready(function() {
 	});
 
 	$("#payrolls_results").on("click", ".pag a", function() {
-    	$.getScript(this.href);
+   	$.getScript(this.href);
 		return false;
-  	});
+  });
 
 	reports_payment_proof.populateEmployeesFilter($('#fetch_employees_deductions_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
 
-	$('input[name=select_method]').change(function() {
-    	reports_payment_proof.selectEmployeesLeft($(this));
-  	});
+  $('input[name=select_method]').change(function() {
+   	reports_payment_proof.selectEmployeesLeft($(this));
+  });
 
-  	$('div.options-right input[name=check-employees-right]').change(reports_payment_proof.selectEmployeesRight);
+  $('div.options-right input[name=check-employees-right]').change(reports_payment_proof.selectEmployeesRight);
 
-  	// Moves the selected employees to the list at the right
-  	$('#add-to-list').click(reports_payment_proof.moveToRight);
-  	$('#remove-to-list').click(reports_payment_proof.moveToLeft);
+  // Moves the selected employees to the list at the right
+  $('#add-to-list').click(reports_payment_proof.moveToRight);
+  $('#remove-to-list').click(reports_payment_proof.moveToLeft);
 
-  	$('#departments_employees').change(function() {
-    	reports_payment_proof.filterDepartment($(this).val());
-  	});
+  $('#departments_employees').change(function() {
+   	reports_payment_proof.filterDepartment($(this).val());
+  });
 
-  	$('#superiors_employees').change(function() {
-    	reports_payment_proof.filterSuperior($(this).val());
-  	});
+  $('#superiors_employees').change(function() {
+    reports_payment_proof.filterSuperior($(this).val());
+  });
 
-  	$('div#marcar-desmarcar input[name=check-employees]').change(reports_payment_proof.marcarDesmarcar);
-  	
- 	$('#employee-data').on('change', 'input', function() {
-		alert('d');
-	});
+  $('div#marcar-desmarcar input[name=check-employees]').change(reports_payment_proof.marcarDesmarcar);
 
+  $('#payrolls_results').on('click', 'input', function() {
+
+    if( $('#payrolls_results input:checked').length === 1 ) {
+      $('#payrolls_results input').attr('disabled','disabled');
+      $('#payrolls_results input:checked').removeAttr('disabled','disabled');
+    } else {
+      $('#payrolls_results input').removeAttr('disabled','disabled');
+    }
+  });
+
+  $('#btn_create').click(reports_payment_proof.validate_data);
 });
 	
 // Establishing the datepicker
@@ -63,7 +70,7 @@ reports_payment_proof.searchPayrolls = function(start_date, end_date, url) {
 			start_date: start_date,
 			end_date: end_date
 		}
-	});	
+	});
 }
 
 // Find the information and calls the search function
@@ -80,7 +87,7 @@ reports_payment_proof.populateEmployeesFilter = function(url, textField, idField
   $.getJSON(url, function(employees) {
       $(document.getElementById(textField)).autocomplete({
           source: $.map(employees, function(item){
-              $.data(document.body, 'account_' + item.id+"", item.entity.name + ' ' + item.entity.surname);
+              $.data(document.body, 'account_' + item.id + "", item.entity.name + ' ' + item.entity.surname);
               return{
                   label: item.entity.surname + ' ' + item.entity.name,                        
                   id: item.id,
@@ -229,4 +236,46 @@ reports_payment_proof.marcarDesmarcar = function() {
   } else {
     $("div.left-list input[type='checkbox']").attr('checked', false);
   };
+}
+
+reports_payment_proof.validate_data = function(e) {
+
+  // Validation
+  if( $('#payrolls_results input:checked').length === 0 ) {
+    $('div#message').html('<div class="alert alert-error">Por favor selecione una planilla</div>');
+    $('div.alert.alert-error').delay(4000).fadeOut();
+    return false;
+  }
+
+  var numberEmployees = $('div.employees-list.list-right input').length;
+  var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
+  var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
+    
+  if( (numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) ) {
+    $('div#message').html('<div class="alert alert-error">Por favor selecione los empleados</div>');
+    $('div.alert.alert-error').delay(4000).fadeOut();
+    return false;
+  }
+
+  reports_payment_proof.create_pdf();
+}
+
+reports_payment_proof.create_pdf = function() {
+  
+  var url = $('#create_pdf_proof_pay_employees_reports_path').val();
+  var payroll_id = $('#payrolls_results input:checked').val();
+  var type = $('#type_report').val();
+  var employees = [];
+
+  $('div.employees-list.list-right input[type=checkbox]').each(function() {
+    if( $(this).is(':checked') ) {
+      employees.push($(this).val());      
+    }
+  });
+
+  window.open(url + '/' + payroll_id + '.pdf'
+                + '?type=' + type
+                + '&employees=' + employees
+                + '&payroll_id=' + payroll_id
+              );
 }

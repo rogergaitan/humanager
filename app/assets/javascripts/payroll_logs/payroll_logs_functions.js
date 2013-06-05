@@ -18,8 +18,8 @@ $(jQuery(document).ready(function($) {
 			payroll_logs.searchCostCode( $(this).val() );
 		});
 
-		payroll_logs.searchAll( $('#search_task_name').val(), "/payroll_logs/search_task", "task" );
-		payroll_logs.searchAll( $('#search_cost_name').val(), "/payroll_logs/search_cost", "cost" );
+		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
+		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
 	}
 
 	// Task
@@ -368,7 +368,7 @@ $(jQuery(document).ready(function($) {
 	// Search Tasks
 
 	$('#search_task_form input').keyup(function() {
-    	return payroll_logs.search( $('#search_task_name').val(), "/payroll_logs/search_task", "task" );
+    	return payroll_logs.search( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
   	});
 
   	$("#search_task_results").on("click", ".pag a", function() {
@@ -385,13 +385,13 @@ $(jQuery(document).ready(function($) {
 
   	$('#clear_task').click(function() {
   		$('#search_task_name').val('');
-  		payroll_logs.searchAll( $('#search_task_name').val(), "/payroll_logs/search_task", "task" );
+  		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
 	});
 
   	// Search Costs
 
   	$('#search_cost_form input').keyup(function() {
-    	return payroll_logs.search( $('#search_cost_name').val(), "/payroll_logs/search_cost", "cost" );
+    	return payroll_logs.search( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
   	});
 
   	$("#search_cost_results").on("click", ".pag a", function() {
@@ -408,7 +408,7 @@ $(jQuery(document).ready(function($) {
 
   	$('#clear_cost').click(function() {
   		$('#search_cost_name').val('');
-		payroll_logs.searchAll( $('#search_cost_name').val(), "/payroll_logs/search_cost", "cost" );
+		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
   	});
 
   	// Delete a Row - Employee (local)

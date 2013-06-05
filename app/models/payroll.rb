@@ -16,6 +16,7 @@ class Payroll < ActiveRecord::Base
 
   has_many :payroll_logs
   has_many :work_benefits_payments
+  has_many :deduction_payments
 
   scope :activas, where(state: true)
   scope :inactivas, where(state: false)

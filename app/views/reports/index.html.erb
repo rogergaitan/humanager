@@ -83,7 +83,6 @@
 	</div>
 
 	<div class="employees-list list-right">
-		<%= hidden_field_tag 'deduction[employee_ids][]', nil %>
 	  	<div class="employees-margin" id="list-to-save"></div>
 	</div>
 	<div style="clear:both"></div>
@@ -91,3 +90,12 @@
 
 <!-- E M P L O Y E E S -->
 <input type="hidden" id="fetch_employees_deductions_path" value="<%= fetch_employees_deductions_path %>">
+<p></p>
+<hr>
+<div id="message" style="height:40px;"></div>
+<!-- <button id="btn_create">Crear archivo PDF</button> -->
+<input type="hidden" id="create_pdf_proof_pay_employees_reports_path" value="<%= reports_path %>">
+
+<input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS][0]['PAYMENT_PROOF'] %>">
+
+<p></p>

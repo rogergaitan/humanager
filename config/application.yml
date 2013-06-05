@@ -19,6 +19,9 @@ CALCULATION_TYPE: [
 	{ name: "porcentual" },
 	{ name: "fija" }
 ]
+REPORTS: [
+	{PAYMENT_PROOF: "1"}
+	]
 FIREBIRD: [
 	{ IEMP: 1,
 	ITDOPER: "MOV1",

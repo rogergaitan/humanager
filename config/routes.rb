@@ -4,6 +4,7 @@ Reasapp::Application.routes.draw do
   resources :reports do
     collection do
       get :search_payrolls
+      get :create_pdf_proof_pay_employees
     end
   end
   get "reports/index"
