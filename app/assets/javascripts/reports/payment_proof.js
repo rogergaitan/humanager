@@ -48,6 +48,25 @@ $(document).ready(function() {
   });
 
   $('#btn_create').click(reports_payment_proof.validate_data);
+
+  var input = $('#messages_to_employees'), display = $('#char-count'), count = 0, limit = 320;
+
+  count = input.val().length
+  remaining = limit - count
+  update(remaining);
+
+  input.keyup(function(e) {
+    count = $(this).val().length;
+    remaining = limit - count;
+
+    update(remaining);
+  });
+
+  function update(count) {
+    var txt = ( Math.abs(count) === 1 ) ? count + ' Carácteres restantes' :  count + ' Carácteres restantes'
+    display.html(txt);
+  }
+
 });
 	
 // Establishing the datepicker
@@ -265,6 +284,7 @@ reports_payment_proof.create_pdf = function() {
   var url = $('#create_pdf_proof_pay_employees_reports_path').val();
   var payroll_id = $('#payrolls_results input:checked').val();
   var type = $('#type_report').val();
+  var msg = $('#messages_to_employees').val();
   var employees = [];
 
   $('div.employees-list.list-right input[type=checkbox]').each(function() {
@@ -277,5 +297,6 @@ reports_payment_proof.create_pdf = function() {
                 + '?type=' + type
                 + '&employees=' + employees
                 + '&payroll_id=' + payroll_id
+                + '&msg=' + msg
               );
 }

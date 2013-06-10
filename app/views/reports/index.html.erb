@@ -92,8 +92,12 @@
 <input type="hidden" id="fetch_employees_deductions_path" value="<%= fetch_employees_deductions_path %>">
 <p></p>
 <hr>
+<h2>Mensaje General</h2>
+<textarea name="messages_to_employees" id="messages_to_employees" cols="55" rows="5" style="width: auto;" maxlength="320"></textarea>
+<div id="char-count"></div>
+<hr>
 <div id="message" style="height:40px;"></div>
-<!-- <button id="btn_create">Crear archivo PDF</button> -->
+<button id="btn_create">Crear archivo PDF</button>
 <input type="hidden" id="create_pdf_proof_pay_employees_reports_path" value="<%= reports_path %>">
 
 <input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS][0]['PAYMENT_PROOF'] %>">

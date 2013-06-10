@@ -22,10 +22,11 @@ class ReportsController < ApplicationController
         
         @employees = params[:employees].split(",")
         @payroll = Payroll.find(params[:payroll_id])
+        @msg = params[:msg]
         
         respond_to do |format|
           format.pdf do
-            pdf = ProofPayEmployeesPDF.new(@payroll, @employees)
+            pdf = ProofPayEmployeesPDF.new(@payroll, @employees, @msg)
             send_data pdf.render, filename: "prueba.pdf",
               type: "application/pdf", disposition: "inline"
           end
