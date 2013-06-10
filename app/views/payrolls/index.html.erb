@@ -3,7 +3,7 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
 </div>
-
+<input id="get_activas_payrolls_path" type="hidden" value="<%= get_activas_payrolls_path %>">
 <div class="tabbable">
   <div class="tabbable">
     <ul class="nav nav-pills">
@@ -15,7 +15,7 @@
         <div class="tab-pane active" id="tab1" data-url="<%= payroll_logs_path %>">
           <input id="payrolls_path" type="hidden" value="<%= payrolls_path %>">
           <h2>Planillas Iniciadas</h2>
-          <table class="table table-bordered" id="activas">
+          <table class="table table-bordered" id="activas" data-url="<%= get_inactivas_payrolls_path %>">
             <thead>
               <tr>
                 <!--<div class="pull-right"> 

@@ -40,7 +40,9 @@ $(document).ready(function() {
 // Get the data of active and inactive payrolls
 payroll.index = function() {
 
-  $.getJSON('payrolls/get_activas', function(resultado) {
+  var url_get_activas = $('#get_activas_payrolls_path').val();
+
+  $.getJSON(url_get_activas, function(resultado) {
 
     $('table#activas > tbody').empty();
     $(resultado.activa).each(function() { 
@@ -48,7 +50,7 @@ payroll.index = function() {
     });
   });
 
-  $.getJSON('payrolls/get_inactivas', function(resultado) {
+  $.getJSON(url_get_activas, function(resultado) {
 
     $('table#inactivas > tbody').empty();
     $(resultado.inactiva).each(function() { 
