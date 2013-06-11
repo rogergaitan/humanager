@@ -124,6 +124,7 @@ GEM
       json (~> 1.4)
     rmagick (2.13.1)
     ruby-rc4 (0.1.5)
+    rubyfb (0.6.7)
     sass (3.1.20)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -172,6 +173,7 @@ DEPENDENCIES
   rails (= 3.2.11)
   rails3-jquery-autocomplete
   rmagick
+  rubyfb
   sass-rails (~> 3.2.3)
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
