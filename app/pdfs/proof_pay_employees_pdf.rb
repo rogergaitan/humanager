@@ -216,7 +216,7 @@ include ActionView::Helpers::NumberHelper
       data[0].map do |row| row end +
       [[ {:content => "Total_a_Recibir (Colones): #{receive}", :colspan => 3, :font_style => :bold } ]],
       :cell_style => { :align => :right, :size => 10, :height => 19 }, 
-      :position => :right, #:column_widths => { 2 => 30 }
+      :position => :right
     )
   end
 

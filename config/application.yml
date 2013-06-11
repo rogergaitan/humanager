@@ -20,7 +20,8 @@ CALCULATION_TYPE: [
 	{ name: "fija" }
 ]
 REPORTS: [
-	{PAYMENT_PROOF: "1"}
+	{PAYMENT_PROOF: "1",
+	GENERAL_PAYROLL: "2"}
 	]
 FIREBIRD: [
 	{ IEMP: 1,

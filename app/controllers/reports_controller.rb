@@ -1,12 +1,10 @@
 class ReportsController < ApplicationController
 
+  before_filter :resources, :only => [:index, :general_payroll]
 	respond_to :html, :json, :js
 
 	def index
     @payrolls = Payroll.where('state = ?', 0)
-  	@department = Department.all
-  	@superior = Employee.superior
-  	@employees = Employee.order_employees
   end
 
 	def search_payrolls
@@ -36,9 +34,16 @@ class ReportsController < ApplicationController
         # Code here...
 
     end # End case
-
-
-
   end # End show
+
+  def general_payroll
+    # @payrolls = Payroll.where('state = ?', 0)
+  end
+
+  def resources
+    @department = Department.all
+    @superior = Employee.superior
+    @employees = Employee.order_employees
+  end
 
 end
