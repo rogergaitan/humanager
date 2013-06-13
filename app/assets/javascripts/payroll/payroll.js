@@ -116,11 +116,13 @@ payroll.add_inactivas = function (payroll, target_table) {
 // Process to close a payroll Selected
 payroll.closePayrollSelected = function(payroll_id) {
 
+  var url_close_payroll = $('#close_payroll_payrolls_path').val();
+
   if( payroll.confirm() ) {
     
     $.ajax({
       type: "POST",
-      url: "/payrolls/close_payroll",
+      url: url_close_payroll,
       data: {
         payroll_id: payroll_id
       },

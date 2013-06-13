@@ -14,4 +14,34 @@ class Deduction < ActiveRecord::Base
 
   validates :calculation, :presence => true
 
+
+  def self.get_list_to_general_payment
+      
+    deductions = Deduction.where('state = ?', 1)
+    list_deductions = []
+
+    if deductions.count > 4
+      
+      deductions = Deduction.where('state = ? and deduction_type = ?', 1, CONSTANTS[:DEDUCTION][0]['name']).limit(4)
+      
+      deductions.each do |d|
+        list_deductions.push d.id
+      end # End each deductions
+
+      unless deductions.count == 4
+        num_limit = 4 - deductions.count
+        deductions = Deduction.where('state = ? and id NOT IN (?)', 1, list_deductions).limit(num_limit)
+        deductions.each do |d|
+          list_deductions.push d.id
+        end # End each deductions
+      end
+
+    else 
+      deductions.each do |d|
+        list_deductions.push d.id
+      end # End each deductions
+    end # End if
+    list_deductions
+  end
+
 end

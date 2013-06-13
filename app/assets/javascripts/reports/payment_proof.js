@@ -64,10 +64,8 @@ reports_payment_proof.create_pdf = function() {
   var msg = $('#messages_to_employees').val();
   var employees = [];
 
-  $('div.employees-list.list-right input[type=checkbox]').each(function() {
-    if( $(this).is(':checked') ) {
-      employees.push($(this).val());      
-    }
+  $('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
+    employees.push($(this).val());
   });
 
   window.open(url + '/' + payroll_id + '.pdf'

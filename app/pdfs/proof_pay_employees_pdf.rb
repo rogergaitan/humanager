@@ -44,8 +44,6 @@ include ActionView::Helpers::NumberHelper
       start_new_page()
 
     end # End each employees
-
-
   end
 
   def proof_pay_info
@@ -171,15 +169,15 @@ include ActionView::Helpers::NumberHelper
     total_others = 0
     count = 0
 
-    WorkBenefitsPayment.where('payroll_id = ?', @payroll.id).each do |a|
-      if a.employee_benefit.employee_id.to_f == employee_id.to_f
+    DeductionPayment.where('payroll_id = ?', @payroll.id).each do |a|
+      if a.deduction_employee.employee_id.to_f == employee_id.to_f
         count += 1
         if count >= 4
           total_others += a.payment.to_f
           total += a.payment
         else
-          row << "#{a.employee_benefit.work_benefit.description}"
-          row << "#{a.percentage}"
+          row << "#{a.deduction_employee.deduction.description}"
+          row << "#{a.deduction_employee.deduction.calculation}"
           row << "#{number_to_format(a.payment.to_f)}"
           total += a.payment
         end
