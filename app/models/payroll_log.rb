@@ -37,6 +37,11 @@ class PayrollLog < ActiveRecord::Base
     .paginate(:page => page, :per_page => 5)
   end
 
+  def self.search_employee(search_employee_name, page, per_page = nil)
+    @entities = Entity.where(" entities.name like '%#{search_employee_name}%' ")
+    .paginate(:page => page, :per_page => 5)
+  end
+
   def self.delete_employee_to_payment(employee_id, payroll_history_id)
     PayrollEmployee.find_by_payroll_history_id_and_employee_id(payroll_history_id, employee_id).destroy()
   end

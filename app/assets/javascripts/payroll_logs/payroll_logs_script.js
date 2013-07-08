@@ -34,7 +34,7 @@ $(jQuery(document).ready(function($) {
 
 	$('#products_items').on('click', '.remove_fields', removeFields);
 	
-	//populates the filter for employees
+	// Populates the filter for employees
 	populateEmployeesFilter('/payroll_logs/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 	
 	$('.items_purchase_orders_form .cc-filter-id:eq(0)').each(function() {
@@ -45,12 +45,12 @@ $(jQuery(document).ready(function($) {
 		populateCentroCostos('/centro_de_costos/load_cc', $(this).next().attr('id'), $(this).attr('id'));
 	});
 	
-	//delete the treeview after the user clicks on close
+	// Delete the treeview after the user clicks on close
 	$('button.delete-accounts').click(function() {
 		$('#list').empty();
 	});
 	
-	//executes different options to select the employees
+	// Executes different options to select the employees
 	$('input[name=select_method]').change(function() {
 		selectEmployeesLeft($(this));
 	});
@@ -70,10 +70,10 @@ $(jQuery(document).ready(function($) {
 	
 	$('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
 	
-	//when the employees are loaded in the page move the selected to the right
+	// When the employees are loaded in the page move the selected to the right
 	moveEmployees();
 	
-	//moves the selected employees to the list at the right
+	// Moves the selected employees to the list at the right
 	$('#add-to-list').click(moveToRight);
 	$('#remove-to-list').click(moveToLeft);
 	
@@ -87,7 +87,7 @@ $(jQuery(document).ready(function($) {
 	
 	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
 	
-	//Add logs to table
+	// Add logs to table
 	$('form').on('click', '.add_fields', addFields);
 	$('#products_items').find('label').remove();
 
@@ -135,7 +135,7 @@ function removeFields(e) {
 }
 
 function addFields(e) {
-	//valida si hay campos en blanco
+	// Valida si hay campos en blanco
 	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 	var numberRows = $('#products_items tr').length;
 	if((timeWorked == 0 ) && numberRows > 1) { 
@@ -148,7 +148,7 @@ function addFields(e) {
 		var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
 		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
 		if (numberRows == 1) { rowIsDisabled = true; };
-		//valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
+		// Valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
 		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
 			$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
 			$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
@@ -195,10 +195,10 @@ function saveEmployees(isDisabled) {
 	};
 }
 
-//FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
+// FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
 
 
-//function to check and uncheck all the employees at the left.
+// Function to check and uncheck all the employees at the left.
 function marcarDesmarcar () {
 	if ($(this).is(':checked')) {
 		$("div.left-list input[type='checkbox']").attr('checked', true);
@@ -215,7 +215,7 @@ function selectEmployeesRight() {
 	};
 }
 
-//function to filter results by department name 
+// Function to filter results by department name 
 function filterDepartment (dropdown) {
 	var dep = dropdown ? dropdown : 0;
 	$('div.employees-list.left-list input[type=checkbox]').each(function() {
@@ -234,7 +234,7 @@ function filterDepartment (dropdown) {
 	});
 }
 
-//function to filter results by superior name 
+// Function to filter results by superior name 
 function filterSuperior (dropdown) {
 	var sup = dropdown ? dropdown : 0;
 	$('div.employees-list.left-list input[type=checkbox]').each(function() {
@@ -253,13 +253,13 @@ function filterSuperior (dropdown) {
 	});
 }
 
-//function to move the employees to the right
+// Function to move the employees to the right
 function moveToRight(e) {
 	e.preventDefault();
 	moveEmployees();
 }
 
-//Function to move employees to the left
+// Function to move employees to the left
 function moveToLeft (e) {
 	e.preventDefault();
 	var appendEmployees = "";
@@ -350,9 +350,9 @@ function populateEmployeesFilter(url, textField, idField) {
       })     
   });	
 }
-//END FILTERS
+// END FILTERS
 
-//function to fill autocompletes
+// Function to fill autocompletes
 function populateCentroCostos(url, textField, idField) {
   $.getJSON(url, function(accounts) {
       $(document.getElementById(idField)).next().autocomplete({
@@ -378,7 +378,7 @@ function populateCentroCostos(url, textField, idField) {
   }); 
 }
 
-//function to fill autocompletes
+// Function to fill autocompletes
 function populateTasks(url, idField) {
   $.getJSON(url, function(accounts) {
       $(document.getElementById(idField)).next().autocomplete({
@@ -404,7 +404,7 @@ function populateTasks(url, idField) {
   }); 
 }
 
-//function to show the controls for adding more employees
+// Function to show the controls for adding more employees
 function addMoreEmployees (e) {
 	e.preventDefault();
 	$('#add-more').hide();
@@ -415,7 +415,7 @@ function addMoreEmployees (e) {
 	$('#employee-header').text('Empleados');
 }
 
-//function to remove the controls for adding more employees
+// Function to remove the controls for adding more employees
 function removeControls (e) {
 	e.preventDefault();
 	$('#filter-controls').slideUp();

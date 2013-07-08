@@ -104,6 +104,13 @@ class PayrollLogsController < ApplicationController
     respond_with @costs
   end
 
+  def search_employee
+    puts "k1"
+    @entities = PayrollLog.search_employee(params[:search_employee_name], params[:page], params[:per_page])
+    puts "@entities"
+    respond_with @entities
+  end
+
   def delete_employee_to_payment
 
     PayrollLog.delete_employee_to_payment(params[:employee_id], params[:payroll_history_id])

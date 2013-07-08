@@ -19,6 +19,7 @@ Reasapp::Application.routes.draw do
       get :fetch_employees
       get :search_task
       get :search_cost
+      get :search_employee
       get :delete_employee_to_payment
     end
   end

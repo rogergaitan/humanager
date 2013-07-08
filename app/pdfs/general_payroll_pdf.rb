@@ -11,15 +11,10 @@ include ActionView::Helpers::NumberHelper
   def start
 
     @data.each do |payroll_id, d|
-      
       header_page(payroll_id)
-
       create_table(d)
-      
       start_new_page()
-
     end # End each @data
-
   end
 
   def header_page(payroll_id)
@@ -38,32 +33,30 @@ include ActionView::Helpers::NumberHelper
 
   def create_table(data)
 
-    get_header(data[0])
-
-    text "#{data[0]}"
+    header = get_header(data[0])
+    rows = []
 
     data.each do |d|
+      row = []
       d.each do |key, value|
-        text "#{key}", character_spacing: 1
-        text "#{value}", character_spacing: 1
-        move_down 5
+        row << "#{value}"
       end
-    end
+      rows << row
+    end # End data
+
+    table(
+      [header] +
+      rows.map do |row| row end
+    )
 
   end
 
   def get_header(data)
-      
-    # count = 0  
-    # data.each do |key, value|
-
-    #   if count == 0 or count == 1
-        
-    #   end
-
-    #   count += 1
-    # end
-
+    header = []    
+    data.each do |key, value|
+      header << {:content => "#{key}", :font_style => :bold}
+    end
+    header
   end
 
   def number_to_format(number)

@@ -20,6 +20,7 @@ $(jQuery(document).ready(function($) {
 
 		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
 		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
+		payroll_logs.searchAll( $('#search_name_employee').val(), $('#search_employee_payroll_logs_path').val(), "employees" );
 	}
 
 	// Task
@@ -61,17 +62,17 @@ $(jQuery(document).ready(function($) {
 
 		$.each(cost_code, function(index, value) {
 			if( value === code ) {
-				$('.success td:eq(2) input:eq(1)').val(cost_id[index]);		//hidden (id)
-				$('.success td:eq(2) input:eq(2)').val(cost_desc[index]);	//text (description)
+				$('.success td:eq(2) input:eq(1)').val(cost_id[index]);		// hidden (id)
+				$('.success td:eq(2) input:eq(2)').val(cost_desc[index]);	// text (description)
 				return false;
 			}
 
 			if( cost_code.length-1 === index ) {
 				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
-				$('.success td:eq(2) input:eq(1)').val(''); //hidden (id)
-				$('#search_cost_code_').val(''); 			//text (code)
-				$('.success td:eq(2) input:eq(2)').val(''); //text (description)
+				$('.success td:eq(2) input:eq(1)').val(''); // hidden (id)
+				$('#search_cost_code_').val(''); 			// text (code)
+				$('.success td:eq(2) input:eq(2)').val(''); // text (description)
 			}
 		});
 	}
@@ -157,6 +158,9 @@ $(jQuery(document).ready(function($) {
 			if( type == 'task' ) {
 				d = { search_task_name: name };
 			}
+			if( type == 'employees' ) {
+				d = { search_employee_name: name };
+			}
 
 			return $.ajax({
 				url: url,
@@ -175,6 +179,9 @@ $(jQuery(document).ready(function($) {
 		} 
 		if( type == 'task' ) {
 			d = { search_task_name: name };
+		}
+		if( type == 'employees' ) {
+			d = { search_employee_name: name };
 		}
 
 		return $.ajax({
@@ -365,6 +372,32 @@ $(jQuery(document).ready(function($) {
   		});  		
   	}
 
+  	// Search Employee KALFARO
+
+  	$('#search_name_employee').keyup(function() {
+  		return payroll_logs.searchAll( $('#search_name_employee').val(), $('#search_employee_payroll_logs_path').val(), "employees" );
+  	});
+
+  	$("#search_employee_results").on("click", ".pag a", function() {
+    	$.getScript(this.href);
+		return false;
+  	});
+  	
+  	$("#search_employee_results").on("click", "table tr a", function(e) {
+  		
+  		$('#name_employee').val( $(this).html() );
+  		/*
+    	payroll_logs.setTaskCode( $(this).next().val() );
+  		*/
+  		$('#employeeModal button:eq(2)').trigger('click');
+  		e.preventDefault();
+  	});
+
+	$('#clear_employee').click(function() {
+  		$('#search_name_employee').val('');
+		payroll_logs.searchAll( $('#search_name_employee').val(), $('#search_employee_payroll_logs_path').val(), "employees" );
+	});  	
+	
 	// Search Tasks
 
 	$('#search_task_form input').keyup(function() {
