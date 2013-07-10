@@ -2,7 +2,7 @@ $(jQuery(document).ready(function($) {
 
     treeviewhr.cc_tree(centro_costos, true);
     // Obtiene las centros de costo
-    $.getJSON('/centro_de_costos/load_cc', function(category_data) {
+    $.getJSON($('#load_cc_centro_de_costos_path').val(), function(category_data) {
         $( "#load_centro_de_costo" ).autocomplete({
             source: $.map(category_data, function(item){
                 $.data(document.body, 'category_' + item.id+"", item.nombre_cc);

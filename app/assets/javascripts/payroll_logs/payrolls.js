@@ -1,6 +1,6 @@
 $(document).ready(function($) {
     //Gets all data from employees
-    $.getJSON('/payrolls/load_payrolls', function(payroll_data) {
+    $.getJSON($('#load_payrolls_payrolls_path').val(), function(payroll_data) {
         $( "#load_payroll" ).autocomplete({
             source: $.map(payroll_data, function(item){
                 $.data(document.body, 'payroll_'+ item.id+"", item.payroll_type.description);

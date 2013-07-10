@@ -38,18 +38,18 @@ $(jQuery(document).ready(function($) {
 	$('#products_items').on('click', '.remove_fields', removeFields);
 	
 	// Populates the filter for employees
-	populateEmployeesFilter('/payroll_logs/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
+	populateEmployeesFilter($('#search_employee_payroll_logs_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
 	
 	$('.items_purchase_orders_form .cc-filter-id:eq(0)').each(function() {
-		populateTasks('/tasks/load_cc', $(this).attr('id'));
+		populateTasks($('#load_cc_tasks_path').val(), $(this).attr('id'));
 	});
 
-	$('.items_purchase_orders_form .cc-filter-id:eq(1)').each(function() {
-		populateCentroCostos('/centro_de_costos/load_cc', $(this).next().attr('id'), $(this).attr('id'));
+	$('.items_purchase_orders_form .cc-filter-id:eq(2)').each(function() {
+		populateCentroCostos($('#load_cc_centro_de_costos_path').val(), $(this).attr('id'), $(this).attr('id'));
 	});
 
 	$('#employee_code').each( function() {
-		populateEmployees('/employees/load_em',$(this).attr('id'));
+		populateEmployees($('#load_em_employees_path').val(), $(this).attr('id'));
 	});
 	
 	// Delete the treeview after the user clicks on close
@@ -86,7 +86,7 @@ $(jQuery(document).ready(function($) {
 	
 	$('#departments_employees').change(function() {
 		filterDepartment($(this).val());
-		});
+	});
 	
 	$('#superiors_employees').change(function() {
 		filterSuperior($(this).val());
@@ -144,6 +144,7 @@ function addFields(e) {
 	// Valida si hay campos en blanco
 	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 	var numberRows = $('#products_items tr').length;
+	var is_select_methol_all = false;
 	if((timeWorked == 0 ) && numberRows > 1) { 
 		$('div#message').html('<div class="alert alert-error">Por favor complete los espacios en blanco</div>');
 		$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
@@ -155,10 +156,20 @@ function addFields(e) {
 		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
 		if (numberRows == 1) { rowIsDisabled = true; };
 
+		// Valida si "Todos" esta seleccionado
 		if( $('#select_method_all').is(':checked') ) {
-			
+			numberEmployees = 1;
+			employeesChecked = true;
+			is_select_methol_all = true;
+			// Validar Empleado
+			if( $('#products_items tr:eq(1) td:eq('+payroll_logs.employee_td_eq+') input:eq(1)').val() === "" ) {
+				$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
+				$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
+				$('div.alert.alert-error').delay(4000).fadeOut();
+				return false;	
+			}
 		}
-		/******************************************************************************************/
+
 		// Valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
 		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
 			$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
@@ -168,11 +179,11 @@ function addFields(e) {
 		} else {
 			// Validate Duplicate Records
 			if( !rowIsDisabled ) {
-				var name = $('#products_items tr:eq(1) td:first input:hidden').attr('name');
+				var name = $('#products_items tr:eq(1) td:eq('+payroll_logs.task_td_eq+') input:hidden').attr('name');
 				var num = name.match(/\d/g);
 				num = num.join('');
 				payroll_logs.setTotal(num);
-				result = payroll_logs.validateEmployeeTask(num);
+				result = payroll_logs.validateEmployeeTask(num,is_select_methol_all);
 				if( result.status ) {
 					$('div#message').html('<div class="alert alert-error">Existe al menos un empleado con datos duplicados ['+result.username+']</div>');
 					$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
@@ -181,32 +192,38 @@ function addFields(e) {
 				}
 			}
 		}
-		/******************************************************************************************/
 
 		$('#products_items tr input, select').attr('disabled', true);
 		var time = new Date().getTime();
 		var regexp = new RegExp($(this).data('id'), 'g');
 		$('.header_items').after($(this).data('fields').replace(regexp, time));
-		populateTasks('/tasks/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id'));
-		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(1)').attr('id'));
-		populateEmployees('/employees/load_em', $('#employee_code').attr('id') ); // kalfaro
+		populateTasks($('#load_cc_tasks_path').val(), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id'));
+		populateCentroCostos($('#load_cc_centro_de_costos_path').val(), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(2)').attr('id'));
+		populateEmployees($('#load_em_employees_path').val(), $('#employee_code').attr('id') );
 		$('#products_items').find('label').remove();
-		saveEmployees(rowIsDisabled);
+		saveEmployees(rowIsDisabled, is_select_methol_all);
 		payroll_logs.reloadSelectorsEvents();
 		payroll_logs.cleanEmployeeAlone();
 		e.preventDefault();
 	}
 }
 
-function saveEmployees(isDisabled) {
-	if (!isDisabled) {
-		var name = $('#products_items tr:eq(2) td:first input:hidden').attr('name');
+function saveEmployees(isDisabled, is_select_methol_all) {
+	if( !isDisabled ) {
+		var name = $('#products_items tr:eq(2) td:eq(' + payroll_logs.task_td_eq + ') input:hidden').attr('name');
 		var num = name.match(/\d/g);
 		num = num.join('');
-		$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
-			$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ $(this).val() +'" >');
-			payroll_logs.addDetailsToEmployee(num,$(this).val());
-		});
+
+		if( is_select_methol_all ) {
+			var idEmployee = $('#products_items tr:eq(2) td:eq('+payroll_logs.employee_td_eq+') input:hidden').val();
+			$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ idEmployee +'" >');
+			payroll_logs.addDetailsToEmployee( num, idEmployee, is_select_methol_all );
+		} else {
+			$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
+				$('#products_items tr:eq(2) .save-employees').append('<input type="hidden" name="payroll_log[payroll_histories_attributes]['+ num +'][employee_ids][]" value="'+ $(this).val() +'" >');
+				payroll_logs.addDetailsToEmployee( num, $(this).val(), is_select_methol_all );
+			});
+		}
 	};
 }
 
@@ -341,9 +358,9 @@ function populateEmployeesFilter(url, textField, idField) {
   $.getJSON(url, function(employees) {
       $(document.getElementById(textField)).autocomplete({
           source: $.map(employees, function(item){
-              $.data(document.body, 'account_' + item.id+"", item.entity.name + ' ' + item.entity.surname);
+              $.data(document.body, 'account_' + item.id+"", item.name + ' ' + item.surname);
               return{
-               	label: item.entity.surname + ' ' + item.entity.name,                        
+               	label: item.surname + ' ' + item.name,
                   id: item.id,
 					sup: item.employee_id,
 					dep: item.department_id,
@@ -368,7 +385,7 @@ function populateEmployeesFilter(url, textField, idField) {
 // END FILTERS
 
 // Function to fill autocompletes (Employee)
-function populateEmployees(url, idField) { // kalfaro
+function populateEmployees(url, idField) {
   $.getJSON(url, function(accounts) {
       $(document.getElementById(idField)).next().autocomplete({
           source: $.map(accounts, function(item){
