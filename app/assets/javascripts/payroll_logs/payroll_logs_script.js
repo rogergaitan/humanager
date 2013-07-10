@@ -6,16 +6,19 @@ $(jQuery(document).ready(function($) {
 		$('#superiors_employees option:eq(0)').attr('selected','selected');
 		$('#departments_employees option:eq(0)').attr('selected','selected');
 		hideEmployess();
+		payroll_logs.cleanEmployeeAlone();
 	});
 
 	$('#select_method_boss').click(function() {
 		hide($('#superiors_employees').val());
 		$('#superiors_employees').removeAttr('disabled');
+		payroll_logs.cleanEmployeeAlone();
 	});
 
 	$('#select_method_department').click(function() {
 		hide($('#departments_employees').val());
 		$('#departments_employees').removeAttr('disabled');
+		payroll_logs.cleanEmployeeAlone();
 	});
 
 	$('#superiors_employees').click(function() {
@@ -43,6 +46,10 @@ $(jQuery(document).ready(function($) {
 
 	$('.items_purchase_orders_form .cc-filter-id:eq(1)').each(function() {
 		populateCentroCostos('/centro_de_costos/load_cc', $(this).next().attr('id'), $(this).attr('id'));
+	});
+
+	$('#employee_code').each( function() {
+		populateEmployees('/employees/load_em',$(this).attr('id'));
 	});
 	
 	// Delete the treeview after the user clicks on close
@@ -99,7 +106,6 @@ $(jQuery(document).ready(function($) {
 	}
 }));
 
-
 function hideEmployess() {
 	$('.employees-list:eq(0) div:eq(0)').hide();
 	$('.employees-list:eq(0)').css('min-height', '218px');
@@ -148,6 +154,11 @@ function addFields(e) {
 		var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
 		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
 		if (numberRows == 1) { rowIsDisabled = true; };
+
+		if( $('#select_method_all').is(':checked') ) {
+			
+		}
+		/******************************************************************************************/
 		// Valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
 		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
 			$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
@@ -170,15 +181,19 @@ function addFields(e) {
 				}
 			}
 		}
+		/******************************************************************************************/
+
 		$('#products_items tr input, select').attr('disabled', true);
 		var time = new Date().getTime();
 		var regexp = new RegExp($(this).data('id'), 'g');
 		$('.header_items').after($(this).data('fields').replace(regexp, time));
 		populateTasks('/tasks/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id'));
 		populateCentroCostos('/centro_de_costos/load_cc', $('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(1)').attr('id'));
+		populateEmployees('/employees/load_em', $('#employee_code').attr('id') ); // kalfaro
 		$('#products_items').find('label').remove();
 		saveEmployees(rowIsDisabled);
 		payroll_logs.reloadSelectorsEvents();
+		payroll_logs.cleanEmployeeAlone();
 		e.preventDefault();
 	}
 }
@@ -328,29 +343,54 @@ function populateEmployeesFilter(url, textField, idField) {
           source: $.map(employees, function(item){
               $.data(document.body, 'account_' + item.id+"", item.entity.name + ' ' + item.entity.surname);
               return{
-                  label: item.entity.surname + ' ' + item.entity.name,                        
+               	label: item.entity.surname + ' ' + item.entity.name,                        
                   id: item.id,
-									sup: item.employee_id,
-									dep: item.department_id,
-									data_id: 'employee_'+ item.id
+					sup: item.employee_id,
+					dep: item.department_id,
+					data_id: 'employee_'+ item.id
               }
           }),
           select: function( event, ui ) {
-							if (!$('#list-to-save input#'+ui.item.data_id).length) {
-								appendEmployees = "<div class='checkbox-group'>" +
-													"<div class='checkbox-margin'>" +
-														"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log_employees' value='"+ ui.item.id +"' />" +
-														"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
-													"</div>" +
-												"</div>";	
-								$('#list-to-save').append(appendEmployees);
-								$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
-							}
+				if (!$('#list-to-save input#'+ui.item.data_id).length) {
+					appendEmployees = "<div class='checkbox-group'>" +
+										"<div class='checkbox-margin'>" +
+											"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log_employees' value='"+ ui.item.id +"' />" +
+											"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
+										"</div>" +
+									"</div>";	
+					$('#list-to-save').append(appendEmployees);
+					$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
+				}
           }
       })     
   });	
 }
 // END FILTERS
+
+// Function to fill autocompletes (Employee)
+function populateEmployees(url, idField) { // kalfaro
+  $.getJSON(url, function(accounts) {
+      $(document.getElementById(idField)).next().autocomplete({
+          source: $.map(accounts, function(item){
+              $.data(document.body, 'e_' + item.id + "", item.nombre_cc);
+              return{
+                  label: item.surname + ' ' + item.name,
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ) {
+              payroll_logs.setEmployeeId(ui.item.id);
+          },
+          focus: function(event, ui){
+              $(document.getElementById(idField)).next().val(ui.item.label);
+          }
+      });
+      if($(document.getElementById(idField)).val()){
+          var account = $.data(document.body, 'e_' + $('#'+idField).val()+'');
+          $(document.getElementById(idField)).next().val(account);
+      }        
+  });
+}
 
 // Function to fill autocompletes
 function populateCentroCostos(url, textField, idField) {

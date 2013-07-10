@@ -242,5 +242,32 @@
 	cost_code = list_code.split(",");
 	cost_desc = list_description.split(",");
 
-<% end -%>
+	/************************
+    	Employees
+    ************************/
+	
+	<% l_employee_code = ''  %>
+	<% l_employee_id = ''  %>
+	<% l_employee_name = ''  %>
+
+	<% @employees.each do |employee| %>
+		<% l_employee_code += "#{employee.entity.entityid}," %>
+		<% l_employee_id += "#{employee.id}," %>
+		<% l_employee_name += "#{employee.entity.name}  #{employee.entity.surname},"  %>
+	<% end %>
+
+	var list_e_code = '<%= l_employee_code %>';
+	var list_e_id = '<%= l_employee_id %>';
+	var list_e_name = '<%= l_employee_name %>';
+	
+	list_e_code = list_e_code.substring(0, list_e_code.length-1);
+	list_e_id = list_e_id.substring(0, list_e_id.length-1);
+	list_e_name = list_e_name.substring(0, list_e_name.length-1);
+
+	var employee_code, employee_id, employee_name = new Array();
+	employee_code = list_e_code.split(",");
+	employee_id = list_e_id.split(",");
+	employee_name = list_e_name.split(",");
+
+<% end %>
 <%= javascript_include_tag "payroll_logs/payroll_logs_functions" %>

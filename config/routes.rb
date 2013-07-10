@@ -123,6 +123,7 @@ Reasapp::Application.routes.draw do
     end
     collection do
       get 'load_employees'
+      get 'load_em'
     end
   end
 

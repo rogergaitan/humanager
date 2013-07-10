@@ -1,5 +1,8 @@
 payroll_logs = {
-	search_length : 3
+	search_length : 3,
+	employee_tr_eq: 0,
+	task_tr_eq: 1,
+	centro_de_costo_tr_eq: 3,
 }
 
 $(jQuery(document).ready(function($) {
@@ -18,6 +21,11 @@ $(jQuery(document).ready(function($) {
 			payroll_logs.searchCostCode( $(this).val() );
 		});
 
+		// Employee
+		$('#search_code_employee').focusout( function() {
+			payroll_logs.searhEmployeeCode( $(this).val() );
+		});
+
 		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
 		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
 		payroll_logs.searchAll( $('#search_name_employee').val(), $('#search_employee_payroll_logs_path').val(), "employees" );
@@ -28,8 +36,8 @@ $(jQuery(document).ready(function($) {
 		
 		$.each(task_code, function(index, value) {
 			if( value === code ) {
-				$('.success td:eq(0) input:hidden:eq(0)').val( task_id[index] );
-				$('.success td:eq(0) input:hidden:eq(1)').val( task_unidad[index] );
+				$('.success td:eq('+payroll_logs.task_tr_eq+') input:hidden:eq(0)').val( task_id[index] );
+				$('.success td:eq('+payroll_logs.task_tr_eq+') input:hidden:eq(1)').val( task_unidad[index] );
 				$('#load_task').val( task_desc[index] );
 				return false;
 			}
@@ -37,8 +45,8 @@ $(jQuery(document).ready(function($) {
 			if( task_code.length-1 == index ) {
 				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
-				$('.success td:eq(0) input:hidden:eq(0)').val( task_id[0] );
-				$('.success td:eq(0) input:hidden:eq(1)').val( task_unidad[0] );
+				$('.success td:eq('+payroll_logs.task_tr_eq+') input:hidden:eq(0)').val( task_id[0] );
+				$('.success td:eq('+payroll_logs.task_tr_eq+') input:hidden:eq(1)').val( task_unidad[0] );
 				$('#load_task').val( task_desc[0] );
 				payroll_logs.setTaskCode( task_id[0] );
 			}
@@ -50,8 +58,8 @@ $(jQuery(document).ready(function($) {
 		$.each(task_id, function(index, value) {
 			if( value == id ) {
 				$("#search_task_code_").val( task_code[index] );
-				$('.success td:eq(0) input:hidden:eq(0)').val( task_id[index] );
-				$('.success td:eq(0) input:hidden:eq(1)').val( task_unidad[index] );
+				$('.success td:eq('+payroll_logs.task_tr_eq+') input:hidden:eq(0)').val( task_id[index] );
+				$('.success td:eq('+payroll_logs.task_tr_eq+') input:hidden:eq(1)').val( task_unidad[index] );
 				return false;
 			}
 		});
@@ -62,17 +70,17 @@ $(jQuery(document).ready(function($) {
 
 		$.each(cost_code, function(index, value) {
 			if( value === code ) {
-				$('.success td:eq(2) input:eq(1)').val(cost_id[index]);		// hidden (id)
-				$('.success td:eq(2) input:eq(2)').val(cost_desc[index]);	// text (description)
+				$('.success td:eq('+payroll_logs.centro_de_costo_tr_eq+') input:eq(1)').val(cost_id[index]);		// hidden (id)
+				$('.success td:eq('+payroll_logs.centro_de_costo_tr_eq+') input:eq(2)').val(cost_desc[index]);	// text (description)
 				return false;
 			}
 
 			if( cost_code.length-1 === index ) {
 				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
-				$('.success td:eq(2) input:eq(1)').val(''); // hidden (id)
+				$('.success td:eq('+payroll_logs.centro_de_costo_tr_eq+') input:eq(1)').val(''); // hidden (id)
 				$('#search_cost_code_').val(''); 			// text (code)
-				$('.success td:eq(2) input:eq(2)').val(''); // text (description)
+				$('.success td:eq('+payroll_logs.centro_de_costo_tr_eq+') input:eq(2)').val(''); // text (description)
 			}
 		});
 	}
@@ -81,11 +89,41 @@ $(jQuery(document).ready(function($) {
 		$.each(cost_id, function(index, value) {
 			if( value == id ) {
 				$("#search_cost_code_").val(cost_code[index]);
-				$('.success td:eq(2) input:eq(1)').val(cost_id[index]);
+				$('.success td:eq('+payroll_logs.centro_de_costo_tr_eq+') input:eq(1)').val(cost_id[index]);
 				return false;
 			}
 		});
 	}
+
+	// Employee kalfaro
+
+	payroll_logs.searhEmployeeCode = function(code) {
+		$.each(employee_code, function(index, value) {
+			if( value == code ) {
+				$('#employee_code').val( employee_id[index] ); 		// Hidden id empleyee (id)
+				$('#name_employee').val( employee_name[index] );	// Name employee
+				return false;
+			}
+
+			if( employee_code.length-1 === index ) {
+				$('div#message').html('<div class="alert alert-error">El numero de Identificacion no fue encontrado</div>');
+				$('div.alert.alert-error').delay(4000).fadeOut();
+				$('#employee_code').val('');		// Hidden id empleyee (id)
+				$('#name_employee').val('');		// Name employee
+				$('#search_code_employee').val('');	// Code employee
+			}
+		});
+	}
+
+	payroll_logs.setEmployeeId = function(id) {
+  		$.each(employee_id, function(index, value) {
+  			if( value == id ) {
+  				$('#search_code_employee').val( employee_code[index] ); // Code employee
+  				$('#employee_code').val( employee_id[index] ); // Hidden id empleyee (id)
+  				return false;
+  			}
+  		});
+  	}
 
 	// Employees add Details
 	payroll_logs.addDetailsToEmployee = function(num, employee_id) {
@@ -372,6 +410,22 @@ $(jQuery(document).ready(function($) {
   		});  		
   	}
 
+  	payroll_logs.cleanEmployeeAlone = function() {
+  		
+  		if( !$('#select_method_all').is(':checked') ) {
+			$('#products_items tr:eq(1) td:eq(' + payroll_logs.employee_tr_eq + ') a').hide();
+			$('#products_items tr:eq(1) td:eq(' + payroll_logs.employee_tr_eq + ') input').each(function() {
+				$(this).val('');
+				$(this).attr( "disabled", "disabled" );
+			});
+  		} else {
+  			$('#products_items tr:eq(1) td:eq(' + payroll_logs.employee_tr_eq + ') a').show();
+			$('#products_items tr:eq(1) td:eq(' + payroll_logs.employee_tr_eq + ') input').each(function() {
+				$(this).removeAttr( "disabled", "disabled" );
+			});
+  		}
+	}
+
   	// Search Employee KALFARO
 
   	$('#search_name_employee').keyup(function() {
@@ -384,11 +438,8 @@ $(jQuery(document).ready(function($) {
   	});
   	
   	$("#search_employee_results").on("click", "table tr a", function(e) {
-  		
   		$('#name_employee').val( $(this).html() );
-  		/*
-    	payroll_logs.setTaskCode( $(this).next().val() );
-  		*/
+  		payroll_logs.setEmployeeId( $(this).next().val() ); // Id Employee
   		$('#employeeModal button:eq(2)').trigger('click');
   		e.preventDefault();
   	});

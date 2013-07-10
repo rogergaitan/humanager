@@ -174,4 +174,11 @@ class EmployeesController < ApplicationController
     respond_with @employees
   end
 
+  def load_em
+    @em = Entity.joins(:employee).select('employees.id, entities.name, entities.surname')
+    respond_to do |format|
+      format.json { render json: @em }
+    end
+  end
+
 end
