@@ -47,10 +47,9 @@ class ReportsController < ApplicationController
                 type: "application/pdf", disposition: "inline"
             end
           end
-          
         else
-          puts "format exel"
-        end        
+          general_payroll_xls(@data, @payroll_ids)
+        end
 
     end # End case
   end # End show
@@ -174,7 +173,41 @@ class ReportsController < ApplicationController
 
     list_payrolls << totals
     list_payrolls
+  end
+
+  def general_payroll_xls(data, payroll_ids)
+    @data = data
+    get_dates(payroll_ids)
     
+    respond_to do |format|
+      format.xls {
+        filename = 'kenneth'
+        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.xls"'
+        render :template => 'xls/general_payroll_xls'
+      }
+    end
+  end
+
+  def get_dates(payroll_ids)
+    @name_payrolls = []
+    Payroll.where( :id => payroll_ids ).each do |p|
+
+      @name_payrolls << "#{p.payroll_type.description}"
+      
+      if(@start_date.nil? and @end_date.nil?)
+        @start_date = p.start_date
+        @end_date = p.end_date
+      else
+        if(@start_date > p.start_date)
+          @start_date = p.start_date
+        end
+
+        if(@end_date < p.end_date)
+          @end_date = p.end_date
+        end
+      end
+    end
+    @name_payrolls = @name_payrolls.uniq
   end
 
 end

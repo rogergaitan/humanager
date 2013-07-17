@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <%
+      stringNames = ""
+      if( @name_payrolls.count == 1 )
+        string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
+      else
+        string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
+        stringNames = "Planillas"
+        @name_payrolls.each do |name|
+          stringNames += " #{name}, "
+        end
+      end
+      stringNames = stringNames.chomp(",")
+    %>
+    <Table>
+      
+      <Row>
+        <Cell><Data ss:Type="String">Agro Vicces S.A.</Data></Cell>
+        <Cell><Data ss:Type="String">Reporte General de Planilla</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= string %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= stringNames %></Data></Cell>
+      </Row>
+      <Row></Row>
+      <Row>
+        <% @data.first.each do |index, value| %>
+            <Cell><Data ss:Type="String"><%= index %></Data></Cell>
+        <% end %>
+      </Row>
+
+      <% @data.each do |array| %>
+        <Row>
+          <% array.each do |index, value| %>
+            <Cell><Data ss:Type="String"><%= value %></Data></Cell>
+          <% end %>
+        </Row>
+      <% end %>
+      
+    </Table>
+  </Worksheet>
+
+</Workbook>
