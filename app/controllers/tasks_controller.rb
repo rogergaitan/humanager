@@ -73,7 +73,6 @@ class TasksController < ApplicationController
 
   def tasksfb
     @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'])
-    # nunidad
     @c = 0
     @tasks = []
     @tasks_fb = {}
@@ -99,14 +98,14 @@ class TasksController < ApplicationController
     end
 
     respond_to do |format|
-      format.json {render json: @tasks_fb}
+      format.json {r ender json: @tasks_fb }
     end
   end
 
   def load_cc
     @namesIds = Task.all
     respond_to do |format|
-      format.json { render json: @namesIds}
+      format.json { render json: @namesIds }
     end
   end
 

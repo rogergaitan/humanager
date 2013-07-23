@@ -25,6 +25,37 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  attr_accessible :email, :password, :encrypted_password, :password_confirmation, :remember_me, :username, :name
   # attr_accessible :title, :body
+
+  validates :name,
+				:presence => true
+  
+  validates :username,
+  				:presence => true,
+  				:length => { :within => 4..10 }
+
+  validates :email,
+  			:presence => true,
+  			:uniqueness => true
+  			
+
+
+  after_create :send_welcome_email
+
+  def send_welcome_email
+    
+    puts "EMAIL CREATE USER"
+
+    # #email_object: hash with the email queue attributes
+    # #CONFIG is a hash constant that takes values from a configuration file (/config/application.yml)
+    # email_object = { user_id: id, to: email,
+    #   subject: CONFIG[:email_templates]['welcome']['subject'],
+    #   from: 'humanager.mailer.test@gmail.com' }
+    # #template_data: Hash for passing data to the email template
+    # template_data = { first_name: first_name, email: email }
+    # EmailQueue.save_email(email_object, CONFIG[:email_templates]['welcome']['template'], template_data)
+
+  end
+
 end

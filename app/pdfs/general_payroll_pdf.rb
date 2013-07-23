@@ -53,7 +53,7 @@ include ActionView::Helpers::NumberHelper
         if( key == 'Nombre Empleado')
           row << "#{value}"
         else
-          row << "#{number_to_format(value)}"
+          row << { :content => "#{number_to_format(value)}", :align => :right }
         end
       end
       rows << row
@@ -61,14 +61,15 @@ include ActionView::Helpers::NumberHelper
 
     table(
       [header] +
-      rows.map do |row| row end
+      rows.map do |row| row end,
+      :cell_style => { :size => 10 }
     )
   end
 
   def get_header(data)
     header = []    
     data.each do |key, value|
-      header << {:content => "#{key}", :font_style => :bold}
+      header << { :content => "#{key}", :font_style => :bold, :align => :center }
     end
     header
   end

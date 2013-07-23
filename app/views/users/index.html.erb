@@ -1,0 +1,49 @@
+<%- model_class = User -%>
+<%= javascript_include_tag 'users/script' %>
+
+<input type="hidden" id="usersfb_users_path" value="<%= usersfb_users_path %>">
+<input type="hidden" id="users_path" value="<%= users_path %>">
+
+<div class="page-header">
+  <h1>
+  	<%= t '.title', :default => model_class.model_name.human(:count => 2) %>
+  	<button id="users-fb" class="btn btn-primary pull-right">
+    	<i class='icon-refresh'></i>
+  	</button>
+  </h1>
+</div>
+
+<%= will_paginate :class =>'pagination pagination-centered' %>
+
+<table class="table table-striped" id="user-data">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:username) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:email) %></th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to user.username, user_path(user) %></td>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_user_path(user), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      user_path(user),
+                      :method => :delete,
+                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_user_path,
+            :class => 'btn btn-primary' %>

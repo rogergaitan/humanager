@@ -96,6 +96,20 @@ es:
                 taken: 'Este código ya existe'
               employee_id:
                 blank: Este campo no puede quedar en blanco
+          user:
+            attributes:
+              name:
+                blank: Este campo no puede quedar en blanco
+              username:
+                blank: Este campo no puede quedar en blanco
+                too_short: Nombre demasiado corto
+              email:
+                blank: Este campo no puede quedar en blanco
+                invalid: Formato de email incorrecto
+              password:
+                blank: Este campo no puede quedar en blanco
+                confirmation: Las Contraseñas no coinciden
+                too_short: Contraseña demasiado corta
           product:
             attributes:
               code:
@@ -465,6 +479,11 @@ es:
           ledger_account_id: Cuenta Contable
           amount: Monto
         user:
+          username: Usuario
+          name: Nombre
+          email: Correo
+          password: Contraseña
+          password_confirmation: Confirmación de Contraseña
           login:
         type_of_personnel_action:
           description: Descripción

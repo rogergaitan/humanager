@@ -1,6 +1,12 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :users do
+    collection do
+      get 'usersfb'
+    end
+  end
+
   resources :reports do
     collection do
       get :search_payrolls

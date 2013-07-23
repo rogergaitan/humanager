@@ -37,8 +37,14 @@
 
       <% @data.each do |array| %>
         <Row>
+          <% count = 0 %>
           <% array.each do |index, value| %>
-            <Cell><Data ss:Type="String"><%= value %></Data></Cell>
+            <% if(count==0) %>
+              <Cell><Data ss:Type="String"><%= value %></Data></Cell>
+            <% else %>
+              <Cell><Data ss:Type="Number"><%= value %></Data></Cell>
+            <% end %>
+            <% count+=1 %>
           <% end %>
         </Row>
       <% end %>

@@ -25,7 +25,7 @@ class ReportsController < ApplicationController
         respond_to do |format|
           format.pdf do
             pdf = ProofPayEmployeesPDF.new(@payroll, @employees, @msg)
-            send_data pdf.render, filename: "prueba.pdf",
+            send_data pdf.render, filename: "payment_proof.pdf",
               type: "application/pdf", disposition: "inline"
           end
         end
@@ -43,7 +43,7 @@ class ReportsController < ApplicationController
           respond_to do |format|
             format.pdf do
               pdf = GeneralPayrollPDF.new(@data, @payroll_ids)
-              send_data pdf.render, filename: "prueba.pdf",
+              send_data pdf.render, filename: "general_payroll.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
@@ -72,8 +72,8 @@ class ReportsController < ApplicationController
     list_payrolls = []
     totals = {}
 
-    payroll_ids.each do |payroll_id|
-      employees.each do |employee_id|
+    payroll_ids.each do | payroll_id |
+      employees.each do | employee_id |
 
         detail = {}
 
@@ -111,7 +111,7 @@ class ReportsController < ApplicationController
         # Set default values
         list_deductions.each do |id|
           d = Deduction.find(id)
-          list_desc_deductions["#{d.description}"] = "#{d.description}" #kalfaro
+          list_desc_deductions["#{d.description}"] = "#{d.description}"
           detail["#{d.description}"] = 0
           if totals["#{d.description}"].blank?
             totals["#{d.description}"] = 0
@@ -177,12 +177,12 @@ class ReportsController < ApplicationController
 
   def general_payroll_xls(data, payroll_ids)
     @data = data
+
     get_dates(payroll_ids)
     
     respond_to do |format|
       format.xls {
-        filename = 'kenneth'
-        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.xls"'
+        response.headers['Content-Disposition'] = 'attachment; filename="general_payroll.xls"'
         render :template => 'xls/general_payroll_xls'
       }
     end
