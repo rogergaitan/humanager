@@ -83,7 +83,7 @@ class UsersController < ApplicationController
       if User.where("username = ?", ufb.nusr).empty?
 
         @numer = randow_string
-        @new_user = User.new( :username => "#{ufb.nusr}", 
+        @new_user = User.new( :username => "#{ufb.nusr}",
                               :name => "#{ufb.snombre} #{ufb.sapellido}", 
                               :email => "#{ufb.semail}", 
                               :password => @numer, 
@@ -110,6 +110,12 @@ class UsersController < ApplicationController
   def randow_string
     value = ""; 8.times{ value << (65 + rand(25)).chr }
     return value
+  end
+
+  def permissions
+    @user = User.find(params[:id])
+    @permissionsCategory = PermissionsCategory.all
+
   end
 
 end

@@ -38,8 +38,6 @@ class User < ActiveRecord::Base
   validates :email,
   			:presence => true,
   			:uniqueness => true
-  			
-
 
   after_create :send_welcome_email
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130722171718) do
+ActiveRecord::Schema.define(:version => 20130731210357) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -435,6 +435,21 @@ ActiveRecord::Schema.define(:version => 20130722171718) do
   end
 
   add_index "payrolls", ["payroll_type_id"], :name => "index_payrolls_on_payroll_type_id"
+
+  create_table "permissions_categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "permissions_subcategories", :force => true do |t|
+    t.string   "name"
+    t.integer  "permissions_category_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "permissions_subcategories", ["permissions_category_id"], :name => "index_permissions_subcategories_on_permissions_category_id"
 
   create_table "personalized_fields", :force => true do |t|
     t.integer  "type_of_personnel_action_id"

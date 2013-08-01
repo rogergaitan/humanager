@@ -1,0 +1,21 @@
+<%- model_class = User -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => t('helpers.titles.permissions', :model => model_class.model_name.human,
+                                 :default => "New #{model_class.model_name.human}") %></h1>
+</div>
+
+<div>
+	<h3>Usuario: <%= @user.name %></h3>
+</div>
+
+<% @permissionsCategory.each do |pc| %>
+
+	<h1><%= pc.name %></h1>
+	<% pc.permissions_subcategories.each do |c| %>
+		<h6><%= c.name %></h6>
+	<% end %>
+
+	
+
+
+<% end %>

@@ -6,6 +6,7 @@ Reasapp::Application.routes.draw do
       get 'usersfb'
     end
   end
+  match "users/permissions/:id", :controller => "users", :action => 'permissions', :as => :permissions_user, via: [:get]
 
   resources :reports do
     collection do
