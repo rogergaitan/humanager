@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130731210357) do
+ActiveRecord::Schema.define(:version => 20130801160003) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -450,6 +450,24 @@ ActiveRecord::Schema.define(:version => 20130731210357) do
   end
 
   add_index "permissions_subcategories", ["permissions_category_id"], :name => "index_permissions_subcategories_on_permissions_category_id"
+
+  create_table "permissions_users", :force => true do |t|
+    t.integer  "permissions_subcategory_id"
+    t.integer  "user_id"
+    t.boolean  "p_create",                   :default => false
+    t.boolean  "p_view",                     :default => false
+    t.boolean  "p_modify",                   :default => false
+    t.boolean  "p_delete",                   :default => false
+    t.boolean  "p_close",                    :default => false
+    t.boolean  "p_accounts",                 :default => false
+    t.boolean  "p_pdf",                      :default => false
+    t.boolean  "p_exel",                     :default => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
+  end
+
+  add_index "permissions_users", ["permissions_subcategory_id"], :name => "index_permissions_users_on_permissions_subcategory_id"
+  add_index "permissions_users", ["user_id"], :name => "index_permissions_users_on_user_id"
 
   create_table "personalized_fields", :force => true do |t|
     t.integer  "type_of_personnel_action_id"

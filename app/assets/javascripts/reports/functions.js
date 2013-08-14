@@ -12,8 +12,8 @@ $(document).ready(function() {
 
 	$("#payrolls_results").on("click", ".pag a", function() {
    		$.getScript(this.href);
-		return false;
-  	});
+	   	return false;
+  });
 
 	general_functions.populateEmployeesFilter($('#fetch_employees_deductions_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
 

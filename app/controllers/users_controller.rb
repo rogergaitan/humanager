@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  respond_to :html, :json
+  respond_to :html, :json, :js
+  #before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # before_filter :authenticate_user!
 
   # GET /users
@@ -27,24 +28,25 @@ class UsersController < ApplicationController
 
   # POST /users
   # POST /users.json
-  def create
-    @user = User.new(params[:user])
+  # def create
+  #   @user = User.new(params[:user])
 
-    respond_to do |format|
-      if @user.save
-        flash[:notice] = 'User was successfully created.'
-        format.html { redirect_to action: "index" }
-        format.json { render json: @user, status: :created, location: @user }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @user.save
+  #       flash[:notice] = 'User was successfully created.'
+  #       format.html { redirect_to action: "index" }
+  #       format.json { render json: @user, status: :created, location: @user }
+  #     else
+  #       format.html { render action: "new" }
+  #       format.json { render json: @user.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PUT /users/1
   # PUT /users/1.json
   def update
+    logger.debug 'KENNETH UPDATE'
     @user = User.find(params[:id])
 
     respond_to do |format|
@@ -91,6 +93,21 @@ class UsersController < ApplicationController
 
         if @new_user.save
           @users << @new_user
+          # Create default Permissions
+          PermissionsSubcategory.all.each do |sub|
+            a = PermissionsUser.new(  :permissions_subcategory_id => sub.id,
+                                      :user_id => @new_user.id,
+                                      :p_create => false,
+                                      :p_view => false,
+                                      :p_modify => false,
+                                      :p_delete => false,
+                                      :p_close => false,
+                                      :p_accounts => false,
+                                      :p_pdf => false,
+                                      :p_exel => false )
+            a.save
+          end
+
           @c += 1
         else
           @new_user.errors.each do |error|
@@ -115,7 +132,39 @@ class UsersController < ApplicationController
   def permissions
     @user = User.find(params[:id])
     @permissionsCategory = PermissionsCategory.all
+    @permissionsUser = PermissionsUser.where('user_id = ?', @user.id)
+  end
 
+  def search_user
+    @users = User.search_users(params[:username], params[:name], params[:page], 5)
+    respond_with @users
+  end
+
+  def save_permissions
+    
+    data = params['permissions_user']
+    user_id = params['user_id']
+
+    respond_to do |format|
+
+      if User.save_permissions_user(data, user_id)
+        format.json {  redirect_to users_path, status: 201, notice: 'Actualizado exitosamente' }
+      else
+        format.json {  redirect_to users_path, status: 500, notice: 'Ocurrio un error Actualizado' }
+      end
+
+    end
+  end
+
+  def get_permissions_user
+    
+    @data = User.get_permissions(params[:id])
+    render :json => { :data => @data }
+  end
+
+  def test
+    puts 'TEST UPDATE :D'
   end
 
 end
+

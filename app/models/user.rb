@@ -18,6 +18,10 @@
 #
 
 class User < ActiveRecord::Base
+
+  has_many :permissions_user, :dependent => :destroy
+  # after_create :create_permissions
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -29,7 +33,7 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
 
   validates :name,
-				:presence => true
+			:presence => true
   
   validates :username,
   				:presence => true,
@@ -53,7 +57,67 @@ class User < ActiveRecord::Base
     # #template_data: Hash for passing data to the email template
     # template_data = { first_name: first_name, email: email }
     # EmailQueue.save_email(email_object, CONFIG[:email_templates]['welcome']['template'], template_data)
-
   end
+
+  def self.search_users(username, name, page, per_page)
+      
+      query = ""
+      params = []
+      params.push(" username like '%#{username}%' ") unless username.empty?
+      params.push(" name like '%#{name}%' ") unless name.empty?
+      query = build_query(params)
+
+      @users = User.where(query).paginate(:page => page, :per_page => per_page)
+  end
+
+  def self.build_query(data)
+    query = ""
+      if data
+        data.each_with_index do |q, i|
+            if i < data.length - 1
+              query += q + " AND "
+            else
+          query += q
+            end
+          end
+      end
+      query
+  end
+
+  def self.save_permissions_user(data, user_id)
+    
+    @result = true
+    begin
+      transaction do
+        data.each do |c|
+          PermissionsUser.find_by_user_id_and_permissions_subcategory_id(user_id, c[1]['id_subcategory'])
+                          .update_attributes(
+                              :p_create => c[1]['p_create'],
+                              :p_view => c[1]['p_view'],
+                              :p_modify => c[1]['p_modify'],
+                              :p_delete => c[1]['p_delete'],
+                              :p_close => c[1]['p_close'],
+                              :p_accounts => c[1]['p_accounts'],
+                              :p_pdf => c[1]['p_pdf'],
+                              :p_exel => c[1]['p_exel']
+                          )
+          end # End
+        end # End Transaction
+    rescue Exception => exc
+      @result = false
+    end # End Begin
+    
+    @result
+  end
+
+  def self.get_permissions(id)
+    @permissions = PermissionsUser.where('user_id=?', id)
+  end
+
+  # def create_permissions
+  #   # self same to this
+  #   logger.debug 'create_permissions after_create'
+  #   logger.debug self.to_yaml
+  # end
 
 end

@@ -1,4 +1,5 @@
 class CentroDeCostosController < ApplicationController
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_parent_info, :only => [:new, :edit]
   # GET /centro_de_costos
   # GET /centro_de_costos.json

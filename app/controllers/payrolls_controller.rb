@@ -1,10 +1,12 @@
 class PayrollsController < ApplicationController
   respond_to :html, :json, :js
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_payroll_types, :only => [:new, :edit]
 
   # GET /payrolls
   # GET /payrolls.json
   def index
+    logger.debug current_user.to_yaml
     #@payrolls = Payroll.all
   end
 

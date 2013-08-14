@@ -1,12 +1,19 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :users do
-    collection do
-      get 'usersfb'
-    end
-  end
+  resources :permissions_users
+  
+  devise_for :users
+
   match "users/permissions/:id", :controller => "users", :action => 'permissions', :as => :permissions_user, via: [:get]
+  match "users", :controller => "users", :action => 'index', via: [:get]
+  match "users/:id/edit", :controller => "users", :action => 'edit', :as => :edit_user, via: [:get]
+  match "users/:id", :controller => "users", :action => 'update', via: [:put]
+  match "users", :controller => "users", :action => 'delete', :as => :user, via: [:delete]
+  match "users/usersfb", :controller => "users", :action => 'usersfb', :as => :usersfb_users, via: [:get]
+  match "users/search_user", :controller => "users", :action => 'search_user', :as => :search_user_users, via: [:get]
+  match "users/get_permissions_user", :controller => "users", :action => 'get_permissions_user', :as => :get_permissions_user_users, via: [:get]
+  match "users/save_permissions", :controller => "users", :action => 'save_permissions', :as => :save_permissions_users, via: [:post]
 
   resources :reports do
     collection do

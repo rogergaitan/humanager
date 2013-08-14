@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   respond_to :html, :json
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /tasks
   # GET /tasks.json

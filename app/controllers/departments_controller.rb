@@ -1,4 +1,5 @@
 class DepartmentsController < ApplicationController
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :resources, :only => [:new, :edit]
   respond_to :html, :json
   # GET /departments

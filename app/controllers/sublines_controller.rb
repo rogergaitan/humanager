@@ -1,4 +1,5 @@
 class SublinesController < ApplicationController
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /sublines
   # GET /sublines.json
   def index

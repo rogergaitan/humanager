@@ -45,7 +45,7 @@ es:
       tasksfb: datos sincronizados
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
-      permissions: Administracion de Permisos | %{model}
+      permissions: Administración de Permisos | %{model}
   notice:
     successfully_created:  ' creado exitosamente'
     successfully_updated:  ' actualizado exitosamente'
@@ -53,6 +53,7 @@ es:
     a_successfully_deleted: ' eliminada correctamente'
     a_successfully_created: ' creada correctamente'
     a_successfully_updated: ' actualizada correctamente'
+    a_unsuccessfully_updated: ' actualizada incorrectamente'
     no_results: 'No se encontraron resultados'
   content:
     titles: 

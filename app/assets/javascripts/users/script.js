@@ -22,8 +22,7 @@ users.add_users = function (user, target_table) {
               '<td>' + users.replace_value(user.email) + '</td>' +
               '<td>' +
               '<a href="'+rootUsers+'/'+ user.id +'/edit" class="btn btn-mini">Editar</a>' +
-              '<a href="'+rootUsers+'/'+ user.id +'" class="btn btn-mini btn-danger" ' +
-              'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
+              '<a href="'+rootUsers+'/'+'permissions/'+user.id+'" class="btn btn-mini">Permisos</a>' +
             '</tr>');
   return row;
 };

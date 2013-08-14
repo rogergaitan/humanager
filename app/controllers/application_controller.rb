@@ -5,4 +5,11 @@ class ApplicationController < ActionController::Base
 	def firebird_encoding(element)
 		element.encode('UTF-8', 'iso-8859-1')
 	end
+
+	def is_login
+		if current_user.nil?
+	    	redirect_to new_user_session_path
+	    end
+	end
+
 end

@@ -1,5 +1,6 @@
 class ReportsController < ApplicationController
 
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy, :general_payroll]
   before_filter :resources, :only => [:index, :general_payroll]
 	respond_to :html, :json, :js
 

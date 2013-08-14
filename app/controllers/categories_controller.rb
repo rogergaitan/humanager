@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /categories
   # GET /categories.json,
   # categories *paginated*

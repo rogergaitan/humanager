@@ -27,17 +27,12 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= link_to user.username, user_path(user) %></td>
+        <td><%= user.username %></td>
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_user_path(user), :class => 'btn btn-mini' %>
-          <!--<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      user_path(user),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %> -->
           <%= link_to t('.permissions', :default => t("helpers.links.permissions")),
                       permissions_user_path(user), :class => 'btn btn-mini' %>
         </td>
@@ -45,7 +40,3 @@
     <% end %>
   </tbody>
 </table>
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_user_path,
-            :class => 'btn btn-primary' %>

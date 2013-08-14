@@ -1,5 +1,6 @@
 class DistrictsController < ApplicationController
   respond_to :html, :json
+  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_district, :only => [:edit, :update, :destroy]
 
   def get_district
