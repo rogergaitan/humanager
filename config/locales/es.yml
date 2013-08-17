@@ -487,6 +487,8 @@ es:
           email: Correo
           password: Contraseña
           password_confirmation: Confirmación de Contraseña
+          current_password: Contraseña actual
+          remember_me: Recordarme
           login:
         type_of_personnel_action:
           description: Descripción

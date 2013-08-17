@@ -1,6 +1,5 @@
 class PayrollTypesController < ApplicationController
   respond_to :html, :json
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /payroll_types
   # GET /payroll_types.json
   def index

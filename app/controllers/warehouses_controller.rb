@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class WarehousesController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /warehouses
   # GET /warehouses.json,
   # index paginated

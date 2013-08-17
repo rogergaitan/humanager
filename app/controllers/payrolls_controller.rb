@@ -1,7 +1,7 @@
 class PayrollsController < ApplicationController
   respond_to :html, :json, :js
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_payroll_types, :only => [:new, :edit]
+  skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird]
 
   # GET /payrolls
   # GET /payrolls.json
@@ -121,7 +121,9 @@ class PayrollsController < ApplicationController
   # Cierra una planilla y realiza los calculos necesarios
   # Closes a payroll and performs the necessary calculations
   def close_payroll
-
+    puts '######################################################'
+    puts 'CLOSE PAYROLL'
+    puts '######################################################'
     payroll_id = params[:payroll_id]
 
     @result = Payroll.close_payroll(payroll_id)
@@ -130,7 +132,6 @@ class PayrollsController < ApplicationController
     respond_to do |format|
       format.json { render json: @result }
     end
-
     
     # render :index
   end
@@ -139,10 +140,9 @@ class PayrollsController < ApplicationController
 
     payroll_id = params[:payroll_id]
 
-    Payroll.send_to_firebird(payroll_id)
+    Payroll.send_to_firebird(payroll_id, current_user.username)
 
     render :index
-
   end
 
 end

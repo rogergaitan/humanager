@@ -130,7 +130,7 @@ permissions.sendInformation = function() {
 	var urlRedirect = $('#users_path').val();
 	var user_id = $('#user_id').val();
 
-	return $.ajax({
+	$.ajax({
 		url: $('#save_permissions_users_path').val(),
 		type: "POST",
       	dataType: "json",
@@ -138,15 +138,19 @@ permissions.sendInformation = function() {
 			permissions_user: permissions.permissions_user,
 			user_id: user_id
 		},
-		statusCode: {
-        500: function() {
-        	window.location.replace(urlRedirect);
-        },
-        201: function(response) {
-        	window.location.replace(urlRedirect);
-        }
-      }
+		success: function(data) {
+			console.log(data);
+		}
+		// statusCode: {
+  //       500: function() {
+  //       	window.location.replace(urlRedirect);
+  //       },
+  //       201: function(response) {
+  //       	window.location.replace(urlRedirect);
+  //       }
+  //     }
 	});
+	$(location).attr('href',urlRedirect);
 }
 
 permissions.getPermissions = function(url, id) {

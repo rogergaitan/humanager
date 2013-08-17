@@ -1,7 +1,6 @@
 # Products Controller.
 # Belongs to Line, Subline, Category
 class ProductsController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /products
   # GET /products.json

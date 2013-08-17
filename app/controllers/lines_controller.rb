@@ -1,6 +1,5 @@
 # Lines Controller
 class LinesController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /lines
   # GET /lines.json,
   # index paginated

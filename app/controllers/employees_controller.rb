@@ -1,5 +1,4 @@
 class EmployeesController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_address_info, :only => [:new, :edit]
   before_filter :get_employee_info, :only => [:new, :edit]
   respond_to :json, :html, :js

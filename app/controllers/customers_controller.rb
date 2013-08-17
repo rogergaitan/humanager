@@ -1,7 +1,6 @@
 class CustomersController < ApplicationController
  
   #filters
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_address_info, :only => [:new, :edit]
 
   #Respond block

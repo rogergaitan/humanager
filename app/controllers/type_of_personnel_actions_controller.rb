@@ -1,5 +1,4 @@
 class TypeOfPersonnelActionsController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :load_fields, :only => [:new, :edit]
   respond_to :html, :json
   # GET /type_of_personnel_actions

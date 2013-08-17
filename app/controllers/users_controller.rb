@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
   respond_to :html, :json, :js
-  #before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
-  # before_filter :authenticate_user!
 
   # GET /users
   # GET /users.json
@@ -43,10 +41,12 @@ class UsersController < ApplicationController
   #   end
   # end
 
-  # PUT /users/1
-  # PUT /users/1.json
+  # PUT /users.1
+  # PUT /users.1.json
   def update
-    logger.debug 'KENNETH UPDATE'
+    
+    # NO FUNCIONA
+
     @user = User.find(params[:id])
 
     respond_to do |format|
@@ -145,12 +145,15 @@ class UsersController < ApplicationController
     data = params['permissions_user']
     user_id = params['user_id']
 
+    msg = { :status => "ok", :message => "Success!", :notice => 'Actualizado exitosamente' }
+
     respond_to do |format|
 
       if User.save_permissions_user(data, user_id)
-        format.json {  redirect_to users_path, status: 201, notice: 'Actualizado exitosamente' }
+        format.json  { render :json => msg }
+        # format.json {  redirect_to users_path, status: 201, notice: 'Actualizado exitosamente' }
       else
-        format.json {  redirect_to users_path, status: 500, notice: 'Ocurrio un error Actualizado' }
+        format.json {  redirect_to users_path, status: 500, notice: 'Ocurrio un error Actualizado', head: ok, url: users_path }
       end
 
     end

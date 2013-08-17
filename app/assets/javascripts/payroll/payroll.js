@@ -41,6 +41,7 @@ $(document).ready(function() {
 payroll.index = function() {
 
   var url_get_activas = $('#get_activas_payrolls_path').val();
+  var url_get_inactivas = $('#get_inactivas_payrolls_path').val();
 
   $.getJSON(url_get_activas, function(resultado) {
 
@@ -50,7 +51,7 @@ payroll.index = function() {
     });
   });
 
-  $.getJSON(url_get_activas, function(resultado) {
+  $.getJSON(url_get_inactivas, function(resultado) {
 
     $('table#inactivas > tbody').empty();
     $(resultado.inactiva).each(function() { 
@@ -170,6 +171,9 @@ payroll.send_to_firebird = function(payroll_id) {
     url: "/payrolls/send_to_firebird",
     data: {
       payroll_id: payroll_id
+    },
+    xhrFields: {
+      withCredentials: true
     },
     success: function(data) {
       

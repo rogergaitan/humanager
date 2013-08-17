@@ -278,7 +278,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Send the information to Firebird.
-  def self.send_to_firebird(payroll_id)
+  def self.send_to_firebird(payroll_id, username)
 
     puts '############### E M P E Z A M O S ###############'
     num_oper = get_number_operation
@@ -294,7 +294,7 @@ class Payroll < ActiveRecord::Base
     num_count = num_count + 2
 
     # Save into OPRMAEST
-    r1 =  save_in_oprmaest(num_oper, payroll)
+    r1 = save_in_oprmaest(num_oper, payroll, username)
 
     # Save into Oprmov1Base
     r2 = save_in_oprmov1_base(num_oper)
@@ -306,7 +306,7 @@ class Payroll < ActiveRecord::Base
     r4 = save_in_oprmov1_detalle_work_benefits(num_oper, payroll, num_count)
 
     # Save into OPRMAEST (Process number 2)
-    r5 = save_in_oprmaest_2(num_oper_2, payroll)
+    r5 = save_in_oprmaest_2(num_oper_2, payroll, username)
 
     # Save into OPRPLA5_BASE (Process number 2)
     r6 = save_in_oprpla5_base(num_oper_2)
@@ -340,7 +340,8 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save into Firebird: Oprmaest
-  def self.save_in_oprmaest(num_oper, payroll)
+  # kalfaro IUSUARIOULT
+  def self.save_in_oprmaest(num_oper, payroll, username)
 
     t = Time.new
     date = t.strftime("%d.%m.%Y, %T.%L")
@@ -359,7 +360,7 @@ class Payroll < ActiveRecord::Base
       oprm.tdetalle = "Deducciones y Prestaciones Planilla " + payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " hasta " + payroll['end_date'].to_s
       oprm.imoneda = CONSTANTS[:FIREBIRD][0]['IMONEDA']
       oprm.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
-      oprm.iusuarioult = CONSTANTS[:FIREBIRD][0]['IUSUARIOULT']
+      oprm.iusuarioult = username #CONSTANTS[:FIREBIRD][0]['IUSUARIOULT']
       oprm.iprocess = CONSTANTS[:FIREBIRD][0]['IPROCESS']
       oprm.iestado = CONSTANTS[:FIREBIRD][0]['IESTADO']
       oprm.banulada = CONSTANTS[:FIREBIRD][0]['BANULADA']
@@ -495,7 +496,8 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save into Firebird: Oprmaest (Process number 2)
-  def self.save_in_oprmaest_2(num_oper, payroll)
+  # kalfaro IUSUARIOULT
+  def self.save_in_oprmaest_2(num_oper, payroll, username)
     t = Time.new
     date = t.strftime("%d.%m.%Y, %T.%L")
 
@@ -512,7 +514,7 @@ class Payroll < ActiveRecord::Base
       oprm.fsemana = payroll['end_date'].cweek
       oprm.tdetalle = "Costos de MDO de la planilla " + payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " al " + payroll['end_date'].to_s
       oprm.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
-      oprm.iusuarioult = CONSTANTS[:FIREBIRD][0]['IUSUARIOULT']
+      oprm.iusuarioult = username #CONSTANTS[:FIREBIRD][0]['IUSUARIOULT']
       oprm.iprocess = CONSTANTS[:FIREBIRD][0]['IPROCESS']
       oprm.iestado = CONSTANTS[:FIREBIRD][0]['IESTADO']
       oprm.banulada = CONSTANTS[:FIREBIRD][0]['BANULADA']

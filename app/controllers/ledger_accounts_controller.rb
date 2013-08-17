@@ -1,6 +1,5 @@
 class LedgerAccountsController < ApplicationController
   respond_to :html, :json
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   before_filter :get_ledger, :only => [:edit, :update, :destroy]
   before_filter :get_parent_info, :only => [:new, :edit]
 

@@ -8,7 +8,7 @@ Reasapp::Application.routes.draw do
   match "users/permissions/:id", :controller => "users", :action => 'permissions', :as => :permissions_user, via: [:get]
   match "users", :controller => "users", :action => 'index', via: [:get]
   match "users/:id/edit", :controller => "users", :action => 'edit', :as => :edit_user, via: [:get]
-  match "users/:id", :controller => "users", :action => 'update', via: [:put]
+  match "users", :controller => "users", :action => 'update', via: [:put]
   match "users", :controller => "users", :action => 'delete', :as => :user, via: [:delete]
   match "users/usersfb", :controller => "users", :action => 'usersfb', :as => :usersfb_users, via: [:get]
   match "users/search_user", :controller => "users", :action => 'search_user', :as => :search_user_users, via: [:get]
@@ -27,7 +27,6 @@ Reasapp::Application.routes.draw do
   match 'reports/index', :to => 'reports#index'
 
   resources :detail_personnel_actions
-
 
   resources :payroll_logs do
     collection do

@@ -1,5 +1,4 @@
 class PositionsController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /positions
   # GET /positions.json
   def index

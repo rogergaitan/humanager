@@ -1,5 +1,4 @@
 class ProductPricingsController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   # GET /product_pricings
   # GET /product_pricings.json
   def index

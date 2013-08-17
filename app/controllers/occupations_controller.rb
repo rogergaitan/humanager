@@ -1,5 +1,4 @@
 class OccupationsController < ApplicationController
-  before_filter :is_login, :only => [:index, :show, :new, :edit, :create, :update, :destroy]
   respond_to :html, :json
   # GET /occupations
   # GET /occupations.json
