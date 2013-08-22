@@ -176,16 +176,14 @@ payroll.send_to_firebird = function(payroll_id) {
       withCredentials: true
     },
     success: function(data) {
-      
-      // if(data['status']) {
-      //   $('#table_results_close_payroll').hide();
-      //   $('#results_close_payroll').html('La Planilla fue cerrada con exito');
-      //   $('#myModalLabel').html('Mensaje');
-      //   $("#payrollModal").modal('show');
-      // } else {
-      //   payroll.show_details_erros(data['data']);
-      // }
-
+      if(data['status']) {
+        $('#table_results_close_payroll').hide();
+        $('#results_close_payroll').html('La Planilla fue cerrada con exito');
+        $('#myModalLabel').html('Mensaje');
+        $("#payrollModal").modal('show');
+      } else {
+        payroll.show_details_erros(data['data']);
+      }
     }
   });
 }

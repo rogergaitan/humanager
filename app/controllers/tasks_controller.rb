@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   # GET /tasks
   # GET /tasks.json
@@ -107,6 +107,12 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.json { render json: @namesIds }
     end
+  end
+
+  #Search for tasks
+  def fetch_tasks
+    @tasks = Task.all
+    respond_with(@tasks, :only => [:id, :itask, :ntask, :iaccount])
   end
 
 end

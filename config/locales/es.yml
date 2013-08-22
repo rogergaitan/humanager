@@ -64,6 +64,10 @@ es:
   activerecord:
       errors:
         models:
+          employee:
+            attributes:
+              number_employee:
+                taken: 'Este número ya existe'
           payroll:
             attributes:
               start_date:
@@ -439,6 +443,7 @@ es:
           price_defined_work: Precio definido en Labor
           payment_unit_id: Unidad de Pago
           payroll_type_default_id: Tipo de Planilla Predeterminada
+          number_employee: Número de Empleado
         entity:
           name: Nombre
           surname: Apellidos

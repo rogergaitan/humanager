@@ -256,7 +256,7 @@
 	<% l_employee_name = ''  %>
 
 	<% @employees.each do |employee| %>
-		<% l_employee_code += "#{employee.entity.entityid}," %>
+		<% l_employee_code += "#{employee.number_employee}," %>
 		<% l_employee_id += "#{employee.id}," %>
 		<% l_employee_name += "#{employee.entity.name}  #{employee.entity.surname},"  %>
 	<% end %>

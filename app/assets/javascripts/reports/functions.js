@@ -17,25 +17,26 @@ $(document).ready(function() {
 
 	general_functions.populateEmployeesFilter($('#fetch_employees_deductions_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
 
-  	$('input[name=select_method]').change(function() {
-   		general_functions.selectEmployeesLeft($(this));
-  	});
+	$('input[name=select_method]').change(function() {
+ 		general_functions.selectEmployeesLeft($(this));
+	});
 
-  	$('div.options-right input[name=check-employees-right]').change(general_functions.selectEmployeesRight);
+	$('div.options-right input[name=check-employees-right]').change(general_functions.selectEmployeesRight);
 
-  	// Moves the selected employees to the list at the right
-  	$('#add-to-list').click(general_functions.moveToRight);
-  	$('#remove-to-list').click(general_functions.moveToLeft);
+	// Moves the selected employees to the list at the right
+	$('#add-to-list').click(general_functions.moveToRight);
+	$('#remove-to-list').click(general_functions.moveToLeft);
 
-  	$('#departments_employees').change(function() {
-   		general_functions.filterDepartment($(this).val());
-  	});
+	$('#departments_employees').change(function() {
+ 		general_functions.filterDepartment($(this).val());
+	});
 
-  	$('#superiors_employees').change(function() {
-    	general_functions.filterSuperior($(this).val());
-  	});
+	$('#superiors_employees').change(function() {
+  	general_functions.filterSuperior($(this).val());
+	});
 
-  	$('div#marcar-desmarcar input[name=check-employees]').change(general_functions.marcarDesmarcar);
+	$('div#marcar-desmarcar input[name=check-employees]').change(general_functions.marcarDesmarcar);
+
 })
 
 // Search the payrolls
@@ -116,9 +117,9 @@ general_functions.selectEmployeesLeft = function(selected) {
 
 general_functions.selectEmployeesRight = function() {
   if ($(this).is(':checked')) {
-    $("div.list-right input[type='checkbox']").attr('checked', true);
+    $("div.employees-list.list-right input[type='checkbox']").attr('checked', true);
   } else {
-    $("div.list-right input[type='checkbox']").attr('checked', false);
+    $("div.employees-list.list-right input[type='checkbox']").attr('checked', false);
   };
 }
 
@@ -210,9 +211,9 @@ general_functions.filterSuperior = function(dropdown) {
 
 general_functions.marcarDesmarcar = function() {
   if ($(this).is(':checked')) {
-    $("div.left-list input[type='checkbox']").attr('checked', true);
+    $("div.employees-list.left-list input[type='checkbox']").attr('checked', true);
   } else {
-    $("div.left-list input[type='checkbox']").attr('checked', false);
+    $("div.employees-list.left-list input[type='checkbox']").attr('checked', false);
   };
 }
 

@@ -29,8 +29,11 @@ class Employee < ActiveRecord::Base
   					:wage_payment, :entity_attributes, :department_id, 
   					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
             :photo_attributes, :position_id, :employee_id, :is_superior,
-            :payment_unit_id, :price_defined_work, :payroll_type_default_id
-            
+            :payment_unit_id, :price_defined_work, :payroll_type_default_id,
+            :number_employee
+  
+  validates_uniqueness_of :number_employee
+
   has_one :department
   belongs_to :entity, :dependent => :destroy
   belongs_to :department
@@ -113,6 +116,121 @@ class Employee < ActiveRecord::Base
       end
     end
     query
+  end
+
+  def self.payment_types_report_data(employees, payroll_ids, tasks, order)
+  
+    data = {}
+    infoData = []
+    result = []
+
+    # ORDER BY EMPLOYEE
+    ###################################################
+    if order == "employee"
+
+      Employee.find(employees).each do |employee|
+        data['nombre'] = employee.entity.name + ' ' + employee.entity.surname
+
+        Task.find(tasks).each do |task|
+
+          info = get_info(payroll_ids, task.id, employee.id, task.ntask)
+
+          if !info.empty?
+            infoData << info
+            info = {}
+          end
+
+        end # End Task.find
+
+        data['info'] = infoData
+        result << data
+        data = {}
+        infoData = []
+
+      end # End if order
+    end # End By Employee
+
+    # ORDER BY TASK
+    ###################################################
+    if order == "task"
+
+      Task.find(tasks).each do |task|
+        data['nombre'] = task.ntask
+
+        Employee.find(employees).each do |employee|
+
+          name_employee = employee.entity.name + ' ' + employee.entity.surname
+
+          info = get_info(payroll_ids, task.id, employee.id, name_employee)
+
+          if !info.empty?
+            infoData << info
+            info = {}
+          end
+
+        end # End each Employee
+
+        data['info'] = infoData
+        result << data
+        data = {}
+        infoData = []
+
+      end # End each Tasks
+    end # End id order
+
+    result
+
+  end
+
+  def self.get_info(payroll_ids, task_id, employee_id, name)
+
+    totalTasks = 0
+    info = {
+            'nombre' => '',
+            'total_unid_ord' => 0,
+            'valor_total_ord' => 0,
+            'total_unid_extra' => 0,
+            'valor_total_extra' => 0,
+            'total_unid_doble' => 0,
+            'valor_total_doble' => 0,
+            'total' => 0
+          }
+
+    data = PayrollHistory.joins(:payroll_employees)
+                        .where(:payroll_log_id => payroll_ids, :task_id => task_id, payroll_employees: {employee_id: employee_id})
+
+      if !data.empty?
+
+        data.each do |detail|
+
+          time_worked = detail.time_worked
+          total = detail.total
+          totalTasks += total
+          info['nombre'] = name
+          
+          case detail.payment_type.to_s
+            when CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+              info['total_unid_ord'] += time_worked.to_i
+              info['valor_total_ord'] += total
+              
+            when CONSTANTS[:PAYMENT][1]['name'] # Extra
+              info['total_unid_extra'] += time_worked.to_i
+              info['valor_total_extra'] += total
+
+            when CONSTANTS[:PAYMENT][2]['name']  # Doble
+              info['total_unid_doble'] += time_worked.to_i
+              info['valor_total_doble'] += total
+          end # End case
+        end # End data each
+
+        info['total'] = totalTasks
+
+      else # Else Emply
+        info = {}
+      end # End Emply
+
+      info
+    
   end
 
 end

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   respond_to :html, :json, :js
+  skip_before_filter :verify_authenticity_token, :only => [:update]
 
   # GET /users
   # GET /users.json
@@ -44,8 +45,6 @@ class UsersController < ApplicationController
   # PUT /users.1
   # PUT /users.1.json
   def update
-    
-    # NO FUNCIONA
 
     @user = User.find(params[:id])
 
@@ -55,7 +54,7 @@ class UsersController < ApplicationController
         format.html { redirect_to action: "index" }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: "index" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

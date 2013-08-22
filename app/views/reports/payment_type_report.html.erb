@@ -1,0 +1,84 @@
+<h1>Labores por Tipo de Pago.</h1>
+<%= render "search" %>
+<%= javascript_include_tag 'reports/payment_type_report' %>
+
+<!-- T A S K S -->
+<div id="tasks" data-id="<%= fetch_tasks_tasks_path %>" >
+	<div class="control-group">
+		<hr>
+	    <h2>Labores</h2>
+	    <div class="controls align-radio">
+	      <div class="options-left">&nbsp;</div>
+	      <div class="options-right">
+	        <%= check_box_tag 'check-tasks-right', '1', true, class: 'align-checkbox' %>
+	        <%= label_tag 'check-tasks-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+	      </div>
+	      <div style="clear:both"></div>
+	    </div>
+	</div>
+
+	<div class="controls padding-filter" id="employee-filter">
+		<%= text_field_tag 'load_filter_tasks_text', nil, :class => 'text_field search-image-tasks' %> 
+	</div>
+
+	<div class="controls" id="marcar-desmarcar">
+		<%= check_box_tag 'check-tasks', '1', false, class: 'align-checkbox' %>
+	    <%= label_tag 'check-tasks', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+	</div>
+
+	<div class="controls lists">
+		<div class="tasks-list left-list">
+	  		<div class="employees-margin" id="no-save-tasks">
+	    		<% @tasks.each do |task| %>
+	      		<div class="checkbox-group">
+			        <div class="checkbox-margin">
+			          <%= check_box_tag 'left-list-employees', task.id, task.id,
+							id: dom_id(task) + '_left', 'data-id' => dom_id(task),
+							'data-sup' => task.id,
+							class: 'align-checkbox'  %>
+			          <%= label_tag dom_id(task) + '_left',
+			          		"#{task.ntask}",
+			              	:class => 'checkbox-label' %>
+			        </div>
+	      		</div>
+	    		<% end %>
+	  		</div>
+		</div>
+
+		<div class="control-buttons">
+			<a href="#" id="add-to-list-tasks" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+		  	<a href="#" id="remove-to-list-tasks" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+		</div>
+		
+		<!-- <div class="options-right">
+	        <%= check_box_tag 'check-tasks-right', '1', true, class: 'align-checkbox' %>
+	        <%= label_tag 'check-tasks-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+	      </div> -->
+	    <!-- <div class="controls" id="marcar-desmarcar">
+			<%= check_box_tag 'check-tasks-right', '1', true, class: 'align-checkbox' %>
+	        <%= label_tag 'check-tasks-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+		</div> -->
+
+		<div class="tasks-list list-right">
+		  	<div class="employees-margin" id="list-tasks"></div>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+<!-- T A S K S -->
+
+<div>
+	<hr>
+	<h2>Ordenado por</h2>
+	<select name="order_by" id="order_by">
+		<option value="employee">Empleado</option>
+		<option value="task">Labor</option>
+	</select>
+</div>
+
+<div id="message" style="height:40px;"></div>
+<input type="hidden" id="show_reports_path" value="<%= reports_path %>">
+<input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS][0]['PAYMENT_TYPE_REPORT'] %>">
+<button id="btn_create_pdf">Crear archivo PDF</button> | 
+<button id="btn_create_xml">Exportar a XML</button>
+<p></p>

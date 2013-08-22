@@ -8,7 +8,7 @@ Reasapp::Application.routes.draw do
   match "users/permissions/:id", :controller => "users", :action => 'permissions', :as => :permissions_user, via: [:get]
   match "users", :controller => "users", :action => 'index', via: [:get]
   match "users/:id/edit", :controller => "users", :action => 'edit', :as => :edit_user, via: [:get]
-  match "users", :controller => "users", :action => 'update', via: [:put]
+  match "users/:id", :controller => "users", :action => 'update', via: [:put]
   match "users", :controller => "users", :action => 'delete', :as => :user, via: [:delete]
   match "users/usersfb", :controller => "users", :action => 'usersfb', :as => :usersfb_users, via: [:get]
   match "users/search_user", :controller => "users", :action => 'search_user', :as => :search_user_users, via: [:get]
@@ -21,6 +21,7 @@ Reasapp::Application.routes.draw do
       get :create_pdf_proof_pay_employees
       get :general_payroll
       get :general_payroll_xls
+      get :payment_type_report
     end
   end
   get "reports/index"
@@ -114,6 +115,7 @@ Reasapp::Application.routes.draw do
     collection do
       get 'tasksfb'
       get 'load_cc'
+      get :fetch_tasks
     end
   end
 

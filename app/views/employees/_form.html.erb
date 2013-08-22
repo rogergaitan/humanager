@@ -44,6 +44,14 @@
 				<h2>Datos Personales</h2>
 				<hr>
           <%= render 'forms/entity_form', :f => builder %>
+          <div class="control-group">
+            <%= f.label :number_employee, :class => 'control-label' %>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on">N</span><%= f.text_field :number_employee, :class => 'text_field' %>
+              </div>
+            </div>
+          </div>
         <% end %>
         <div class="control-group">
           <%= f.label :gender, :class => 'control-label' %>

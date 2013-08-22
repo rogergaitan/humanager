@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
 
-  before_filter :resources, :only => [:index, :general_payroll]
+  before_filter :resources, :only => [:index, :general_payroll, :payment_type_report]
 	respond_to :html, :json, :js
 
 	def index
@@ -51,11 +51,51 @@ class ReportsController < ApplicationController
           general_payroll_xls(@data, @payroll_ids)
         end
 
+      when CONSTANTS[:REPORTS][0]['PAYMENT_TYPE_REPORT']
+        
+        format = params[:format]
+        employees = params[:employees].split(",")
+        payroll_ids = params[:payroll_ids].split(",")
+        tasks = params[:tasks].split(",")
+        order = params[:order]
+
+        
+        if tasks.empty?
+          tasks = Task.select(:id).collect(&:id)
+        end
+
+        @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order)
+
+        if format.to_s == "pdf"
+          puts 'pdf ##################'
+          puts @data
+          puts 'pdf ##################'
+          # respond_to do |format|
+          #   format.pdf do
+              # pdf PaymentTypeReportPDF.new()
+              # pdf = GeneralPayrollPDF.new(@data, @payroll_ids)
+              # send_data pdf.render, filename: "general_payroll.pdf",
+              #   type: "application/pdf", disposition: "inline"
+          #   end
+          # end
+        else
+          puts 'xls'
+          puts '##################'
+          puts @data
+          puts '##################'
+          # general_payroll_xls(@data, @payroll_ids)
+        end
+
+
     end # End case
   end # End show
 
   def general_payroll
     # @payrolls = Payroll.where('state = ?', 0)
+  end
+
+  def payment_type_report
+    @tasks = Task.all
   end
 
   def resources

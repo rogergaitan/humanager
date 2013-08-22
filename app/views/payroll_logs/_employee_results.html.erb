@@ -5,7 +5,7 @@
   <table class="table table-striped" id="employee-data">
     <thead>
       <tr>
-        <th><%= model_class.human_attribute_name(:entityid) %></th>
+        <th>Número de Empleado</th>
         <th><%= model_class.human_attribute_name(:name) %></th>
       </tr>
     </thead>
@@ -13,8 +13,8 @@
       <% unless @entities.empty?  %>
         <% @entities.each do |entity| %>
           <tr>
-            <td>
-              <%= "#{entity.entityid}" %>
+            <td style="text-align: center">
+              <%= "#{entity.employee.number_employee}" %>
             </td>
             <td>
               <%= link_to "#{entity.name} #{entity.surname}" %>

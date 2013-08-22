@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130801160003) do
+ActiveRecord::Schema.define(:version => 20130819172624) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -225,12 +225,14 @@ ActiveRecord::Schema.define(:version => 20130801160003) do
     t.integer  "payment_unit_id"
     t.boolean  "price_defined_work"
     t.integer  "payroll_type_default_id"
+    t.integer  "number_employee"
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
   add_index "employees", ["employee_id"], :name => "index_employees_on_employee_id"
   add_index "employees", ["entity_id"], :name => "index_employees_on_entity_id"
   add_index "employees", ["means_of_payment_id"], :name => "index_employees_on_means_of_payment_id"
+  add_index "employees", ["number_employee"], :name => "index_employees_on_number_employee", :unique => true
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
   add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
   add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
