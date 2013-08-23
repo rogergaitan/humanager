@@ -10,6 +10,7 @@ include ActionView::Helpers::NumberHelper
     @start_date = nil
     @name_payrolls = []
     get_dates(payroll_ids)
+    big_total
     
     if order == 'employee'
       @order = 'Empleado'
@@ -19,7 +20,6 @@ include ActionView::Helpers::NumberHelper
 
     repeat :all do
       bounding_box [bounds.left, bounds.top], :width  => bounds.width do
-        # header
         header_page
       end
     end
@@ -42,6 +42,10 @@ include ActionView::Helpers::NumberHelper
       get_table(header, d['info'])
 
     end # End each @data
+    move_down 20
+    stroke_horizontal_rule
+    move_down 20
+    set_table_total(header)
   end
 
   def header_page
@@ -121,45 +125,69 @@ include ActionView::Helpers::NumberHelper
 
     row = []
     rows = []
-
-    nombre = 'TOTAL'
-    total_unid_ord = 0
-    valor_total_ord = 0
-    total_unid_extra = 0
-    valor_total_extra = 0
-    total_unid_doble = 0
-    valor_total_doble = 0
-    total = 0
+    count = 0
 
     info.each do |a|
+      count += 1
       row << a['nombre']
       row << "#{number_to_format(a['total_unid_ord'])}"
-      total_unid_ord += a['total_unid_ord']
       row << "#{number_to_format(a['valor_total_ord'])}"
-      valor_total_ord += a['valor_total_ord']
       row << "#{number_to_format(a['total_unid_extra'])}"
-      total_unid_extra += a['total_unid_extra']
       row << "#{number_to_format(a['valor_total_extra'])}"
-      valor_total_extra += a['valor_total_extra']
       row << "#{number_to_format(a['total_unid_doble'])}"
-      total_unid_doble += a['total_unid_doble']
       row << "#{number_to_format(a['valor_total_doble'])}"
-      valor_total_doble += a['valor_total_doble']
       row << "#{number_to_format(a['total'])}"
-      total += a['total']
+      
+      if info.count == count
+        @total['total_unid_ord'] += a['total_unid_ord']
+        @total['valor_total_ord'] += a['valor_total_ord']
+        @total['total_unid_extra'] += a['total_unid_extra']
+        @total['valor_total_extra'] += a['valor_total_extra']
+        @total['total_unid_doble'] += a['total_unid_doble']
+        @total['valor_total_doble'] += a['valor_total_doble']
+        @total['total'] += a['total']
+      end
+
       rows << row
       row = []
     end
 
-    row << nombre
-    row << "#{number_to_format(total_unid_ord)}"
-    row << "#{number_to_format(valor_total_ord)}"
-    row << "#{number_to_format(total_unid_extra)}"
-    row << "#{number_to_format(valor_total_extra)}"
-    row << "#{number_to_format(total_unid_doble)}"
-    row << "#{number_to_format(valor_total_doble)}"
-    row << "#{number_to_format(total)}"
+    table(
+      [header] +
+      rows.map do |row| row end,
+      :cell_style => { :align => :right, :size => 10, :height => 19 },
+      :position => :right
+    )
+  end
+
+  def big_total
+    @total = {
+            'nombre' => 'Gran Total',
+            'total_unid_ord' => 0,
+            'valor_total_ord' => 0,
+            'total_unid_extra' => 0,
+            'valor_total_extra' => 0,
+            'total_unid_doble' => 0,
+            'valor_total_doble' => 0,
+            'total' => 0
+          }
+  end
+
+  def set_table_total(header)
+
+    row = []
+    rows = []
+
+    row << @total['nombre']
+    row << "#{number_to_format(@total['total_unid_ord'])}"
+    row << "#{number_to_format(@total['valor_total_ord'])}"
+    row << "#{number_to_format(@total['total_unid_extra'])}"
+    row << "#{number_to_format(@total['valor_total_extra'])}"
+    row << "#{number_to_format(@total['total_unid_doble'])}"
+    row << "#{number_to_format(@total['valor_total_doble'])}"
+    row << "#{number_to_format(@total['total'])}"
     rows << row
+    row = []
 
     table(
       [header] +

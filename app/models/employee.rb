@@ -123,12 +123,14 @@ class Employee < ActiveRecord::Base
     data = {}
     infoData = []
     result = []
+    set_total
 
     # ORDER BY EMPLOYEE
     ###################################################
     if order == "employee"
 
       Employee.find(employees).each do |employee|
+
         data['nombre'] = employee.entity.name + ' ' + employee.entity.surname
 
         Task.find(tasks).each do |task|
@@ -139,23 +141,25 @@ class Employee < ActiveRecord::Base
             infoData << info
             info = {}
           end
+        end # End each Task
 
-        end # End Task.find
-
-        data['info'] = infoData
-        result << data
-        data = {}
-        infoData = []
-
-      end # End if order
-    end # End By Employee
+        if !infoData.empty?
+          infoData << @total
+          set_total
+          data['info'] = infoData
+          result << data
+          data = {}
+          infoData = []
+        end
+      end # End each Employee
+    end # End if order
 
     # ORDER BY TASK
     ###################################################
     if order == "task"
+
       Task.find(tasks).each do |task|
         
-        pass = false
         data['nombre'] = task.ntask
 
         Employee.find(employees).each do |employee|
@@ -163,28 +167,25 @@ class Employee < ActiveRecord::Base
           name_employee = employee.entity.name + ' ' + employee.entity.surname
 
           info = get_info(payroll_ids, task.id, employee.id, name_employee)
-          pass = false
           
           if !info.empty?
-            pass = true
             infoData << info
             info = {}
           end
-
         end # End each Employee
 
-        if pass
+        if !infoData.empty?
+          infoData << @total
+          set_total
           data['info'] = infoData
           result << data
           data = {}
           infoData = []
         end
-
       end # End each Tasks
-    end # End id order
+    end # End if order
 
     result
-
   end
 
   def self.get_info(payroll_ids, task_id, employee_id, name)
@@ -217,23 +218,42 @@ class Employee < ActiveRecord::Base
             when CONSTANTS[:PAYMENT][0]['name'] # Ordinario
               info['total_unid_ord'] += time_worked.to_i
               info['valor_total_ord'] += total
+              @total['total_unid_ord'] += time_worked.to_i
+              @total['valor_total_ord'] += total
               
             when CONSTANTS[:PAYMENT][1]['name'] # Extra
               info['total_unid_extra'] += time_worked.to_i
               info['valor_total_extra'] += total
+              @total['total_unid_extra'] += time_worked.to_i
+              @total['valor_total_extra'] += total
 
             when CONSTANTS[:PAYMENT][2]['name'] # Doble
               info['total_unid_doble'] += time_worked.to_i
               info['valor_total_doble'] += total
+              @total['total_unid_doble'] += time_worked.to_i
+              @total['valor_total_doble'] += total
           end # End case
         end # End data each
 
         info['total'] = totalTasks
-
+        @total['total'] += totalTasks
       else # Else Emply
         info = {}
       end # End Emply
       info
+  end
+
+  def self.set_total
+    @total = {
+            'nombre' => 'Total',
+            'total_unid_ord' => 0,
+            'valor_total_ord' => 0,
+            'total_unid_extra' => 0,
+            'valor_total_extra' => 0,
+            'total_unid_doble' => 0,
+            'valor_total_doble' => 0,
+            'total' => 0
+          }
   end
 
 end

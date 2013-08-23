@@ -58,7 +58,6 @@ class ReportsController < ApplicationController
         payroll_ids = params[:payroll_ids].split(",")
         tasks = params[:tasks].split(",")
         order = params[:order]
-
         
         if tasks.empty?
           tasks = Task.select(:id).collect(&:id)
@@ -75,15 +74,9 @@ class ReportsController < ApplicationController
                 type: "application/pdf", disposition: "inline"
             end
           end
-
         else
-          puts 'xls ##################'
-          puts @data
-          puts 'xls ##################'
-          # general_payroll_xls(@data, @payroll_ids)
+          payment_type_report_xls(@data, payroll_ids, order)
         end
-
-
     end # End case
   end # End show
 
@@ -221,6 +214,20 @@ class ReportsController < ApplicationController
       format.xls {
         response.headers['Content-Disposition'] = 'attachment; filename="general_payroll.xls"'
         render :template => 'xls/general_payroll_xls'
+      }
+    end
+  end
+
+  def payment_type_report_xls(data, payroll_ids, order)
+    @data = data
+    @order = order
+
+    get_dates(payroll_ids)
+    
+    respond_to do |format|
+      format.xls {
+        response.headers['Content-Disposition'] = 'attachment; filename="payment_type_report.xls"'
+        render :template => 'xls/payment_type_report_xls'
       }
     end
   end

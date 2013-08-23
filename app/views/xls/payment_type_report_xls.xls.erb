@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <%
+      @total = {
+        'nombre' => 'Gran Total',
+        'total_unid_ord' => 0,
+        'valor_total_ord' => 0,
+        'total_unid_extra' => 0,
+        'valor_total_extra' => 0,
+        'total_unid_doble' => 0,
+        'valor_total_doble' => 0,
+        'total' => 0
+      }
+
+      if @order == 'employee'
+        @order = 'Empleado'
+      else
+        @order = 'Tarea'
+      end
+
+      stringNames = ""
+      if( @name_payrolls.count == 1 )
+        string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
+      else
+        string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
+        stringNames = "Planillas"
+        @name_payrolls.each do |name|
+          stringNames += " #{name}, "
+        end
+      end
+      stringNames = stringNames.chomp(",")
+    %>
+    <Table>
+      
+      <Row>
+        <Cell><Data ss:Type="String">Agro Vicces S.A.</Data></Cell>
+        <Cell><Data ss:Type="String">Reporte de Labores Por Tipo de Pago</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String">Agrupado por <%= @order %>s</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= string %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= stringNames %></Data></Cell>
+      </Row>
+      <Row></Row>
+      <Row></Row>
+
+      <% @data.each do |d| %>
+        
+        <Row>
+          <Cell><Data ss:Type="String"><%= "Agrupacion #{@order}: #{d['nombre']}" %></Data></Cell>
+        </Row>
+        
+        <Row></Row>
+        
+        <Row>
+          <Cell><Data ss:Type="String">Nombre</Data></Cell>
+          <Cell><Data ss:Type="String">Total de Unid Ord</Data></Cell>
+          <Cell><Data ss:Type="String">Valor Total Ord</Data></Cell>
+          <Cell><Data ss:Type="String">Total de Unid Ext</Data></Cell>
+          <Cell><Data ss:Type="String">Valor total Ext</Data></Cell>
+          <Cell><Data ss:Type="String">Total de Unid Dobles</Data></Cell>
+          <Cell><Data ss:Type="String">Valor total Doble</Data></Cell>
+          <Cell><Data ss:Type="String">Total</Data></Cell>
+        </Row>
+        <% count = 0 %>
+        <% d['info'].each do |a| %>
+          <% count += 1 %>
+          <Row>
+            <Cell><Data ss:Type="String"><%= a['nombre'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['total_unid_ord'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['valor_total_ord'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['total_unid_extra'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['valor_total_extra'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['total_unid_doble'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['valor_total_doble'] %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= a['total'] %></Data></Cell>
+            
+            <% if d['info'].count == count %>
+              <% @total['total_unid_ord'] += a['total_unid_ord'] %>
+              <% @total['valor_total_ord'] += a['valor_total_ord'] %>
+              <% @total['total_unid_extra'] += a['total_unid_extra'] %>
+              <% @total['valor_total_extra'] += a['valor_total_extra'] %>
+              <% @total['total_unid_doble'] += a['total_unid_doble'] %>
+              <% @total['valor_total_doble'] += a['valor_total_doble'] %>
+              <% @total['total'] += a['total'] %>
+            <% end %>
+
+        </Row>
+        <% end %>
+        
+        <Row></Row>
+        <Row></Row>
+
+      <% end %>
+      
+      <Row></Row>
+      <Row></Row>
+
+      <Row>
+        <Cell><Data ss:Type="String"><%= @total['nombre'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['total_unid_ord'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['valor_total_ord'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['total_unid_extra'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['valor_total_extra'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['total_unid_doble'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['valor_total_doble'] %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= @total['total'] %></Data></Cell>
+      </Row>
+      
+    </Table>
+  </Worksheet>
+
+</Workbook>
