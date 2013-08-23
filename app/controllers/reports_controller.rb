@@ -67,22 +67,19 @@ class ReportsController < ApplicationController
         @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order)
 
         if format.to_s == "pdf"
-          puts 'pdf ##################'
-          puts @data
-          puts 'pdf ##################'
-          # respond_to do |format|
-          #   format.pdf do
-              # pdf PaymentTypeReportPDF.new()
-              # pdf = GeneralPayrollPDF.new(@data, @payroll_ids)
-              # send_data pdf.render, filename: "general_payroll.pdf",
-              #   type: "application/pdf", disposition: "inline"
-          #   end
-          # end
+
+          respond_to do |format|
+            format.pdf do
+              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids)
+              send_data pdf.render, filename: "payment_type_report.pdf",
+                type: "application/pdf", disposition: "inline"
+            end
+          end
+
         else
-          puts 'xls'
-          puts '##################'
+          puts 'xls ##################'
           puts @data
-          puts '##################'
+          puts 'xls ##################'
           # general_payroll_xls(@data, @payroll_ids)
         end
 

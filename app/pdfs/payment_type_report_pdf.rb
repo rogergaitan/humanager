@@ -1,225 +1,172 @@
 class PaymentTypeReportPDF < Prawn::Document
 include ActionView::Helpers::NumberHelper
 
-  def initialize() #(payroll, employees, msg)
+  def initialize(data, order, payroll_ids)
     
-    super(top_margin: 5, :left_margin => 90, :right_margin => 90, :page_size => [612,396])
-    # @payroll = payroll
-    # @employees = employees
-    @total = 0
-    @msg = msg
-    # start
+    super(top_margin: 5, :page_size => "A4", :page_layout => :landscape)
+    
+    @data = data
+    @end_date = nil
+    @start_date = nil
+    @name_payrolls = []
+    get_dates(payroll_ids)
+    
+    if order == 'employee'
+      @order = 'Empleado'
+    else
+      @order = 'Tarea'
+    end
+
+    repeat :all do
+      bounding_box [bounds.left, bounds.top], :width  => bounds.width do
+        # header
+        header_page
+      end
+    end
+
+    bounding_box([bounds.left, bounds.top - 90], :width  => bounds.width, :height => bounds.height - 100) do                 
+      start
+    end
+
   end
 
   def start
 
-    list_task_unidad_payment_type = get_task_unidad_payment_type
-    headers = get_heares(list_task_unidad_payment_type)
+    header = get_header()    
 
-    @employees.each do |employee_id|
-      
-      proof_pay_info
-      move_down 5
+    @data.each do |d|
 
-      e = Employee.find(employee_id)
-      text "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}", character_spacing: 1
-      # move_down 5
+      move_down 20
+      text "Agrupacion #{@order}: #{d['nombre']}", character_spacing: 1
+      move_down 20
+      get_table(header, d['info'])
 
-      data_salary = get_data_salary(list_task_unidad_payment_type, employee_id)
-      text "Detalle Salario Devengados:", character_spacing: 1
-      # move_down 5
-
-      table_salary_earned(headers, data_salary)
-      move_down 5
-
-      data_deductions = get_data_deductions(employee_id)
-      text "Deducciones Aplicadas:", character_spacing: 1
-      table_deductions(data_deductions, data_salary[1])
-
-      text_box "#{@msg}",
-      :at => [0, 140], :height => 150, :width => 230, character_spacing: 1
-
-      move_down 5
-
-      start_new_page()
-
-    end # End each employees
+    end # End each @data
   end
 
-  def proof_pay_info
+  def header_page
 
     font_size(10) do
       text_box "Agro Vicces S.A.", :align => :left, style: :bold, character_spacing: 1
-      text_box "Comprobante de Pago de Salario", :align => :right, style: :bold, character_spacing: 1
+      text_box "Reporte de Labores Por Tipo de Pago", :align => :center, style: :bold, character_spacing: 1
     end
     move_down 20
-    string = "Planilla #{@payroll.payroll_type.description} del #{@payroll.start_date} al #{@payroll.end_date}"
+    string = "Agrupado por #{@order}s"
     text string, :align => :center, style: :bold, character_spacing: 1.5
+
+    move_down 10
+    stringNames = ""
+
+    if( @name_payrolls.count == 1 )
+      string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
+    else
+      string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
+      stringNames = "Planillas"
+      @name_payrolls.each do |name|
+        stringNames += " #{name}, "
+      end
+    end
+    stringNames = stringNames.chomp(",")
+    text string, :align => :center, style: :bold, character_spacing: 1.5
+    text stringNames, :align => :center, style: :bold, character_spacing: 1.5
+    move_down 10
   end
 
-  def get_task_unidad_payment_type
+  def get_header()
 
-    task_unidad = []
-    result = []
-    task_payment_type = [
-      CONSTANTS[:PAYMENT][0]['name'].to_s, # Ordinario
-      CONSTANTS[:PAYMENT][1]['name'].to_s, # Extra
-      CONSTANTS[:PAYMENT][2]['name'].to_s  # Doble
+    header = []
+    header_list = [
+        'Nombre', 
+        'Total de Unid Ord',
+        'Valor total Ord',
+        'Total de Unid Ext',
+        'Valor total Ext',
+        'Total de Unid Dobles',
+        'Valor total Doble',
+        'Total'
     ]
     
-    PayrollHistory.where('payroll_log_id = ?', @payroll.id).each do |p|
-      task_unidad << p.task_unidad
+    header_list.each do |title|
+      header << {:content => title, :colspan => 2, :font_style => :bold}
     end
-    result << task_unidad.uniq
-    result << task_payment_type.uniq
-  end
-
-  def get_data_salary(list_task_unidad_payment_type, employee_id)
-
-    task_unidad = {}
-    task_payment_type = {}
-    detail = {}
-    data = []
-    result = []
-    total = 0
-
-    list_task_unidad_payment_type[1].each do |payment_type|
-      list_task_unidad_payment_type[0].each do |unidad|
-        task_unidad[unidad] = 0
-        detail['cantidad'] = 0
-        detail['monto'] = 0
-        PayrollHistory.where('payroll_log_id = ? and payment_type = ? and task_unidad = ?', @payroll.id, payment_type, unidad).each do |p|
-          unless p.payroll_employees.where('employee_id = ?', employee_id).empty?
-            detail['cantidad'] += p.time_worked.to_f
-            detail['monto'] += p.total
-            total += p.total.to_f
-          end # End unless
-        end # End each payroll
-        detail['monto'] = "#{number_to_format(detail['monto'])}"
-        task_unidad[unidad] = detail
-        detail = {}
-      end # End each unidad
-      task_payment_type[payment_type] = task_unidad
-      data << task_payment_type
-      task_payment_type = {}
-      task_unidad = {}
-    end # End each payment_type
-    result << data
-    result << total
-  end
-
-  def get_heares(list_task_unidad_payment_type)
-
-    header = [""]
-    headers = []
-    sub_header = [""]
-
-    list_task_unidad_payment_type[0].each do |unidad|
-      header << {:content => unidad, :colspan => 2, :font_style => :bold}
-    end
-
-    @total = ((header.count-1)*2)
-
-    (1..@total).each do |num|
-      if( num%2 == 0 )
-        sub_header << {:content => "Monto", :font_style => :bold}
-      else
-        sub_header << {:content => "Cantidad", :font_style => :bold}
-      end
-    end
-
-    headers << header
-    headers << sub_header
-  end
-
-  def table_salary_earned(headers, data)
-    
-    rows = []
-    row = []
-
-    data[0].each do |index|
-      index.each do |a|
-        row << "#{a[0]}"
-        a[1].each do |b, index2|
-          row << index2['cantidad']
-          row << index2['monto']
-        end
-        rows << row
-        row = []
-      end
-    end # End each data
-
-    total = number_to_format(data[1])
-
-    table(
-      headers +
-      rows.map do |row| row end +
-      [[ {:content => "Total(Colones): #{total}", :colspan => (@total+1), :font_style => :bold} ]],
-      :cell_style => { :align => :right, :size => 10, :height => 19 },
-      :position => :right
-    )
-  end
-
-  def get_data_deductions(employee_id)
-      
-    rows = []
-    row = []
-    result = []
-    total = 0
-    total_others = 0
-    count = 0
-
-    DeductionPayment.where('payroll_id = ?', @payroll.id).each do |a|
-      if a.deduction_employee.employee_id.to_f == employee_id.to_f
-        count += 1
-        if count >= 4
-          total_others += a.payment.to_f
-          total += a.payment
-        else
-          row << "#{a.deduction_employee.deduction.description}"
-          row << "#{a.deduction_employee.deduction.calculation}"
-          row << "#{number_to_format(a.payment.to_f)}"
-          total += a.payment
-        end
-      end
-
-      unless row.empty?
-        if count < 4
-          rows << row
-          row = []
-        end
-      end
-
-    end
-
-    if total_others != 0
-      row = []
-      row << "Otros"
-      row << "0"
-      row << total_others
-      rows << row
-    end
-
-    result << rows
-    result << "#{total}"
-  end
-
-  def table_deductions(data, total_salary)
-      
-    receive = total_salary.to_f - data[1].to_f  
-    receive = number_to_format(receive)
-      
-    table([
-      ["Deduccion", "%", "Monto"]] +
-      data[0].map do |row| row end +
-      [[ {:content => "Total a Recibir (Colones): #{receive}", :colspan => 3, :font_style => :bold } ]],
-      :cell_style => { :align => :right, :size => 10, :height => 19 }, 
-      :position => :right
-    )
   end
 
   def number_to_format(number)
     number_to_currency(number, :precision => 2, :format => "%u%n", :unit => "")
+  end
+
+  def get_dates(payroll_ids)
+
+    Payroll.where( :id => payroll_ids ).each do |p|
+
+      @name_payrolls << "#{p.payroll_type.description}"
+      
+      if(@start_date.nil? and @end_date.nil?)
+        @start_date = p.start_date
+        @end_date = p.end_date
+      else
+        if(@start_date > p.start_date)
+          @start_date = p.start_date
+        end
+
+        if(@end_date < p.end_date)
+          @end_date = p.end_date
+        end
+      end
+    end
+    @name_payrolls = @name_payrolls.uniq
+  end
+
+  def get_table(header, info)
+
+    row = []
+    rows = []
+
+    nombre = 'TOTAL'
+    total_unid_ord = 0
+    valor_total_ord = 0
+    total_unid_extra = 0
+    valor_total_extra = 0
+    total_unid_doble = 0
+    valor_total_doble = 0
+    total = 0
+
+    info.each do |a|
+      row << a['nombre']
+      row << "#{number_to_format(a['total_unid_ord'])}"
+      total_unid_ord += a['total_unid_ord']
+      row << "#{number_to_format(a['valor_total_ord'])}"
+      valor_total_ord += a['valor_total_ord']
+      row << "#{number_to_format(a['total_unid_extra'])}"
+      total_unid_extra += a['total_unid_extra']
+      row << "#{number_to_format(a['valor_total_extra'])}"
+      valor_total_extra += a['valor_total_extra']
+      row << "#{number_to_format(a['total_unid_doble'])}"
+      total_unid_doble += a['total_unid_doble']
+      row << "#{number_to_format(a['valor_total_doble'])}"
+      valor_total_doble += a['valor_total_doble']
+      row << "#{number_to_format(a['total'])}"
+      total += a['total']
+      rows << row
+      row = []
+    end
+
+    row << nombre
+    row << "#{number_to_format(total_unid_ord)}"
+    row << "#{number_to_format(valor_total_ord)}"
+    row << "#{number_to_format(total_unid_extra)}"
+    row << "#{number_to_format(valor_total_extra)}"
+    row << "#{number_to_format(total_unid_doble)}"
+    row << "#{number_to_format(valor_total_doble)}"
+    row << "#{number_to_format(total)}"
+    rows << row
+
+    table(
+      [header] +
+      rows.map do |row| row end,
+      :cell_style => { :align => :right, :size => 10, :height => 19 },
+      :position => :right
+    )
   end
 
 end

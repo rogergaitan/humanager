@@ -153,8 +153,9 @@ class Employee < ActiveRecord::Base
     # ORDER BY TASK
     ###################################################
     if order == "task"
-
       Task.find(tasks).each do |task|
+        
+        pass = false
         data['nombre'] = task.ntask
 
         Employee.find(employees).each do |employee|
@@ -162,18 +163,22 @@ class Employee < ActiveRecord::Base
           name_employee = employee.entity.name + ' ' + employee.entity.surname
 
           info = get_info(payroll_ids, task.id, employee.id, name_employee)
-
+          pass = false
+          
           if !info.empty?
+            pass = true
             infoData << info
             info = {}
           end
 
         end # End each Employee
 
-        data['info'] = infoData
-        result << data
-        data = {}
-        infoData = []
+        if pass
+          data['info'] = infoData
+          result << data
+          data = {}
+          infoData = []
+        end
 
       end # End each Tasks
     end # End id order
@@ -217,7 +222,7 @@ class Employee < ActiveRecord::Base
               info['total_unid_extra'] += time_worked.to_i
               info['valor_total_extra'] += total
 
-            when CONSTANTS[:PAYMENT][2]['name']  # Doble
+            when CONSTANTS[:PAYMENT][2]['name'] # Doble
               info['total_unid_doble'] += time_worked.to_i
               info['valor_total_doble'] += total
           end # End case
@@ -228,9 +233,7 @@ class Employee < ActiveRecord::Base
       else # Else Emply
         info = {}
       end # End Emply
-
       info
-    
   end
 
 end
