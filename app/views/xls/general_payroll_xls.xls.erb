@@ -6,17 +6,7 @@
   xmlns:html="http://www.w3.org/TR/REC-html40">
   <Worksheet ss:Name="Sheet1">
     <%
-      stringNames = ""
-      if( @name_payrolls.count == 1 )
-        string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
-      else
-        string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
-        stringNames = "Planillas"
-        @name_payrolls.each do |name|
-          stringNames += " #{name}, "
-        end
-      end
-      stringNames = stringNames.chomp(",")
+      string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
     %>
     <Table>
       
@@ -26,7 +16,6 @@
       </Row>
       <Row>
         <Cell><Data ss:Type="String"><%= string %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= stringNames %></Data></Cell>
       </Row>
       <Row></Row>
       <Row>

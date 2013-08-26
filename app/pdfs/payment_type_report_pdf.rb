@@ -8,7 +8,7 @@ include ActionView::Helpers::NumberHelper
     @data = data
     @end_date = nil
     @start_date = nil
-    @name_payrolls = []
+    @name_payrolls = nil
     get_dates(payroll_ids)
     big_total
     
@@ -17,10 +17,23 @@ include ActionView::Helpers::NumberHelper
     else
       @order = 'Tarea'
     end
-
-    repeat :all do
+    repeat(:all, :dynamic => true) do
+      
+      # HEADER
       bounding_box [bounds.left, bounds.top], :width  => bounds.width do
         header_page
+      end
+
+      # FOOTER
+      bounding_box [bounds.left, bounds.bottom + 15], :width  => bounds.width do
+        move_down(5)
+        time = Time.new
+        text "Impreso el: #{time.day}/#{time.month}/#{time.year} #{time.hour}:#{time.min}:#{time.sec}", :size => 10
+      end
+
+      bounding_box [700, bounds.bottom + 15], :width  => bounds.width do
+        move_down(5)
+        text "Pagina #{page_number} de #{page_count}", :size => 10
       end
     end
 
@@ -37,7 +50,7 @@ include ActionView::Helpers::NumberHelper
     @data.each do |d|
 
       move_down 20
-      text "Agrupacion #{@order}: #{d['nombre']}", character_spacing: 1
+      text "#{d['nombre']}", character_spacing: 1
       move_down 20
       get_table(header, d['info'])
 
@@ -59,20 +72,9 @@ include ActionView::Helpers::NumberHelper
     text string, :align => :center, style: :bold, character_spacing: 1.5
 
     move_down 10
-    stringNames = ""
-
-    if( @name_payrolls.count == 1 )
-      string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
-    else
-      string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
-      stringNames = "Planillas"
-      @name_payrolls.each do |name|
-        stringNames += " #{name}, "
-      end
-    end
-    stringNames = stringNames.chomp(",")
+    string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
+    
     text string, :align => :center, style: :bold, character_spacing: 1.5
-    text stringNames, :align => :center, style: :bold, character_spacing: 1.5
     move_down 10
   end
 
@@ -103,7 +105,7 @@ include ActionView::Helpers::NumberHelper
 
     Payroll.where( :id => payroll_ids ).each do |p|
 
-      @name_payrolls << "#{p.payroll_type.description}"
+      @name_payrolls = "#{p.payroll_type.description}"
       
       if(@start_date.nil? and @end_date.nil?)
         @start_date = p.start_date
@@ -118,7 +120,10 @@ include ActionView::Helpers::NumberHelper
         end
       end
     end
-    @name_payrolls = @name_payrolls.uniq
+
+    if payroll_ids.count > 1
+      @name_payrolls = 'Varios'
+    end
   end
 
   def get_table(header, info)

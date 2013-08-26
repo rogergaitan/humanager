@@ -233,10 +233,10 @@ class ReportsController < ApplicationController
   end
 
   def get_dates(payroll_ids)
-    @name_payrolls = []
+    @name_payrolls = nil
     Payroll.where( :id => payroll_ids ).each do |p|
 
-      @name_payrolls << "#{p.payroll_type.description}"
+      @name_payrolls = "#{p.payroll_type.description}"
       
       if(@start_date.nil? and @end_date.nil?)
         @start_date = p.start_date
@@ -251,7 +251,9 @@ class ReportsController < ApplicationController
         end
       end
     end
-    @name_payrolls = @name_payrolls.uniq
+    if payroll_ids.count > 1
+      @name_payrolls = 'Varios'
+    end
   end
 
 end

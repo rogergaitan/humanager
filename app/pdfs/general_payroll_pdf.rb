@@ -7,7 +7,7 @@ include ActionView::Helpers::NumberHelper
     @data = data
     @end_date = nil
     @start_date = nil
-    @name_payrolls = []
+    @name_payrolls = nil
     get_dates(payroll_ids)
     start
   end
@@ -25,20 +25,9 @@ include ActionView::Helpers::NumberHelper
     end
 
     move_down 20
-    stringNames = ""
-
-    if( @name_payrolls.count == 1 )
-      string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
-    else
-      string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
-      stringNames = "Planillas"
-      @name_payrolls.each do |name|
-        stringNames += " #{name}, "
-      end
-    end
-    stringNames = stringNames.chomp(",")
+    string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
+    
     text string, :align => :center, style: :bold, character_spacing: 1.5
-    text stringNames, :align => :center, style: :bold, character_spacing: 1.5
     move_down 10
   end
 
@@ -82,7 +71,7 @@ include ActionView::Helpers::NumberHelper
 
     Payroll.where( :id => payroll_ids ).each do |p|
 
-      @name_payrolls << "#{p.payroll_type.description}"
+      @name_payrolls = "#{p.payroll_type.description}"
       
       if(@start_date.nil? and @end_date.nil?)
         @start_date = p.start_date
@@ -97,7 +86,10 @@ include ActionView::Helpers::NumberHelper
         end
       end
     end
-    @name_payrolls = @name_payrolls.uniq
+
+    if payroll_ids.count > 1
+      @name_payrolls = 'Varios'
+    end
   end
 
 end

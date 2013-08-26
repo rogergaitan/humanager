@@ -23,17 +23,7 @@
         @order = 'Tarea'
       end
 
-      stringNames = ""
-      if( @name_payrolls.count == 1 )
-        string = "Planilla #{@name_payrolls[0]} del #{@start_date} al #{@end_date}"
-      else
-        string = "Reporte General de Planilla del #{@start_date} al #{@end_date}"
-        stringNames = "Planillas"
-        @name_payrolls.each do |name|
-          stringNames += " #{name}, "
-        end
-      end
-      stringNames = stringNames.chomp(",")
+      string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
     %>
     <Table>
       
@@ -46,7 +36,6 @@
       </Row>
       <Row>
         <Cell><Data ss:Type="String"><%= string %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= stringNames %></Data></Cell>
       </Row>
       <Row></Row>
       <Row></Row>
@@ -54,7 +43,7 @@
       <% @data.each do |d| %>
         
         <Row>
-          <Cell><Data ss:Type="String"><%= "Agrupacion #{@order}: #{d['nombre']}" %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= "#{d['nombre']}" %></Data></Cell>
         </Row>
         
         <Row></Row>
