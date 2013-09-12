@@ -10,3 +10,4 @@ class CreatePayrollEmployees < ActiveRecord::Migration
     add_index :payroll_employees, :payroll_history_id
   end
 end
+

@@ -15,7 +15,7 @@ development:
   database: reasapp_development
   pool: 5
   username: root
-  password: 'root'
+  password: ''
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -27,7 +27,7 @@ test:
   database: reasapp_test
   pool: 5
   username: root
-  password: 'root'
+  password: ''
 
 production:
   adapter: mysql2
@@ -36,11 +36,11 @@ production:
   database: reasapp_production
   pool: 5
   username: root
-  password: 'root'
+  password: ''
 
-firebird:
-  adapter: rubyfb
-  database: /var/lib/firebird/2.5/data/AreaT_PRUEBAS.fdb
-  username: SYSDBA
-  password: 'root'
-  host: localhost
+# firebird:
+#   adapter: rubyfb
+#   database: /var/lib/firebird/2.5/data/AreaT_PRUEBAS.fdb
+#   username: SYSDBA
+#   password: 'root'
+#   host: localhost

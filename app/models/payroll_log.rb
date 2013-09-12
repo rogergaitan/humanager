@@ -5,7 +5,7 @@ class PayrollLog < ActiveRecord::Base
   has_many :payroll_histories, :dependent => :destroy
   
   accepts_nested_attributes_for :payroll_histories, :allow_destroy => true, :reject_if => proc { |attributes| attributes["time_worked"].blank? && attributes["centro_de_costo_id"].blank? }
-  attr_accessible :id, :payroll_histories_attributes, :payroll_date
+  attr_accessible :id, :payroll_histories_attributes, :payroll_date, :payroll_total
 
 
   def self.history(id)

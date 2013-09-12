@@ -1,4 +1,6 @@
-var payroll = {}
+var payroll = {
+  total : 0
+}
 
 $(document).ready(function() {
 
@@ -36,6 +38,7 @@ $(document).ready(function() {
 
 });
 
+
 // Consulta los datos de las planillas activas y inactivas
 // Get the data of active and inactive payrolls
 payroll.index = function() {
@@ -44,10 +47,12 @@ payroll.index = function() {
   var url_get_inactivas = $('#get_inactivas_payrolls_path').val();
 
   $.getJSON(url_get_activas, function(resultado) {
-
+    var totalCount = resultado.activa.length;
+    var count = 0;
     $('table#activas > tbody').empty();
     $(resultado.activa).each(function() { 
-      payroll.add_activas(this, 'table#activas');
+      count ++;
+      payroll.add_activas(this, 'table#activas', count, totalCount);
     });
   });
 
@@ -58,30 +63,44 @@ payroll.index = function() {
       payroll.add_inactivas(this, 'table#inactivas');
     });
   });
+
 }
 
 // Carga las planillas activas en una tabla
 // Load the active payroll in a table
-payroll.add_activas = function (payroll, target_table) {
+payroll.add_activas = function (payrolld, target_table, count, totalCount) {
+  payroll.total += parseFloat(payrolld.payroll_log.payroll_total);
   var url = $('#tab1').data('url');
   var url_payrolls = $('#payrolls_path').val();
+  var row2 = '';
   var row = $(target_table + '> tbody:last').append(
     '<tr>' + 
-      '<td><a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a></td>' +
-      '<td>' + payroll.start_date + '</td>' +
-      '<td>' + payroll.end_date + '</td>' +
-      '<td>' + payroll.payment_date + '</td>' +
+      '<td><a href="/payrolls/' + payroll.id + '">' + payrolld.payroll_type.description + '</a></td>' +
+      '<td>' + payrolld.start_date + '</td>' +
+      '<td>' + payrolld.end_date + '</td>' +
+      '<td>' + payrolld.payment_date + '</td>' +
+      '<td>' + payrolld.payroll_log.payroll_total + '</td>' +
       '<td>' +
-        '<input type="checkbox" class="ckActive" id="' + payroll.id + '" value="' + payroll.id + '" />' +
+        '<input type="checkbox" class="ckActive" id="' + payrolld.id + '" value="' + payrolld.id + '" />' +
       '</td>' +
-      '<td><a href="'+ url +'/' + payroll.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
+      '<td><a href="'+ url +'/' + payrolld.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
 			'Digitar</a> ' + 
-			'<a href="'+ url +'/' + payroll.id +'/edit" class="btn btn-mini" ' +
+			'<a href="'+ url +'/' + payrolld.id +'/edit" class="btn btn-mini" ' +
       'data-method="get" rel="nofollow">Editar</a> ' +
-     '<a href="'+ url_payrolls +'/' + payroll.id + '" class="btn btn-mini btn-danger" ' +
+     '<a href="'+ url_payrolls +'/' + payrolld.id + '" class="btn btn-mini btn-danger" ' +
       'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
     '</tr>');
-  return row;
+
+  if(count == totalCount) {
+    row2 = $(target_table + '> tbody:last').append(
+      '<tr>' + 
+        '<td colspan="4" style="text-align: right;">Total: </td>' +
+        '<td colspan="3">' + payroll.total + '</td>' +
+      '</tr>'
+    );
+  }
+
+  return row + row2;
 }
 
 // Carga las planillas inactivas en una tabla

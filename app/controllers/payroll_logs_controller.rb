@@ -51,6 +51,8 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.update_attributes(params[:payroll_log])
+        @payroll_log.payroll_total = @payroll_log.payroll_histories.sum(:total)
+        @payroll_log.save
         format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
         format.json { head :no_content }
       else
@@ -72,13 +74,6 @@ class PayrollLogsController < ApplicationController
     end
   end
   
-  def fetch_employees
-    @employees = Employee.includes(:entity).order_employees
-    respond_to do |format|
-      format.json { render json: @employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} } }
-    end
-  end
-
   def fetch_employees
     @employees = Employee.includes(:entity).order_employees
     respond_to do |format|

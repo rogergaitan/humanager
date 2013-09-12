@@ -154,13 +154,19 @@ class DeductionsController < ApplicationController
       
     @deduction = Deduction.find(params[:id])
 
-    if DeductionEmployee.find_by_deduction_id(params[:id]).deduction_payments.empty?
-      # There are no records.
+    if @deduction.deduction_employees.empty?
       @deduction.destroy
     else
-      # There are records.
-      @deduction.state = 0
-      @deduction.save
+
+      if DeductionEmployee.find_by_deduction_id(params[:id]).deduction_payments.empty?
+        # There are no records.
+        @deduction.destroy
+      else
+        # There are records.
+        @deduction.state = 0
+        @deduction.save
+      end
+      
     end
 
     respond_to do |format|

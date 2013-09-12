@@ -26,6 +26,7 @@
                 <th><%= model_class.human_attribute_name(:start_date) %></th>
                 <th><%= model_class.human_attribute_name(:end_date) %></th>
                 <th><%= model_class.human_attribute_name(:payment_date) %></th>
+                <th>Acumulado</th>
                 <th><%= model_class.human_attribute_name(:state) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
@@ -34,6 +35,8 @@
         
           </tbody>
         </table>
+        <hr>
+        <div id="payroll_total"></div>
          <%= link_to t('.new', :default => t("helpers.links.new")),
             new_payroll_path,
             :class => 'btn btn-primary' %>

@@ -159,6 +159,7 @@ $(jQuery(document).ready(function($) {
 														'<input type="hidden" value="' + employee_id + '"  />' +
 													'</td>' +
 												'</tr>');
+		payroll_logs.addToPayrollTotal(totalRow);
 	}
 
 	payroll_logs.addNewSelection = function(num, employee_id, is_select_methol_all) {
@@ -445,6 +446,7 @@ $(jQuery(document).ready(function($) {
   		total = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
   		total = (total-subtotal);
   		$('#total_' + employee_id + ' td:eq(1)').html(total);
+  		payroll_logs.deductToPayrollTotal(subtotal);
   	}
 
   	payroll_logs.removeAllTotalRows = function(num) {
@@ -475,6 +477,16 @@ $(jQuery(document).ready(function($) {
 			$('#filter-controls input:checkbox').css("display", "none");
 			$('#filter-controls input:checkbox').next().css("display", "none");
   		}
+	}
+
+	payroll_logs.addToPayrollTotal = function(num) {
+		var total = parseFloat($('#payroll_total').html());
+		$('#payroll_total').html( total + num );
+	}
+
+	payroll_logs.deductToPayrollTotal = function(num) {
+		var total = parseFloat($('#payroll_total').html());
+		$('#payroll_total').html( total - num );
 	}
 
 	payroll_logs.cleanEmployeeAlone();

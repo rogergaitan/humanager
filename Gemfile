@@ -5,25 +5,29 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.13'
 gem 'jquery-rails'
 gem 'devise'
-gem 'rmagick'
+gem 'rmagick', '~> 2.13.2'
 gem 'carrierwave'
 gem 'client_side_validations'
-gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'enum_column3'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'prawn', :git => 'git://github.com/sandal/prawn.git'
-gem 'rubyfb'
-
+#gem 'rubyfb'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
+  
+  # gem 'therubyracer', :platform => :ruby
+  # gem 'libv8', '~> 3.11.8.3'
+  # gem 'less'
+  # gem 'less-rails'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
 

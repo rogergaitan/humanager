@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130819172624) do
+ActiveRecord::Schema.define(:version => 20130905200551) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -339,23 +339,6 @@ ActiveRecord::Schema.define(:version => 20130819172624) do
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "payment_methods", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  create_table "payment_schedules", :force => true do |t|
-    t.string   "code"
-    t.string   "description"
-    t.date     "initial_date"
-    t.date     "end_date"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.date     "payment_date"
-  end
-
   create_table "payment_units", :force => true do |t|
     t.string   "description"
     t.datetime "created_at",  :null => false
@@ -391,9 +374,10 @@ ActiveRecord::Schema.define(:version => 20130819172624) do
 
   create_table "payroll_logs", :force => true do |t|
     t.integer  "payroll_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
     t.date     "payroll_date"
+    t.decimal  "payroll_total", :precision => 18, :scale => 4
   end
 
   add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
@@ -421,8 +405,9 @@ ActiveRecord::Schema.define(:version => 20130819172624) do
   create_table "payroll_types", :force => true do |t|
     t.string   "description"
     t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                                                   :null => false
+    t.datetime "updated_at",                                                                   :null => false
+    t.boolean  "state",                                                      :default => true
   end
 
   create_table "payrolls", :force => true do |t|
@@ -536,13 +521,6 @@ ActiveRecord::Schema.define(:version => 20130819172624) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "roles", :force => true do |t|
-    t.string   "role"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
   end
 
   create_table "sublines", :force => true do |t|

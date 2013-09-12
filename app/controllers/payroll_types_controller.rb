@@ -3,7 +3,7 @@ class PayrollTypesController < ApplicationController
   # GET /payroll_types
   # GET /payroll_types.json
   def index
-    @payroll_types = PayrollType.paginate(:page => params[:page], :per_page => 15)
+    @payroll_types = PayrollType.where(:state => 1).paginate(:page => params[:page], :per_page => 15)
     respond_with(@payroll_types)
   end
 
@@ -62,7 +62,13 @@ class PayrollTypesController < ApplicationController
   # DELETE /payroll_types/1.json
   def destroy
     @payroll_type = PayrollType.find(params[:id])
-    @payroll_type.destroy
+
+    if Payroll.find_by_payroll_type_id(params[:id]).nil?
+      @payroll_type.destroy
+    else
+      @payroll_type.state = 0
+      @payroll_type.save
+    end
 
     respond_to do |format|
       format.html { redirect_to payroll_types_url }

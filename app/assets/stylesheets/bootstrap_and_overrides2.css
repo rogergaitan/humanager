@@ -1,6 +1,14 @@
-@import "twitter/bootstrap/bootstrap";
-body { 
-	padding-top: 60px;
+/*
+  =require twitter-bootstrap-static/bootstrap
+
+  Use Font Awesome icons (default)
+  To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
+  =require twitter-bootstrap-static/fontawesome
+  */
+
+/*@import "twitter/bootstrap/bootstrap";*/
+body {
+padding-top: 60px;
 }
 
 @import "twitter/bootstrap/responsive";
@@ -10,8 +18,8 @@ body {
 @iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not 
-//       have the proper paths. So for now we use the absolute path.
+// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
+// have the proper paths. So for now we use the absolute path.
 @fontAwesomeEotPath: '/assets/fontawesome-webfont.eot';
 @fontAwesomeWoffPath: '/assets/fontawesome-webfont.woff';
 @fontAwesomeTtfPath: '/assets/fontawesome-webfont.ttf';
@@ -41,33 +49,33 @@ body {
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .error_mesages p {
-margin: 8px 10 px;
+	margin: 8px 10 px;
 }
 
 .field_with_errors {
-display: inline;
+	display: inline;
 }
 
 .field_with_errors .message {
-color: #D80;
-padding-left: 5px;
-font-size: 12px;
+	color: #D80;
+	padding-left: 5px;
+	font-size: 12px;
 }
 
 .controls .error {
-color: #D80;
-padding-left: 5px;
-font-size: 12px;
+	color: #D80;
+	padding-left: 5px;
+	font-size: 12px;
 }
 select:focus {
-border-color: rgba(82, 168, 236, 0.8);
-outline: 0;
--webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
--moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
--webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
--moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
+	border-color: rgba(82, 168, 236, 0.8);
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
 }
 select {
     background-color: white;
@@ -139,18 +147,18 @@ form {
     list-style: none outside none;
     margin: 1px 0 0;
     min-width: 160px;
-    padding: 4px 0;    
+    padding: 4px 0;
 }
 
-.ui-autocomplete  a{
-       clear: both;
+.ui-autocomplete a{
+    clear: both;
     color: #333333;
     display: block;
     font-weight: normal;
     line-height: 18px;
     padding: 3px 15px;
     white-space: nowrap;
-} 
+}
 .ui-autocomplete li > a:hover, .ui-autocomplete .active > a, .ui-autocomplete .active > a:hover {
     background-color: #0088CC;
     color: #FFFFFF;
@@ -158,20 +166,20 @@ form {
 }
 
 .btn.btn-info.dropdown-toggle {
-width: 30%;
+	width: 30%;
 }
 .btn-group .btn.btn-info {
-width: 70%;
-padding-left: 0px;
-margin: 0px;
-border: none;
-padding-right: 0px;
--webkit-border-radius: 0px;
-border-radius: 0px;
--moz-border-radius: 0;
+	width: 70%;
+	padding-left: 0px;
+	margin: 0px;
+	border: none;
+	padding-right: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+	-moz-border-radius: 0;
 }
 .btn.btn-info.dropdown-toggle {
-width: 30% !important;
+	width: 30% !important;
 }
 
 
@@ -226,7 +234,7 @@ span.node_link {
 }
 
 /* Employees Checkboxes */
-div.employees-list, div.payroll-types-list,  {
+div.employees-list, div.payroll-types-list, {
 	height: 225px;
 	overflow: auto;
 	width: 218px;
@@ -247,7 +255,7 @@ div.employees-list, div.payroll-types-list,  {
 }
 
 /* Employees Checkboxes */
-div.tasks-list, div.payroll-types-list,  {
+div.tasks-list, div.payroll-types-list, {
 	height: 225px;
 	overflow: auto;
 	width: 218px;
@@ -268,10 +276,10 @@ div.tasks-list, div.payroll-types-list,  {
 }
 
 div.employees-list.list-right {
-	
+
 }
 div.tasks-list.list-right {
-	
+
 }
 div.employees-margin, div.payroll-types-margin {
 	margin: 5px;
@@ -335,7 +343,7 @@ div.controls.align-radio {
 
 .align-checkbox.right {
 	margin-right: 5px;
-	
+
 }
 .align-checkbox {
     display: inline;
@@ -345,8 +353,8 @@ div.controls.align-radio {
 
 .h5-with-shadown{
 	text-shadow: 0 0 0.2em #87F, 0 0 0.2em #87F,
-	0 0 0.2em #87F}
-	
+0 0 0.2em #87F}
+
 .control-group-inline{
 	float: left;
 }
