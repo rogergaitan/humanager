@@ -32,7 +32,7 @@ class Employee < ActiveRecord::Base
             :payment_unit_id, :price_defined_work, :payroll_type_default_id,
             :number_employee
   
-  validates_uniqueness_of :number_employee
+  validates_uniqueness_of :number_employee, :allow_nil => true
 
   has_one :department
   belongs_to :entity, :dependent => :destroy

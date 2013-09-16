@@ -92,17 +92,18 @@ class EmployeesController < ApplicationController
 
   def sync
     @abanits = Abanit.where("bempleado = ?", 'T').find(:all, 
-                            :select => ['init', 'ntercero'])
+                            :select => ['init', 'ntercero', 'napellido'])
     @c = 0 
     @syn_data = {}
     @employees = []
     @notice = []
     @abanits.each do |employee|
       if Entity.where("entityid = ?", employee.init).empty?
-        full_name = splitname(firebird_encoding(employee.ntercero).split)
+        full_name = employee.ntercero
+        last_name = employee.napellido
         @new_employee = Employee.new
-        @entity = @new_employee.build_entity(:name => full_name[:name], :surname => 
-                                full_name[:surname], :entityid => employee.init)
+        @entity = @new_employee.build_entity(:name => full_name, :surname => 
+                                last_name, :entityid => employee.init)
         @entity.telephones.build
         @new_employee.build_photo
         @entity.emails.build
