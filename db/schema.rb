@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130905200551) do
+ActiveRecord::Schema.define(:version => 20130917210030) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -202,9 +202,9 @@ ActiveRecord::Schema.define(:version => 20130905200551) do
 
   create_table "employees", :force => true do |t|
     t.integer  "entity_id"
-    t.enum     "gender",                  :limit => [:male, :female]
+    t.enum     "gender",                  :limit => [:masculino, :femenino]
     t.date     "birthday"
-    t.enum     "marital_status",          :limit => [:single, :married, :divorced, :widowed, :civil_union, :engage]
+    t.enum     "marital_status",          :limit => [:soltero, :casado, :divorciado, :viudo, :union_civil, :comprometido]
     t.integer  "number_of_dependents"
     t.string   "spouse"
     t.date     "join_date"
@@ -216,12 +216,12 @@ ActiveRecord::Schema.define(:version => 20130905200551) do
     t.integer  "payment_method_id"
     t.integer  "payment_frequency_id"
     t.integer  "means_of_payment_id"
-    t.decimal  "wage_payment",                                                                                       :precision => 12, :scale => 2
-    t.datetime "created_at",                                                                                                                                           :null => false
-    t.datetime "updated_at",                                                                                                                                           :null => false
+    t.decimal  "wage_payment",                                                                                             :precision => 12, :scale => 2
+    t.datetime "created_at",                                                                                                                                                 :null => false
+    t.datetime "updated_at",                                                                                                                                                 :null => false
     t.string   "position_id"
     t.integer  "employee_id"
-    t.boolean  "is_superior",                                                                                                                       :default => false
+    t.boolean  "is_superior",                                                                                                                             :default => false
     t.integer  "payment_unit_id"
     t.boolean  "price_defined_work"
     t.integer  "payroll_type_default_id"
@@ -250,9 +250,9 @@ ActiveRecord::Schema.define(:version => 20130905200551) do
     t.string   "name"
     t.string   "surname"
     t.string   "entityid"
-    t.enum     "typeid",     :limit => [:national, :foreign, :company]
-    t.datetime "created_at",                                            :null => false
-    t.datetime "updated_at",                                            :null => false
+    t.enum     "typeid",     :limit => [:ced_nacional, :ced_residencia, :ced_juridica]
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
   end
 
   create_table "fields_personnel_actions", :force => true do |t|

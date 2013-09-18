@@ -10,6 +10,14 @@
 
 <!-- Empledos Deducciones -->
 <div class="control-group">
+  <%= f.label :description, :class => 'control-label' %>
+  <div class="controls">
+    <%= f.text_field :description, :class => 'text_field' %>
+  </div>
+</div>
+<!--<br></br>
+<hr></hr>-->
+<div class="control-group">
   <p>Aplica a:</p>
     <%= f.label :Empleados, :class => 'control-label' %>
     <div class="controls align-radio">
@@ -184,13 +192,6 @@
     <%= f.label :calculation, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :calculation, :class => 'text_field' %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :description, :class => 'text_field' %>
     </div>
   </div>
 

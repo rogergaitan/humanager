@@ -3,8 +3,8 @@ class PayrollType < ActiveRecord::Base
   validates :description, :presence => true, :uniqueness => true
 
   has_many :employees
-  has_many :payroll_type_benefits, :dependent => :destroy # kalfaro
-  has_many :work_benefit, :through => :payroll_type_benefits # kalfaro
+  has_many :payroll_type_benefits, :dependent => :destroy
+  has_many :work_benefit, :through => :payroll_type_benefits
   
   scope :tipo_planilla, select(['id','description','payroll_type']).where(:state => 1 ).order('payroll_type')
   #scope :tipo_planilla, lambda {|type_payroll| where("payroll_type = ?", type_payroll).

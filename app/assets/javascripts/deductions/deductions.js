@@ -1,5 +1,19 @@
 $(document).ready(function() {
 
+  $('#new_deduction').submit(function( event ) {
+    if( $('#list-payroll-types-to-save input').length == 0 ) {
+      event.preventDefault();
+      if( $('#requerido').length==0 ) {
+        $( "#load_filter_payroll_types_text" ).after( '<label id="requerido" for="load_filter_payroll_types_text" generated="true" class="error">Requerido</label>' );
+      }
+    } else {
+      if( $('#requerido').length != 0 ) {
+        $('#requerido').remove()
+      }
+    }
+
+  });
+
   // Llena el filtro para los empleados
   populateEmployeesFilter('/deductions/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 

@@ -24,6 +24,25 @@ $(document).ready(function() {
 	$('#btn_save').on('click', function() {
 		permissions.savePermissions();
 	});
+
+	$("table[id^='category_'] thead input").change(function() {
+		var checked = false;
+		if( $(this).is(':checked') ) {
+			checked = true;
+		}
+
+		var element = $(this).val().split('-');
+		$('#' + element[0] + ' tbody tr').each(function(){
+
+			var id = $(this).attr('id');
+			if( checked ) {
+				$('#' + id + ' td:eq(' + element[1] + ') input').prop('checked', true);
+			} else {
+				$('#' + id + ' td:eq(' + element[1] + ') input').prop('checked', false);
+			}
+		});
+	});
+
 });
 
 // Search the users

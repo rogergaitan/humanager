@@ -9,7 +9,7 @@
 <div><h3>Usuario: <%= @user.name %></h3></div>
 
 
-<div class="container">
+<div class="container-fluid">
 	
 	<!-- S E A R C H   U S E R S -->
 	<legend>
@@ -49,10 +49,10 @@
 								<thead>
 									<tr>
 										<td></td>
-										<td>Crear</td>
-										<td>Ver</td>
-										<td>Modificar</td>
-										<td>Eliminar</td>
+										<td>Crear | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
+										<td>Ver | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
+										<td>Modificar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-3"></td>
+										<td>Eliminar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-4"></td>
 									</tr>
 								</thead>
 							<% end %>
@@ -60,7 +60,13 @@
 							<% if count == 1 %>
 								<thead>
 									<tr>
-										<td></td><td>Crear</td><td>Ver</td><td>Modificar</td><td>Eliminar</td><td>Cerrar</td><td>Contabilizar</td>
+										<td></td>
+										<td>Crear | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
+										<td>Ver | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
+										<td>Modificar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-3"></td>
+										<td>Eliminar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-4"></td>
+										<td>Cerrar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-5"></td>
+										<td>Contabilizar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-6"></td>
 									</tr>
 								</thead>
 							<% end %>
@@ -68,7 +74,9 @@
 							<% if count == 2 %>
 								<thead>
 									<tr>
-										<td></td><td>PDF</td><td>Exel</td>
+										<td></td>
+										<td>PDF | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
+										<td>XLS | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
 									</tr>
 								</thead>
 							<% end %>

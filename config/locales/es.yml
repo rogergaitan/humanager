@@ -421,6 +421,9 @@ es:
           end_date: 'Hasta'
           payment_date: 'Fecha del pago'
         employee:
+          id: Cédula
+          name: Nombre
+          surname: Apellido
           employee_id: Jefe Inmediato
           entity_id: Entidad
           join_date: Ingreso
