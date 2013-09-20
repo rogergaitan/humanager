@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130917210030) do
+ActiveRecord::Schema.define(:version => 20130920000416) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -110,11 +110,11 @@ ActiveRecord::Schema.define(:version => 20130917210030) do
   create_table "deduction_payments", :force => true do |t|
     t.integer  "deduction_employee_id"
     t.date     "payment_date"
-    t.integer  "previous_balance"
-    t.integer  "payment"
-    t.integer  "current_balance"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.decimal  "previous_balance",      :precision => 18, :scale => 2
+    t.decimal  "payment",               :precision => 18, :scale => 2
+    t.decimal  "current_balance",       :precision => 18, :scale => 2
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
     t.integer  "payroll_id"
   end
 

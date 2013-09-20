@@ -29,8 +29,12 @@ class Payroll < ActiveRecord::Base
 
     list_employees_salary = get_salary_empoyees(payroll_id)
     list_employees_deductions = get_deductions_employees(list_employees_salary)
+    puts 'list_employees_deductions'
+    puts list_employees_deductions
     list_employees_work_benefits = get_work_benefits(list_employees_salary)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
+    puts 'detail_report'
+    puts detail_report
 
     result = {}
 
@@ -408,7 +412,7 @@ class Payroll < ActiveRecord::Base
         od.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
         od.inumoper = num_oper
         od.ilinea = count
-        od.icuenta = dp.deduction_employee.deduction_id
+        od.icuenta = dp.deduction_employee.deduction.ledger_account.iccount
         od.init = dp.deduction_employee.employee.entity.entityid
         od.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
 
@@ -459,7 +463,7 @@ class Payroll < ActiveRecord::Base
         od_debit.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
         od_debit.inumoper = num_oper
         od_debit.ilinea = count
-        od_debit.icuenta = wb.employee_benefit.work_benefit.debit_account
+        od_debit.icuenta =  LedgerAccount.find(wb.employee_benefit.work_benefit.debit_account).iaccount
         od_debit.init = wb.employee_benefit.employee.entity.entityid
         od_debit.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
         od_debit.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
@@ -472,7 +476,7 @@ class Payroll < ActiveRecord::Base
         od_credit.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
         od_credit.inumoper = num_oper
         od_credit.ilinea = (count + 1)
-        od_credit.icuenta = wb.employee_benefit.work_benefit.credit_account
+        od_credit.icuenta = LedgerAccount.find(wb.employee_benefit.work_benefit.credit_account).iaccount
 
         if wb.employee_benefit.work_benefit.is_beneficiary
           od_credit.init = wb.employee_benefit.employee.entity.entityid
@@ -514,7 +518,7 @@ class Payroll < ActiveRecord::Base
       oprm.fsemana = payroll['end_date'].cweek
       oprm.tdetalle = "Costos de MDO de la planilla " + payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " al " + payroll['end_date'].to_s
       oprm.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
-      oprm.iusuarioult = username #CONSTANTS[:FIREBIRD][0]['IUSUARIOULT']
+      oprm.iusuarioult = username
       oprm.iprocess = CONSTANTS[:FIREBIRD][0]['IPROCESS']
       oprm.iestado = CONSTANTS[:FIREBIRD][0]['IESTADO']
       oprm.banulada = CONSTANTS[:FIREBIRD][0]['BANULADA']
@@ -573,7 +577,7 @@ class Payroll < ActiveRecord::Base
         od.itdcontrato = a['payment_type']
         od.icclunes = a['centro_de_costo_id']
         od.iactividadlunes = CONSTANTS[:FIREBIRD][0]['IACTIVIDADLUNES']
-        od.ilaborlunes = a['task_id']
+        od.ilaborlunes = a['itask']
         od.qjorslunes = a['time_worked']
         od.qcantlunes = CONSTANTS[:FIREBIRD][0]['QCANTLUNES']
         od.bcantdesclunes = CONSTANTS[:FIREBIRD][0]['BCANTDESCLUNES']

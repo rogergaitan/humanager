@@ -1,17 +1,18 @@
 $(document).ready(function() {
 
-  $('#new_deduction').submit(function( event ) {
+  $('#member_submit').click(function( event ) {
     if( $('#list-payroll-types-to-save input').length == 0 ) {
       event.preventDefault();
       if( $('#requerido').length==0 ) {
         $( "#load_filter_payroll_types_text" ).after( '<label id="requerido" for="load_filter_payroll_types_text" generated="true" class="error">Requerido</label>' );
+      } else {
+        $('#requerido').css('display','block');
       }
     } else {
       if( $('#requerido').length != 0 ) {
         $('#requerido').remove()
       }
     }
-
   });
 
   // Llena el filtro para los empleados
@@ -100,7 +101,9 @@ function is_beneficiary(value) {
   if( value ) {
     $('#beneficiary_id').attr('disabled', 'disabled');
     $('#deduction_beneficiary_id').val('');
+    $('#deduction_beneficiary_id').attr('readonly', true);
   } else {
+    $('#deduction_beneficiary_id').attr('readonly', false);
     $('#beneficiary_id').removeAttr('disabled', 'disabled');
   }
 }

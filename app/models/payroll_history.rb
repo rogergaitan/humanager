@@ -33,10 +33,10 @@ class PayrollHistory < ActiveRecord::Base
 		            	payment_type_id = 3
           		end # end case
 
-				object['task_id'] = ph.task_id
+				object['itask'] = ph.task.itask
 				object['centro_de_costo_id'] = ph.centro_de_costo_id
 				object['payment_type'] = payment_type_id
-				object2['task_id'] = ph.task_id
+				object2['itask'] = ph.task.itask
 				object2['centro_de_costo_id'] = ph.centro_de_costo_id
 				object2['payment_type'] = payment_type_id
 

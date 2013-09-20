@@ -15,8 +15,7 @@
     <%= f.text_field :description, :class => 'text_field' %>
   </div>
 </div>
-<!--<br></br>
-<hr></hr>-->
+
 <div class="control-group">
   <p>Aplica a:</p>
     <%= f.label :Empleados, :class => 'control-label' %>
@@ -83,20 +82,20 @@
 <!-- P A Y R O L L    T Y P E S -->
 
 <div class="control-group">
-    <%= f.label :payroll_types, :class => 'control-label' %>
-    <div class="controls align-radio">
-      <div class="options-left">
-        <%= text_field_tag 'load_filter_payroll_types_text', nil, :class => 'text_field required search-image-employee' %> 
-      </div>
-
-      <div class="options-right">
-        <%= check_box_tag 'check-payroll-types-right', '1', true, class: 'align-checkbox' %>
-        <%= label_tag 'check-payroll-types-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-      </div>
-
-      <div style="clear:both"></div>
+  <%= f.label :payroll_types, :class => 'control-label' %>
+  <div class="controls align-radio">
+    <div class="options-left">
+      <%= text_field_tag 'load_filter_payroll_types_text', nil, :class => 'text_field search-image-employee' %>
     </div>
+
+    <div class="options-right">
+      <%= check_box_tag 'check-payroll-types-right', '1', true, class: 'align-checkbox' %>
+      <%= label_tag 'check-payroll-types-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+    </div>
+
+    <div style="clear:both"></div>
   </div>
+</div>
   
   <div class="controls" id="marcar-desmarcar-payroll-types">
     <%= check_box_tag 'check-payroll-types', '1', false, class: 'align-checkbox' %>
