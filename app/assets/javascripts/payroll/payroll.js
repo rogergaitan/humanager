@@ -35,6 +35,12 @@ $(document).ready(function() {
       payroll.send_to_firebird(payroll_id);
     }
   });
+  //kalfaro
+  $('#payrollModal').click(function() {
+    if ($('#id_sent_to_firebird').val()==1){
+      location.reload();
+    }
+  });
 
 });
 
@@ -110,11 +116,11 @@ payroll.add_inactivas = function (payroll, target_table) {
   var num_oper = '';
   var checked = '';
   if (payroll.num_oper != null ) {
-    num_oper = payroll.num_oper;
+    num_oper = payroll.num_oper + ', ' + payroll.num_oper_2;
     checked = 'disabled="disabled"';
   } else { 
     num_oper = '<a href="#" id="send_firebird_'+payroll.id+'" class="btn btn-mini btn-danger"'+
-    ' data-method="delete" rel="nofollow">Enviar a FIREBIRD</a>'+
+    ' data-method="delete" rel="nofollow">Enviar a AgroWin</a>'+
     '<input type="hidden" value="'+payroll.id+'">';
   }
 
@@ -197,12 +203,16 @@ payroll.send_to_firebird = function(payroll_id) {
     success: function(data) {
       if(data['status']) {
         $('#table_results_close_payroll').hide();
-        $('#results_close_payroll').html('La Planilla fue cerrada con exito');
+        var input = '<input type="hidden" id="id_sent_to_firebird" value="1" >';
+        $('#results_close_payroll').html('Informacion enviada con exito' + input);
         $('#myModalLabel').html('Mensaje');
         $("#payrollModal").modal('show');
-      } else {
-        payroll.show_details_erros(data['data']);
       }
+    },
+    error: function(data) {
+      $('#results_close_payroll').html('Ocurrio un error durante el proceso');
+      $('#myModalLabel').html('Mensaje');
+      $("#payrollModal").modal('show');
     }
   });
 }

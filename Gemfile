@@ -19,6 +19,7 @@ gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'prawn', :git => 'git://github.com/sandal/prawn.git'
 #gem 'rubyfb'
+gem 'cancan'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -95,8 +95,8 @@ class CentroDeCostosController < ApplicationController
     @empmaest.each do |centrocostos|
       if CentroDeCosto.where("icentro_costo = ?", centrocostos.icc).empty?
         @new_cc = CentroDeCosto.create(:iempresa => centrocostos.iemp, :icentro_costo => 
-                                firebird_encoding(centrocostos.icc), :nombre_cc => firebird_encoding(centrocostos.ncc), 
-                                :icc_padre => firebird_encoding(centrocostos.iccpadre))
+                                firebird_encoding(centrocostos.icc.to_s), :nombre_cc => firebird_encoding(centrocostos.ncc.to_s), 
+                                :icc_padre => firebird_encoding(centrocostos.iccpadre.to_s))
         if @new_cc.save
           @centro_costos << @new_cc
           @c += 1
@@ -123,6 +123,6 @@ class CentroDeCostosController < ApplicationController
   end
 
   def get_parent_info
-    @cc_child ||= CentroDeCosto.find(:all, :select =>['icentro_costo','icc_padre', 'nombre_cc'])
+    @cc_child ||= CentroDeCosto.find(:all, :select =>['icentro_costo','icc_padre', 'nombre_cc', 'iaccount'])
    end
 end

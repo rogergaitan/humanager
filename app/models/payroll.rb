@@ -1,6 +1,6 @@
 class Payroll < ActiveRecord::Base
 
-  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper
+  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper, :num_oper_2
   belongs_to :payroll_type
   belongs_to :deduction_payment
   has_many :deduction_payrolls, :dependent => :destroy
@@ -285,13 +285,9 @@ class Payroll < ActiveRecord::Base
   def self.send_to_firebird(payroll_id, username)
 
     puts '############### E M P E Z A M O S ###############'
+    result = true
     num_oper = get_number_operation
     num_oper_2 = get_number_operation
-
-    puts 'num_oper_1'
-    puts num_oper
-    puts 'num_oper_2'
-    puts num_oper_2
 
     payroll = Payroll.find(payroll_id)
     num_count = DeductionPayment.where('payroll_id = ?', payroll.id).count
@@ -318,12 +314,16 @@ class Payroll < ActiveRecord::Base
     # Save into OPRPLA5_DETALLE (Process number 2)
     r7 = save_in_oprpla5_detalle(num_oper_2, payroll)
 
+    # Save into the payroll table the num_oper and num_oper_2
     if r1 and r2 and r3 and r4 and r5 and r6 and r7
-      puts 'todo BIEN guardado'
-      # INSERTAR DENTRO DEL PAYROLL EL NUM_OPER Y REFRESCAR LA PAGINA
+      payroll.num_oper = num_oper
+      payroll.num_oper_2 = num_oper_2
+      payroll.save
+      result = true
     else 
-      puts 'todo MAL guardado'
+      result = false
     end
+    result
   end
 
   # Get the number operation to save information into the database Firebird

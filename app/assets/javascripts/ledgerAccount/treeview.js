@@ -17,7 +17,7 @@ var treeviewhr = new function() {
 					$('#list li#' + this[2] + ' p:first span:first').removeClass('linkclass');
 					$('#list li#' + this[2] + ' p:first span.tree-actions a.icon-trash').remove();
 					$('#list li#' + this[2]).append("<ul style='display:none'><li id='" + this[0] + "' data-parent='" + this[2] + "' data-id='"+ this[3] +"'><p class='tree-hover'><span class='linkclass'><i class='icon-minus'></i><span>" + 
-																						this[1] + "</span></span> <span class='tree-actions'><a title='Eliminar' href='/ledger_accounts/" + this[3] + 
+																						this[4] + ' - ' + this[1] + "</span></span> <span class='tree-actions'><a title='Eliminar' href='/ledger_accounts/" + this[3] + 
 																						"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/ledger_accounts/" + 
 																						this[3] + "/edit' rel='tooltip' class='btn-mini icon-pencil'></a></span></p></li></ul>");
 				}

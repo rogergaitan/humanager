@@ -1,7 +1,7 @@
 <script type="text/javascript">
   var cuenta_contable = [];
   <%  @ledger_accounts.each do |cc| %>
-    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>, <%= cc.iaccount %>));
   <% end %>
 </script>
 <%- model_class = LedgerAccount -%>

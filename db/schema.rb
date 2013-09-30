@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130920000416) do
+ActiveRecord::Schema.define(:version => 20130923213552) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -419,6 +419,7 @@ ActiveRecord::Schema.define(:version => 20130920000416) do
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
     t.string   "num_oper"
+    t.string   "num_oper_2"
   end
 
   add_index "payrolls", ["payroll_type_id"], :name => "index_payrolls_on_payroll_type_id"

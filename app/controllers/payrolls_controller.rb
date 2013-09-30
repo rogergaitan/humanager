@@ -128,21 +128,25 @@ class PayrollsController < ApplicationController
 
     @result = Payroll.close_payroll(payroll_id)
 
-    # Json
     respond_to do |format|
       format.json { render json: @result }
     end
     
-    # render :index
   end
 
   def send_to_firebird
 
     payroll_id = params[:payroll_id]
 
-    Payroll.send_to_firebird(payroll_id, current_user.username)
+    result = Payroll.send_to_firebird(payroll_id, current_user.username)
 
-    render :index
+    respond_to do |format|
+      if result
+        format.json { render json: { 'status' => true }, status: :created }
+      else
+        format.json { render json: { 'status' => false }, status: :unprocessable_entity }
+      end
+    end
   end
 
 end
