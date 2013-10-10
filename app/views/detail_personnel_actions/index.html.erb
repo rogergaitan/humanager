@@ -22,19 +22,26 @@
         <td><%= detail_personnel_action.value %></td>
         <td><%=l detail_personnel_action.created_at %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_detail_personnel_action_path(detail_personnel_action), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      detail_personnel_action_path(detail_personnel_action),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+          <% if can? :update, DetailPersonnelAction %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_detail_personnel_action_path(detail_personnel_action), :class => 'btn btn-mini' %>
+          <% end %>
+
+          <% if can? :destroy, DetailPersonnelAction %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        detail_personnel_action_path(detail_personnel_action),
+                        :method => :delete,
+                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                        :class => 'btn btn-mini btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_detail_personnel_action_path,
-            :class => 'btn btn-primary' %>
+<% if can? :create, DetailPersonnelAction %>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_detail_personnel_action_path,
+              :class => 'btn btn-primary' %>
+<% end %>

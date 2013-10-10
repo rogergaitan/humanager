@@ -16,24 +16,77 @@
         <div id="configuration" class="accordion-body dropdown collapse">
             <div class="accordion-inner">
                 <ul class="nav nav-list">
-                    <li><a href=<%= provinces_path%>> Provincias</a></li>
-                    <li><a href=<%= cantons_path%>> Cantones</a></li>
-                    <li><a href=<%= districts_path%>> Distritos</a></li>
-                    <li><a href=<%= employees_path%>> Empleados</a></li>
-                    <li><a href=<%= departments_path%>> Departamentos</a></li>
-                    <li><a href=<%= positions_path%>> Puestos</a></li>
-                    <li><a href=<%= tasks_path%>> Labores</a></li> 
-                    <li><a href=<%= deductions_path%>> Deducciones</a></li>
-                    <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
-                    <li><a href=<%= centro_de_costos_path%>> Centro de Costos</a></li>
-                    <li><a href=<%= ledger_accounts_path%>> Cuentas Contables</a></li>
-                    <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
-                    <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
-                    <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
-                    <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
-                    <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
-                    <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
-                    <li><a href=<%= users_path%>> Usuarios</a></li>
+                    <% if can? :read, Province %>
+                        <li><a href=<%= provinces_path%>> Provincias</a></li>
+                    <% end %>
+
+                    <% if can? :read, Canton %>
+                        <li><a href=<%= cantons_path%>>Cantones</a></li>
+                    <% end %>
+
+                    <% if can? :read, District %>
+                        <li><a href=<%= districts_path%>> Distritos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Employee %>
+                        <li><a href=<%= employees_path%>> Empleados</a></li>
+                    <% end %>
+
+                    <% if can? :read, Department %>
+                        <li><a href=<%= departments_path%>> Departamentos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Position %>
+                        <li><a href=<%= positions_path%>> Puestos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Task %>
+                        <li><a href=<%= tasks_path%>> Labores</a></li> 
+                    <% end %>
+
+                    <% if can? :read, Deduction %>
+                        <li><a href=<%= deductions_path%>> Deducciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, WorkBenefit %>
+                        <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, CentroDeCosto %>
+                        <li><a href=<%= centro_de_costos_path%>> Centro de Costos</a></li>
+                    <% end %>
+
+                    <% if can? :read, LedgerAccount %>
+                        <li><a href=<%= ledger_accounts_path%>> Cuentas Contables</a></li>
+                    <% end %>
+
+                    <% if can? :read, OtherSalary %>
+                        <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
+                    <% end %>
+
+                    <% if can? :read, Occupation %>
+                        <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, MeansOfPayment %>
+                        <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
+                    <% end %>
+
+                    <% if can? :read, PaymentFrequency %>
+                        <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
+                    <% end %>
+
+                    <% if can? :read, TypeOfPersonnelAction %>
+                        <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
+                    <% end %>
+
+                    <% if can? :read, PayrollType %>
+                        <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
+                    <% end %>
+
+                    <% if can? :read, User %>
+                        <li><a href=<%= users_path%>> Usuarios</a></li>
+                    <% end %>
                 </ul>
             </div>
         </div>
@@ -47,8 +100,12 @@
         <div id="process" class="accordion-body dropdown collapse">
             <div class="accordion-inner">
                 <ul class="nav nav-list">
-                    <li><a href=<%= payrolls_path%>>Planillas</a></li>
-                    <li><a href=<%= detail_personnel_actions_path%>>Acciones de Personal</a></li>
+                    <% if can? :read, Payroll %>
+                        <li><a href=<%= payrolls_path%>>Planillas</a></li>
+                    <% end %>
+                    <% if can? :read, DetailPersonnelAction %>
+                        <li><a href=<%= detail_personnel_actions_path%>>Acciones de Personal</a></li>
+                    <% end %>
                 </ul>
             </div>
         </div>

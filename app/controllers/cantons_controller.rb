@@ -1,4 +1,5 @@
 class CantonsController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   before_filter :get_canton, :only => [:edit, :update, :destroy]
 

@@ -157,17 +157,15 @@ permissions.sendInformation = function() {
 			permissions_user: permissions.permissions_user,
 			user_id: user_id
 		},
+		xhrFields: {
+	      withCredentials: true
+	    },
 		success: function(data) {
 			console.log(data);
+		}, 
+		error: function(data) {
+			console.log(data);
 		}
-		// statusCode: {
-  //       500: function() {
-  //       	window.location.replace(urlRedirect);
-  //       },
-  //       201: function(response) {
-  //       	window.location.replace(urlRedirect);
-  //       }
-  //     }
 	});
 	$(location).attr('href',urlRedirect);
 }

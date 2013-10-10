@@ -1,4 +1,5 @@
 class MeansOfPaymentsController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
 
   # GET /means_of_payments

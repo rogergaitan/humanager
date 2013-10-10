@@ -21,19 +21,26 @@
         <td><%= work_benefit.debit.naccount if work_benefit.debit %></td>
         <td><%= work_benefit.credit.naccount if work_benefit.debit %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_work_benefit_path(work_benefit), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      work_benefit_path(work_benefit),
-                      :method => :delete,
-											:data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-mini btn-danger' %>
+          <% if can? :update, WorkBenefit %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_work_benefit_path(work_benefit), :class => 'btn btn-mini' %>
+          <% end %>
+
+          <% if can? :destroy, WorkBenefit %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        work_benefit_path(work_benefit),
+                        :method => :delete,
+  											:data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                        :class => 'btn btn-mini btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_work_benefit_path,
-            :class => 'btn btn-primary' %>
+<% if can? :create, WorkBenefit %>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_work_benefit_path,
+              :class => 'btn btn-primary' %>
+<% end %>

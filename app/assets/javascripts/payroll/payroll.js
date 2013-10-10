@@ -35,7 +35,7 @@ $(document).ready(function() {
       payroll.send_to_firebird(payroll_id);
     }
   });
-  //kalfaro
+  
   $('#payrollModal').click(function() {
     if ($('#id_sent_to_firebird').val()==1){
       location.reload();
@@ -76,26 +76,37 @@ payroll.index = function() {
 // Load the active payroll in a table
 payroll.add_activas = function (payrolld, target_table, count, totalCount) {
   payroll.total += parseFloat(payrolld.payroll_log.payroll_total);
+
+  var payroll_destroy = $('#payroll_destroy').val();
+  var payroll_update = $('#payroll_update').val();
+
   var url = $('#tab1').data('url');
   var url_payrolls = $('#payrolls_path').val();
   var row2 = '';
-  var row = $(target_table + '> tbody:last').append(
-    '<tr>' + 
-      '<td><a href="/payrolls/' + payroll.id + '">' + payrolld.payroll_type.description + '</a></td>' +
+
+  var data = '<tr>' + 
+      '<td><a href="/payrolls/' + payrolld.id + '">' + payrolld.payroll_type.description + '</a></td>' +
       '<td>' + payrolld.start_date + '</td>' +
       '<td>' + payrolld.end_date + '</td>' +
       '<td>' + payrolld.payment_date + '</td>' +
       '<td>' + payrolld.payroll_log.payroll_total + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payrolld.id + '" value="' + payrolld.id + '" />' +
-      '</td>' +
-      '<td><a href="'+ url +'/' + payrolld.payroll_log.id + '/edit" class="btn btn-mini btn-success">' +
-			'Digitar</a> ' + 
-			'<a href="'+ url +'/' + payrolld.id +'/edit" class="btn btn-mini" ' +
-      'data-method="get" rel="nofollow">Editar</a> ' +
-     '<a href="'+ url_payrolls +'/' + payrolld.id + '" class="btn btn-mini btn-danger" ' +
-      'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
-    '</tr>');
+      '</td><td>';
+
+  if( payroll_update == 1 ) {
+    data = data + '<a href="'+ url +'/' + payrolld.payroll_log.id + '/edit" class="btn btn-mini btn-success">Digitar</a> ' + 
+      '<a href="'+ url +'/' + payrolld.id +'/edit" class="btn btn-mini" data-method="get" rel="nofollow">Editar</a>';
+  }
+
+  if( payroll_destroy == 1 ) {
+    data = data + '<a href="'+ url_payrolls +'/' + payrolld.id + '" class="btn btn-mini btn-danger" ' +
+     'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a>';
+  }
+
+
+  data = data + '</td></tr>';
+  var row = $(target_table + '> tbody:last').append(data);
 
   if(count == totalCount) {
     row2 = $(target_table + '> tbody:last').append(
@@ -115,13 +126,17 @@ payroll.add_inactivas = function (payroll, target_table) {
 
   var num_oper = '';
   var checked = '';
+  var send_to_firebird = $('#send_to_firebird').val();
+
   if (payroll.num_oper != null ) {
     num_oper = payroll.num_oper + ', ' + payroll.num_oper_2;
     checked = 'disabled="disabled"';
-  } else { 
-    num_oper = '<a href="#" id="send_firebird_'+payroll.id+'" class="btn btn-mini btn-danger"'+
-    ' data-method="delete" rel="nofollow">Enviar a AgroWin</a>'+
-    '<input type="hidden" value="'+payroll.id+'">';
+  } else {
+    if( send_to_firebird == 1 ) {
+      num_oper = '<a href="#" id="send_firebird_'+payroll.id+'" class="btn btn-mini btn-danger"'+
+      ' data-method="delete" rel="nofollow">Enviar a AgroWin</a>'+
+      '<input type="hidden" value="'+payroll.id+'">';
+    }
   }
 
   var row = $(target_table + '> tbody:last').append('<tr>' + 

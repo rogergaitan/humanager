@@ -21,11 +21,17 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               deductions_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_deduction_path(@deduction), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              deduction_path(@deduction),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+  
+  <% if can? :update, Deduction %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_deduction_path(@deduction), :class => 'btn' %>
+  <% end %>
+  
+  <% if can? :destroy, Deduction %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                deduction_path(@deduction),
+                :method => 'delete',
+                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                :class => 'btn btn-danger' %>
+  <% end %>
 </div>

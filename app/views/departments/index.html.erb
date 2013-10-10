@@ -17,19 +17,26 @@
         <td><%= link_to department.name, department_path(department) %></td>
         <td><%= department.employee.full_name if department.employee %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_department_path(department), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      department_path(department),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+          <% if can? :update, Department %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_department_path(department), :class => 'btn btn-mini' %>
+          <% end %>
+
+          <% if can? :destroy, Department %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        department_path(department),
+                        :method => :delete,
+                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                        :class => 'btn btn-mini btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_department_path,
-            :class => 'btn btn-primary' %>
+<% if can? :create, Department %>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_department_path,
+              :class => 'btn btn-primary' %>
+<% end %>

@@ -1,4 +1,5 @@
 class PayrollTypesController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   # GET /payroll_types
   # GET /payroll_types.json

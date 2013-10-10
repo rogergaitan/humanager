@@ -1,4 +1,5 @@
 class PaymentFrequenciesController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   # GET /payment_frequencies
   # GET /payment_frequencies.json

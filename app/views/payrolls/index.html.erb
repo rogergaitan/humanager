@@ -19,9 +19,6 @@
           <table class="table table-bordered" id="activas" data-url="<%= get_inactivas_payrolls_path %>">
             <thead>
               <tr>
-                <!--<div class="pull-right"> 
-                  <input type="checkbox"  id="chkTodos"  /> Seleccionar Todos 
-                </div>-->
                 <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
                 <th><%= model_class.human_attribute_name(:start_date) %></th>
                 <th><%= model_class.human_attribute_name(:end_date) %></th>
@@ -37,10 +34,14 @@
         </table>
         <hr>
         <div id="payroll_total"></div>
-         <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_payroll_path,
-            :class => 'btn btn-primary' %>
-          <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
+          <% if can? :create, Payroll %>
+            <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_payroll_path,
+              :class => 'btn btn-primary' %>
+          <% end %>
+          <% if can? :close_payroll, Payroll %>
+            <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
+          <% end %>
           <input type="hidden" id="close_payroll_payrolls_path" value="<%= close_payroll_payrolls_path %>">
         </div>
 
@@ -61,9 +62,10 @@
 
           </tbody>
         </table>
-        <button id="seleccion" class="btn"> Reabrir Seleccionadas</button>
+        <% if can? :close_payroll, Payroll %>
+          <button id="seleccion" class="btn"> Reabrir Seleccionadas</button>
+        <% end %>
         </div>
-
       </div>
 </div>
 <%= javascript_include_tag 'payroll/bootstrap-modal' %>
@@ -90,3 +92,21 @@
     <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
   </div>
 </div>
+
+<% if can? :destroy, Payroll %>
+  <input type="hidden" id="payroll_destroy" value="1">
+<% else %>
+  <input type="hidden" id="payroll_destroy" value="0">
+<% end %>
+
+<% if can? :update, Payroll %>
+  <input type="hidden" id="payroll_update" value="1">
+<% else %>
+  <input type="hidden" id="payroll_update" value="0">
+<% end %>
+
+<% if can? :send_to_firebird, Payroll %>
+  <input type="hidden" id="send_to_firebird" value="1">
+<% else %>
+  <input type="hidden" id="send_to_firebird" value="0">
+<% end %>

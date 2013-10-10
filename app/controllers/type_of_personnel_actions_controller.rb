@@ -1,4 +1,5 @@
 class TypeOfPersonnelActionsController < ApplicationController
+  load_and_authorize_resource
   before_filter :load_fields, :only => [:new, :edit]
   respond_to :html, :json
   # GET /type_of_personnel_actions

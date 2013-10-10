@@ -1,5 +1,4 @@
 class ReportsController < ApplicationController
-
   before_filter :resources, :only => [:index, :general_payroll, :payment_type_report]
 	respond_to :html, :json, :js
 

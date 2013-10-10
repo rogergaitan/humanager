@@ -1,4 +1,5 @@
 class DetailPersonnelActionsController < ApplicationController
+  load_and_authorize_resource
   # GET /detail_personnel_actions
   # GET /detail_personnel_actions.json
   def index

@@ -31,10 +31,12 @@
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_user_path(user), :class => 'btn btn-mini' %>
-          <%= link_to t('.permissions', :default => t("helpers.links.permissions")),
-                      permissions_user_path(user), :class => 'btn btn-mini' %>
+          <% if can? :update, User %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_user_path(user), :class => 'btn btn-mini' %>
+            <%= link_to t('.permissions', :default => t("helpers.links.permissions")),
+                        permissions_user_path(user), :class => 'btn btn-mini' %>
+          <% end %>
         </td>
       </tr>
     <% end %>

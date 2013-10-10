@@ -1,7 +1,9 @@
 class EmployeesController < ApplicationController
+  load_and_authorize_resource
   before_filter :get_address_info, :only => [:new, :edit]
   before_filter :get_employee_info, :only => [:new, :edit]
   respond_to :json, :html, :js
+  
   # GET /employees
   # GET /employees.json
   def index
@@ -47,22 +49,6 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
   end
 
-  # POST /employees
-  # POST /employees.json
-  def create
-    @employee = Employee.new(params[:employee])
-
-    respond_to do |format|
-      if @employee.save
-        format.html { redirect_to @employee, notice: 'Employee was successfully created.' }
-        format.json { render json: @employee, status: :created, location: @employee }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @employee.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # PUT /employees/1
   # PUT /employees/1.json
   def update
@@ -75,18 +61,6 @@ class EmployeesController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @employee.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /employees/1
-  # DELETE /employees/1.json
-  def destroy
-    @employee = Employee.find(params[:id])
-    @employee.destroy
-
-    respond_to do |format|
-      format.html { redirect_to employees_url }
-      format.json { head :no_content }
     end
   end
 

@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	var centro_costos = [];
   <% @centro_de_costos.each do |cc| %>
-		centro_costos.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
+		centro_costos.push(new Array('<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>', '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
   <% end %>
 </script>
 <%- model_class = CentroDeCosto -%>

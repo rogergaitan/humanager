@@ -1,4 +1,5 @@
 class PayrollsController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json, :js
   before_filter :get_payroll_types, :only => [:new, :edit]
   skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird]
@@ -131,7 +132,6 @@ class PayrollsController < ApplicationController
     respond_to do |format|
       format.json { render json: @result }
     end
-    
   end
 
   def send_to_firebird

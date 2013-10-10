@@ -1,4 +1,5 @@
 class DepartmentsController < ApplicationController
+  load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit]
   respond_to :html, :json
   # GET /departments

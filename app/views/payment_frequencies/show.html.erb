@@ -13,11 +13,16 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               payment_frequencies_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_payment_frequency_path(@payment_frequency), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              payment_frequency_path(@payment_frequency),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+  <% if can? :update, PaymentFrequency %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_payment_frequency_path(@payment_frequency), :class => 'btn' %>
+  <% end %>
+
+  <% if can? :destroy, PaymentFrequency %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                payment_frequency_path(@payment_frequency),
+                :method => 'delete',
+                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                :class => 'btn btn-danger' %>
+  <% end %>
 </div>

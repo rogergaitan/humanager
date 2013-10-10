@@ -1,4 +1,5 @@
 class CentroDeCostosController < ApplicationController
+  load_and_authorize_resource
   before_filter :get_parent_info, :only => [:new, :edit]
   # GET /centro_de_costos
   # GET /centro_de_costos.json
@@ -19,69 +20,6 @@ class CentroDeCostosController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @centro_de_costo }
-    end
-  end
-
-  # GET /centro_de_costos/new
-  # GET /centro_de_costos/new.json
-  def new
-    @centro_de_costo = CentroDeCosto.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @centro_de_costo }
-    end
-  end
-
-  # GET /centro_de_costos/1/edit
-  def edit
-    @centro_de_costo = CentroDeCosto.find(params[:id])
-  end
-
-  # POST /centro_de_costos
-  # POST /centro_de_costos.json
-  def create
-    @centro_de_costo = CentroDeCosto.new(params[:centro_de_costo])
-
-    respond_to do |format|
-      if @centro_de_costo.save
-        format.html { redirect_to @centro_de_costo, notice: 'Centro de costo was successfully created.' }
-        format.json { render json: @centro_de_costo, status: :created, location: @centro_de_costo }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @centro_de_costo.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /centro_de_costos/1
-  # PUT /centro_de_costos/1.json
-  def update
-    @centro_de_costo = CentroDeCosto.find(params[:id])
-
-    respond_to do |format|
-      if @centro_de_costo.update_attributes(params[:centro_de_costo])
-        format.html { redirect_to @centro_de_costo, notice: 'Centro de costo was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @centro_de_costo.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /centro_de_costos/1
-  # DELETE /centro_de_costos/1.json
-  def destroy
-    @centro_de_costo = CentroDeCosto.find(params[:id])
-    @centro_de_costo.destroy
-    unless @centro_de_costo.errors.empty?
-      notice = "El elemento que esta intentando eliminar tiene hijos asociados"
-    end
-
-    respond_to do |format|
-      format.html { redirect_to centro_de_costos_url, notice: notice }
-      format.json { head :no_content }
     end
   end
 

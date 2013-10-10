@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
+  before_filter :authenticate_user!, :except => [:permissions]
+  load_and_authorize_resource
   respond_to :html, :json, :js
-  skip_before_filter :verify_authenticity_token, :only => [:update]
+  skip_before_filter :verify_authenticity_token, :only => [:update, :save_permissions]
 
   # GET /users
   # GET /users.json
@@ -25,23 +27,6 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  # POST /users
-  # POST /users.json
-  # def create
-  #   @user = User.new(params[:user])
-
-  #   respond_to do |format|
-  #     if @user.save
-  #       flash[:notice] = 'User was successfully created.'
-  #       format.html { redirect_to action: "index" }
-  #       format.json { render json: @user, status: :created, location: @user }
-  #     else
-  #       format.html { render action: "new" }
-  #       format.json { render json: @user.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-
   # PUT /users.1
   # PUT /users.1.json
   def update
@@ -57,19 +42,6 @@ class UsersController < ApplicationController
         format.html { render action: "index" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /users/1
-  # DELETE /users/1.json
-  def destroy
-    @user = User.find(params[:id])
-    @user.destroy
-
-    respond_to do |format|
-      flash[:notice] = 'User was successfully deleted.'
-      format.html { redirect_to users_url }
-      format.json { head :no_content }
     end
   end
 
@@ -128,7 +100,9 @@ class UsersController < ApplicationController
     return value
   end
 
+  # PUT /PERMISSIONS /permissions/1
   def permissions
+    # authorize! :permissions_users, params[:id]
     @user = User.find(params[:id])
     @permissionsCategory = PermissionsCategory.all
     @permissionsUser = PermissionsUser.where('user_id = ?', @user.id)
@@ -144,13 +118,10 @@ class UsersController < ApplicationController
     data = params['permissions_user']
     user_id = params['user_id']
 
-    msg = { :status => "ok", :message => "Success!", :notice => 'Actualizado exitosamente' }
-
     respond_to do |format|
 
       if User.save_permissions_user(data, user_id)
-        format.json  { render :json => msg }
-        # format.json {  redirect_to users_path, status: 201, notice: 'Actualizado exitosamente' }
+        format.json { redirect_to users_path, :status => 200, :message => "Success!", :notice => 'Actualizado exitosamente' }
       else
         format.json {  redirect_to users_path, status: 500, notice: 'Ocurrio un error Actualizado', head: ok, url: users_path }
       end
@@ -165,7 +136,7 @@ class UsersController < ApplicationController
   end
 
   def test
-    puts 'TEST UPDATE :D'
+    puts 'TEST UPDATE'
   end
 
 end

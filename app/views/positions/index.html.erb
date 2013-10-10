@@ -16,19 +16,25 @@
         <td><%= link_to position.position, position_path(position) %></td>
         <td><%= position.description %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_position_path(position), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      position_path(position),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+          <% if can? :update, Position %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_position_path(position), :class => 'btn btn-mini' %>
+          <% end %>
+          
+          <% if can? :destroy, Position %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        position_path(position),
+                        :method => :delete,
+                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                        :class => 'btn btn-mini btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_position_path,
-            :class => 'btn btn-primary' %>
+<% if can? :create, Position %>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_position_path,
+              :class => 'btn btn-primary' %>
+<% end %>

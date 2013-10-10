@@ -5,6 +5,12 @@
 <div id="message" style="height:40px;"></div>
 <input type="hidden" id="show_reports_path" value="<%= reports_path %>">
 <input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS][0]['GENERAL_PAYROLL'] %>">
-<button id="btn_create_pdf">Crear archivo PDF</button> | 
-<button id="btn_create_excel">Exportar a XML</button>
+
+<% if can? :general_proof_payments_pdf, User %>
+	<button id="btn_create_pdf">Crear archivo PDF</button> | 
+<% end %>
+
+<% if can? :general_proof_payments_xls, User %>
+	<button id="btn_create_excel">Exportar a XML</button>
+<% end %>
 <p></p>

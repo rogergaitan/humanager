@@ -46,6 +46,7 @@ es:
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
       permissions: Administración de Permisos | %{model}
+      proof_payment_salary: Comprobante de Pago de Salario
   notice:
     successfully_created:  ' creado exitosamente'
     successfully_updated:  ' actualizado exitosamente'
@@ -61,6 +62,7 @@ es:
       messages: Mensajes
       home: Inicio
       other: Otros
+      messages_general: Mensaje General
   activerecord:
       errors:
         models:

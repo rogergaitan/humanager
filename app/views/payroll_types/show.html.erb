@@ -13,11 +13,16 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               payroll_types_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_payroll_type_path(@payroll_type), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              payroll_type_path(@payroll_type),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+  <% if can? :update, PayrollType %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_payroll_type_path(@payroll_type), :class => 'btn' %>
+  <% end %>
+
+  <% if can? :destroy, PayrollType %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                payroll_type_path(@payroll_type),
+                :method => 'delete',
+                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                :class => 'btn btn-danger' %>
+  <% end %>
 </div>

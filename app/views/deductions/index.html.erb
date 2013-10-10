@@ -26,19 +26,26 @@
         <td><%= deduction.calculation %></td>
         <td><%= deduction.ledger_account.naccount if deduction.ledger_account %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_deduction_path(deduction), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      deduction_path(deduction),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+          <% if can? :update, Deduction %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_deduction_path(deduction), :class => 'btn btn-mini' %>
+          <% end %>
+
+          <% if can? :destroy, Deduction %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        deduction_path(deduction),
+                        :method => :delete,
+                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                        :class => 'btn btn-mini btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_deduction_path,
-            :class => 'btn btn-primary' %>
+<% if can? :create, Deduction %>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_deduction_path,
+              :class => 'btn btn-primary' %>
+<% end %>

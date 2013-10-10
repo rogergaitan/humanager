@@ -1,15 +1,20 @@
-<h1>Comprobante Pago Trabajadores</h1>
+<h1><%=t '.title', :default => t('helpers.titles.proof_payment_salary') %></h1>
+
 <%= render "search" %>
 <%= javascript_include_tag 'reports/payment_proof' %>
 
-<h2>Mensaje General</h2>
+<h2><%=t '.title', :default => t('content.titles.messages_general') %></h2>
 
 <textarea name="messages_to_employees" id="messages_to_employees" cols="55" rows="5" style="width: auto;" maxlength="320"></textarea>
 
 <div id="char-count"></div>
 <hr>
 <div id="message" style="height:40px;"></div>
-<button id="btn_create">Crear archivo PDF</button>
+
+<% if can? :payment_proof_employee_pdf, User %>
+	<button id="btn_create">Crear archivo PDF</button>
+<% end %>
+
 <input type="hidden" id="show_reports_path" value="<%= reports_path %>">
 
 <input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS][0]['PAYMENT_PROOF'] %>">

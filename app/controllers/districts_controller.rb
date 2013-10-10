@@ -1,4 +1,5 @@
 class DistrictsController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   before_filter :get_district, :only => [:edit, :update, :destroy]
 

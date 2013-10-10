@@ -1,4 +1,5 @@
 class OccupationsController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   # GET /occupations
   # GET /occupations.json

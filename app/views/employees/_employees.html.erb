@@ -27,10 +27,15 @@
                 <h3><%=t '.actions', :default => t("helpers.actions") %></h3>
               </div>
               <div class="modal-body">
-                <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                          edit_employee_path(employee), :class => 'btn btn-mini' %>
-                <%= link_to t('.edit', :default => t("helpers.links.personnel_action")),
+                <% if can? :update, Employee %>
+                  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                            edit_employee_path(employee), :class => 'btn btn-mini' %>
+                <% end %>
+
+                <% if can? :update, DetailPersonnelAction %>
+                <%= link_to t('.personnel_action', :default => t("helpers.links.personnel_action")),
                           detail_personnel_actions_path, :class => 'btn btn-mini' %>
+                <% end %> 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" arial-hidden="true">Close</button>

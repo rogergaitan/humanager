@@ -1,4 +1,5 @@
 class ProvincesController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   before_filter :get_province, :only => [:edit, :update, :destroy]
 
