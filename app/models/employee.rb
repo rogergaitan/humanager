@@ -118,142 +118,299 @@ class Employee < ActiveRecord::Base
     query
   end
 
-  def self.payment_types_report_data(employees, payroll_ids, tasks, order)
+  def self.payment_types_report_data(employees, payroll_ids, task_ids, order, cc_ids)
   
-    data = {}
-    infoData = []
-    result = []
-    set_total
+    data = []; infoData = [];
+    info = {};
+    
+    # Get the payroll log ids
+    payroll_log_ids = PayrollLog.where(:payroll_id => payroll_ids)
 
-    # ORDER BY EMPLOYEE
-    ###################################################
-    if order == "employee"
+    case order
+      
+      ##### NOT ORDER #####
+      when "no_order"
+        totl = 0
+        set_total('cc')
 
-      Employee.find(employees).each do |employee|
+        employees.each do |employee_id|
 
-        data['nombre'] = employee.entity.name + ' ' + employee.entity.surname
-
-        Task.find(tasks).each do |task|
-
-          info = get_info(payroll_ids, task.id, employee.id, task.ntask)
-
-          if !info.empty?
-            infoData << info
+          totl += 1
+          info = get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, "no_order")
+                    
+          unless info.empty?
+            data << info
             info = {}
+          end # End unless
+
+          if totl == employees.length
+            info << @total
+            data << info
           end
-        end # End each Task
 
-        if !infoData.empty?
-          infoData << @total
-          set_total
-          data['info'] = infoData
-          result << data
-          data = {}
-          infoData = []
-        end
-      end # End each Employee
-    end # End if order
+        end # End each Employee
+        result = data
 
-    # ORDER BY TASK
-    ###################################################
-    if order == "task"
-
-      Task.find(tasks).each do |task|
-        
-        data['nombre'] = task.ntask
+      ##### ORDER BY EMPLOYEE #####
+      when "employee"
 
         Employee.find(employees).each do |employee|
 
-          name_employee = employee.entity.name + ' ' + employee.entity.surname
-
-          info = get_info(payroll_ids, task.id, employee.id, name_employee)
-          
-          if !info.empty?
-            infoData << info
+          info['nombre'] = "#{employee.entity.name} #{employee.entity.surname}"
+          set_total('cc')
+          info['info'] = get_info_by_employee_no_order(payroll_ids, task_ids, employee.id, cc_ids, "employee")
+                    
+          unless info['info'].empty?
+            info['info'] << @total
+            data << info
             info = {}
           end
         end # End each Employee
+        result = data
 
-        if !infoData.empty?
-          infoData << @total
-          set_total
-          data['info'] = infoData
-          result << data
-          data = {}
-          infoData = []
-        end
-      end # End each Tasks
-    end # End if order
+      ##### ORDER BY TASK #####
+      when "task"
+        
+        Task.find(task_ids).each do |task|
 
+          info['nombre'] = "#{task.ntask}"
+          set_total('cc')
+          info['info'] = get_info_by_task_cc(payroll_ids, task.id, employees, cc_ids, "task")
+
+          unless info['info'].empty?
+            info['info'] << @total
+            data << info
+            info = {}
+          end
+
+        end # End each Task
+        result = data
+
+      ##### ORDER BY CENTRO DE COSTO #####
+      when "centro_costo"
+
+        CentroDeCosto.find(cc_ids).each do |cc|
+
+          info['nombre'] = "#{cc.nombre_cc}"
+          set_total('task')
+          info['info'] = get_info_by_task_cc(payroll_ids, task_ids, employees, cc.id, "centro_costo")
+
+          unless info['info'].empty?
+            info['info'] << @total
+            data << info
+            info = {}
+          end 
+        end # End each cc_ids
+        result = data
+    end # End Case
     result
   end
 
-  def self.get_info(payroll_ids, task_id, employee_id, name)
+  def self.get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, type)
 
-    totalTasks = 0
-    info = {
-            'nombre' => '',
-            'total_unid_ord' => 0,
-            'valor_total_ord' => 0,
-            'total_unid_extra' => 0,
-            'valor_total_extra' => 0,
-            'total_unid_doble' => 0,
-            'valor_total_doble' => 0,
-            'total' => 0
-          }
+    data = []; infoData = [];
+    info = {}
 
-    data = PayrollHistory.joins(:payroll_employees)
-                        .where(:payroll_log_id => payroll_ids, :task_id => task_id, payroll_employees: {employee_id: employee_id})
+    PayrollHistory.joins(:payroll_employees)
+                  .where(:payroll_log_id => payroll_ids, :task_id => task_ids, :centro_de_costo_id => cc_ids, payroll_employees: {employee_id: employee_id})
+                  .each do |ph|
 
-      if !data.empty?
+      obj = {}
+      obj['tarea'] = ph.task.ntask
+      obj['cc'] = ph.centro_de_costo.nombre_cc
 
-        data.each do |detail|
+      if data.include?(obj)
+        index = data.index(obj)
 
-          time_worked = detail.time_worked
-          total = detail.total
-          totalTasks += total
-          info['nombre'] = name
-          
-          case detail.payment_type.to_s
-            when CONSTANTS[:PAYMENT][0]['name'] # Ordinario
-              info['total_unid_ord'] += time_worked.to_i
-              info['valor_total_ord'] += total
-              @total['total_unid_ord'] += time_worked.to_i
-              @total['valor_total_ord'] += total
-              
-            when CONSTANTS[:PAYMENT][1]['name'] # Extra
-              info['total_unid_extra'] += time_worked.to_i
-              info['valor_total_extra'] += total
-              @total['total_unid_extra'] += time_worked.to_i
-              @total['valor_total_extra'] += total
+        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+          infoData[index]['total_unid_ord'] += ph.time_worked.to_f
+          infoData[index]['valor_total_ord'] += ph.total.to_f
+          @total['total_unid_ord'] += ph.time_worked.to_f
+          @total['valor_total_ord'] += ph.total.to_f
+        end
+        
+        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+          infoData[index]['total_unid_extra'] += ph.time_worked.to_f
+          infoData[index]['valor_total_extra'] += ph.total.to_f
+          @total['total_unid_extra'] += ph.time_worked.to_f
+          @total['valor_total_extra'] += ph.total.to_f
+        end
 
-            when CONSTANTS[:PAYMENT][2]['name'] # Doble
-              info['total_unid_doble'] += time_worked.to_i
-              info['valor_total_doble'] += total
-              @total['total_unid_doble'] += time_worked.to_i
-              @total['valor_total_doble'] += total
-          end # End case
-        end # End data each
+        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+          infoData[index]['total_unid_doble'] += ph.time_worked.to_f
+          infoData[index]['valor_total_doble'] += ph.total.to_f
+          @total['total_unid_doble'] += ph.time_worked.to_f
+          @total['valor_total_doble'] += ph.total.to_f
+        end
 
-        info['total'] = totalTasks
-        @total['total'] += totalTasks
-      else # Else Emply
+        infoData[index]['total'] += ph.total.to_f
+        @total['total'] += ph.total.to_f
+
+      else
+        
+        if type == "employee"
+          info['nombre'] = ph.task.ntask
+        else
+          em = Employee.find(employee_id)
+          info['nombre'] = "#{em.entity.name} #{em.entity.surname}"
+          info['tarea'] = ph.task.ntask
+        end
+
+        info['cc'] = ph.centro_de_costo.nombre_cc
+        info['total_unid_ord'] = 0
+        info['valor_total_ord'] = 0
+        info['total_unid_extra'] = 0
+        info['valor_total_extra'] = 0
+        info['total_unid_doble'] = 0
+        info['valor_total_doble'] = 0
+        info['total'] = 0
+
+        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+          info['total_unid_ord'] = ph.time_worked.to_f
+          info['valor_total_ord'] = ph.total.to_f
+          @total['total_unid_ord'] += ph.time_worked.to_f
+          @total['valor_total_ord'] += ph.total.to_f
+        end
+        
+        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+          info['total_unid_extra'] = ph.time_worked.to_f
+          info['valor_total_extra'] = ph.total.to_f
+          @total['total_unid_extra'] += ph.time_worked.to_f
+          @total['valor_total_extra'] += ph.total.to_f
+        end
+
+        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+          info['total_unid_doble'] = ph.time_worked.to_f
+          info['valor_total_doble'] = ph.total.to_f
+          @total['total_unid_doble'] += ph.time_worked.to_f
+          @total['valor_total_doble'] += ph.total.to_f
+        end
+
+        info['total'] = ph.total.to_f
+        @total['total'] += ph.total.to_f
+
+        data << obj
+        infoData << info
         info = {}
-      end # End Emply
-      info
+      end # End data.include?(obj)
+    end # End PayrollHistory.joins
+    infoData
   end
 
-  def self.set_total
+  def self.get_info_by_task_cc(payroll_ids, task_id, employee_ids, cc_ids, type)
+
+    data = []; infoData = [];
+    info = {}
+
+    PayrollHistory.joins(:payroll_employees)
+                  .where(:payroll_log_id => payroll_ids, :task_id => task_id, :centro_de_costo_id => cc_ids, payroll_employees: {employee_id: employee_ids})
+                  .each do |ph|
+
+      ph.payroll_employees.each do |pe|
+
+        obj = {}
+        obj['employee'] = pe.employee_id
+        obj['cc'] = ph.centro_de_costo.nombre_cc
+        
+        if type == "task"
+          obj['task'] = task_id
+        end
+
+        if type == "centro_costo"
+          obj['task'] = ph.task.ntask
+        end
+
+        if data.include?(obj)
+          index = data.index(obj)
+          
+          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+            infoData[index]['total_unid_ord'] += ph.time_worked.to_f
+            infoData[index]['valor_total_ord'] += ph.total.to_f
+            @total['total_unid_ord'] += ph.time_worked.to_f
+            @total['valor_total_ord'] += ph.total.to_f
+          end
+          
+          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+            infoData[index]['total_unid_extra'] += ph.time_worked.to_f
+            infoData[index]['valor_total_extra'] += ph.total.to_f
+            @total['total_unid_extra'] += ph.time_worked.to_f
+            @total['valor_total_extra'] += ph.total.to_f
+          end
+
+          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+            infoData[index]['total_unid_doble'] += ph.time_worked.to_f
+            infoData[index]['valor_total_doble'] += ph.total.to_f
+            @total['total_unid_doble'] += ph.time_worked.to_f
+            @total['valor_total_doble'] += ph.total.to_f
+          end
+          infoData[index]['total'] += ph.total.to_f
+          @total['total'] += ph.total.to_f
+        else
+
+          info['nombre'] = "#{pe.employee.entity.name} #{pe.employee.entity.surname}"
+          
+          if type == "task"
+              info['cc'] = ph.centro_de_costo.nombre_cc
+          end
+
+          if type == "centro_costo"
+            info['task'] = ph.task.ntask
+          end
+          
+          info['total_unid_ord'] = 0
+          info['valor_total_ord'] = 0
+          info['total_unid_extra'] = 0
+          info['valor_total_extra'] = 0
+          info['total_unid_doble'] = 0
+          info['valor_total_doble'] = 0
+          info['total'] = 0
+          
+          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+            info['total_unid_ord'] = ph.time_worked.to_f
+            info['valor_total_ord'] = ph.total.to_f
+            @total['total_unid_ord'] += ph.time_worked.to_f
+            @total['valor_total_ord'] += ph.total.to_f
+          end
+          
+          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+            info['total_unid_extra'] = ph.time_worked.to_f
+            info['valor_total_extra'] = ph.total.to_f
+            @total['total_unid_extra'] += ph.time_worked.to_f
+            @total['valor_total_extra'] += ph.total.to_f
+          end
+
+          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+            info['total_unid_doble'] = ph.time_worked.to_f
+            info['valor_total_doble'] = ph.total.to_f
+            @total['total_unid_doble'] += ph.time_worked.to_f
+            @total['valor_total_doble'] += ph.total.to_f
+          end
+
+          info['total'] = ph.total.to_f
+          @total['total'] += ph.total.to_f
+
+          data << obj
+          infoData << info
+          info = {}
+        end
+
+      end # End each ph.payroll_employees
+    end # End each PayrollHistory.joins
+    infoData    
+  end
+
+  def self.set_total(data)
+    
     @total = {
-            'nombre' => 'Total',
-            'total_unid_ord' => 0,
-            'valor_total_ord' => 0,
-            'total_unid_extra' => 0,
-            'valor_total_extra' => 0,
-            'total_unid_doble' => 0,
-            'valor_total_doble' => 0,
-            'total' => 0
-          }
+        "#{data}" => 'Total',
+        'total_unid_ord' => 0,
+        'valor_total_ord' => 0,
+        'total_unid_extra' => 0,
+        'valor_total_extra' => 0,
+        'total_unid_doble' => 0,
+        'valor_total_doble' => 0,
+        'total' => 0
+    }
   end
 
 end

@@ -27,7 +27,7 @@
 	</div>
 
 	<div class="controls lists">
-		<div class="tasks-list left-list">
+		<div id="tasks-list" class="tasks-list left-list">
 	  		<div class="employees-margin" id="no-save-tasks">
 	    		<% @tasks.each do |task| %>
 	      		<div class="checkbox-group">
@@ -49,15 +49,6 @@
 			<a href="#" id="add-to-list-tasks" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
 		  	<a href="#" id="remove-to-list-tasks" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
 		</div>
-		
-		<!-- <div class="options-right">
-	        <%= check_box_tag 'check-tasks-right', '1', true, class: 'align-checkbox' %>
-	        <%= label_tag 'check-tasks-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-	      </div> -->
-	    <!-- <div class="controls" id="marcar-desmarcar">
-			<%= check_box_tag 'check-tasks-right', '1', true, class: 'align-checkbox' %>
-	        <%= label_tag 'check-tasks-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-		</div> -->
 
 		<div class="tasks-list list-right">
 		  	<div class="employees-margin" id="list-tasks"></div>
@@ -67,12 +58,70 @@
 </div>
 <!-- T A S K S -->
 
+<!-- C E N T R O   D E   C O S T O S -->
+<div id="centro_de_costos" data-id="<%= fetch_cc_centro_de_costos_path %>">
+	<div class="control-group">
+		<hr>
+	    <h2>Centro de Costos</h2>
+	    <div class="controls align-radio">
+	      <div class="options-left">&nbsp;</div>
+	      <div class="options-right">
+	        <%= check_box_tag 'check-cc-right', '1', true, class: 'align-checkbox' %>
+	        <%= label_tag 'check-cc-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+	      </div>
+	      <div style="clear:both"></div>
+	    </div>
+	</div>
+
+	<div class="controls padding-filter" id="employee-filter">
+		<%= text_field_tag 'load_filter_cc_text', nil, :class => 'text_field search-image-tasks' %> 
+	</div>
+
+	<div class="controls" id="marcar-desmarcar">
+		<%= check_box_tag 'check-cc', '1', false, class: 'align-checkbox' %>
+	    <%= label_tag 'check-cc', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+	</div>
+
+	<div class="controls lists">
+		<div id="cc-list" class="tasks-list left-list">
+	  		<div class="employees-margin" id="no-save-cc">
+	    		<% @cc.each do |c| %>
+	      		<div class="checkbox-group">
+			        <div class="checkbox-margin">
+			          <%= check_box_tag 'left-list-cc', c.id, c.id,
+							id: dom_id(c) + '_left', 'data-id' => dom_id(c),
+							'data-sup' => c.id,
+							class: 'align-checkbox'  %>
+			          <%= label_tag dom_id(c) + '_left',
+			          		"#{c.nombre_cc}",
+			              	:class => 'checkbox-label' %>
+			        </div>
+	      		</div>
+	    		<% end %>
+	  		</div>
+		</div>
+
+		<div class="control-buttons">
+			<a href="#" id="add-to-list-cc" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+		  	<a href="#" id="remove-to-list-cc" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+		</div>
+		
+		<div class="tasks-list list-right">
+		  	<div class="employees-margin" id="list-cc"></div>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+<!-- C E N T R O   D E   C O S T O S -->
+
 <div>
 	<hr>
-	<h2>Ordenado por</h2>
+	<h2>Agrupado por</h2>
 	<select name="order_by" id="order_by">
+		<option value="no_order">Sin Agrupar</option>
 		<option value="employee">Empleado</option>
 		<option value="task">Labor</option>
+		<option value="centro_costo">Centro de Costo</option>
 	</select>
 </div>
 
@@ -85,7 +134,7 @@
 <% end %>
 
 <% if can? :task_type_payment_xls, User %>
-	<button id="btn_create_xml">Exportar a XML</button>
+	<button id="btn_create_xml">Exportar a XLS</button>
 <% end %>
 
 <p></p>

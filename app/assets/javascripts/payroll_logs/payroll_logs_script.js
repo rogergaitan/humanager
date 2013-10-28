@@ -182,6 +182,9 @@ function addFields(e) {
 				var name = $('#products_items tr:eq(1) td:eq('+payroll_logs.task_td_eq+') input:hidden').attr('name');
 				var num = name.match(/\d/g);
 				num = num.join('');
+
+				// Set Date
+				$('#payroll_log_payroll_histories_attributes_' + num + '_payroll_date').val($('#payroll_log_payroll_date').val());
 				payroll_logs.setTotal(num);
 				result = payroll_logs.validateEmployeeTask(num,is_select_methol_all);
 				if( result.status ) {

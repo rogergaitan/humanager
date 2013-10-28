@@ -4,19 +4,20 @@ include ActionView::Helpers::NumberHelper
   def initialize(data, order, payroll_ids)
     
     super(top_margin: 5, :page_size => "A4", :page_layout => :landscape)
-    
     @data = data
     @end_date = nil
     @start_date = nil
     @name_payrolls = nil
     get_dates(payroll_ids)
     big_total
+    @order = order
     
-    if order == 'employee'
-      @order = 'Empleado'
-    else
-      @order = 'Tarea'
-    end
+    @order_by = 'Agrupado por '
+    if order == 'employee'; @order_by += 'Empleados' end
+    if order == 'task'; @order_by += 'Tareas' end
+    if order == 'centro_costo'; @order_by += 'Centro de Costo' end
+    if order == 'no_order'; @order_by = 'Sin Agrupar' end
+      
     repeat(:all, :dynamic => true) do
       
       # HEADER
@@ -37,24 +38,44 @@ include ActionView::Helpers::NumberHelper
       end
     end
 
-    bounding_box([bounds.left, bounds.top - 90], :width  => bounds.width, :height => bounds.height - 100) do                 
+    bounding_box([bounds.left, bounds.top - 90], :width  => bounds.width, :height => bounds.height - 100) do
       start
     end
-
   end
 
   def start
-
-    header = get_header()    
+    
+    header = get_headers()
+    dt = []
 
     @data.each do |d|
 
-      move_down 20
-      text "#{d['nombre']}", character_spacing: 1
-      move_down 20
-      get_table(header, d['info'])
+      if @order == 'employee' || @order == 'task'
+        move_down 20
+        text "#{d['nombre']}", character_spacing: 1
+        move_down 10
+        get_tables(header, d['info'])
+      end
+      
+      if @order == 'centro_costo'
+        move_down 20
+        text "#{d['nombre']}", character_spacing: 1
+        move_down 10
+        get_tables(header, d['info'])
+      end
+      
+      if @order == 'no_order'
+        d.each do |e|
+          dt << e
+        end
+      end
 
     end # End each @data
+    
+    if @order == 'no_order'
+      get_tables(header, dt)
+    end
+
     move_down 20
     stroke_horizontal_rule
     move_down 20
@@ -68,7 +89,7 @@ include ActionView::Helpers::NumberHelper
       text_box "Reporte de Labores Por Tipo de Pago", :align => :center, style: :bold, character_spacing: 1
     end
     move_down 20
-    string = "Agrupado por #{@order}s"
+    string = "#{@order_by}"
     text string, :align => :center, style: :bold, character_spacing: 1.5
 
     move_down 10
@@ -78,22 +99,42 @@ include ActionView::Helpers::NumberHelper
     move_down 10
   end
 
-  def get_header()
+  def get_headers()
 
+    header_list = []
     header = []
-    header_list = [
-        'Nombre', 
-        'Total de Unid Ord',
-        'Valor total Ord',
-        'Total de Unid Ext',
-        'Valor total Ext',
-        'Total de Unid Dobles',
-        'Valor total Doble',
-        'Total'
-    ]
+
+    if @order == 'employee'
+      header_list << 'Labor'
+      header_list << 'Centro de Costo'
+    end
+
+    if @order == 'task'
+      header_list << 'Nombre'
+      header_list << 'Centro de Costo'
+    end
+
+    if @order == 'centro_costo'
+      header_list << 'Nombre'
+      header_list << 'Labor'
+    end
+
+    if @order == 'no_order'
+      header_list << 'Nombre'
+      header_list << 'Tarea'
+      header_list << 'Centro de Costo'
+    end
+
+    header_list << 'Tot Uni Ord'
+    header_list << 'Val tot Ord'
+    header_list << 'Tot Uni Ext'
+    header_list << 'Val tot Ext'
+    header_list << 'Tot Uni Dob'
+    header_list << 'Val tot Dob'
+    header_list << 'Gran Total'    
     
     header_list.each do |title|
-      header << {:content => title, :colspan => 2, :font_style => :bold}
+      header << { :content => title, :colspan => 2, :font_style => :bold }
     end
   end
 
@@ -126,15 +167,29 @@ include ActionView::Helpers::NumberHelper
     end
   end
 
-  def get_table(header, info)
-
-    row = []
-    rows = []
-    count = 0
+  def get_tables(header, info)
+    
+    row = []; rows = []; count = 0
 
     info.each do |a|
       count += 1
-      row << a['nombre']
+      
+      if @order == 'employee' || @order == 'task'
+        row << a['nombre'] # Labor
+        row << a['cc']
+      end
+
+      if @order == 'centro_costo'
+        row << a['nombre']
+        row << a['task']
+      end
+
+      if @order == 'no_order'
+        row << a['nombre']
+        row << a['tarea']
+        row << a['cc']
+      end
+
       row << "#{number_to_format(a['total_unid_ord'])}"
       row << "#{number_to_format(a['valor_total_ord'])}"
       row << "#{number_to_format(a['total_unid_extra'])}"
@@ -156,11 +211,15 @@ include ActionView::Helpers::NumberHelper
       rows << row
       row = []
     end
+    get_table(header, rows)
+  end
+
+  def get_table(header, rows)
 
     table(
       [header] +
       rows.map do |row| row end,
-      :cell_style => { :align => :right, :size => 10, :height => 19 },
+      :cell_style => { :align => :right, :size => 8, :height => 19 },
       :position => :right
     )
   end
@@ -180,8 +239,7 @@ include ActionView::Helpers::NumberHelper
 
   def set_table_total(header)
 
-    row = []
-    rows = []
+    row = []; rows = []
 
     row << @total['nombre']
     row << "#{number_to_format(@total['total_unid_ord'])}"
@@ -195,9 +253,9 @@ include ActionView::Helpers::NumberHelper
     row = []
 
     table(
-      [header] +
+      [['','Tot Uni Ord','Val tot Ord','Tot Uni Ext','Val tot Ext','Tot Uni Dob','Val tot Dob', 'Gran Total']] +
       rows.map do |row| row end,
-      :cell_style => { :align => :right, :size => 10, :height => 19 },
+      :cell_style => { :align => :right, :size => 8, :height => 19 },
       :position => :right
     )
   end

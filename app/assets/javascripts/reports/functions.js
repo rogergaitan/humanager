@@ -117,9 +117,9 @@ general_functions.selectEmployeesLeft = function(selected) {
 
 general_functions.selectEmployeesRight = function() {
   if ($(this).is(':checked')) {
-    $("div.employees-list.list-right input[type='checkbox']").attr('checked', true);
+    $("div.employees-list.list-right input[type='checkbox']").prop('checked', true);
   } else {
-    $("div.employees-list.list-right input[type='checkbox']").attr('checked', false);
+    $("div.employees-list.list-right input[type='checkbox']").prop('checked', false);
   };
 }
 
@@ -137,8 +137,8 @@ general_functions.moveEmployees = function() {
       $(this).closest('.checkbox-group').remove();
     };
   });
-  $('div#marcar-desmarcar input[name=check-employees]').attr('checked', false);
-  $('div.options-right input[name=check-employees-right]').attr('checked', true);
+  $('div#marcar-desmarcar input[name=check-employees]').prop('checked', false);
+  $('div.options-right input[name=check-employees-right]').prop('checked', true);
 }
 
 general_functions.moveToRight = function(e) {
@@ -211,9 +211,9 @@ general_functions.filterSuperior = function(dropdown) {
 
 general_functions.marcarDesmarcar = function() {
   if ($(this).is(':checked')) {
-    $("div.employees-list.left-list input[type='checkbox']").attr('checked', true);
+    $("div.employees-list.left-list input[type='checkbox']").prop('checked', true);
   } else {
-    $("div.employees-list.left-list input[type='checkbox']").attr('checked', false);
+    $("div.employees-list.left-list input[type='checkbox']").prop('checked', false);
   };
 }
 

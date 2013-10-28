@@ -5,7 +5,21 @@
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:html="http://www.w3.org/TR/REC-html40">
   <Worksheet ss:Name="Sheet1">
+    
+    <%= 
+      # puts "------------------------"
+      # puts "DATA"
+      # puts @data
+      # puts "YAML"
+      # puts @data.to_yaml
+      # puts "------------------------"
+    %>
+
+
     <%
+      @header = []
+      @count = 1
+      @order_by = 'Agrupado por '
       @total = {
         'nombre' => 'Gran Total',
         'total_unid_ord' => 0,
@@ -16,15 +30,57 @@
         'valor_total_doble' => 0,
         'total' => 0
       }
-
+      
       if @order == 'employee'
-        @order = 'Empleado'
-      else
-        @order = 'Tarea'
+        @order_by += 'Empleados'
+        @header << 'Labor'
+        @header << 'Centro de Costo'
       end
 
+      if @order == 'task'
+        @order_by += 'Tareas'
+        @header << 'Nombre'
+        @header << 'Centro de Costo'
+      end
+      
+      if @order == 'centro_costo'
+        @order_by += 'Centro de Costo'
+        @header << 'Nombre'
+        @header << 'Labor'
+      end
+
+      if @order == 'no_order'
+        @order_by = 'Sin Agrupar'
+        @header << 'Nombre'
+        @header << 'Labor'
+        @header << 'Centro de Costo'
+        @count = 2
+
+        # Order the data correctly
+        ###########################
+        dt = []; da = {}
+
+        @data.each do |d|
+          d.each do |e|
+            dt << e
+          end
+        end
+        da["nombre"] = ""
+        da["info"] = dt
+        @data = []
+        @data << da
+      end
+
+      @header << 'Tot Uni Ord'
+      @header << 'Val tot Ord'
+      @header << 'Tot Uni Ext'
+      @header << 'Val tot Ext'
+      @header << 'Tot Uni Dob'
+      @header << 'Val tot Dob'
+      @header << 'Gran Total'
       string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
     %>
+
     <Table>
       
       <Row>
@@ -32,7 +88,7 @@
         <Cell><Data ss:Type="String">Reporte de Labores Por Tipo de Pago</Data></Cell>
       </Row>
       <Row>
-        <Cell><Data ss:Type="String">Agrupado por <%= @order %>s</Data></Cell>
+        <Cell><Data ss:Type="String"><%= @order_by %></Data></Cell>
       </Row>
       <Row>
         <Cell><Data ss:Type="String"><%= string %></Data></Cell>
@@ -49,20 +105,32 @@
         <Row></Row>
         
         <Row>
-          <Cell><Data ss:Type="String">Nombre</Data></Cell>
-          <Cell><Data ss:Type="String">Total de Unid Ord</Data></Cell>
-          <Cell><Data ss:Type="String">Valor Total Ord</Data></Cell>
-          <Cell><Data ss:Type="String">Total de Unid Ext</Data></Cell>
-          <Cell><Data ss:Type="String">Valor total Ext</Data></Cell>
-          <Cell><Data ss:Type="String">Total de Unid Dobles</Data></Cell>
-          <Cell><Data ss:Type="String">Valor total Doble</Data></Cell>
-          <Cell><Data ss:Type="String">Total</Data></Cell>
+          <% @header.each do |h| %>
+            <Cell><Data ss:Type="String"><%= "#{h}" %></Data></Cell>
+          <% end %>
         </Row>
+
         <% count = 0 %>
         <% d['info'].each do |a| %>
           <% count += 1 %>
+
           <Row>
-            <Cell><Data ss:Type="String"><%= a['nombre'] %></Data></Cell>
+            <% if @order == 'employee' || @order == 'task' %>
+              <Cell><Data ss:Type="String"><%= a['nombre'] %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= a['cc'] %></Data></Cell>
+            <% end %>
+
+            <% if @order == 'centro_costo' %>
+              <Cell><Data ss:Type="String"><%= a['nombre'] %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= a['task'] %></Data></Cell>
+            <% end %>
+
+            <% if @order == 'no_order' %>
+              <Cell><Data ss:Type="String"><%= a['nombre'] %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= a['tarea'] %></Data></Cell>
+              <Cell><Data ss:Type="String"><%= a['cc'] %></Data></Cell>
+            <% end %>
+
             <Cell><Data ss:Type="Number"><%= a['total_unid_ord'] %></Data></Cell>
             <Cell><Data ss:Type="Number"><%= a['valor_total_ord'] %></Data></Cell>
             <Cell><Data ss:Type="Number"><%= a['total_unid_extra'] %></Data></Cell>
@@ -80,8 +148,8 @@
               <% @total['valor_total_doble'] += a['valor_total_doble'] %>
               <% @total['total'] += a['total'] %>
             <% end %>
+          </Row>
 
-        </Row>
         <% end %>
         
         <Row></Row>
@@ -93,6 +161,10 @@
       <Row></Row>
 
       <Row>
+        <% (1..@count).each do %>
+          <Cell><Data ss:Type="String"></Data></Cell>        
+        <% end  %>
+
         <Cell><Data ss:Type="String"><%= @total['nombre'] %></Data></Cell>
         <Cell><Data ss:Type="Number"><%= @total['total_unid_ord'] %></Data></Cell>
         <Cell><Data ss:Type="Number"><%= @total['valor_total_ord'] %></Data></Cell>
@@ -102,8 +174,9 @@
         <Cell><Data ss:Type="Number"><%= @total['valor_total_doble'] %></Data></Cell>
         <Cell><Data ss:Type="Number"><%= @total['total'] %></Data></Cell>
       </Row>
-      
     </Table>
+
+
   </Worksheet>
 
 </Workbook>

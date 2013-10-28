@@ -5,6 +5,122 @@
 			<input id="global_date" type="text" data-date-format="dd/mm/yyy" class="datepicker search-query input-small">
 		</div>
 	</li>
+	
+<!-- N U E V O -->
+	
+	<li>
+		<a href=<%=root_path %>>
+            <i class='icon-white icon-home'></i>
+            <span><%= I18n.t('.content.titles.home')%></span>
+        </a>
+	</li>
+
+	<ul class="nav nav navbar-nav">
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuración<b class="caret"></b></a>
+			<ul class="dropdown-menu" role="menu">
+				<% if can? :read, Province %>
+                        <li><a href=<%= provinces_path%>> Provincias</a></li>
+                    <% end %>
+
+                    <% if can? :read, Canton %>
+                        <li><a href=<%= cantons_path%>>Cantones</a></li>
+                    <% end %>
+
+                    <% if can? :read, District %>
+                        <li><a href=<%= districts_path%>> Distritos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Employee %>
+                        <li><a href=<%= employees_path%>> Empleados</a></li>
+                    <% end %>
+
+                    <% if can? :read, Department %>
+                        <li><a href=<%= departments_path%>> Departamentos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Position %>
+                        <li><a href=<%= positions_path%>> Puestos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Task %>
+                        <li><a href=<%= tasks_path%>> Labores</a></li> 
+                    <% end %>
+
+                    <% if can? :read, Deduction %>
+                        <li><a href=<%= deductions_path%>> Deducciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, WorkBenefit %>
+                        <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, CentroDeCosto %>
+                        <li><a href=<%= centro_de_costos_path%>> Centro de Costos</a></li>
+                    <% end %>
+
+                    <% if can? :read, LedgerAccount %>
+                        <li><a href=<%= ledger_accounts_path%>> Cuentas Contables</a></li>
+                    <% end %>
+
+                    <% if can? :read, OtherSalary %>
+                        <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
+                    <% end %>
+
+                    <% if can? :read, Occupation %>
+                        <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, MeansOfPayment %>
+                        <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
+                    <% end %>
+
+                    <% if can? :read, PaymentFrequency %>
+                        <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
+                    <% end %>
+
+                    <% if can? :read, TypeOfPersonnelAction %>
+                        <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
+                    <% end %>
+
+                    <% if can? :read, PayrollType %>
+                        <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
+                    <% end %>
+
+                    <% if can? :read, User %>
+                        <li><a href=<%= users_path%>> Usuarios</a></li>
+                    <% end %>
+			</ul>
+		</li>
+	</ul>
+
+	<ul class="nav nav navbar-nav">
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Procesos<b class="caret"></b></a>
+			<ul class="dropdown-menu" role="menu">
+				<% if can? :read, Payroll %>
+                    <li><a href=<%= payrolls_path%>>Planillas</a></li>
+                <% end %>
+                <% if can? :read, DetailPersonnelAction %>
+                    <li><a href=<%= detail_personnel_actions_path%>>Acciones de Personal</a></li>
+                <% end %>
+			</ul>
+		</li>
+	</ul>
+
+	<ul class="nav nav navbar-nav">
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Reportes<b class="caret"></b></a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href=<%= reports_path %> >Comprobante Pago trabajadores</a></li>
+                <li><a href=<%= general_payroll_reports_path %> >Comprobante General de Pago</a></li>
+                <li><a href=<%= payment_type_report_reports_path %> >Labores por Tipo de Pago</a></li>
+			</ul>
+		</li>
+	</ul>
+
+<!-- N U E V O -->
+
 </ul>
 
 <div class='btn-group pull-right'>

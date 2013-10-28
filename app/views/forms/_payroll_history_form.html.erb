@@ -1,27 +1,30 @@
 <tr class="success items_purchase_orders_form">
 	<td class="controls_item">
-		<%= text_field_tag 'search_code_employee', '', :class => 'input-mini', :placeholder => 'Número' %>
-		<%= hidden_field_tag 'employee_code', ''%>
-		<%= text_field_tag 'name_employee', '', :class => 'input-medium', :placeholder => 'Nombre Empleado' %>
-		<a class="btn" data-keyboard="false" data-backdrop="static" href="#employeeModal" 
-		role="button" data-toggle="modal">
-			<span class="add-on"><i class="icon-list"></i></span>
-		</a>
+		<div class="input-append">
+			<%= text_field_tag 'search_code_employee', '', :class => 'input-mini', :placeholder => 'Número' %>
+			<%= hidden_field_tag 'employee_code', ''%>
+			<%= text_field_tag 'name_employee', '', :class => 'input-medium', :placeholder => 'Nombre Empleado' %>
+			<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#employeeModal" 
+			role="button" data-toggle="modal">
+				<span class="add-on"><i class="icon-list"></i></span>
+			</a>
+		</div>
 	</td>
 	<td class="controls_item">
-		<%= f.label :task_id, :class => '' %>
-		<%= text_field 'search_task_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
+		<div class="input-append">
+			<%= f.label :task_id, :class => '' %>
+			<%= text_field 'search_task_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
 
-		<%= f.hidden_field :task_id, class: "cc-filter-id" %>
-		<%= text_field_tag 'load_task', nil, :class => 'cc-filter input-medium search-image-employee', 
-		:for => :task_id %>
+			<%= f.hidden_field :task_id, class: "cc-filter-id" %>
+			<%= text_field_tag 'load_task', nil, :class => 'cc-filter input-medium search-image-employee', 
+			:for => :task_id %>
 
-		<a class="btn" data-keyboard="false" data-backdrop="static" href="#taskModal" 
-		role="button" data-toggle="modal">
-			<span class="add-on"><i class="icon-list"></i></span>
-		</a>
-		<%= f.hidden_field :task_unidad, class: "cc-filter-id" %>
-
+			<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#taskModal" 
+			role="button" data-toggle="modal">
+				<span class="add-on"><i class="icon-list"></i></span>
+			</a>
+			<%= f.hidden_field :task_unidad, class: "cc-filter-id" %>
+		</div>
 	</td>
 	<td class="controls_item">
 		<%= f.label :time_worked, :class => '' %>
@@ -47,5 +50,6 @@
 		<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
 		<%= f.hidden_field :total %>
 		<%= f.hidden_field :task_total %>
+		<%= f.hidden_field :payroll_date %>
 	</td>
 </tr>

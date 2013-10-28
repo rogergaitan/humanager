@@ -54,7 +54,7 @@ class TasksController < ApplicationController
     end
   end
 
-  #Search for tasks
+  # Search for tasks
   def fetch_tasks
     @tasks = Task.all
     respond_with(@tasks, :only => [:id, :itask, :ntask, :iaccount])

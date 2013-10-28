@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130923213552) do
+ActiveRecord::Schema.define(:version => 20131011170718) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -366,6 +366,7 @@ ActiveRecord::Schema.define(:version => 20130923213552) do
     t.decimal  "total",                                                      :precision => 18, :scale => 4
     t.decimal  "task_total",                                                 :precision => 18, :scale => 4
     t.string   "task_unidad"
+    t.date     "payroll_date"
   end
 
   add_index "payroll_histories", ["centro_de_costo_id"], :name => "index_payroll_histories_on_centro_de_costo_id"

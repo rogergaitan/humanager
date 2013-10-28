@@ -3,47 +3,144 @@ include ActionView::Helpers::NumberHelper
 
   def initialize(payroll, employees, msg)
     
-    super(top_margin: 5, :left_margin => 90, :right_margin => 90, :page_size => [612,396])
+    super(top_margin: 15, :left_margin => 20, :right_margin => 20)
     @payroll = payroll
     @employees = employees
-    @total = 0
+    @total_devengado = 0
     @msg = msg
     start
   end
 
   def start
 
-    list_task_unidad_payment_type = get_task_unidad_payment_type
-    headers = get_heares(list_task_unidad_payment_type)
-
+    list_payments_types = get_payments_types
+    header = get_header()
+    count = 0
     @employees.each do |employee_id|
       
       proof_pay_info
       move_down 5
+      count += 1
 
       e = Employee.find(employee_id)
-      text "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}", character_spacing: 1
-      # move_down 5
+      employee = "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
+      text employee, character_spacing: 1
+      move_down 15
 
-      data_salary = get_data_salary(list_task_unidad_payment_type, employee_id)
-      text "Detalle Salario Devengados:", character_spacing: 1
-      # move_down 5
-
-      table_salary_earned(headers, data_salary)
-      move_down 5
+      data_salary = get_data_salary(list_payments_types, employee_id)
+      text "Detalle Salario Devengados", character_spacing: 1, :align => :center
+      move_down 15
 
       data_deductions = get_data_deductions(employee_id)
-      text "Deducciones Aplicadas:", character_spacing: 1
-      table_deductions(data_deductions, data_salary[1])
 
-      text_box "#{@msg}",
-      :at => [0, 140], :height => 150, :width => 230, character_spacing: 1
+      tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types)
+      #################################################################################################################################################
 
-      move_down 5
+      if tRows.length > 1
+        tables_salary(tRows, header, data_deductions, employee)
+      else 
+        tables_salary_center(tRows, header)
+        table_deductions(data_deductions, true)
+      end
+      
+      #################################################################################################################################################
 
-      start_new_page()
+      if count != @employees.count
+        start_new_page()
+      end
+
 
     end # End each employees
+  end
+
+  def tables_salary(tRows, header, data_deductions, employee)
+
+      c = 0; count = 0; lastTotalRows = 0
+      print = false
+      define_grid(:columns => 2, :rows => 1, :gutter => 5)
+
+      tRows.each do |rows|
+        count += 1
+        if c > 1;  c = 0 end
+
+        if c == 0
+          grid([1,0],[0,0]).bounding_box do
+            move_down 90
+            table(
+              header + 
+              rows.map do |row| row end, 
+                :cell_style => {:size => 8, :height => 19, :border_color => "FFFFFF" },
+                :position => :left
+            ) do
+              row(0).borders = [:bottom]
+              row(0).border_width = 2
+              row(0).font_style = :bold
+              row(0).border_color = "#000000"
+            end
+          end # end grid
+        end # end if
+
+        if c == 1
+          lastTotalRows = rows.length
+          grid([1,1],[0,0]).bounding_box do
+            move_down 90
+            table(
+              header + 
+              rows.map do |row| row end, 
+                :cell_style => {:size => 8, :height => 19, :border_color => "FFFFFF" },
+                :position => :right
+            ) do
+              row(0).borders = [:bottom]
+              row(0).border_width = 2
+              row(0).font_style = :bold
+              row(0).border_color = "#000000"
+            end
+
+            if count == tRows.length
+              if rows.length <= 19 # cantidad de rows kalfaro1
+                move_down 10
+                table_deductions(data_deductions, false)
+                print = true
+              end
+            end
+          end # end grid
+          if count != tRows.length
+            start_new_page()
+            text employee, character_spacing: 1
+          end
+        end # end if
+
+        c += 1
+      end
+
+      if c == 1
+        grid([1,1],[0,0]).bounding_box do
+            move_down 90
+            table_deductions(data_deductions, false)
+        end
+      else
+        if !print
+          table_deductions(data_deductions, true)
+        end
+      end
+
+  end
+
+  def tables_salary_center(tRows, header)
+    
+    tRows.each do |rows|
+      table(
+        header + 
+        rows.map do |row| row end, 
+          :cell_style => {:size => 8, :height => 19, :border_color => "FFFFFF" },
+          :position => :center
+      ) do
+        row(0).borders = [:bottom]
+        row(0).border_width = 2
+        row(0).font_style = :bold
+        row(0).border_color = "#000000"
+      end
+    end
   end
 
   def proof_pay_info
@@ -57,107 +154,167 @@ include ActionView::Helpers::NumberHelper
     text string, :align => :center, style: :bold, character_spacing: 1.5
   end
 
-  def get_task_unidad_payment_type
+  def get_payments_types
 
-    task_unidad = []
-    result = []
     task_payment_type = [
       CONSTANTS[:PAYMENT][0]['name'].to_s, # Ordinario
       CONSTANTS[:PAYMENT][1]['name'].to_s, # Extra
       CONSTANTS[:PAYMENT][2]['name'].to_s  # Doble
     ]
+
+    task_payment_type.uniq
+  end
+
+  def get_data_salary(list_payments_types, employee_id)
+
+    result = []; data = []
+    info_data = {}; info = {}
     
-    PayrollHistory.where('payroll_log_id = ?', @payroll.id).each do |p|
-      task_unidad << p.task_unidad
-    end
-    result << task_unidad.uniq
-    result << task_payment_type.uniq
-  end
-
-  def get_data_salary(list_task_unidad_payment_type, employee_id)
-
-    task_unidad = {}
-    task_payment_type = {}
-    detail = {}
-    data = []
-    result = []
-    total = 0
-
-    list_task_unidad_payment_type[1].each do |payment_type|
-      list_task_unidad_payment_type[0].each do |unidad|
-        task_unidad[unidad] = 0
-        detail['cantidad'] = 0
-        detail['monto'] = 0
-        PayrollHistory.where('payroll_log_id = ? and payment_type = ? and task_unidad = ?', @payroll.id, payment_type, unidad).each do |p|
-          unless p.payroll_employees.where('employee_id = ?', employee_id).empty?
-            detail['cantidad'] += p.time_worked.to_f
-            detail['monto'] += p.total
-            total += p.total.to_f
-          end # End unless
-        end # End each payroll
-        detail['monto'] = "#{number_to_format(detail['monto'])}"
-        task_unidad[unidad] = detail
-        detail = {}
-      end # End each unidad
-      task_payment_type[payment_type] = task_unidad
-      data << task_payment_type
-      task_payment_type = {}
-      task_unidad = {}
-    end # End each payment_type
-    result << data
-    result << total
-  end
-
-  def get_heares(list_task_unidad_payment_type)
-
-    header = [""]
-    headers = []
-    sub_header = [""]
-
-    list_task_unidad_payment_type[0].each do |unidad|
-      header << {:content => unidad, :colspan => 2, :font_style => :bold}
-    end
-
-    @total = ((header.count-1)*2)
-
-    (1..@total).each do |num|
-      if( num%2 == 0 )
-        sub_header << {:content => "Monto", :font_style => :bold}
-      else
-        sub_header << {:content => "Cantidad", :font_style => :bold}
-      end
-    end
-
-    headers << header
-    headers << sub_header
-  end
-
-  def table_salary_earned(headers, data)
+    totals = {
+        'ordinario' => 0,
+        'extra' => 0,
+        'doble' => 0
+    }
     
-    rows = []
-    row = []
+    payroll_history_ids = PayrollEmployee.where('employee_id = ?', employee_id).map(&:payroll_history_id)
 
-    data[0].each do |index|
-      index.each do |a|
-        row << "#{a[0]}"
-        a[1].each do |b, index2|
-          row << index2['cantidad']
-          row << index2['monto']
+    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type, payroll_date, total, task_unidad")
+                  .where(:payroll_log_id => @payroll.id, :id => payroll_history_ids)
+                  .group("payment_type, payroll_date").order("payroll_date").each do |p|
+
+      obj = {}
+      obj['labor'] = p.task.ntask
+      obj['fecha'] = p.payroll_date
+
+      if data.include?(obj)
+        index = data.index(obj)
+
+        if p.payment_type.to_s == list_payments_types[0]
+          result[index]['ordinario'] += p.time_worked.to_f
+          totals['ordinario'] += p.total.to_f
         end
-        rows << row
-        row = []
+        
+        if p.payment_type.to_s== list_payments_types[1]
+          result[index]['extra'] += p.time_worked.to_f
+          totals['extra'] += p.total.to_f
+        end
+
+        if p.payment_type.to_s == list_payments_types[2]
+          result[index]['doble'] += p.time_worked.to_f
+          totals['doble'] += p.total.to_f
+        end
+      else
+        info_data['fecha'] = "#{p.payroll_date.day}/#{p.payroll_date.month}"
+        info_data['labor'] = p.task.ntask
+        info['fecha'] = info_data['fecha']
+        info['labor'] = "#{p.task.ntask[0..20]}..."
+        info['unidad'] = p.task_unidad
+        info['ordinario'] = 0
+        info['extra'] = 0
+        info['doble'] = 0
+        
+        if p.payment_type.to_s == list_payments_types[0]
+          info['ordinario'] = p.time_worked.to_f
+          totals['ordinario'] += p.total.to_f
+        end
+        
+        if p.payment_type.to_s == list_payments_types[1]
+          info['extra'] = p.time_worked.to_f
+          totals['extra'] += p.total.to_f
+        end
+
+        if p.payment_type.to_s == list_payments_types[2]
+          info['doble'] = p.time_worked.to_f
+          totals['doble'] += p.total.to_f
+        end
+
+        result << info
+        data << info_data
+        info_data = {}
+        info = {}
       end
+    end # End each PayrollHistory
+    
+    [result, totals]
+  end
+
+  def get_header()
+
+    header = [[ 
+      {:content => "Fecha", :font_style => :bold },
+      {:content => "Labor", :font_style => :bold },
+      {:content => "Unid", :font_style => :bold },
+      {:content => "Ord", :font_style => :bold },
+      {:content => "Ext", :font_style => :bold },
+      {:content => "Dob",  :font_style => :bold }
+    ]]
+  end
+
+  def table_salary_earned(data, totals, header, lpt)
+    
+    tRows = []; rows = []; row = []
+    total = 0; tOrdinario = 0; tExtra = 0; tDoble = 0; cRows = 0
+
+    data.each do |obj|    
+      cRows += 1
+
+      obj.each do |a,b|
+        if a.capitalize == lpt[0] || a.capitalize == lpt[1] || a.capitalize == lpt[2]
+          row << { :content => "#{number_to_format(b)}", :align => :center }
+        else
+          row << { :content => "#{b}", :align => :left }
+        end
+
+        if a.capitalize == lpt[0].capitalize
+          tOrdinario += b.to_f
+        end
+
+        if a.capitalize == lpt[1].capitalize
+          tExtra += b.to_f
+        end
+
+        if a.capitalize == lpt[2].capitalize
+          tDoble += b.to_f
+        end
+      end
+      rows << row
+      row = []      
+
+      if cRows == 30
+        tRows << rows
+        rows = []
+        cRows = 0
+      end
+
     end # End each data
 
-    total = number_to_format(data[1])
+    # Cantidades Totales
+    row << { :content => "Cantidades Totales", :colspan => 3, :align => :right, :font_style => :bold }
+    row << { :content => "#{number_to_format(tOrdinario)}", :align => :center }
+    row << { :content => "#{number_to_format(tExtra)}", :align => :center }
+    row << { :content => "#{number_to_format(tDoble)}", :align => :center }
+    rows << row
+    row = []
 
-    table(
-      headers +
-      rows.map do |row| row end +
-      [[ {:content => "Total(Colones): #{total}", :colspan => (@total+1), :font_style => :bold} ]],
-      :cell_style => { :align => :right, :size => 10, :height => 19 },
-      :position => :right
-    )
+    # Montos Totales
+    row << { :content => "Montos Totales", :colspan => 3, :align => :right, :font_style => :bold }
+    row << { :content => "#{number_to_format(totals['ordinario'])}", :align => :center }
+    row << { :content => "#{number_to_format(totals['extra'])}", :align => :center }
+    row << { :content => "#{number_to_format(totals['doble'])}", :align => :center }
+    rows << row
+    row = []
+
+    # Total Devengado
+    @total_devengado = totals['ordinario'].to_f + totals['extra'].to_f + totals['doble'].to_f
+    row << { :content => "Total Devengado", :colspan => 3, :align => :right, :font_style => :bold }  
+    row << { :content => "#{number_to_format(@total_devengado)}", :colspan => 3, :align => :center}
+    rows << row
+    row = []
+
+    tRows << rows
+    rows = []
+    
+    tRows
   end
 
   def get_data_deductions(employee_id)
@@ -204,18 +361,45 @@ include ActionView::Helpers::NumberHelper
     result << "#{total}"
   end
 
-  def table_deductions(data, total_salary)
-      
-    receive = total_salary.to_f - data[1].to_f  
+  def table_deductions(data, center)
+
+    receive = @total_devengado.to_f - data[1].to_f
     receive = number_to_format(receive)
-      
+
+    if center
+      aline = :center
+      moveDown = move_down 15
+    else
+      aline = :right
+      moveDown = ""
+    end
+
+    moveDown
+    text "Deducciones Aplicadas", character_spacing: 1, :align => aline
+    moveDown
+
     table([
-      ["Deduccion", "%", "Monto"]] +
+      [
+        { :content => "Deduccion", :font_style => :bold }, 
+        { :content => "%", :font_style => :bold }, 
+        { :content => "Monto", :font_style => :bold }
+      ]] +
       data[0].map do |row| row end +
-      [[ {:content => "Total a Recibir (Colones): #{receive}", :colspan => 3, :font_style => :bold } ]],
-      :cell_style => { :align => :right, :size => 10, :height => 19 }, 
-      :position => :right
-    )
+      [[ {:content => "Total Deducciones:", :colspan => 2, :font_style => :bold }, {:content => "#{data[1].to_f}"} ],
+      [ {:content => "Total a Recibir:", :colspan => 2, :font_style => :bold }, {:content => "#{receive}"} ]],
+      :cell_style => { :align => :right, :size => 10, :height => 19, :border_color => "FFFFFF" },
+      :position => aline
+    ) do
+      row(0).borders = [:bottom]
+      row(0).border_width = 2
+      row(0).font_style = :bold
+      row(0).border_color = "#000000"
+    end
+    move_down 15
+    span(280,:position => aline) do
+      text "#{@msg}", :size => 10
+    end
+
   end
 
   def number_to_format(number)

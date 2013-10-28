@@ -57,12 +57,17 @@ class ReportsController < ApplicationController
         payroll_ids = params[:payroll_ids].split(",")
         tasks = params[:tasks].split(",")
         order = params[:order]
+        cc = params[:cc].split(",")
         
         if tasks.empty?
           tasks = Task.select(:id).collect(&:id)
         end
 
-        @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order)
+        if cc.empty?
+          cc = CentroDeCosto.select(:id).collect(&:id)
+        end
+        
+        @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order, cc)
 
         if format.to_s == "pdf"
 
@@ -85,6 +90,7 @@ class ReportsController < ApplicationController
 
   def payment_type_report
     @tasks = Task.all
+    @cc = CentroDeCosto.all
   end
 
   def resources

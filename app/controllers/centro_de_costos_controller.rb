@@ -1,6 +1,7 @@
 class CentroDeCostosController < ApplicationController
   load_and_authorize_resource
   before_filter :get_parent_info, :only => [:new, :edit]
+  respond_to :html, :json, :js
   # GET /centro_de_costos
   # GET /centro_de_costos.json
   def index
@@ -63,4 +64,11 @@ class CentroDeCostosController < ApplicationController
   def get_parent_info
     @cc_child ||= CentroDeCosto.find(:all, :select =>['icentro_costo','icc_padre', 'nombre_cc', 'iaccount'])
    end
+
+  # Search for Centro de Costos
+  def fetch_cc
+    @cc = CentroDeCosto.all
+    respond_with(@cc, :only => [:id, :icentro_costo, :nombre_cc])
+  end
+
 end

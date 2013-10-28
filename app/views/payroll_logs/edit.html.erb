@@ -38,7 +38,7 @@
 					<tbody>
 					<% e[1].each do |h| %>
 						<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
-							<td><%= @payroll_log.payroll_date %></td>
+							<td><%= h.payroll_date %></td>
 							<td><%= h.task.ntask %></td>
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>

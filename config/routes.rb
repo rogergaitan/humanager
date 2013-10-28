@@ -91,6 +91,7 @@ Reasapp::Application.routes.draw do
   resources :centro_de_costos do
     collection do
       get 'sync_cc'
+      get 'fetch_cc'
     end
     collection do
       get 'load_cc'
