@@ -14,8 +14,6 @@
 /log/*.log
 /tmp
 
-# Files
-
 /config/database.yml
 Gemfile.lock
 
