@@ -112,7 +112,7 @@ class ReportsController < ApplicationController
 
         detail = {}
 
-        # G E T   E M P L O Y E   N A M E
+      # G E T   E M P L O Y E   N A M E
         e = Employee.find(employee_id)
         name = {}
         index = nil
@@ -125,9 +125,9 @@ class ReportsController < ApplicationController
           employees_names << name
         end
         totals['Nombre Empleado'] = "Total"
-        # G E T   E M P L O Y E   N A M E
+      # G E T   E M P L O Y E   N A M E
         
-        # G E T   T O T A L   E A R N
+      # G E T   T O T A L   E A R N
         total_earn = 0
         PayrollHistory.where('payroll_log_id = ?', payroll_id).each do |p|
           unless p.payroll_employees.where('employee_id = ?', employee_id).empty?
@@ -140,9 +140,9 @@ class ReportsController < ApplicationController
         else
           totals['Total Devengado'] += total_earn
         end
-        # G E T   T O T A L   E A R N
+      # G E T   T O T A L   E A R N
 
-        # G E T   D E D U C T I O N S
+      # G E T   D E D U C T I O N S
         # Set default values
         list_deductions.each do |id|
           d = Deduction.find(id)
@@ -184,7 +184,7 @@ class ReportsController < ApplicationController
           end
         end # End WorkBenefitsPayment
         list_desc_deductions["Otras Deducciones"] = "Otras Deducciones"
-        # G E T   D E D U C T I O N S
+      # G E T   D E D U C T I O N S
 
         detail["Total"] = (total_earn-total_deductions)
         if totals["Total"].blank?

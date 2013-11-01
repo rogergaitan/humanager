@@ -18,7 +18,9 @@ gem 'bootstrap-will_paginate'
 gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'prawn', :git => 'git://github.com/sandal/prawn.git'
-#gem 'rubyfb'
+# gem 'rubyfb'
+# gem 'rack', '~> 1.4.5'
+# gem 'thin'
 gem 'cancan'
 
 # Gems used only for assets and not required

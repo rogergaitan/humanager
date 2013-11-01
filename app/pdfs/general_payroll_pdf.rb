@@ -9,6 +9,7 @@ include ActionView::Helpers::NumberHelper
     @start_date = nil
     @name_payrolls = nil
     get_dates(payroll_ids)
+    # text "#{@data}"
     start
   end
 
