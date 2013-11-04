@@ -92,9 +92,9 @@ class EmployeesController < ApplicationController
         end
       else
         # UPDATE
-        @update_employee = Employee.find_by_entity_id(employee.init)
-        params[:employee] = { :name => full_name, :surname => last_name }
-        if @update_employee.update_attributes(params[:employee])
+        @update_entity = Entity.find_by_entityid(employee.init)
+        params[:entity] = { :name => full_name, :surname => last_name }
+        if @update_entity.update_attributes(params[:entity])
           @ca += 1
         end
       end
