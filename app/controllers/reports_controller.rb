@@ -194,7 +194,9 @@ class ReportsController < ApplicationController
         end
 
         if(index.nil?)
-          list_payrolls << detail
+          if detail['Total Devengado'] != 0
+            list_payrolls << detail
+          end
         else
           list_payrolls[index]["Total Devengado"] += detail["Total Devengado"]
           list_payrolls[index]["Total"] += detail["Total"]

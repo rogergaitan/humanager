@@ -34,7 +34,6 @@ include ActionView::Helpers::NumberHelper
       data_deductions = get_data_deductions(employee_id)
 
       tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types)
-      #################################################################################################################################################
 
       if tRows.length > 1
         tables_salary(tRows, header, data_deductions, employee)
@@ -42,8 +41,6 @@ include ActionView::Helpers::NumberHelper
         tables_salary_center(tRows, header)
         table_deductions(data_deductions, true)
       end
-      
-      #################################################################################################################################################
 
       if count != @employees.count
         start_new_page()
@@ -123,7 +120,6 @@ include ActionView::Helpers::NumberHelper
           table_deductions(data_deductions, true)
         end
       end
-
   end
 
   def tables_salary_center(tRows, header)
@@ -194,7 +190,7 @@ include ActionView::Helpers::NumberHelper
           totals['ordinario'] += p.total.to_f
         end
         
-        if p.payment_type.to_s== list_payments_types[1]
+        if p.payment_type.to_s == list_payments_types[1]
           result[index]['extra'] += p.time_worked.to_f
           totals['extra'] += p.total.to_f
         end
@@ -346,7 +342,6 @@ include ActionView::Helpers::NumberHelper
           row = []
         end
       end
-
     end
 
     if total_others != 0
@@ -399,7 +394,6 @@ include ActionView::Helpers::NumberHelper
     span(280,:position => aline) do
       text "#{@msg}", :size => 10
     end
-
   end
 
   def number_to_format(number)

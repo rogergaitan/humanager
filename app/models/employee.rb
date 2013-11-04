@@ -121,7 +121,7 @@ class Employee < ActiveRecord::Base
   def self.payment_types_report_data(employees, payroll_ids, task_ids, order, cc_ids)
   
     data = []; infoData = [];
-    info = {};
+    info = {}
     
     # Get the payroll log ids
     payroll_log_ids = PayrollLog.where(:payroll_id => payroll_ids)
@@ -144,8 +144,8 @@ class Employee < ActiveRecord::Base
           end # End unless
 
           if totl == employees.length
-            info << @total
-            data << info
+            infoData << @total
+            data << infoData
           end
 
         end # End each Employee

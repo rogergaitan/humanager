@@ -9,7 +9,6 @@ include ActionView::Helpers::NumberHelper
     @start_date = nil
     @name_payrolls = nil
     get_dates(payroll_ids)
-    # text "#{@data}"
     start
   end
 
@@ -43,7 +42,11 @@ include ActionView::Helpers::NumberHelper
         if( key == 'Nombre Empleado')
           row << "#{value}"
         else
-          row << { :content => "#{number_to_format(value)}", :align => :right }
+          if value == 0
+            row << { :content => "--", :align => :right }
+          else
+            row << { :content => "#{number_to_format(value)}", :align => :right }
+          end
         end
       end
       rows << row
