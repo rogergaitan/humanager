@@ -76,8 +76,8 @@ class EmployeesController < ApplicationController
         full_name = employee.ntercero
         last_name = employee.napellido
         @new_employee = Employee.new
-        @entity = @new_employee.build_entity(:name => full_name, :surname => 
-                                last_name, :entityid => employee.init)
+        @entity = @new_employee.build_entity(:name => firebird_encoding(full_name.to_s), :surname => 
+                                firebird_encoding(last_name.to_s), :entityid => employee.init)
         @entity.telephones.build
         @new_employee.build_photo
         @entity.emails.build
@@ -93,7 +93,7 @@ class EmployeesController < ApplicationController
       else
         # UPDATE
         @update_entity = Entity.find_by_entityid(employee.init)
-        params[:entity] = { :name => full_name, :surname => last_name }
+        params[:entity] = { :name => firebird_encoding(full_name.to_s), :surname => firebird_encoding(last_name.to_s) }
         if @update_entity.update_attributes(params[:entity])
           @ca += 1
         end
