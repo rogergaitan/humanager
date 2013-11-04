@@ -1,8 +1,9 @@
 $(document).ready(function() {
 
   $('#task-fb').click(function() { 
+    $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
     $.getJSON('tasks/tasksfb', function(element) {
-      $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
+      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(function(){location.reload();}); });
       $(element.task).each(function() { add_tasks(this, 'table#task-data')});
       $('#task-fb').hide();
     })

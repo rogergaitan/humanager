@@ -42,7 +42,8 @@ es:
       permissions: Permisos
     titles:
       sync: datos sincronizados
-      tasksfb: datos sincronizados
+      tasksfb: 'Sincronización Completada, Datos Nuevos'
+      tasksfb_update: 'Datos Actualizados'
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
       permissions: Administración de Permisos | %{model}

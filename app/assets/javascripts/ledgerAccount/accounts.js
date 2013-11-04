@@ -31,12 +31,12 @@ function replace_value(value) {
 
 //Sincroniza y muestra todas las cuentas contables
 function AllLedgerAccounts() {
-  
-  $('#account-fb').attr("disabled", true); //desabilito el boton
   var cc_array = [];
+  $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
+  $('#account-fb').attr("disabled", true); //desabilito el boton
   $.ajax('/ledger_accounts/accountfb', {
     type: 'GET',
-    timeout: 15000,
+    //timeout: 15000,
 
     beforeSend: function() {
       $('#error').hide();
@@ -46,7 +46,11 @@ function AllLedgerAccounts() {
       $('#loading').hide();
     },
     success: function(result) {
-      $(result.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(); });
+      $(result.notice).each(function() { 
+        $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(function(){
+          location.reload();
+        }); 
+      });
       $(result.account).each(function() { 
         cc_array.push(new Array(this.iaccount ? this.iaccount : 0, this.naccount, this.ifather ? this.ifather : 0, this.id));
       });

@@ -4,9 +4,10 @@ Employee = {
 
 $(document).ready(function() {
   $('#sync-fb').click(function() {
+    $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
     $.getJSON('employees/sync', function(element) {
-      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(); });
-      $(element.employee).each(function() { add_employees(this, 'table#employee-data')});
+      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(function(){location.reload();}); });
+      $(element.employee).each(function() { add_employees(this, 'table#employee-data') });
       $('#sync-fb').hide();
     })
   });

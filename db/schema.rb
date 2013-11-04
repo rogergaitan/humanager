@@ -339,6 +339,23 @@ ActiveRecord::Schema.define(:version => 20131011170718) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "payment_methods", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "payment_schedules", :force => true do |t|
+    t.string   "code"
+    t.string   "description"
+    t.date     "initial_date"
+    t.date     "end_date"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.date     "payment_date"
+  end
+
   create_table "payment_units", :force => true do |t|
     t.string   "description"
     t.datetime "created_at",  :null => false
@@ -523,6 +540,13 @@ ActiveRecord::Schema.define(:version => 20131011170718) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "roles", :force => true do |t|
+    t.string   "role"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "sublines", :force => true do |t|

@@ -48,6 +48,7 @@ class UsersController < ApplicationController
   def usersfb
     @usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
     @c = 0
+    @ca = 0
     @users = []
     @users_fb = {}
 
@@ -82,13 +83,23 @@ class UsersController < ApplicationController
           @c += 1
         else
           @new_user.errors.each do |error|
-            Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}";
+            Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}"
           end
         end
+      else
+
+        @update_user = User.find_by_username(ufb.nusr)
+        params[:user] = { :name => "#{ufb.snombre} #{ufb.sapellido}", :email => "#{ufb.semail}" }
+
+        if @update_user.update_attributes(params[:user])
+          @ca += 1
+        end
+        
       end # End if
-      @users_fb[:user] = @users
-      @users_fb[:notice] = "#{t('helpers.titles.tasksfb').capitalize}: #{@c}"
     end # End each usersfb
+
+    @users_fb[:user] = @users
+    @users_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
 
     respond_to do |format|
       format.json { render json: @users_fb }

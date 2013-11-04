@@ -67,10 +67,10 @@ class EmployeesController < ApplicationController
   def sync
     @abanits = Abanit.where("bempleado = ?", 'T').find(:all, 
                             :select => ['init', 'ntercero', 'napellido'])
-    @c = 0 
+    @c = 0
+    @ca = 0
     @syn_data = {}
     @employees = []
-    @notice = []
     @abanits.each do |employee|
       if Entity.where("entityid = ?", employee.init).empty?
         full_name = employee.ntercero
@@ -83,21 +83,27 @@ class EmployeesController < ApplicationController
         @entity.emails.build
         @entity.addresses.build
         if @new_employee.save
-           @employees << @new_employee
-            @c += 1
+          @employees << @new_employee
+          @c += 1
         else
           @new_employee.errors.each do |error|
-            @notice << "Error creando empleado: #{employee.init}, el nombre no ha sido especificado"
+            Rails.logger.error "Error creando empleado: #{employee.init}, el nombre no ha sido especificado"
           end
-        end        
+        end
+      else
+        # UPDATE
+        @update_employee = Employee.find_by_entityid(employee.init)
+        params[:employee] = { :name => full_name, :surname => last_name }
+        if @update_employee.update_attributes(params[:employee])
+          @ca += 1
+        end
       end
     end
     @syn_data[:employee] = @employees
-    @notice << "#{t('helpers.titles.sync').capitalize}: #{@c}"
-    @syn_data[:notice] = @notice
+    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
     respond_to do |format|
-        format.json { render json: @syn_data, :include => :entity}
-      end
+      format.json { render json: @syn_data, :include => :entity }
+    end
   end
 
   def splitname(splitname)

@@ -25,12 +25,10 @@ class CentroDeCostosController < ApplicationController
   end
 
   def sync_cc
-    @empmaest = Empmaestcc.find(:all, 
-                            :select => ['iemp', 'icc', 'ncc', 'iccpadre'])
-    @centro_costos = []
-    @syn_data = {}
-    @c = 0
-    @notice = []
+    @empmaest = Empmaestcc.find(:all, :select => ['iemp', 'icc', 'ncc', 'iccpadre'])
+    @centro_costos = []; @syn_data = {}
+    @c = 0; @ca = 0
+    
     @empmaest.each do |centrocostos|
       if CentroDeCosto.where("icentro_costo = ?", centrocostos.icc).empty?
         @new_cc = CentroDeCosto.create(:iempresa => centrocostos.iemp, :icentro_costo => 
@@ -41,17 +39,26 @@ class CentroDeCostosController < ApplicationController
           @c += 1
         else
           @new_cc.errors.each do |error|
-            @notice << "Error creando centro de costos: #{centrocostos.icc}"
+            Rails.logger.error "Error creando centro de costos: #{centrocostos.icc}"
           end
-        end        
+        end
+      else
+        # UPDATE
+        @update_cc = CentroDeCosto.find_by_icentro_costo(centrocostos.icc)
+        params[:centroDeCosto] = { :iempresa => centrocostos.iemp, :nombre_cc => firebird_encoding(centrocostos.ncc.to_s), 
+                                :icc_padre => firebird_encoding(centrocostos.iccpadre.to_s) }
+        if @update_cc.update_attributes(params[:centroDeCosto])
+          @ca += 1
+        end
       end
+    
     end
+
     @syn_data[:centrocostos] = @centro_costos
-    @notice << "#{t('helpers.titles.sync').capitalize}: #{@c}"
-    @syn_data[:notice] = @notice
+    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
     respond_to do |format|
-        format.json { render json: @syn_data}
-      end
+      format.json { render json: @syn_data}
+    end
   end
 
   def load_cc

@@ -19,6 +19,7 @@ class TasksController < ApplicationController
   def tasksfb
     @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'])
     @c = 0
+    @ca = 0
     @tasks = []
     @tasks_fb = {}
 
@@ -37,13 +38,24 @@ class TasksController < ApplicationController
                                 Description: #{error}"
             end
           end
+
+        else
+          @update_task = Task.find_by_itask(task.ilabor)
+          params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
+                      :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
+
+          if @update_task.update_attributes(params[:task])
+            @ca += 1
+          end
+
         end
-        @tasks_fb[:task] = @tasks
-        @tasks_fb[:notice] =  "#{t('helpers.titles.tasksfb').capitalize}: #{@c}"
     end
+    
+    @tasks_fb[:task] = @tasks
+    @tasks_fb[:notice] =  ["#{t('helpers.titles.tasksfb')}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
 
     respond_to do |format|
-      format.json {r ender json: @tasks_fb }
+      format.json {render json: @tasks_fb }
     end
   end
 

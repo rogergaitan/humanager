@@ -3,11 +3,10 @@ var users = {}
 $(document).ready(function() {
 
   $('#users-fb').on('click', function() {
+    $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
     $.getJSON( $('#usersfb_users_path').val(), function(element) {
-      $('section.nav').append('<div class="notice">'+ element.notice +'</div>');
-      $(element.user).each(function() { 
-        users.add_users(this, "table#user-data");
-      });
+      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(function(){location.reload();}); });
+      $(element.user).each(function() { users.add_users(this, "table#user-data"); });
       $('#users-fb').hide();
     })
   });
