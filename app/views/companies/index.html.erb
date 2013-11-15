@@ -1,0 +1,45 @@
+<%- model_class = Company -%>
+<%= javascript_include_tag 'companies/script' %>
+
+<input type="hidden" id="companies_fb_companies_path" value="<%= companies_fb_companies_path %>">
+
+<div class="page-header">
+  <h1>
+    <%=t '.title', :default => model_class.model_name.human.pluralize %>
+    <button id="companies-fb" class="btn btn-primary pull-right">
+      <i class='icon-refresh'></i>
+    </button>
+  </h1>
+</div>
+
+<%= will_paginate :class =>'pagination pagination-centered' %>
+
+<table class="table table-striped" id="companies-data">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:code) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:label_reports_1) %></th>
+      <th><%= model_class.human_attribute_name(:label_reports_2) %></th>
+      <th><%= model_class.human_attribute_name(:label_reports_3) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @companies.each do |company| %>
+    <tr>
+      <td><%= company.code %></td>
+      <td><%= company.name %></td>
+      <td><%= company.label_reports_1 %></td>
+      <td><%= company.label_reports_2 %></td>
+      <td><%= company.label_reports_3 %></td>
+      <td>
+        <% if can? :update, Company %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          edit_company_path(company), :class => 'btn btn-mini' %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -31,6 +31,26 @@ class Ability
         end
     end
     ######################################################################################
+    # COMPANIES | CONFIGURACION
+    ######################################################################################
+    company = user.permissions_user.find_by_permissions_subcategory_id(list['Companias']) 
+    if !company.nil?
+         # Default values, available for all
+        can [:manage], Company
+
+        # Not available actions
+        cannot [:create, :destroy], Company
+
+        if !company.p_view
+            cannot :read, Company
+        end
+
+        if !company.p_modify
+            cannot :update, Company
+        end
+
+    end
+    ######################################################################################
     # CANTONS | CONFIGURACION
     ######################################################################################
     canton = user.permissions_user.find_by_permissions_subcategory_id(list['Cantones'])
@@ -91,6 +111,7 @@ class Ability
         if !employee.p_modify
             cannot [:update], Employee
         end
+        can [:update], Employee
     end
     ######################################################################################
     # DEPARTMENTS | CONFIGURACION

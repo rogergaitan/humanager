@@ -296,6 +296,7 @@ es:
         province: Provincia
         district: Distrito
         canton: Cantones
+        company: Compañias
         task: 
           one: Labor
           other: Labores
@@ -474,6 +475,12 @@ es:
         canton:
           canton: Cantón
           province_id: Provincia
+        company:
+          code: Código
+          name: Nombre
+          label_reports_1: Rotulo en Reportes 1
+          label_reports_2: Rotulo en Reportes 2
+          label_reports_3: Rotulo en Reportes 3
         district:
           district: Distrito
           canton_id: Cantón

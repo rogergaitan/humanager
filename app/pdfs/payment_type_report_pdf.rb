@@ -1,13 +1,14 @@
 class PaymentTypeReportPDF < Prawn::Document
 include ActionView::Helpers::NumberHelper
 
-  def initialize(data, order, payroll_ids)
+  def initialize(data, order, payroll_ids, company_id)
     
     super(top_margin: 5, :page_size => "A4", :page_layout => :landscape)
     @data = data
     @end_date = nil
     @start_date = nil
     @name_payrolls = nil
+    @company = Company.find(company_id)
     get_dates(payroll_ids)
     big_total
     @order = order
@@ -85,9 +86,13 @@ include ActionView::Helpers::NumberHelper
   def header_page
 
     font_size(10) do
-      text_box "Agro Vicces S.A.", :align => :left, style: :bold, character_spacing: 1
       text_box "Reporte de Labores Por Tipo de Pago", :align => :center, style: :bold, character_spacing: 1
     end
+
+    text "#{@company.label_reports_1}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    text "#{@company.label_reports_2}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    text "#{@company.label_reports_3}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+
     move_down 20
     string = "#{@order_by}"
     text string, :align => :center, style: :bold, character_spacing: 1.5

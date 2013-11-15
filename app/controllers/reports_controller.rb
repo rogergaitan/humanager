@@ -13,17 +13,18 @@ class ReportsController < ApplicationController
 
   def show
 
+    @company_id = params[:company]
+
     case params[:type].to_s
       
       when CONSTANTS[:REPORTS][0]['PAYMENT_PROOF']
-        
         @employees = params[:employees].split(",")
         @payroll = Payroll.find(params[:payroll_id])
         @msg = params[:msg]
         
         respond_to do |format|
           format.pdf do
-            pdf = ProofPayEmployeesPDF.new(@payroll, @employees, @msg)
+            pdf = ProofPayEmployeesPDF.new(@payroll, @employees, @msg, @company_id)
             send_data pdf.render, filename: "payment_proof.pdf",
               type: "application/pdf", disposition: "inline"
           end
@@ -41,13 +42,13 @@ class ReportsController < ApplicationController
 
           respond_to do |format|
             format.pdf do
-              pdf = GeneralPayrollPDF.new(@data, @payroll_ids)
+              pdf = GeneralPayrollPDF.new(@data, @payroll_ids, @company_id)
               send_data pdf.render, filename: "general_payroll.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
         else
-          general_payroll_xls(@data, @payroll_ids)
+          general_payroll_xls(@data, @payroll_ids, @company_id)
         end
 
       when CONSTANTS[:REPORTS][0]['PAYMENT_TYPE_REPORT']
@@ -73,13 +74,13 @@ class ReportsController < ApplicationController
 
           respond_to do |format|
             format.pdf do
-              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids)
+              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids, @company_id)
               send_data pdf.render, filename: "payment_type_report.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
         else
-          payment_type_report_xls(@data, payroll_ids, order)
+          payment_type_report_xls(@data, payroll_ids, order, @company_id)
         end
     end # End case
   end # End show
@@ -97,6 +98,7 @@ class ReportsController < ApplicationController
     @department = Department.all
     @superior = Employee.superior
     @employees = Employee.order_employees
+    @companies = Company.all
   end
 
   def general_payroll_data(payroll_ids, employees)
@@ -212,8 +214,9 @@ class ReportsController < ApplicationController
     list_payrolls
   end
 
-  def general_payroll_xls(data, payroll_ids)
+  def general_payroll_xls(data, payroll_ids, company_id)
     @data = data
+    @company =  Company.find(company_id)
 
     get_dates(payroll_ids)
     
@@ -225,9 +228,10 @@ class ReportsController < ApplicationController
     end
   end
 
-  def payment_type_report_xls(data, payroll_ids, order)
+  def payment_type_report_xls(data, payroll_ids, order, company_id)
     @data = data
     @order = order
+    @company =  Company.find(company_id)
 
     get_dates(payroll_ids)
     

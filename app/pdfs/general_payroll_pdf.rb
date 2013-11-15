@@ -1,13 +1,14 @@
 class GeneralPayrollPDF < Prawn::Document
 include ActionView::Helpers::NumberHelper
 
-  def initialize(data, payroll_ids)
+  def initialize(data, payroll_ids, company_id)
     
     super(top_margin: 5, :page_size => "A4", :page_layout => :landscape)
     @data = data
     @end_date = nil
     @start_date = nil
     @name_payrolls = nil
+    @company = Company.find(company_id)
     get_dates(payroll_ids)
     start
   end
@@ -20,9 +21,13 @@ include ActionView::Helpers::NumberHelper
   def header_page()
 
     font_size(10) do
-      text_box "Agro Vicces S.A.", :align => :left, style: :bold, character_spacing: 1
       text_box "Reporte General de Planilla", :align => :right, style: :bold, character_spacing: 1
     end
+
+    text "#{@company.label_reports_1}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    text "#{@company.label_reports_2}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    text "#{@company.label_reports_3}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    
 
     move_down 20
     string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"

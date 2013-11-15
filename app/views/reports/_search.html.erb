@@ -91,3 +91,11 @@
 <input type="hidden" id="fetch_employees_deductions_path" value="<%= fetch_employees_deductions_path %>">
 <p></p>
 <hr>
+
+<h2>Compañia</h2>
+
+<% c = @companies.empty? ? "No existen compañias todavía" : "Por favor selecciona" %>
+<%= select_tag("company", options_for_select(@companies.map { |c| [c.name, c.id] }), { :prompt => c }) %>
+
+
+<% select("company", "id", @companies.collect {|p| [ p.name, p.id ] }, { include_blank: c }) %>

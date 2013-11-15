@@ -47,8 +47,7 @@ class UsersController < ApplicationController
 
   def usersfb
     @usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
-    @c = 0
-    @ca = 0
+    @c = 0; @ca = 0
     @users = []
     @users_fb = {}
 

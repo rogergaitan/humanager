@@ -1,13 +1,14 @@
 class ProofPayEmployeesPDF < Prawn::Document
 include ActionView::Helpers::NumberHelper
 
-  def initialize(payroll, employees, msg)
+  def initialize(payroll, employees, msg, id_company)
     
     super(top_margin: 15, :left_margin => 20, :right_margin => 20)
     @payroll = payroll
     @employees = employees
     @total_devengado = 0
     @msg = msg
+    @company = Company.find(id_company)
     start
   end
 
@@ -142,9 +143,13 @@ include ActionView::Helpers::NumberHelper
   def proof_pay_info
 
     font_size(10) do
-      text_box "Agro Vicces S.A.", :align => :left, style: :bold, character_spacing: 1
       text_box "Comprobante de Pago de Salario", :align => :right, style: :bold, character_spacing: 1
     end
+
+    text "#{@company.label_reports_1}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    text "#{@company.label_reports_2}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+    text "#{@company.label_reports_3}", :align => :left, style: :bold, character_spacing: 1, :size => 10
+
     move_down 20
     string = "Planilla #{@payroll.payroll_type.description} del #{@payroll.start_date} al #{@payroll.end_date}"
     text string, :align => :center, style: :bold, character_spacing: 1.5

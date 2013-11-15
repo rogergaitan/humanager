@@ -11,8 +11,14 @@
     <Table>
       
       <Row>
-        <Cell><Data ss:Type="String">Agro Vicces S.A.</Data></Cell>
+        <Cell><Data ss:Type="String"><%= "#{@company.label_reports_1}" %></Data></Cell>
         <Cell><Data ss:Type="String">Reporte General de Planilla</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= "#{@company.label_reports_2}" %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= "#{@company.label_reports_3}" %></Data></Cell>
       </Row>
       <Row>
         <Cell><Data ss:Type="String"><%= string %></Data></Cell>

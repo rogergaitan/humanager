@@ -41,7 +41,7 @@ reports_payment_proof.validate_data = function(e) {
     $('div#message').html('<div class="alert alert-error">Por favor selecione una planilla</div>');
     $('div.alert.alert-error').delay(4000).fadeOut();
     return false;
-  }
+  }  
 
   var numberEmployees = $('div.employees-list.list-right input').length;
   var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
@@ -49,6 +49,13 @@ reports_payment_proof.validate_data = function(e) {
     
   if( (numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) ) {
     $('div#message').html('<div class="alert alert-error">Por favor selecione los empleados</div>');
+    $('div.alert.alert-error').delay(4000).fadeOut();
+    return false;
+  }
+
+  // Validate Company
+  if( $('#company').val() == "" ) {
+    $('div#message').html('<div class="alert alert-error">Por favor selecione una compañia </div>');
     $('div.alert.alert-error').delay(4000).fadeOut();
     return false;
   }
@@ -62,6 +69,7 @@ reports_payment_proof.create_pdf = function() {
   var payroll_id = $('#payrolls_results input:checked').val();
   var type = $('#type_report').val();
   var msg = $('#messages_to_employees').val();
+  var company = $('#company').val();
   var employees = [];
 
   $('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
@@ -72,6 +80,7 @@ reports_payment_proof.create_pdf = function() {
                 + '?type=' + type
                 + '&employees=' + employees
                 + '&payroll_id=' + payroll_id
+                + '&company=' + company
                 + '&msg=' + msg
               );
 }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131011170718) do
+ActiveRecord::Schema.define(:version => 20131115213134) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -64,6 +64,16 @@ ActiveRecord::Schema.define(:version => 20131011170718) do
     t.string   "icc_padre"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+  end
+
+  create_table "companies", :force => true do |t|
+    t.integer  "code"
+    t.string   "name"
+    t.text     "label_reports_1"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.text     "label_reports_2"
+    t.text     "label_reports_3"
   end
 
   create_table "contacts", :force => true do |t|

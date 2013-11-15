@@ -88,6 +88,10 @@
                     <% if can? :read, User %>
                         <li><a href=<%= users_path%>> Usuarios</a></li>
                     <% end %>
+
+                    <% if can? :read, Company %>
+                        <li><a href=<%= companies_path %>> Compañias</a></li>
+                    <% end %>
 			</ul>
 		</li>
 	</ul>
