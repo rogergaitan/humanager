@@ -17,7 +17,9 @@ class TasksController < ApplicationController
   end
 
   def tasksfb
-    @labmaests = Labmaest.find(:all, :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'])
+    @labmaests = Labmaest.find( :all, 
+                                :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'], 
+                                :conditions => {:IACTIVIDAD => 1} )
     @c = 0
     @ca = 0
     @tasks = []
