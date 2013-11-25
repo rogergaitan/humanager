@@ -18,7 +18,7 @@ $(jQuery(document).ready(function($) {
 
 		// Cost
 		$('#search_cost_code_').focusout(function() {
-			payroll_logs.searchCostCode( $(this).val() );
+			payroll_logs.searchCostCode( $(this).val().toUpperCase() );
 		});
 
 		// Employee
@@ -39,6 +39,7 @@ $(jQuery(document).ready(function($) {
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[index] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_unidad[index] );
 				$('#load_task').val( task_desc[index] );
+				$("#task_unit_").val( task_unidad[index] );
 				return false;
 			}
 
@@ -58,6 +59,7 @@ $(jQuery(document).ready(function($) {
 		$.each(task_id, function(index, value) {
 			if( value == id ) {
 				$("#search_task_code_").val( task_code[index] );
+				$("#task_unit_").val( task_unidad[index] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[index] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_unidad[index] );
 				return false;
@@ -138,21 +140,23 @@ $(jQuery(document).ready(function($) {
 	payroll_logs.addNewColumn = function(num, employee_id) {
 
 		var date = $('#payroll_log_payroll_date').val();
-		var task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val()
+		var task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val();
+		var unit = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().val();
 		var mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val();
 		var cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val();
 		var payment = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type option:selected').html();
 		var totalRow = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_total').val());
 		var subTotal = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
-		$('#total_' + employee_id + ' td:eq(1)').html((totalRow + subTotal));
+		$('#total_' + employee_id + ' td:eq(1)').html( (totalRow + subTotal).toFixed(2) );
 		
 		$('#employee_table_'+employee_id+' #total_'+employee_id).before('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
 													'<td>'+ date +'</td>' +
 													'<td>'+ task +'</td>' +
+													'<td>'+ unit + '</td>' +
 													'<td>'+ mount +'</td>' +
 													'<td>'+ cost +'</td>' +
 													'<td>'+ payment +'</td>' +
-													'<td>'+ totalRow  +'</td>' +
+													'<td>'+ totalRow.toFixed(2)  +'</td>' +
 													'<td>' +
 														'<button type="button" class="btn btn-mini btn-danger">remove</button>' +
 														'<input type="hidden" value="' + num + '"  />' +
@@ -182,12 +186,12 @@ $(jQuery(document).ready(function($) {
 			'<div id="collapse'+total+'" class="accordion-body collapse" style="height: 0px; "><div class="accordion-inner">'+
 			'<table class="table table-hover table-bordered table-striped" id="employee_table_'+employee_id+'">'+
 				'<thead><tr>'+
-					'<td>Fecha</td><td>Labor</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
+					'<td>Fecha</td><td>Labor</td><td>Unidad</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
 				'</tr></thead>'+
 			'<tbody>'+
 			'<tr id="total_'+employee_id+'">'+
-					'<td colspan="5" class="align_right">Total:</td>'+
-					'<td colspan="2">00.00</td>'+
+					'<td colspan="6" class="align_right">Total:</td>'+
+					'<td colspan="3">00.00</td>'+
 				'</tr>'+
 			'</tbody></table></div></div></div>');
 	}
@@ -481,13 +485,25 @@ $(jQuery(document).ready(function($) {
 
 	payroll_logs.addToPayrollTotal = function(num) {
 		var total = parseFloat($('#payroll_total').html());
-		$('#payroll_total').html( total + num );
+		$('#payroll_total').html( (total + num).toFixed(2) );
 	}
 
 	payroll_logs.deductToPayrollTotal = function(num) {
 		var total = parseFloat($('#payroll_total').html());
-		$('#payroll_total').html( total - num );
+		$('#payroll_total').html( (total - num).toFixed(2) );
 	}
+
+	/* payroll_logs.addCommas = function(nStr) {
+		nStr += '';
+		x = nStr.split('.');
+		x1 = x[0];
+		x2 = x.length > 1 ? '.' + x[1] : '';
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		}
+		return x1 + x2;
+	} */
 
 	payroll_logs.cleanEmployeeAlone();
 

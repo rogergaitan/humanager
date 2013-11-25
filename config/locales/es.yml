@@ -528,6 +528,7 @@ es:
           payment_date: Fecha de pago
           state: Cerrar
           num_oper: Numero de Operación
+          company_id: Compañia
         payroll_log:
           date: Fecha
           time_worked: Tiempo trabajado

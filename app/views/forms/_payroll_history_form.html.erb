@@ -1,11 +1,11 @@
 <tr class="success items_purchase_orders_form">
 	<td class="controls_item">
 		<div class="input-append">
-			<%= text_field_tag 'search_code_employee', '', :class => 'input-mini', :placeholder => 'Número' %>
+			<%= text_field_tag 'search_code_employee', '', :class => 'input-mini', :placeholder => 'Número',:tabindex => '1' %>
 			<%= hidden_field_tag 'employee_code', ''%>
-			<%= text_field_tag 'name_employee', '', :class => 'input-medium', :placeholder => 'Nombre Empleado' %>
+			<%= text_field_tag 'name_employee', '', :class => 'input-medium', :placeholder => 'Nombre Empleado', :tabindex => '2' %>
 			<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#employeeModal" 
-			role="button" data-toggle="modal">
+			role="button" data-toggle="modal" tabindex="3">
 				<span class="add-on"><i class="icon-list"></i></span>
 			</a>
 		</div>
@@ -13,11 +13,12 @@
 	<td class="controls_item">
 		<div class="input-append">
 			<%= f.label :task_id, :class => '' %>
-			<%= text_field 'search_task_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
+			<%= text_field 'search_task_code', '', :class => 'input-mini', :placeholder => 'Código', :tabindex => '4' %>
+			<%= text_field 'task_unit', '', :class => 'input-mini', :placeholder => 'Unidad', :readonly => true %>
 
 			<%= f.hidden_field :task_id, class: "cc-filter-id" %>
 			<%= text_field_tag 'load_task', nil, :class => 'cc-filter input-medium search-image-employee', 
-			:for => :task_id %>
+			:for => :task_id, :tabindex => '5' %>
 
 			<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#taskModal" 
 			role="button" data-toggle="modal">
@@ -28,14 +29,14 @@
 	</td>
 	<td class="controls_item">
 		<%= f.label :time_worked, :class => '' %>
-		<%= f.number_field :time_worked, :class => 'input-mini input-table time-worked' %>
+		<%= f.number_field :time_worked, :class => 'input-mini input-table time-worked', :tabindex => '6' %>
 	</td>
 	<td class="controls_item">
 		<%= f.label :centro_de_costo_id, :class => 'input-table' %>
 			<div class="input-append">
-				<%= text_field 'search_cost_code', '', :class => 'input-mini', :placeholder => 'codigo' %>
+				<%= text_field 'search_cost_code', '', :class => 'input-mini', :placeholder => 'codigo', :tabindex => '7' %>
 				<%= f.hidden_field :centro_de_costo_id, class: "cc-filter-id centro-costo" %>
-				<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee centro-costo', :for => :centro_de_costo_id %>
+				<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee centro-costo', :for => :centro_de_costo_id, :tabindex => '8' %>
 				<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#payrollModal" 
 				role="button" data-toggle="modal">
 					<span class="add-on"><i class="icon-list"></i></span>
@@ -45,7 +46,7 @@
 	<td class="save-employees" style="display:none;"></td>
 	<td class="controls_item">
 		<%= f.label :payment_type, :class => '' %>
-		<%= f.enum_select :payment_type, :include_blank => false %>
+		<%= f.enum_select :payment_type, :include_blank => false, :tabindex => '9'  %>
 		<%= f.hidden_field :_destroy, :class => 'payroll_histories' %>
 		<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
 		<%= f.hidden_field :total %>

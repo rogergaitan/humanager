@@ -82,7 +82,7 @@ class PayrollsController < ApplicationController
     @activas[:activa] = Payroll.activas
 
      respond_to do |format|
-      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log])}
+      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log, :company])}
     end
   end
 
@@ -103,9 +103,10 @@ class PayrollsController < ApplicationController
     end
   end
 
-  # Obtiene todos los tipos de planillas
+  # Obtiene todos los tipos de planillas y todas las compañias
   def get_payroll_types
     @payroll_types = PayrollType.tipo_planilla
+    @companies = Company.all
   end
 
   # Reabre una o un conjunto de planillas cerradas

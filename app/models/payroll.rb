@@ -1,14 +1,16 @@
 class Payroll < ActiveRecord::Base
 
-  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper, :num_oper_2
+  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper, :num_oper_2, :company_id
   belongs_to :payroll_type
   belongs_to :deduction_payment
+  belongs_to :company
   has_many :deduction_payrolls, :dependent => :destroy
   has_many :deductions, :through => :deduction_payrolls
   validates :payroll_type_id, :presence => true
   validates :start_date, :presence => true
   validates :end_date, :presence => true
   validates :payment_date, :presence => true
+  validates :company_id, :presence => true
 
   has_one :payroll_log, :dependent => :destroy
   
@@ -284,7 +286,7 @@ class Payroll < ActiveRecord::Base
   # Send the information to Firebird.
   def self.send_to_firebird(payroll_id, username)
 
-    puts '############### E M P E Z A M O S ###############'
+    ############### E M P E Z A M O S ###############
     result = true
     num_oper = get_number_operation
     num_oper_2 = get_number_operation
@@ -344,7 +346,6 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save into Firebird: Oprmaest
-  # kalfaro IUSUARIOULT
   def self.save_in_oprmaest(num_oper, payroll, username)
 
     t = Time.new
@@ -500,7 +501,6 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save into Firebird: Oprmaest (Process number 2)
-  # kalfaro IUSUARIOULT
   def self.save_in_oprmaest_2(num_oper, payroll, username)
     t = Time.new
     date = t.strftime("%d.%m.%Y, %T.%L")

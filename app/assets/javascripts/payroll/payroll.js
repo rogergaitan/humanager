@@ -75,7 +75,11 @@ payroll.index = function() {
 // Carga las planillas activas en una tabla
 // Load the active payroll in a table
 payroll.add_activas = function (payrolld, target_table, count, totalCount) {
-  payroll.total += parseFloat(payrolld.payroll_log.payroll_total);
+  if( payrolld.payroll_log.payroll_total != null ) {
+    payroll.total += parseFloat(payrolld.payroll_log.payroll_total);
+  } else {
+    payroll.total += parseFloat(0);
+  }
 
   var payroll_destroy = $('#payroll_destroy').val();
   var payroll_update = $('#payroll_update').val();
@@ -86,10 +90,11 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
 
   var data = '<tr>' + 
       '<td><a href="/payrolls/' + payrolld.id + '">' + payrolld.payroll_type.description + '</a></td>' +
+      '<td>' + (payrolld.company != null ? payrolld.company.name : '--' ) + '</td>' +
       '<td>' + payrolld.start_date + '</td>' +
       '<td>' + payrolld.end_date + '</td>' +
       '<td>' + payrolld.payment_date + '</td>' +
-      '<td>' + payrolld.payroll_log.payroll_total + '</td>' +
+      '<td>' + ( payrolld.payroll_log.payroll_total != null ? payrolld.payroll_log.payroll_total : 0)  + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payrolld.id + '" value="' + payrolld.id + '" />' +
       '</td><td>';
@@ -143,6 +148,7 @@ payroll.add_inactivas = function (payroll, target_table) {
       '<td>' +
         '<a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a>' +
       '</td>' +
+      '<td>' + (payroll.company != null ? payroll.company.name : '--' ) + '</td>' +
       '<td>' +  payroll.start_date + '</td>' +
       '<td>' +  payroll.end_date + '</td>' +
       '<td>' +  payroll.payment_date + '</td>' +

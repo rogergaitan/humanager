@@ -5,10 +5,10 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'#, '~> 0.3.13'
+gem 'mysql2', '~> 0.3.13'
 gem 'jquery-rails'
 gem 'devise'
-gem 'rmagick'#, '~> 2.13.2'
+gem 'rmagick', '~> 2.13.2'
 gem 'carrierwave'
 gem 'client_side_validations'
 gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
@@ -19,8 +19,8 @@ gem 'rails3-jquery-autocomplete'
 gem 'annotate'
 gem 'prawn', :git => 'git://github.com/sandal/prawn.git'
 gem 'rubyfb'
-# gem 'rack', '~> 1.4.5'
-# gem 'thin'
+gem 'rack', '~> 1.4.5'
+gem 'thin'
 gem 'cancan'
 
 # Gems used only for assets and not required

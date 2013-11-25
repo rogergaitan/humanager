@@ -7,6 +7,12 @@
     </div>
   </div>
   <div class="control-group">
+    <%= f.label :company_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select(:company_id, @companies, :id, :name , :prompt => true) %>
+    </div>
+  </div>
+  <div class="control-group">
     <%= f.label :start_date, :class => 'control-label' %>
     <div class="controls">
 			<%= f.text_field :start_date, :class => 'text_field', :readonly => true %>

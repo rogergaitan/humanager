@@ -20,7 +20,7 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, child_index: id) do |builder|
       render("forms/" + association.to_s.singularize + "_form", f: builder)
     end
-    link_to(name, '#', class: "add_fields btn btn-mini btn-success " + fieldClass, id: association, data: {id: id, fields: fields.gsub("\n", "")})
+    link_to(name, '#', tabindex: '10', class: "add_fields btn btn-mini btn-success " + fieldClass, id: association, data: {id: id, fields: fields.gsub("\n", "")})
   end
 
 end

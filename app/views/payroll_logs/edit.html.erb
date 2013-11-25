@@ -6,7 +6,9 @@
 	<%= @payroll_log.payroll.payroll_type.description %> del 
 	<%= @payroll_log.payroll.start_date %> al 
 	<%= @payroll_log.payroll.end_date %>
-  	<div style="float:right" id="payroll_total" ><%= @payroll_log.payroll_total %></div>
+  	<div style="float:right" id="payroll_total" > 
+  		<%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
+  	</div>
   	<div style="float:right">Acumulado = &nbsp;</div>
   </h3>
   <div style="clear:both;">
@@ -29,6 +31,7 @@
 					<thead>
 						<td>Fecha</td>
 						<td>Labor</td>
+						<td>Unidad</td>
 						<td>Cantidad</td>
 						<td>Centro de Costos</td>
 						<td>Tipo de Pago</td>
@@ -40,10 +43,11 @@
 						<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
 							<td><%= h.payroll_date %></td>
 							<td><%= h.task.ntask %></td>
+							<td><%= h.task.nunidad %></td>
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>
 							<td><%= h.payment_type %></td>
-							<td><%= h.total.to_f %></td>
+							<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.') %></td>
 							<% @total += h.total.to_f %>
 							<td>
 								<button type="button" class="btn btn-mini btn-danger">remove</button>
@@ -53,8 +57,8 @@
 						</tr>
 						<% end %>
 						<tr id="total_<%= e[0][0] %>">
-							<td colspan="5" class="align_right">Total:</td>
-							<td colspan="2"><%= @total %></td>
+							<td colspan="6" class="align_right">Total:</td>
+							<td colspan="3"><%= number_with_precision(@total, :precision => 2, :separator => '.') %></td>
 						</tr>
 					</tbody>
 				</table>
