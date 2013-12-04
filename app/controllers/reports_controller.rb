@@ -85,6 +85,10 @@ class ReportsController < ApplicationController
     end # End case
   end # End show
 
+  def report_between_dates
+    
+  end
+
   def general_payroll
     # @payrolls = Payroll.where('state = ?', 0)
   end

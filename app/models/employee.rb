@@ -30,7 +30,7 @@ class Employee < ActiveRecord::Base
   					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
             :photo_attributes, :position_id, :employee_id, :is_superior,
             :payment_unit_id, :price_defined_work, :payroll_type_default_id,
-            :number_employee
+            :number_employee, :account_bncr
   
   validates_uniqueness_of :number_employee, :allow_nil => true
 
@@ -49,6 +49,7 @@ class Employee < ActiveRecord::Base
   has_many :employees
   has_many :deduction_employees, :dependent => :destroy
   has_many :deductions, :through => :deduction_employees
+  validates :account_bncr, length: {is: 12}, allow_blank: true
 
   #association with other_salaries through other_salary_employees
   has_many :other_salary_employees, :dependent => :destroy

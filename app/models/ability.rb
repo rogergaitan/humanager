@@ -162,7 +162,7 @@ class Ability
     if !task.nil?
 
         # Default values, available for all
-        can [:tasksfb, :load_cc, :fetch_tasks], Task
+        can [:tasksfb, :load_cc, :fetch_tasks, :search], Task
 
         # Not available actions
         cannot [:create, :destroy, :update], Task

@@ -120,6 +120,12 @@
           </div>
         </div>
         <div class="control-group">
+          <%= f.label :account_bncr, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :account_bncr, :class => 'text_field', :maxlength=>"12", type: "number" %>
+          </div>
+        </div>
+        <div class="control-group">
           <%= f.label :occupation_id, :class => 'control-label' %>
           <div class="controls">
             <%= f.collection_select(:occupation_id, @occupation, :id, :description , :prompt => true) %>
@@ -136,7 +142,7 @@
           <div class="controls">
             <%= f.hidden_field :employee_id %>
             <%= text_field_tag 'load_employee',nil, :class => 'text_field 
-                                search-image-employee', :for=>:employee_id %> 
+                                search-image-employee', :for=>:employee_id %>
           </div>
         </div>
         <div class="control-group">

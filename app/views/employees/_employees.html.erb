@@ -1,7 +1,7 @@
 <%- model_class = Employee -%>
 <%- model_class_entity = Entity -%>
 <div id="employees">
- 
+ <%= will_paginate :class =>'pagination pagination-centered' %>
   <table class="table table-striped" id="employee-data">
     <thead>
       <tr>

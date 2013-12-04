@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+  task = {
+    search_length : 3
+  }
+
   $('#task-fb').click(function() { 
     $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
     $.getJSON('tasks/tasksfb', function(element) {
@@ -17,6 +21,44 @@ $(document).ready(function() {
     var url = $(this).next().val();
     document.location.href = url;
   });
+
+  $('#search_form input').keyup(function() {
+    return search_task();
+  });
+
+  $('#clear').click(function(e){
+    search_all();
+    $('#search_code').val('');
+    $('#search_desc').val('');
+  });
+
+  function search_task() {
+    var code = $('#search_code').val(),
+        description = $('#search_desc').val();
+
+    if( code.length >= 1 || description.length >= task.search_length || code != "" || description != "") {
+
+      return $.ajax({
+        url: $('#search_form').attr('action'),
+        dataType: "script",
+        data: {
+          search_code: code,
+          search_desc: description
+        }
+      });
+    }
+  }
+
+  function search_all() {
+    return $.ajax({
+      url: $('#search_form').attr('action'),
+      dataType: "script",
+      data: {
+          search_code: "",
+          search_desc: ""
+        }
+    });
+  }
 
   function add_tasks(task, target_table) {
     var row = $(target_table + '> tbody:last').append('<tr>' + 

@@ -451,6 +451,7 @@ es:
           payment_unit_id: Unidad de Pago
           payroll_type_default_id: Tipo de Planilla Predeterminada
           number_employee: Número de Empleado
+          account_bncr: Cuenta BNCR
         entity:
           name: Nombre
           surname: Apellidos

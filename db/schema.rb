@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131125173210) do
+ActiveRecord::Schema.define(:version => 20131204163748) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(:version => 20131125173210) do
     t.boolean  "price_defined_work"
     t.integer  "payroll_type_default_id"
     t.integer  "number_employee"
+    t.string   "account_bncr",            :limit => 12
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"

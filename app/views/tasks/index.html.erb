@@ -7,31 +7,21 @@
   </button></h1>
 </div>
 
-<%= will_paginate :class =>'pagination pagination-centered' %>
-<table class="table table-striped" id="task-data">
-  <thead>
-    <tr>
-     <!--  <th><%= model_class.human_attribute_name(:iactivity) %></th> -->
-      <th><%= model_class.human_attribute_name(:itask) %></th>
-      <th><%= model_class.human_attribute_name(:ntask) %></th>
-      <th><%= model_class.human_attribute_name(:iaccount) %></th>
-      <th><%= model_class.human_attribute_name(:mlaborcost) %></th>
-      <th><%= model_class.human_attribute_name(:nunidad) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tasks.each do |task| %>
-      <tr>
-        <!-- <td><%= task.iactivity %></td> -->
-        <td><%= task.itask %></td>
-        <td>
-          <%= link_to task.ntask, '#' %>
-          <%= hidden_field_tag '', task_path(task) %>
-        </td>
-        <td><%= task.iaccount %></td>
-        <td><%= task.mlaborcost %></td>
-        <td><%= task.nunidad %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<!-- search -->
+<legend>  
+  <%= form_tag :search_tasks, :id => "search_form", :class => "form-search", :method => "get" do %>
+    <div class="control-group search">
+      <%= text_field_tag :search_code, params[:search_code], :class => "search-query",
+       :placeholder => model_class.human_attribute_name(:itask) %>
+
+      <%= text_field_tag :search_desc, params[:search_desc], :class => "search-query",
+       :placeholder => model_class.human_attribute_name(:ntask) %>
+      
+      <button class="btn" id="clear" type="button">Limpiar</button>
+    </div>
+  <% end %>
+</legend>
+<!-- search -->
+<div id="list_tasks">
+  <%= render "tasks" %>
+</div>

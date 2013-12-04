@@ -22,6 +22,7 @@ Reasapp::Application.routes.draw do
       get :general_payroll
       get :general_payroll_xls
       get :payment_type_report
+      get :report_between_dates
     end
   end
   get "reports/index"
@@ -117,6 +118,7 @@ Reasapp::Application.routes.draw do
       get 'tasksfb'
       get 'load_cc'
       get :fetch_tasks
+      get :search
     end
   end
 

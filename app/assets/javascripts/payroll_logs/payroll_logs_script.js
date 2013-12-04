@@ -207,6 +207,7 @@ function addFields(e) {
 		saveEmployees(rowIsDisabled, is_select_methol_all);
 		payroll_logs.reloadSelectorsEvents();
 		payroll_logs.cleanEmployeeAlone();
+		$('#search_code_employee').focus();
 		e.preventDefault();
 	}
 }

@@ -177,7 +177,6 @@ $(jQuery(document).ready(function($) {
 			name = $('#employee_'+employee_id).next().html();			
 		}
 
-
 		$('#accordion').append(
 			'<div class="accordion-group">'+
 			'<div class="accordion-heading">'+

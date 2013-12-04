@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.paginate(:page => params[:page], :per_page => 10)
+    @tasks = Task.order("itask ASC").paginate(:page => params[:page], :per_page => 10)
     respond_with(@tasks)
   end
 
@@ -72,6 +72,14 @@ class TasksController < ApplicationController
   def fetch_tasks
     @tasks = Task.all
     respond_with(@tasks, :only => [:id, :itask, :ntask, :iaccount])
+  end
+
+  def search
+    @tasks = Task.search(params[:search_code], params[:search_desc], params[:page], params[:per_page])
+    puts '--------------'
+    puts @tasks
+    puts '--------------'
+    respond_with @tasks
   end
 
 end
