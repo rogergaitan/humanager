@@ -176,7 +176,7 @@ function addFields(e) {
 			$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
 			$('div.alert.alert-error').delay(4000).fadeOut();
 			return false;
-		} /*else {
+		} else {
 			// Validate Duplicate Records
 			if( !rowIsDisabled ) {
 				var name = $('#products_items tr:eq(1) td:eq('+payroll_logs.task_td_eq+') input:hidden').attr('name');
@@ -194,7 +194,7 @@ function addFields(e) {
 					return false;
 				}
 			}
-		} */
+		}
 
 		$('#products_items tr input, select').attr('disabled', true);
 		var time = new Date().getTime();

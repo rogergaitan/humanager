@@ -102,7 +102,7 @@
 		<% name = e[0][1]  %>
 		
 		<% e[1].each do |h| %>
-			<% date = "#{@payroll_log.payroll_date}" %>
+			<% date = "#{h.payroll_date}" %>
 			<% task = "#{h.task.ntask}" %>
 			<% cost = "#{h.centro_de_costo.nombre_cc}" %>
 			<% type_payment = "#{h.payment_type}" %>
