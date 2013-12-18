@@ -27,7 +27,7 @@
       <%= select_tag(:search_department, options_from_collection_for_select(@all_departments, :id, :name), 
       {:prompt => 'Departamento'}) %>
 
-      <%= select_tag(:search_entities, options_for_select(@employees.map {|s| [s.entity.name, s.id] }),
+      <%= select_tag(:search_entities, options_for_select(@employees_s.map { |s| [s.entity.name, s.id] }),
       {:prompt => 'Jefe Inmediato'}) %>
 
 
