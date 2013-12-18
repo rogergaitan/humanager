@@ -16,6 +16,8 @@
 
 /config/database.yml
 Gemfile.lock
+Gemfile
+/config/application.rb
 
 doc/api
 doc/app

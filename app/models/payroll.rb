@@ -413,7 +413,7 @@ class Payroll < ActiveRecord::Base
         od.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
         od.inumoper = num_oper
         od.ilinea = count
-        od.icuenta = dp.deduction_employee.deduction.ledger_account.iccount
+        od.icuenta = dp.deduction_employee.deduction.ledger_account.iaccount
         od.init = dp.deduction_employee.employee.entity.entityid
         od.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
 
