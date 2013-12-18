@@ -87,14 +87,15 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
   var url = $('#tab1').data('url');
   var url_payrolls = $('#payrolls_path').val();
   var row2 = '';
+  var pay_total = parseFloat(payrolld.payroll_log.payroll_total)
 
   var data = '<tr>' + 
       '<td><a href="/payrolls/' + payrolld.id + '">' + payrolld.payroll_type.description + '</a></td>' +
       '<td>' + (payrolld.company != null ? payrolld.company.name : '--' ) + '</td>' +
-      '<td>' + payrolld.start_date + '</td>' +
-      '<td>' + payrolld.end_date + '</td>' +
-      '<td>' + payrolld.payment_date + '</td>' +
-      '<td>' + ( payrolld.payroll_log.payroll_total != null ? payrolld.payroll_log.payroll_total : 0)  + '</td>' +
+      '<td>' + date_format(payrolld.start_date) + '</td>' +
+      '<td>' + date_format(payrolld.end_date) + '</td>' +
+      '<td>' + date_format(payrolld.payment_date) + '</td>' +
+      '<td>' + ( payrolld.payroll_log.payroll_total != null ? (pay_total).toFixed(2) : 0.00)  + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payrolld.id + '" value="' + payrolld.id + '" />' +
       '</td><td>';
@@ -112,12 +113,12 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
 
   data = data + '</td></tr>';
   var row = $(target_table + '> tbody:last').append(data);
-
+  console.log(payrolld);
   if(count == totalCount) {
     row2 = $(target_table + '> tbody:last').append(
       '<tr>' + 
         '<td colspan="4" style="text-align: right;">Total: </td>' +
-        '<td colspan="3">' + payroll.total + '</td>' +
+        '<td colspan="3">' + (payroll.total).toFixed(2) + '</td>' +
       '</tr>'
     );
   }
@@ -143,15 +144,16 @@ payroll.add_inactivas = function (payroll, target_table) {
       '<input type="hidden" value="'+payroll.id+'">';
     }
   }
-
+  
   var row = $(target_table + '> tbody:last').append('<tr>' + 
       '<td>' +
         '<a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a>' +
       '</td>' +
       '<td>' + (payroll.company != null ? payroll.company.name : '--' ) + '</td>' +
-      '<td>' +  payroll.start_date + '</td>' +
-      '<td>' +  payroll.end_date + '</td>' +
-      '<td>' +  payroll.payment_date + '</td>' +
+      '<td>' +  date_format(payroll.start_date) + '</td>' +
+      '<td>' +  date_format(payroll.end_date) + '</td>' +
+      '<td>' +  date_format(payroll.payment_date) + '</td>' +
+      '<td>' + ( payroll.payroll_log.payroll_total != null ? parseFloat(payroll.payroll_log.payroll_total).toFixed(2) : 0.00)  + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '" '+checked+'/>' +
       '</td>' +
@@ -159,6 +161,16 @@ payroll.add_inactivas = function (payroll, target_table) {
     '</tr>');
   return row;
 }
+
+var date_format;
+
+date_format = function(date) {
+  var date1, date2, date_f, date_from, date_t, date_to;
+  date_from = (date).split("-");
+  date_f = date_from[2] + "-" + date_from[1] + "-" + date_from[0];
+    
+  return date_f;
+};
 
 // Process to close a payroll Selected
 payroll.closePayrollSelected = function(payroll_id) {

@@ -99,7 +99,7 @@ class PayrollsController < ApplicationController
     @inactivas[:inactiva] = Payroll.inactivas
 
     respond_to do |format|
-      format.json { render json: @inactivas, :include => :payroll_type }
+      format.json { render json: @inactivas.to_json(include: [:payroll_type, :payroll_log, :company])}
     end
   end
 
