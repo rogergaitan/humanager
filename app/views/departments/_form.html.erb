@@ -12,6 +12,7 @@
 <%= javascript_include_tag 'employees/employee' %>
 <%= javascript_include_tag 'departments/department' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'utils/modal' %>
 <%= form_for @department, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :name, :class => 'control-label' %>
@@ -32,8 +33,10 @@
     <div class="controls">
       <%= f.hidden_field :centro_de_costos_id %>
       <%= text_field_tag 'load_centro_de_costo',nil, :class => 'text_field required 
-                          search-image-employee', :for=>:centro_de_costos_id %> 
+                          search-image-employee', :for=>:centro_de_costos_id %>
+    <!--
     <a href="#myModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i> </a> 
+    -->
     </div>
   </div>
 

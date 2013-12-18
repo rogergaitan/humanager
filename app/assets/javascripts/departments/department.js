@@ -1,5 +1,9 @@
 $(jQuery(document).ready(function($) {
 
+    $('form').on('dblclick', '#load_centro_de_costo', function() {
+      $('#myModal').modal('show');
+    });
+
     treeviewhr.cc_tree(centro_costos, true);
 //Obtiene las centros de costo
     $.getJSON('/centro_de_costos/load_cc', function(category_data) {
