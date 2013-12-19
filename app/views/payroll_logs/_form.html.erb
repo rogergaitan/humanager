@@ -191,13 +191,13 @@
 	<% list_id = ''  %>
 	<% list_desc = ''  %>
 	<% list_cost = ''  %>
-	<% list_unidad = ''  %>
+	<% list_unidad = ''  %>	
 
 	<% @tasks.each do |task| %>
 		<% list_id += "#{task.id}," %>
 		<% list_code += "#{task.itask}," %>
 		<% list_desc += "#{task.ntask}," %>
-		<% list_unidad += "#{task.nunidad}," %>
+		<% list_unidad += "#{task.nunidad}," %>		
 		
 		<% if task.mlaborcost.blank? %>
 			<% list_cost += "0," %>
@@ -219,13 +219,12 @@
 	list_cost = list_cost.substring(0, list_cost.length-1);
 	list_unidad = list_unidad.substring(0, list_unidad.length-1);
 
-	var task_id, task_code, task_desc, task_cost, task_unidad = new Array();
+	var task_id, task_code, task_desc, task_cost, task_unidad, task_total = new Array();
 	task_code = list_code.split(",");
 	task_id = list_id.split(",");
 	task_desc = list_description.split(",");
 	task_cost = list_cost.split(",");
-	task_unidad = list_unidad.split(",");
-    
+	task_unidad = list_unidad.split(",");    
     /************************ 
     	Cost Center
     ************************/

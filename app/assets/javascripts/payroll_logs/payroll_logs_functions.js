@@ -37,8 +37,10 @@ $(jQuery(document).ready(function($) {
 		$.each(task_code, function(index, value) {
 			if( value === code ) {
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[index] );
-				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_unidad[index] );
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_cost[index] );
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val( task_unidad[index] );
 				$('#load_task').val( task_desc[index] );
+				$('#task_cost').val(task_cost[index]);
 				$("#task_unit_").val( task_unidad[index] );
 				return false;
 			}
@@ -47,7 +49,8 @@ $(jQuery(document).ready(function($) {
 				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
 				$('div.alert.alert-error').delay(4000).fadeOut();
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[0] );
-				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_unidad[0] );
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_cost[0] );
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val( task_unidad[0] );
 				$('#load_task').val( task_desc[0] );
 				payroll_logs.setTaskCode( task_id[0] );
 			}
@@ -59,9 +62,11 @@ $(jQuery(document).ready(function($) {
 		$.each(task_id, function(index, value) {
 			if( value == id ) {
 				$("#search_task_code_").val( task_code[index] );
+				$("#task_cost_").val( parseFloat(task_cost[index]).toFixed(2) );
 				$("#task_unit_").val( task_unidad[index] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[index] );
-				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_unidad[index] );
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_cost[index] );
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val( task_unidad[index] );
 				return false;
 			}
 		});
