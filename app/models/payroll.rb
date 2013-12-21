@@ -464,6 +464,7 @@ class Payroll < ActiveRecord::Base
         od_debit.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
         od_debit.inumoper = num_oper
         od_debit.ilinea = count
+        od_debit.icc = CentroDeCosto.find(wb.employee_benefit.work_benefit.centro_de_costo_id).icentro_costo
         od_debit.icuenta =  LedgerAccount.find(wb.employee_benefit.work_benefit.debit_account).iaccount
         od_debit.init = wb.employee_benefit.employee.entity.entityid
         od_debit.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
@@ -477,6 +478,7 @@ class Payroll < ActiveRecord::Base
         od_credit.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
         od_credit.inumoper = num_oper
         od_credit.ilinea = (count + 1)
+        od_credit.icc = CentroDeCosto.find(wb.employee_benefit.work_benefit.centro_de_costo_id).icentro_costo
         od_credit.icuenta = LedgerAccount.find(wb.employee_benefit.work_benefit.credit_account).iaccount
 
         if wb.employee_benefit.work_benefit.is_beneficiary

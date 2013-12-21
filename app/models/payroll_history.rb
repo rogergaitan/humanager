@@ -13,7 +13,7 @@ class PayrollHistory < ActiveRecord::Base
 		list_objects = []
 		list_result = []
 
-		PayrollHistory.where('payroll_log_id = ?', payroll_log_id).each do |ph|
+		PayrollHistory.where('payroll_log_id = ?', payroll_log_id).includes(:centro_de_costo).each do |ph|
 
 			unless ph.task_id.blank?
 
@@ -22,6 +22,7 @@ class PayrollHistory < ActiveRecord::Base
 				index = ''
 				object = {}
 				object2 = {}
+				#cost_center_code = CentroDeCosto.where('id = ?', )
 
 				# 1 si es ordinario, 2 extra, 3 doble (tipo de pago)
 				case ph.payment_type.to_s
@@ -34,10 +35,10 @@ class PayrollHistory < ActiveRecord::Base
           		end # end case
 
 				object['itask'] = ph.task.itask
-				object['centro_de_costo_id'] = ph.centro_de_costo_id
+				object['centro_de_costo_id'] = ph.centro_de_costo.icentro_costo
 				object['payment_type'] = payment_type_id
 				object2['itask'] = ph.task.itask
-				object2['centro_de_costo_id'] = ph.centro_de_costo_id
+				object2['centro_de_costo_id'] = ph.centro_de_costo.icentro_costo
 				object2['payment_type'] = payment_type_id
 
 				if list_objects.include?(object)

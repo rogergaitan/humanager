@@ -48,7 +48,7 @@
 	<td class="save-employees" style="display:none;"></td>
 	<td class="controls_item">
 		<%= f.label :payment_type, :class => '' %>
-		<%= f.enum_select :payment_type, :include_blank => false, :tabindex => '9'  %>
+		<%= f.enum_select :payment_type, {:tabindex => '9' , :include_blank => false }, { :class => 'paymentType' } %>
 		<%= f.hidden_field :_destroy, :class => 'payroll_histories' %>
 		<%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
 		<%= f.hidden_field :total %>

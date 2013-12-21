@@ -26,6 +26,11 @@ $(jQuery(document).ready(function($) {
 			payroll_logs.searhEmployeeCode( $(this).val() );
 		});
 
+		// Add Fields last tap
+		$('.paymentType').focusout(function() {
+			$('.addFields').trigger('click');
+		});
+
 		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
 		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
 		payroll_logs.searchAll( $('#search_name_employee').val(), $('#search_employee_payroll_logs_path').val(), "employees" );
@@ -40,7 +45,7 @@ $(jQuery(document).ready(function($) {
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_cost[index] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val( task_unidad[index] );
 				$('#load_task').val( task_desc[index] );
-				$('#task_cost').val(task_cost[index]);
+				$('#task_cost_').val(parseFloat(task_cost[index]).toFixed(2));
 				$("#task_unit_").val( task_unidad[index] );
 				return false;
 			}
@@ -146,6 +151,7 @@ $(jQuery(document).ready(function($) {
 
 		var date = $('#payroll_log_payroll_date').val();
 		var task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val();
+		var task_cost = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().prev().val();
 		var unit = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().val();
 		var mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val();
 		var cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val();
@@ -157,6 +163,7 @@ $(jQuery(document).ready(function($) {
 		$('#employee_table_'+employee_id+' #total_'+employee_id).before('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
 													'<td>'+ date +'</td>' +
 													'<td>'+ task +'</td>' +
+													'<td>'+ task_cost +'</td>'+
 													'<td>'+ unit + '</td>' +
 													'<td>'+ mount +'</td>' +
 													'<td>'+ cost +'</td>' +
@@ -190,7 +197,7 @@ $(jQuery(document).ready(function($) {
 			'<div id="collapse'+total+'" class="accordion-body collapse" style="height: 0px; "><div class="accordion-inner">'+
 			'<table class="table table-hover table-bordered table-striped" id="employee_table_'+employee_id+'">'+
 				'<thead><tr>'+
-					'<td>Fecha</td><td>Labor</td><td>Unidad</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
+					'<td>Fecha</td><td>Labor</td><td>Costo</td><td>Unidad</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
 				'</tr></thead>'+
 			'<tbody>'+
 			'<tr id="total_'+employee_id+'">'+
