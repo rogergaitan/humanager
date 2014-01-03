@@ -6,10 +6,16 @@
 	<%= @payroll_log.payroll.payroll_type.description %> del 
 	<%= @payroll_log.payroll.start_date %> al 
 	<%= @payroll_log.payroll.end_date %>
+<div style="float:right">
+	<div style="float:right" id="employee_counter" > 
+  		<%= @result.count %>
+  	</div>
+  	<div style="">Cant. de empleados = &nbsp;</div>
   	<div style="float:right" id="payroll_total" > 
   		<%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
   	</div>
-  	<div style="float:right">Acumulado = &nbsp;</div>
+  	<div style="">Acumulado = &nbsp;</div>
+</div>  	
   </h3>
   <div style="clear:both;">
   </div>
@@ -58,7 +64,7 @@
 							</td>
 						</tr>
 						<% end %>
-						<tr id="total_<%= e[0][0] %>">
+						<tr class="employee_count" id="total_<%= e[0][0] %>">
 							<td colspan="6" class="align_right">Total:</td>
 							<td colspan="3"><%= number_with_precision(@total, :precision => 2, :separator => '.') %></td>
 						</tr>

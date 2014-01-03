@@ -28,8 +28,18 @@ $(jQuery(document).ready(function($) {
 
 		// Add Fields last tap
 		$('.paymentType').focusout(function() {
+		//$('.addFields').focusout(function() {
 			$('.addFields').trigger('click');
 		});
+
+		// Focus field redirect
+		//$('.paymentType').focusout(function() {
+			//$('.addFields').trigger('focus');
+		//});
+
+		$('#load_centro_de_costo').focusout(function() {
+			$('.paymentType').trigger('focus');
+		});		
 
 		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
 		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );
@@ -176,6 +186,7 @@ $(jQuery(document).ready(function($) {
 													'</td>' +
 												'</tr>');
 		payroll_logs.addToPayrollTotal(totalRow);
+		payroll_logs.addEmployeeCounter();
 	}
 
 	payroll_logs.addNewSelection = function(num, employee_id, is_select_methol_all) {
@@ -200,7 +211,7 @@ $(jQuery(document).ready(function($) {
 					'<td>Fecha</td><td>Labor</td><td>Costo</td><td>Unidad</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
 				'</tr></thead>'+
 			'<tbody>'+
-			'<tr id="total_'+employee_id+'">'+
+			'<tr class="employee_count" id="total_'+employee_id+'">'+
 					'<td colspan="6" class="align_right">Total:</td>'+
 					'<td colspan="3">00.00</td>'+
 				'</tr>'+
@@ -416,7 +427,12 @@ $(jQuery(document).ready(function($) {
   	payroll_logs.removeAllEmployeeTaskData = function(num) {
 
   		$('input[name="payroll_log[payroll_histories_attributes][' + num + '][employee_ids][]"]').each(function() {
+  			var table_id = $('#tr_' + num + '_' + $(this).val() ).parents('table').attr('id');
   			payroll_logs.removeEmployeeTaskData(num, $(this).val(), '');
+  			if ($('#' + table_id + ' >tbody >tr').length == 2){
+  				$('#tr_' + num + '_' + $(this).val() ).parents('.accordion-group').remove();
+  			}
+  			payroll_logs.addEmployeeCounter();
   		});
   	}
 
@@ -503,6 +519,18 @@ $(jQuery(document).ready(function($) {
 		var total = parseFloat($('#payroll_total').html());
 		$('#payroll_total').html( (total - num).toFixed(2) );
 	}
+
+	payroll_logs.addEmployeeCounter = function() {
+		var oldCount = $('#accordion .accordion-group').length;
+		//var newCount = $('#products_items tr.success').length - 1;
+		//var totalCount = parseInt($('').html());
+		$('#employee_counter').html(oldCount);
+	}
+
+	/*payroll_logs.deductEmployeeCounter = function(counter) {
+		var totalCount = parseInt($('').html());
+		$('').html(totalCount + counter);	
+	}*/
 
 	/* payroll_logs.addCommas = function(nStr) {
 		nStr += '';
@@ -593,18 +621,25 @@ $(jQuery(document).ready(function($) {
 
   		var num = $(this).next().val();					// Number
   		var employee_id = $(this).next().next().val();	// Employee_id
+  		var table_id = $(this).parents('table').attr('id'); //Table id
   		
   		if( $("tr[id^='tr_" + num + "_']").length == 1 ) {
   			
   			$('#payroll_log_payroll_histories_attributes_' + num + '__destroy').val(1);
 			var deletedRow = $('#payroll_log_payroll_histories_attributes_' + num + '__destroy').closest('.success');
 			deletedRow.removeClass('success').addClass('deleted').hide();
+			if ($('#' + table_id + ' >tbody >tr').length == 2){
+				$(this).parents('.accordion-group').remove();
+  			}
+  			payroll_logs.addEmployeeCounter();
   		}
   		
 		payroll_logs.removeEmployeeTaskData(num, employee_id, "");
 		payroll_logs.removeTotalRow(num, employee_id, "");
   		$('#tr_' + num + '_' + employee_id).remove();
   		$("input[name='payroll_log[payroll_histories_attributes][" + num + "][employee_ids][]'][value='" + employee_id + "']").remove();
+  		//$(this).parents('.accordion-group').remove();
+  		payroll_logs.addEmployeeCounter();
   	});
 
   	// Delete a Row - Employee (server)
