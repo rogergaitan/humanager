@@ -39,7 +39,11 @@ $(jQuery(document).ready(function($) {
 
 		$('#load_centro_de_costo').focusout(function() {
 			$('.paymentType').trigger('focus');
-		});		
+		});
+
+		$('#name_employee').focusout(function() {
+			$('#search_task_code_').trigger('focus');
+		});			
 
 		payroll_logs.searchAll( $('#search_task_name').val(), $('#search_task_payroll_logs_path').val(), "task" );
 		payroll_logs.searchAll( $('#search_cost_name').val(), $('#search_cost_payroll_logs_path').val(), "cost" );

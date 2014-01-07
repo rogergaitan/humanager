@@ -17,16 +17,42 @@ include ActionView::Helpers::NumberHelper
     list_payments_types = get_payments_types
     header = get_header()
     count = 0
+    employee_ids = []
+    c = 0
+    cp = 0
+    
+    @payroll_log_id = PayrollLog.select('id').where('payroll_id = ?', @payroll.id)
+    @payroll_history_ids = PayrollHistory.select('id').where('payroll_log_id = ?', @payroll_log_id)
+        
+    @payroll_history_ids.each do |i|     
+      e_id = PayrollEmployee.select('employee_id').where('payroll_history_id = ?', i)
+      employee_ids[c] = e_id[0]['employee_id']
+      c += 1
+    end
+    
     @employees.each do |employee_id|
+      if employee_id.to_i == employee_ids.detect { |item| item == employee_id.to_i }
+        cp += 1
+      end  
+    end
+
+    @employees.each do |employee_id|
+      
+    if employee_id.to_i == employee_ids.detect { |item| item == employee_id.to_i }
       
       proof_pay_info
       move_down 5
-      count += 1
-
+      count += 1      
+               
       e = Employee.find(employee_id)
-      employee = "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
+      co = @company
+      employee =  "Empresa: #{co.name}
+                   Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
+      #company = "Empresa: #{co.name}"
       text employee, character_spacing: 1
       move_down 15
+      #text Company, character_spacing: 1
+      #move_down 15
 
       data_salary = get_data_salary(list_payments_types, employee_id)
       text "Detalle Salario Devengados", character_spacing: 1, :align => :center
@@ -37,21 +63,22 @@ include ActionView::Helpers::NumberHelper
       tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types)
 
       if tRows.length > 1
-        tables_salary(tRows, header, data_deductions, employee)
+        tables_salary(tRows, header, data_deductions, employee, company)
       else 
         tables_salary_center(tRows, header)
         table_deductions(data_deductions, true)
       end
 
-      if count != @employees.count
+      if count != cp #@employees.count
         start_new_page()
       end
 
+    end
 
     end # End each employees
   end
 
-  def tables_salary(tRows, header, data_deductions, employee)
+  def tables_salary(tRows, header, data_deductions, employee, company)
 
       c = 0; count = 0; lastTotalRows = 0
       print = false
@@ -105,6 +132,7 @@ include ActionView::Helpers::NumberHelper
           if count != tRows.length
             start_new_page()
             text employee, character_spacing: 1
+            #text company, character_spacing: 1
           end
         end # end if
 
@@ -179,7 +207,7 @@ include ActionView::Helpers::NumberHelper
     
     payroll_history_ids = PayrollEmployee.where('employee_id = ?', employee_id).map(&:payroll_history_id)
 
-    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type, payroll_date, total, task_unidad")
+    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type, payroll_date, SUM(total) as total, task_unidad")
                   .where(:payroll_log_id => @payroll.id, :id => payroll_history_ids)
                   .group("payment_type, payroll_date").order("payroll_date").each do |p|
 
