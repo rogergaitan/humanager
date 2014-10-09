@@ -1,24 +1,51 @@
 var dynamic_fields = new function() {
-	this.provinceSelected = function() {
-	  province_id = $('#employee_entity_attributes_addresses_attributes_0_province_id').val();
-	  $('#employee_entity_attributes_addresses_attributes_0_canton_id').find('option').remove();
+	this.provinceSelected = function(canton_id) {
+
+	  	province_id = $('#employee_entity_attributes_addresses_attributes_0_province_id').val();
+	  	attrSelected = false;
+
+	  	$('#employee_entity_attributes_addresses_attributes_0_canton_id').find('option').remove();
 		$('#employee_entity_attributes_addresses_attributes_0_district_id').find('option').remove();
-	  $(cantons).each(function() {
-	    if (this[0] == province_id) {
-	      $('#employee_entity_attributes_addresses_attributes_0_canton_id').append("<option value='" + this[2] + "'>" + this[1] + "</option>");
-	    } 
-	  });
+		$(cantons).each(function() {
+			if (this[0] == province_id) {
+		    	if(canton_id == this[2]) {
+		    		attrSelected = true;
+		      		$('#employee_entity_attributes_addresses_attributes_0_canton_id').append("<option selected='selected' value='" + this[2] + "'>" + this[1] + "</option>");
+		    	} else {
+		      		$('#employee_entity_attributes_addresses_attributes_0_canton_id').append("<option value='" + this[2] + "'>" + this[1] + "</option>");
+		    	}
+		    }
+		});
+
+		if(attrSelected) {
+		    $('#employee_entity_attributes_addresses_attributes_0_canton_id').prepend("<option value='' ></option>");
+		} else {
+		    $('#employee_entity_attributes_addresses_attributes_0_canton_id').prepend("<option value='' selected='selected'></option>");
+		}
+
 		dynamic_fields.cantonSelected();
 	}
 
-	this.cantonSelected = function() {
-	  canton_id = $('#employee_entity_attributes_addresses_attributes_0_canton_id').val();
-	  $('#employee_entity_attributes_addresses_attributes_0_district_id').find('option').remove();
-	  $(district).each(function() {
-	    if (this[0] == canton_id) {
-	      $('#employee_entity_attributes_addresses_attributes_0_district_id').append("<option value='" + this[2] + "'>" + this[1] + "</option>");
-	    } 
-	  });
+	this.cantonSelected = function(district_id) {
+		canton_id = $('#employee_entity_attributes_addresses_attributes_0_canton_id').val();
+		attrSelected = false;
+
+		$('#employee_entity_attributes_addresses_attributes_0_district_id').find('option').remove();
+		$(district).each(function() {
+			if (this[0] == canton_id) {
+				if(district_id == this[2]) {
+					attrSelected = true;
+					$('#employee_entity_attributes_addresses_attributes_0_district_id').append("<option selected='selected' value='" + this[2] + "'>" + this[1] + "</option>");
+				} else {
+					$('#employee_entity_attributes_addresses_attributes_0_district_id').append("<option value='" + this[2] + "'>" + this[1] + "</option>");
+				}
+			} 
+		});
+		if(attrSelected) {
+			$('#employee_entity_attributes_addresses_attributes_0_district_id').prepend("<option value='' ></option>");
+		} else {
+			$('#employee_entity_attributes_addresses_attributes_0_district_id').prepend("<option value='' selected='selected'></option>");
+		}
 	}
 
 	this.addFields = function(e) {
@@ -71,8 +98,12 @@ $(document).ready(function() {
 	dynamic_fields.countFields();
 	$('div.employee_contact_fields a.telephone-remove.remove_fields:eq(0)').remove();
 	$('div.employee_contact_fields a.email-remove.remove_fields:eq(0)').remove();
-	dynamic_fields.provinceSelected();
-	dynamic_fields.cantonSelected();
+
+	var canton_id = $('#employee_entity_attributes_addresses_attributes_0_canton_id').val();
+	var district_id = $('#employee_entity_attributes_addresses_attributes_0_district_id').val();
+	dynamic_fields.provinceSelected(canton_id);
+	dynamic_fields.cantonSelected(district_id);
+
 	$('#employee_entity_attributes_addresses_attributes_0_province_id').change(dynamic_fields.provinceSelected);
 	$('#employee_entity_attributes_addresses_attributes_0_canton_id').change(dynamic_fields.cantonSelected);	
 	$('form').on('click', '.add_fields', dynamic_fields.addFields);	

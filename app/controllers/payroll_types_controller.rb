@@ -66,13 +66,15 @@ class PayrollTypesController < ApplicationController
 
     if Payroll.find_by_payroll_type_id(params[:id]).nil?
       @payroll_type.destroy
+      message = t('.notice.successfully_deleted')
     else
-      @payroll_type.state = 0
-      @payroll_type.save
+      #@payroll_type.state = 0
+      #@payroll_type.save
+      message = t('.notice.can_be_deleted')
     end
 
     respond_to do |format|
-      format.html { redirect_to payroll_types_url }
+      format.html { redirect_to payroll_types_url, notice: message }
       format.json { head :no_content }
     end
   end

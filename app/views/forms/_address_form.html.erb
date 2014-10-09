@@ -1,19 +1,19 @@
 <div class="control-group">
   <%= f.label :province_id, :class => 'control-label' %>
   <div class="controls">
-    <%= f.collection_select :province_id, @province, :id, :name , :prompt => true %>
+    <%= f.collection_select :province_id, @province, :id, :name, :prompt => true %>
   </div>
 </div>
 <div class="control-group">
   <%= f.label :canton_id, :class => 'control-label' %>
   <div class="controls">
-    <%= f.collection_select :canton_id, @canton, :id, :name , :prompt => true %>
+    <%= f.collection_select :canton_id, @canton, :id, :name, :prompt => true %>
   </div>
 </div>
 <div class="control-group">
   <%= f.label :district_id, :class => 'control-label' %>
   <div class="controls">
-    <%= f.collection_select :district_id, @district, :id, :name , :prompt => true %>
+    <%= f.collection_select(:district_id, @district, :id, :name, prompt: true) %>
   </div>
 </div>
 <div class="control-group">
@@ -22,4 +22,3 @@
 		<%= f.text_area :address, :size => "5x5" %>
 	</div>
 </div>
-

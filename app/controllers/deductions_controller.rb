@@ -157,21 +157,23 @@ class DeductionsController < ApplicationController
 
     if @deduction.deduction_employees.empty?
       @deduction.destroy
+      message = t('.notice.successfully_deleted')
     else
 
       if DeductionEmployee.find_by_deduction_id(params[:id]).deduction_payments.empty?
         # There are no records.
         @deduction.destroy
+        message = t('.notice.successfully_deleted')
       else
         # There are records.
-        @deduction.state = 0
-        @deduction.save
+        #@deduction.state = 0
+        #@deduction.save
+        message = t('.notice.can_be_deleted')
       end
-      
     end
 
     respond_to do |format|
-      format.html { redirect_to deductions_url }
+      format.html { redirect_to deductions_url, notice: message }
       format.json { head :no_content }
     end
   end

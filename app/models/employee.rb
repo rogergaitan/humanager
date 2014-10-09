@@ -414,4 +414,21 @@ class Employee < ActiveRecord::Base
     }
   end
 
+  # Check if some departments it's used in any record.
+  # Check if some position it's used in any record.
+  def self.check_if_exist_records(id, type)
+    case type.to_s
+        when "department"
+          @total = Employee.where('department_id = ?', id).count
+        when "position"
+          @total = Employee.where('position_id = ?', id).count
+        when "occupation"
+          @total = Employee.where('occupation_id = ?', id).count
+        when "means_of_payment"
+          @total = Employee.where('means_of_payment_id = ?', id).count
+        when "payment_frequency"
+          @total = Employee.where('payment_frequency_id = ?', id).count
+    end
+  end
+
 end

@@ -57,6 +57,7 @@ es:
     a_successfully_updated: ' actualizada correctamente'
     a_unsuccessfully_updated: ' actualizada incorrectamente'
     no_results: 'No se encontraron resultados'
+    can_be_deleted: "El Registro no es puede eliminar pues ya ha sido utilizado en la base de datos"
   content:
     titles: 
       tools: Herramientas

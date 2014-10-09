@@ -144,14 +144,16 @@ class WorkBenefitsController < ApplicationController
     if EmployeeBenefit.find_by_work_benefit_id(params[:id]).work_benefits_payments.empty?
       # There are no records.
       @work_benefit.destroy
+      message = t('.notice.successfully_deleted')
     else
       # There are records.
-      @work_benefit.state = 0
-      @work_benefit.save
+      #@work_benefit.state = 0
+      #@work_benefit.save
+      message = t('.notice.can_be_deleted')
     end
     
     respond_to do |format|
-      format.html { redirect_to work_benefits_url }
+      format.html { redirect_to work_benefits_url, notice: message }
       format.json { head :no_content }
     end
   end

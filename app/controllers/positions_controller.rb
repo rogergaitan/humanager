@@ -74,10 +74,17 @@ class PositionsController < ApplicationController
   # DELETE /positions/1.json
   def destroy
     @position = Position.find(params[:id])
-    @position.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'position')
 
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @position.destroy
+      message = t('.notice.successfully_deleted')
+    end
+    
     respond_to do |format|
-      format.html { redirect_to positions_url }
+      format.html { redirect_to positions_url, notice: message }
       format.json { head :no_content }
     end
   end

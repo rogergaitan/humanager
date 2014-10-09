@@ -67,10 +67,19 @@ class CantonsController < ApplicationController
   # DELETE /cantons/1
   # DELETE /cantons/1.json
   def destroy
-    @canton.destroy
+    
+    @canton = Canton.find(params[:id])
+    @result = Entity.check_if_exist_addresses(params[:id], "canton")
+
+    if @result > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @canton.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to cantons_url }
+      format.html { redirect_to cantons_url, notice: message }
       format.json { head :no_content }
     end
   end

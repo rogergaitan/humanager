@@ -63,10 +63,17 @@ class OccupationsController < ApplicationController
   # DELETE /occupations/1.json
   def destroy
     @occupation = Occupation.find(params[:id])
-    @occupation.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'occupation')
+
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @occupation.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to occupations_url }
+      format.html { redirect_to occupations_url, notice: message }
       format.json { head :no_content }
     end
   end

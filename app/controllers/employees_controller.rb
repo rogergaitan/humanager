@@ -56,6 +56,11 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
+
+        puts "PARAMS"
+        puts params[:employee]
+        puts "PARAMS"
+
         format.html { redirect_to employees_path, notice: 'Employee was successfully updated.' }
         format.json { head :no_content }
       else

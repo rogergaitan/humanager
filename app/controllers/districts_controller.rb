@@ -69,10 +69,19 @@ class DistrictsController < ApplicationController
   # DELETE /districts/1
   # DELETE /districts/1.json
   def destroy
-    @district.destroy
+
+    @district = District.find(params[:id])
+    @result = Entity.check_if_exist_addresses(params[:id], "district")
+
+    if @result > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @district.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to districts_url }
+      format.html { redirect_to districts_url, notice: message }
       format.json { head :no_content }
     end
   end

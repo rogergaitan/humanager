@@ -29,5 +29,22 @@ class Entity < ActiveRecord::Base
                   :emails_attributes, :addresses_attributes, :contacts_attributes
 
   validates :name, :surname, :entityid, :presence => true
+
+  # Check if some province, canton or district it's used in any record.
+  def self.check_if_exist_addresses(id, type)
+    @total = 0
+    Entity.all().each do |e|
+      case type.to_s
+        when "province"
+          @total += e.addresses.where("province_id = ?", id).count
+        when "canton"
+          @total += e.addresses.where("canton_id = ?", id).count
+        when "district"
+          @total += e.addresses.where("district_id = ?", id).count
+      end # End Case
+    end # End Each
+    @total
+  end
+
 end
 
