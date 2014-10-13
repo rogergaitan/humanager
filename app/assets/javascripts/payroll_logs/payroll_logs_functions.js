@@ -163,20 +163,22 @@ $(jQuery(document).ready(function($) {
 
 	payroll_logs.addNewColumn = function(num, employee_id) {
 
-		var date = $('#payroll_log_payroll_date').val();
-		var task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val();
-		var task_cost = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().prev().val();
-		var unit = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().val();
-		var mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val();
-		var cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val();
-		var payment = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type option:selected').html();
-		var totalRow = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_total').val());
-		var subTotal = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
+		var date = $('#payroll_log_payroll_date').val(),
+			task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val(),
+			task_id = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prevAll().eq(2).val(),
+			task_cost = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().prev().val(),
+			unit = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().val(),
+			mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val(),
+			cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val(),
+			payment = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type option:selected').html(),
+			totalRow = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_total').val()),
+			subTotal = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
+
 		$('#total_' + employee_id + ' td:eq(1)').html( (totalRow + subTotal).toFixed(2) );
 		
 		$('#employee_table_'+employee_id+' #total_'+employee_id).before('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
 													'<td>'+ date +'</td>' +
-													'<td>'+ task +'</td>' +
+													'<td>'+ task_id +' | '+ task +'</td>' +
 													'<td>'+ task_cost +'</td>'+
 													'<td>'+ unit + '</td>' +
 													'<td>'+ mount +'</td>' +
@@ -195,8 +197,8 @@ $(jQuery(document).ready(function($) {
 
 	payroll_logs.addNewSelection = function(num, employee_id, is_select_methol_all) {
 		
-		var total = $('#accordion div.accordion-group').length + 1;
-		var name = "";
+		var total = $('#accordion div.accordion-group').length + 1,
+			name = "";
 
 		if( is_select_methol_all ) {
 			name = $('#products_items tr:eq(2) td:eq('+payroll_logs.employee_td_eq+') input:eq(2)').val();

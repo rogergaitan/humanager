@@ -2,24 +2,25 @@
 <div class="page-header">
   <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
                                    :default => "Edit #{model_class.model_name.human}") %></h1>
-  <h3>
-	<%= @payroll_log.payroll.payroll_type.description %> del 
-	<%= @payroll_log.payroll.start_date %> al 
-	<%= @payroll_log.payroll.end_date %>
-<div style="float:right">
-	<div style="float:right" id="employee_counter" > 
-  		<%= @result.count %>
-  	</div>
-  	<div style="">Cant. de empleados = &nbsp;</div>
-  	<div style="float:right" id="payroll_total" > 
-  		<%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
-  	</div>
-  	<div style="">Acumulado = &nbsp;</div>
-</div>  	
-  </h3>
+	<h3>
+		<%= @payroll_log.payroll.payroll_type.description %> del 
+		<%= @payroll_log.payroll.start_date %> al 
+		<%= @payroll_log.payroll.end_date %>
+		<div style="float:right">
+			<div style="float:right" id="employee_counter" > 
+				<%= @result.count %>
+			</div>
+			<div style="">Cant. de empleados = &nbsp;</div>
+			<div style="float:right" id="payroll_total" > 
+				<%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
+			</div>
+			<div style="">Acumulado = &nbsp;</div>
+		</div>  	
+	</h3>
   <div style="clear:both;">
   </div>
 </div>
+
 <%= render :partial => 'form' %>
  <div class="accordion" id="accordion">
 	<% @count = 0 %>
@@ -36,7 +37,7 @@
 				<table class="table table-hover table-bordered table-striped" id="employee_table_<%= e[0][0] %>">
 					<thead>
 						<td>Fecha</td>
-						<td>Labor</td>
+						<td>Codigo | Labor</td>
 						<td>Costo</td>
 						<td>Unidad</td>
 						<td>Cantidad</td>
@@ -49,8 +50,8 @@
 					<% e[1].each do |h| %>
 						<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
 							<td><%= h.payroll_date %></td>
-							<td><%= h.task.ntask %></td>
-							<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.') %></td>	
+							<td><%= h.task.id %> | <%= h.task.ntask %></td>
+							<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.') %></td>
 							<td><%= h.task.nunidad %></td>
 							<td><%= h.time_worked %></td>
 							<td><%= h.centro_de_costo.nombre_cc %></td>

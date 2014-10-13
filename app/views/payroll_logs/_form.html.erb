@@ -73,6 +73,9 @@
 	<div class="input-append date payroll-date" id="dp3" data-date-format="dd/mm/yyyy">
 		<%= f.text_field :payroll_date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
 	</div>
+
+	<input id="last_fingering" type="button" value="Ultima digitacion" class="btn btn-primary" style="margin-bottom: 16px;" >
+
 	<div id="message" style="height:40px;"></div>
 	<table id="products_items" class=" table table-hover table-bordered table-striped">
 		<tr class="header_items">
@@ -84,9 +87,13 @@
     	</tr>
 	</table>
 	<div class="form-actions">
-		<%= f.submit nil, :class => 'btn btn-primary' %>
+		<%= f.submit nil, :class => 'btn btn-primary', :tabindex => '-1' %>
 		<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-		            payrolls_path, :class => 'btn' %>
+		            payrolls_path, :class => 'btn', :tabindex => '-1' %>
+		
+		<%= f.check_box :continue_editing, {:checked=>true} %>
+		<%= label_tag 'continue-editing', 'Continuar editando al actualizar', class: 'checkbox-label' %>
+
 	</div>
 <% end %>
 

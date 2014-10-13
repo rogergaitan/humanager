@@ -537,6 +537,7 @@ es:
           task_id: Tarea
           payment_type: Tipo de Pago
           payroll_id: Planilla
+          payroll_date: Fecha
   date:
       abbr_day_names:
       - dom

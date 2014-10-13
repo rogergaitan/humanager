@@ -53,8 +53,15 @@ class PayrollLogsController < ApplicationController
       if @payroll_log.update_attributes(params[:payroll_log])
         @payroll_log.payroll_total = @payroll_log.payroll_histories.sum(:total)
         @payroll_log.save
+
+        if to_bool( params[:payroll_log]["continue_editing"] )
+          format.html { redirect_to :action => "edit", :id => 13 }
+        end
+
         format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
         format.json { head :no_content }
+
+
       else
         format.html { render action: "edit" }
         format.json { render json: @payroll_log.errors, status: :unprocessable_entity }

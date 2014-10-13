@@ -5,14 +5,14 @@ class PayrollLog < ActiveRecord::Base
   has_many :payroll_histories, :dependent => :destroy
   
   accepts_nested_attributes_for :payroll_histories, :allow_destroy => true, :reject_if => proc { |attributes| attributes["time_worked"].blank? && attributes["centro_de_costo_id"].blank? }
-  attr_accessible :id, :payroll_id, :payroll_histories_attributes, :payroll_date, :payroll_total
-
+  attr_accessible :id, :payroll_id, :payroll_histories_attributes, :payroll_date, :payroll_total, :continue_editing
+  attr_accessor :continue_editing
 
   def self.history(id)
   	
   	@employees = Entity.joins(:employee => {:payroll_employees => :payroll_history})
   	.where('payroll_histories.payroll_log_id = ?', id)
-    .select('employees.id, entities.name, entities.surname')
+    .select('employees.id, entities.name, entities.surname').order('entities.surname')
 
     result = {}
     employee_detail = {}
@@ -20,7 +20,7 @@ class PayrollLog < ActiveRecord::Base
     @employees.each do |em|
       @history = PayrollHistory.includes(:payroll_employees, :centro_de_costo)
       .where('payroll_employees.employee_id = ? and payroll_histories.payroll_log_id = ?', em.id, id)
-      .select('payroll_histories.created_at, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type')
+      .select('payroll_histories.id, payroll_histories.created_at, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type').order('payroll_histories.payroll_date')
       employee_detail = ["#{em.id}", "#{em.name} #{em.surname}"]
       result[employee_detail] = @history
     end

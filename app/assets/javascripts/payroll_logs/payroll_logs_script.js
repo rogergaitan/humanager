@@ -104,6 +104,11 @@ $(jQuery(document).ready(function($) {
 		$('#products_items input').attr('disabled', true);
 		$('#products_items select').attr('disabled', true);
 	}
+
+	$('#last_fingering').click(function(){
+		getLastFingering();
+	});
+
 }));
 
 function hideEmployess() {
@@ -492,4 +497,20 @@ function removeControls (e) {
 
 function checkNumberEmployees() {
 	$('#add-more').trigger('click');
+}
+
+function getLastFingering() {
+	var str, id;
+	$("[id^='employee_table_'] tr[id^='tr_']").each(function() {
+		if(typeof str == 'undefined') {
+			str = this.id.split(['_'])[2];
+			id = this.id;
+		} else {
+			if( parseInt( this.id.split(['_'])[2] ) > parseInt(str) ) {
+				str = this.id.split(['_'])[2];
+				id = this.id;
+			}
+		}
+	});
+	$('#'+id).addClass("tr_info");
 }

@@ -18,4 +18,10 @@ class ApplicationController < ActionController::Base
 		 user.permissions_user.find_by_permissions_subcategory_id(list['Planillas'])
 	end
 
+	def to_bool(string)
+		return true if string == true || string =~ (/(true|t|yes|y|1)$/i)
+		return false if string == false || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+		raise ArgumentError.new("invalid value for Boolean: \"#{string}\"")
+	end
+
 end
