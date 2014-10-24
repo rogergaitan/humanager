@@ -143,6 +143,9 @@ Reasapp::Application.routes.draw do
     collection do
       get 'load_employees'
       get 'load_em'
+      get 'search_employee_by_id'
+      get 'search_employee_by_code'
+      get 'search_employee_by_name'
     end
   end
 

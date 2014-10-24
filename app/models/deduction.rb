@@ -1,18 +1,25 @@
 class Deduction < ActiveRecord::Base
-  attr_accessible :payroll_ids, :amount_exhaust, :calculation, :calculation_type, 
-  			:ledger_account_id, :deduction_type, :description, :employee_ids, 
-  			:payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id
+
+  attr_accessible :payroll_ids, :amount_exhaust, :calculation_type, #:calculation
+        :ledger_account_id, :deduction_type, :description,
+        :payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id, :individual, :deduction_employees_attributes, :custom_calculation
+
+  attr_accessor :custom_calculation
 
   has_many :payroll_type_deductions, :dependent => :destroy
   has_many :payroll_type, :through => :payroll_type_deductions
+  
+  has_many :deduction_employees, :dependent => :destroy
+  has_many :employees, :through => :deduction_employees
+  accepts_nested_attributes_for :deduction_employees, :allow_destroy => true
+  accepts_nested_attributes_for :employees, :allow_destroy => true
 
   has_many :deduction_payrolls, :dependent => :destroy
-  has_many :deduction_employees, :dependent => :destroy
   has_many :payrolls, :through => :deduction_payrolls
-  has_many :employees, :through => :deduction_employees
+
   belongs_to :ledger_account
 
-  validates :calculation, :presence => true
+  # validates :calculation, :presence => true
 
 
   def self.get_list_to_general_payment

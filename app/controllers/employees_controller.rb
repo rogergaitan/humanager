@@ -167,4 +167,16 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def search_employee_by_id
+    respond_with Employee.search_employee_by_id(params[:search_id])
+  end
+
+  def search_employee_by_code
+    respond_with Employee.search_employee_by_code(params[:search_code])
+  end
+
+  def search_employee_by_name
+    respond_with Employee.search_employee_by_name(params[:search_name])
+  end
+
 end

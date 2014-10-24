@@ -21,19 +21,39 @@ class DeductionsController < ApplicationController
   # GET /deductions/new.json
   def new
     @deduction = Deduction.new
-
     @employee_ids = []
 
     @deduction.deduction_employees.where('state=1').select('employee_id').each do |e|
       @employee_ids << e['employee_id']
     end
+    #respond_with(@deduction)
 
-    respond_with(@deduction)
+    @deduction.deduction_employees.build
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @employee }
+    end
   end
 
   # GET /deductions/1/edit
   def edit
     @deduction = Deduction.find(params[:id])
+
+    @object = []
+    @objectHidden = []
+
+    @deduction.deduction_employees.each do |de|
+      unless de.deduction_payments.empty?
+        # if there are records.
+        @object << "#{de.employee_id}"
+      end
+
+      unless de.state
+        @objectHidden << "#{de.employee_id}"
+      end
+
+    end
 
     @employee_ids = []
 
@@ -63,90 +83,66 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1.json
   def update
 
-    @deduction = Deduction.find(params[:id])
-    
-    current_employees = []
-    delete_employees = []
-    add_employees = []
-    list_employees = params[:deduction][:employee_ids].to_a
-
-    DeductionEmployee.where('deduction_id = ?', params[:id]).select('employee_id').each do |id|
-      employee_id = id['employee_id']
-      current_employees << "#{employee_id}"
-    end
-
-    delete_employees = current_employees - list_employees
-
-    if delete_employees.length > 0
-      # Here delete or update state deduction employees
-      delete_employees.each do |id_employee|
-
-        de = DeductionEmployee.find_by_deduction_id_and_employee_id(params[:id], id_employee)
+    ActiveRecord::Base.transaction do
       
-        if de.deduction_payments.empty?
-          # No there are records.
-          de.delete
-        else
-          # if there are records.
-          de.state = 0
-          de.save
-        end
-      end # End each delete_employeest
-    else
-      # Here add new employees what not exist into the DB
-      add_employees = list_employees - current_employees
-      add_employees.delete("")
-      list_employees.delete("")
+      @deduction = Deduction.find(params[:id])
 
-      if add_employees.length > 0
-        add_employees.each do |new_id|
-          unless new_id.empty?
+      # Employees from the view
+      params[:deduction][:deduction_employees_attributes].each do |de|
+        if de[1]["id"].nil?
+          # New
+          unless to_bool( de[1]["_destroy"] )
             new_deduction_employee = DeductionEmployee.new
             new_deduction_employee.deduction_id = params[:id]
-            new_deduction_employee.employee_id = new_id
+            new_deduction_employee.employee_id = de[1]["employee_id"]
+            new_deduction_employee.calculation = de[1]["calculation"]
             new_deduction_employee.state = 1
             new_deduction_employee.save
           end
-        end # End each add_employees
-      else
-        # Here update state for all employees
-        list_employees.each do |id_list_employee|
-          deduction = DeductionEmployee.find_by_deduction_id_and_employee_id(params[:id], id_list_employee)
-          deduction.state = 1
-          deduction.save
-        end # End each list_employees
-      end # End if add_employees.length
-    end # End each delete_employees
+        else
+          # Old
+          deductionEmployee = DeductionEmployee.find( de[1]["id"] )
+          if to_bool( de[1]["_destroy"] ) # Change status
+            unless deductionEmployee.deduction_payments.empty?
+              # if there are records.
+              puts "ACTUALIZA ESTADO A 0"
+              deductionEmployee.state = 0
+            else
+              # No records.
+              puts "ELIMINA EL DEDUCTION-EMPLOYEE"
+              deductionEmployee.destroy
+            end
+          else
+            puts "ACTUALIZA ESTADO A 1"
+            deductionEmployee.state = 1
+            deductionEmployee.calculation = de[1]["calculation"]
+          end
+          deductionEmployee.save
+        end
+      end
 
-    @deduction.description = params[:deduction][:description]
-    @deduction.deduction_type = params[:deduction][:deduction_type]
-    @deduction.amount_exhaust = params[:deduction][:amount_exhaust]
-    @deduction.calculation_type = params[:deduction][:calculation_type]
-    @deduction.calculation = params[:deduction][:calculation]
-    @deduction.ledger_account_id = params[:deduction][:ledger_account_id]
-    @deduction.is_beneficiary = params[:deduction][:is_beneficiary]
-    @deduction.beneficiary_id = params[:deduction][:beneficiary_id]
-    @deduction.payroll_type_ids = params[:deduction][:payroll_type_ids]
+      # "payroll_ids"=>[""],
 
-    respond_to do |format|
-      if @deduction.save
-        format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @deduction.errors, status: :unprocessable_entity }
+      @deduction.description = params[:deduction][:description]
+      @deduction.individual = params[:deduction][:individual]
+      @deduction.deduction_type = params[:deduction][:deduction_type]
+      @deduction.amount_exhaust = params[:deduction][:amount_exhaust]
+      @deduction.calculation_type = params[:deduction][:calculation_type]
+      @deduction.ledger_account_id = params[:deduction][:ledger_account_id]
+      @deduction.is_beneficiary = params[:deduction][:is_beneficiary]
+      @deduction.beneficiary_id = params[:deduction][:beneficiary_id]
+      @deduction.payroll_type_ids = params[:deduction][:payroll_type_ids]
+
+      respond_to do |format|
+        if @deduction.save
+          format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: "edit" }
+          format.json { render json: @deduction.errors, status: :unprocessable_entity }
+        end
       end
     end
-
-    # respond_to do |format|
-    #   if @deduction.update_attributes(params[:deduction])
-    #     format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
-    #     format.json { head :no_content }
-    #   else
-    #     format.html { render action: "edit" }
-    #     format.json { render json: @deduction.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # DELETE /deductions/1

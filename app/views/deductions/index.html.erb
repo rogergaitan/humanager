@@ -11,7 +11,6 @@
       <th><%= model_class.human_attribute_name(:deduction_type) %></th>
       <th><%= model_class.human_attribute_name(:amount_exhaust) %></th>
       <th><%= model_class.human_attribute_name(:calculation_type) %></th>
-      <th><%= model_class.human_attribute_name(:calculation) %></th>
       <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -23,7 +22,6 @@
         <td><%= deduction.deduction_type %></td>
         <td><%= deduction.amount_exhaust %></td>
         <td><%= deduction.calculation_type %></td>
-        <td><%= deduction.calculation %></td>
         <td><%= deduction.ledger_account.naccount if deduction.ledger_account %></td>
         <td>
           <% if can? :update, Deduction %>

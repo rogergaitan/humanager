@@ -12,8 +12,6 @@
   <dd><%= @deduction.amount_exhaust ? @deduction.amount_exhaust : 0 %></dd>
   <dt><strong><%= model_class.human_attribute_name(:calculation_type) %>:</strong></dt>
   <dd><%= @deduction.calculation_type %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:calculation) %>:</strong></dt>
-  <dd><%= @deduction.calculation %></dd>
   <dt><strong><%= model_class.human_attribute_name(:ledger_account_id) %>:</strong></dt>
   <dd><%= @deduction.ledger_account.naccount %></dd>
 </dl>

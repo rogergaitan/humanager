@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131204163748) do
+ActiveRecord::Schema.define(:version => 20141024163147) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -109,9 +109,10 @@ ActiveRecord::Schema.define(:version => 20131204163748) do
   create_table "deduction_employees", :force => true do |t|
     t.integer  "deduction_id"
     t.integer  "employee_id"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.boolean  "state",        :default => true
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
+    t.boolean  "state",                                       :default => true
+    t.decimal  "calculation",  :precision => 18, :scale => 4
   end
 
   add_index "deduction_employees", ["deduction_id"], :name => "index_deduction_employees_on_deduction_id"
@@ -146,13 +147,13 @@ ActiveRecord::Schema.define(:version => 20131204163748) do
     t.enum     "deduction_type",    :limit => [:Constante, :Unica, :Monto_Agotar]
     t.decimal  "amount_exhaust",                                                   :precision => 10, :scale => 0
     t.enum     "calculation_type",  :limit => [:porcentual, :fija]
-    t.decimal  "calculation",                                                      :precision => 18, :scale => 4
     t.integer  "ledger_account_id"
-    t.datetime "created_at",                                                                                                        :null => false
-    t.datetime "updated_at",                                                                                                        :null => false
+    t.datetime "created_at",                                                                                                         :null => false
+    t.datetime "updated_at",                                                                                                         :null => false
     t.boolean  "state",                                                                                           :default => true
     t.boolean  "is_beneficiary",                                                                                  :default => true
-    t.integer  "beneficiary_id"
+    t.string   "beneficiary_id"
+    t.boolean  "individual",                                                                                      :default => false
   end
 
   add_index "deductions", ["beneficiary_id"], :name => "index_deductions_on_beneficiary_id"

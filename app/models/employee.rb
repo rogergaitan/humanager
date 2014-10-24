@@ -47,8 +47,10 @@ class Employee < ActiveRecord::Base
   has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits
   has_many :employees
+
   has_many :deduction_employees, :dependent => :destroy
   has_many :deductions, :through => :deduction_employees
+  
   validates :account_bncr, length: {is: 12}, allow_blank: true
 
   #association with other_salaries through other_salary_employees
@@ -429,6 +431,21 @@ class Employee < ActiveRecord::Base
         when "payment_frequency"
           @total = Employee.where('payment_frequency_id = ?', id).count
     end
+  end
+
+  def self.search_employee_by_id(search_id)
+    @result = Entity.joins(:employee).where(:employees => { :id => search_id }).select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
+    @result[0]
+  end
+
+  def self.search_employee_by_code(search_code)
+    @result = Entity.joins(:employee).where(:employees => { :number_employee => search_code }).select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
+    @result[0]
+  end
+
+   def self.search_employee_by_name(search_name)
+    @result = Entity.joins(:employee).where('CONCAT(entities.surname, " " ,entities.name) like ?', "%#{search_name}%").select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
+    @result[0]
   end
 
 end

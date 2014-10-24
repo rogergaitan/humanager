@@ -4,3 +4,18 @@
                                    :default => "Edit #{model_class.model_name.human}") %></h1>
 </div>
 <%= render :partial => 'form' %>
+
+<%= javascript_tag  do %>
+
+	var detailPayments = [];
+	var detailPaymentsHidden = [];
+
+	<% @object.each do |id| %>
+		detailPayments.push(<%= id %>);
+	<% end %>
+
+	<% @objectHidden.each do |id| %>
+		detailPaymentsHidden.push(<%= id %>);
+	<% end %>
+
+<% end %>

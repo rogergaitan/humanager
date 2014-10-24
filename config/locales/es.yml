@@ -513,16 +513,19 @@ es:
         type_of_personnel_action:
           description: Descripción
           created_at: Creado
+        deduction_employee:
+          calculation: Valor
         deduction:
           description: Descripción
           deduction_type: Tipo de deducción
           amount_exhaust: Monto a agotar
           calculation_type: Tipo de calculo
-          calculation: Valor
+          custom_calculation: Valor
           ledger_account_id: Cuenta de Crédito
-          is_beneficiary: Es Beneficiario
+          is_beneficiary: El empleado es Beneficiario?
           beneficiary_id: Beneficiario
           payroll_types: Tipos de planillas
+          individual: Individual
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde
