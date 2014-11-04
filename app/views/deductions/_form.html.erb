@@ -41,7 +41,8 @@
   <div class="control-group" id="amount_exhaust_controls">
     <%= f.label :amount_exhaust, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :amount_exhaust, :class => 'text_field' %>
+      <%= f.text_field :amount_exhaust, :class => 'text_field', 
+      :value => number_with_precision(f.object.amount_exhaust, delimiter: ',', separator: '.', precision: 2) %>
     </div>
   </div>
   
@@ -85,7 +86,8 @@
   <div id="custom_calculation" class="control-group">
     <%= f.label :custom_calculation, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :custom_calculation, :class => 'text_field' %>
+      <%= f.text_field :custom_calculation, :class => 'text_field', 
+      :value => number_with_precision(f.object.custom_calculation, delimiter: ',', separator: '.', precision: 2)%>
     </div>
   </div>
 

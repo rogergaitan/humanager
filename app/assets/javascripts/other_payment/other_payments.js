@@ -193,6 +193,10 @@ $(document).ready(function() {
 
 	$('#unicPayroll').on({ click: otherPayment.clearPayrolls });
 
+	$("#employee_items input:text[id*='_calculation']").keyup(resources.twoDecimals);
+	$('#other_payment_amount').keyup(resources.twoDecimals);
+	$('#other_payment_custom_calculation').keyup(resources.twoDecimals);
+
 });
 
 // Show messages

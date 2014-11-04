@@ -15,7 +15,8 @@
   <td class="controls_item">
     <div class="input-append">
       <div class="controls">
-        <%= f.text_field :calculation, :size => "5x5" %>
+        <%= f.text_field :calculation, :size => "5x5", 
+        :value => number_with_precision(f.object.calculation, delimiter: ',', separator: '.', precision: 2) %>
     	</div>
     </div>
   </td>

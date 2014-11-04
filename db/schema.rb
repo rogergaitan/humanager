@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141103214346) do
+ActiveRecord::Schema.define(:version => 20141104212121) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.datetime "created_at",                                                    :null => false
     t.datetime "updated_at",                                                    :null => false
     t.boolean  "state",                                       :default => true
-    t.decimal  "calculation",  :precision => 18, :scale => 4
+    t.decimal  "calculation",  :precision => 10, :scale => 2
   end
 
   add_index "deduction_employees", ["deduction_id"], :name => "index_deduction_employees_on_deduction_id"
@@ -121,9 +121,9 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
   create_table "deduction_payments", :force => true do |t|
     t.integer  "deduction_employee_id"
     t.date     "payment_date"
-    t.decimal  "previous_balance",      :precision => 18, :scale => 2
-    t.decimal  "payment",               :precision => 18, :scale => 2
-    t.decimal  "current_balance",       :precision => 18, :scale => 2
+    t.decimal  "previous_balance",      :precision => 10, :scale => 2
+    t.decimal  "payment",               :precision => 10, :scale => 2
+    t.decimal  "current_balance",       :precision => 10, :scale => 2
     t.datetime "created_at",                                           :null => false
     t.datetime "updated_at",                                           :null => false
     t.integer  "payroll_id"
@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
   create_table "deductions", :force => true do |t|
     t.string   "description"
     t.enum     "deduction_type",    :limit => [:Constante, :Unica, :Monto_Agotar]
-    t.decimal  "amount_exhaust",                                                   :precision => 10, :scale => 0
+    t.decimal  "amount_exhaust",                                                   :precision => 10, :scale => 2
     t.enum     "calculation_type",  :limit => [:porcentual, :fija]
     t.integer  "ledger_account_id"
     t.datetime "created_at",                                                                                                         :null => false
@@ -318,7 +318,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.integer  "other_payment_id"
     t.integer  "employee_id"
     t.boolean  "state"
-    t.decimal  "calculation",      :precision => 18, :scale => 2
+    t.decimal  "calculation",      :precision => 10, :scale => 2
     t.datetime "created_at",                                      :null => false
     t.datetime "updated_at",                                      :null => false
   end
@@ -344,7 +344,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.string   "description"
     t.enum     "deduction_type",     :limit => [:Constante, :Unica, :Monto_Agotar]
     t.enum     "calculation_type",   :limit => [:porcentual, :fija]
-    t.decimal  "amount",                                                            :precision => 18, :scale => 2
+    t.decimal  "amount",                                                            :precision => 10, :scale => 2
     t.boolean  "state"
     t.boolean  "constitutes_salary"
     t.boolean  "individual"
@@ -359,7 +359,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.integer  "ledger_account_id"
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
-    t.decimal  "amount",            :precision => 18, :scale => 2
+    t.decimal  "amount",            :precision => 10, :scale => 2
     t.boolean  "state",                                            :default => true
   end
 
@@ -368,7 +368,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.integer  "employee_id"
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
-    t.decimal  "amount",          :precision => 18, :scale => 2
+    t.decimal  "amount",          :precision => 10, :scale => 2
   end
 
   add_index "other_salary_employees", ["employee_id"], :name => "index_other_salary_employees_on_employee_id"
@@ -432,8 +432,8 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.integer  "payroll_log_id"
     t.datetime "created_at",                                                                                :null => false
     t.datetime "updated_at",                                                                                :null => false
-    t.decimal  "total",                                                      :precision => 18, :scale => 4
-    t.decimal  "task_total",                                                 :precision => 18, :scale => 4
+    t.decimal  "total",                                                      :precision => 10, :scale => 2
+    t.decimal  "task_total",                                                 :precision => 10, :scale => 2
     t.string   "task_unidad"
     t.date     "payroll_date"
   end
@@ -447,7 +447,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.datetime "created_at",                                   :null => false
     t.datetime "updated_at",                                   :null => false
     t.date     "payroll_date"
-    t.decimal  "payroll_total", :precision => 18, :scale => 4
+    t.decimal  "payroll_total", :precision => 10, :scale => 2
   end
 
   add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
@@ -685,7 +685,7 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
 
   create_table "work_benefits", :force => true do |t|
     t.string   "description"
-    t.decimal  "percentage",         :precision => 12, :scale => 2
+    t.decimal  "percentage",         :precision => 10, :scale => 2
     t.integer  "debit_account"
     t.integer  "credit_account"
     t.datetime "created_at",                                                          :null => false
@@ -704,8 +704,8 @@ ActiveRecord::Schema.define(:version => 20141103214346) do
     t.integer  "employee_benefits_id"
     t.integer  "payroll_id"
     t.date     "payment_date"
-    t.decimal  "percentage",           :precision => 10, :scale => 0
-    t.decimal  "payment",              :precision => 10, :scale => 0
+    t.decimal  "percentage",           :precision => 10, :scale => 2
+    t.decimal  "payment",              :precision => 10, :scale => 2
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
   end
