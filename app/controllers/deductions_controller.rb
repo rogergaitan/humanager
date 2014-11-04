@@ -52,7 +52,6 @@ class DeductionsController < ApplicationController
       unless de.state
         @objectHidden << "#{de.employee_id}"
       end
-
     end
 
     @employee_ids = []
@@ -105,15 +104,12 @@ class DeductionsController < ApplicationController
           if to_bool( de[1]["_destroy"] ) # Change status
             unless deductionEmployee.deduction_payments.empty?
               # if there are records.
-              puts "ACTUALIZA ESTADO A 0"
               deductionEmployee.state = 0
             else
               # No records.
-              puts "ELIMINA EL DEDUCTION-EMPLOYEE"
               deductionEmployee.destroy
             end
           else
-            puts "ACTUALIZA ESTADO A 1"
             deductionEmployee.state = 1
             deductionEmployee.calculation = de[1]["calculation"]
           end

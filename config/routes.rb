@@ -1,6 +1,9 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  resources :other_payments
+
+
   resources :permissions_users
   
   devise_for :users

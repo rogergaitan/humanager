@@ -90,13 +90,15 @@ $(jQuery(document).ready(function($) {
 		searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
 	});
 
+  	// Seach Cost center
 	$("#search_cost_center_results").on("click", "table tr a", function(e) {
   		$('#load_centro_de_costo_name').val( $(this).html() );
   		$('#work_benefit_centro_de_costo_id').val( $(this).next().val() );
     	$('#costCenterModal button:eq(2)').trigger('click');
   		e.preventDefault();
   	});
-  	// Seach Cost center
+  	
+  	$('#work_benefit_percentage').keyup(resources.twoDecimals);
 
 }));
 

@@ -57,6 +57,10 @@ class Employee < ActiveRecord::Base
   has_many :other_salary_employees, :dependent => :destroy
   has_many :other_salaries, :through => :other_salary_employees
 
+  #association with other_salaries through other_payment_employees
+  has_many :other_payment_employees, :dependent => :destroy
+  has_many :other_salaries, :through => :other_payment_employees
+
   belongs_to :employees
   
   has_many :payroll_employees, :dependent => :destroy

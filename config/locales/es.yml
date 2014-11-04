@@ -326,6 +326,7 @@ es:
         payroll_log:
           one: planilla
           other: Registro de planillas
+        other_payment: Otros Pagos
       attributes:
         work_benefit:
           description: Descripción
@@ -541,6 +542,17 @@ es:
           payment_type: Tipo de Pago
           payroll_id: Planilla
           payroll_date: Fecha
+        other_payment:
+          description: Descripción
+          deduction_type: Tipo de deducción
+          calculation_type: Tipo de calculo
+          amount: Monto a agotar
+          constitutes_salary: Constituye Salario
+          individual: Individual
+          ledger_account_id: Cuenta Debito
+          centro_de_costo_id: Centro de Costo
+          payroll_types: Tipos de planillas
+          custom_calculation: Valor
   date:
       abbr_day_names:
       - dom

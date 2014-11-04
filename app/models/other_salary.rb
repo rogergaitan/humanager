@@ -1,6 +1,6 @@
 class OtherSalary < ActiveRecord::Base
 	belongs_to :ledger_account
-	#association with employees through other_salary_employees
+	# association with employees through other_salary_employees
   	has_many :other_salary_employees, :dependent => :destroy
   	has_many :employees, :through => :other_salary_employees
 

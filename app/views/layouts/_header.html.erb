@@ -65,6 +65,10 @@
                         <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
                     <% end %>
 
+                    
+                    <li><a href=<%= other_payments_path%>> Otros Pagos</a></li>
+                    
+
                     <% if can? :read, Occupation %>
                         <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
                     <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141024163147) do
+ActiveRecord::Schema.define(:version => 20141103214346) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -314,6 +314,46 @@ ActiveRecord::Schema.define(:version => 20141024163147) do
     t.string   "ccss_code"
   end
 
+  create_table "other_payment_employees", :force => true do |t|
+    t.integer  "other_payment_id"
+    t.integer  "employee_id"
+    t.boolean  "state"
+    t.decimal  "calculation",      :precision => 18, :scale => 2
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
+  end
+
+  create_table "other_payment_payments", :force => true do |t|
+    t.integer  "other_payment_employee_id"
+    t.date     "payment_date"
+    t.integer  "payment"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "other_payment_payments", ["other_payment_employee_id"], :name => "index_other_payment_payments_on_other_payment_employee_id"
+
+  create_table "other_payment_payrolls", :force => true do |t|
+    t.integer  "other_payment_id"
+    t.integer  "payroll_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  create_table "other_payments", :force => true do |t|
+    t.string   "description"
+    t.enum     "deduction_type",     :limit => [:Constante, :Unica, :Monto_Agotar]
+    t.enum     "calculation_type",   :limit => [:porcentual, :fija]
+    t.decimal  "amount",                                                            :precision => 18, :scale => 2
+    t.boolean  "state"
+    t.boolean  "constitutes_salary"
+    t.boolean  "individual"
+    t.integer  "ledger_account_id"
+    t.integer  "centro_de_costo_id"
+    t.datetime "created_at",                                                                                       :null => false
+    t.datetime "updated_at",                                                                                       :null => false
+  end
+
   create_table "other_salaries", :force => true do |t|
     t.string   "description"
     t.integer  "ledger_account_id"
@@ -431,6 +471,13 @@ ActiveRecord::Schema.define(:version => 20141024163147) do
 
   add_index "payroll_type_deductions", ["deduction_id"], :name => "index_payroll_type_deductions_on_deduction_id"
   add_index "payroll_type_deductions", ["payroll_type_id"], :name => "index_payroll_type_deductions_on_payroll_type_id"
+
+  create_table "payroll_type_other_payments", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.integer  "other_payment_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "payroll_types", :force => true do |t|
     t.string   "description"

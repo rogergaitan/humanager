@@ -161,15 +161,18 @@ $(document).ready(function() {
     return searchAll($('#search_name_employee_modal').val());
   });
 
+  $('#deduction_custom_calculation').keyup(resources.twoDecimals);
+
   $('#deduction_custom_calculation').on('change', function() {
     var value = $(this).val();
-
     $('#employee_items tr').each(function() {
       if( !parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
         $(this).find("input:text[id*='_calculation']").val(value);
       }
     });
   });
+
+  $("#employee_items input:text[id*='_calculation']").keyup(resources.twoDecimals);
 
   /************************************************************************************************************/
   /************************************************************************************************************/

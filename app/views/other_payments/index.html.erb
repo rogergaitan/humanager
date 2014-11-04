@@ -1,0 +1,23 @@
+<h1>Listing other_payments</h1>
+
+<table>
+  <tr>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @other_payments.each do |other_payment| %>
+  <tr>
+    <td><%= other_payment.description %></td>
+    <td><%= link_to 'Show', other_payment %></td>
+    <td><%= link_to 'Edit', edit_other_payment_path(other_payment) %></td>
+    <td><%= link_to 'Destroy', other_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Other payment', new_other_payment_path %>

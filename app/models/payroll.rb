@@ -6,6 +6,11 @@ class Payroll < ActiveRecord::Base
   belongs_to :company
   has_many :deduction_payrolls, :dependent => :destroy
   has_many :deductions, :through => :deduction_payrolls
+
+  # OTHER PAYMENTS
+  has_many :other_payment_payrolls, :dependent => :destroy
+  has_many :deductions, :through => :other_payment_payrolls
+
   validates :payroll_type_id, :presence => true
   validates :start_date, :presence => true
   validates :end_date, :presence => true
