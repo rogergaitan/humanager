@@ -349,6 +349,11 @@ es:
         payroll_type:
           description: Descripción
           payroll_type: Tipo de planilla
+          cod_doc_payroll_support: Cod Doc Soporte Planilla
+          mask_doc_payroll_support: Mascara Doc Soporte Planilla
+          cod_doc_accounting_support_mov: Cod Doc Soporte Mov Contable
+          mask_doc_accounting_support_mov: Mascara Doc Soporte Mov Contable
+          ledger_account_id: Cuenta Banco
         centro_de_costo:
           iempresa: Empresa
           icentro_costo: Id Centro de Costos

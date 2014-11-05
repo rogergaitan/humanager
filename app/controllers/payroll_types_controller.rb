@@ -1,5 +1,6 @@
 class PayrollTypesController < ApplicationController
   load_and_authorize_resource
+  before_filter :resources, :only => [:new, :edit]
   respond_to :html, :json
   # GET /payroll_types
   # GET /payroll_types.json
@@ -78,4 +79,9 @@ class PayrollTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def resources
+    @bank_accounts = LedgerAccount.bank_account
+  end
+
 end

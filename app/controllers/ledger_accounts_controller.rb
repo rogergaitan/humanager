@@ -68,4 +68,8 @@ class LedgerAccountsController < ApplicationController
     @cc_child ||= LedgerAccount.find(:all, :select =>['iaccount', 'ifather', 'naccount'])
   end
 
+  def get_bank_account
+    respond_with LedgerAccount.bank_account
+  end
+
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141104212121) do
+ActiveRecord::Schema.define(:version => 20141105155547) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -481,11 +481,18 @@ ActiveRecord::Schema.define(:version => 20141104212121) do
 
   create_table "payroll_types", :force => true do |t|
     t.string   "description"
-    t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
-    t.datetime "created_at",                                                                   :null => false
-    t.datetime "updated_at",                                                                   :null => false
-    t.boolean  "state",                                                      :default => true
+    t.enum     "payroll_type",                    :limit => [:Administrativa, :Campo, :Planta]
+    t.datetime "created_at",                                                                                      :null => false
+    t.datetime "updated_at",                                                                                      :null => false
+    t.boolean  "state",                                                                         :default => true
+    t.integer  "cod_doc_payroll_support"
+    t.string   "mask_doc_payroll_support",        :limit => 5
+    t.integer  "cod_doc_accounting_support_mov"
+    t.string   "mask_doc_accounting_support_mov", :limit => 5
+    t.integer  "ledger_account_id"
   end
+
+  add_index "payroll_types", ["ledger_account_id"], :name => "index_payroll_types_on_ledger_account_id"
 
   create_table "payrolls", :force => true do |t|
     t.integer  "payroll_type_id"

@@ -1,14 +1,65 @@
+<script type="text/javascript">
+  var bank_account = [];
+  <%  @bank_accounts.each do |cc| %>
+    bank_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>, <%= cc.iaccount %>));
+  <% end %>
+</script>
+
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
+<%= javascript_include_tag 'payroll_type/payroll_type' %>
+
 <%= form_for @payroll_type, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+
   <div class="control-group">
     <%= f.label :description, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :description, :class => 'text_field' %>
     </div>
   </div>
+
   <div class="control-group">
     <%= f.label :payroll_type, :class => 'control-label' %>
     <div class="controls">
 			<%= f.enum_select :payroll_type, :include_blank => false %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :cod_doc_payroll_support, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :cod_doc_payroll_support, :maxlength => "3" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :mask_doc_payroll_support, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :mask_doc_payroll_support, :maxlength => "5" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :cod_doc_accounting_support_mov, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :cod_doc_accounting_support_mov, :maxlength => "3" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :mask_doc_accounting_support_mov, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :mask_doc_accounting_support_mov, :maxlength => "5" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :ledger_account_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :ledger_account_id %>
+       <%= text_field_tag 'payroll_type_ledger_account',nil, :class => 'number_field search-image-category', 
+        :for => :ledger_account_id %>
+      <a href="#ledgerAccountModal" role="button" class="btn" data-toggle="modal" rel="tooltip" 
+        title="Ver lista de cuentas contables"> <i class="icon-list"></i> </a>
     </div>
   </div>
 
@@ -18,3 +69,19 @@
                 payroll_types_path, :class => 'btn' %>
   </div>
 <% end %>
+
+<input type="hidden" id="get_bank_account_ledger_accounts_path" value="<%= get_bank_account_ledger_accounts_path %>">
+
+<!-- Ledger account Modal -->
+<div id="ledgerAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la Cuenta de Banco</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>

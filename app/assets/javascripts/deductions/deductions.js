@@ -32,7 +32,7 @@ $(document).ready(function() {
 	treeviewhr.cc_tree(cuenta_credito, true);
   $('.expand_tree').click(treeviewhr.expand);
 
-  // Cuando se da click en una cuenta de credito para que setee el id
+  // Cuando se da click en una cuenta de credito para que establesca el id
   $('#list').on({
 		click: set_account,
 		mouseenter: function() {
