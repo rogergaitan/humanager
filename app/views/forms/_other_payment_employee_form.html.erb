@@ -2,7 +2,7 @@
 
   <td class="controls_item">
     <div class="input-append">
-      <%= f.hidden_field :employee_id, :class => 'control-label' %>
+      <%= f.hidden_field :employee_id %>
       <%= hidden_field_tag 'in_searching', '0' %>
       <%= text_field_tag 'search_code_employee', '', :class => 'input-mini search_code_employee', :placeholder => 'Número' %>
       <%= text_field_tag 'search_name_employee', '', :class => 'input-medium', :placeholder => 'Nombre Empleado'  %>
@@ -29,5 +29,6 @@
       </div>
     </div>
   </td>
+  <%= f.hidden_field :completed, :value => false %>
 
 </tr>

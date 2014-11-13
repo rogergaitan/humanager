@@ -1,26 +1,17 @@
 class OtherPaymentsController < ApplicationController
-
-  before_filter :resources, :only => [:new, :edit]
+  #load_and_authorize_resource
+  before_filter :resources, :only => [:new, :edit, :create]
+  respond_to :html, :json, :js
 
   # GET /other_payments
   # GET /other_payments.json
   def index
-    @other_payments = OtherPayment.all
+    @other_payments = OtherPayment.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
+        .paginate(:page => params[:page], :per_page => 15)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
       format.json { render json: @other_payments }
-    end
-  end
-
-  # GET /other_payments/1
-  # GET /other_payments/1.json
-  def show
-    @other_payment = OtherPayment.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @other_payment }
     end
   end
 
@@ -28,11 +19,9 @@ class OtherPaymentsController < ApplicationController
   # GET /other_payments/new.json
   def new
     @other_payment = OtherPayment.new
-    @employee_ids = []
+    objects_employees(@other_payment)
 
-    @other_payment.other_payment_employees.where('state=1').select('employee_id').each do |e|
-      @employee_ids << e['employee_id']
-    end
+    @other_payment.other_payment_employees.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -42,29 +31,21 @@ class OtherPaymentsController < ApplicationController
 
   # GET /other_payments/1/edit
   def edit
-    @other_payment = OtherPayment.find(params[:id])
-    @employee_ids = []
-    @objectHidden = [] # They are the ids that are hidden from view
-    @object = [] # Are the ids that can't be deleted
-
-    @other_payment.other_payment_employees.each do |pe|
-      if pe.state
-        @employee_ids << pe.employee_id
-      else
-        @objectHidden << "#{pe.employee_id}"
-      end
-
-      unless pe.other_payment_payments.empty?
-        # if there are records.
-        @object << "#{de.employee_id}"
+    begin
+      @other_payment = OtherPayment.where(:state => CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
+          .find(params[:id])
+      objects_employees(@other_payment)
+    rescue
+      respond_to do |format|
+        format.html { redirect_to( other_payments_path, notice: t('.notice.no_results')) }
       end
     end
-
   end
 
   # POST /other_payments
   # POST /other_payments.json
   def create
+    params[:other_payment][:payroll_ids].reject!{|a| a==""}
     @other_payment = OtherPayment.new(params[:other_payment])
 
     respond_to do |format|
@@ -72,6 +53,7 @@ class OtherPaymentsController < ApplicationController
         format.html { redirect_to @other_payment, notice: 'Other payment was successfully created.' }
         format.json { render json: @other_payment, status: :created, location: @other_payment }
       else
+        objects_employees(@other_payment)
         format.html { render action: "new" }
         format.json { render json: @other_payment.errors, status: :unprocessable_entity }
       end
@@ -90,29 +72,29 @@ class OtherPaymentsController < ApplicationController
         if pe[1]["id"].nil?
           # New
           unless to_bool(pe[1]["_destroy"])
-            otherPaymentEmployee = OtherPaymentEmployee.new
-            otherPaymentEmployee.other_payment_id = params[:id]
-            otherPaymentEmployee.employee_id = pe[1]["employee_id"]
-            otherPaymentEmployee.calculation = pe[1]["calculation"]
-            otherPaymentEmployee.state = 1
-            otherPaymentEmployee.save
+            other_payment_employee = OtherPaymentEmployee.new
+            other_payment_employee.other_payment_id = params[:id]
+            other_payment_employee.employee_id = pe[1]["employee_id"]
+            other_payment_employee.calculation = pe[1]["calculation"]
+            other_payment_employee.completed = false
+            other_payment_employee.save
           end
         else
           # Old
-          otherPaymentEmployee = OtherPaymentEmployee.find(pe[1]["id"])
+          other_payment_employee = OtherPaymentEmployee.find(pe[1]["id"])
           if to_bool( pe[1]["_destroy"] ) # Change status
-            unless otherPaymentEmployee.other_payment_payments.empty?
+            unless other_payment_employee.other_payment_payments.empty?
               # if there are records.
-              otherPaymentEmployee.state = 0
+              other_payment_employee.completed = true
             else
               # No records.
-              otherPaymentEmployee.destroy
+              other_payment_employee.destroy
             end
           else
-            otherPaymentEmployee.state = 1
-            otherPaymentEmployee.calculation = pe[1]["calculation"]
+            other_payment_employee.completed = false
+            other_payment_employee.calculation = pe[1]["calculation"]
           end
-          otherPaymentEmployee.save
+          other_payment_employee.save
         end
       end
 
@@ -124,30 +106,18 @@ class OtherPaymentsController < ApplicationController
       @other_payment.ledger_account_id = params[:other_payment][:ledger_account_id]
       @other_payment.constitutes_salary = params[:other_payment][:constitutes_salary]      
       @other_payment.payroll_type_ids = params[:other_payment][:payroll_type_ids]
+      @other_payment.payroll_ids = params[:other_payment][:payroll_ids]
 
       respond_to do |format|
         if @other_payment.save
-          format.html { redirect_to @other_payment, notice: 'Other payment was successfully updated.' }
+          format.html { redirect_to other_payments_path, notice: 'Other payment was successfully updated.' }
           format.json { head :no_content }
         else
           format.html { render action: "edit" }
           format.json { render json: @other_payment.errors, status: :unprocessable_entity }
         end
-      end
-
-      
+      end 
     end # End Transaction
-
-    # respond_to do |format|
-    #   if @other_payment.update_attributes(params[:other_payment])
-    #     format.html { redirect_to @other_payment, notice: 'Other payment was successfully updated.' }
-    #     format.json { head :no_content }
-    #   else
-    #     format.html { render action: "edit" }
-    #     format.json { render json: @other_payment.errors, status: :unprocessable_entity }
-    #   end
-    # end
-
   end
 
   # DELETE /other_payments/1
@@ -164,11 +134,31 @@ class OtherPaymentsController < ApplicationController
 
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
-    # @credit_accounts = LedgerAccount.credit_accounts
     @payroll_types = PayrollType.all
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
+  end
+
+  # Get a other payment object and search all ids' employees and
+  # check if is possible deleted
+  def objects_employees(other_payment)
+    @employee_ids = []
+    @object_hidden = [] # They are the ids that are hidden from view
+    @object = [] # Are the ids that can't be deleted
+
+    other_payment.other_payment_employees.each do |pe|
+      unless pe.completed
+        @employee_ids << pe.employee_id
+      else
+        @object_hidden << "#{pe.employee_id}"
+      end
+
+      unless pe.other_payment_payments.empty?
+        # if there are records.
+        @object << "#{pe.employee_id}"
+      end
+    end
   end
 
 end

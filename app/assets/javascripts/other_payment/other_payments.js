@@ -151,7 +151,7 @@ $(document).ready(function() {
 	$('#other_payment_custom_calculation').on('change', function() {
 		var value = $(this).val();
 		$('#employee_items tr').each(function() {
-			if( !parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
+			if( !otherPayment.parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
 				$(this).find("input:text[id*='_calculation']").val(value);
 			}
 		});

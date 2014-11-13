@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141105155547) do
+ActiveRecord::Schema.define(:version => 20141110161800) do
 
   create_table "addresses", :force => true do |t|
     t.string   "address"
@@ -109,9 +109,9 @@ ActiveRecord::Schema.define(:version => 20141105155547) do
   create_table "deduction_employees", :force => true do |t|
     t.integer  "deduction_id"
     t.integer  "employee_id"
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
-    t.boolean  "state",                                       :default => true
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
+    t.boolean  "completed",                                   :default => false
     t.decimal  "calculation",  :precision => 10, :scale => 2
   end
 
@@ -148,9 +148,9 @@ ActiveRecord::Schema.define(:version => 20141105155547) do
     t.decimal  "amount_exhaust",                                                   :precision => 10, :scale => 2
     t.enum     "calculation_type",  :limit => [:porcentual, :fija]
     t.integer  "ledger_account_id"
-    t.datetime "created_at",                                                                                                         :null => false
-    t.datetime "updated_at",                                                                                                         :null => false
-    t.boolean  "state",                                                                                           :default => true
+    t.datetime "created_at",                                                                                                           :null => false
+    t.datetime "updated_at",                                                                                                           :null => false
+    t.enum     "state",             :limit => [:completed, :active],                                              :default => :active
     t.boolean  "is_beneficiary",                                                                                  :default => true
     t.string   "beneficiary_id"
     t.boolean  "individual",                                                                                      :default => false
@@ -203,9 +203,9 @@ ActiveRecord::Schema.define(:version => 20141105155547) do
   create_table "employee_benefits", :force => true do |t|
     t.integer  "work_benefit_id"
     t.integer  "employee_id"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-    t.boolean  "state",           :default => true
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "completed",       :default => false
   end
 
   add_index "employee_benefits", ["employee_id"], :name => "index_employee_benefits_on_employee_id"
@@ -317,21 +317,27 @@ ActiveRecord::Schema.define(:version => 20141105155547) do
   create_table "other_payment_employees", :force => true do |t|
     t.integer  "other_payment_id"
     t.integer  "employee_id"
-    t.boolean  "state"
+    t.boolean  "completed",                                       :default => false
     t.decimal  "calculation",      :precision => 10, :scale => 2
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
   end
+
+  add_index "other_payment_employees", ["employee_id"], :name => "index_other_payment_employees_on_employee_id"
+  add_index "other_payment_employees", ["other_payment_id"], :name => "index_other_payment_employees_on_other_payment_id"
 
   create_table "other_payment_payments", :force => true do |t|
     t.integer  "other_payment_employee_id"
+    t.integer  "payroll_id"
     t.date     "payment_date"
-    t.integer  "payment"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.decimal  "payment",                   :precision => 10, :scale => 2
+    t.boolean  "is_salary",                                                :default => false
+    t.datetime "created_at",                                                                  :null => false
+    t.datetime "updated_at",                                                                  :null => false
   end
 
   add_index "other_payment_payments", ["other_payment_employee_id"], :name => "index_other_payment_payments_on_other_payment_employee_id"
+  add_index "other_payment_payments", ["payroll_id"], :name => "index_other_payment_payments_on_payroll_id"
 
   create_table "other_payment_payrolls", :force => true do |t|
     t.integer  "other_payment_id"
@@ -345,13 +351,13 @@ ActiveRecord::Schema.define(:version => 20141105155547) do
     t.enum     "deduction_type",     :limit => [:Constante, :Unica, :Monto_Agotar]
     t.enum     "calculation_type",   :limit => [:porcentual, :fija]
     t.decimal  "amount",                                                            :precision => 10, :scale => 2
-    t.boolean  "state"
+    t.enum     "state",              :limit => [:completed, :active],                                              :default => :active
     t.boolean  "constitutes_salary"
     t.boolean  "individual"
     t.integer  "ledger_account_id"
     t.integer  "centro_de_costo_id"
-    t.datetime "created_at",                                                                                       :null => false
-    t.datetime "updated_at",                                                                                       :null => false
+    t.datetime "created_at",                                                                                                            :null => false
+    t.datetime "updated_at",                                                                                                            :null => false
   end
 
   create_table "other_salaries", :force => true do |t|
@@ -692,15 +698,15 @@ ActiveRecord::Schema.define(:version => 20141105155547) do
 
   create_table "work_benefits", :force => true do |t|
     t.string   "description"
-    t.decimal  "percentage",         :precision => 10, :scale => 2
+    t.decimal  "percentage",                                          :precision => 10, :scale => 2
     t.integer  "debit_account"
     t.integer  "credit_account"
-    t.datetime "created_at",                                                          :null => false
-    t.datetime "updated_at",                                                          :null => false
-    t.boolean  "is_beneficiary",                                    :default => true
+    t.datetime "created_at",                                                                                              :null => false
+    t.datetime "updated_at",                                                                                              :null => false
+    t.boolean  "is_beneficiary",                                                                     :default => true
     t.integer  "beneficiary_id"
     t.integer  "centro_de_costo_id"
-    t.boolean  "state",                                             :default => true
+    t.enum     "state",              :limit => [:completed, :active],                                :default => :active
   end
 
   add_index "work_benefits", ["centro_de_costo_id"], :name => "index_work_benefits_on_centro_de_costo_id"

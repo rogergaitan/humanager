@@ -9,7 +9,7 @@ class Payroll < ActiveRecord::Base
 
   # OTHER PAYMENTS
   has_many :other_payment_payrolls, :dependent => :destroy
-  has_many :deductions, :through => :other_payment_payrolls
+  has_many :other_payments, :through => :other_payment_payrolls
 
   validates :payroll_type_id, :presence => true
   validates :start_date, :presence => true
@@ -23,7 +23,8 @@ class Payroll < ActiveRecord::Base
 
   has_many :payroll_logs
   has_many :work_benefits_payments
-  has_many :deduction_payments
+  has_many :deduction_payment
+  has_many :other_payment_payment
 
   scope :activas, where(state: true)
   scope :inactivas, where(state: false)
@@ -34,28 +35,38 @@ class Payroll < ActiveRecord::Base
   # Close the payroll
   def self.close_payroll(payroll_id)
 
-    list_employees_salary = get_salary_empoyees(payroll_id)
-    list_employees_deductions = get_deductions_employees(list_employees_salary)
-    puts 'list_employees_deductions'
-    puts list_employees_deductions
-    list_employees_work_benefits = get_work_benefits(list_employees_salary)
+    payroll_log = PayrollLog.find_by_payroll_id(payroll_id)
+    list_employees_salary = get_salary_empoyees(payroll_log)
+    list_other_payment = get_other_payment(list_employees_salary, payroll_log)
+    list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment)
+    list_employees_deductions = get_deductions_employees(list_employees_salary, payroll_log)
+    list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
-    puts 'detail_report'
-    puts detail_report
-
+    
     result = {}
 
     if detail_report.empty?
       # Save information, close the payroll and close deductions
+      ActiveRecord::Base.transaction do
 
-      # Deductions
-      save_information_payroll(payroll_id, list_employees_deductions)
-      
-      # Work Benefits
-      save_work_benefits_payments(payroll_id, list_employees_work_benefits)
+        # Get date
+        date = payroll_log.payroll.payment_date
 
-      result['status'] = true
-      result['data'] = true
+        # Deductions
+        save_deduction_payments(date, payroll_id, list_employees_deductions)
+        
+        # Work Benefits
+        save_work_benefits_payments(date, payroll_id, list_employees_work_benefits)
+        
+        # Other Payments
+        save_other_payment_payments(date, payroll_id, list_other_payment)
+
+        p = payroll_log.payroll
+        p.update_attributes(:state => false)
+
+        result['status'] = true
+        result['data'] = true
+      end
     else
       result['status'] = false
       result['data'] = detail_report
@@ -64,14 +75,10 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get the salary of each employee
-  def self.get_salary_empoyees(payroll_id)
-    
-    payroll_log = PayrollLog.find_by_payroll_id(payroll_id)
-
-    list_histories = payroll_log.payroll_histories
+  def self.get_salary_empoyees(payroll_log)
     list_employees_salary = {}
 
-    list_histories.each do |h|
+    payroll_log.payroll_histories.each do |h|
       h.payroll_employees.each do |e|
         if list_employees_salary.has_key?(e.employee_id)
           list_employees_salary[e.employee_id] += h.total.to_f
@@ -83,8 +90,103 @@ class Payroll < ActiveRecord::Base
     list_employees_salary    
   end
 
+  # Get Other Payments of each employee
+  def self.get_other_payment(list_employees, payroll_log)
+
+    other_payment_details = {}
+    list_other_payments = []
+    list_employee_other_payments = {}
+    
+    list_employees.each do |id, salary|
+
+      OtherPaymentEmployee.where(:employee_id => id).each do |ope|
+        
+        if ope.other_payment.state === CONSTANTS[:PAYROLLS_STATES]['ACTIVE'].to_sym and !ope.completed
+
+          other_payment_details['other_payment_employee_id'] = ope.id
+          other_payment_details['other_payment_id'] = ope.other_payment.id
+          other_payment_details['other_payment_name'] = ope.other_payment.description
+          other_payment_details['payment'] = 0
+          other_payment_details['constitutes_salary'] = ope.other_payment.constitutes_salary
+          other_payment_details['state'] = true
+          other_payment_details['state_other_payment_employee'] = true
+          add = true
+
+          case ope.other_payment.deduction_type.to_s
+            # Constante
+            when CONSTANTS[:DEDUCTION]["CONSTANTE"].to_s
+
+              if ope.other_payment.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
+                # porcentual
+                if ope.other_payment.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['PORCENTUAL'].to_s
+                  other_payment_details['payment'] = (salary.to_f*ope.calculation.to_f/100)
+                end
+
+                # fija
+                if ope.other_payment.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['FIJA'].to_s
+                  other_payment_details['payment'] = ope.calculation.to_f
+                end
+              else
+                add = false
+              end
+
+            # Unica
+            when CONSTANTS[:DEDUCTION]["UNICA"].to_s
+
+              if ope.other_payment.payroll_ids.include? payroll_log.payroll_id.to_i
+
+                # porcentual
+                if ope.other_payment.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['PORCENTUAL'].to_s
+                  other_payment_details['payment'] = (salary.to_f*ope.calculation.to_f/100)
+                end
+
+                # fija
+                if ope.other_payment.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['FIJA'].to_s
+                  other_payment_details['payment'] = ope.calculation.to_f
+                end
+                other_payment_details['state'] = false
+                other_payment_details['state_other_payment_employee'] = false
+              else
+                add = false
+              end
+          end # End Case
+
+          if add
+            list_other_payments << other_payment_details
+            list_employee_other_payments[id] = list_other_payments
+          end
+        end # End if states
+        other_payment_details = {}
+      end # OtherPaymentEmployee
+      list_other_payments = []
+    end # list_employees
+
+    list_employee_other_payments
+  end
+
+  # Sum other payments to the salary only if ("is_salary") 
+  def self.sum_other_payments_salary(list_employees, list_other_payments)
+
+    new_list_employee_salary = {}
+    
+    list_employees.each do |employee_id, salary|
+      list_other_payments[employee_id].each do |other_payment|
+        if other_payment['constitutes_salary']
+          if new_list_employee_salary.has_key?(employee_id)
+            new_list_employee_salary[employee_id] += other_payment['payment'].to_f
+          else
+            new_list_employee_salary[employee_id] = other_payment['payment'].to_f
+          end
+        end
+      end
+      new_list_employee_salary[employee_id] += salary.to_f
+    end
+
+    new_list_employee_salary
+  end
+
   # Get the deduction of each employee (Calculations)
-  def self.get_deductions_employees(list_employees)
+  def self.get_deductions_employees(list_employees, payroll_log)
     
     deduction_details = {}
     list_deductions = []
@@ -94,7 +196,7 @@ class Payroll < ActiveRecord::Base
 
       DeductionEmployee.where(:employee_id => id).each do |de|
         
-        if de.deduction.state and de.state
+        if de.deduction.state === CONSTANTS[:PAYROLLS_STATES]['ACTIVE'].to_sym and !de.completed
 
           deduction_details['deduction_employee_id'] = de.id
           deduction_details['deduction_id'] = de.deduction.id
@@ -105,67 +207,86 @@ class Payroll < ActiveRecord::Base
           deduction_details['current_balance'] = 0
           deduction_details['state'] = true
           deduction_details['state_deduction_employee'] = true
+          add = true
 
           case de.deduction.deduction_type.to_s
             
             # Constante
-            when CONSTANTS[:DEDUCTION][0]["name"].to_s
+            when CONSTANTS[:DEDUCTION]["CONSTANTE"].to_s
+              
+              if de.deduction.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
 
-              # porcentual
-              if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE][0]["name"].to_s
-                deduction_details['payment'] = (salary.to_f*de.deduction.calculation.to_f/100)
-              end
+                # porcentual
+                if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['PORCENTUAL'].to_s
+                  deduction_details['payment'] = (salary.to_f*de.calculation.to_f/100)
+                end
 
-              # fija
-              if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE][1]["name"].to_s
-                deduction_details['payment'] = de.deduction.calculation.to_f
+                # fija
+                if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['FIJA'].to_s
+                  deduction_details['payment'] = de.calculation.to_f
+                end
+              else
+                add = false
               end
 
             # Unica
-            when CONSTANTS[:DEDUCTION][1]["name"].to_s
+            when CONSTANTS[:DEDUCTION]["UNICA"].to_s
 
-              # fija
-              if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE][1]["name"].to_s
-                deduction_details['payment'] = de.deduction.calculation.to_f
-              end
+              if de.deduction.payroll_ids.include? payroll_log.payroll_id.to_i
 
-              deduction_details['state'] = false
-              deduction_details['state_deduction_employee'] = false
-              
-            # Monto_Agotar
-            when CONSTANTS[:DEDUCTION][2]["name"].to_s
-
-              # fija
-              if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE][1]["name"].to_s
-
-                if de.deduction_payments.blank?
-                  deduction_details['previous_balance'] = de.deduction.amount_exhaust.to_f
-                  deduction_details['current_balance'] = (de.deduction.amount_exhaust.to_f - de.deduction.calculation.to_f)
-                  deduction_details['payment'] = de.deduction.calculation.to_f
-                else
-
-                  if de.deduction_payments.last.current_balance.to_f >= de.deduction.calculation.to_f
-                    deduction_details['current_balance'] = (de.deduction_payments.last.current_balance.to_f - de.deduction.calculation.to_f)
-                    deduction_details['payment'] = de.deduction.calculation.to_f
-                    deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
-                  else
-                    deduction_details['current_balance'] = 0
-                    deduction_details['payment'] = de.deduction_payments.last.current_balance.to_f
-                    deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
-                  end 
-
-                  if deduction_details['current_balance'].to_f == 0
-                    deduction_details['state_deduction_employee'] = false
-                    deduction_details['state'] = false
-                  end
-
+                # porcentual
+                if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['PORCENTUAL'].to_s
+                  deduction_details['payment'] = (salary.to_f*de.calculation.to_f/100)
                 end
 
+                # fija
+                if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['FIJA'].to_s
+                  deduction_details['payment'] = de.calculation.to_f
+                end
+
+                deduction_details['state'] = false
+                deduction_details['state_deduction_employee'] = false
+              else
+                add = false
+              end
+
+            # Monto_Agotar
+            when CONSTANTS[:DEDUCTION]["MONTO_AGOTAR"].to_s
+              
+              if de.deduction.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
+                # fija
+                if de.deduction.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['FIJA'].to_s
+
+                  if de.deduction_payments.blank?
+                    deduction_details['previous_balance'] = de.deduction.amount_exhaust.to_f
+                    deduction_details['current_balance'] = (de.deduction.amount_exhaust.to_f - de.calculation.to_f)
+                    deduction_details['payment'] = de.calculation.to_f
+                  else
+                    if de.deduction_payments.last.current_balance.to_f >= de.calculation.to_f
+                      deduction_details['current_balance'] = (de.deduction_payments.last.current_balance.to_f - de.calculation.to_f)
+                      deduction_details['payment'] = de.calculation.to_f
+                      deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
+                    else
+                      deduction_details['current_balance'] = 0
+                      deduction_details['payment'] = de.deduction_payments.last.current_balance.to_f
+                      deduction_details['previous_balance'] = de.deduction_payments.last.current_balance.to_f
+                    end 
+
+                    if deduction_details['current_balance'].to_f == 0
+                      deduction_details['state_deduction_employee'] = false
+                      deduction_details['state'] = false
+                    end
+                  end
+                end
+              else
+                add = false
               end
           end # end case
-
-          list_deductions << deduction_details
-          list_employees_deductions[id] = list_deductions
+          
+          if add
+            list_deductions << deduction_details
+            list_employees_deductions[id] = list_deductions
+          end
         end # end if states
 
         deduction_details = {}
@@ -175,6 +296,35 @@ class Payroll < ActiveRecord::Base
     end # end each list_employees
 
     list_employees_deductions
+  end
+
+  # Get the work benefits (Calculations)
+  def self.get_work_benefits(list_employees, payroll_log)
+
+    work_benefits_details = {}
+    list_work_benefits = []
+    list_employees_work_benefits = {}
+
+    list_employees.each do |id, salary|
+
+      EmployeeBenefit.where(:employee_id => id).each do |eb|
+        
+        if eb.work_benefit.state === CONSTANTS[:PAYROLLS_STATES]['ACTIVE'].to_sym and !eb.completed
+          if eb.work_benefit.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
+            work_benefits_details['employee_benefits_id'] = eb.id
+            work_benefits_details['percentage'] = eb.work_benefit.percentage.to_f
+            work_benefits_details['payment'] = (salary.to_f*eb.work_benefit.percentage.to_f/100)
+            list_work_benefits << work_benefits_details
+          end
+        end
+        work_benefits_details = {}
+      end # End each work_benefits
+
+      list_employees_work_benefits[id] = list_work_benefits
+      list_work_benefits = []
+    end # End each list_employees
+
+    list_employees_work_benefits
   end
 
   # Cheack salaries between deductions
@@ -199,15 +349,12 @@ class Payroll < ActiveRecord::Base
         detail_employee['total_deductions'] = total_deductions
         detail_report[id] = detail_employee
       end
-
     end # End list_deductions
     detail_report
   end
 
   # Save the deductions information
-  def self.save_information_payroll(payroll_id, list_employees_deductions)
-    
-    date = Payroll.find(payroll_id, :select=>"payment_date")
+  def self.save_deduction_payments(date, payroll_id, list_employees_deductions)
 
     list_employees_deductions.each do |id, deductions|
 
@@ -215,62 +362,28 @@ class Payroll < ActiveRecord::Base
 
         deduction_payment = DeductionPayment.new
         deduction_payment.deduction_employee_id = deduction['deduction_employee_id']
-        deduction_payment.payment_date = date['payment_date']
+        deduction_payment.payment_date = date
         deduction_payment.previous_balance = deduction['previous_balance']
         deduction_payment.payment = deduction['payment']
         deduction_payment.current_balance = deduction['current_balance']
-        deduction_payment.payroll_id = payroll_id
+        deduction_payment.payroll_id = payroll_id.to_i
         deduction_payment.save
 
         if deduction['state'] == false
           d = Deduction.find(deduction['deduction_id'])
-          d.update_attributes(:state => false)
+          d.update_attributes(:state => CONSTANTS[:PAYROLLS_STATES]['COMPLETED'])
         end
 
         if deduction['state_deduction_employee'] == false
           de = DeductionEmployee.find(deduction['deduction_employee_id'])
-          de.update_attributes(:state => false)
+          de.update_attributes(:completed => true)
         end
-      
       end # End each deductions
-
-      p = Payroll.find(payroll_id)
-      p.update_attributes(:state => false)
-
     end # End each list_employees_deductions
   end
 
-  # Get the work benefits (Calculations)
-  def self.get_work_benefits(list_employees)
-
-    work_benefits_details = {}
-    list_work_benefits = []
-    list_employees_work_benefits = {}
-
-    list_employees.each do |id, salary|
-
-      EmployeeBenefit.where(:employee_id => id).each do |eb|
-        
-        work_benefits_details['employee_benefits_id'] = eb.id
-        work_benefits_details['percentage'] = eb.work_benefit.percentage.to_f
-        work_benefits_details['payment'] = (salary.to_f*eb.work_benefit.percentage.to_f/100)
-
-        list_work_benefits << work_benefits_details
-        work_benefits_details = {}
-      end # End each work_benefits
-
-      list_employees_work_benefits[id] = list_work_benefits
-      list_work_benefits = []
-
-    end # End each list_employees
-
-    list_employees_work_benefits
-  end
-
   # Save the work benefits
-  def self.save_work_benefits_payments(payroll_id, list_employees_work_benefits)
-
-    date = Payroll.find(payroll_id, :select=>"payment_date")
+  def self.save_work_benefits_payments(date, payroll_id, list_employees_work_benefits)
 
     list_employees_work_benefits.each do |id, work_benefits|
       
@@ -279,15 +392,45 @@ class Payroll < ActiveRecord::Base
         work_benefits_payments = WorkBenefitsPayment.new
         work_benefits_payments.employee_benefits_id = benefits['employee_benefits_id'].to_i
         work_benefits_payments.payroll_id = payroll_id.to_i
-        work_benefits_payments.payment_date = date['payment_date']
+        work_benefits_payments.payment_date = date
         work_benefits_payments.percentage = benefits['percentage']
         work_benefits_payments.payment = benefits['payment']
         work_benefits_payments.save
-
       end # End each work_benefits
     end # End each list_employees_work_benefits
   end
 
+  # Save the other payments
+  def self.save_other_payment_payments(date, payroll_id, list_other_payments)
+    
+    list_other_payments.each do |id, other_payments|
+
+      other_payments.each do |other_payment|
+
+        other_payment_payments = OtherPaymentPayment.new
+        other_payment_payments.other_payment_employee_id = other_payment['other_payment_employee_id']
+        other_payment_payments.payroll_id = payroll_id
+        other_payment_payments.payment_date = date
+        other_payment_payments.payment = other_payment['payment']
+        other_payment_payments.is_salary = other_payment['constitutes_salary']
+        other_payment_payments.save
+
+        if other_payment['state'] == false
+          op = OtherPayment.find(other_payment['other_payment_id'])
+          op.update_attributes(:state => CONSTANTS[:PAYROLLS_STATES]['COMPLETED'])
+        end
+
+        if other_payment['state_other_payment_employee'] == false
+          ope = OtherPaymentEmployee.find(other_payment['other_payment_employee_id'])
+          ope.update_attributes(:completed => true)
+        end
+      end # End each other_payments
+    end # End each list_other_payments
+  end
+  
+  ##################################################################################################
+  ##################################################################################################
+  
   # Send the information to Firebird.
   def self.send_to_firebird(payroll_id, username)
 
@@ -361,7 +504,7 @@ class Payroll < ActiveRecord::Base
       oprm.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
       oprm.inumoper = num_oper
       oprm.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
-      oprm.itdoper = CONSTANTS[:FIREBIRD][0]['ITDOPER']
+      oprm.itdoper = oprm.itdsop = CONSTANTS[:FIREBIRD][0]['ITDSOP']
       oprm.itdsop = CONSTANTS[:FIREBIRD][0]['ITDSOP']
       oprm.inumsop = payroll['id']
       oprm.snumsop = "MRH-" + (sprintf '%04d', payroll['id'])
@@ -607,7 +750,6 @@ class Payroll < ActiveRecord::Base
       params.push(" end_date <= '#{end_date}' ") unless end_date.empty?
       params.push(" state = 0 ")
       query = build_query(params)
-
       @payrolls = Payroll.where(query).paginate(:page => page, :per_page => per_page)
   end
 

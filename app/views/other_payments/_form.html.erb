@@ -17,10 +17,9 @@
     detailPayments.push(<%= id %>);
   <% end %>
 
-  <% @objectHidden.each do |id| %>
+  <% @object_hidden.each do |id| %>
     detailPaymentsHidden.push(<%= id %>);
   <% end %>
-
 </script>
 
 <%= javascript_include_tag 'resources' %>
@@ -62,7 +61,7 @@
   <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
   <div class="control-group" id="other_payment_payrolls">
     <div class='controls'>
-      <%= text_field_tag 'other_payment_payroll',nil, :class => 'search-image-category'%>
+      <%= text_field_tag 'other_payment_payroll', nil, :class => 'search-image-category'%>
     </div>
   </div>
 
@@ -182,7 +181,7 @@
     </div>
 
     <div style="clear:both"></div>
-</div>
+  </div>
 
 
   <!-- PAYROLL TYPES -->
@@ -304,7 +303,6 @@
 <input type="hidden" id="search_employee_payroll_logs_path" value="<%= search_employee_payroll_logs_path %>">
 <input type="hidden" id="fetch_payroll_type_deductions_path" value="<%= fetch_payroll_type_deductions_path %>">
 <input type="hidden" id="get_activas_payrolls_path" value="<%= get_activas_payrolls_path %>">
-
 
 <!-- Modals -->
 

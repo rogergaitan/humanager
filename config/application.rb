@@ -11,7 +11,7 @@ if defined?(Bundler)
   Bundler.require(:default, :assets, Rails.env)
 end
 
-CONSTANTS = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+CONSTANTS = YAML.load(File.read(File.expand_path('../constants.yml', __FILE__)))
 CONSTANTS.merge! CONSTANTS.fetch(Rails.env, {})
 CONSTANTS.symbolize_keys!
 

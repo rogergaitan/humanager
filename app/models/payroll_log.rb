@@ -20,7 +20,8 @@ class PayrollLog < ActiveRecord::Base
     @employees.each do |em|
       @history = PayrollHistory.includes(:payroll_employees, :centro_de_costo)
       .where('payroll_employees.employee_id = ? and payroll_histories.payroll_log_id = ?', em.id, id)
-      .select('payroll_histories.id, payroll_histories.created_at, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type').order('payroll_histories.payroll_date')
+      .select('payroll_histories.id, payroll_histories.created_at, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type')
+      .order('payroll_histories.payroll_date')
       employee_detail = ["#{em.id}", "#{em.name} #{em.surname}"]
       result[employee_detail] = @history
     end

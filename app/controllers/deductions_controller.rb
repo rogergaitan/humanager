@@ -6,15 +6,9 @@ class DeductionsController < ApplicationController
   # GET /deductions
   # GET /deductions.json
   def index
-    @deductions = Deduction.where('state = ?', 1).paginate(:page => params[:page], :per_page => 15)
+    @deductions = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
+        .paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
-  end
-
-  # GET /deductions/1
-  # GET /deductions/1.json
-  def show
-    @deduction = Deduction.find(params[:id])
-    respond_with(@deduction, :include => :ledger_account)
   end
 
   # GET /deductions/new
@@ -23,10 +17,9 @@ class DeductionsController < ApplicationController
     @deduction = Deduction.new
     @employee_ids = []
 
-    @deduction.deduction_employees.where('state=1').select('employee_id').each do |e|
+    @deduction.deduction_employees.where('completed = ?', false).select('employee_id').each do |e|
       @employee_ids << e['employee_id']
     end
-    #respond_with(@deduction)
 
     @deduction.deduction_employees.build
     
@@ -38,34 +31,39 @@ class DeductionsController < ApplicationController
 
   # GET /deductions/1/edit
   def edit
-    @deduction = Deduction.find(params[:id])
+    begin
+      @deduction = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE']).find(params[:id])
+      @object = []
+      @object_hidden = []
 
-    @object = []
-    @objectHidden = []
+      @deduction.deduction_employees.each do |de|
+        unless de.deduction_payments.empty?
+          # if there are records.
+          @object << "#{de.employee_id}"
+        end
 
-    @deduction.deduction_employees.each do |de|
-      unless de.deduction_payments.empty?
-        # if there are records.
-        @object << "#{de.employee_id}"
+        if de.completed
+          @object_hidden << "#{de.employee_id}"
+        end
       end
 
-      unless de.state
-        @objectHidden << "#{de.employee_id}"
+      @employee_ids = []
+
+      @deduction.deduction_employees.where('completed = ?', false ).select('employee_id').each do |e|
+        @employee_ids << e['employee_id']
+      end
+    rescue
+      respond_to do |format|
+        format.html { redirect_to( deductions_path, notice: t('.notice.no_results')) }
       end
     end
-
-    @employee_ids = []
-
-    @deduction.deduction_employees.where('state=1').select('employee_id').each do |e|
-      @employee_ids << e['employee_id']
-    end
-    #@credit_account = LedgerAccount.credit_accounts
   end
 
   # POST /deductions
   # POST /deductions.json
   def create
     @deduction = Deduction.new(params[:deduction])
+    @deduction.state = CONSTANTS[:PAYROLLS_STATES]['ACTIVE']
 
     respond_to do |format|
       if @deduction.save
@@ -88,36 +86,35 @@ class DeductionsController < ApplicationController
 
       # Employees from the view
       params[:deduction][:deduction_employees_attributes].each do |de|
-        if de[1]["id"].nil?
+        deduction_obj = de[1]
+        if deduction_obj["id"].nil?
           # New
-          unless to_bool( de[1]["_destroy"] )
+          unless to_bool( deduction_obj["_destroy"] )
             new_deduction_employee = DeductionEmployee.new
             new_deduction_employee.deduction_id = params[:id]
-            new_deduction_employee.employee_id = de[1]["employee_id"]
-            new_deduction_employee.calculation = de[1]["calculation"]
-            new_deduction_employee.state = 1
+            new_deduction_employee.employee_id = deduction_obj["employee_id"]
+            new_deduction_employee.calculation = deduction_obj["calculation"]
+            new_deduction_employee.completed = false
             new_deduction_employee.save
           end
         else
           # Old
-          deductionEmployee = DeductionEmployee.find( de[1]["id"] )
-          if to_bool( de[1]["_destroy"] ) # Change status
-            unless deductionEmployee.deduction_payments.empty?
+          deduction_employee = DeductionEmployee.find( deduction_obj["id"] )
+          if to_bool( deduction_obj["_destroy"] ) # Change status
+            unless deduction_employee.deduction_payments.empty?
               # if there are records.
-              deductionEmployee.state = 0
+              deduction_employee.completed = true
             else
               # No records.
-              deductionEmployee.destroy
+              deduction_employee.destroy
             end
           else
-            deductionEmployee.state = 1
-            deductionEmployee.calculation = de[1]["calculation"]
+            deduction_employee.completed = false
+            deduction_employee.calculation = deduction_obj["calculation"]
           end
-          deductionEmployee.save
+          deduction_employee.save
         end
       end
-
-      # "payroll_ids"=>[""],
 
       @deduction.description = params[:deduction][:description]
       @deduction.individual = params[:deduction][:individual]
@@ -131,7 +128,7 @@ class DeductionsController < ApplicationController
 
       respond_to do |format|
         if @deduction.save
-          format.html { redirect_to @deduction, notice: 'Deduction was successfully updated.' }
+          format.html { redirect_to deductions_path, notice: 'Deduction was successfully updated.' }
           format.json { head :no_content }
         else
           format.html { render action: "edit" }
@@ -151,15 +148,19 @@ class DeductionsController < ApplicationController
       @deduction.destroy
       message = t('.notice.successfully_deleted')
     else
+      deduction_with_payments = @deduction.deduction_employees.each do |de| 
+        unless de.deduction_payments.empty?
+          true
+        end
+      end
 
-      if DeductionEmployee.find_by_deduction_id(params[:id]).deduction_payments.empty?
+      if deduction_with_payments
         # There are no records.
         @deduction.destroy
         message = t('.notice.successfully_deleted')
       else
-        # There are records.
-        #@deduction.state = 0
-        #@deduction.save
+        @deduction.state = CONSTANTS[:PAYROLLS_STATES]['COMPLETED']
+        @deduction.save
         message = t('.notice.can_be_deleted')
       end
     end
@@ -168,6 +169,7 @@ class DeductionsController < ApplicationController
       format.html { redirect_to deductions_url, notice: message }
       format.json { head :no_content }
     end
+
   end
 
   #Search for employees

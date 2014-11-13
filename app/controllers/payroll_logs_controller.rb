@@ -55,7 +55,7 @@ class PayrollLogsController < ApplicationController
         @payroll_log.save
 
         if to_bool( params[:payroll_log]["continue_editing"] )
-          format.html { redirect_to :action => "edit", :id => 13 }
+          format.html { redirect_to :action => "edit", :id => @payroll_log.id }
         end
 
         format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }

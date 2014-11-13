@@ -1,0 +1,77 @@
+development:
+  INPUT_TEXT: "text_field"
+  INPUT_PASSWORD: "password"
+  INPUT_CHECHBOX: "checkbox"
+  INPUT_RADIO: "radio"
+  INPUT_SELECT: "select"
+  INPUT_TEXTAREA: "textarea"
+  INPUT_DATE: "datepicture"
+  PAYROLLS_STATES: {
+  	COMPLETED: "completed",
+  	ACTIVE: "active"
+  }
+  PAYMENT: [
+  	{ name: "Ordinario", type: "1" },
+    { name: "Extra", type: "1.5" },
+  	{ name: "Doble", type: "2" }
+  ]
+  DEDUCTION: {
+  	CONSTANTE: "Constante",
+  	UNICA: "Unica",
+  	MONTO_AGOTAR: "Monto_Agotar"
+  }
+  CALCULATION_TYPE: {
+    PORCENTUAL: "porcentual",
+    FIJA: "fija"
+  }
+  REPORTS: [
+  	{PAYMENT_PROOF: "1",
+  	GENERAL_PAYROLL: "2",
+  	PAYMENT_TYPE_REPORT: "3"}
+  	]
+  FIREBIRD: [
+    { IEMP: 1,
+  	ITDOPER: "MOV1",
+  	ITDOPER2: "PLA5",
+  	ITDSOP: 13,
+  	ITDSOP2: 320,
+  	ICLASIFOP: 1,
+  	ISEDE: "01",
+  	IUSUARIOULT: "RRHH",
+  	IPROCESS: 0,
+  	IESTADO: 1,
+  	BANULADA: "F",
+  	BIMPRESA: "F",
+  	MDEBITOS: 0,
+  	MCREDITOS: 0,
+  	QMOVCNT: 0,
+  	QMOVINV: 0,
+  	QMOVORD: 0,
+  	IIMAGEN: "",
+  	IWS: "",
+  	IUSUARIO: "RRHH",
+  	IEJECUCION: 0,
+  	IMONEDA: "10",
+  	BMOVMANUAL: "F",
+  	ICUENTA: 21010210,
+  	BPAGOCXP: "F",
+  	ITIPOCOSTEO: 0,
+  	BPROCESOPORDIA: "F",
+  	BRENDIMCMP: "F",
+  	QREGCTOLABOR: 0,
+  	QREGCTOS: 0,
+  	QREGFPAGODCTO1: 0,
+  	QREGFPAGODCTO2: 0,
+  	QREGFPAGODCTO3: 0,
+  	QREGFPAGODCTO4: 0,
+  	QREGFPAGOPAGADOR: 0,
+  	IACTIVIDADLUNES: 1,
+  	QCANTLUNES: 0,
+  	BCANTDESCLUNES: "T",
+  	QFACTOR: 1,
+  	ILINEAMOV: 0 }
+  ]
+
+test:
+
+production:

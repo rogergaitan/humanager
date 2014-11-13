@@ -29,7 +29,7 @@ class Deduction < ActiveRecord::Base
 
     if deductions.count > 4
       
-      deductions = Deduction.where('state = ? and deduction_type = ?', 1, CONSTANTS[:DEDUCTION][0]['name']).limit(4)
+      deductions = Deduction.where('state = ? and deduction_type = ?', 1, CONSTANTS[:DEDUCTION]['CONSTANTE']).limit(4)
       
       deductions.each do |d|
         list_deductions.push d.id

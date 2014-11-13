@@ -14,8 +14,6 @@ class ChangeDecimalFieldsToCorrectFormat < ActiveRecord::Migration
   	change_column(:other_salaries, :amount, :decimal, :precision => 10, :scale => 2)
   	change_column(:other_salary_employees, :amount, :decimal, :precision => 10, :scale => 2)
   	change_column(:payroll_logs, :payroll_total, :decimal, :precision => 10, :scale => 2)
-  	change_column(:other_payment_employees, :calculation, :decimal, :precision => 10, :scale => 2)
-  	change_column(:other_payments, :amount, :decimal, :precision => 10, :scale => 2)
 
   end
 end

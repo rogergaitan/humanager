@@ -5,25 +5,19 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits
   # GET /work_benefits.json
   def index
-    @work_benefits = WorkBenefit.paginate(:page => params[:page], :per_page => 15).includes(:credit, :debit)
+    @work_benefits = WorkBenefit.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
+        .paginate(:page => params[:page], :per_page => 15)
+        .includes(:credit, :debit)
     respond_with(@work_benefits)
-  end
-
-  # GET /work_benefits/1
-  # GET /work_benefits/1.json
-  def show
-    @work_benefit = WorkBenefit.find(params[:id])
-    respond_with(@work_benefit)
   end
 
   # GET /work_benefits/new
   # GET /work_benefits/new.json
   def new
     @work_benefit = WorkBenefit.new
-
     @employee_ids = []
 
-    @work_benefit.employee_benefits.where('state=1').select('employee_id').each do |e|
+    @work_benefit.employee_benefits.where('completed = ?', true).select('employee_id').each do |e|
       @employee_ids << e['employee_id']
     end
 
@@ -32,19 +26,23 @@ class WorkBenefitsController < ApplicationController
 
   # GET /work_benefits/1/edit
   def edit
-    @work_benefit = WorkBenefit.find(params[:id])
-
-    @employee_ids = []
-
-    @work_benefit.employee_benefits.where('state=1').select('employee_id').each do |e|
-      @employee_ids << e['employee_id']
+    begin
+      @work_benefit = WorkBenefit.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE']).find(params[:id])
+      @employee_ids = []
+      @work_benefit.employee_benefits.where('completed = ?', false).select('employee_id').each do |e|
+        @employee_ids << e['employee_id']
+      end
+    rescue
+      respond_to do |format|
+        format.html { redirect_to( work_benefits_path, notice: t('.notice.no_results')) }
+      end
     end
   end
 
   # POST /work_benefits
   # POST /work_benefits.json
   def create
-    @work_benefit = WorkBenefit.new(params[:work_benefit])
+    @work_benefit = WorkBenefit.new(params[:work_benefit]) 
 
     respond_to do |format|
       if @work_benefit.save
@@ -85,7 +83,7 @@ class WorkBenefitsController < ApplicationController
           eb.delete
         else
           # if there are records.
-          eb.state = 0
+          eb.completed = true
           eb.save
         end
       end # End each delete_employees
@@ -97,11 +95,11 @@ class WorkBenefitsController < ApplicationController
 
       if add_employees.length > 0
         add_employees.each do |new_id|
-          unless  new_id.empty?
+          unless new_id.empty?
             new_employee_benefit = EmployeeBenefit.new
             new_employee_benefit.work_benefit_id = params[:id]
             new_employee_benefit.employee_id = new_id
-            new_employee_benefit.state = 1
+            new_employee_benefit.completed = false
             new_employee_benefit.save
           end
         end # End eacg add_employee
@@ -109,7 +107,7 @@ class WorkBenefitsController < ApplicationController
         # Here update state for all employees
         list_employees.each do |id_list_employee|
           benenfit = EmployeeBenefit.find_by_work_benefit_id_and_employee_id(params[:id], id_list_employee)
-          benenfit.state = 1
+          benenfit.completed = true
           benenfit.save
         end # End each list_employee
       end # End if add_employees
@@ -126,7 +124,7 @@ class WorkBenefitsController < ApplicationController
 
     respond_to do |format|
       if @work_benefit.save
-        format.html { redirect_to @work_benefit, notice: 'Work benefit was successfully updated.' }
+        format.html { redirect_to work_benefits_path, notice: 'Work benefit was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -138,18 +136,28 @@ class WorkBenefitsController < ApplicationController
   # DELETE /work_benefits/1
   # DELETE /work_benefits/1.json
   def destroy
-
     @work_benefit = WorkBenefit.find(params[:id])
 
-    if EmployeeBenefit.find_by_work_benefit_id(params[:id]).work_benefits_payments.empty?
+    if @work_benefit.employee_benefits.empty?
       # There are no records.
       @work_benefit.destroy
       message = t('.notice.successfully_deleted')
     else
-      # There are records.
-      #@work_benefit.state = 0
-      #@work_benefit.save
-      message = t('.notice.can_be_deleted')
+      work_benefit_with_payments = @work_benefit.employee_benefits.each do |eb|
+        unless eb.work_benefits_payments.empty?
+          true
+        end
+      end
+
+      if work_benefit_with_payments
+        # There are no records.
+        @work_benefit.destroy
+        message = t('.notice.successfully_deleted')
+      else
+        @work_benefit.state = CONSTANTS[:PAYROLLS_STATES]['COMPLETED']
+        @work_benefit.save
+        message = t('.notice.can_be_deleted')
+      end
     end
     
     respond_to do |format|
