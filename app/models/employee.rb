@@ -29,7 +29,7 @@ class Employee < ActiveRecord::Base
   					:wage_payment, :entity_attributes, :department_id, 
   					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
             :photo_attributes, :position_id, :employee_id, :is_superior,
-            :payment_unit_id, :price_defined_work, :payroll_type_default_id,
+            :payment_unit_id, :price_defined_work, :payroll_type_id,
             :number_employee, :account_bncr
   
   validates_uniqueness_of :number_employee, :allow_nil => true
@@ -196,9 +196,9 @@ class Employee < ActiveRecord::Base
       ##### ORDER BY CENTRO DE COSTO #####
       when "centro_costo"
 
-        CentroDeCosto.find(cc_ids).each do |cc|
+        CostsCenter.find(cc_ids).each do |cc|
 
-          info['nombre'] = "#{cc.nombre_cc}"
+          info['nombre'] = "#{cc.name_cc}"
           set_total('task')
           info['info'] = get_info_by_task_cc(payroll_ids, task_ids, employees, cc.id, "centro_costo")
 
@@ -219,12 +219,12 @@ class Employee < ActiveRecord::Base
     info = {}
 
     PayrollHistory.joins(:payroll_employees)
-                  .where(:payroll_log_id => payroll_ids, :task_id => task_ids, :centro_de_costo_id => cc_ids, payroll_employees: {employee_id: employee_id})
+                  .where(:payroll_log_id => payroll_ids, :task_id => task_ids, :costs_center_id => cc_ids, payroll_employees: {employee_id: employee_id})
                   .each do |ph|
 
       obj = {}
       obj['tarea'] = ph.task.ntask
-      obj['cc'] = ph.centro_de_costo.nombre_cc
+      obj['cc'] = ph.costs_center.name_cc
 
       if data.include?(obj)
         index = data.index(obj)
@@ -263,7 +263,7 @@ class Employee < ActiveRecord::Base
           info['tarea'] = ph.task.ntask
         end
 
-        info['cc'] = ph.centro_de_costo.nombre_cc
+        info['cc'] = ph.costs_center.name_cc
         info['total_unid_ord'] = 0
         info['valor_total_ord'] = 0
         info['total_unid_extra'] = 0
@@ -310,14 +310,14 @@ class Employee < ActiveRecord::Base
     info = {}
 
     PayrollHistory.joins(:payroll_employees)
-                  .where(:payroll_log_id => payroll_ids, :task_id => task_id, :centro_de_costo_id => cc_ids, payroll_employees: {employee_id: employee_ids})
+                  .where(:payroll_log_id => payroll_ids, :task_id => task_id, :costs_center_id => cc_ids, payroll_employees: {employee_id: employee_ids})
                   .each do |ph|
 
       ph.payroll_employees.each do |pe|
 
         obj = {}
         obj['employee'] = pe.employee_id
-        obj['cc'] = ph.centro_de_costo.nombre_cc
+        obj['cc'] = ph.costs_center.name_cc
         
         if type == "task"
           obj['task'] = task_id
@@ -357,7 +357,7 @@ class Employee < ActiveRecord::Base
           info['nombre'] = "#{pe.employee.entity.name} #{pe.employee.entity.surname}"
           
           if type == "task"
-              info['cc'] = ph.centro_de_costo.nombre_cc
+              info['cc'] = ph.costs_center.name_cc
           end
 
           if type == "centro_costo"
@@ -438,17 +438,20 @@ class Employee < ActiveRecord::Base
   end
 
   def self.search_employee_by_id(search_id)
-    @result = Entity.joins(:employee).where(:employees => { :id => search_id }).select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
+    @result = Entity.joins(:employee).where(:employees => { :id => search_id })
+                    .select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
     @result[0]
   end
 
   def self.search_employee_by_code(search_code)
-    @result = Entity.joins(:employee).where(:employees => { :number_employee => search_code }).select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
+    @result = Entity.joins(:employee).where(:employees => { :number_employee => search_code })
+                    .select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
     @result[0]
   end
 
    def self.search_employee_by_name(search_name)
-    @result = Entity.joins(:employee).where('CONCAT(entities.surname, " " ,entities.name) like ?', "%#{search_name}%").select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
+    @result = Entity.joins(:employee).where('CONCAT(entities.surname, " " ,entities.name) like ?', "%#{search_name}%")
+                    .select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
     @result[0]
   end
 

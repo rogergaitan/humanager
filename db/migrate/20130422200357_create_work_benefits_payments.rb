@@ -4,8 +4,8 @@ def change
       t.integer :employee_benefits_id
       t.integer :payroll_id
       t.date :payment_date
-      t.decimal :percentage
-      t.decimal :payment
+      t.decimal :percentage, :precision => 10, :scale => 2
+      t.decimal :payment, :precision => 10, :scale => 2
 
       t.timestamps
     end

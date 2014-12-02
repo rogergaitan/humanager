@@ -2,6 +2,14 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 es:
+  menus:
+    start: Inicio
+    configuration: Configuración
+    process: Procesos
+    reports: Reportes
+    payment_voucher_workers: Comprobante Pago trabajadores
+    general_payment_voucher: Comprobante General de Pago
+    work_payment_type: Labores por Tipo de Pago
   hello: "Hello world"
   tabs:
     general: General
@@ -269,7 +277,8 @@ es:
                 blank: Este campo no puede quedar en blanco
                 invalid: Formato incorrecto
       models:
-        detail_personnel_actions:
+        detail_personnel_action:
+          one: Accion de Personal
           other: Acciones de Personal
         work_benefit:
           one: Prestación
@@ -279,7 +288,7 @@ es:
         payroll_type:
           one: Tipo de planilla
           other: Tipos de planillas
-        centro_de_costo: Centro De Costos
+        costs_center: Centro De Costos
         position: Puesto
         role:
           one: Rol
@@ -292,8 +301,8 @@ es:
         product_pricing: Precio
         product: Producto
         line: Línea
-        payment_schedule: 'Calendario de pagos'
-        telephone: 'Teléfono'
+        payment_schedule: Calendario de pagos
+        telephone: Teléfono
         employee: Empleado
         entity: Entidad
         warehouse:  Bodega
@@ -301,7 +310,7 @@ es:
         user: Usuario
         subline: Sub-Línea
         category: Categoría
-        province: Provincia
+        province: Provincias
         district: Distrito
         canton: Cantones
         company: Compañias
@@ -315,6 +324,7 @@ es:
           one: Tipo Acción Personal
           other: Tipos Acciones Personal
         payroll: Planilla
+        costs_center: Centro de Costos
         work_benefit: 
           one: Prestación
           other: Prestaciones
@@ -342,7 +352,7 @@ es:
           credit_account: Cuenta de Crédito
           is_beneficiary: Es Beneficiario
           beneficiary_id: Beneficiario
-          centro_de_costo_id: Centro de Costo
+          costs_center_id: Centro de Costo
           payroll_types: Tipos de planillas
         payment_method: 
           name: Nombre
@@ -361,11 +371,11 @@ es:
           cod_doc_accounting_support_mov: Cod Doc Soporte Mov Contable
           mask_doc_accounting_support_mov: Mascara Doc Soporte Mov Contable
           ledger_account_id: Cuenta Banco o CXP
-        centro_de_costo:
-          iempresa: Empresa
-          icentro_costo: Id Centro de Costos
-          nombre_cc: Nombre
-          icc_padre: Padre
+        costs_center:
+          icompany: Empresa
+          icost_center: Id Centro de Costos
+          name_cc: Nombre
+          icc_father: Padre
         email:
           typeemail: Tipo de email
         position:
@@ -381,6 +391,7 @@ es:
         department:
           name: Departamento
           employee_id: Encargado
+          costs_center_id: Centro de Costo
         vendor:
           credit_limit: Crédito
         entity:
@@ -463,7 +474,7 @@ es:
           position_id: Puesto
           price_defined_work: Precio definido en Labor
           payment_unit_id: Unidad de Pago
-          payroll_type_default_id: Tipo de Planilla Predeterminada
+          payroll_type_id: Tipo de Planilla Predeterminada
           number_employee: Número de Empleado
           account_bncr: Cuenta BNCR
         entity:
@@ -500,6 +511,7 @@ es:
           district: Distrito
           canton_id: Cantón
         task:
+          iactivity: Actividad
           itask: Codigo
           ntask: Descripción
           mlaborcost: Costo Labor
@@ -562,7 +574,7 @@ es:
           constitutes_salary: Constituye Salario
           individual: Individual
           ledger_account_id: Cuenta Debito
-          centro_de_costo_id: Centro de Costo
+          costs_center_id: Centro de Costo
           payroll_types: Tipos de planillas
           custom_calculation: Valor
   date:

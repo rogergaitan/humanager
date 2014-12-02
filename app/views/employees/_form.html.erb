@@ -152,7 +152,6 @@
           	<%= f.collection_select(:department_id, @department, :id, :name , :prompt => h) %>
           </div>
         </div>
-     
         <div class="control-group">
           <%= f.label :payment_frequency_id, :class => 'control-label' %>
           <div class="controls">
@@ -168,9 +167,9 @@
           </div>
         </div>        
         <div class="control-group">
-          <%= f.label :payroll_type_default_id, :class => 'control-label' %>
+          <%= f.label :payroll_type_id, :class => 'control-label' %>
           <div class="controls">
-            <%= f.collection_select(:payroll_type_default_id, @payroll_type, :id, :description, 
+            <%= f.collection_select(:payroll_type_id, @payroll_type, :id, :description, 
                                   :prompt => true) %>
           </div>
         </div>

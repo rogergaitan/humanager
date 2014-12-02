@@ -1,8 +1,8 @@
 class CreateVendors < ActiveRecord::Migration
   def change
     create_table :vendors do |t|
-      t.string :credit_limit
       t.references :entity
+      t.string :credit_limit
 
       t.timestamps
     end

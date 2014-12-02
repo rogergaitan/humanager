@@ -56,11 +56,6 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
-
-        puts "PARAMS"
-        puts params[:employee]
-        puts "PARAMS"
-
         format.html { redirect_to employees_path, notice: 'Employee was successfully updated.' }
         format.json { head :no_content }
       else
@@ -71,23 +66,33 @@ class EmployeesController < ApplicationController
   end
 
   def sync
-    @abanits = Abanit.where("bempleado = ?", 'T').find(:all, 
-                            :select => ['init', 'ntercero', 'napellido'])
+    @abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido'])
+
     @c = 0
     @ca = 0
     @syn_data = {}
     @employees = []
+
     @abanits.each do |employee|
+
+      full_name = employee.ntercero
+      last_name = employee.napellido
+
+      if last_name.empty?
+        last_name = 'nr'
+      end
+
       if Entity.where("entityid = ?", employee.init).empty?
-        full_name = employee.ntercero
-        last_name = employee.napellido
+
         @new_employee = Employee.new
-        @entity = @new_employee.build_entity(:name => firebird_encoding(full_name.to_s), :surname => 
-                                firebird_encoding(last_name.to_s), :entityid => employee.init)
+        @entity = @new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
+                                              :surname => firebird_encoding(last_name.to_s), 
+                                              :entityid => employee.init)
         @entity.telephones.build
         @new_employee.build_photo
         @entity.emails.build
         @entity.addresses.build
+
         if @new_employee.save
           @employees << @new_employee
           @c += 1
@@ -105,6 +110,7 @@ class EmployeesController < ApplicationController
         end
       end
     end
+
     @syn_data[:employee] = @employees
     @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
     respond_to do |format|

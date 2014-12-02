@@ -1,10 +1,10 @@
 class PayrollLog < ActiveRecord::Base
   belongs_to :payroll
   belongs_to :task
-  belongs_to :centro_de_costos
+  belongs_to :costs_center
   has_many :payroll_histories, :dependent => :destroy
   
-  accepts_nested_attributes_for :payroll_histories, :allow_destroy => true, :reject_if => proc { |attributes| attributes["time_worked"].blank? && attributes["centro_de_costo_id"].blank? }
+  accepts_nested_attributes_for :payroll_histories, :allow_destroy => true, :reject_if => proc { |attributes| attributes["time_worked"].blank? && attributes["costs_center_id"].blank? }
   attr_accessible :id, :payroll_id, :payroll_histories_attributes, :payroll_date, :payroll_total, :continue_editing
   attr_accessor :continue_editing
 
@@ -18,9 +18,9 @@ class PayrollLog < ActiveRecord::Base
     employee_detail = {}
     
     @employees.each do |em|
-      @history = PayrollHistory.includes(:payroll_employees, :centro_de_costo)
+      @history = PayrollHistory.includes(:payroll_employees, :costs_center)
       .where('payroll_employees.employee_id = ? and payroll_histories.payroll_log_id = ?', em.id, id)
-      .select('payroll_histories.id, payroll_histories.created_at, payroll_histories.time_worked, centro_de_costo.nombre_cc, payroll_histories.payroll_type')
+      .select('payroll_histories.id, payroll_histories.created_at, payroll_histories.time_worked, costs_centers.name_cc, payroll_histories.payroll_type')
       .order('payroll_histories.payroll_date')
       employee_detail = ["#{em.id}", "#{em.name} #{em.surname}"]
       result[employee_detail] = @history
@@ -34,7 +34,7 @@ class PayrollLog < ActiveRecord::Base
   end
 
   def self.search_cost(search_cost_name, page, per_page = nil)
-    @costs = CentroDeCosto.where(" centro_de_costos.nombre_cc like '%#{search_cost_name}%' ")
+    @costs = CostsCenter.where(" costs_centers.name_cc like '%#{search_cost_name}%' ")
     .paginate(:page => page, :per_page => 5)
   end
 

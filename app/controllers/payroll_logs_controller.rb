@@ -89,7 +89,7 @@ class PayrollLogsController < ApplicationController
   end
 
   def resources
-    @centro_costos = CentroDeCosto.all
+    @costs_centers = CostsCenter.all
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
@@ -120,7 +120,6 @@ class PayrollLogsController < ApplicationController
     else 
       render :json => {:data => 'false', :status => :unprocessable_entity}
     end
-
   end
 
 end

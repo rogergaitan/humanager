@@ -1,19 +1,20 @@
 class PayrollHistory < ActiveRecord::Base
   belongs_to :task
-  belongs_to :centro_de_costo
+  belongs_to :costs_center
   belongs_to :payroll_log
   has_many :payroll_employees, :dependent => :destroy
   has_many :employees, :through => :payroll_employees
-  attr_accessible :time_worked, :task_id, :centro_de_costo_id, :payment_type, 
+  attr_accessible :time_worked, :task_id, :costs_center_id, :payment_type, 
   		:payroll_log_id, :employee_ids, :total, :task_total, :task_unidad, :payroll_date
 
 
+  	# KALFARO
 	def self.list_to_oprpla5_detalle(payroll_log_id)
 
 		list_objects = []
 		list_result = []
 
-		PayrollHistory.where('payroll_log_id = ?', payroll_log_id).includes(:centro_de_costo).each do |ph|
+		PayrollHistory.where('payroll_log_id = ?', payroll_log_id).includes(:costs_center).each do |ph|
 
 			unless ph.task_id.blank?
 
@@ -35,10 +36,10 @@ class PayrollHistory < ActiveRecord::Base
           		end # end case
 
 				object['itask'] = ph.task.itask
-				object['centro_de_costo_id'] = ph.centro_de_costo.icentro_costo
+				object['costs_center_id'] = ph.centro_de_costo.icentro_costo
 				object['payment_type'] = payment_type_id
 				object2['itask'] = ph.task.itask
-				object2['centro_de_costo_id'] = ph.centro_de_costo.icentro_costo
+				object2['costs_center_id'] = ph.centro_de_costo.icentro_costo
 				object2['payment_type'] = payment_type_id
 
 				if list_objects.include?(object)

@@ -117,7 +117,7 @@ class WorkBenefitsController < ApplicationController
     @work_benefit.percentage = params[:work_benefit][:percentage]
     @work_benefit.debit_account = params[:work_benefit][:debit_account]
     @work_benefit.credit_account = params[:work_benefit][:credit_account]
-    @work_benefit.centro_de_costo_id = params[:work_benefit][:centro_de_costo_id]
+    @work_benefit.costs_center_id = params[:work_benefit][:costs_center_id]
     @work_benefit.is_beneficiary = params[:work_benefit][:is_beneficiary]
     @work_benefit.beneficiary_id = params[:work_benefit][:beneficiary_id]
     @work_benefit.payroll_type_ids = params[:work_benefit][:payroll_type_ids]
@@ -181,7 +181,7 @@ class WorkBenefitsController < ApplicationController
   end
 
   def fetch_cost_center
-    @cost_center = CentroDeCosto.all
+    @cost_center = CostsCenter.all
     respond_to do |format|
       format.json { render json: @cost_center }
     end

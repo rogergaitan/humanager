@@ -69,7 +69,7 @@
 	<br /><hr>
 	<h2>Labores</h2>
 	<hr>	
-	<%= f.label :payroll_date, :class => '' %>
+	<%= f.label :payroll_date %>
 	<div class="input-append date payroll-date" id="dp3" data-date-format="dd/mm/yyyy">
 		<%= f.text_field :payroll_date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
 	</div>
@@ -93,7 +93,6 @@
 		
 		<%= f.check_box :continue_editing, {:checked=>true} %>
 		<%= label_tag 'continue-editing', 'Continuar editando al actualizar', class: 'checkbox-label' %>
-
 	</div>
 <% end %>
 
@@ -186,7 +185,7 @@
 <input type="hidden" id="search_employee_payroll_logs_path" value="<%= search_employee_payroll_logs_path %>">
 <input type="hidden" id="load_em_employees_path" value="<%= load_em_employees_path %>">
 <input type="hidden" id="load_cc_tasks_path" value="<%= load_cc_tasks_path %>">
-<input type="hidden" id="load_cc_centro_de_costos_path" value="<%= load_cc_centro_de_costos_path %>">
+<input type="hidden" id="load_cc_centro_de_costos_path" value="<%= load_cc_costs_centers_path %>">
 <input type="hidden" id="load_payrolls_payrolls_path" value="<%= load_payrolls_payrolls_path %>">
 
 <%= javascript_tag  do %>
@@ -240,10 +239,10 @@
 	<% list_id = ''  %>
 	<% list_desc = ''  %>
 
-	<% @centro_costos.each do |costo| %>
+	<% @costs_centers.each do |costo| %>
 		<% list_id += "#{costo.id}," %>
-		<% list_code += "#{costo.icentro_costo}," %>
-		<% list_desc += "#{costo.nombre_cc}," %>
+		<% list_code += "#{costo.icost_center}," %>
+		<% list_desc += "#{costo.name_cc}," %>
   	<% end %>
 
 	var list_id = '<%= list_id %>';

@@ -3,7 +3,6 @@ Reasapp::Application.routes.draw do
 
   resources :other_payments
 
-
   resources :permissions_users
   
   devise_for :users
@@ -92,17 +91,13 @@ Reasapp::Application.routes.draw do
 
   resources :payroll_types
 
-  resources :centro_de_costos do
+  resources :costs_centers do
     collection do
-      get 'sync_cc'
-      get 'fetch_cc'
-    end
-    collection do
-      get 'load_cc'
+      get :sync_cc
+      get :fetch_cc
+      get :load_cc
     end
   end
-
-  resources :centro_de_costos
 
   resources :positions
 

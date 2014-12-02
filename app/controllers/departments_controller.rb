@@ -80,6 +80,6 @@ class DepartmentsController < ApplicationController
   end
   
   def resources
-    @centro_costos = CentroDeCosto.all
+    @costs_centers = CostsCenter.all
   end
 end

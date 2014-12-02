@@ -224,17 +224,17 @@ class Ability
     ######################################################################################
     # CENTRO DE COSTOS | CONFIGURACION
     ######################################################################################
-    centro_de_costo = user.permissions_user.find_by_permissions_subcategory_id(list['Centro de Costos'])
-    unless centro_de_costo.nil?
+    costs_center = user.permissions_user.find_by_permissions_subcategory_id(list['Centro de Costos'])
+    unless costs_center.nil?
 
         # All default values, available for all
-        can :manage, [CentroDeCosto]
+        can :manage, [CostsCenter]
 
         # Not available actions
-        cannot [:create, :destroy, :update], CentroDeCosto
+        cannot [:create, :destroy, :update], CostsCenter
 
-        unless centro_de_costo.p_view
-            cannot :read, CentroDeCosto
+        unless costs_center.p_view
+            cannot :read, CostsCenter
         end
     end
     ######################################################################################
@@ -256,26 +256,26 @@ class Ability
     ######################################################################################
     # OTHER SALARIES | CONFIGURACION
     ######################################################################################
-    other_salary = user.permissions_user.find_by_permissions_subcategory_id(list['Otros Salarios'])
-    unless other_salary.nil?
+    other_payment = user.permissions_user.find_by_permissions_subcategory_id(list['Otros Pagos'])
+    unless other_payment.nil?
 
         # Default values, available for all
-        can [:manage], OtherSalary
+        can [:manage], OtherPayment
 
-        unless other_salary.p_create
-            cannot :create, OtherSalary
+        unless other_payment.p_create
+            cannot :create, OtherPayment
         end
 
-        unless other_salary.p_view
-            cannot :read, OtherSalary
+        unless other_payment.p_view
+            cannot :read, OtherPayment
         end
 
-        unless other_salary.p_modify
-            cannot :update, OtherSalary
+        unless other_payment.p_modify
+            cannot :update, OtherPayment
         end
 
-        unless other_salary.p_delete
-            cannot :destroy, OtherSalary
+        unless other_payment.p_delete
+            cannot :destroy, OtherPayment
         end
     end
     ######################################################################################

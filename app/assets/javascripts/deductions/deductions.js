@@ -50,7 +50,7 @@ $(document).ready(function() {
   
   // Cuando cambia el valor del select se llama la funcion TipoDeduccion
   $('#deduction_deduction_type').change(function() {
-    TipoDeduccion(this);
+    TypeDeduction(this);
   });
 
   // Al precionar click sobre una planilla se settea el id de la planilla
@@ -684,22 +684,22 @@ function set_account(e) {
 }
 
 // Resive el tipo de deducicon de un select y dependiendo el valor ejecuta diferentes opciones
-function TipoDeduccion(selected) {
+function TypeDeduction(selected) {
   switch($(selected).val()) {
-    case 'Unica':
+    case 'unique':
       $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty(); //prueba
       $('#unicPayroll').show();
       $('#deduction_payrolls').show();
       ObtenerPlanillas();
     break;
-    case 'Monto_Agotar':
+    case 'amount_to_exhaust':
       $('#amount_exhaust_controls').show();
       $('#payrolls-to-save').empty(); //prueba
       $('#unicPayroll').hide();
       $('#deduction_payrolls').hide();
     break;
-    case 'Constante':
+    case 'constant':
     $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty(); //prueba
       $('#unicPayroll').hide();

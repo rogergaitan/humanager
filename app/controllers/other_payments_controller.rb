@@ -50,7 +50,7 @@ class OtherPaymentsController < ApplicationController
 
     respond_to do |format|
       if @other_payment.save
-        format.html { redirect_to @other_payment, notice: 'Other payment was successfully created.' }
+        format.html { redirect_to other_payments_path, notice: 'Other payment was successfully created.' }
         format.json { render json: @other_payment, status: :created, location: @other_payment }
       else
         objects_employees(@other_payment)
@@ -104,7 +104,7 @@ class OtherPaymentsController < ApplicationController
       @other_payment.amount = params[:other_payment][:amount]
       @other_payment.calculation_type = params[:other_payment][:calculation_type]
       @other_payment.ledger_account_id = params[:other_payment][:ledger_account_id]
-      @other_payment.centro_de_costo_id = params[:other_payment][:centro_de_costo_id]
+      @other_payment.costs_center_id = params[:other_payment][:costs_center_id]
       @other_payment.constitutes_salary = params[:other_payment][:constitutes_salary]      
       @other_payment.payroll_type_ids = params[:other_payment][:payroll_type_ids]
       @other_payment.payroll_ids = params[:other_payment][:payroll_ids]

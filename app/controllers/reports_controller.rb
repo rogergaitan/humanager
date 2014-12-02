@@ -95,7 +95,7 @@ class ReportsController < ApplicationController
 
   def payment_type_report
     @tasks = Task.all
-    @cc = CentroDeCosto.all
+    @cc = CostsCenter.all
   end
 
   def resources

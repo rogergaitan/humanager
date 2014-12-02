@@ -59,7 +59,7 @@
 <!-- T A S K S -->
 
 <!-- C E N T R O   D E   C O S T O S -->
-<div id="centro_de_costos" data-id="<%= fetch_cc_centro_de_costos_path %>">
+<div id="centro_de_costos" data-id="<%= fetch_cc_costs_centers_path %>">
 	<div class="control-group">
 		<hr>
 	    <h2>Centro de Costos</h2>
@@ -93,7 +93,7 @@
 							'data-sup' => c.id,
 							class: 'align-checkbox'  %>
 			          <%= label_tag dom_id(c) + '_left',
-			          		"#{c.nombre_cc}",
+			          		"#{c.name_cc}",
 			              	:class => 'checkbox-label' %>
 			        </div>
 	      		</div>

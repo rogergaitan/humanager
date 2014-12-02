@@ -12,7 +12,7 @@ $(jQuery(document).ready(function($) {
 	// Populates the autocompletes for the accounts
   	fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
   	fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
-  	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "load_centro_de_costo_name", "work_benefit_centro_de_costo_id");
+  	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "load_costs_center_name", "work_benefit_costs_center_id");
 	// Populates the filter for employees
 	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
@@ -92,8 +92,8 @@ $(jQuery(document).ready(function($) {
 
   	// Seach Cost center
 	$("#search_cost_center_results").on("click", "table tr a", function(e) {
-  		$('#load_centro_de_costo_name').val( $(this).html() );
-  		$('#work_benefit_centro_de_costo_id').val( $(this).next().val() );
+  		$('#load_costs_center_name').val( $(this).html() );
+  		$('#work_benefit_costs_center_id').val( $(this).next().val() );
     	$('#costCenterModal button:eq(2)').trigger('click');
   		e.preventDefault();
   	});
@@ -396,9 +396,9 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
 	$.getJSON(url, function(accounts) {
       $(document.getElementById(textField)).autocomplete({
           source: $.map(accounts, function(item) {
-              $.data(document.body, 'account_' + item.id + "", item.nombre_cc);
+              $.data(document.body, 'account_' + item.id + "", item.name_cc);
               return{
-                  label: item.nombre_cc,                        
+                  label: item.name_cc,                        
                   id: item.id
               }
           }),
@@ -406,7 +406,7 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
               $(document.getElementById(idField)).val(ui.item.id);
           },
           focus: function(event, ui) {
-              $(document.getElementById(textField)).val(ui.item.nombre_cc);
+              $(document.getElementById(textField)).val(ui.item.name_cc);
           }
 
       })

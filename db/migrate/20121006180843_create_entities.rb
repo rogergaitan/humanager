@@ -4,7 +4,7 @@ class CreateEntities < ActiveRecord::Migration
       t.string :name
       t.string :surname
       t.string :entityid
-      t.column :typeid, :enum, :limit => [:national, :foreign, :company]
+      t.column :typeid, :enum, :limit => [:national_id, :residence_id, :business_id, :passport, :other]
 
       t.timestamps
     end

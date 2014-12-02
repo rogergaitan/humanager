@@ -18,39 +18,36 @@ class TasksController < ApplicationController
 
   def tasksfb
     @labmaests = Labmaest.find( :all, 
-                                :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'], 
-                                :conditions => {:IACTIVIDAD => 1} )
+                                :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'] )
+
     @c = 0
     @ca = 0
     @tasks = []
     @tasks_fb = {}
 
     @labmaests.each  do |task|
-        if Task.where("itask = ?", task.ilabor).empty?
-          @new_task = Task.new(:iactivity => task.iactividad, :itask => task.ilabor, :ntask =>
-            firebird_encoding(task.nlabor), :iaccount => task.icuenta, :mlaborcost => task.mcostolabor,
-            :nunidad => task.nunidad)
+      if Task.where("itask = ?", task.ilabor).empty?
+        @new_task = Task.new(:iactivity => task.iactividad, :itask => task.ilabor, 
+          :ntask => firebird_encoding(task.nlabor), :iaccount => task.icuenta, 
+          :mlaborcost => task.mcostolabor, :nunidad => task.nunidad)
 
-          if @new_task.save
-            @tasks <<  @new_task
-            @c +=  1
-          else
-            @new_task.er.each do |error|
-              Rails.logger.error "Error Creating task: #{task.ilabor}, 
-                                Description: #{error}"
-            end
-          end
-
+        if @new_task.save
+          @tasks <<  @new_task
+          @c +=  1
         else
-          @update_task = Task.find_by_itask(task.ilabor)
-          params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
-                      :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
-
-          if @update_task.update_attributes(params[:task])
-            @ca += 1
+          @new_task.er.each do |error|
+            Rails.logger.error "Error Creating task: #{task.ilabor}, Description: #{error}"
           end
-
         end
+      else
+        @update_task = Task.find_by_itask(task.ilabor)
+        params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
+                    :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
+
+        if @update_task.update_attributes(params[:task])
+          @ca += 1
+        end
+      end
     end
     
     @tasks_fb[:task] = @tasks
@@ -76,9 +73,6 @@ class TasksController < ApplicationController
 
   def search
     @tasks = Task.search(params[:search_code], params[:search_desc], params[:page], params[:per_page])
-    puts '--------------'
-    puts @tasks
-    puts '--------------'
     respond_with @tasks
   end
 

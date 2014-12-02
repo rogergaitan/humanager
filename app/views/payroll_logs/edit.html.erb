@@ -10,11 +10,11 @@
 			<div style="float:right" id="employee_counter" > 
 				<%= @result.count %>
 			</div>
-			<div style="">Cant. de empleados = &nbsp;</div>
+			<div>Cant. de empleados = &nbsp;</div>
 			<div style="float:right" id="payroll_total" > 
 				<%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
 			</div>
-			<div style="">Acumulado = &nbsp;</div>
+			<div>Acumulado = &nbsp;</div>
 		</div>  	
 	</h3>
   <div style="clear:both;">
@@ -48,28 +48,28 @@
 						<td>Accion</td>
 					</thead>
 					<tbody>
-					<% e[1].each do |h| %>
-						<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
-							<td><%= h.payroll_date %></td>
-							<td><%= h.task.id %> | <%= h.task.ntask %></td>
-							<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.') %></td>
-							<td><%= h.task.nunidad %></td>
-							<td><%= h.time_worked %></td>
-							<td><%= h.centro_de_costo.nombre_cc %></td>
-							<td><%= h.payment_type %></td>
-							<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.') %></td>
-							<% @total += h.total.to_f %>
-							<td>
-								<button type="button" class="btn btn-mini btn-danger">remove</button>
-								<input type="hidden" value="<%= e[0][0] %>">
-								<input type="hidden" value="<%= h.id %>">
-							</td>
-						</tr>
+						<% e[1].each do |h| %>
+							<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
+								<td><%= h.payroll_date %></td>
+								<td><%= h.task.id %> | <%= h.task.ntask %></td>
+								<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.') %></td>
+								<td><%= h.task.nunidad %></td>
+								<td><%= h.time_worked %></td>
+								<td><%= h.costs_center.name_cc %></td>
+								<td><%= h.payment_type %></td>
+								<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.') %></td>
+								<% @total += h.total.to_f %>
+								<td>
+									<button type="button" class="btn btn-mini btn-danger">remove</button>
+									<input type="hidden" value="<%= e[0][0] %>">
+									<input type="hidden" value="<%= h.id %>">
+								</td>
+							</tr>
 						<% end %>
-						<tr class="employee_count" id="total_<%= e[0][0] %>">
-							<td colspan="6" class="align_right">Total:</td>
-							<td colspan="3"><%= number_with_precision(@total, :precision => 2, :separator => '.') %></td>
-						</tr>
+							<tr class="employee_count" id="total_<%= e[0][0] %>">
+								<td colspan="6" class="align_right">Total:</td>
+								<td colspan="3"><%= number_with_precision(@total, :precision => 2, :separator => '.') %></td>
+							</tr>
 					</tbody>
 				</table>
  			</div>
@@ -114,7 +114,7 @@
 		<% e[1].each do |h| %>
 			<% date = "#{h.payroll_date}" %>
 			<% task = "#{h.task.ntask}" %>
-			<% cost = "#{h.centro_de_costo.nombre_cc}" %>
+			<% cost = "#{h.costs_center.name_cc}" %>
 			<% type_payment = "#{h.payment_type}" %>
 
 			data.push({
@@ -132,5 +132,4 @@
 			}); 
 		data = []
 	<% end %>
-
 <% end %>

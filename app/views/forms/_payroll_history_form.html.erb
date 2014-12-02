@@ -34,16 +34,17 @@
 		<%= f.number_field :time_worked, :class => 'input-mini input-table time-worked', :tabindex => '6' %>
 	</td>
 	<td class="controls_item">
-		<%= f.label :centro_de_costo_id, :class => 'input-table' %>
-			<div class="input-append">
-				<%= text_field 'search_cost_code', '', :class => 'input-mini', :placeholder => 'codigo', :tabindex => '7' %>
-				<%= f.hidden_field :centro_de_costo_id, class: "cc-filter-id centro-costo" %>
-				<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee centro-costo', :for => :centro_de_costo_id, :tabindex => '8' %>
-				<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#payrollModal" 
-				role="button" data-toggle="modal">
-					<span class="add-on"><i class="icon-list"></i></span>
-				</a>
-			</div>
+		<%= f.label :costs_center_id, :class => 'input-table' %>
+		<div class="input-append">
+			<%= text_field 'search_cost_code', '', :class => 'input-mini', :placeholder => 'codigo', :tabindex => '7' %>
+			<%= f.hidden_field :costs_center_id, class: "cc-filter-id centro-costo" %>
+			<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter input-medium search-image-employee centro-costo', 
+			:for => :costs_center_id, :tabindex => '8' %>
+			<a class="centro-costo" data-keyboard="false" data-backdrop="static" href="#payrollModal" 
+			role="button" data-toggle="modal">
+				<span class="add-on"><i class="icon-list"></i></span>
+			</a>
+		</div>
 	</td>
 	<td class="save-employees" style="display:none;"></td>
 	<td class="controls_item">

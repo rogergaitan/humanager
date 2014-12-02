@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 	// List of the routes
 	otherPayment.fetch_ledger_accounts_path = $('#fetch_ledger_accounts_path').val();
-	otherPayment.fetch_cc_centro_de_costos_path = $('#fetch_cc_centro_de_costos_path').val();
+	otherPayment.fetch_cc_costs_centers_path = $('#fetch_cc_costs_centers_path').val();
 	otherPayment.search_cost_center_work_benefits_path = $('#search_cost_center_work_benefits_path').val();
 	otherPayment.fetch_employees_deductions_path = $('#fetch_employees_deductions_path').val();
 	otherPayment.search_employee_by_id_path = $('#search_employee_by_id_path').val();
@@ -66,7 +66,7 @@ $(document).ready(function() {
 		$('#other_payment_ledger_account_name'), $('#other_payment_ledger_account_id'));
 	
 	// Add the auto complete to Centro de Costro
-	otherPayment.fetchPopulateAutocomplete(otherPayment.fetch_cc_centro_de_costos_path, 
+	otherPayment.fetchPopulateAutocomplete(otherPayment.fetch_cc_costs_centers_path, 
 		$('#other_payment_centro_de_costo_name'), $('#other_payment_centro_de_costo_id'));
 
 	// Add the auto complete to Employee field
@@ -505,22 +505,22 @@ otherPayment.showHideEmployees = function(isIndividual) {
 // Check the type deduction and based in the value, run the differents options
 otherPayment.typeDeduction = function(selected) {
 	switch($(selected).val()) {
-		case 'Unica':
+		case 'unique':
 			$('#amount_exhaust_controls').hide();
 			$('#payrolls-to-save').empty();
 			$('#unicPayroll').show();
 			$('#other_payment_payroll').show();
 			otherPayment.getPayrolls();
 		break;
-		case 'Monto_Agotar':
+		case 'amount_to_exhaust':
 			$('#amount_exhaust_controls').show();
-			$('#payrolls-to-save').empty(); //prueba
+			$('#payrolls-to-save').empty();
 			$('#unicPayroll').hide();
 			$('#other_payment_payroll').hide();
 		break;
-		case 'Constante':
+		case 'constant':
 			$('#amount_exhaust_controls').hide();
-			$('#payrolls-to-save').empty(); //prueba
+			$('#payrolls-to-save').empty();
 			$('#unicPayroll').hide();
 			$('#other_payment_payroll').hide();
 		break;
@@ -633,7 +633,7 @@ otherPayment.populateListEmployees = function(employee, parent, isNew) {
 		}
 	}
 
-	if(!isNew) {
+	if(!isNew && employee != null) {
 		otherPayment.hiddenEmployees(employee.id);
 	}
 	

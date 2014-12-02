@@ -6,7 +6,7 @@ class CreatePayrollTypeOtherPayments < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :payroll_type_deductions, :payroll_type_id
-    add_index :payroll_type_deductions, :other_payment_id
+    add_index :payroll_type_other_payments, :payroll_type_id
+    add_index :payroll_type_other_payments, :other_payment_id
   end
 end

@@ -1,10 +1,10 @@
 <script type="text/javascript">
-  var centro_costos = [];
-  <% @centro_costos.each do |cc| %>
-    centro_costos.push(new Array(
-          '<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>', 
-          '<%= cc.nombre_cc %>', 
-          '<%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>', 
+  var costs_centers = [];
+  <% @costs_centers.each do |cc| %>
+    costs_centers.push(new Array(
+          '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>', 
+          '<%= cc.name_cc %>', 
+          '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>', 
           <%= cc.id %>)
     );
   <% end %>
@@ -13,6 +13,7 @@
 <%= javascript_include_tag 'departments/department' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
 <%= javascript_include_tag 'utils/modal' %>
+
 <%= form_for @department, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :name, :class => 'control-label' %>
@@ -29,17 +30,13 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :centro_de_costos_id, :class => 'control-label' %>
+    <%= f.label :costs_center_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.hidden_field :centro_de_costos_id %>
-      <%= text_field_tag 'load_centro_de_costo',nil, :class => 'text_field required 
-                          search-image-employee', :for=>:centro_de_costos_id %>
-    <!--
-    <a href="#myModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i> </a> 
-    -->
+      <%= f.hidden_field :costs_center_id %>
+      <%= text_field_tag 'load_costs_centers',nil, :class => 'text_field required 
+                          search-image-employee', :for=>:costs_center_id %>
     </div>
   </div>
-
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
@@ -47,7 +44,8 @@
   </div>
 <% end %>
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+  aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Seleccione un Centro de Costos</h3>
@@ -57,8 +55,5 @@
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-    <!--
-    <button class="btn btn-primary">Save changes</button>
-    -->
   </div>
 </div>

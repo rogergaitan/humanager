@@ -21,7 +21,6 @@
         <%= cc.iaccount %>
     ));
   <% end %>
-
 </script>
 
 <%= javascript_include_tag 'resources' %>
@@ -60,10 +59,10 @@
   </div>
   
   <div class="control-group">
-    <%= f.label :centro_de_costo_id, :class => 'control-label' %>
+    <%= f.label :costs_center_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.hidden_field :centro_de_costo_id %>
-      <%= text_field_tag 'load_centro_de_costo_name', nil, :class => 'text_field required search-image-employee', :for => :centro_de_costo_id %>
+      <%= f.hidden_field :costs_center_id %>
+      <%= text_field_tag 'load_costs_center_name', nil, :class => 'text_field required search-image-employee', :for => :costs_center_id %>
       <a id="cost-centrt-button" data-keyboard="false" data-backdrop="static" href="#costCenterModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i></a>
     </div>
   </div>

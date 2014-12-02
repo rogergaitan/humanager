@@ -1,10 +1,10 @@
 class OtherPayment < ActiveRecord::Base
 
   belongs_to :ledger_account
-  belongs_to :centro_de_costo
+  belongs_to :costs_center
 
   attr_accessible :description, :deduction_type, :calculation_type, :amount, :state, :constitutes_salary, 
-      :individual, :ledger_account_id, :payroll_type_ids, :centro_de_costo_id, :other_payment_employees_attributes, 
+      :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
       :custom_calculation, :payroll_ids
 
   attr_accessor :custom_calculation

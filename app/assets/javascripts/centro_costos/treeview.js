@@ -4,11 +4,10 @@ var treeviewhr = new function() {
 		$(tree_array.sort()).each(function() {
 			if (this[2] == 0) {
 				$('#list').append("<ul><li id='" + this[0] + "' data-id='"+ this[3] +"' class='accordion-group'><p class='main-parent tree-hover'><span><i class='icon-minus'></i>" + 
-														this[1] + "</span> <span class='tree-actions'><a title='Eliminar' href='/centro_de_costos/" + this[3] + 
-														"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/centro_de_costos/" + 
+														this[1] + "</span> <span class='tree-actions'><a title='Eliminar' href='/costs_center/" + this[3] + 
+														"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/costs_center/" + 
 														this[3] + "/edit' rel='tooltip' class='btn-mini icon-pencil'></a></span></p></li></ul>");
-			}
-			else {
+			} else {
 				if ($('#list li#'+this[2]).length) {
 					if (!($('#list li#' + this[2] + ' p:first i.icon-chevron-right').length)) {
 						$('#list li#' + this[2] + ' p:first i').toggleClass('icon-minus icon-chevron-right');
@@ -17,15 +16,14 @@ var treeviewhr = new function() {
 					$('#list li#' + this[2] + ' p:first span:first').removeClass('linkclass');
 					$('#list li#' + this[2] + ' p:first span.tree-actions a.icon-trash').remove();
 					$('#list li#' + this[2]).append("<ul style='display:none'><li id='" + this[0] + "' data-parent='" + this[2] + "' data-id='"+ this[3] +"'><p class='tree-hover'><span class='linkclass'><i class='icon-minus'></i><span>" + 
-																						this[0] + ' - ' + this[1] + "</span></span> <span class='tree-actions'><a title='Eliminar' href='/centro_de_costos/" + this[3] + 
-																						"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/centro_de_costos/" + 
+																						this[0] + ' - ' + this[1] + "</span></span> <span class='tree-actions'><a title='Eliminar' href='/costs_center/" + this[3] + 
+																						"' class='btn-mini icon-trash' data-confirm='¿Está seguro(a)?' data-method='delete' rel='tooltip'></a><a title='Modificar' href='/costs_center/" + 
 																						this[3] + "/edit' rel='tooltip' class='btn-mini icon-pencil'></a></span></p></li></ul>");
-				}
-				else {
+				} else {
 					leftover.push(this);
-				};
-			};
-		})
+				}
+			}
+		});
 		if (leftover.length) {
 			this.cc_tree(leftover, isPopup);
 		}

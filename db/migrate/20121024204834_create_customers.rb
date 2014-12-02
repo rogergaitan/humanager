@@ -1,9 +1,9 @@
 class CreateCustomers < ActiveRecord::Migration
   def change
     create_table :customers do |t|
-      t.string :asigned_seller
       t.references :customer_profile
       t.references :entity
+      t.string :asigned_seller
 
       t.timestamps
     end

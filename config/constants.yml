@@ -11,18 +11,18 @@ development:
   	ACTIVE: "active"
   }
   PAYMENT: [
-  	{ name: "Ordinario", type: "1" },
-    { name: "Extra", type: "1.5" },
-  	{ name: "Doble", type: "2" }
+  	{ name: "ordinary", type: "1" },
+    { name: "extra", type: "1.5" },
+  	{ name: "double", type: "2" }
   ]
   DEDUCTION: {
-  	CONSTANTE: "Constante",
-  	UNICA: "Unica",
-  	MONTO_AGOTAR: "Monto_Agotar"
+  	CONSTANTE: "constant",
+  	UNICA: "unique",
+  	MONTO_AGOTAR: "amount_to_exhaust"
   }
   CALCULATION_TYPE: {
-    PORCENTUAL: "porcentual",
-    FIJA: "fija"
+    PORCENTUAL: "percentage",
+    FIJA: "fixed"
   }
   REPORTS: [
   	{PAYMENT_PROOF: "1",

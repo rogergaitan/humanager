@@ -363,7 +363,7 @@ include ActionView::Helpers::NumberHelper
           total += a.payment
         else
           row << "#{a.deduction_employee.deduction.description}"
-          row << "#{a.deduction_employee.deduction.calculation}"
+          row << "#{a.deduction_employee.calculation}"
           row << "#{number_to_format(a.payment.to_f)}"
           total += a.payment
         end

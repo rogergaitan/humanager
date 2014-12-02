@@ -613,7 +613,7 @@ class Payroll < ActiveRecord::Base
         od_debit.iemp = payroll.company.code
         od_debit.inumoper = num_oper
         od_debit.ilinea = count
-        od_debit.icc = CentroDeCosto.find(wb.employee_benefit.work_benefit.centro_de_costo_id).icentro_costo
+        od_debit.icc = CostsCenter.find(wb.employee_benefit.work_benefit.costs_center_id).icost_center
         od_debit.icuenta =  LedgerAccount.find(wb.employee_benefit.work_benefit.debit_account).iaccount
         od_debit.init = wb.employee_benefit.employee.entity.entityid
         od_debit.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
@@ -627,7 +627,7 @@ class Payroll < ActiveRecord::Base
         od_credit.iemp = payroll.company.code
         od_credit.inumoper = num_oper
         od_credit.ilinea = (count + 1)
-        od_credit.icc = CentroDeCosto.find(wb.employee_benefit.work_benefit.centro_de_costo_id).icentro_costo
+        od_credit.icc = CostsCenter.find(wb.employee_benefit.work_benefit.costs_center_id).icost_center
         od_credit.icuenta = LedgerAccount.find(wb.employee_benefit.work_benefit.credit_account).iaccount
 
         if wb.employee_benefit.work_benefit.is_beneficiary
@@ -664,7 +664,7 @@ class Payroll < ActiveRecord::Base
         od.iemp = payroll.company.code
         od.inumoper = num_oper
         od.ilinea = count
-        od.icc = opp.other_payment_employee.other_payment.centro_de_costo.icentro_costo
+        od.icc = opp.other_payment_employee.other_payment.costs_center.icost_center
         od.icuenta = opp.other_payment_employee.other_payment.ledger_account.iaccount
         od.init = opp.other_payment_employee.employee.entity.entityid
         od.fsoport = payroll.end_date.strftime("%d.%m.%Y")
@@ -760,7 +760,7 @@ class Payroll < ActiveRecord::Base
         od.inumoper = num_oper
         od.ilinea = count
         od.itdcontrato = a['payment_type']
-        od.icclunes = a['centro_de_costo_id']
+        od.icclunes = a['costs_center_id']
         od.iactividadlunes = CONSTANTS[:FIREBIRD][0]['IACTIVIDADLUNES']
         od.ilaborlunes = a['itask']
         od.qjorslunes = a['time_worked']

@@ -3,6 +3,8 @@ class CreateDeductionEmployees < ActiveRecord::Migration
     create_table :deduction_employees do |t|
       t.references :deduction
       t.references :employee
+      t.boolean :completed, :boolean, :default => false
+      t.decimal :calculation, :precision => 10, :scale => 2
 
       t.timestamps
     end
