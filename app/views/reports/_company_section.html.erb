@@ -1,0 +1,9 @@
+<!-- C O M P A N Y -->
+<h2>Compañia</h2>
+
+<% c = @companies.empty? ? "No existen compañias todavía" : "Por favor selecciona" %>
+<%= select_tag("company", options_for_select(@companies.map { |c| [c.name, c.id] }), { :prompt => c }) %>
+
+
+<% select("company", "id", @companies.collect {|p| [ p.name, p.id ] }, { include_blank: c }) %>
+<!-- C O M P A N Y -->

@@ -9,6 +9,7 @@ es:
     reports: Reportes
     payment_voucher_workers: Comprobante Pago trabajadores
     general_payment_voucher: Comprobante General de Pago
+    accrued_wages_between_dates: Salarios Devengados entre Fechas
     work_payment_type: Labores por Tipo de Pago
   hello: "Hello world"
   tabs:

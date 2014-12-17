@@ -127,7 +127,7 @@
 
 <div id="message" style="height:40px;"></div>
 <input type="hidden" id="show_reports_path" value="<%= reports_path %>">
-<input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS][0]['PAYMENT_TYPE_REPORT'] %>">
+<input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS]['PAYMENT_TYPE_REPORT'] %>">
 
 <% if can? :task_type_payment_pdf, User %>
 	<button id="btn_create_pdf">Crear archivo PDF</button> | 

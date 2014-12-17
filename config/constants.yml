@@ -24,11 +24,12 @@ development:
     PORCENTUAL: "percentage",
     FIJA: "fixed"
   }
-  REPORTS: [
-  	{PAYMENT_PROOF: "1",
+  REPORTS: {
+    PAYMENT_PROOF: "1",
   	GENERAL_PAYROLL: "2",
-  	PAYMENT_TYPE_REPORT: "3"}
-  	]
+  	PAYMENT_TYPE_REPORT: "3",
+    ACCRUED_WAGES_DATES: "4"
+  }
   FIREBIRD: [
     { IEMP: 1,
   	ITDOPER: "MOV1",

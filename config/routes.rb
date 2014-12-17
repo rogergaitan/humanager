@@ -25,6 +25,7 @@ Reasapp::Application.routes.draw do
       get :general_payroll_xls
       get :payment_type_report
       get :report_between_dates
+      get :accrued_wages_between_dates_report
     end
   end
   get "reports/index"

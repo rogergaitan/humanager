@@ -1,0 +1,31 @@
+<h1>Salarios Devengados entre fechas</h1>
+
+<%= javascript_include_tag 'reports/functions' %>
+<%= javascript_include_tag 'reports/accrued_wages_between_dates_report.js' %>
+
+<div id="message" style="height:40px;"></div>
+
+<legend>  
+	<div class="control-group search">
+		<%= text_field_tag 'start_date', '', :class => 'text_field', :readonly => true, :placeholder => 'Desde' %>
+		<%= text_field_tag 'end_date', '', :class => 'text_field', :readonly => true, :placeholder => 'Hasta'  %>
+    </div>
+</legend>
+
+<%= render "employee_section" %>
+
+<%= render "company_section" %>
+
+<p></p>
+<hr>
+
+<input type="hidden" id="show_reports_path" value="<%= reports_path %>">
+<input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS]['ACCRUED_WAGES_DATES'] %>">
+
+<% #if can? :general_proof_payments_pdf, User %>
+	<button id="btn_create_pdf">Crear archivo PDF</button> |
+<% #end %>
+
+<% #if can? :general_proof_payments_xls, User %>
+	<button id="btn_create_excel">Exportar a XLS</button>
+<% #end %>

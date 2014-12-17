@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_filter :resources, :only => [:index, :general_payroll, :payment_type_report]
+  before_filter :resources, :only => [:index, :general_payroll, :payment_type_report, :accrued_wages_between_dates_report]
 	respond_to :html, :json, :js
 
 	def index
@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
 
     case params[:type].to_s
       
-      when CONSTANTS[:REPORTS][0]['PAYMENT_PROOF']
+      when CONSTANTS[:REPORTS]['PAYMENT_PROOF']
         @employees = params[:employees].split(",")
         @payroll = Payroll.find(params[:payroll_id])
         @msg = params[:msg]
@@ -30,7 +30,7 @@ class ReportsController < ApplicationController
           end
         end
 
-      when CONSTANTS[:REPORTS][0]['GENERAL_PAYROLL']
+      when CONSTANTS[:REPORTS]['GENERAL_PAYROLL']
 
         @employees = params[:employees].split(",")
         @payroll_ids = params[:payroll_ids].split(",")
@@ -51,7 +51,7 @@ class ReportsController < ApplicationController
           general_payroll_xls(@data, @payroll_ids, @company_id)
         end
 
-      when CONSTANTS[:REPORTS][0]['PAYMENT_TYPE_REPORT']
+      when CONSTANTS[:REPORTS]['PAYMENT_TYPE_REPORT']
         
         format = params[:format]
         employees = params[:employees].split(",")
@@ -82,6 +82,29 @@ class ReportsController < ApplicationController
         else
           payment_type_report_xls(@data, payroll_ids, order, @company_id)
         end
+
+      when CONSTANTS[:REPORTS]['ACCRUED_WAGES_DATES']
+        
+        employee_ids = params[:employee_ids].split(",")
+        start_date = params[:start_date]
+        end_date = params[:end_date]
+        company_id = params[:company_id]
+
+        @data = accrued_wages_dates_date(employee_ids, start_date, end_date, company_id)
+
+        if params[:format].to_s == "pdf"
+          respond_to do |format|
+            format.pdf do
+              pdf = AccruedWagesDatesPDF.new(@data, company_id, start_date, end_date)
+              send_data pdf.render, filename: "test.pdf",
+                type: "application/pdf", disposition: "inline"
+            end
+          end
+        else
+          accrued_wages_dates_date_xls(@data, company_id, start_date, end_date)
+        end
+
+
     end # End case
   end # End show
 
@@ -96,6 +119,10 @@ class ReportsController < ApplicationController
   def payment_type_report
     @tasks = Task.all
     @cc = CostsCenter.all
+  end
+
+  def accrued_wages_between_dates_report
+    
   end
 
   def resources
@@ -268,6 +295,54 @@ class ReportsController < ApplicationController
     end
     if payroll_ids.count > 1
       @name_payrolls = 'Varios'
+    end
+  end
+
+  def accrued_wages_dates_date(employee_ids, start_date, end_date, company_id)
+    
+    payroll_ids = Payroll.where("(start_date >= ? or start_date <= ?) and (end_date >= ? or end_date <= ?) and state = ? and company_id = ?",
+                                start_date, end_date, start_date, end_date, false, company_id).pluck(:id)
+
+    payroll_log_ids = PayrollLog.where(id: payroll_ids).pluck(:id)
+
+    data = {}
+    list = []
+
+    employee_ids.each do |employee_id|
+
+      employee = Employee.find(employee_id)
+
+      data['number_employee'] = employee.number_employee
+      data['entityid'] = employee.entity.entityid
+      data['full_name'] = "#{employee.entity.name} #{employee.entity.surname}"
+
+      total_earn = 0
+      payroll_log_ids.each do |payroll_id|
+        PayrollHistory.where('payroll_log_id = ? and payroll_date BETWEEN ? and ?', payroll_id, start_date, end_date).each do |p|
+          unless p.payroll_employees.where('employee_id = ?', employee_id).empty?
+            total_earn += p.total.to_f
+          end
+        end # End PayrollHistory
+      end
+      data['total'] = total_earn
+      list << data
+      data = {}
+    end # End Employee_ids
+
+    list
+  end
+
+  def accrued_wages_dates_date_xls(data, company_id, start_date, end_date)
+    @data = data
+    @start_date = start_date
+    @end_date = end_date
+    @company =  Company.find(company_id)
+    
+    respond_to do |format|
+      format.xls {
+        response.headers['Content-Disposition'] = 'attachment; filename="accrued_wages_dates_date.xls"'
+        render :template => 'xls/accrued_wages_dates_date_xls'
+      }
     end
   end
 

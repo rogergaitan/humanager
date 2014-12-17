@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <%
+      string = "#{@company.name} Salarios Devengados Entre Fechas"
+      dates = "Desde #{@start_date} Hasta #{@end_date}"
+      titles = ["Numero", "ID", "Nombre", "Total Devengado"]
+      total = 0
+    %>
+    <Table>
+      
+      <Row>
+        <Cell><Data ss:Type="String"><%= string %></Data></Cell>
+      </Row>
+      <Row></Row>
+      
+      <Row>
+        <Cell><Data ss:Type="String"><%= dates %></Data></Cell>
+      </Row>
+      <Row></Row>
+      <Row>
+        <% titles.each do |a| %>
+          <Cell><Data ss:Type="String"><%= "#{a}" %></Data></Cell>
+        <% end %>
+      </Row>
+
+      <% @data.each do |array| %>
+        <Row>
+          <% count = 0 %>
+          <% array.each do |index, value| %>
+            <% if(count==0) %>
+              <Cell><Data ss:Type="String"><%= value %></Data></Cell>
+            <% else %>
+              <Cell><Data ss:Type="Number"><%= value %></Data></Cell>
+              <% 
+                if(index=="total")
+                  total += value.to_f
+                end 
+              %>
+            <% end %>
+            <% count+=1 %>
+          <% end %>
+        </Row>
+      <% end %>
+      
+      <Row>
+        <Cell><Data ss:Type="String">Total:</Data></Cell>
+        <Cell></Cell>
+        <Cell></Cell>
+        <Cell><Data ss:Type="Number"><%= total %></Data></Cell>
+      </Row>
+
+      
+    </Table>
+  </Worksheet>
+
+</Workbook>
