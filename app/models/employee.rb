@@ -181,6 +181,7 @@ class Employee < ActiveRecord::Base
         Task.find(task_ids).each do |task|
 
           info['nombre'] = "#{task.ntask}"
+          info['unidad'] = "#{task.nunidad}"
           set_total('cc')
           info['info'] = get_info_by_task_cc(payroll_ids, task.id, employees, cc_ids, "task")
 
@@ -224,6 +225,7 @@ class Employee < ActiveRecord::Base
 
       obj = {}
       obj['tarea'] = ph.task.ntask
+      obj['unidad'] = ph.task.nunidad
       obj['cc'] = ph.costs_center.name_cc
 
       if data.include?(obj)
@@ -251,7 +253,7 @@ class Employee < ActiveRecord::Base
         end
 
         infoData[index]['total'] += ph.total.to_f
-        @total['total'] += ph.total.to_f
+        @total['total'] += ph.total.to_
 
       else
         
@@ -263,6 +265,7 @@ class Employee < ActiveRecord::Base
           info['tarea'] = ph.task.ntask
         end
 
+        info['unidad'] = ph.task.nunidad
         info['cc'] = ph.costs_center.name_cc
         info['total_unid_ord'] = 0
         info['valor_total_ord'] = 0
@@ -325,6 +328,7 @@ class Employee < ActiveRecord::Base
 
         if type == "centro_costo"
           obj['task'] = ph.task.ntask
+          obj['unidad'] = ph.task.nunidad
         end
 
         if data.include?(obj)
@@ -362,6 +366,7 @@ class Employee < ActiveRecord::Base
 
           if type == "centro_costo"
             info['task'] = ph.task.ntask
+            info['unidad'] = ph.task.nunidad
           end
           
           info['total_unid_ord'] = 0
@@ -449,7 +454,7 @@ class Employee < ActiveRecord::Base
     @result[0]
   end
 
-   def self.search_employee_by_name(search_name)
+  def self.search_employee_by_name(search_name)
     @result = Entity.joins(:employee).where('CONCAT(entities.surname, " " ,entities.name) like ?', "%#{search_name}%")
                     .select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
     @result[0]

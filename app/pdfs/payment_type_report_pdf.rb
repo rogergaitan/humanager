@@ -51,9 +51,16 @@ include ActionView::Helpers::NumberHelper
 
     @data.each do |d|
 
-      if @order == 'employee' || @order == 'task'
+      if @order == 'employee'
         move_down 20
         text "#{d['nombre']}", character_spacing: 1
+        move_down 10
+        get_tables(header, d['info'])
+      end
+
+      if @order == 'task'
+        move_down 20
+        text "#{d['nombre']} (#{d['unidad']})", character_spacing: 1
         move_down 10
         get_tables(header, d['info'])
       end
@@ -111,6 +118,7 @@ include ActionView::Helpers::NumberHelper
 
     if @order == 'employee'
       header_list << 'Labor'
+      header_list << 'Und'
       header_list << 'Centro de Costo'
     end
 
@@ -122,12 +130,14 @@ include ActionView::Helpers::NumberHelper
     if @order == 'centro_costo'
       header_list << 'Nombre'
       header_list << 'Labor'
+      header_list << 'Und'
     end
 
     if @order == 'no_order'
-      header_list << 'Nombre'
-      header_list << 'Tarea'
-      header_list << 'Centro de Costo'
+      header_list << { :content => 'Nombre', :align => :left }
+      header_list << { :content => 'Labor', :align => :left }
+      header_list << { :content => 'Und', :align => :left }
+      header_list << { :content => 'Centro de Costo', :align => :left }
     end
 
     header_list << 'Tot Uni Ord'
@@ -175,33 +185,43 @@ include ActionView::Helpers::NumberHelper
   def get_tables(header, info)
     
     row = []; rows = []; count = 0
+    font_style = :normal
 
     info.each do |a|
+      if info.count === info.index(a) + 1
+        font_style = :bold
+      end
+
       count += 1
-      
-      if @order == 'employee' || @order == 'task'
-        row << a['nombre'] # Labor
-        row << a['cc']
+      row << a['nombre'] # Labor
+
+      if @order == 'employee'
+        row << a['unidad']
+        row << { :content => a['cc'], :font_style => font_style }
+      end
+
+      if@order == 'task'
+        row << { :content => a['cc'], :font_style => font_style }
       end
 
       if @order == 'centro_costo'
-        row << a['nombre']
         row << a['task']
+        row << a['unidad']
       end
 
       if @order == 'no_order'
-        row << a['nombre']
         row << a['tarea']
-        row << a['cc']
+        row << a['unidad']
+        row << { :content => a['cc'], :font_style => font_style }
       end
 
-      row << "#{number_to_format(a['total_unid_ord'])}"
-      row << "#{number_to_format(a['valor_total_ord'])}"
-      row << "#{number_to_format(a['total_unid_extra'])}"
-      row << "#{number_to_format(a['valor_total_extra'])}"
-      row << "#{number_to_format(a['total_unid_doble'])}"
-      row << "#{number_to_format(a['valor_total_doble'])}"
-      row << "#{number_to_format(a['total'])}"
+      row << { :content => "#{number_to_format(a['total_unid_ord'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['valor_total_ord'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['total_unid_extra'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['valor_total_extra'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['total_unid_doble'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['valor_total_doble'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['total'])}", :align => :right, :font_style => font_style }
       
       if info.count == count
         @total['total_unid_ord'] += a['total_unid_ord']
@@ -224,7 +244,7 @@ include ActionView::Helpers::NumberHelper
     table(
       [header] +
       rows.map do |row| row end,
-      :cell_style => { :align => :right, :size => 8, :height => 19 },
+      :cell_style => { :size => 8, :height => 19 },
       :position => :right
     )
   end
@@ -260,7 +280,7 @@ include ActionView::Helpers::NumberHelper
     table(
       [['','Tot Uni Ord','Val tot Ord','Tot Uni Ext','Val tot Ext','Tot Uni Dob','Val tot Dob', 'Gran Total']] +
       rows.map do |row| row end,
-      :cell_style => { :align => :right, :size => 8, :height => 19 },
+      :cell_style => { :align => :right, :size => 8, :height => 19, :font_style => :bold },
       :position => :right
     )
   end

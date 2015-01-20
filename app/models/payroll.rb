@@ -777,13 +777,14 @@ class Payroll < ActiveRecord::Base
     end # End transaction
   end
 
-  def self.search_payrolls_to_reports(start_date, end_date, page, per_page)
+  def self.search_payrolls_to_reports(start_date, end_date, company_id, page, per_page)
       
       query = ""
       params = []
       params.push(" start_date >= '#{start_date}' ") unless start_date.empty?
       params.push(" end_date <= '#{end_date}' ") unless end_date.empty?
       params.push(" state = 0 ")
+      params.push(" company_id = '#{company_id}' ")
       query = build_query(params)
       @payrolls = Payroll.where(query).paginate(:page => page, :per_page => per_page)
   end

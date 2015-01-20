@@ -15,6 +15,10 @@ $(document).ready(function() {
 	   	return false;
   });
 
+  $('#company').change(function(){
+    general_functions.searchInfoPayrolls();
+  });
+
 	general_functions.populateEmployeesFilter($('#fetch_employees_deductions_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
 
 	$('input[name=select_method]').change(function() {
@@ -40,14 +44,15 @@ $(document).ready(function() {
 })
 
 // Search the payrolls
-general_functions.searchPayrolls = function(start_date, end_date, url) {
+general_functions.searchPayrolls = function(start_date, end_date, url, company_id) {
 
 	return $.ajax({
 		url: url,
 		dataType: "script",
 		data: {
 			start_date: start_date,
-			end_date: end_date
+			end_date: end_date,
+      company_id: company_id
 		}
 	});
 }
@@ -55,11 +60,17 @@ general_functions.searchPayrolls = function(start_date, end_date, url) {
 // Find the information and calls the search function
 general_functions.searchInfoPayrolls = function() {
 
-	var start_date = $('#start_date').val();
-	var end_date = $('#end_date').val();
-	var url = $("form[id=search_payrolls_form]").attr('action');
+  if( $('#company').val() === "" ) {
+    $('#payrolls_results').html("<div class='alert alert-info'>Por favor seleccione una compañia</div>");
+  } else {
+  	var start_date = $('#start_date').val(),
+  	    end_date = $('#end_date').val(),
+  	    url = $("form[id=search_payrolls_form]").attr('action')
+        company_id = $('#company').val();
 
-	general_functions.searchPayrolls(start_date, end_date, url);
+  	general_functions.searchPayrolls(start_date, end_date, url, company_id);
+  }
+
 }
 
 general_functions.populateEmployeesFilter = function(url, textField, idField) {

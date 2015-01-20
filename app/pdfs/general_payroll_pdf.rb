@@ -22,6 +22,11 @@ include ActionView::Helpers::NumberHelper
 
     font_size(10) do
       text_box "Reporte General de Planilla", :align => :right, style: :bold, character_spacing: 1
+
+      # string = "Planilla #{@payroll.payroll_type.description} del #{@payroll.start_date} al #{@payroll.end_date}"
+      # text_box string, :align => :right, :at => [0, y - 50]
+      string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
+      text_box string, :align => :right, :at => [0, y - 50]
     end
 
     text "#{@company.label_reports_1}", :align => :left, style: :bold, character_spacing: 1, :size => 10
@@ -30,10 +35,6 @@ include ActionView::Helpers::NumberHelper
     
 
     move_down 20
-    string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
-    
-    text string, :align => :center, style: :bold, character_spacing: 1.5
-    move_down 10
   end
 
   def create_table(data)
@@ -41,16 +42,23 @@ include ActionView::Helpers::NumberHelper
     header = get_header(data[0])
     rows = []
 
-    data.each do |d|
+    #text "#{data}"
+
+    data.each_with_index do |d, i|
       row = []
+
+      a = :normal
+      a = :bold if i == data.size-1
+
       d.each do |key, value|
+
         if( key == 'Nombre Empleado')
-          row << "#{value}"
+          row << {:content => "#{value}", :font_style => a}
         else
           if value == 0
-            row << { :content => "--", :align => :right }
+            row << { :content => "N/A", :align => :right, :font_style => a }
           else
-            row << { :content => "#{number_to_format(value)}", :align => :right }
+            row << { :content => "#{number_to_format(value)}", :align => :right, :font_style => a }
           end
         end
       end

@@ -24,12 +24,12 @@ class Deduction < ActiveRecord::Base
 
   def self.get_list_to_general_payment
       
-    deductions = Deduction.where('state = ?', 1)
+    deductions = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
     list_deductions = []
 
     if deductions.count > 4
       
-      deductions = Deduction.where('state = ? and deduction_type = ?', 1, CONSTANTS[:DEDUCTION]['CONSTANTE']).limit(4)
+      deductions = Deduction.where('state = ? and deduction_type = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], CONSTANTS[:DEDUCTION]['CONSTANTE']).limit(4)
       
       deductions.each do |d|
         list_deductions.push d.id
@@ -37,7 +37,7 @@ class Deduction < ActiveRecord::Base
 
       unless deductions.count == 4
         num_limit = 4 - deductions.count
-        deductions = Deduction.where('state = ? and id NOT IN (?)', 1, list_deductions).limit(num_limit)
+        deductions = Deduction.where('state = ? and id NOT IN (?)', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], list_deductions).limit(num_limit)
         deductions.each do |d|
           list_deductions.push d.id
         end # End each deductions

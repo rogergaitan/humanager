@@ -21,61 +21,70 @@ include ActionView::Helpers::NumberHelper
     c = 0
     cp = 0
     
-    @payroll_log_id = PayrollLog.select('id').where('payroll_id = ?', @payroll.id)
+    @payroll_log_id = PayrollLog.includes(:payroll)
+                                .where(payrolls:{company_id: @company.id, state: false }, payroll_logs: {payroll_id: 1})
+                                .collect(&:id)
+    #@payroll_log_id = PayrollLog.select('id').where('payroll_id = ?', @payroll.id)
     @payroll_history_ids = PayrollHistory.select('id').where('payroll_log_id = ?', @payroll_log_id)
+
+    if @payroll_history_ids.length == 0
+      no_info
+    else
+      @payroll_history_ids.each do |i|
+        e_id = PayrollEmployee.select('employee_id').where('payroll_history_id = ?', i)
+        employee_ids[c] = e_id[0]['employee_id']
+        c += 1
+      end
+      
+      @employees.each do |employee_id|
+        if employee_id.to_i == employee_ids.detect { |item| item == employee_id.to_i }
+          cp += 1
+        end  
+      end
+
+      @employees.each do |employee_id|
         
-    @payroll_history_ids.each do |i|     
-      e_id = PayrollEmployee.select('employee_id').where('payroll_history_id = ?', i)
-      employee_ids[c] = e_id[0]['employee_id']
-      c += 1
+        if employee_id.to_i == employee_ids.detect { |item| item == employee_id.to_i }
+          
+          proof_pay_info
+          move_down 5
+          count += 1      
+                   
+          e = Employee.find(employee_id)
+          co = @company
+          employee =  "Empresa: #{co.name}
+                       Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
+          #company = "Empresa: #{co.name}"
+          text employee, character_spacing: 1
+          move_down 15
+          #text Company, character_spacing: 1
+          #move_down 15
+
+          data_salary = get_data_salary(list_payments_types, employee_id)
+          text "Detalle Salario Devengados", character_spacing: 1, :align => :center
+          move_down 15
+
+          data_deductions = get_data_deductions(employee_id)
+
+          tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types)
+
+          if tRows.length > 1
+            tables_salary(tRows, header, data_deductions, employee, company)
+          else 
+            tables_salary_center(tRows, header)
+            table_deductions(data_deductions, true)
+          end
+
+          if count != cp #@employees.count
+            start_new_page()
+          end
+        end
+      end # End each employees
     end
-    
-    @employees.each do |employee_id|
-      if employee_id.to_i == employee_ids.detect { |item| item == employee_id.to_i }
-        cp += 1
-      end  
-    end
+  end
 
-    @employees.each do |employee_id|
-      
-    if employee_id.to_i == employee_ids.detect { |item| item == employee_id.to_i }
-      
-      proof_pay_info
-      move_down 5
-      count += 1      
-               
-      e = Employee.find(employee_id)
-      co = @company
-      employee =  "Empresa: #{co.name}
-                   Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
-      #company = "Empresa: #{co.name}"
-      text employee, character_spacing: 1
-      move_down 15
-      #text Company, character_spacing: 1
-      #move_down 15
-
-      data_salary = get_data_salary(list_payments_types, employee_id)
-      text "Detalle Salario Devengados", character_spacing: 1, :align => :center
-      move_down 15
-
-      data_deductions = get_data_deductions(employee_id)
-
-      tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types)
-
-      if tRows.length > 1
-        tables_salary(tRows, header, data_deductions, employee, company)
-      else 
-        tables_salary_center(tRows, header)
-        table_deductions(data_deductions, true)
-      end
-
-      if count != cp #@employees.count
-        start_new_page()
-      end
-
-    end
-
-    end # End each employees
+  def no_info
+    text "No existen datos para mostrar"
   end
 
   def tables_salary(tRows, header, data_deductions, employee, company)
@@ -172,15 +181,14 @@ include ActionView::Helpers::NumberHelper
 
     font_size(10) do
       text_box "Comprobante de Pago de Salario", :align => :right, style: :bold, character_spacing: 1
+      string = "Planilla #{@payroll.payroll_type.description} del #{@payroll.start_date} al #{@payroll.end_date}"
+      text_box string, :align => :right, :at => [0, y - 50]
     end
 
     text "#{@company.label_reports_1}", :align => :left, style: :bold, character_spacing: 1, :size => 10
     text "#{@company.label_reports_2}", :align => :left, style: :bold, character_spacing: 1, :size => 10
     text "#{@company.label_reports_3}", :align => :left, style: :bold, character_spacing: 1, :size => 10
-
     move_down 20
-    string = "Planilla #{@payroll.payroll_type.description} del #{@payroll.start_date} al #{@payroll.end_date}"
-    text string, :align => :center, style: :bold, character_spacing: 1.5
   end
 
   def get_payments_types
@@ -233,7 +241,7 @@ include ActionView::Helpers::NumberHelper
           totals['doble'] += p.total.to_f
         end
       else
-        info_data['fecha'] = "#{p.payroll_date.day}/#{p.payroll_date.month}"
+        info_data['fecha'] = "#{p.payroll_date.strftime('%d')}/#{p.payroll_date.strftime('%m')}"
         info_data['labor'] = p.task.ntask
         info['fecha'] = info_data['fecha']
         info['labor'] = "#{p.task.ntask[0..20]}..."
@@ -291,7 +299,11 @@ include ActionView::Helpers::NumberHelper
         if a.capitalize == lpt[0] || a.capitalize == lpt[1] || a.capitalize == lpt[2]
           row << { :content => "#{number_to_format(b)}", :align => :center }
         else
-          row << { :content => "#{b}", :align => :left }
+          if is_numeric("#{b}")
+            row << { :content => "#{b}", :align => :right }
+          else
+            row << { :content => "#{b}", :align => :left }
+          end
         end
 
         if a.capitalize == lpt[0].capitalize
@@ -319,24 +331,24 @@ include ActionView::Helpers::NumberHelper
 
     # Cantidades Totales
     row << { :content => "Cantidades Totales", :colspan => 3, :align => :right, :font_style => :bold }
-    row << { :content => "#{number_to_format(tOrdinario)}", :align => :center }
-    row << { :content => "#{number_to_format(tExtra)}", :align => :center }
-    row << { :content => "#{number_to_format(tDoble)}", :align => :center }
+    row << { :content => "#{number_to_format(tOrdinario)}", :align => :right }
+    row << { :content => "#{number_to_format(tExtra)}", :align => :right }
+    row << { :content => "#{number_to_format(tDoble)}", :align => :right }
     rows << row
     row = []
 
     # Montos Totales
     row << { :content => "Montos Totales", :colspan => 3, :align => :right, :font_style => :bold }
-    row << { :content => "#{number_to_format(totals['ordinario'])}", :align => :center }
-    row << { :content => "#{number_to_format(totals['extra'])}", :align => :center }
-    row << { :content => "#{number_to_format(totals['doble'])}", :align => :center }
+    row << { :content => "#{number_to_format(totals['ordinario'])}", :align => :right }
+    row << { :content => "#{number_to_format(totals['extra'])}", :align => :right }
+    row << { :content => "#{number_to_format(totals['doble'])}", :align => :right }
     rows << row
     row = []
 
     # Total Devengado
     @total_devengado = totals['ordinario'].to_f + totals['extra'].to_f + totals['doble'].to_f
     row << { :content => "Total Devengado", :colspan => 3, :align => :right, :font_style => :bold }  
-    row << { :content => "#{number_to_format(@total_devengado)}", :colspan => 3, :align => :center}
+    row << { :content => "#{number_to_format(@total_devengado)}", :colspan => 3, :align => :right}
     rows << row
     row = []
 
@@ -362,9 +374,11 @@ include ActionView::Helpers::NumberHelper
           total_others += a.payment.to_f
           total += a.payment
         else
-          row << "#{a.deduction_employee.deduction.description}"
-          row << "#{a.deduction_employee.calculation}"
-          row << "#{number_to_format(a.payment.to_f)}"
+          if a.payment > 0
+            row << "#{a.deduction_employee.deduction.description}"
+            row << "#{a.deduction_employee.calculation}"
+            row << "#{number_to_format(a.payment.to_f)}"
+          end
           total += a.payment
         end
       end
@@ -382,6 +396,11 @@ include ActionView::Helpers::NumberHelper
       row << "Otros"
       row << "0"
       row << total_others
+      rows << row
+    else
+      row << "N/A"
+      row << "0.0"
+      row << "0.0"
       rows << row
     end
 
@@ -431,6 +450,14 @@ include ActionView::Helpers::NumberHelper
 
   def number_to_format(number)
     number_to_currency(number, :precision => 2, :format => "%u%n", :unit => "")
+  end
+
+  def is_numeric(string)
+    if /^[\d]+(\.[\d]+){0,1}$/ === string
+      true
+    else
+      false
+    end    
   end
 
 end

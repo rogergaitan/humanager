@@ -45,7 +45,6 @@ accrued_wages_dates.validate_data = function(format) {
 	}
 
 	accrued_wages_dates.create_pdf_or_exel(format);
-
 }
 
 accrued_wages_dates.create_pdf_or_exel = function(format) {
