@@ -1,19 +1,26 @@
 <div class="employee_contact_fields">
-	<div class="control-group">
-		<%= f.label :telephone, :class => 'control-label' %>
-		<div class="controls">
-			<div class="input-prepend">
-				<span class="add-on"><i class="icon-phone"></i></span><%= f.text_field :telephone, :class => 'text_field telephone-field' %>
+	<div class="form-group">
+		<%= f.label :telephone, :class => 'col-sm-2 control-label' %>
+		<div class="col-sm-3">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+				<%= f.text_field :telephone, :class => 'form-control telephone-field' %>
 			</div>
+		</div>
+		<div class="col-sm-1">
 			<%= f.hidden_field :_destroy, :class => 'telephones' %>
-			<%= link_to "remove", '#', class: "telephone-remove remove_fields btn btn-mini btn-danger" %>
+			<%= link_to '#', class: "btn btn-xs btn-danger-alt telephone-remove remove_fields" do %>
+	   			<i class="fa fa-trash-o"></i>
+	        <% end %>
 		</div>
 	</div>
-	<div class="control-group">
-		<%= f.label :typephone, :class => 'control-label' %>
-		<div class="controls">
-			<div class="input-prepend">
-				<span class="add-on">T</span><%= f.enum_select :typephone, :include_blank => false %>
+
+	<div class="form-group">
+		<%= f.label :typephone, :class => 'col-sm-2 control-label' %>
+		<div class="col-sm-3">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+				<%= f.enum_select( :typephone, {:include_blank => false}, {:class => 'form-control'}) %>
 			</div>
 		</div>
 	</div>

@@ -124,7 +124,7 @@ $(document).ready(function() {
 
 	//Gets all data from employees
     $.getJSON('/employees/load_employees', function(employee_data) {
-        $( "#load_employee" ).autocomplete({
+        $('#load_employee').autocomplete({
             source: $.map(employee_data, function(item){
                 $.data(document.body, 'employee_'+ item.id+"", item.entity.name + ' ' + item.entity.surname);
                 return{
@@ -147,11 +147,17 @@ $(document).ready(function() {
                     $("#load_employee_id").val("");
                 }
             }
-        })
+        });
+        $('#load_employee').removeClass('ui-autocomplete-input');
         if($("#employee_employee_id").val()){
             var load_employee_name = $.data(document.body, 'employee_' + $("#employee_employee_id").val()+'');
             $("#load_employee").val(load_employee_name);
         }
     });
-	
+
+	$('form').submit(function(e) {
+		if(!$(this).parsley().validate()) {
+			e.preventDefault();
+		}
+	});
 })

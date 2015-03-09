@@ -1,6 +1,21 @@
 <%- model_class = WorkBenefit -%>
-<div class="page-header">
+<div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      
+      <% if can? :create, WorkBenefit %>
+      <%= link_to new_work_benefit_path, :class => 'btn btn-primary pull-right' do %>
+        <i class="fa fa-plus"></i>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ************************************************************************************* -->
+<div class="page-header">
 </div>
 <%= will_paginate :class =>'pagination pagination-centered' %>
 <table class="table table-striped">
@@ -39,8 +54,5 @@
   </tbody>
 </table>
 
-<% if can? :create, WorkBenefit %>
-  <%= link_to t('.new', :default => t("helpers.links.new")),
-              new_work_benefit_path,
-              :class => 'btn btn-primary' %>
+
 <% end %>

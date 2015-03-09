@@ -2,39 +2,85 @@
 <%- model_class_entity = Entity -%>
 <%= javascript_include_tag 'employees/script' %>
 
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
-  <button id="sync-fb" class="btn btn-primary pull-right">
-    <i class='icon-refresh'></i>
-  </button></h1>
+<div class="page-heading">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="sync-fb" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
 </div>
 
-<!-- search -->
-<legend>  
-  <%= form_tag :search_employees, :id => "search_form", :class => "form-search", :method => "get" do %>
-    <div class="control-group search">
-      <%= text_field_tag :search_id, params[:search_id], :class => "search-query",
-       :placeholder => model_class.human_attribute_name(:id) %>
+<div class="container-fluid">
+  
+  <!-- S E A R C H -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h2>Search</h2></div>
+        <div class="panel-body">
+          <%= form_tag :search_tasks, :id => "search_form", :class => "form-horizontal", :method => "get" do %>
+            <div class="row">
 
-      <%= text_field_tag :search_name, params[:search_name], :class => "search-query",
-       :placeholder => model_class.human_attribute_name(:name) %>
+              <div class="col-md-12">
+                <div class="col-sm-2">
+                  <div class="form-group">
+                      <%= text_field_tag :search_id, params[:search_id], :class => "form-control",
+                                          :placeholder => model_class.human_attribute_name(:id) %>
+                  </div>
+                </div>
+                
+                <div class="col-sm-2">
+                  <div class="form-group">
+                      <%= text_field_tag :search_name, params[:search_name], :class => "form-control",
+                                          :placeholder => model_class.human_attribute_name(:name) %>
+                  </div>
+                </div>
+                
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <%= text_field_tag :search_surname, params[:search_surname], :class => "form-control",
+                                        :placeholder => model_class.human_attribute_name(:surname) %>
+                  </div>
+                </div>
+              </div>
 
-      <%= text_field_tag :search_surname, params[:search_surname], :class => "search-query",
-       :placeholder => model_class.human_attribute_name(:surname) %>
+              <div class="col-md-12">
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <%= select_tag(:search_department, options_from_collection_for_select(@all_departments, :id, :name), 
+                                    {:prompt => 'Departamento', :class => "form-control"} ) %>
+                  </div>
+                </div>
+                
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <%= select_tag(:search_entities, options_for_select(@employees_s.map { |s| [s.entity.name, s.id] }),
+                                  {:prompt => 'Jefe Inmediato', :class => "form-control"}) %>
+                  </div>
+                </div>
+                
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <button class="btn" id="clear" type="button">Limpiar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="control-group search">
-      <%= select_tag(:search_department, options_from_collection_for_select(@all_departments, :id, :name), 
-      {:prompt => 'Departamento'}) %>
-
-      <%= select_tag(:search_entities, options_for_select(@employees_s.map { |s| [s.entity.name, s.id] }),
-      {:prompt => 'Jefe Inmediato'}) %>
-
-
-      <button class="btn" id="clear" type="button">Limpiar</button>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+          <%= render "employees" %>
+      </div>
     </div>
-  <% end %>
-</legend>
-<!-- search -->
+  </div>
+</div>
 
-<%= render "employees" %>

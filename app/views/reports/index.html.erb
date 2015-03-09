@@ -1,22 +1,41 @@
-<h1><%=t '.title', :default => t('helpers.titles.proof_payment_salary') %></h1>
+<%= javascript_include_tag 'resources' %>
 
-<%= render "search" %>
-<%= javascript_include_tag 'reports/payment_proof' %>
+<div class="page-heading">
+	<h1><%=t '.title', :default => t('helpers.titles.proof_payment_salary') %></h1>
+</div>
 
-<h2><%=t '.title', :default => t('content.titles.messages_general') %></h2>
+<div class="container-fluid">
+	
+	<%= render "search" %>
+	<%= javascript_include_tag 'reports/payment_proof' %>
+  
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h2><%=t '.title', :default => t('content.titles.messages_general') %></h2></div>
+				<div class="panel-body">
+					<textarea name="messages_to_employees" id="messages_to_employees" cols="55" rows="5" style="width: auto;" maxlength="320"></textarea>
+					<div id="char-count"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<textarea name="messages_to_employees" id="messages_to_employees" cols="55" rows="5" style="width: auto;" maxlength="320"></textarea>
+	<%= render "message" %>
 
-<div id="char-count"></div>
-<hr>
-<div id="message" style="height:40px;"></div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<% if can? :payment_proof_employee_pdf, User %>
+						<button id="btn_create">Crear archivo PDF</button>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<% if can? :payment_proof_employee_pdf, User %>
-	<button id="btn_create">Crear archivo PDF</button>
-<% end %>
+</div>
 
 <input type="hidden" id="show_reports_path" value="<%= reports_path %>">
-
 <input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS]['PAYMENT_PROOF'] %>">
-
-<p></p>

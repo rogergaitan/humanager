@@ -1,140 +1,81 @@
-<h1>Labores por Tipo de Pago.</h1>
-<%= render "search" %>
-<%= javascript_include_tag 'reports/payment_type_report' %>
-
-<!-- T A S K S -->
-<div id="tasks" data-id="<%= fetch_tasks_tasks_path %>" >
-	<div class="control-group">
-		<hr>
-	    <h2>Labores</h2>
-	    <div class="controls align-radio">
-	      <div class="options-left">&nbsp;</div>
-	      <div class="options-right">
-	        <%= check_box_tag 'check-tasks-right', '1', true, class: 'align-checkbox' %>
-	        <%= label_tag 'check-tasks-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-	      </div>
-	      <div style="clear:both"></div>
-	    </div>
-	</div>
-
-	<div class="controls padding-filter" id="employee-filter">
-		<%= text_field_tag 'load_filter_tasks_text', nil, :class => 'text_field search-image-tasks' %> 
-	</div>
-
-	<div class="controls" id="marcar-desmarcar">
-		<%= check_box_tag 'check-tasks', '1', false, class: 'align-checkbox' %>
-	    <%= label_tag 'check-tasks', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-	</div>
-
-	<div class="controls lists">
-		<div id="tasks-list" class="tasks-list left-list">
-	  		<div class="employees-margin" id="no-save-tasks">
-	    		<% @tasks.each do |task| %>
-	      		<div class="checkbox-group">
-			        <div class="checkbox-margin">
-			          <%= check_box_tag 'left-list-employees', task.id, task.id,
-							id: dom_id(task) + '_left', 'data-id' => dom_id(task),
-							'data-sup' => task.id,
-							class: 'align-checkbox'  %>
-			          <%= label_tag dom_id(task) + '_left',
-			          		"#{task.ntask}",
-			              	:class => 'checkbox-label' %>
-			        </div>
-	      		</div>
-	    		<% end %>
-	  		</div>
-		</div>
-
-		<div class="control-buttons">
-			<a href="#" id="add-to-list-tasks" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
-		  	<a href="#" id="remove-to-list-tasks" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
-		</div>
-
-		<div class="tasks-list list-right">
-		  	<div class="employees-margin" id="list-tasks"></div>
-		</div>
-		<div style="clear:both"></div>
-	</div>
-</div>
-<!-- T A S K S -->
-
-<!-- C E N T R O   D E   C O S T O S -->
-<div id="centro_de_costos" data-id="<%= fetch_cc_costs_centers_path %>">
-	<div class="control-group">
-		<hr>
-	    <h2>Centro de Costos</h2>
-	    <div class="controls align-radio">
-	      <div class="options-left">&nbsp;</div>
-	      <div class="options-right">
-	        <%= check_box_tag 'check-cc-right', '1', true, class: 'align-checkbox' %>
-	        <%= label_tag 'check-cc-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-	      </div>
-	      <div style="clear:both"></div>
-	    </div>
-	</div>
-
-	<div class="controls padding-filter" id="employee-filter">
-		<%= text_field_tag 'load_filter_cc_text', nil, :class => 'text_field search-image-tasks' %> 
-	</div>
-
-	<div class="controls" id="marcar-desmarcar">
-		<%= check_box_tag 'check-cc', '1', false, class: 'align-checkbox' %>
-	    <%= label_tag 'check-cc', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-	</div>
-
-	<div class="controls lists">
-		<div id="cc-list" class="tasks-list left-list">
-	  		<div class="employees-margin" id="no-save-cc">
-	    		<% @cc.each do |c| %>
-	      		<div class="checkbox-group">
-			        <div class="checkbox-margin">
-			          <%= check_box_tag 'left-list-cc', c.id, c.id,
-							id: dom_id(c) + '_left', 'data-id' => dom_id(c),
-							'data-sup' => c.id,
-							class: 'align-checkbox'  %>
-			          <%= label_tag dom_id(c) + '_left',
-			          		"#{c.name_cc}",
-			              	:class => 'checkbox-label' %>
-			        </div>
-	      		</div>
-	    		<% end %>
-	  		</div>
-		</div>
-
-		<div class="control-buttons">
-			<a href="#" id="add-to-list-cc" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
-		  	<a href="#" id="remove-to-list-cc" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
-		</div>
-		
-		<div class="tasks-list list-right">
-		  	<div class="employees-margin" id="list-cc"></div>
-		</div>
-		<div style="clear:both"></div>
-	</div>
-</div>
-<!-- C E N T R O   D E   C O S T O S -->
-
-<div>
-	<hr>
-	<h2>Agrupado por</h2>
-	<select name="order_by" id="order_by">
-		<option value="no_order">Sin Agrupar</option>
-		<option value="employee">Empleado</option>
-		<option value="task">Labor</option>
-		<option value="centro_costo">Centro de Costo</option>
-	</select>
+<div class="page-heading">	
+	<h1>Labores por Tipo de Pago</h1>
 </div>
 
-<div id="message" style="height:40px;"></div>
+<div class="container-fluid">
+	<%= render "search" %>
+	<%= javascript_include_tag 'reports/payment_type_report' %>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h2>Labores</h2></div>
+				<div class="panel-body">
+					<div class="col-md-12">
+						<%= select("report", "task_ids", 
+							options_for_select( @tasks.map {|t| ["#{t.ntask}", t.id ]}), 
+							{ include_blank: false }, 
+							{:class => 'form-control required', :multiple => true}) %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h2>Centro de Costos</h2></div>
+				<div class="panel-body">
+					<div class="col-md-12">
+						<%= select("report", "cc_ids", 
+							options_for_select( @cc.map {|c| ["#{c.name_cc}", c.id ]}), 
+							{ include_blank: false }, 
+							{:class => 'form-control required', :multiple => true}) %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h2>Agrupado por</h2></div>
+				<div class="panel-body">
+					<div class="col-md-3">
+						<select name="order_by" id="order_by" class="form-control">
+							<option value="no_order">Sin Agrupar</option>
+							<option value="employee">Empleado</option>
+							<option value="task">Labor</option>
+							<option value="centro_costo">Centro de Costo</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<%= render "message" %>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<% if can? :task_type_payment_pdf, User %>
+						<button id="btn_create_pdf">Crear archivo PDF</button> | 
+					<% end %>
+
+					<% if can? :task_type_payment_xls, User %>
+						<button id="btn_create_xml">Exportar a XLS</button>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 <input type="hidden" id="show_reports_path" value="<%= reports_path %>">
 <input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS]['PAYMENT_TYPE_REPORT'] %>">
-
-<% if can? :task_type_payment_pdf, User %>
-	<button id="btn_create_pdf">Crear archivo PDF</button> | 
-<% end %>
-
-<% if can? :task_type_payment_xls, User %>
-	<button id="btn_create_xml">Exportar a XLS</button>
-<% end %>
-
-<p></p>

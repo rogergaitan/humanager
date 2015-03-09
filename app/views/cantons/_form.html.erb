@@ -1,20 +1,50 @@
-<%= form_for @canton, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :province_id, :class => 'control-label' %>
-    <div class="controls">
-			<%= collection_select(:canton, :province_id, @province, :id, :name , :prompt => true) %>
-    </div>
-  </div>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                cantons_path, :class => 'btn' %>
+    <% if @canton.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@canton.errors.count, "error") %> prohibited this canton from being saved:</h3>
+        <% @canton.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @canton, :html => { :class => 'form-horizontal row-border' } do |f| %>
+
+          <div class="form-group">
+            <%= f.label :name, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :name, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :province_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= collection_select(:canton, :province_id, @province, :id, :name, 
+                  options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  cantons_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

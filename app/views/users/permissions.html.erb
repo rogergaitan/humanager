@@ -1,153 +1,176 @@
 <%- model_class = User -%>
 <%= javascript_include_tag 'users/permissions' %>
 
-<div class="page-header">
-  <h1><%=t '.title', :default => t('helpers.titles.permissions', :model => model_class.model_name.human,
-                                 :default => "New #{model_class.model_name.human}") %></h1>
+<div class="page-heading">
+	<h1><%=t '.title', :default => t('helpers.titles.permissions', :model => model_class.model_name.human,
+									:default => "New #{model_class.model_name.human}") %></h1>
+	<div class="options">
+    	<div class="btn-toolbar">
+    		<h3>Usuario: <%= @user.name %></h3>
+		</div>
+	</div>
 </div>
-
-<div><h3>Usuario: <%= @user.name %></h3></div>
-
 
 <div class="container-fluid">
 	
 	<!-- S E A R C H   U S E R S -->
-	<legend>
-		<%= form_tag :search_user_users, :id => "search_users_form", :class => "form-search", :method => "get" do %>
-		<div class="control-group search">
-		<%= text_field_tag 'username', '', :class => 'text_field', :placeholder => 'Usuario' %>
-			<%= text_field_tag 'name', '', :class => 'text_field', :placeholder => 'Nombre'  %>
-			<button class="btn" id="search_users" type="button">Buscar</button>
-	    </div>
-	  <% end %>
-	</legend>
+	<div class="row">
+		<div class="col-xs-12">
+	      <div class="panel panel-default">
+	        <div class="panel-heading"><h2>Search</h2></div>
+	        <div class="panel-body">
+				<%= form_tag :search_user_users, :id => "search_users_form", :class => "form-inline", :method => "get" do %>
+		            <div class="row">
+		            	<div class="col-md-12">
+			                <div class="form-group">
+			                	<%= text_field_tag 'username', '', :class => 'form-control', :placeholder => 'Usuario' %>
+			                </div>
 
-	<div id="users_results"></div>
-	<!-- S E A R C H   U S E R S -->
+			                <div class="form-group">
+			                  <%= text_field_tag 'name', '', :class => 'form-control', :placeholder => 'Nombre'  %>
+			                </div>
+
+			                <div class="form-group">
+			                	<button class="btn btn-primary" id="search_users" type="button">Buscar</button>
+			                </div>
+		              	</div>
+		            </div>
+	          	<% end %>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+	
+	<div class="row">
+	    <div class="col-xs-12">
+	    	<div class="panel panel-primary" id="users_results"></div>
+		</div>
+	</div>
+
 	<input type="hidden" id="save_permissions_users_path" value="<%= save_permissions_users_path %>">
 	<input type="hidden" id="users_path" value="<%= users_path %>">
 	<input type="hidden" id="user_id" value="<%= @user.id %>">
 	<input type="hidden" id="get_permissions_user_users_path" value="<%= get_permissions_user_users_path %>">
-	<div class="accordion" id="accordion">
-	<hr>
 
-		<% count = 0 %>
-		<% @permissionsCategory.each do |pc| %>
-			
-			<div class="accordion-group">
-				
-				<div class="accordion-heading">
-					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<%= count %>">
-						<%= pc.name %>
-					</a>
-				</div>
-				
-				<div id="collapse<%= count %>" class="accordion-body in collapse" style="height: auto; ">
-					<div class="accordion-inner">
-						<table id="category_<%= pc.id %>" class="table table-hover table-bordered table-striped">
-							<% if count == 0 %>
-								<thead>
-									<tr>
-										<td></td>
-										<td>Crear | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
-										<td>Ver | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
-										<td>Modificar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-3"></td>
-										<td>Eliminar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-4"></td>
-									</tr>
-								</thead>
-							<% end %>
-								
-							<% if count == 1 %>
-								<thead>
-									<tr>
-										<td></td>
-										<td>Crear | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
-										<td>Ver | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
-										<td>Modificar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-3"></td>
-										<td>Eliminar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-4"></td>
-										<td>Cerrar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-5"></td>
-										<td>Contabilizar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-6"></td>
-									</tr>
-								</thead>
-							<% end %>
+	<div class="row">
+	    <div class="col-xs-12">
+	    	<div class="panel-group panel-default" id="accordionA">
+	    		<% count = 0 %>
+				<% @permissionsCategory.each do |pc| %>
+		    		<div class="panel panel-default">
+						<a data-toggle="collapse" data-parent="#accordionA" href="#collapse<%= count %>" aria-expanded="false" class="collapsed">
+							<div class="panel-heading"><h2><%= pc.name %></h2></div>
+						</a>
+						<div id="collapse<%= count %>" class="collapse" aria-expanded="false" style="height: 0px;">
+							<div class="panel-body panel-no-padding">
+								<table id="category_<%= pc.id %>" class="table table-striped">
+									<% if count == 0 %>
+										<thead>
+											<tr>
+												<td></td>
+												<td>Crear | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
+												<td>Ver | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
+												<td>Modificar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-3"></td>
+												<td>Eliminar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-4"></td>
+											</tr>
+										</thead>
+									<% end %>
+										
+									<% if count == 1 %>
+										<thead>
+											<tr>
+												<td></td>
+												<td>Crear | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
+												<td>Ver | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
+												<td>Modificar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-3"></td>
+												<td>Eliminar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-4"></td>
+												<td>Cerrar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-5"></td>
+												<td>Contabilizar | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-6"></td>
+											</tr>
+										</thead>
+									<% end %>
 
-							<% if count == 2 %>
-								<thead>
-									<tr>
-										<td></td>
-										<td>PDF | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
-										<td>XLS | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
-									</tr>
-								</thead>
-							<% end %>
-							
-							<tbody>
-							<% pc.permissions_subcategories.each do |c| %>
-								
-								<% if count == 0 %>
-									<tr id="tr_<%= c.id %>" >
-										<td><%= c.name %></td>
-										<td><%= check_box_tag "create_#{c.id}", "#{c.id}", 
-											@permissionsUser.find_by_permissions_subcategory_id(c.id).p_create %>
-										</td>
-										<td><%= check_box_tag "view_#{c.id}", "#{c.id}", 
-											@permissionsUser.find_by_permissions_subcategory_id(c.id).p_view %>
-										</td>
-										<td><%= check_box_tag "modify_#{c.id}", "#{c.id}", 
-											@permissionsUser.find_by_permissions_subcategory_id(c.id).p_modify %>
-										</td>
-										<td><%= check_box_tag "delete_#{c.id}", "#{c.id}", 
-											@permissionsUser.find_by_permissions_subcategory_id(c.id).p_delete %>
-										</td>
-									</tr>
-								<% end %>
-							
-								<% if count == 1 %>
-									<tr id="tr_<%= c.id %>" >
-										<td><%= c.name %></td>
-										<td><%= check_box_tag "create_#{c.id}", "#{c.id}",
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_create %>
-										</td>
-										<td><%= check_box_tag "view_#{c.id}", "#{c.id}", 
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_view %>
-										</td>
-										<td><%= check_box_tag "modify_#{c.id}", "#{c.id}",
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_modify %>
-										</td>
-										<td><%= check_box_tag "delete_#{c.id}", "#{c.id}",
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_delete %>
-										</td>
-										<td><%= check_box_tag "close_#{c.id}", "#{c.id}", 
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_close %>
-										</td>
-										<td><%= check_box_tag "accounts_#{c.id}", "#{c.id}",
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_accounts %>
-										</td>
-									</tr>
-								<% end %>
-							
-								<% if count == 2 %>
-									<tr id="tr_<%= c.id %>" >
-										<td><%= c.name %></td>
-										<td><%= check_box_tag "pdf_#{c.id}", "#{c.id}",
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_pdf %>
-										</td>
-										<td><%= check_box_tag "exel_#{c.id}", "#{c.id}",
-												@permissionsUser.find_by_permissions_subcategory_id(c.id).p_exel %>
-										</td>
-									</tr>
-								<% end %>
-
-							<% end %>
-							</tbody>
-						</table>
+									<% if count == 2 %>
+										<thead>
+											<tr>
+												<td></td>
+												<td>PDF | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-1"></td>
+												<td>XLS | <input id="" type="checkbox" style="margin: 0px;" value="category_<%= pc.id %>-2"></td>
+											</tr>
+										</thead>
+									<% end %>
+									
+									<tbody>
+										<% pc.permissions_subcategories.each do |c| %>
+											
+											<% if count == 0 %>
+												<tr id="tr_<%= c.id %>" >
+													<td><%= c.name %></td>
+													<td><%= check_box_tag "create_#{c.id}", "#{c.id}", 
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_create %>
+													</td>
+													<td><%= check_box_tag "view_#{c.id}", "#{c.id}", 
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_view %>
+													</td>
+													<td><%= check_box_tag "modify_#{c.id}", "#{c.id}", 
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_modify %>
+													</td>
+													<td><%= check_box_tag "delete_#{c.id}", "#{c.id}", 
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_delete %>
+													</td>
+												</tr>
+											<% end %>
+										
+											<% if count == 1 %>
+												<tr id="tr_<%= c.id %>" >
+													<td><%= c.name %></td>
+													<td><%= check_box_tag "create_#{c.id}", "#{c.id}",
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_create %>
+													</td>
+													<td><%= check_box_tag "view_#{c.id}", "#{c.id}", 
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_view %>
+													</td>
+													<td><%= check_box_tag "modify_#{c.id}", "#{c.id}",
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_modify %>
+													</td>
+													<td><%= check_box_tag "delete_#{c.id}", "#{c.id}",
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_delete %>
+													</td>
+													<td><%= check_box_tag "close_#{c.id}", "#{c.id}", 
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_close %>
+													</td>
+													<td><%= check_box_tag "accounts_#{c.id}", "#{c.id}",
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_accounts %>
+													</td>
+												</tr>
+											<% end %>
+										
+											<% if count == 2 %>
+												<tr id="tr_<%= c.id %>" >
+													<td><%= c.name %></td>
+													<td><%= check_box_tag "pdf_#{c.id}", "#{c.id}",
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_pdf %>
+													</td>
+													<td><%= check_box_tag "exel_#{c.id}", "#{c.id}",
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_exel %>
+													</td>
+												</tr>
+											<% end %>
+										<% end %>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-
-		<% count += 1 %>
-		<% end %>
+					<% count += 1 %>
+				<% end %>
+	    	</div>
+		</div>
 	</div>
-	<input type="button" id="btn_save" value="Salvar" class="btn btn-primary">
 
+	<div class="row">
+	    <div class="col-xs-12">
+			<input type="button" id="btn_save" value="Salvar" class="btn btn-primary">
+	    </div>
+	</div>
 </div>

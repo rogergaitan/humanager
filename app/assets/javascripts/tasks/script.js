@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  task = {
+  var task = {
     search_length : 3
   }
 

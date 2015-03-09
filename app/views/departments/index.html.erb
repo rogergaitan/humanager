@@ -1,42 +1,65 @@
 <%- model_class = Department -%>
-<div class="page-header">
+
+<div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <% if can? :create, Department %>
+        <%= link_to new_department_path, :class => 'btn btn-primary pull-right' do %>
+          <i class="fa fa-plus"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>
-<%= will_paginate :class =>'pagination pagination-centered' %>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:employee_id) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @departments.each do |department| %>
-      <tr>
-        <td><%= link_to department.name, department_path(department) %></td>
-        <td><%= department.employee.full_name if department.employee %></td>
-        <td>
-          <% if can? :update, Department %>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                        edit_department_path(department), :class => 'btn btn-mini' %>
-          <% end %>
 
-          <% if can? :destroy, Department %>
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                        department_path(department),
-                        :method => :delete,
-                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                        :class => 'btn btn-mini btn-danger' %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="container-fluid">
 
-<% if can? :create, Department %>
-  <%= link_to t('.new', :default => t("helpers.links.new")),
-              new_department_path,
-              :class => 'btn btn-primary' %>
-<% end %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:employee_id) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @departments.each do |department| %>
+              <tr>
+                <td><%= link_to department.name, department_path(department) %></td>
+                <td><%= department.employee.full_name if department.employee %></td>
+                <td>
+                  <% if can? :update, Department %>
+                    <%= link_to edit_department_path(department), :class => 'btn btn-xs btn-success-alt' do %>
+                      <i class="fa fa-pencil"></i>
+                    <% end %>
+                  <% end %>
+                  <% if can? :destroy, Department %>
+                    <%= link_to department_path(department), :method => :delete,
+                                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                :class => 'btn btn-xs btn-danger-alt' do %>
+                      <i class="fa fa-trash-o"></i>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          
+          <div class="text-right">    
+            <%= will_paginate @departments %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

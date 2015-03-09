@@ -4,41 +4,60 @@
 <input type="hidden" id="usersfb_users_path" value="<%= usersfb_users_path %>">
 <input type="hidden" id="users_path" value="<%= users_path %>">
 
-<div class="page-header">
-  <h1>
-  	<%= t '.title', :default => model_class.model_name.human(:count => 2) %>
-  	<button id="users-fb" class="btn btn-primary pull-right">
-    	<i class='icon-refresh'></i>
-  	</button>
-  </h1>
+<div class="page-heading">
+  <h1><%= t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="users-fb" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
 </div>
 
-<%= will_paginate :class =>'pagination pagination-centered' %>
+<div class="container-fluid">
 
-<table class="table table-striped" id="user-data">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:username) %></th>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:email) %></th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.username %></td>
-        <td><%= user.name %></td>
-        <td><%= user.email %></td>
-        <td>
-          <% if can? :update, User %>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                        edit_user_path(user), :class => 'btn btn-mini' %>
-            <%= link_to t('.permissions', :default => t("helpers.links.permissions")),
-                        permissions_user_path(user), :class => 'btn btn-mini' %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:username) %></th>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:email) %></th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td><%= user.username %></td>
+                  <td><%= user.name %></td>
+                  <td><%= user.email %></td>
+                  <td>
+                    <% if can? :update, User %>
+                      <%= link_to edit_user_path(user), :class => 'btn btn-xs btn-success-alt' do %>
+                        <i class="fa fa-pencil"></i>
+                      <% end %>
+                      <%= link_to permissions_user_path(user), :class => 'btn btn-xs btn-inverse-alt' do %>
+                        <i class="fa fa-unlock-alt"></i>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="text-right">    
+            <%= will_paginate @users %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

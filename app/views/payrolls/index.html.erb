@@ -1,8 +1,10 @@
 <%- model_class = Payroll -%>
 <%= javascript_include_tag 'payroll/payroll' %>
-<div class="page-header">
+
+<div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
 </div>
+
 <input id="get_activas_payrolls_path" type="hidden" value="<%= get_activas_payrolls_path %>">
 <input id="get_inactivas_payrolls_path" type="hidden" value="<%= get_inactivas_payrolls_path %>">
 <div class="tabbable">

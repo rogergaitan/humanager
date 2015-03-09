@@ -15,12 +15,28 @@
 <%= javascript_include_tag 'centro_costos/sync_cc' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
 
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %>
-    <button id="sync-cc" class="btn btn-primary pull-right">
-      <i class='icon-refresh'></i>
-    </button>
-  </h1>
+<div class="page-heading">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="sync-cc" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
 </div>
 
-<div id="list"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <div id="list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

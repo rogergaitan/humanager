@@ -10,8 +10,8 @@ $(document).ready(function() {
 
 	// Event click in a Bank Account to set the id
 	$('#list').on({
-		click: payrollType.setAccount
-		,
+		click: payrollType.setAccount,
+		
 		mouseenter: function() {
 			$(this).css("text-decoration", "underline");
 		},
@@ -36,7 +36,7 @@ payrollType.setAccount = function(e) {
 // Autocomplete to Bank Account
 payrollType.autocompleteBackAccounts = function() {
 	$.getJSON(payrollType.bank_accounts_path, function(category_data) {
-		$( "#payroll_type_ledger_account" ).autocomplete({
+		$('#payroll_type_ledger_account').autocomplete({
 			source: $.map(category_data, function(item) {
 				$.data(document.body, 'category_' + item.id+"", item.naccount);
 				return {
@@ -50,8 +50,8 @@ payrollType.autocompleteBackAccounts = function() {
 			focus: function(event, ui) {
 				$( "#payroll_type_ledger_account" ).val(ui.item.label);
 			}
-
-		})
+		});
+		$('#payroll_type_ledger_account').removeClass('ui-autocomplete-input');
 		if($("#payroll_type_ledger_account_id").val()) {
 			var deducciones_cuentas = $.data(document.body, 'category_' + $("#payroll_type_ledger_account_id").val()+'');
 			$("#payroll_type_ledger_account").val(deducciones_cuentas);

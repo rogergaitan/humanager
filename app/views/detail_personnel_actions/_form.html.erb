@@ -1,26 +1,57 @@
-<%= form_for @detail_personnel_action, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :type_of_personnel_action_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :type_of_personnel_action_id, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :fields_personnel_action_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :fields_personnel_action_id, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :value, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :value, :class => 'text_field' %>
-    </div>
-  </div>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                detail_personnel_actions_path, :class => 'btn' %>
+    <% if @detail_personnel_action.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@detail_personnel_action.errors.count, "error") %> prohibited this detail_personnel_action from being saved:</h3>
+        <% @detail_personnel_action.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @detail_personnel_action, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        
+          <div class="form-group">
+            <%= f.label :type_of_personnel_action_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.number_field :type_of_personnel_action_id, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :fields_personnel_action_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.number_field :fields_personnel_action_id, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :value, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :value, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  detail_personnel_actions_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

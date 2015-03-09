@@ -21,26 +21,21 @@ accrued_wages_dates.validate_data = function(format) {
 	
 	// Dates
 	if( accrued_wages_dates.start_date.val() == "" || accrued_wages_dates.end_date.val() == "") {
-		accrued_wages_dates.message.html('<div class="alert alert-error">Por favor selecione las fechas</div>');
-		$('div.alert.alert-error').delay(4000).fadeOut();
+		general_functions.showMessage("warning", "Por favor selecione las fechas");
 		return false;
 	}
 
 	// Employees 
-	var numberEmployees = $('div.employees-list.list-right input').length,
-		employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked'),
-		rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
+	var numberEmployees = $('#ms-deduction_employee_ids .ms-selection li.ms-selected').length;
     
-	if( (numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) ) {
-		accrued_wages_dates.message.html('<div class="alert alert-error">Por favor selecione los empleados</div>');
-		$('div.alert.alert-error').delay(4000).fadeOut();
+	if(numberEmployees == 0) {
+		general_functions.showMessage("warning", "Por favor selecione los empleados");
 		return false;
 	}
 
 	// Company
 	if( $('#company').val() == "" ) {
-		accrued_wages_dates.message.html('<div class="alert alert-error">Por favor selecione una compañia </div>');
-		$('div.alert.alert-error').delay(4000).fadeOut();
+		general_functions.showMessage("warning", "Por favor selecione una compañia");
 		return false;
 	}
 
@@ -56,9 +51,9 @@ accrued_wages_dates.create_pdf_or_exel = function(format) {
   		end_date = $('#end_date').val(),
   		employee_ids = [];
 
-  	$('div.employees-list.list-right input[type=checkbox]:checked').each(function() {
-		employee_ids.push($(this).val());
-  	});
+  	$('#ms-deduction_employee_ids .ms-selection li.ms-selected').each(function() {
+		employees.push($(this).attr('id').replace('-selection',''));
+	});
 
   	if( format === 'pdf' ) {
   		url = url + '/accrued_wages_dates' + '.pdf'

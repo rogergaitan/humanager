@@ -1,47 +1,68 @@
 <%- model_class = DetailPersonnelAction -%>
-<div class="page-header">
+
+<div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <% if can? :create, DetailPersonnelAction %>
+        <%= link_to new_detail_personnel_action_path, :class => 'btn btn-primary pull-right' do %>
+          <i class="fa fa-plus"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:type_of_personnel_action_id) %></th>
-      <th><%= model_class.human_attribute_name(:fields_personnel_action_id) %></th>
-      <th><%= model_class.human_attribute_name(:value) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @detail_personnel_actions.each do |detail_personnel_action| %>
-      <tr>
-        <td><%= link_to detail_personnel_action.id, detail_personnel_action_path(detail_personnel_action) %></td>
-        <td><%= detail_personnel_action.type_of_personnel_action_id %></td>
-        <td><%= detail_personnel_action.fields_personnel_action_id %></td>
-        <td><%= detail_personnel_action.value %></td>
-        <td><%=l detail_personnel_action.created_at %></td>
-        <td>
-          <% if can? :update, DetailPersonnelAction %>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                        edit_detail_personnel_action_path(detail_personnel_action), :class => 'btn btn-mini' %>
-          <% end %>
 
-          <% if can? :destroy, DetailPersonnelAction %>
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                        detail_personnel_action_path(detail_personnel_action),
-                        :method => :delete,
-                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                        :class => 'btn btn-mini btn-danger' %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="container-fluid">
 
-<% if can? :create, DetailPersonnelAction %>
-  <%= link_to t('.new', :default => t("helpers.links.new")),
-              new_detail_personnel_action_path,
-              :class => 'btn btn-primary' %>
-<% end %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:id) %></th>
+                <th><%= model_class.human_attribute_name(:type_of_personnel_action_id) %></th>
+                <th><%= model_class.human_attribute_name(:fields_personnel_action_id) %></th>
+                <th><%= model_class.human_attribute_name(:value) %></th>
+                <th><%= model_class.human_attribute_name(:created_at) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @detail_personnel_actions.each do |detail_personnel_action| %>
+                <tr>
+                  <td><%= link_to detail_personnel_action.id, detail_personnel_action_path(detail_personnel_action) %></td>
+                  <td><%= detail_personnel_action.type_of_personnel_action_id %></td>
+                  <td><%= detail_personnel_action.fields_personnel_action_id %></td>
+                  <td><%= detail_personnel_action.value %></td>
+                  <td><%=l detail_personnel_action.created_at %></td>
+                  <td>
+                    <% if can? :update, DetailPersonnelAction %>
+                      <%= link_to edit_detail_personnel_action_path(detail_personnel_action), 
+                          :class => 'btn btn-xs btn-success-alt' do %>
+                        <i class="fa fa-pencil"></i>
+                      <% end %>
+                    <% end %>
+
+                    <% if can? :destroy, DetailPersonnelAction %>
+                      <%= link_to detail_personnel_action_path(detail_personnel_action), :method => :delete,
+                                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                  :class => 'btn btn-xs btn-danger-alt' do %>
+                        <i class="fa fa-trash-o"></i>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

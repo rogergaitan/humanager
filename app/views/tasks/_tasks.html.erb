@@ -1,29 +1,38 @@
 <%- model_class = Task -%>
-<%= will_paginate :class =>'pagination pagination-centered' %>
-<table class="table table-striped" id="task-data">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:iactivity) %></th>
-      <th><%= model_class.human_attribute_name(:itask) %></th>
-      <th><%= model_class.human_attribute_name(:ntask) %></th>
-      <th><%= model_class.human_attribute_name(:iaccount) %></th>
-      <th><%= model_class.human_attribute_name(:mlaborcost) %></th>
-      <th><%= model_class.human_attribute_name(:nunidad) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tasks.each do |task| %>
+
+<div class="panel-heading"></div>
+
+<div class="panel-body panel-no-padding" id="list_tasks">
+  
+  <table class="table table-striped" id="task-data">
+    <thead>
       <tr>
-        <td><%= task.iactivity %></td>
-        <td><%= task.itask %></td>
-        <td>
-          <%= link_to task.ntask, '#' %>
-          <%= hidden_field_tag '', task_path(task) %>
-        </td>
-        <td><%= task.iaccount %></td>
-        <td><%= task.mlaborcost %></td>
-        <td><%= task.nunidad %></td>
+        <th><%= model_class.human_attribute_name(:iactivity) %></th>
+        <th><%= model_class.human_attribute_name(:itask) %></th>
+        <th><%= model_class.human_attribute_name(:ntask) %></th>
+        <th><%= model_class.human_attribute_name(:iaccount) %></th>
+        <th><%= model_class.human_attribute_name(:mlaborcost) %></th>
+        <th><%= model_class.human_attribute_name(:nunidad) %></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= task.iactivity %></td>
+          <td><%= task.itask %></td>
+          <td>
+            <%= link_to task.ntask, '#' %>
+            <%= hidden_field_tag '', task_path(task) %>
+          </td>
+          <td><%= task.iaccount %></td>
+          <td><%= task.mlaborcost %></td>
+          <td><%= task.nunidad %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="text-right">    
+    <%= will_paginate @task %>
+  </div>
+</div>

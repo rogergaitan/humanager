@@ -1,27 +1,52 @@
 <%- model_class = Task -%>
 <%= javascript_include_tag 'tasks/script' %>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %>
-  <button id="task-fb" class="btn btn-primary pull-right">
-    <i class='icon-refresh'></i>
-  </button></h1>
+
+<div class="page-heading">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="task-fb" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
 </div>
 
-<!-- search -->
-<legend>  
-  <%= form_tag :search_tasks, :id => "search_form", :class => "form-search", :method => "get" do %>
-    <div class="control-group search">
-      <%= text_field_tag :search_code, params[:search_code], :class => "search-query",
-       :placeholder => model_class.human_attribute_name(:itask) %>
+<div class="container-fluid">
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h2>Search</h2></div>
+        <div class="panel-body">          
+          <%= form_tag :search_tasks, :id => "search_form", :class => "form-inline", :method => "get" do %>
+            <div class="row">
+              <div class="col-md-12">
 
-      <%= text_field_tag :search_desc, params[:search_desc], :class => "search-query",
-       :placeholder => model_class.human_attribute_name(:ntask) %>
-      
-      <button class="btn" id="clear" type="button">Limpiar</button>
+                <div class="form-group">
+                  <%= text_field_tag :search_code, params[:search_code], :class => "form-control",
+                                      :placeholder => model_class.human_attribute_name(:itask) %>
+                </div>
+                <div class="form-group">
+                  <%= text_field_tag :search_desc, params[:search_desc], :class => "form-control",
+                                      :placeholder => model_class.human_attribute_name(:ntask) %>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" id="clear" type="button">Limpiar</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-</legend>
-<!-- search -->
-<div id="list_tasks">
-  <%= render "tasks" %>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary" id="list_tasks">
+          <%= render "tasks" %>
+      </div>
+    </div>
+  </div>
 </div>

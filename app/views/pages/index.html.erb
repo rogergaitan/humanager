@@ -1,38 +1,98 @@
-<div id="block-top">
-	<ul id="block-top">
-		<ul class="thumbnails">
-			<li>
-				<a href=<%= payrolls_path%> class="btn btn-maniadmin-6 btn-large" data-original-title="Planillas" >
-					<img src="assets/icon/iconset-info.png" alt="">
-					<span class="label label-success">Planillas</span>
-				</a>
-			</li>
-			<li>
-				<a href=<%= work_benefits_path%> class="btn btn-maniadmin-6 btn-large" data-original-title="Prestaciones" >
-					<img src="assets/icon/iconset-travel.png" alt="">
-					<span class="label label-success">Prestaciones</span>
-				</a>
-			</li>
-			<li>
-				<a href=<%= detail_personnel_actions_path%> class="btn btn-maniadmin-6 btn-large" data-original-title="Acciones de Personal" >
-					<img src="assets/icon/iconset-users.png" alt="">
-					<span class="label label-success">Acciones de Personal</span>
-				</a>
-			</li>
-		</ul>
-	</ul>
+<div class="page-heading">
+	<h1>Dashboard</h1>
 </div>
 
-<br><br>
-<div id="section-body" class="tabbable">
-	<ul class="nav nav-tabs">
-		<li class="active">
-			<a href="#payroll" id="payroll_tab">Planillas</a>
-		</li>
-	</ul>
-	<div class="tab-content">
-		<div id="payroll_tab" class="tab-pane active">
-			<%= render :template => 'payrolls/index'  %>
+<div class="container-fluid">
+
+	<div data-widget-group="group1">
+		<div class="row">
+			<div class="col-md-3">
+				<a class="info-tiles tiles-inverse has-footer" href="#">
+					<div class="tiles-heading">
+						<div class="pull-left">Orders</div>
+						<div class="pull-right">
+							<div id="tileorders" class="sparkline-block"></div>
+						</div>
+					</div>
+					<div class="tiles-body">
+						<div class="text-center">1,275</div>
+					</div>
+					<div class="tiles-footer">
+						<div class="pull-left">manage orders</div>
+						<div class="pull-right percent-change">+20.7%</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-md-3">
+				<a class="info-tiles tiles-green has-footer" href="#">
+					<div class="tiles-heading">
+						<div class="pull-left">Revenues</div>
+						<div class="pull-right">
+							<div id="tilerevenues" class="sparkline-block"></div>
+						</div>
+					</div>
+					<div class="tiles-body">
+						<div class="text-center">$71,250</div>
+					</div>
+					<div class="tiles-footer">
+						<div class="pull-left">go to accounts</div>
+						<div class="pull-right percent-change">+17.2%</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-md-3">
+				<a class="info-tiles tiles-blue has-footer" href="#">
+					<div class="tiles-heading">
+						<div class="pull-left">Tickets</div>
+						<div class="pull-right">
+							<div id="tiletickets" class="sparkline-block"></div>
+						</div>
+					</div>
+					<div class="tiles-body">
+						<div class="text-center">1,500</div>
+					</div>
+					<div class="tiles-footer">
+						<div class="pull-left">see all tickets</div>
+						<div class="pull-right percent-change">+10.3%</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-md-3">
+				<a class="info-tiles tiles-midnightblue has-footer" href="#">
+					<div class="tiles-heading">
+						<div class="pull-left">Members</div>
+						<div class="pull-right">
+							<div id="tilemembers" class="sparkline-block"></div>
+						</div>
+					</div>
+					<div class="tiles-body">
+						<div class="text-center">6,500</div>
+					</div>
+					<div class="tiles-footer">
+						<div class="pull-left">manage members</div>
+						<div class="pull-right percent-change">-11.1%</div>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="row">
+			
+			<div id="section-body" class="tabbable">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#payroll" id="payroll_tab">Planillas</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div id="payroll_tab" class="tab-pane active">
+						<%= render :template => 'payrolls/index'  %>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

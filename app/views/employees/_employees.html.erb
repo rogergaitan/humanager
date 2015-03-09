@@ -1,53 +1,62 @@
 <%- model_class = Employee -%>
 <%- model_class_entity = Entity -%>
-<div id="employees">
- <%= will_paginate :class =>'pagination pagination-centered' %>
-  <table class="table table-striped" id="employee-data">
+
+<div class="panel-heading"></div>
+
+<div class="panel-body panel-no-padding" id="employees">
+  
+  <table class="table table-striped" id="task-data">
     <thead>
       <tr>
         <th><%= model_class_entity.human_attribute_name(:entityid) %></th>
         <th><%= model_class_entity.human_attribute_name(:name) %></th>
         <th><%= model_class_entity.human_attribute_name(:surname) %></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
+      
       <% unless @employees.empty?  %>
         <% @employees.each do |employee| %>
           <tr>
-            <td><%= link_to employee.entity.entityid, employee_path(employee) %></td>
+            <td><%= employee.entity.entityid %></td>
             <td>
-              <%= link_to employee.entity.name, "#modal#{employee.entity.id}", "data-toggle" => "modal"  %>
+              <%= employee.entity.name %>
             </td>
             <td>
-              <%= link_to employee.entity.surname, "#modal#{employee.entity.id}", "data-toggle" => "modal"  %>
+              <%= employee.entity.surname %>
             </td>
-            <div id="modal<%= employee.entity.id %>" class="modal hide fade" rode="dialog" arial-labelledby="ModalLabel" arial-hidden="true">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                <h3><%=t '.actions', :default => t("helpers.actions") %></h3>
-              </div>
-              <div class="modal-body">
-                <% if can? :update, Employee %>
-                  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                            edit_employee_path(employee), :class => 'btn btn-mini' %>
-                <% end %>
 
-                <% if can? :update, DetailPersonnelAction %>
-                <%= link_to t('.personnel_action', :default => t("helpers.links.personnel_action")),
-                          detail_personnel_actions_path, :class => 'btn btn-mini' %>
-                <% end %> 
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" arial-hidden="true">Close</button>
-              </div>
-            </div>
+            <td>
+              <% if can? :update, Employee %>
+                <%= link_to edit_employee_path(employee), :class => 'btn btn-xs btn-success-alt' do %>
+                  <i class="fa fa-pencil"></i>
+                <% end %>
+              <% end %>
+              <% if can? :update, DetailPersonnelAction %>
+                <%= link_to detail_personnel_actions_path, :class => 'btn btn-xs btn-inverse-alt' do %>
+                  <i class="fa fa-users"></i>
+                <% end %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       <% else %>
-        <div class="alert alert-block alert-error">
-          <%= t("notice.no_results") %>
-        </div>
+        <tr>
+          <td colspan="4">
+            <div class="alert alert-dismissable alert-info">
+              <i class="fa fa-fw fa-info-circle"></i>
+              <strong>Información!</strong>
+              <%= t("notice.no_results") %>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+          </td>
+        </tr>
       <% end %>
     </tbody>
   </table>
+
+  <div class="text-right">    
+    <%= will_paginate @employees %>
+  </div>
 </div>

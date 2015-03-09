@@ -2,22 +2,34 @@
 
   <td class="controls_item">
     <div class="input-append">
-      <%= f.hidden_field :employee_id %>
-      <%= hidden_field_tag 'in_searching', '0' %>
-      <%= text_field_tag 'search_code_employee', '', :class => 'input-mini search_code_employee', :placeholder => 'Número' %>
-      <%= text_field_tag 'search_name_employee', '', :class => 'input-medium', :placeholder => 'Nombre Empleado'  %>
-      <a id="openEmployeeModal" data-keyboard="false" data-backdrop="static" href="#employeeModal" role="button" data-toggle="modal" >
-        <span class="add-on"><i class="icon-list"></i></span>
-      </a>
+      <div class="col-md-12">
+        <%= f.hidden_field :employee_id %>
+        <%= hidden_field_tag 'in_searching', '0' %>
+        <div class="col-md-2">
+          <%= text_field_tag 'search_code_employee', '', :class => 'form-control search_code_employee', 
+              :placeholder => 'Número' %>
+        </div>
+
+        <div class="input-group">
+          <%= text_field_tag 'search_name_employee', '', :class => 'form-control', 
+              :placeholder => 'Nombre Empleado' %>
+          <span class="input-group-btn">
+            <a id="openEmployeeModal" class="btn btn-default" data-keyboard="false" data-backdrop="static" 
+                href="#employeeModal" role="button" data-toggle="modal" >
+              <i class="fa fa-list"></i>
+            </a>
+          </span>
+        </div>
+      </div>
     </div>
   </td>
 
   <td class="controls_item">
     <div class="input-append">
       <div class="controls">
-        <%= f.text_field :calculation, :size => "5x5", 
+        <%= f.text_field :calculation, :size => "5x5", :class => 'form-control',
         :value => number_with_precision(f.object.calculation, delimiter: ',', separator: '.', precision: 2) %>
-    	</div>
+      </div>
     </div>
   </td>
 
@@ -25,10 +37,13 @@
     <div class="controls_item">
       <div class="controls">
         <%= f.hidden_field :_destroy  %>
-        <%= link_to "remove", '#', class: "remove_fields btn btn-mini btn-danger" %>
+        <%= link_to '#', class: "remove_fields btn btn-xs btn-danger" do %>
+          <i class="fa fa-trash-o"></i>
+        <% end %>
       </div>
     </div>
   </td>
+
   <%= f.hidden_field :completed, :value => false %>
 
 </tr>

@@ -3,43 +3,60 @@
 
 <input type="hidden" id="companies_fb_companies_path" value="<%= companies_fb_companies_path %>">
 
-<div class="page-header">
-  <h1>
-    <%=t '.title', :default => model_class.model_name.human.pluralize %>
-    <button id="companies-fb" class="btn btn-primary pull-right">
-      <i class='icon-refresh'></i>
-    </button>
-  </h1>
+<div class="page-heading">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="companies-fb" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
 </div>
 
-<%= will_paginate :class =>'pagination pagination-centered' %>
+<div class="container-fluid">
+    
+  <%= will_paginate :class =>'pagination pagination-centered' %>
 
-<table class="table table-striped" id="companies-data">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:code) %></th>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:label_reports_1) %></th>
-      <th><%= model_class.human_attribute_name(:label_reports_2) %></th>
-      <th><%= model_class.human_attribute_name(:label_reports_3) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @companies.each do |company| %>
-    <tr>
-      <td><%= company.code %></td>
-      <td><%= company.name %></td>
-      <td><%= company.label_reports_1 %></td>
-      <td><%= company.label_reports_2 %></td>
-      <td><%= company.label_reports_3 %></td>
-      <td>
-        <% if can? :update, Company %>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                          edit_company_path(company), :class => 'btn btn-mini' %>
-        <% end %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <table class="table table-bordered mb0">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:code) %></th>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:label_reports_1) %></th>
+                <th><%= model_class.human_attribute_name(:label_reports_2) %></th>
+                <th><%= model_class.human_attribute_name(:label_reports_3) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @companies.each do |company| %>
+              <tr>
+                <td><%= company.code %></td>
+                <td><%= company.name %></td>
+                <td><%= company.label_reports_1 %></td>
+                <td><%= company.label_reports_2 %></td>
+                <td><%= company.label_reports_3 %></td>
+                <td>
+                  <% if can? :update, Company %>
+                    <%= link_to edit_company_path(company), :class => 'btn btn-xs btn-success-alt' do %>
+                      <i class="fa fa-pencil"></i>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

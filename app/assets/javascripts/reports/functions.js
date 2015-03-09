@@ -2,59 +2,81 @@ general_functions = { }
 
 $(document).ready(function() {
 
+  $('#deduction_employee_ids').multiSelect({
+    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+    afterInit: function(ms){
+      var that = this,
+      $selectableSearch = that.$selectableUl.prev(),
+      $selectionSearch = that.$selectionUl.prev(),
+      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+      .on('keydown', function(e){
+        if(e.which === 40){
+          that.$selectableUl.focus();
+          return false;
+        }
+      });
+
+      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+      .on('keydown', function(e){
+        if (e.which == 40){
+          that.$selectionUl.focus();
+          return false;
+        }
+      });
+    },
+    afterSelect: function(){
+      // this.qs1.cache();
+      this.qs2.cache();
+    },
+    afterDeselect: function(){
+      this.qs1.cache();
+      this.qs2.cache();
+    }
+  });
+
 	general_functions.datePicker();
+  general_functions.searchInfoPayrolls();
+  general_functions.showHideOptions($('#select_method_all')); // Set default
 
-	general_functions.searchInfoPayrolls();
-
-	$('#search_payrolls').click(function() {
-		general_functions.searchInfoPayrolls();
-	});
-
-	$("#payrolls_results").on("click", ".pag a", function() {
-   		$.getScript(this.href);
-	   	return false;
+  $('#search_payrolls').click(function() {
+    general_functions.searchInfoPayrolls();
   });
 
   $('#company').change(function(){
     general_functions.searchInfoPayrolls();
   });
 
-	general_functions.populateEmployeesFilter($('#fetch_employees_deductions_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
+  $('input[name=select_method]').change(function() {
+    general_functions.showHideOptions($(this));
+  });
 
-	$('input[name=select_method]').change(function() {
- 		general_functions.selectEmployeesLeft($(this));
-	});
+  $('#departments_employees').change(function() {
+    general_functions.filterEmployees("department", $(this).val());
+  });
 
-	$('div.options-right input[name=check-employees-right]').change(general_functions.selectEmployeesRight);
+  $('#superiors_employees').change(function() {
+    general_functions.filterEmployees("superior", $(this).val());
+  });
 
-	// Moves the selected employees to the list at the right
-	$('#add-to-list').click(general_functions.moveToRight);
-	$('#remove-to-list').click(general_functions.moveToLeft);
-
-	$('#departments_employees').change(function() {
- 		general_functions.filterDepartment($(this).val());
-	});
-
-	$('#superiors_employees').change(function() {
-  	general_functions.filterSuperior($(this).val());
-	});
-
-	$('div#marcar-desmarcar input[name=check-employees]').change(general_functions.marcarDesmarcar);
+	$("#payrolls_results").on("click", ".pag a", function() {
+ 	  $.getScript(this.href);
+    return false;
+  });
 
 })
 
-// Search the payrolls
-general_functions.searchPayrolls = function(start_date, end_date, url, company_id) {
-
-	return $.ajax({
-		url: url,
-		dataType: "script",
-		data: {
-			start_date: start_date,
-			end_date: end_date,
-      company_id: company_id
-		}
-	});
+// Establishing the datepicker
+general_functions.datePicker = function() {
+  $("#start_date").datepicker({ //'dd/mm/yyyy'
+    format: 'yyyy-mm-dd'
+  });
+  $("#end_date").datepicker({
+    format: 'yyyy-mm-dd'
+  });
 }
 
 // Find the information and calls the search function
@@ -63,177 +85,114 @@ general_functions.searchInfoPayrolls = function() {
   if( $('#company').val() === "" ) {
     $('#payrolls_results').html("<div class='alert alert-info'>Por favor seleccione una compañia</div>");
   } else {
-  	var start_date = $('#start_date').val(),
-  	    end_date = $('#end_date').val(),
-  	    url = $("form[id=search_payrolls_form]").attr('action')
+    var start_date = $('#start_date').val(),
+        end_date = $('#end_date').val(),
+        url = $("form[id=search_payrolls_form]").attr('action')
         company_id = $('#company').val();
 
-  	general_functions.searchPayrolls(start_date, end_date, url, company_id);
+    general_functions.searchPayrolls(start_date, end_date, url, company_id);
   }
-
 }
 
-general_functions.populateEmployeesFilter = function(url, textField, idField) {
-  $.getJSON(url, function(employees) {
-      $(document.getElementById(textField)).autocomplete({
-          source: $.map(employees, function(item){
-              $.data(document.body, 'account_' + item.id + "", item.entity.name + ' ' + item.entity.surname);
-              return{
-                  label: item.entity.surname + ' ' + item.entity.name,                        
-                  id: item.id,
-                  sup: item.employee_id,
-                  dep: item.department_id,
-                  data_id: 'employee_'+ item.id
-              }
-          }),
-          select: function( event, ui ) {
-              if (!$('#list-to-save input#'+ui.item.data_id).length) {
-                appendEmployees = "<div class='checkbox-group'>" +
-                              "<div class='checkbox-margin'>" +
-                                "<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='deduction[employee_ids][]' value='"+ ui.item.id +"' />" +
-                                "<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
-                              "</div>" +
-                            "</div>"; 
-                $('#list-to-save').append(appendEmployees);
-                $('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
-              }
-          }
-      })     
-  }); 
+// Search the payrolls
+general_functions.searchPayrolls = function(start_date, end_date, url, company_id) {
+  return $.ajax({
+    url: url,
+    dataType: "script",
+    data: {
+      start_date: start_date,
+      end_date: end_date,
+      company_id: company_id
+    }
+  });
 }
-//
-general_functions.selectEmployeesLeft = function(selected) {
+
+general_functions.showHideOptions = function(selected) {
   switch($(selected).val()) {
     case 'all':
-      $('#employee-filter').show();
+      $('#ms-deduction_employee_ids').find('input:eq(0)').show();
       $('#list-departments').hide();
       $('#list-superior').hide(); 
-      $('div.employees-list.left-list input[type=checkbox]').prop('disabled', false);
-      $('.checkbox-group').show();
+      $('.ms-selection').css('margin-top', '0px');
+      general_functions.filterEmployees("all");
       break;
     case 'boss':
-      $('#employee-filter').hide();
+      $('.ms-selection').css('margin-top', '-3.7%');
+      $('#ms-deduction_employee_ids').find('input:eq(0)').hide();
       $('#list-departments').hide();
-      general_functions.filterSuperior($('#superiors_employees').val());
+      general_functions.filterEmployees("superior", $('#superiors_employees').val());
       $('#list-superior').show(); 
       break;
     case 'department':
-      $('#employee-filter').hide();
+      $('.ms-selection').css('margin-top', '-3.7%');
+      $('#ms-deduction_employee_ids').find('input:eq(0)').hide();
       $('#list-superior').hide(); 
-      general_functions.filterDepartment($('#departments_employees').val());
-      $('#list-departments').show();      
+      general_functions.filterEmployees("department", $('#departments_employees').val());
+      $('#list-departments').show();
       break;
   }
 }
 
-general_functions.selectEmployeesRight = function() {
-  if ($(this).is(':checked')) {
-    $("div.employees-list.list-right input[type='checkbox']").prop('checked', true);
-  } else {
-    $("div.employees-list.list-right input[type='checkbox']").prop('checked', false);
-  };
-}
+general_functions.filterEmployees = function(type, id) {
+  
+  id = id ? id : 0;
 
-general_functions.moveEmployees = function() {
-  var appendEmployees = "";
-  $('div.employees-list.left-list input[type=checkbox]:checked').each(function() {
-    if (!$(this).is(':disabled')) {
-      appendEmployees = "<div class='checkbox-group'>" +
-                    "<div class='checkbox-margin'>" +
-                      "<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='deduction[employee_ids][]' value='"+ $(this).val() +"' />" +
-                      "<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
-                    "</div>" +
-                  "</div>"; 
-      $('#list-to-save').append(appendEmployees);
-      $(this).closest('.checkbox-group').remove();
-    };
-  });
-  $('div#marcar-desmarcar input[name=check-employees]').prop('checked', false);
-  $('div.options-right input[name=check-employees-right]').prop('checked', true);
-}
+  $('#ms-deduction_employee_ids .ms-selectable').find('li').each(function() {
+    
+    if(type === "all") {
+      if(!$(this).hasClass('ms-selected'))
+        $(this).show();
+    }
 
-general_functions.moveToRight = function(e) {
-  e.preventDefault();
-  general_functions.moveEmployees();
-}
-
-general_functions.moveToLeft = function(e) {
-  e.preventDefault();
-  var appendEmployees = "";
-  $('div.employees-list.list-right input[type=checkbox]:not(:checked)').each(function() {
-    appendEmployees = "<div class='checkbox-group'>" +
-                  "<div class='checkbox-margin'>" +
-                    "<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' data-id='"+ $(this).attr('id') +"' class='align-checkbox right' id='"+ $(this).attr('id')+'_left' +"' name='left-list-employees' value='"+ $(this).val() +"' />" +
-                    "<label class='checkbox-label' for='"+ $(this).attr('id')+'_left' +"'>"+ $(this).next().text() +"</label>" +
-                  "</div>" +
-                "</div>"; 
-    $('#no-save').append(appendEmployees);
-    $(this).closest('.checkbox-group').remove();
-  });
-  if ($('input[name=select_method]:checked').val() == 'department') {
-    general_functions.filterDepartment($('#departments_employees').val());
-  } else if ($('input[name=select_method]:checked').val() == 'boss') {
-    general_functions.filterSuperior($('#superiors_employees').val())
-  };
-}
-
-general_functions.filterDepartment = function(dropdown) { 
-  var empSelected = [];
-  var dep = dropdown ? dropdown : 0; //si se manda un id de departamento se almacena en dep de lo contrario se almacena 0
-  $('div.employees-list.left-list input[type=checkbox]').each(function() { //recorre cada checkbox
-    //en la sig linea si el empleado tiene un id de departamento es porque esta asigando a uno de lo 
-    //y se almacenaria en empDep de lo contrario si no tiene es porque el empleado no a sido asignado a ninguno
-    var empDep = $(this).data('dep') ? $(this).data('dep') : 0; 
-    if (!(dep == 0)) { //si el id del departamento es diferente de 0
-      if (!(dep == empDep)) { //si dep no es igual a empDep quiere decir que el empleado NO pertenece al departamento seleccionado
-        //En la siguiente linea se procede a guardar en un arreglo 
-        //otro arreglo con el id del empledo luego el id del departamento y despues el nombre del empleado
-        empSelected.push(Array($(this).data('id'), empDep, $(this).next().text()));
-        $(this).closest('div.checkbox-group').hide(); //oculte el checkbox grup correspondiente a ese empleado
-        $(this).prop('disabled', true);
-      } else { //quiere decir que dep es igual a empDep ese empleado pertenece al departamente seleccionado
-        $(this).prop('disabled', false); //habilito el check
-        $(this).closest('div.checkbox-group').show(); //y muestro al empleado
-      };
-    }  else {
-        $(this).closest('div.checkbox-group').show(); //que los muestre todos
-      };
-  });
-}
-
-general_functions.filterSuperior = function(dropdown) {
-  var empSelected = [];
-  var sup = dropdown ? dropdown : 0;
-  $('div.employees-list.left-list input[type=checkbox]').each(function() {
-    var empSup = $(this).data('sup') ? $(this).data('sup') : 0;
-    if (!(sup == 0)) {
-      if (!(sup == empSup)) {
-        $(this).closest('div.checkbox-group').hide();
-        $(this).prop('disabled', true);
+    var searchType = 0;
+    if(type === "superior") {
+      searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+    }
+    
+    if(type === "department") {
+      searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+    }
+    
+    if(id != 0) {
+      if( id == searchType ) {
+        if(!$(this).hasClass('ms-selected'))
+          $(this).show();
       } else {
-        $(this).prop('disabled', false);
-        $(this).closest('div.checkbox-group').show();
-      };
-    }  else {
-        $(this).closest('div.checkbox-group').show();
-      };
+        $(this).hide();
+      }
+    } else {
+      if(!$(this).hasClass('ms-selected'))
+        $(this).show();
+    }
   });
 }
 
-general_functions.marcarDesmarcar = function() {
-  if ($(this).is(':checked')) {
-    $("div.employees-list.left-list input[type='checkbox']").prop('checked', true);
-  } else {
-    $("div.employees-list.left-list input[type='checkbox']").prop('checked', false);
-  };
-}
+general_functions.showMessage = function(type, message) {
+  var icon;
+  if(type === "success") {
+    icon = 'check';
+  }
+  if(type === "danger") {
+    icon = 'times';
+  }
+  if(type === "warning") {
+    icon = 'warning';
+  }
+  if(type === "info") {
+    icon = 'info-circle';
+  }
 
-// Establishing the datepicker
-general_functions.datePicker = function() {
-	$("#start_date").datepicker({ //'dd/mm/yyyy'
-		format: 'yyyy-mm-dd'
-	});
-	$("#end_date").datepicker({
-		format: 'yyyy-mm-dd'
-	});
+  $('#div-message').show();
+  $('#div-message').find('div.alert.alert-dismissable').addClass('alert-'+type);
+  $('#div-message').find('label#message').html(message);
+  $('#div-message').find('i').addClass('fa-'+icon);
+
+  $('div.alert.alert-'+type).fadeIn(4000, function() {
+    setTimeout(function() {
+        $(this).fadeOut("slow");
+        $('#div-message').find('div.alert.alert-dismissable').removeClass('alert-' + type);
+        $('#div-message').find('i').removeClass('fa-' + icon);
+        $('#div-message').hide();
+    },4000);
+  });
 }
