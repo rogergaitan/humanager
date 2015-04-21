@@ -101,13 +101,12 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
       '</td><td>';
 
   if( payroll_update == 1 ) {
-    data = data + '<a href="'+ url +'/' + payrolld.payroll_log.id + '/edit" class="btn btn-mini btn-success">Digitar</a> ' + 
-      '<a href="'+ url +'/' + payrolld.id +'/edit" class="btn btn-mini" data-method="get" rel="nofollow">Editar</a>';
+    data = data + '<a href="'+ url +'/' + payrolld.id +'/edit" class="btn btn-xs btn-success-alt" data-method="get" rel="nofollow"><i class="fa fa-pencil"></i></a>';
   }
 
   if( payroll_destroy == 1 ) {
-    data = data + '<a href="'+ url_payrolls +'/' + payrolld.id + '" class="btn btn-mini btn-danger" ' +
-     'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow">Eliminar</a>';
+    data = data + '<a href="'+ url_payrolls +'/' + payrolld.id + '" class="btn btn-xs btn-danger-alt" ' +
+     'data-confirm="¿Está seguro(a) que desea eliminar la planilla?" data-method="delete" rel="nofollow"><i class="fa fa-trash-o"></i></a>';
   }
 
 

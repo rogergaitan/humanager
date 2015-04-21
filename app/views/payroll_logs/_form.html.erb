@@ -1,101 +1,122 @@
 <%= javascript_include_tag "payroll_logs/payroll_logs_script" %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
-<%= form_for @payroll_log, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
-<!-- Checkbox functionality -->
-<h2 id="employee-header">Empleado</h2>
-<hr>
-	<div class="control-group">
-	  <div class="controls align-radio" id="filter-controls">
-			<div class="options-left">
-	      <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
-			</div>
-			<div class="options-right">
-	      <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
-				<%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-			</div>
-			<div style="clear:both"></div>
-	  </div>
-	</div>
-	<div class="controls padding-filter" id="list-departments">
-		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
-		<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
-	</div>
-	<div class="controls padding-filter" id="list-superior">
-		<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
-		<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
-	</div>
-	<div class="padding-filter" id="employee-filter">
-		<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee',
-		:placeholder => 'Empleado' %>
-		<a title='Añadir más empleados' id="add-more" href="#" class="btn showTooltip"> <i class="icon-plus"></i></a>
-	</div>
-	<div id="employee-box">
-		<div class="controls" id="marcar-desmarcar">
-			<%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
-			<%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-		</div>
-		<div class="controls lists">
-			<div class="employees-list left-list">
-				<div class="employees-margin" id="no-save">
-					<% @employees.each do |employee| %>
-						<div class="checkbox-group">
-							<div class="checkbox-margin">
-								<%= check_box_tag 'left-list-employees', employee.id, 
-												false, id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
-								<%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
-										:class => 'checkbox-label' %>
-							</div>
-					  </div>
-					<% end %>
-				</div>
-			</div>
-			<div class="control-buttons">
-				<a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
-				<a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
-			</div>
-			<div class="employees-list list-right">
-				<div class="employees-margin" id="list-to-save">				
-				</div>
-			</div>
-			<div style="clear:both"></div>
-		</div>
-	</div>
-<!-- End Checkbox functionality-->
-	<br /><hr>
-	<h2>Labores</h2>
-	<hr>	
-	<%= f.label :payroll_date %>
-	<div class="input-append date payroll-date" id="dp3" data-date-format="dd/mm/yyyy">
-		<%= f.text_field :payroll_date, :class => 'input-medium', :readonly => true, :value => Time.now.to_date - 1.days %><span class="add-on"><i class="icon-calendar"></i></span>
-	</div>
 
-	<input id="last_fingering" type="button" value="Ultima digitacion" class="btn btn-primary" style="margin-bottom: 16px;" >
+<%= form_for @payroll_log, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+	
+	<div class="form-group">
+    <div class="col-sm-11 col-md-offset-1">
+    	<h2><b><%= f.label :Empleados %></b></h2>
+    </div>
+  </div>
 
-	<div id="message" style="height:40px;"></div>
-	<table id="products_items" class=" table table-hover table-bordered table-striped">
-		<tr class="header_items">
-			<td class="header_employees">Empleados</td>
-	    	<td class="header_task">Labor</td>
-	      	<td class="header_time">Tiempo Trabajado</td>
-	      	<td class="header_cc">Centro De Costo</td>
-	      	<td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log addFields") %></td>
-    	</tr>
-	</table>
-	<div class="form-actions">
-		<%= f.submit nil, :class => 'btn btn-primary', :tabindex => '-1' %>
-		<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-		            payrolls_path, :class => 'btn', :tabindex => '-1' %>
-		
-		<%= f.check_box :continue_editing, {:checked=>true} %>
-		<%= label_tag 'continue-editing', 'Continuar editando al actualizar', class: 'checkbox-label' %>
-	</div>
+	<!-- E M P L O Y E E S -->
+  <div class="form-group">
+    <div class="col-sm-8 col-md-offset-2">
+      <div class="checkbox icheck">
+        <label>
+          <input type="checkbox" id="emplotee_select_all"> Seleccionar/Deseleccionar
+        </label>
+      </div>
+
+      <div class="checkbox icheck">
+        <label>
+          <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox', :checked => true %>
+          Todos
+        </label>
+        <label>
+          <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+          Jefe Inmediatos
+        </label>
+        <label>
+          <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+          Por Departamento
+        </label>
+      </div>
+
+      <div class="" id="list-departments" style="border-top:0px;">
+        <div class="col-sm-5" style="width: 46%; padding-bottom: 10px;padding-left: 1px;">
+          <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+          <%= collection_select("departments", "employees", @department, :id, :name, 
+              {:prompt => p}, {:class => 'form-control'}) %>
+        </div>
+      </div>
+
+      <div class="" id="list-superior" style="border-top:0px;">
+        <div class="col-sm-5" style="width: 46%; padding-bottom: 10px;padding-left: 1px;">
+          <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+            <%= collection_select("superiors", "employees", @superior, :id, :full_name,
+              {:prompt => p}, {:class => 'form-control'}) %>
+        </div>
+      </div>
+
+      <%= select("payroll_logs", "employee_ids", 
+        options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
+          { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]} ), 
+        { include_blank: false }, {:multiple => true}) %>
+    </div>
+  </div>
+  <!-- E M P L O Y E E S -->
+	
+	<div class="form-group">
+    <div class="col-sm-11 col-md-offset-1">
+    	<h2><b><%= f.label 'Labores' %></b></h2>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :payroll_date, :class => 'col-sm-2 control-label' %>
+    <div class="col-sm-3" id="dp3">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        <%= f.text_field :payroll_date, :class => 'form-control', :value => Time.now.to_date - 1.days %>
+      </div>
+    </div>
+    <div class="col-sm-3">
+    	<div class="input-group">
+      	<input id="last_fingering" type="button" value="Ultima digitacion" class="btn btn-primary" style="margin-bottom: 16px;" >
+    	</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <div id="message" style="height:40px;"></div>
+			<table id="products_items" class=" table table-hover table-bordered table-striped">
+				<tr class="header_items">
+					<td class="header_employees">Empleados</td>
+			    	<td class="header_task">Labor</td>
+			      	<td class="header_time">Tiempo Trabajado</td>
+			      	<td class="header_cc">Centro De Costo</td>
+			      	<td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log addFields") %></td>
+		    	</tr>
+			</table>
+    </div>
+  </div>
+
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+				<%= f.submit nil, :class => 'btn btn-primary', :tabindex => '-1' %>
+				<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+				            payrolls_path, :class => 'btn-default btn', :tabindex => '-1' %>
+				<%= f.check_box :continue_editing, {:checked=>true} %>
+				<%= label_tag 'continue-editing', 'Continuar editando al actualizar', class: 'checkbox-label' %>
+      </div>
+    </div>
+  </div>
+
 <% end %>
 
+
+
+
+
+
+
+
+
+<!-- *********************************************************************************************** -->
+<!-- *********************************************************************************************** -->
 <!--Payroll Modal-->
 <div id="payrollModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -284,6 +305,6 @@
 	employee_code = list_e_code.split(",");
 	employee_id = list_e_id.split(",");
 	employee_name = list_e_name.split(",");
-
 <% end %>
+
 <%= javascript_include_tag "payroll_logs/payroll_logs_functions" %>

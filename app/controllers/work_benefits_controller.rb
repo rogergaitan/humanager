@@ -58,6 +58,7 @@ class WorkBenefitsController < ApplicationController
   # PUT /work_benefits/1
   # PUT /work_benefits/1.json
   def update
+
     @work_benefit = WorkBenefit.find(params[:id])
 
     current_employees = []

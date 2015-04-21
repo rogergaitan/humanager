@@ -28,7 +28,6 @@ $(jQuery(document).ready(function($) {
 
 		// Add Fields last tap
 		$('.paymentType').focusout(function() {
-		//$('.addFields').focusout(function() {
 			$('.addFields').trigger('click');
 		});
 
@@ -186,7 +185,7 @@ $(jQuery(document).ready(function($) {
 													'<td>'+ payment +'</td>' +
 													'<td>'+ totalRow.toFixed(2)  +'</td>' +
 													'<td>' +
-														'<button type="button" class="btn btn-mini btn-danger">remove</button>' +
+														'<button type="button" class="btn btn-xs btn-danger-alt"><i class="fa fa-trash-o"></i></button>' +
 														'<input type="hidden" value="' + num + '"  />' +
 														'<input type="hidden" value="' + employee_id + '"  />' +
 													'</td>' +
@@ -197,7 +196,7 @@ $(jQuery(document).ready(function($) {
 
 	payroll_logs.addNewSelection = function(num, employee_id, is_select_methol_all) {
 		
-		var total = $('#accordion div.accordion-group').length + 1,
+		var total = $('#accordion div.panel.accordion-item').length + 1,
 			name = "";
 
 		if( is_select_methol_all ) {
@@ -206,8 +205,31 @@ $(jQuery(document).ready(function($) {
 			name = $('#employee_'+employee_id).next().html();			
 		}
 
-		$('#accordion').append(
-			'<div class="accordion-group">'+
+		// Kalfaro
+		var theadList = ["Fecha", "Labor", "Costo", "Unidad", "Cantidad", "Centro de Costos", "Tipo de Pago", "Total"];
+		var thead = '';
+
+		for (var i = theadList.length - 1; i >= 0; i--) {
+			thead += '<td>'+theadList[i]+'</td>';
+		}
+
+		var data = '<div class="panel accordion-item">' +
+			'<a class="accordion-title collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsea'+total+'" aria-expanded="false">' +
+				'<h2>'+name+'</h2></a>' +
+			'<div id="collapsea'+total+'" class="collapse" aria-expanded="false" style="height: 0px;">' +
+				'<div class="accordion-body">' +
+					'<table class="table table-hover table-bordered table-striped" id="employee_table_<%= e[0][0] %>">' +
+						thead +
+						'<tbody>' +
+							'<tr class="employee_count" id="total_'+employee_id+'">' +
+								'<td colspan="6" class="align_right">Total:</td>' +
+								'<td colspan="3">00.00</td>' +
+			'</tr></tbody></table></div></div></div>';
+
+		$('#accordion').append(data);
+
+		/*$('#accordion').append(
+			'<div class="panel accordion-item">'+
 			'<div class="accordion-heading">'+
 				'<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse'+total+'">'+name+'</a>'+
 			'</div>'+
@@ -221,7 +243,8 @@ $(jQuery(document).ready(function($) {
 					'<td colspan="6" class="align_right">Total:</td>'+
 					'<td colspan="3">00.00</td>'+
 				'</tr>'+
-			'</tbody></table></div></div></div>');
+			'</tbody></table></div></div></div>');*/
+
 	}
 
   	payroll_logs.search = function(name, url, type) {

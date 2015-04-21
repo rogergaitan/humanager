@@ -1,5 +1,77 @@
 $(jQuery(document).ready(function($) {
 	
+	$('#work_benefit_employee_ids').multiSelect({
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    afterInit: function(ms){
+	      var that = this,
+	      $selectableSearch = that.$selectableUl.prev(),
+	      $selectionSearch = that.$selectionUl.prev(),
+	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+	        if (e.which === 40){
+	          that.$selectableUl.focus();
+	          return false;
+	        }
+	      });
+
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+	        if (e.which == 40){
+	          that.$selectionUl.focus();
+	          return false;
+	        }
+	      });
+	    },
+	    afterSelect: function(){
+	      // this.qs1.cache();
+	      this.qs2.cache();
+	    },
+	    afterDeselect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    }
+	  });
+	
+	$('#work_benefit_payroll_type_ids').multiSelect({
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    afterInit: function(ms){
+	      var that = this,
+	      $selectableSearch = that.$selectableUl.prev(),
+	      $selectionSearch = that.$selectionUl.prev(),
+	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+	        if (e.which === 40){
+	          that.$selectableUl.focus();
+	          return false;
+	        }
+	      });
+
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+	        if (e.which == 40){
+	          that.$selectionUl.focus();
+	          return false;
+	        }
+	      });
+	    },
+	    afterSelect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    },
+	    afterDeselect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    }
+	  });
+	
 	// Generates the treeview with the different accounts
 	$('#debit-button').click(function(){
 		treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');
@@ -35,45 +107,12 @@ $(jQuery(document).ready(function($) {
 		mouseleave: function() {
 			$(this).css("text-decoration", "none");
 		}}, ".node_link");
-		
-	// Executes different options to select the employees
-	$('input[name=select_method]').change(function() {
-		selectEmployeesLeft($(this));
-	});
-	
-	$('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
-
-	$('#check-payroll-types-right').change(selectPayrollTypesRight);
-	
-	// When the employees are loaded in the page move the selected to the right
-	moveEmployees();
-	movePayrollTypes();
-	
-	// Moves the selected employees to the list at the right
-	$('#add-to-list').click(moveToRight);
-	$('#remove-to-list').click(moveToLeft);
-
-	// Moves the selected payroll types to the list at the right
-	$('#add-to-list-payroll-types').click(moveToRightPayrollTypes);
-	$('#remove-to-list-payroll-types').click(moveToLeftPayrollTypes);
-	
-	$('#departments_employees').change(function() {
-		filterDepartment($(this).val());
-	});
-	
-	$('#superiors_employees').change(function() {
-		filterSuperior($(this).val());
-	});
-	
-	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
-	
-	$('div#marcar-desmarcar-payroll-types input[name=check-payroll-types]').change(checkUncheck);
 
 	is_beneficiary( $('#work_benefit_is_beneficiary').is(':checked') );
 
 	$('#work_benefit_is_beneficiary').change(function() { is_beneficiary($('#work_benefit_is_beneficiary').is(':checked')) });
 
-	// Seach Cost center
+	// Seach Cost Center
 	searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center");
 
 	$("#search_cost_center_results").on("click", ".pag a", function() {
@@ -100,9 +139,122 @@ $(jQuery(document).ready(function($) {
   	
   	$('#work_benefit_percentage').keyup(resources.twoDecimals);
 
+  	// Empleados
+  	$('#emplotee_select_all').parents('label').click(function() {
+		employeesSelectAll();
+	});
+
+	$('#emplotee_select_all').next().click(function() {
+		employeesSelectAll();
+	});
+
+	// Tipos de Planillas
+	$('#payroll_type_select_all').parents('label').click(function() {
+		payrollSelectAll();
+	});
+
+	$('#payroll_type_select_all').next().click(function() {
+		payrollSelectAll();
+	});
+
+	// Employees
+	showHideOptions( $('#select_method_all') ); // Set default
+
+	$('input[name=select_method]').parents('label').click(function() {
+		showHideOptions( $(this).find('input') );
+	});
+
+	$('input[name=select_method]').next().click(function() {
+		showHideOptions( $(this).parents('label').find('input') );
+	});
+
+	$('#departments_employees').change(function() {
+		filterEmployees("department", $(this).val());
+	});
+
+	$('#superiors_employees').change(function() {
+    	filterEmployees("superior", $(this).val());
+  	});
+
 }));
 
 var empSelected = [];
+
+function showHideOptions(selected) {
+  switch($(selected).val()) {
+    case 'all':
+      $('#ms-work_benefit_employee_ids').find('input:eq(0)').show();
+      $('#list-departments').hide();
+      $('#list-superior').hide(); 
+      $('#ms-work_benefit_employee_ids').find('.ms-selection').css('margin-top', '-1px');
+      filterEmployees("all");
+      break;
+    case 'boss':
+      $('#ms-work_benefit_employee_ids').find('.ms-selection').css('margin-top', '-5.7%');
+      $('#ms-work_benefit_employee_ids').find('input:eq(0)').hide();
+      $('#list-departments').hide();
+      filterEmployees("superior", $('#superiors_employees').val());
+      $('#list-superior').show(); 
+      break;
+    case 'department':
+      $('#ms-work_benefit_employee_ids').find('.ms-selection').css('margin-top', '-5.7%');
+      $('#ms-work_benefit_employee_ids').find('input:eq(0)').hide();
+      $('#list-superior').hide(); 
+      filterEmployees("department", $('#departments_employees').val());
+      $('#list-departments').show();
+      break;
+  }
+}
+
+function filterEmployees(type, id) {
+  
+  id = id ? id : 0;
+
+  $('#ms-work_benefit_employee_ids .ms-selectable').find('li').each(function() {
+    
+    if(type === "all") {
+      if(!$(this).hasClass('ms-selected'))
+        $(this).show();
+    }
+
+    var searchType = 0;
+    if(type === "superior") {
+      searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+    }
+    
+    if(type === "department") {
+      searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+    }
+    
+    if(id != 0) {
+      if( id == searchType ) {
+        if(!$(this).hasClass('ms-selected'))
+          $(this).show();
+      } else {
+        $(this).hide();
+      }
+    } else {
+      if(!$(this).hasClass('ms-selected'))
+        $(this).show();
+    }
+  });
+}
+
+function employeesSelectAll() {
+	if( $('#emplotee_select_all').is(':checked') ) {
+		$('#work_benefit_employee_ids').multiSelect('select_all');
+	} else {
+		$('#work_benefit_employee_ids').multiSelect('deselect_all');
+	}
+}
+
+function payrollSelectAll() {
+	if( $('#payroll_type_select_all').is(':checked') ) {
+		$('#work_benefit_payroll_type_ids').multiSelect('select_all');
+	} else {
+		$('#work_benefit_payroll_type_ids').multiSelect('deselect_all');
+	}
+}
 
 function is_beneficiary(value) {
 	if( value ) {
@@ -110,193 +262,6 @@ function is_beneficiary(value) {
 		$('#work_benefit_beneficiary_id').val('');
 	} else {
 		$('#work_benefit_beneficiary_id').removeAttr('disabled', 'disabled');
-	}
-}
-
-// Function to check and uncheck all the employees at the left.
-function marcarDesmarcar () {
-	if ($(this).is(':checked')) {
-		$("div.employees-list.left-list input[type='checkbox']").attr('checked', true);
-	} else {
-		$("div.employees-list.left-list input[type='checkbox']").attr('checked', false);
-	};
-}
-
-// Function to check and uncheck all the payroll types at the left.
-function checkUncheck() {
-	if ($(this).is(':checked')) {
-		$("div.payroll-types-list.left-list input[type='checkbox']").attr('checked', true);
-	} else {
-		$("div.payroll-types-list.left-list input[type='checkbox']").attr('checked', false);
-	};	
-}
-
-function selectEmployeesRight() {
-	if ($(this).is(':checked')) {
-		$("div.employees-list.list-right input[type='checkbox']").attr('checked', true);
-	} else {
-		$("div.employees-list.list-right input[type='checkbox']").attr('checked', false);
-	};
-}
-
-function selectPayrollTypesRight() {
-	if ($(this).is(':checked')) {
-		$("div.payroll-types-list.list-right input[type='checkbox']").attr('checked', true);
-	} else {
-		$("div.payroll-types-list.list-right input[type='checkbox']").attr('checked', false);
-	};
-}
-
-// Function to filter results by department name 
-function filterDepartment (dropdown) {
-	var dep = dropdown ? dropdown : 0;
-	$('div.employees-list.left-list input[type=checkbox]').each(function() {
-		var empDep = $(this).data('dep') ? $(this).data('dep') : 0;
-		if (!(dep == 0)) {
-			if (!(dep == empDep)) {
-				empSelected.push(Array($(this).data('id'), empDep, $(this).next().text()));
-				$(this).closest('div.checkbox-group').hide();
-				$(this).prop('disabled', true);
-			} else {
-				$(this).prop('disabled', false);
-				$(this).closest('div.checkbox-group').show();
-			};
-		}	 else {
-				$(this).closest('div.checkbox-group').show();
-			};
-	});
-}
-
-// Function to filter results by superior name 
-function filterSuperior (dropdown) {
-	var sup = dropdown ? dropdown : 0;
-	$('div.employees-list.left-list input[type=checkbox]').each(function() {
-		var empSup = $(this).data('sup') ? $(this).data('sup') : 0;
-		if (!(sup == 0)) {
-			if (!(sup == empSup)) {
-				$(this).closest('div.checkbox-group').hide();
-				$(this).prop('disabled', true);
-			} else {
-				$(this).prop('disabled', false);
-				$(this).closest('div.checkbox-group').show();
-			};
-		}	 else {
-				$(this).closest('div.checkbox-group').show();
-			};
-	});
-}
-
-// Function to move the employees to the right
-function moveToRight(e) {
-	e.preventDefault();
-	moveEmployees();
-}
-
-// Function to move the payroll-types to the right
-function moveToRightPayrollTypes(e) {
-	e.preventDefault();
-	movePayrollTypes();
-}
-
-// Function to move employees to the left
-function moveToLeft (e) {
-	e.preventDefault();
-	var appendEmployees = "";
-	$('div.employees-list.list-right input[type=checkbox]:not(:checked)').each(function() {
-		appendEmployees = "<div class='checkbox-group'>" +
-									"<div class='checkbox-margin'>" +
-										"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' data-id='"+ $(this).attr('id') +"' class='align-checkbox right' id='"+ $(this).attr('id')+'_left' +"' name='left-list-employees' value='"+ $(this).val() +"' />" +
-										"<label class='checkbox-label' for='"+ $(this).attr('id')+'_left' +"'>"+ $(this).next().text() +"</label>" +
-									"</div>" +
-								"</div>";	
-		$('#no-save').append(appendEmployees);
-		$(this).closest('.checkbox-group').remove();
-	});
-	if ($('input[name=select_method]:checked').val() == 'department') {
-		filterDepartment($('#departments_employees').val());
-	} else if ($('input[name=select_method]:checked').val() == 'boss') {
-		filterSuperior($('#superiors_employees').val())
-	};
-}
-
-// Function to move payroll-types to the left
-function moveToLeftPayrollTypes(e) {
-	e.preventDefault();
-	var appendPayrollTypes = "";
-	$('div.payroll-types-list.list-right input[type=checkbox]:not(:checked)').each(function() {
-		appendPayrollTypes = "<div class='checkbox-group'>" +
-									"<div class='checkbox-margin'>" +
-										"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' data-id='"+ $(this).attr('id') +"' class='align-checkbox right' id='"+ $(this).attr('id')+'_left' +"' name='left-list-payroll-types' value='"+ $(this).val() +"' />" +
-										"<label class='checkbox-label' for='"+ $(this).attr('id')+'_left' +"'>"+ $(this).next().text() +"</label>" +
-									"</div>" +
-								"</div>";	
-		$('#no-save-payroll-types').append(appendPayrollTypes);
-		$(this).closest('.checkbox-group').remove();
-	});
-	// if ($('input[name=select_method]:checked').val() == 'department') {
-	// 	filterDepartment($('#departments_employees').val());
-	// } else if ($('input[name=select_method]:checked').val() == 'boss') {
-	// 	filterSuperior($('#superiors_employees').val())
-	// };
-}
-
-function moveEmployees () {
-	var appendEmployees = "";
-	$('div.employees-list.left-list input[type=checkbox]:checked').each(function() {
-		if (!$(this).is(':disabled')) {
-			appendEmployees = "<div class='checkbox-group'>" +
-										"<div class='checkbox-margin'>" +
-											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='work_benefit[employee_ids][]' value='"+ $(this).val() +"' />" +
-											"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
-										"</div>" +
-									"</div>";	
-			$('#list-to-save').append(appendEmployees);
-			$(this).closest('.checkbox-group').remove();
-		};
-	});
-	$('div#marcar-desmarcar input[name=check-employees]').attr('checked', false);
-	$('div.options-right input[name=check-employees-right]').attr('checked', true);
-}
-
-function movePayrollTypes () {
-	var appendPayrollTypes = "";
-	$('div.payroll-types-list.left-list input[type=checkbox]:checked').each(function() {
-		if (!$(this).is(':disabled')) {
-			appendPayrollTypes = "<div class='checkbox-group'>" +
-										"<div class='checkbox-margin'>" +
-											"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='work_benefit[payroll_type_ids][]' value='"+ $(this).val() +"' />" +
-											"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
-										"</div>" +
-									"</div>";	
-			$('#list-payroll-types-to-save').append(appendPayrollTypes);
-			$(this).closest('.checkbox-group').remove();
-		};
-	});
-	$('div#marcar-desmarcar-payroll-types input[name=check-payroll-types]').attr('checked', false);
-	$('div.options-right input[name=check-payroll-types-right]').attr('checked', true);
-}
-
-function selectEmployeesLeft(selected) {
-	switch($(selected).val()) {
-		case 'all':
-			$('#employee-filter').show();
-			$('#list-departments').hide();
-			$('#list-superior').hide();	
-			$('div.employees-list.left-list input[type=checkbox]').prop('disabled', false);
-			$('.checkbox-group').show();
-			break;
-		case 'boss':
-			$('#employee-filter').hide();
-			$('#list-departments').hide();
-			filterSuperior($('#superiors_employees').val());
-			$('#list-superior').show();	
-			break;
-		case 'department':
-			$('#employee-filter').hide();
-			$('#list-superior').hide();	
-			filterDepartment($('#departments_employees').val());
-			$('#list-departments').show();			
-			break;
 	}
 }
 
@@ -316,8 +281,10 @@ function fetchPopulateAutocomplete(url, textField, idField) {
           focus: function(event, ui) {
               $(document.getElementById(textField)).val(ui.item.label);
           }
+      });
 
-      })
+      $("#"+textField).removeClass('ui-autocomplete-input');
+
       if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
           $(document.getElementById(textField)).val(account);
@@ -327,18 +294,18 @@ function fetchPopulateAutocomplete(url, textField, idField) {
 
 function populateEmployeesFilter(url, textField, idField) {
   $.getJSON(url, function(employees) {
-      $(document.getElementById(textField)).autocomplete({
-          source: $.map(employees, function(item){
-              $.data(document.body, 'account_' + item.id+"", item.entity.name + ' ' + item.entity.surname);
-              return{
-                  label: item.entity.surname + ' ' + item.entity.name,                        
-                  id: item.id,
+	  $(document.getElementById(textField)).autocomplete({
+	      source: $.map(employees, function(item){
+	          $.data(document.body, 'account_' + item.id+"", item.entity.name + ' ' + item.entity.surname);
+	          return{
+	              label: item.entity.surname + ' ' + item.entity.name,                        
+	              id: item.id,
 									sup: item.employee_id,
 									dep: item.department_id,
 									data_id: 'employee_'+ item.id
-              }
-          }),
-          select: function( event, ui ) {
+	          }
+	      }),
+	      select: function( event, ui ) {
 							if (!$('#list-to-save input#'+ui.item.data_id).length) {
 								appendEmployees = "<div class='checkbox-group'>" +
 															"<div class='checkbox-margin'>" +
@@ -349,8 +316,10 @@ function populateEmployeesFilter(url, textField, idField) {
 								$('#list-to-save').append(appendEmployees);
 								$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
 							}
-          }
-      })     
+	      }
+	  });
+
+	  $("#"+textField).removeClass('ui-autocomplete-input');
   });	
 }
 
@@ -379,7 +348,9 @@ function populatePayrollTypesFilter(url, textField, idField) {
 					$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
 				}
           }
-      })     
+      });
+
+	  $("#"+textField).removeClass('ui-autocomplete-input');
   });	
 }
 
@@ -408,8 +379,8 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
           focus: function(event, ui) {
               $(document.getElementById(textField)).val(ui.item.name_cc);
           }
-
-      })
+      });
+      $("#"+textField).removeClass('ui-autocomplete-input');
       if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
           $(document.getElementById(textField)).val(account);
@@ -417,7 +388,7 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
   }); 
 }
 
-function searchCostCenter (name, url, type) {
+function searchCostCenter(name, url, type) {
 
 	return $.ajax({
 		url: url,

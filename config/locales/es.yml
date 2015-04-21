@@ -19,6 +19,8 @@ es:
     contacts: Contactos
     employment_data: Datos de empleado
     contact: Contacto
+    iniciadas: Iniciadas
+    cerradas: Cerradas
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior

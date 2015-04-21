@@ -1,5 +1,46 @@
 $(jQuery(document).ready(function($) {
 
+/***************************************************************************************************/
+	$('#payroll_logs_employee_ids').multiSelect({
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    afterInit: function(ms){
+	      var that = this,
+	      $selectableSearch = that.$selectableUl.prev(),
+	      $selectionSearch = that.$selectionUl.prev(),
+	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+	        if (e.which === 40){
+	          that.$selectableUl.focus();
+	          return false;
+	        }
+	      });
+
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+	        if (e.which == 40){
+	          that.$selectionUl.focus();
+	          return false;
+	        }
+	      });
+	    },
+	    afterSelect: function(){
+	      // this.qs1.cache();
+	      this.qs2.cache();
+	    },
+	    afterDeselect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    }
+	  });
+
+	$('#payroll_log_payroll_date').datepicker();
+
+/***************************************************************************************************/
+
 	hideEmployess();
 
 	$('#select_method_all').click(function() {
@@ -24,11 +65,10 @@ $(jQuery(document).ready(function($) {
 	$('#superiors_employees').click(function() {
 		hide($(this).val());
 	});
+
 	$('#departments_employees').click(function() {
 		hide($(this).val());
 	});
-
-	$('#dp3').datepicker();
 	
 	$('.showTooltip').tooltip();
 	$('#remove-controls').tooltip();
@@ -145,11 +185,12 @@ function removeFields(e) {
 	e.preventDefault();
 }
 
-function addFields(e) {
+function addFields(e) { // kalfaro
 	// Valida si hay campos en blanco
 	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 	var numberRows = $('#products_items tr').length;
 	var is_select_methol_all = false;
+
 	if((timeWorked == 0 ) && numberRows > 1) { 
 		$('div#message').html('<div class="alert alert-error">Por favor complete los espacios en blanco</div>');
 		$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
@@ -205,9 +246,19 @@ function addFields(e) {
 		var time = new Date().getTime();
 		var regexp = new RegExp($(this).data('id'), 'g');
 		$('.header_items').after($(this).data('fields').replace(regexp, time));
-		populateTasks($('#load_cc_tasks_path').val(), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id'));
-		populateCentroCostos($('#load_cc_centro_de_costos_path').val(), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), $('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(2)').attr('id'));
-		populateEmployees($('#load_em_employees_path').val(), $('#employee_code').attr('id') );
+		populateTasks(
+			$('#load_cc_tasks_path').val(), 
+			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id')
+		);
+		populateCentroCostos(
+			$('#load_cc_centro_de_costos_path').val(), 
+			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), 
+			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(2)').attr('id')
+		);
+		populateEmployees(
+			$('#load_em_employees_path').val(), 
+			$('#employee_code').attr('id')
+		);
 		$('#products_items').find('label').remove();
 		saveEmployees(rowIsDisabled, is_select_methol_all);
 		payroll_logs.reloadSelectorsEvents();
@@ -257,7 +308,7 @@ function selectEmployeesRight() {
 }
 
 // Function to filter results by department name 
-function filterDepartment (dropdown) {
+function filterDepartment(dropdown) {
 	var dep = dropdown ? dropdown : 0;
 	$('div.employees-list.left-list input[type=checkbox]').each(function() {
 		var empDep = $(this).data('dep') ? $(this).data('dep') : 0;
@@ -276,7 +327,7 @@ function filterDepartment (dropdown) {
 }
 
 // Function to filter results by superior name 
-function filterSuperior (dropdown) {
+function filterSuperior(dropdown) {
 	var sup = dropdown ? dropdown : 0;
 	$('div.employees-list.left-list input[type=checkbox]').each(function() {
 		var empSup = $(this).data('sup') ? $(this).data('sup') : 0;
@@ -301,7 +352,7 @@ function moveToRight(e) {
 }
 
 // Function to move employees to the left
-function moveToLeft (e) {
+function moveToLeft(e) {
 	e.preventDefault();
 	var appendEmployees = "";
 	$('div.employees-list.list-right input[type=checkbox]:not(:checked)').each(function() {
@@ -321,7 +372,7 @@ function moveToLeft (e) {
 	};
 }
 
-function moveEmployees () {
+function moveEmployees() {
 	var appendEmployees = "";
 	$('div.employees-list.left-list input[type=checkbox]:checked').each(function() {
 		if (!$(this).is(':disabled')) {
@@ -482,7 +533,7 @@ function addMoreEmployees (e) {
 }
 
 // Function to remove the controls for adding more employees
-function removeControls (e) {
+function removeControls(e) {
 	e.preventDefault();
 	$('#filter-controls').slideUp();
 	$('#employee-box').slideUp();
