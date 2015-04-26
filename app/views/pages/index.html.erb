@@ -1,83 +1,10 @@
 <div class="page-heading">
-	<h1>Dashboard</h1>
+	<h1>Panel de Control</h1>
 </div>
 
 <div class="container-fluid">
 
 	<div data-widget-group="group1">
-		<div class="row">
-			<div class="col-md-3">
-				<a class="info-tiles tiles-inverse has-footer" href="#">
-					<div class="tiles-heading">
-						<div class="pull-left">Orders</div>
-						<div class="pull-right">
-							<div id="tileorders" class="sparkline-block"></div>
-						</div>
-					</div>
-					<div class="tiles-body">
-						<div class="text-center">1,275</div>
-					</div>
-					<div class="tiles-footer">
-						<div class="pull-left">manage orders</div>
-						<div class="pull-right percent-change">+20.7%</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-md-3">
-				<a class="info-tiles tiles-green has-footer" href="#">
-					<div class="tiles-heading">
-						<div class="pull-left">Revenues</div>
-						<div class="pull-right">
-							<div id="tilerevenues" class="sparkline-block"></div>
-						</div>
-					</div>
-					<div class="tiles-body">
-						<div class="text-center">$71,250</div>
-					</div>
-					<div class="tiles-footer">
-						<div class="pull-left">go to accounts</div>
-						<div class="pull-right percent-change">+17.2%</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-md-3">
-				<a class="info-tiles tiles-blue has-footer" href="#">
-					<div class="tiles-heading">
-						<div class="pull-left">Tickets</div>
-						<div class="pull-right">
-							<div id="tiletickets" class="sparkline-block"></div>
-						</div>
-					</div>
-					<div class="tiles-body">
-						<div class="text-center">1,500</div>
-					</div>
-					<div class="tiles-footer">
-						<div class="pull-left">see all tickets</div>
-						<div class="pull-right percent-change">+10.3%</div>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-md-3">
-				<a class="info-tiles tiles-midnightblue has-footer" href="#">
-					<div class="tiles-heading">
-						<div class="pull-left">Members</div>
-						<div class="pull-right">
-							<div id="tilemembers" class="sparkline-block"></div>
-						</div>
-					</div>
-					<div class="tiles-body">
-						<div class="text-center">6,500</div>
-					</div>
-					<div class="tiles-footer">
-						<div class="pull-left">manage members</div>
-						<div class="pull-right percent-change">-11.1%</div>
-					</div>
-				</a>
-			</div>
-		</div>
 
 		<div class="row">
 			
@@ -94,5 +21,133 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default" data-widget=''>
+							<div class="panel-heading">
+								<h2>Lista de Tareas</h2>
+								<div class="panel-ctrls button-icon-bg"
+									data-actions-container="" 
+									data-action-collapse='{"target": ".panel-body"}'
+									data-action-expand=''
+									data-action-colorpicker=''
+									data-action-edit=''
+									data-action-close=''
+								>
+								</div>
+							</div>
+							<div class="panel-editbox" data-widget-controls=""></div>
+							<div class="panel-body panel-no-padding panel-todo">
+								<ul class="connectedSortable" id="sortable-todo">
+			                        <li class="item-warning">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox"></div>
+			                            </span>
+			                            <p class="todo-description">
+			                                Send project demo files to client
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                        <li class="item-orange">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox"></div>
+			                            </span>
+			                            <p class="todo-description">
+			                                Sketch wireframes for new project and send it to client as soon as possible
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                        <li class="">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox"></div>
+			                            </span>
+			                            <p class="todo-description">
+			                                Buy some milk
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                        <li class="">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox"></div>
+			                            </span>
+			                            <p class="todo-description">
+			                                Prepare documentation for completed project
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                        <li class="item-success">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox"></div>
+			                            </span>
+			                            <p class="todo-description">
+			                                Meeting with the development team
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                    
+			                    </ul>
+								<span class="todo-header"></span>
+								<ul class="todo-completed connectedSortable" id="completed-todo">
+			                    
+			                        <li class="item-primary">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox" checked></div>
+			                                <span class="drag-image"></span>
+			                            </span>
+			                            <p class="todo-description">
+			                                Assign todo to designers
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                        <li class="">
+			                            <span class="drag-todo"> 
+			                                <div class="checkbox-inline icheck"><input type="checkbox" checked></div>
+			                                <span class="drag-image"></span>
+			                            </span>
+			                            <p class="todo-description">
+			                                Set up a meeting with new client
+			                            </p>
+			                            <a href="#" class="btn btn-xs btn-default todo-options"><i class="fa fa-pencil"></i></a>
+			                        </li>
+			                    
+			                    </ul>
+								<div class="todo-footer clearfix">
+									<a href="#" class="btn btn-sm btn-success"><i class="visible-xs fa fa-plus"></i> <span class="hidden-xs">New</span></a>
+									<a href="#" class="btn btn-sm btn-default"><i class="visible-xs fa fa-check"></i> <span class="hidden-xs">Mark All Done</span></a>
+									<a href="app-todo.html" class="btn-link btn-sm pull-right" style="padding-right: 0">Go to todo page</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="col-md-12">
+					<div class="panel panel-default" data-widget=''>
+						<div class="panel-heading">
+							<h2>Calendario</h2>
+							<div class="panel-ctrls button-icon-bg"
+								data-actions-container=""
+								data-action-collapse='{"target": ".panel-body"}'
+								data-action-expand=''
+								data-action-colorpicker=''
+								data-action-edit=''
+								data-action-close=''>
+								<a href="#" class="button-icon custom-icon has-bg"><i class="fa fa-cog"></i></a>
+							</div>
+						</div>
+						<div class="panel-editbox" data-widget-controls=""></div>
+						<div class="panel-body">
+							<div id="calendar-drag"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 	</div>
 </div>
