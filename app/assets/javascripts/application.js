@@ -40,6 +40,7 @@
 //= require ../template/plugins/clockface/js/clockface
 
 // Form-components
+//= require ../template/plugins/fullcalendar/fullcalendar.min
 //= require ../template/plugins/form-multiselect/js/jquery.multi-select.min
 //= require ../template/plugins/quicksearch/jquery.quicksearch.min
 //= require ../template/plugins/form-typeahead/typeahead.bundle.min
@@ -58,6 +59,7 @@
 //= require ../template/plugins/wijets/wijets
 //= require ../template/plugins/form-parsley/parsley
 
+//= require date/date
 
 //= require_directory .
 
