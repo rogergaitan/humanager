@@ -56,10 +56,4 @@ gem 'unicorn'
 group :development, :test do
   gem 'capistrano'
   gem 'capistrano-rails'
-  gem 'capistrano3-puma'
 end
-
-gem 'puma'
-
-# To use debugger
-# gem 'debugger'
