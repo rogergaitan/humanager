@@ -1,43 +1,30 @@
 class CompaniesController < ApplicationController
-  before_filter :title
-  respond_to :json, :html
-
+  respond_to :html, :json, :js
+  # GET /companies
+  # GET /companies.json
   def index
-    respond_with @companies = Company.all
+    @companies = Company.paginate(:page => params[:page], :per_page => 15).all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @companies }
+    end
   end
 
-  def show
-    respond_with @company = Company.find(params[:id])
-  end
-
-  def new
-    respond_with @company = Company.new
-  end
-
+  # GET /companies/1/edit
   def edit
     @company = Company.find(params[:id])
   end
 
-  def create
-    @company = Company.new(params[:company])
-
-    respond_to do |format|
-      if @company.save
-        format.html { redirect_to companies_url, notice: t('.activerecord.models.company').capitalize + t('.notice.a_successfully_created') }
-        format.json { render json: @company, status: :created, location: @company }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
+  # PUT /companies/1
+  # PUT /companies/1.json
   def update
     @company = Company.find(params[:id])
 
     respond_to do |format|
       if @company.update_attributes(params[:company])
-        format.html { redirect_to companies_url, notice: t('.activerecord.models.company').capitalize + t('.notice.a_successfully_updated') }
+        flash[:notice] = 'Company was successfully updated.'
+        format.html { redirect_to action: "index" }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -46,17 +33,42 @@ class CompaniesController < ApplicationController
     end
   end
 
-  def destroy
-    @company = Company.find(params[:id])
-    @company.destroy
+  def companies_fb
+    @empmaestcc = Empmaestcc.find(:all, :select =>['iemp', 'ncc'], :conditions => ['inivel = ?', 0])
+    @c = 0; @ca = 0
+    @companies = []
+    @companies_fb = {}
+    
+    @empmaestcc.each do |cfb|
+      if Company.where('code = ?', cfb.iemp).empty?
+        @new_company = Company.new( :code => cfb.iemp,
+                                    :name => "#{cfb.ncc}" )
+
+        if @new_company.save
+          @companies << @new_company
+          @c += 1
+        else
+          @new_company.errors.each do |error|
+            Rails.logger.error "Error Creating Company: #{cfb.ncc}, Description: #{error}"
+          end
+        end
+      else
+        # UPDATE
+        @update_company = Company.find_by_code(cfb.iemp)
+        params[:company] = { :name => "#{cfb.ncc}" }
+
+        if @update_company.update_attributes(params[:company])
+          @ca += 1
+        end
+      end
+    end
+
+    @companies_fb[:companies] = @companies
+    @companies_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
 
     respond_to do |format|
-      format.html { redirect_to companies_url, notice: t('.activerecord.models.company').capitalize + t('.notice.a_successfully_deleted') }
-      format.json { head :no_content }
+      format.json { render json: @companies_fb }
     end
   end
 
-  def title
-    @title = t('.activerecord.models.company').capitalize + " - " + t(".helpers.links.#{action_name}" ) 
-  end
 end

@@ -1,51 +1,66 @@
+<script type="text/javascript">
+  var cuenta_contable = [];
+  <%  @ledger_accounts.each do |cc| %>
+    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>, <%= cc.iaccount %>));
+  <% end %>
+</script>
+
 <%- model_class = LedgerAccount -%>
-<%= javascript_include_tag 'ledger_accounts/ledger_accounts' %>
-<%= javascript_include_tag 'ledger_accounts/modal' %>
-<legend>
-  <%=t '.title', :default => model_class.model_name.human.pluralize %>
-</legend>
-<div id="list">
+<%= javascript_include_tag 'ledgerAccount/accounts' %>
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
+
+<div class="page-heading">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="account-fb" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
 </div>
-<table class="table table-condensed table-hover table_accounts">
-	<thead>
-		<th><%= model_class.human_attribute_name(:iaccount) %></th>
-		<th><%= model_class.human_attribute_name(:naccount) %></th>
-		<th><%=t '.actions', :default => t("helpers.actions") %></th>
-	</thead>
-	<tbody>
-	<% @accounts.each do |account| %>
-		<tr>
-			<td>
-				<%= account.iaccount %>
-				<input id="<%= account.iaccount %>" type="hidden" 
-					data-ifather="<%= account.ifather %>" 
-					data-account-type="<%= account.account_type %>"
-					data-cost-center="<%= account.cost_center %>"
-					data-foreign-currency="<%= account.foreign_currency %>"
-					data-request-entity="<%= account.request_entity %>"
-					data-iaccount="<%= account.iaccount %>"
-					data-naccount="<%= account.naccount %>"
-					data-id="<%= account.id %>">
-				</td>
-			<td class="account_name"><%= account.naccount %></td>
-			<td>
-				<%= link_to t("content.titles.create_sub_account"), "#new_account", 
-					:class => 'btn btn-mini btn-success create_account' %>
-				<%= link_to t("helpers.links.edit"), "#new_account", 
-					:class => 'btn btn-mini update_account' %>
-        <%= link_to t("helpers.links.destroy"), ledger_account_path(account), :method => :delete,
-          :data => { :confirm => t("helpers.links.confirm", :default => 'Are you sure?') },
-          :class => 'btn btn-mini btn-danger' %>
-			</td>
-		</tr>
-	<% end %>
-	</tbody>
-</table>
-<div id="new_account" class="modal hide">
-	<%= render 'form' %>	
+
+<div class="container-fluid">
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <div id="loading" class="alert alert-dismissable alert-info">
+        <strong>
+          <i class="fa fa-fw fa-info-circle">&nbsp;Información!</i>
+        </strong>
+        <p>
+          <i class="fa fa-spinner fa-spin"></i>
+          Espere un momento mientras se cargan las cuentas contables disponibles.
+        </p>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      </div>
+
+      <div id="error" class="alert alert-dismissable alert-danger">
+        <strong>
+          <i class="fa fa-fw fa-times">&nbsp;Error!</i>
+        </strong>
+        <p>Imposible cargar las cuentas contables</p>
+        <a href='#'>Click Aqui</a> para volver a intentarlo<p>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <div id="list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="hide" id="put_account">
-  <input type="hidden" value="put" name="_method">
-</div>
+
+<!-- ************************************************************************************* -->
+
 
 

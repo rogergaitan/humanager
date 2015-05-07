@@ -1,0 +1,42 @@
+<%- model_class = CostsCenter -%>
+
+<script type="text/javascript">
+  var centro_costos = [];
+  <% @costs_centers.each do |cc| %>
+    centro_costos.push(new Array(
+      '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>',
+      '<%=h cc.name_cc %>',
+      '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>',
+      <%= cc.id %>
+    ));
+  <% end %>
+</script>
+
+<%= javascript_include_tag 'centro_costos/sync_cc' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+
+<div class="page-heading">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="sync-cc" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <div id="list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

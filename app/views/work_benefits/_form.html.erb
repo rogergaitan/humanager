@@ -1,121 +1,268 @@
 <script type="text/javascript">
   var debit_account = [];
 	var credit_account = [];
-  <%  @debit_accounts.each do |cc| %>
-    debit_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+ 
+  <% @debit_accounts.each do |cc| %>
+    debit_account.push(new Array(
+        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+        '<%=h cc.naccount %>', 
+        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+        <%= cc.id %>,
+        <%= cc.iaccount %>
+    ));
   <% end %>
-  <%  @credit_accounts.each do |cc| %>
-    credit_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+
+  <% @credit_accounts.each do |cc| %>
+    credit_account.push(new Array(
+        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+        '<%=h cc.naccount %>', 
+        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+        <%= cc.id %>,
+        <%= cc.iaccount %>
+    ));
   <% end %>
 </script>
+
+<%= javascript_include_tag 'resources' %>
 <%= javascript_include_tag "work_benefits/work_benefits_script" %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
-<%= form_for @work_benefit, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :description, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :percentage, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :percentage, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :debit_account, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.hidden_field :debit_account %>
-      <%= text_field_tag 'load_debit_accounts', nil, :class => 'text_field required search-image-employee', :for => :debit_account %>  
-      <a id="debit-button" data-keyboard="false" data-backdrop="static" href="#accountsModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i></a>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :credit_account, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.hidden_field :credit_account %>
-      <%= text_field_tag 'load_credit_account_name', nil, :class => 'text_field required search-image-employee', :for => :credit_account %>
-			<a id="credit-button" data-keyboard="false" data-backdrop="static" href="#accountsModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i></a>
-    </div>
-  </div>
-	<div class="control-group">
-    <%= f.label :Empleados, :class => 'control-label' %>
-    <div class="controls align-radio">
-			<div class="options-left">
-	      <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
-				<%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
-				<%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
-			</div>
-			<div class="options-right">
-	      <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
-				<%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-			</div>
-			<div style="clear:both"></div>
-    </div>
-  </div>
-	<div class="controls padding-filter" id="list-departments">
-		<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
-  	<%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
-  </div>
-	<div class="controls padding-filter" id="list-superior">
-		<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
-  	<%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
-  </div>
-	<div class="controls padding-filter" id="employee-filter">
-  	<%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field required search-image-employee' %> 
-  </div>
-	<div class="controls" id="marcar-desmarcar">
-		<%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
-		<%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
-	</div>
-	<div class="controls lists">
-		<div class="employees-list left-list">
-			<div class="employees-margin" id="no-save">
-				
-        <% @employees.each do |employee| %>
-					<div class="checkbox-group">
-						<div class="checkbox-margin">
-							<%= check_box_tag 'left-list-employees', employee.id, 
-											@work_benefit.employee_ids.include?(employee.id), id: dom_id(employee) + '_left', 'data-id' => dom_id(employee), 'data-sup' => employee.employee_id, class: 'align-checkbox', 'data-dep' => employee.department_id  %>
-							<%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
-									:class => 'checkbox-label' %>
-						</div>
-				  </div>
-				<% end %>
-      
-			</div>
-		</div>
-		<div class="control-buttons">
-			<a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
-			<a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
-		</div>
-		<div class="employees-list list-right">
-			<%= hidden_field_tag 'work_benefit[employee_ids][]', nil %>
-			<div class="employees-margin" id="list-to-save">				
-			</div>
-		</div>
-		<div style="clear:both"></div>
-	</div>
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                work_benefits_path, :class => 'btn' %>
-  </div>
-<% end %>
 
-<div id="accountsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+
+    <% if @work_benefit.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@work_benefit.errors.count, "error") %> prohibited this work_benefit from being saved:</h3>
+        <% @work_benefit.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+
+        <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border' } do |f| %>
+
+          <div class="form-group">
+            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :description, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :percentage, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :percentage, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :debit_account, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <%= f.hidden_field :debit_account %>
+                <%= text_field_tag 'load_debit_accounts', nil, :class => 'form-control', 
+                    :for => :debit_account %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <a id="debit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :credit_account, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <%= f.hidden_field :credit_account %>
+                <%= text_field_tag 'load_credit_account_name', nil, :class => 'form-control', 
+                    :for => :credit_account %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <a id="credit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <%= f.hidden_field :costs_center_id %>
+                <%= text_field_tag 'load_costs_center_name', nil, :class => 'form-control', 
+                    :for => :costs_center_id %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <a id="cost-centrt-button" href="#costCenterModal" class="btn btn-default-alt" data-toggle="modal">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :is_beneficiary, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.check_box :is_beneficiary, :class => '' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :beneficiary_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :beneficiary_id, :class => 'form-control' %>
+            </div>
+          </div>
+          
+          <!-- E M P L O Y E E S -->
+          <div class="form-group" >
+            <%= f.label :Empleados, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-8">
+              <div class="checkbox icheck">
+                <label>
+                  <input type="checkbox" id="emplotee_select_all"> Seleccionar/Deseleccionar
+                </label>
+              </div>
+
+              <div class="checkbox icheck">
+                <label>
+                  <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox', :checked => true %>
+                  Todos
+                </label>
+                <label>
+                  <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+                  Jefe Inmediatos
+                </label>
+                <label>
+                  <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+                  Por Departamento
+                </label>
+              </div>
+
+              <div class="" id="list-departments" style="border-top:0px;">
+                <div class="col-sm-5" style="width: 46%; padding-bottom: 10px;padding-left: 1px;">
+                  <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+                  <%= collection_select("departments", "employees", @department, :id, :name, 
+                      {:prompt => p}, {:class => 'form-control'}) %>
+                </div>
+              </div>
+
+              <div class="" id="list-superior" style="border-top:0px;">
+                <div class="col-sm-5" style="width: 46%; padding-bottom: 10px;padding-left: 1px;">
+                  <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+                    <%= collection_select("superiors", "employees", @superior, :id, :full_name,
+                      {:prompt => p}, {:class => 'form-control'}) %>
+                </div>
+              </div>
+
+              <%= select("work_benefit", "employee_ids", 
+                options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
+                  { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
+                { include_blank: false }, 
+                {:multiple => true, :selected => @employee_ids}) %>
+            </div>
+          </div>
+          <!-- E M P L O Y E E S -->
+
+          <div class="form-group" >
+            <%= f.label :payroll_types, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-8">
+              <div class="checkbox icheck">
+                <label>
+                  <input type="checkbox" id="payroll_type_select_all"> Seleccionar/Deseleccionar
+                </label>
+              </div>
+              <%= select("work_benefit", "payroll_type_ids", options_for_select( @payroll_types.map {|p| ["#{p.description}", p.id]}, 
+                  @work_benefit.payroll_type_ids.map {|j|j} ), { include_blank: false }, {:multiple => true, :selected => @work_benefit.payroll_type_ids}) %>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit nil, :class => 'btn btn-primary' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  work_benefits_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+
+        <% end %>
+
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    <div id="list"></div>
+</div>
+
+<!-- MODALS -->
+
+<div class="modal fade" id="accountsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">Seleccione la cuenta contable</h2>
+      </div>
+      <div class="modal-body">
+        <div id="list"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
-  <div class="modal-footer">
-    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+</div>
+
+<div class="modal fade" id="costCenterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">Seleccione un Centro de costo</h2>
+      </div>
+      <div class="modal-body">
+        <!-- search -->
+        <div class="panel-body">
+          <%= form_tag :search_cost_center_work_benefits, :id => "search_cost_center_form", :class => "form-inline", :method => "get" do %>
+            <div class="row control-group search">
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= text_field_tag :cost_center_name, params[:cost_center_name], :class => "form-control",
+                  :placeholder => 'Nombre' %>
+                  <button class="btn" id="clear_task" type="button">Limpiar</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <!-- search -->
+        <div id="search_cost_center_results"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

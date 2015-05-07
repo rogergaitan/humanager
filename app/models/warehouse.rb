@@ -15,18 +15,14 @@
 class Warehouse < ActiveRecord::Base
   attr_accessible :address, :code, :description, :manager, :name
 
-  validates :code,
-    :length => { :within => 4..10 },
-    :uniqueness => { :case_sensitive => false }
+    validates :code, 
+					:presence => true, 
+					:length => { :within => 4..10 },
+					:uniqueness => { :case_sensitive => false }
 
-  validates :code, :name, :manager, :presence => true
-
-  def self.fetch
-    Rails.cache.fetch("Warehouse.all"){ find(:all, :select =>['id','name']) }
-  end
-
-  def self.clean_cache
-		Rails.cache.delete("Warehouse.all")
-	end
-
+	validates :description, 
+					:presence => true		
+					
+	validates :name, 
+					:presence => true
 end

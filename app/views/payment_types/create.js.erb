@@ -1,7 +1,0 @@
-//Update the notice message on page
-$("#messages").html('<div class="flash notice"><%= escape_javascript(flash.discard(:notice)) %></div>');
-
-//Append the content of the new price to the table
-$('table.table > tbody').append("<%= escape_javascript(render(:partial => @payment_type)) %>");
-
-$("button.close").trigger("click");

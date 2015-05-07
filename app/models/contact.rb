@@ -16,7 +16,4 @@
 class Contact < ActiveRecord::Base
   belongs_to :entity
   attr_accessible :email, :name, :occupation, :phone, :skype
-
-  #VALIDATIONS
-  #validates :name, :presence => true
 end

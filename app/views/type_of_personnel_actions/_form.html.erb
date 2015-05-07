@@ -1,39 +1,56 @@
-<%= form_for @type_of_personnel_action, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <div class="input-prepend">
-        <span class="add-on">D</span><%= f.text_field :description, :class => 'text_field' %>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+
+    <% if @type_of_personnel_action.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@type_of_personnel_action.errors.count, "error") %> prohibited this type_of_personnel_action from being saved:</h3>
+        <% @type_of_personnel_action.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @type_of_personnel_action, :html => { :class => 'form-horizontal row-border' } do |f| %>
+
+          <div class="form-group">
+            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <span class="input-group-addon">D</i></span>
+                <%= f.text_field :description, :class => 'form-control' %>
+              </div>
+            </div>
+          </div>
+          
+          <h2>Campos</h2><hr>
+
+          <% @fields_personnel.each do |fields_personnel_actions| %>
+            <div class="form-group" style='width: auto;' >
+              <%= check_box_tag 'type_of_personnel_action[fields_personnel_action_ids][]', fields_personnel_actions.id, @type_of_personnel_action.  fields_personnel_action_ids.include?(fields_personnel_actions.id), id: dom_id(fields_personnel_actions), class: 'align-checkbox', :style => 'margin-top: 0px;' %>
+              <%= label_tag dom_id(fields_personnel_actions), fields_personnel_actions.name, 
+                  :class => 'checkbox-label', :style => 'width: 143px; height: 20px; text-align: right; display: inline;' %>
+            </div>
+          <% end %>
+          
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  type_of_personnel_actions_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+
+        <% end %>
       </div>
     </div>
   </div>
-
-  <h2>Campos</h2>
-  <hr>
-
-  
-
-  <%= hidden_field_tag 'type_of_personnel_action[fields_personnel_action_ids][]', nil %>
-  
-  <% @fields_personnel.each do |fields_personnel_actions| %> 
-     
-     <div class="control-group" style='width: auto;' >
-       
-     <!-- <div class="controls" style='width: auto;' > -->
-
-        <%= check_box_tag 'type_of_personnel_action[fields_personnel_action_ids][]', fields_personnel_actions.id, @type_of_personnel_action.fields_personnel_action_ids.include?(fields_personnel_actions.id), id: dom_id(fields_personnel_actions), class: 'align-checkbox', :style => 'margin-top: 0px;' %>
-     <!-- </div> -->
-
-     <%= label_tag dom_id(fields_personnel_actions), fields_personnel_actions.name, 
-      :class => 'checkbox-label', :style => 'width: 143px; height: 20px; text-align: right; display: inline;' %>
-
-    </div>
-    
-    <% end %>
-
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                type_of_personnel_actions_path, :class => 'btn' %>
-  </div>
-<% end %>
+</div>

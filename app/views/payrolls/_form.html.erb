@@ -1,33 +1,73 @@
 <%= javascript_include_tag 'payroll/dinamic_fields' %>
-<%= form_for @payroll, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :payroll_type_id, :class => 'control-label' %>
-    <div class="controls">
-			<%= f.collection_select(:payroll_type_id, @payroll_types, :id, :description , :prompt => true) %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :start_date, :class => 'control-label' %>
-    <div class="controls">
-			<%= f.text_field :start_date, :class => 'text_field', :readonly => true %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :end_date, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :end_date, :class => 'text_field', :readonly => true %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :payment_date, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :payment_date, :class => 'text_field', :readonly => true %>
-    </div>
-  </div>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                payrolls_path, :class => 'btn' %>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+
+    <% if @payroll.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@payroll.errors.count, "error") %> prohibited this payroll from being saved:</h3>
+        <% @payroll.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @payroll, :html => { :class => 'form-horizontal row-border' } do |f| %>
+          <div class="form-group">
+            <%= f.label :payroll_type_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.collection_select(:payroll_type_id, @payroll_types, :id, :description, 
+                options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :company_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.collection_select(:company_id, @companies, :id, :name, 
+                options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :start_date, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :start_date, :class => 'form-control', :readonly => true %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :end_date, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :end_date, :class => 'form-control', :readonly => true %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :payment_date, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :payment_date, :class => 'form-control', :readonly => true %>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  cantons_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

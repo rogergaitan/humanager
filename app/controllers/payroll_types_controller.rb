@@ -1,9 +1,11 @@
 class PayrollTypesController < ApplicationController
+  load_and_authorize_resource
+  before_filter :resources, :only => [:new, :edit]
   respond_to :html, :json
   # GET /payroll_types
   # GET /payroll_types.json
   def index
-    @payroll_types = PayrollType.paginate(:page => params[:page], :per_page => 15)
+    @payroll_types = PayrollType.where(:state => 1).paginate(:page => params[:page], :per_page => 15)
     respond_with(@payroll_types)
   end
 
@@ -33,8 +35,7 @@ class PayrollTypesController < ApplicationController
 
     respond_to do |format|
       if @payroll_type.save
-
-        format.html { redirect_to @payroll_type, notice: t('activerecord.models.payroll_type.one').capitalize + t('.notice.a_successfully_created') }
+        format.html { redirect_to @payroll_type, notice: 'Payroll type was successfully created.' }
         format.json { render json: @payroll_type, status: :created, location: @payroll_type }
       else
         format.html { render action: "new" }
@@ -50,7 +51,7 @@ class PayrollTypesController < ApplicationController
 
     respond_to do |format|
       if @payroll_type.update_attributes(params[:payroll_type])
-        format.html { redirect_to @payroll_type, notice: t('activerecord.models.payroll_type.one').capitalize + t('notice.a_successfully_updated') }
+        format.html { redirect_to @payroll_type, notice: 'Payroll type was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -63,11 +64,24 @@ class PayrollTypesController < ApplicationController
   # DELETE /payroll_types/1.json
   def destroy
     @payroll_type = PayrollType.find(params[:id])
-    @payroll_type.destroy
+
+    if Payroll.find_by_payroll_type_id(params[:id]).nil?
+      @payroll_type.destroy
+      message = t('.notice.successfully_deleted')
+    else
+      #@payroll_type.state = 0
+      #@payroll_type.save
+      message = t('.notice.can_be_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to payroll_types_url, notice: t('activerecord.models.payroll_type.one').capitalize + t('notice.a_successfully_deleted') }
+      format.html { redirect_to payroll_types_url, notice: message }
       format.json { head :no_content }
     end
   end
+
+  def resources
+    @bank_accounts = LedgerAccount.bank_account
+  end
+
 end

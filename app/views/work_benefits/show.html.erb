@@ -17,11 +17,17 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               work_benefits_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_work_benefit_path(@work_benefit), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              work_benefit_path(@work_benefit),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+
+  <% if can? :update, WorkBenefit %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_work_benefit_path(@work_benefit), :class => 'btn' %>
+  <% end %>
+
+  <% if can? :destroy, WorkBenefit %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                work_benefit_path(@work_benefit),
+                :method => 'delete',
+                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                :class => 'btn btn-danger' %>
+  <% end %>
 </div>

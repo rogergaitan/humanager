@@ -1,47 +1,309 @@
-<div clas="group-menu nav-collapse">
-	<div class='btn-group pull-right'>
-		<% if user_signed_in? %>
-			<a id="user_logged" class="btn btn-info">
-				<i class="icon-globe"></i>
-				<%= session[:company_id] ? session[:company] : default_company %>
-			</a>
-			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-		    <i class="icon-user"></i>
-		    <%=current_user.email %>
-		    <span class="caret"></span>
-		  </a>
-	    <ul class="dropdown-menu">
-	  	  <li>
-	  	  	<a href="#">
-	  	  		Profile
-	  	  	</a>
-	  	 	</li>
-	      <li class="divider"></li>
-	      <li>
-	      	<%= link_to 'Cerrar Sesión', destroy_user_session_path, :method => 'delete' %>
-	      </li>
-	    </ul>
-		<% else%>	
-			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">  
-				<i class="icon-user"></i>
-				Usuario	
-				<span class="caret"></span>
-			</a>
-	  	<ul class="dropdown-menu">
-		  	<li>
-		  		<%= link_to "Iniciar Sesión", new_user_session_path %>
-		  	</li>
-		  	<li class="divider"></li>
-		  	<li>
-		  		<%= link_to "Registrarse", new_user_registration_path %>
-		  	</li>
-			</ul>
-		<%end%>
-	</div>
-	<ul class="nav pull-right">
-		<li class="divider-vertical"></li>
-	</ul>
-	<div class="navbar-search pull-right">
-		<a id="desplegar">Más</a>
-	</div>
-</div>
+<!--<div id="headerbar">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tiles tiles-brown">
+                    <div class="tiles-body">
+                        <div class="pull-left"><i class="fa fa-pencil"></i></div>
+                    </div>
+                    <div class="tiles-footer">Create Post</div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tiles tiles-grape">
+                    <div class="tiles-body">
+                    <div class="pull-left"><i class="fa fa-group"></i></div>
+                    <div class="pull-right"><span class="badge">2</span></div>
+                    </div>
+                    <div class="tiles-footer">Contacts</div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tiles tiles-primary">
+                    <div class="tiles-body">
+                        <div class="pull-left"><i class="fa fa-envelope-o"></i></div>
+                        <div class="pull-right"><span class="badge">10</span></div>
+                    </div>
+                    <div class="tiles-footer">Messages</div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tiles tiles-inverse">
+                    <div class="tiles-body">
+                        <div class="pull-left"><i class="fa fa-camera"></i></div>
+                        <div class="pull-right"><span class="badge">3</span></div>
+                    </div>
+                    <div class="tiles-footer">Gallery</div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tiles tiles-midnightblue">
+                <div class="tiles-body">
+                    <div class="pull-left"><i class="fa fa-cog"></i></div>
+                </div>
+                <div class="tiles-footer">Settings</div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tiles tiles-orange">
+                    <div class="tiles-body">
+                        <div class="pull-left"><i class="fa fa-wrench"></i></div>
+                    </div>
+                    <div class="tiles-footer">Plugins</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<header id="topnav" class="navbar navbar-fixed-top clearfix navbar-midnightblue" role="banner">
+
+    <a id="leftmenu-trigger" class="" data-toggle="tooltip" data-placement="right" title="Toggle Sidebar"></a>
+
+    <!--<a class="navbar-brand" href="index.html">HuManager</a>-->
+    <a class="" href="index.html" style="float:left;height:50px;width:210px;padding: 8px !important;font-size: 21px;">HuManager</a>
+
+    <div class="yamm navbar-left navbar-collapse collapse in">
+        <ul class="nav navbar-nav">
+
+            <li class="dropdown" id="widget-classicmenu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Configuración
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <% if can? :read, Province %>
+                        <li><a href=<%= provinces_path%>> Provincias</a></li>
+                    <% end %>
+
+                    <% if can? :read, Canton %>
+                        <li><a href=<%= cantons_path%>>Cantones</a></li>
+                    <% end %>
+
+                    <% if can? :read, District %>
+                        <li><a href=<%= districts_path%>> Distritos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Employee %>
+                        <li><a href=<%= employees_path%>> Empleados</a></li>
+                    <% end %>
+
+                    <% if can? :read, Department %>
+                        <li><a href=<%= departments_path%>> Departamentos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Position %>
+                        <li><a href=<%= positions_path%>> Puestos</a></li>
+                    <% end %>
+
+                    <% if can? :read, Task %>
+                        <li><a href=<%= tasks_path%>> Labores</a></li> 
+                    <% end %>
+
+                    <% if can? :read, Deduction %>
+                        <li><a href=<%= deductions_path%>> Deducciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, WorkBenefit %>
+                        <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, CostsCenter %>
+                        <li><a href=<%= costs_centers_path%>> Centro de Costos</a></li>
+                    <% end %>
+
+                    <% if can? :read, LedgerAccount %>
+                        <li><a href=<%= ledger_accounts_path%>> Cuentas Contables</a></li>
+                    <% end %>
+
+                    <% if can? :read, OtherSalary %>
+                        <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
+                    <% end %>
+
+                    <% if can? :read, Occupation %>
+                        <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
+                    <% end %>
+
+                    <% if can? :read, MeansOfPayment %>
+                        <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
+                    <% end %>
+
+                    <% if can? :read, PaymentFrequency %>
+                        <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
+                    <% end %>
+
+                    <% if can? :read, TypeOfPersonnelAction %>
+                        <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
+                    <% end %>
+
+                    <% if can? :read, PayrollType %>
+                        <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
+                    <% end %>
+
+                    <% if can? :read, User %>
+                        <li><a href=<%= users_path%>> Usuarios</a></li>
+                    <% end %>
+                </ul>
+            </li>
+
+            <li class="dropdown" id="widget-classicmenu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Procesos
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <% if can? :read, Payroll %>
+                        <li><a href=<%= payrolls_path%>>Planillas</a></li>
+                    <% end %>
+                    <% if can? :read, DetailPersonnelAction %>
+                        <li><a href=<%= detail_personnel_actions_path%>>Acciones de Personal</a></li>
+                    <% end %>
+                </ul>
+            </li>
+            
+            <li class="dropdown" id="widget-classicmenu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Reportes
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href=<%= reports_path %> >Comprobante Pago trabajadores</a></li>
+                    <li><a href=<%= general_payroll_reports_path %> >Comprobante General de Pago</a></li>
+                    <li><a href=<%= payment_type_report_reports_path %> >Labores por Tipo de Pago</a></li>
+                </ul>
+            </li>
+            
+        </ul>
+    </div>
+
+    <ul class="nav navbar-nav toolbar pull-right">
+        <li class="dropdown">
+            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse">&nbsp;</a>
+        </li>
+
+        <li class="dropdown">
+            <input id="global_date" type="text" class="form-control" style="margin-top: 10px;">
+            
+        </li>
+
+        <li class="dropdown toolbar-icon-bg hidden-xs">
+            <a href="#" class="hasnotifications dropdown-toggle" data-toggle='dropdown'>
+                <span class="icon-bg"><i class="fa fa-fw fa-tasks"></i></span>
+                <span class="badge badge-warning">7</span>
+            </a>
+            <div class="dropdown-menu taskprogresses arrow">
+                <div class="dd-header">
+                    <span>Tasks</span>
+                    <span><a href="#">Settings</a></span>
+                </div>
+                <ul class="scrollthis">
+                    <li>
+                        <a href="#">
+                            <div class="contextual-progress">
+                                <div class="clearfix">
+                                    <div class="progress-title">Template Styling</div>
+                                    <div class="progress-percentage">5/25</div>
+                                </div>
+                                <div class="progress progress-lg">
+                                    <div class="progress-bar progress-bar-inverse" style="width: 20%"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="contextual-progress">
+                                <div class="clearfix">
+                                    <div class="progress-title">App Development</div>
+                                    <div class="progress-percentage">3/9</div>
+                                </div>
+                                <div class="progress progress-lg progress-striped active">
+                                    <div class="progress-bar progress-bar-success" style="width: 33%"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="contextual-progress">
+                                <div class="clearfix">
+                                    <div class="progress-title">App Interface</div>
+                                    <div class="progress-percentage">15%</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-danger" style="width: 15%"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="contextual-progress">
+                                <div class="clearfix">
+                                    <div class="progress-title">Documentation</div>
+                                    <div class="progress-percentage">4/5</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-primary" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="contextual-progress">
+                                <div class="clearfix">
+                                    <div class="progress-title">eCommerce</div>
+                                    <div class="progress-percentage">6/10</div>
+                                </div>
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-warning" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="dd-footer">
+                    <a href="#">View all tasks</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+                <% if user_signed_in? %>
+                    <span class="hidden-xs">
+                        <%= current_user.name %>
+                    </span>
+                    <%= image_tag("demo/avatar/avatar_15.png", width: '100%', alt: "Dangerfield", class: "img-circle") %>
+                <% end %>
+            </a>
+            
+            <ul class="dropdown-menu userinfo">
+                <li>
+                    <a href="#">
+                        <span class="pull-left">Editar Perfil</span> 
+                        <i class="pull-right fa fa-pencil"></i>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <%= link_to destroy_user_session_path, :method => 'delete' do %>
+                        <span class="pull-left">Cerrar Sesión</span>
+                        <i class="pull-right fa fa-sign-out"></i>
+                    <% end %>
+                 </li>
+            </ul>
+        </li>
+    </ul>
+</header>

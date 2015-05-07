@@ -1,20 +1,49 @@
-<%= form_for @payment_frequency, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :description, :class => 'text_field' %>
-    </div>
-  </div>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                payment_frequencies_path, :class => 'btn' %>
+    <% if @payment_frequency.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@payment_frequency.errors.count, "error") %> prohibited this payment_frequency from being saved:</h3>
+        <% @payment_frequency.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @payment_frequency, :html => { :class => 'form-horizontal row-border' } do |f| %>
+          
+          <div class="form-group">
+            <%= f.label :name, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :name, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :description, :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                            payment_frequencies_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

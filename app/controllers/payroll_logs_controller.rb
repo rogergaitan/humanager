@@ -1,6 +1,6 @@
 class PayrollLogsController < ApplicationController
   before_filter :resources, :only => [:new, :edit]
-  respond_to :html, :json
+  respond_to :html, :json, :js
   # GET /payroll_logs
   # GET /payroll_logs.json
   def index
@@ -25,6 +25,7 @@ class PayrollLogsController < ApplicationController
   # GET /payroll_logs/1/edit
   def edit
     @payroll_log = PayrollLog.find(params[:id])
+    respond_with @result = PayrollLog.history(@payroll_log.id)
   end
 
   # POST /payroll_logs
@@ -34,8 +35,8 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.save
-        format.html { redirect_to payrolls_path, notice: t('activerecord.models.payroll_log.one').capitalize + t('.notice.a_successfully_created') }
-                format.json { render json: @payroll_log, status: :created, location: @payroll_log }
+        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully created.' }
+        format.json { render json: @payroll_log, status: :created, location: @payroll_log }
       else
         format.html { render action: "new" }
         format.json { render json: @payroll_log.errors, status: :unprocessable_entity }
@@ -50,8 +51,17 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.update_attributes(params[:payroll_log])
-        format.html { redirect_to payrolls_path, notice: t('activerecord.models.payroll_log.one').capitalize + t('.notice.a_successfully_updated') }
+        @payroll_log.payroll_total = @payroll_log.payroll_histories.sum(:total)
+        @payroll_log.save
+
+        if to_bool( params[:payroll_log]["continue_editing"] )
+          format.html { redirect_to :action => "edit", :id => @payroll_log.id }
+        end
+
+        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
         format.json { head :no_content }
+
+
       else
         format.html { render action: "edit" }
         format.json { render json: @payroll_log.errors, status: :unprocessable_entity }
@@ -78,18 +88,38 @@ class PayrollLogsController < ApplicationController
     end
   end
 
-  def fetch_employees
-    @employees = Employee.includes(:entity).order_employees
-    respond_to do |format|
-      format.json { render json: @employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} } }
-    end
-  end
-
   def resources
-    @centro_costos = CentroDeCosto.all
+    @costs_centers = CostsCenter.all
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
     @tasks = Task.all
   end
+
+  def search_task
+    @tasks = PayrollLog.search_task(params[:search_task_name], params[:page], params[:per_page])
+    respond_with @tasks
+  end
+
+  def search_cost
+    @costs = PayrollLog.search_cost(params[:search_cost_name], params[:page], params[:per_page])
+    respond_with @costs
+  end
+
+  def search_employee
+    @entities = PayrollLog.search_employee(params[:search_employee_name], params[:page], params[:per_page])
+    respond_with @entities
+  end
+
+  def delete_employee_to_payment
+
+    PayrollLog.delete_employee_to_payment(params[:employee_id], params[:payroll_history_id])
+
+    if PayrollEmployee.where("payroll_employees.employee_id = ? AND payroll_employees.payroll_history_id = ?", params[:employee_id], params[:payroll_history_id]).exists?
+      render :json => {:data => 'true'}
+    else 
+      render :json => {:data => 'false', :status => :unprocessable_entity}
+    end
+  end
+
 end

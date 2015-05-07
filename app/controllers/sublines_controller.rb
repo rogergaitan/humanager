@@ -1,28 +1,35 @@
 class SublinesController < ApplicationController
-
-  after_filter :clean_cache, :only => [:new, :edit, :destroy]
-  respond_to :json, :html
-
-
   # GET /sublines
   # GET /sublines.json
   def index
-    @sublines = Subline.paginate(:page => params[:page], :per_page => 10)
-    respond_with @sublines
+    @sublines = Subline.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @sublines }
+    end
   end
 
   # GET /sublines/1
   # GET /sublines/1.json
   def show
     @subline = Subline.find(params[:id])
-    respond_with @subline
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @subline }
+    end
   end
 
   # GET /sublines/new
   # GET /sublines/new.json
   def new
     @subline = Subline.new
-    respond_with @subline
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @subline }
+    end
   end
 
   # GET /sublines/1/edit
@@ -40,10 +47,10 @@ class SublinesController < ApplicationController
     respond_to do |format|
       if @subline.save
         if params['continue']
-          format.html { redirect_to new_subline_path, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_created') }
+          format.html { redirect_to new_subline_path, notice: 'Subline was successfully created.' }
           format.json { render json: @subline, status: :created, location: @subline }
         else
-          format.html { redirect_to @subline, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_created') }
+          format.html { redirect_to @subline, notice: 'Subline was successfully created.' }
           format.json { render json: @subline, status: :created, location: @subline }
         end
       else
@@ -60,7 +67,7 @@ class SublinesController < ApplicationController
 
     respond_to do |format|
       if @subline.update_attributes(params[:subline])
-        format.html { redirect_to @subline, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_updated') }
+        format.html { redirect_to @subline, notice: 'Subline was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -76,29 +83,19 @@ class SublinesController < ApplicationController
     @subline.destroy
 
     respond_to do |format|
-      format.html { redirect_to sublines_url, notice: t('.activerecord.models.subline').capitalize + t('.notice.a_successfully_deleted') }
+      format.html { redirect_to sublines_url }
       format.json { head :no_content }
     end
-  end
-
-  def search
-      if params[:name]
-        @sublines = Subline.search(params[:name])
-      end  
-    
-    #Rails.logger.debug @subline
-    respond_with @sublines
   end
 
   # SHORT /subline/short
   # Get All sublines including just the id and the name. 
   # We use this method on: *create* or *edit* products(dropdowns)
   def fetch
-    respond_with Subline.fetch
+    @names_ids = Subline.find(:all, :select =>['id','name']).to_json
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @names_ids }
+    end
   end
-
-  def clean_cache
-    Subline.clean_cache
-  end
-
 end

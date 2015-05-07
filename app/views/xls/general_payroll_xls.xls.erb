@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <%
+      string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
+    %>
+    <Table>
+      
+      <Row>
+        <Cell><Data ss:Type="String"><%= "#{@company.label_reports_1}" %></Data></Cell>
+        <Cell><Data ss:Type="String">Reporte General de Planilla</Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= "#{@company.label_reports_2}" %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= "#{@company.label_reports_3}" %></Data></Cell>
+      </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= string %></Data></Cell>
+      </Row>
+      <Row></Row>
+      <Row>
+        <% @data.first.each do |index, value| %>
+            <Cell><Data ss:Type="String"><%= index %></Data></Cell>
+        <% end %>
+      </Row>
+
+      <% @data.each do |array| %>
+        <Row>
+          <% count = 0 %>
+          <% array.each do |index, value| %>
+            <% if(count==0) %>
+              <Cell><Data ss:Type="String"><%= value %></Data></Cell>
+            <% else %>
+              <Cell><Data ss:Type="Number"><%= value %></Data></Cell>
+            <% end %>
+            <% count+=1 %>
+          <% end %>
+        </Row>
+      <% end %>
+      
+    </Table>
+  </Worksheet>
+
+</Workbook>

@@ -1,4 +1,5 @@
 class PositionsController < ApplicationController
+  load_and_authorize_resource
   # GET /positions
   # GET /positions.json
   def index
@@ -44,7 +45,7 @@ class PositionsController < ApplicationController
 
     respond_to do |format|
       if @position.save
-        format.html { redirect_to @position, notice: t('activerecord.models.position').capitalize + t('.notice.successfully_created') }
+        format.html { redirect_to @position, notice: 'Position was successfully created.' }
         format.json { render json: @position, status: :created, location: @position }
       else
         format.html { render action: "new" }
@@ -60,7 +61,7 @@ class PositionsController < ApplicationController
 
     respond_to do |format|
       if @position.update_attributes(params[:position])
-        format.html { redirect_to @position, notice:  t('activerecord.models.position').capitalize + t('.notice.successfully_updated') }
+        format.html { redirect_to @position, notice: 'Position was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -73,10 +74,17 @@ class PositionsController < ApplicationController
   # DELETE /positions/1.json
   def destroy
     @position = Position.find(params[:id])
-    @position.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'position')
 
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @position.destroy
+      message = t('.notice.successfully_deleted')
+    end
+    
     respond_to do |format|
-      format.html { redirect_to positions_url, notice:  t('activerecord.models.position').capitalize + t('.notice.successfully_deleted')}
+      format.html { redirect_to positions_url, notice: message }
       format.json { head :no_content }
     end
   end

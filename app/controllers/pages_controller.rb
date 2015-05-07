@@ -16,7 +16,7 @@ class PagesController < ApplicationController
   	@title = 'Contacto'
   end
 
-  def _configuracion
+    def _configuracion
     @title = 'Configuracion'
   end
 

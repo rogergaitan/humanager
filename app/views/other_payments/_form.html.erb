@@ -1,0 +1,405 @@
+<script type="text/javascript">
+  var debit_account = [];
+  <% @debit_accounts.each do |cc| %>
+    debit_account.push(new Array(
+        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+        '<%=h cc.naccount %>', 
+        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+        <%= cc.id %>,
+        <%= cc.iaccount %>
+    ));
+  <% end %>
+
+  var detailPayments = []; // Are the ids that can not be eliminated
+  var detailPaymentsHidden = []; // They are the ids that are hidden from view
+
+  <% @object.each do |id| %>
+    detailPayments.push(<%= id %>);
+  <% end %>
+
+  <% @object_hidden.each do |id| %>
+    detailPaymentsHidden.push(<%= id %>);
+  <% end %>
+</script>
+
+<%= javascript_include_tag 'resources' %>
+<%= javascript_include_tag 'other_payment/other_payments' %>
+<%= javascript_include_tag 'centro_costos/treeview' %>
+
+<%= form_for @other_payment, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+  <% if @other_payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@other_payment.errors.count, "error") %> prohibited this other_payment from being saved:</h2>
+
+      <ul>
+      <% @other_payment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :description, :class => 'text_field' %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :deduction_type, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.enum_select :deduction_type, :include_blank =>false %>
+      <a id="unicPayroll" href="#payrollModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Seleccionar planilla"> <i class="icon-list"></i> </a>
+    </div>
+    <div class="payrolls-all">
+      <%= hidden_field_tag 'other_payment[payroll_ids][]', nil %>
+      <div class="payrolls-margin" id="payrolls-to-save"></div>
+    </div>
+  </div>
+
+  <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
+  <div class="control-group" id="other_payment_payrolls">
+    <div class='controls'>
+      <%= text_field_tag 'other_payment_payroll', nil, :class => 'search-image-category'%>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :calculation_type, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.enum_select :calculation_type, :include_blank =>false %>
+    </div>
+  </div>
+
+  <div class="control-group" id="amount_exhaust_controls">
+    <%= f.label :amount, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.text_field :amount, :include_blank =>false,
+      :value => number_with_precision(f.object.amount, delimiter: ',', separator: '.', precision: 2) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :constitutes_salary, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.check_box :constitutes_salary %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :individual, :class => 'control-label' %>
+    <div class='controls'>
+      <%= f.check_box :individual %>
+    </div>
+  </div>
+
+  <div id="custom_calculation" class="control-group">
+    <%= f.label :custom_calculation, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :custom_calculation, :class => 'text_field',
+      :value => number_with_precision(f.object.custom_calculation, delimiter: ',', separator: '.', precision: 2) %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :ledger_account_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :ledger_account_id %>
+      <%= text_field_tag 'other_payment_ledger_account_name',nil, :class => 'number_field search-image-category', :for => :ledger_account_id %>
+      <a href="#ledgerAccountModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables">
+        <i class="icon-list"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :costs_center_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :costs_center_id %>
+      <%= text_field_tag 'other_payment_centro_de_costo_name',nil, :class => 'number_field search-image-category', :for => :costs_center_id %>
+      <a id="centroCostoButton" href="#centroCostoModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Ver lista de cuentas contables">
+        <i class="icon-list"></i>
+      </a>
+    </div>
+  </div>
+  
+  <!-- PAYROLL TYPES -->
+  
+  <hr></hr>
+
+  <div class="control-group">
+    <%= f.label :payroll_types, :class => 'control-label' %>
+    <div class="controls align-radio">
+      <div class="options-left">
+        <%= text_field_tag 'load_filter_payroll_types_text', nil, :class => 'text_field search-image-employee' %>
+      </div>
+      <div class="options-right">
+        <%= check_box_tag 'check-payroll-types-right', '1', true, class: 'align-checkbox' %>
+        <%= label_tag 'check-payroll-types-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+  </div>
+
+  <div class="controls" id="marcar-desmarcar-payroll-types">
+    <%= check_box_tag 'check-payroll-types', '1', false, class: 'align-checkbox' %>
+    <%= label_tag 'check-payroll-types', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+  </div>
+
+  <div class="controls lists">
+    <div class="payroll-types-list left-list">
+      <div class="payroll-types-margin" id="no-save-payroll-types">
+        <% @payroll_types.each do |payroll_type| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
+
+              <%= check_box_tag 'left-list-payroll-type', payroll_type.id, 
+                @other_payment.payroll_type_ids.include?(payroll_type.id),
+                id: dom_id(payroll_type) + '_left', 
+                'data-id' => dom_id(payroll_type), 
+                'data-sup' => payroll_type.id, 
+                class: 'align-checkbox', 'data-dep' => payroll_type.id %>
+
+              <%= label_tag dom_id(payroll_type) + '_left', "#{payroll_type.description}", 
+              :class => 'checkbox-label' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="control-buttons">
+      <a href="#" id="add-to-list-payroll-types" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+      <a href="#" id="remove-to-list-payroll-types" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+    </div>
+
+    <div class="payroll-types-list list-right">
+      <%= hidden_field_tag 'other_payment[payroll_type_ids][]', nil %>
+      <div class="employees-margin" id="list-payroll-types-to-save">        
+      </div>
+    </div>
+
+    <div style="clear:both"></div>
+  </div>
+
+
+  <!-- PAYROLL TYPES -->
+
+  <!-- EMPLOYEES -->
+
+  <div id="employee_items_one">
+    <div class="control-group">
+      <p>Aplica a:</p>
+      <%= f.label :Empleados, :class => 'control-label' %>
+      <div class="controls align-radio">
+        <div class="options-left">
+          <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox' %>
+          <%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
+          <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+          <%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
+          <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+          <%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
+        </div>
+        <div class="options-right">
+          <%= check_box_tag 'check-employees-right', '1', true, class: 'align-checkbox' %>
+          <%= label_tag 'check-employees-right', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+        </div>
+        <div style="clear:both"></div>
+      </div>
+    </div>
+
+    <div class="controls padding-filter" id="list-departments">
+      <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+      <%= collection_select("departments", "employees", @department, :id, :name , :prompt => p) %>
+    </div>
+
+    <div class="controls padding-filter" id="list-superior">
+      <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+      <%= collection_select("superiors", "employees", @superior, :id, :full_name , :prompt => p) %>
+    </div>
+
+    <div class="controls padding-filter" id="employee-filter">
+      <%= text_field_tag 'load_filter_employees_text', nil, :class => 'text_field search-image-employee' %> 
+    </div>
+
+    <div class="controls" id="marcar-desmarcar">
+      <%= check_box_tag 'check-employees', '1', false, class: 'align-checkbox' %>
+      <%= label_tag 'check-employees', 'Marcar/Desmarcar', class: 'checkbox-label' %>
+    </div>
+
+    <div class="controls lists">
+
+      <div class="employees-list left-list">
+        <div class="employees-margin" id="no-save">
+          <% @employees.each do |employee| %>
+          <div class="checkbox-group">
+            <div class="checkbox-margin">
+              <% @deduction_ids %>
+              <%= check_box_tag 'left-list-employees', employee.id, 
+                @employee_ids.include?(employee.id), 
+                id: dom_id(employee) + '_left', 
+                'data-id' => dom_id(employee), 
+                'data-sup' => employee.employee_id, 
+                class: 'align-checkbox', 'data-dep' => employee.department_id %>
+              <%= label_tag dom_id(employee) + '_left', "#{employee.entity.surname} #{employee.entity.name}", 
+              :class => 'checkbox-label' %>
+            </div>
+          </div>         
+          <% end %>
+        </div>
+      </div>
+
+      <div class="control-buttons">
+        <a href="#" id="add-to-list" class="btn btn-large button-list"><i class=" icon-arrow-right"></i></a>
+        <a href="#" id="remove-to-list" class="btn btn-large button-list"><i class=" icon-arrow-left"></i></a>
+      </div>
+
+      <div class="employees-list list-right">
+        <%= hidden_field_tag 'employee_ids', nil %>
+        <div class="employees-margin" id="list-to-save"></div>
+      </div>
+
+      <div style="clear:both"></div>
+    </div>
+  </div>
+
+  <hr></hr>
+
+  <div id="message" style="height:40px;"></div>  
+  <div id="employee_items_two">
+    <h2>Agregar Empleados</h2>
+    <table id="employee_items" class=" table table-hover table-bordered table-striped">
+      <tr class="header_items">
+        <td class="header_employee">Empleado</td>
+        <td class="header_calculation">Valor</td>
+        <td class="">
+          Agregar <%= link_to_add_fields("", f, :other_payment_employees, "icon-plus btn_plus right add-payroll-log addFields") %>
+        </td>
+        </tr>
+          <%= f.fields_for :other_payment_employees do |de| %>
+            <%= render 'forms/other_payment_employee_form', :f => de %>
+          <% end %>
+    </table>
+  </div>
+
+  <!-- EMPLOYEES -->
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>
+
+<!-- Routes -->
+<input type="hidden" id="fetch_ledger_accounts_path" value="<%= fetch_ledger_accounts_path %>">
+<input type="hidden" id="fetch_cc_costs_centers_path" value="<%= fetch_cc_costs_centers_path %>">
+<input type="hidden" id="fetch_employees_deductions_path" value="<%= fetch_employees_deductions_path %>">
+<input type="hidden" id="search_cost_center_work_benefits_path" value="<%= search_cost_center_work_benefits_path %>">
+<input type="hidden" id="search_employee_by_id_path" value="<%= search_employee_by_id_employees_path %>">
+<input type="hidden" id="search_employee_by_code_path" value="<%= search_employee_by_code_employees_path %>">
+<input type="hidden" id="search_employee_by_name_path" value="<%= search_employee_by_name_employees_path %>">
+<input type="hidden" id="load_em_employees_path" value="<%= load_em_employees_path %>">
+<input type="hidden" id="search_employee_payroll_logs_path" value="<%= search_employee_payroll_logs_path %>">
+<input type="hidden" id="fetch_payroll_type_deductions_path" value="<%= fetch_payroll_type_deductions_path %>">
+<input type="hidden" id="get_activas_payrolls_path" value="<%= get_activas_payrolls_path %>">
+
+<!-- Modals -->
+
+<!-- Ledger account Modal -->
+<div id="ledgerAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la cuenta de crédito</h3>
+  </div>
+  <div class="modal-body">
+    <div id="list"></div>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<!-- Centro de Costo Modal -->
+<div id="centroCostoModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione un Centro de costo</h3>
+  </div>
+  <div class="modal-body">
+    <div>
+      <!-- Search -->
+      <legend>  
+        <%= form_tag :search_cost_center_work_benefits, :id => "search_cost_center_form", :class => "form-search", :method => "get" do %>
+          <div class="control-group search">
+            <%= text_field_tag :cost_center_name, params[:cost_center_name], :class => "search-query", :placeholder => 'Nombre' %>
+            <button class="btn" id="clear_task" type="button">Limpiar</button>
+          </div>
+        <% end %>
+      </legend>
+      <!-- Search -->
+    </div>
+    <div id="search_cost_center_results"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<!-- Employee Modal -->
+<div id="employeeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione un Empleado</h3>
+  </div>
+  <div class="modal-body">
+    <div>
+      <!-- search -->
+      <legend>  
+        <%= form_tag :search_employee_payroll_logs, :id => "search_employee_form", :class => "form-search", :method => "get" do %>
+          <div class="control-group search">
+            <%= text_field_tag :search_name_employee_modal, params[:search_name_employee], :class => "search-query", :placeholder => 'Nombre' %>
+            <button class="btn" id="clear_employee" type="button">Limpiar</button>
+          </div>
+        <% end %>
+      </legend>
+      <!-- search -->
+    </div>
+    <div id="search_employee_results"></div>
+  </div>
+  <div class="modal-footer">
+  <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<!-- Payroll logs Modal -->
+<div id="payrollModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Seleccione la planilla</h3>
+  </div>
+  <div id="loading"> <h5><p align="center" class="h5-with-shadown">Espere un momento mientras se cargan las planillas disponibles.</p></h5>
+    <p align="center" ><%= image_tag("ajax-loader.gif") %> </p>
+  </div>
+  <div id="error">
+    <h5><p align="center" class="h5-with-shadown">Imposible cargar las planillas</p></h5>
+    <p align="center"><a href='#'>Click Aqui</a> para volver a intentarlo<p>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped" id="activas">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>Tipo de planilla</th>
+          <th>Desde</th>
+          <th>Hasta</th>
+          <th>Fecha de pago</th>
+        </tr>
+      </thead>
+    <tbody></tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button id="cerrar" class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>

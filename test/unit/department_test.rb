@@ -2,12 +2,11 @@
 #
 # Table name: departments
 #
-#  id                  :integer          not null, primary key
-#  name                :string(255)
-#  employee_id         :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  centro_de_costos_id :integer
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  employee_id :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 
 require 'test_helper'

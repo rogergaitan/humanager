@@ -1,21 +1,20 @@
-# == Schema Information
-#
-# Table name: work_benefits
-#
-#  id             :integer          not null, primary key
-#  description    :string(255)
-#  percentage     :decimal(12, 2)
-#  debit_account  :integer
-#  credit_account :integer
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#
-
 class WorkBenefit < ActiveRecord::Base
-  attr_accessible :credit_account, :debit_account, :description, :percentage, :employee_ids
+  attr_accessible :credit_account, :debit_account, :description, :percentage, :employee_ids,
+  			:payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id
   
+  has_many :payroll_type_benefits, :dependent => :destroy
+  has_many :payroll_type, :through => :payroll_type_benefits
   has_many :employee_benefits, :dependent => :destroy
   has_many :employees, :through => :employee_benefits
+  has_many :work_benefits_payments
+  
+  belongs_to :costs_center , class_name: 'CostsCenter', foreign_key: "costs_center_id"
   belongs_to :debit, class_name: 'LedgerAccount', foreign_key: "debit_account"
   belongs_to :credit, class_name: 'LedgerAccount', foreign_key: "credit_account"
+
+  def self.search_cost_center(search_cost_center_name, page, per_page = nil)
+    @cost_center = CostsCenter.where(" costs_centers.name_cc like '%#{search_cost_center_name}%' " )
+    .paginate(:page => page, :per_page => 5)
+  end
+
 end

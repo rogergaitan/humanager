@@ -1,24 +1,30 @@
-<%= javascript_include_tag "vendors/vendors.js" %>
-<%= javascript_include_tag "telephones/telephones.js" %>
+<script type="text/javascript">
+  var cantons = new Array();
+  var district = new Array();
+  <% @canton.each do |canton| %>
+    cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
+  <% end %>
+  <% @district.each do |district| %>
+    district.push(new Array(<%= district.canton_id %>, '<%=h district.name %>', <%= district.id %>));
+  <% end %>
+</script>
+
 <div class="tabbable">
-  <ul class="nav nav-tabs vendor_tabs">
+  <ul class="nav nav-tabs">
     <li class="active">
-        <a href="#tab1" class="vendor_tab" data-toggle="tab"><%=t("tabs.general")%></a>
+        <a href="#tab1" data-toggle="tab"><%=t("tabs.general")%></a>
     </li>
-    <li class="">
-      <a href="#tab2" class="vendor_tab" data-toggle="tab"><%=t("tabs.contact")%></a>
-    </li>
-    <li class="">
-      <a href="#tab3" class="vendor_tab" data-toggle="tab"><%=t("tabs.conditions")%></a>
+    <li class="disabled">
+      <a href="#tab2" data-toggle="tab"><%=t("tabs.contact")%></a>
     </li>
   </ul>
 
 <!-- Render Vendor form -->
-    <%= form_for @vendor, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
+    <%= form_for @vendor, :html => { :class => 'form-horizontal' } do |f| %>
     <div class="tab-content">
       
 <!-- Render Entity information into partial to reuse that code -->
-          <%= f.fields_for :entity, :validate => true do |ent| %>
+          <%= f.fields_for :entity do |ent| %>
 
             <div class="tab-pane active" id="tab1">
               <%= render 'forms/entity_form', :f => ent %>
@@ -31,41 +37,43 @@
               <%= ent.fields_for :addresses do |add| %>              
                 <%= render 'forms/address_form', :f => add %>
             <% end %>
-              <h3>Teléfonos <%= link_to_add_fields("Agregar teléfono", ent, :telephones, "add_fields btn btn-mini btn-success add_telephone") %></h3>
-              <div id="telephones">
-                <%= ent.fields_for :telephones, :validate => true do |pho| %>
-                    <%= render 'forms/telephone_form', :f => pho %>
-                <% end %>
-              </div>
             </div>
 
+<!-- Render Entity's phones information into partial to reuse code -->
             <div class="tab-pane" id="tab2">
-              <h2>Información de contacto <%= link_to_add_fields("Agregar contacto", ent, :contacts, "add_fields btn btn-mini btn-success add_contact") %></h2>
-              <div id="contacts">
-              <%= ent.fields_for :contacts, :validate => true do |cont| %>
-                  <%= render 'forms/contact_form', :f => cont %>
-              <% end %>
-              </div>
+
+            <%= ent.fields_for :telephones do |pho| %>
+                <%= render 'forms/telephone_form', :f => pho %>
+                
+            <% end %>
+            <%= link_to_add_fields("Agregar otro teléfono", ent, :telephones) %>
+            <div class="control-label">
+              
+            </div>
+            <%= ent.fields_for :contacts do |cont| %>
+              <br /><br />
+              <h2>Información de contacto</h2>
+                <%= render 'forms/contact_form', :f => cont %>
+            <% end %>
             </div>
 
 <!-- Render Entity's contacts information into partial to reuse code -->
             <div class="tab-pane" id="tab3">  
-              <h2>Cuentas Bancarias <%= link_to_add_fields("Agregar cuenta", ent, :bank_accounts, "add_fields btn btn-mini btn-success add_bank_account") %></h2>
-              <div id="bank_accounts">
-              <%= ent.fields_for :bank_accounts, :validate => true do |cont| %>
-                    <%= render 'forms/bank_account_form', :f => cont %>
-                  <% end %>
-                </div>
+            
             </div>
+
+<!-- Render Entity's address information -->
+            <div class="tab-pane" id="tab4">  
+            
+            </div>
+
 
     <% end %>
 
     <div class="form-actions">
           <%= f.submit nil, :class => 'btn btn-primary' %>
-          <% if !@vendor.id  %>
-            <%= f.submit :name=> 'continue',:value =>t("helpers.links.save_continue"), :class => 'btn btn-primary btn-info' %>
-          <% end %>
-          <%= link_to t('.cancel', :default => t("helpers.links.cancel")), vendors_path, :class => 'btn' %>
+          <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      vendors_path, :class => 'btn' %>
     </div>
   </div>
 </div>

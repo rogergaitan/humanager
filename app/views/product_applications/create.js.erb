@@ -1,6 +1,0 @@
-//Update the notice message on page
-$("#messages").html('<div class="flash notice"><%= escape_javascript(flash.discard(:notice)) %></div>');
-//$("div.applications ul").load('<%= escape_javascript(render(:partial => @product_application)) %>');
-$("div.applications ul").append('<%= escape_javascript(render(:partial => @product_application)) %>');
-//$("div.applications ul").append('<li><div class="btn-group"><button class="btn"><%= escape_javascript(@product_application.name)%><button class="btn remove_application"><i class="icon-remove"></i></button></button></div></li>');
-//$("div.applications ul").load();

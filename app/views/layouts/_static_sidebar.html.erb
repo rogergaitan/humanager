@@ -1,0 +1,68 @@
+<div class="static-sidebar-wrapper sidebar-midnightblue">
+    <div class="static-sidebar">
+        <div class="sidebar">
+			<div class="widget stay-on-collapse">
+				<div class="widget-body welcome-box tabular">
+					<div class="tabular-row">
+						<div class="tabular-cell welcome-avatar">
+							<a href="#"><%= image_tag("demo/avatar/avatar_15.png", class: "avatar") %></a>
+						</div>
+						<div class="tabular-cell welcome-options">
+							<span class="welcome-text">Bienvenido,</span>
+							<a href="#" class="name">
+								<% if user_signed_in? %>
+									<%= current_user.name %>
+								<% end %>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="widget stay-on-collapse" id="widget-sidebar">
+		        <span class="widget-heading">Explore</span>
+		        <nav role="navigation" class="widget-body">
+					<ul class="acc-menu">
+						<li>
+							<a href="/">
+								<i class="fa fa-home"></i>
+								<span>Panel de Control</span>
+								<span class="badge badge-dark">1</span>
+							</a>
+						</li>
+						<li>
+							<a href=<%= payrolls_path%>>
+								<i class="fa fa-folder-open"></i>
+								<span>Planillas</span>
+								<span class="badge badge-dark">1</span>
+							</a>
+						</li>
+						<li>
+							<a href=<%= employees_path%>>
+								<i class="fa fa-users"></i>
+								<span>Empleados</span>
+								<span class="badge badge-dark">1</span>
+							</a>
+						</li>
+						<li>
+							<a href=<%= deductions_path%>>
+								<i class="fa fa-sort-numeric-asc"></i>
+								<span>Deducciones</span>
+								<span class="badge badge-dark">1</span>
+							</a>
+						</li>
+						<li>
+							<a href=<%= other_payments_path%>>
+								<i class="fa fa-money"></i>
+								<span>Otros Pagos</span>
+								<span class="badge badge-dark">1</span>
+							</a>
+						</li>				
+						
+					</ul>
+				</nav>
+		    </div>
+		</div>
+    </div>
+</div>

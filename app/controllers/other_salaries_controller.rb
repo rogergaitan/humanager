@@ -1,4 +1,5 @@
 class OtherSalariesController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   before_filter :resources, :only => [:new, :edit]
   before_filter :accounts, :only => [:new, :edit]

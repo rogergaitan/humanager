@@ -9,7 +9,30 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require datepicker
  *= require_tree .
- */
  
+ *= require ../template/fonts/font-awesome/css/font-awesome.min
+ *= require ../template/css/styles
+ *= require ../template/plugins/jstree/dist/themes/avalon/style.min
+ *= require ../template/plugins/codeprettifier/prettify.min
+ *= require ../template/plugins/iCheck/skins/minimal/blue
+
+ *= require ../template/plugins/form-daterangepicker/daterangepicker-bs3
+ *= require ../template/plugins/switchery/switchery
+ *= require ../template/plugins/fullcalendar/fullcalendar
+ *= require ../template/plugins/clockface/css/clockface
+
+ *= require ../template/plugins/form-select2/select2
+ *= require ../template/plugins/form-multiselect/css/multi-select
+ *= require ../template/plugins/form-fseditor/fseditor
+ *= require ../template/plugins/form-tokenfield/bootstrap-tokenfield
+ *= require ../template/plugins/switchery/switchery
+ *= require ../template/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min
+ *= require ../template/js/jqueryui
+ *= require ../template/plugins/iCheck/skins/minimal/_all
+ *= require ../template/plugins/iCheck/skins/flat/_all
+ *= require ../template/plugins/iCheck/skins/square/_all
+ *= require ../template/plugins/card/lib/css/card
+
+ */
+

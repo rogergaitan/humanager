@@ -1,41 +1,11 @@
-# == Schema Information
-#
-# Table name: companies
-#
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  surname    :string(255)
-#  company_id :string(255)
-#  telephone  :string(255)
-#  address    :string(255)
-#  email      :string(255)
-#  web_site   :string(255)
-#  default    :boolean
-#  logo       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
+  code: 1
   name: MyString
-  surname: MyString
-  company_id: MyString
-  telephone: MyString
-  address: MyString
-  email: MyString
-  web_site: MyString
-  default: false
-  logo: MyString
+  label_reports: MyText
 
 two:
+  code: 1
   name: MyString
-  surname: MyString
-  company_id: MyString
-  telephone: MyString
-  address: MyString
-  email: MyString
-  web_site: MyString
-  default: false
-  logo: MyString
+  label_reports: MyText

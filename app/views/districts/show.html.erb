@@ -13,11 +13,15 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               districts_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_district_path(@district), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              district_path(@district),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+  <% if can? :update, District %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_district_path(@district), :class => 'btn' %>
+  <% end %>
+  <% if can? :destroy, District %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                district_path(@district),
+                :method => 'delete',
+                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                :class => 'btn btn-danger' %>
+  <% end %>
 </div>

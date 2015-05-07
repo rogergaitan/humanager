@@ -1,0 +1,32 @@
+<%- model_class = Entity -%>
+
+<div id="employees">
+  <%= will_paginate @entities, :class =>'pagination pagination-centered' %>
+  <table class="table table-striped" id="employee-data">
+    <thead>
+      <tr>
+        <th>Número de Empleado</th>
+        <th><%= model_class.human_attribute_name(:name) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @entities.empty?  %>
+        <% @entities.each do |entity| %>
+          <tr>
+            <td style="text-align: center">
+              <%= "#{entity.employee.number_employee}" %>
+            </td>
+            <td>
+              <%= link_to "#{entity.name} #{entity.surname}" %>
+              <%= hidden_field_tag "employee_id_#{entity.employee.id}", "#{entity.employee.id}" %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <div class="alert alert-block alert-error">
+          <%= t("notice.no_results") %>
+        </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>

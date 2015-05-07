@@ -1,15 +1,17 @@
 # Lines Controller
 class LinesController < ApplicationController
-  
-  after_filter :clean_cache, :only => [:new, :edit, :destroy]
-  respond_to :json, :html
   # GET /lines
   # GET /lines.json,
+  # index paginated
   def index
     @title = I18n.t('.activerecord.models.line').pluralize
-    #@lines = Line.all
+    @lines = Line.all
     @lines = Line.paginate(:page => params[:page], :per_page => 10)
-    respond_with @lines
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @lines }
+    end
   end
 
   # GET /lines/1
@@ -93,12 +95,14 @@ class LinesController < ApplicationController
     end
   end
 
+  # SHORT /lines/short
+  # Get All lines including just the id and the name. 
+  # We use this method on: create or edit products(dropdowns)
   def fetch
-    respond_with Line.fetch
+    @names_ids = Line.find(:all, :select =>['id','name']).to_json
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @names_ids }
+    end
   end
-
-  def clean_cache
-    Line.clean_cache
-  end
-
 end

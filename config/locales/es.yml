@@ -2,50 +2,35 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 es:
+  menus:
+    start: Inicio
+    configuration: Configuración
+    process: Procesos
+    reports: Reportes
+    payment_voucher_workers: Comprobante Pago trabajadores
+    general_payment_voucher: Comprobante General de Pago
+    accrued_wages_between_dates: Salarios Devengados entre Fechas
+    work_payment_type: Labores por Tipo de Pago
   hello: "Hello world"
-  'true': 'Si'
-  'false': 'No'
-  account_type:
-    asset: Activo
-    liability: Pasivo
-    equity: Patrimonio
-    income: Ingresos
-    expense: Gastos
-    cost_sale: Costo Ventas
-  typephone:
-    personal: Personal
-    home: Casa
-    work: Trabajo
-  typeid:
-    national: Nacional
-    foreign: Extranjero
-    campany: Compañia
-  price_type:
-    credit: Crédito
-    debit: Débito
-    other: Otros
-  status:
-    active: Activo
-    inactive: Inactivo
-    out_no_stock: No existente
-  purchase_type:
-    local: local
-    imported: Importado
   tabs:
     general: General
     prices: Precios
     other: Otros
-    conditions: Condiciones Comerciales
     contacts: Contactos
-    contact: Contacto
-    applications: Aplicaciones
     employment_data: Datos de empleado
+    contact: Contacto
+    iniciadas: Iniciadas
+    cerradas: Cerradas
   will_paginate:
     next_label: Siguiente
     previous_label: Anterior
     personal_data: 'Datos Personales'
     employment_data: 'Empresa'
     contact: Contacto
+  routes:
+    new: nuevo
+    edit: editar
+    users: usuario
   helpers:
     actions: Acciones 
     select:
@@ -55,29 +40,25 @@ es:
       submit: Guardar %{model}
       update: Actualizar %{model}
     links:
-      show: Información
-      index: Indice
-      search: Buscar
       destroy: Eliminar
       save_continue: Guardar y Continuar        
       edit: Editar
-      edit_price: Ver precios
+      edit_price: Editar precio
       new: Nuevo
-      news:
-        purchase_order: Nueva orden de compra
-        purchase: Nueva compra
-        quotation: Nueva cotización
-      create: Nuevo
       cancel: Cancelar  
       back: Regresar
       confirm: '¿Está seguro(a)?'
       show_accounting_info: 'Información Contable'
-      save: Guardar 
+      personnel_action: 'Accion de Personal'
+      permissions: Permisos
     titles:
       sync: datos sincronizados
-      tasksfb: datos sincronizados
+      tasksfb: 'Sincronización Completada, Datos Nuevos'
+      tasksfb_update: 'Datos Actualizados'
       edit: Editar  %{model}
       new:  Nuevo registro de %{model}
+      permissions: Administración de Permisos | %{model}
+      proof_payment_salary: Comprobante de Pago de Salario
   notice:
     successfully_created:  ' creado exitosamente'
     successfully_updated:  ' actualizado exitosamente'
@@ -85,329 +66,33 @@ es:
     a_successfully_deleted: ' eliminada correctamente'
     a_successfully_created: ' creada correctamente'
     a_successfully_updated: ' actualizada correctamente'
-  dictionary:
-    blank: &BLANK "Este campo no puede quedar en blanco"
-    required: &REQUIRED "Campo requerido"
-    greater_than: &GREATER_THAN "Mayor a %{count}"
-    less_than_or_equal_to: &LESS_THAN_OR_EQUAL_TO "Menor o igual a %{count}"
-    not_a_number: &NOT_A_NUMBER "Solo números"
-    less_than: &LESS_THAN "Menor a %{count}"
+    a_unsuccessfully_updated: ' actualizada incorrectamente'
+    no_results: 'No se encontraron resultados'
+    can_be_deleted: "El Registro no es puede eliminar pues ya ha sido utilizado en la base de datos"
   content:
     titles: 
       tools: Herramientas
       messages: Mensajes
       home: Inicio
       other: Otros
-      create_sub_account: Nueva Sub-Cuenta
+      messages_general: Mensaje General
   activerecord:
       errors:
         models:
-          occupation:
+          employee:
             attributes:
-              description:
-                blank: *BLANK
-                taken: 'Está ocupación ya existe'
-          ledger_account:
+              number_employee:
+                taken: 'Este número ya existe'
+          payroll:
             attributes:
-              account_type:
-                blank: *BLANK
-              naccount:
-                blank: *BLANK
-              iaccount:
-                blank: *BLANK
-                taken: "Ya existe un registro con este código"
-          invoice:
-            attributes:
-              invoice_items:
-                blank: "Debe existir al menos un ítem"
-              customer_name:
-                blank: *BLANK
-              total:
-                blank: *BLANK
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              quotation_id:
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-          invoice_item:
-            attributes:
-              warehouse_id:
-                blank: *REQUIRED
-              code:
-                blank: *REQUIRED
-              description:
-                blank: *REQUIRED
-              cost_unit:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              total:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              discount:
-                greater_than: *GREATER_THAN
-                less_than: *LESS_THAN
-                not_a_number: *NOT_A_NUMBER
-              ordered_quantity:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              quantity:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-          quotation_item:
-            attributes:
-              code:
-                blank: *REQUIRED
-              description:
-                blank: *REQUIRED
-              quantity:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              unit_price:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              discount:
-                not_a_number: *NOT_A_NUMBER
-                less_than: *LESS_THAN
-                greater_than: *GREATER_THAN
-              tax:
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-              total:
-                blank: *REQUIRED
-          quotation:
-            attributes:
-              customer_name:
-                blank: *BLANK
-          document_number:
-            attributes:
-              start_number:
-                blank: *BLANK
-              document_type:
-                taken: "Ya existe un registro con el elemento seleccionado"
-          purchase_order_payment:
-            attributes:
-              payment_option_id:
-                blank: *BLANK
-              payment_type_id:
-                blank: *BLANK
-              number:
-                blank: *REQUIRED
-              amount:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-          kardex:
-            attributes:
-              code:
-                blank: *BLANK
-              cost_total:
-                blank: *BLANK
-              cost_unit:
-                blank: *BLANK
-              current_user:
-                blank: *BLANK
-              doc_number:
-                blank: *BLANK
-              doc_type:
-                blank: *BLANK
-              mov_date:
-                blank: *BLANK
-              mov_id:
-                blank: *BLANK
-              mov_type:
-                blank: *BLANK
-              quantity:
-                blank:  *BLANK
-              entity_id:
-                blank: *BLANK
-              company_id:
-                blank: *BLANK
-          company:
-            attributes:
-              name:
-                blank: *BLANK
-              surname:
-                blank: *BLANK
-              company_id:
-                blank: *BLANK
-              telephone:
-                blank: *BLANK
-              address:
-                blank: *BLANK
-          contact:
-            attributes:
-              name:
-                blank: *BLANK
-          discount_profile_item:
-            attributes:
-              name:
-                blank: *BLANK
-              item_id:
-                blank: *BLANK
-              discount:
-                blank: *REQUIRED
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-                less_than_or_equal_to: *LESS_THAN_OR_EQUAL_TO
-          discount_profile:
-            attributes:
-              description:
-                blank: *BLANK
-          taxis:
-            attributes:
-              name:
-                blank: *BLANK
-              percentage:
-                blank: *BLANK
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-                less_than_or_equal_to: *LESS_THAN_OR_EQUAL_TO
-              cc_id:
-                blank: *BLANK
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-          cost_center:
-            attributes:
-              code:
-                blank: *BLANK
-              description:
-                blank: *BLANK
-          product_application:
-            attributes:
-              name:
-                blank: *BLANK
-                taken: "La aplicación ya existe en el sistema"
-              product_id:
-                blank: *BLANK
-          purchase_payment_option:
-            attributes:
-              number:
-                blank: *BLANK
-              amount:
-                blank: *BLANK
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER
-              payment_option_id:
-                blank: *BLANK
-              payment_type_id:
-                blank: *BLANK
-          payment_type:
-            attributes:
-              name:
-                blank: *BLANK
-                taken: "Este tipo de pago ya existe"
-          payment_option:
-            attributes:
-              name:
-                blank: *BLANK
-              related_account:
-                blank: *BLANK
-              use_expenses:
-                blank: *BLANK
-              use_incomes:
-                blank: *BLANK
-              require_transaction:
-                blank: *BLANK
-          purchase_item:
-            attributes:
-              code:
-                blank: *REQUIRED
-              warehouse_id:
-                blank: *REQUIRED
-              discount:
-                blank: *REQUIRED
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER
-                less_than: "Menor a %{count}" 
-              product_id:
-                blank: *REQUIRED
-              description:
-                blank: *REQUIRED
-              quantity:
-                blank: *REQUIRED
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER  
-              cost_unit:
-                blank: *REQUIRED
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER  
-              cost_total:
-                blank: *REQUIRED
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER  
-          purchase:
-            attributes:
-              vendor_name:
-                blank: *BLANK
-              vendor_id:
-                blank: *BLANK
-              document_number:
-                blank: *BLANK
-              vendor_id:
-                blank: *BLANK
-              purchase_date:
-                blank: *BLANK
-          shipping_method:
-            attributes:
-              name:
-                blank: *BLANK
-          items_purchase_order:
-            attributes:
-              product:
-                blank:  *REQUIRED
-              description:
-                blank:  *REQUIRED
-              quantity:
-                blank:  *REQUIRED
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER
-              warehouse_id:
-                blank: *REQUIRED
-              cost_unit:
-                blank:  *REQUIRED
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER
-              cost_total:
-                not_a_number: *NOT_A_NUMBER
-                greater_than: *GREATER_THAN
-                blank:  *REQUIRED
-              discount:
-                greater_than: *GREATER_THAN
-                not_a_number: *NOT_A_NUMBER
-                less_than: *LESS_THAN
-          purchase_order:
-            attributes:
-              document_date:
-                blank: *BLANK
-              vendor_name:
-                blank: *BLANK
-              delivery_date:
-                blank: *BLANK
-              reference_info:
-                blank: *BLANK
-              vendor_text:
-                blank: *BLANK
-          entity:
-            attributes:
-              entityid:
-                blank: *BLANK
-                taken: "La entidad ya se encuentra en el sistema"
-              name:
-                blank: *BLANK
-              surname:
-                blank: *BLANK
-          product_pricing:
-            attributes:
-              utility: 
-                blank: *BLANK
-              sell_price:
-                blank: *BLANK
+              start_date:
+                blank: Este campo no puede quedar en blanco
+              end_date:
+                blank: Este campo no puede quedar en blanco
+              payment_date:
+                blank: Este campo no puede quedar en blanco
+              payroll_type_id:
+                blank: Por favor seleccionar alguna de las opciones
           payroll_type:
             attributes:
               description:
@@ -433,6 +118,20 @@ es:
                 taken: 'Este código ya existe'
               employee_id:
                 blank: Este campo no puede quedar en blanco
+          user:
+            attributes:
+              name:
+                blank: Este campo no puede quedar en blanco
+              username:
+                blank: Este campo no puede quedar en blanco
+                too_short: Nombre demasiado corto
+              email:
+                blank: Este campo no puede quedar en blanco
+                invalid: Formato de email incorrecto
+              password:
+                blank: Este campo no puede quedar en blanco
+                confirmation: Las Contraseñas no coinciden
+                too_short: Contraseña demasiado corta
           product:
             attributes:
               code:
@@ -443,6 +142,8 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
               part_number:
+                blank: Este campo no puede quedar en blanco
+              name: 
                 blank: Este campo no puede quedar en blanco
               make:
                 blank: Este campo no puede quedar en blanco
@@ -458,16 +159,6 @@ es:
                 blank: Este campo no puede quedar en blanco
               product_subline:
                 blank: Este campo no puede quedar en blanco
-              max_discount:
-                not_a_number: *NOT_A_NUMBER
-              max_cant:
-                not_a_number: *NOT_A_NUMBER
-              min_cant:
-                not_a_number: *NOT_A_NUMBER
-              market_price:
-                not_a_number: *NOT_A_NUMBER
-              stock:
-                not_a_number: *NOT_A_NUMBER
           line:
             attributes:
               code:
@@ -475,39 +166,60 @@ es:
                 too_long: Código demasiado largo
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
               name:
                 blank: Este campo no puede quedar en blanco
+              description:
+                blank: Este campo no puede quedar en blanco
               income:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               inventory:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               lost_adjustment:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
+              name:
+                blank: Este campo no puede quedar en blanco
               purchase_return:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               purchase_tax:
-                not_a_number: *NOT_A_NUMBER
-                blank: *BLANK
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               sale_cost:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               sale_tax:
-                not_a_number: *NOT_A_NUMBER
-                blank: *BLANK
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               sales_return:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
               utility_adjusment:
-                not_a_number: *NOT_A_NUMBER
+                blank: Este campo no puede quedar en blanco
+                not_a_number: 'Este campo solo puede contener números'
+                greater_than: 'El valor especificado debe ser mayor a %{count}.'
           warehouse:
             attributes:
               code:
                 too_short: Código demasiado corto
                 too_long: Código demasiado largo
-                blank: *BLANK
+                blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
+              description:
+                blank: Este campo no puede quedar en blanco
               name:
-                blank: *BLANK
-              manager:
-                blank: *BLANK
+                blank: Este campo no puede quedar en blanco
           subline:
             attributes:
               code:
@@ -560,29 +272,17 @@ es:
             attributes:
               calculation:
                 blank: Este campo no puede quedar en blanco
+          other_payment:
+            attributes:
+              payrolls:
+                invalid: Invalido
+              other_payment:
+                blank: Este campo no puede quedar en blanco
+                invalid: Formato incorrecto
       models:
-        configuration:
-          one: Configuración
-          other: Configuraciones
-        invoice: Factura
-        quotation:
-          one: Cotización
-          other: Cotizaciones
-        description: Descripción
-        document_number: Número Documento
-        company: Compañía
-        discount_profile_item: Artículos del Perfil de Descuento
-        discount_profile: Perfil de Descuento
-        taxis: Impuesto
-        cost_center: Centro de Costo
-        payment_type: Tipo de Pago
-        payment_option: "Opción de Pago"
-        product_application: Aplicaciones
-        purchase_item: Items de compra
-        purchase: Compra
-        shipping_method: "Método de envío"
-        purchase_order: Orden de compra
-        bank_account: Cuenta Bancaria
+        detail_personnel_action:
+          one: Accion de Personal
+          other: Acciones de Personal
         work_benefit:
           one: Prestación
           other: Prestaciones
@@ -591,7 +291,7 @@ es:
         payroll_type:
           one: Tipo de planilla
           other: Tipos de planillas
-        centro_de_costo: Centro De Costos
+        costs_center: Centro De Costos
         position: Puesto
         role:
           one: Rol
@@ -599,14 +299,13 @@ es:
         department: Departamento
         customer: Cliente
         vendor: Proveedor
-        vendors: Proveedores
         entity: Entidad
         employee: Empleado
         product_pricing: Precio
         product: Producto
         line: Línea
-        payment_schedule: 'Calendario de pagos'
-        telephone: 'Teléfono'
+        payment_schedule: Calendario de pagos
+        telephone: Teléfono
         employee: Empleado
         entity: Entidad
         warehouse:  Bodega
@@ -614,11 +313,10 @@ es:
         user: Usuario
         subline: Sub-Línea
         category: Categoría
-        province: Provincia
+        province: Provincias
         district: Distrito
-        canton: 
-          one: Cantones
-          other: Cantón
+        canton: Cantones
+        company: Compañias
         task: 
           one: Labor
           other: Labores
@@ -629,6 +327,7 @@ es:
           one: Tipo Acción Personal
           other: Tipos Acciones Personal
         payroll: Planilla
+        costs_center: Centro de Costos
         work_benefit: 
           one: Prestación
           other: Prestaciones
@@ -647,122 +346,17 @@ es:
         payroll_log:
           one: planilla
           other: Registro de planillas
+        other_payment: Otros Pagos
       attributes:
-        invoice_item:
-          warehouse_id: Bodega
-          code: Código
-          description: Descripción
-          ordered_quantity: Cantidad Ordenada
-          available_quantity: Cantidad Disponible
-          quantity_sale: Cantidad Vender
-          unit_price: Precio Unitario
-          discount: Descuento
-          tax: Impuesto
-          total: Total
-        invoice:
-          customer_name: Cliente
-          customer_id: Cliente
-          document_number: Número
-          document_date: Fecha
-          currency: Moneda
-          price_list: Lista Precio
-          payment_term: Termino Pago
-          due_date: Fecha expira
-          quotation_id: Cotización
-          closed: Cerrada
-          sub_total_free: Sub-Total exento
-          sub_total_taxed: Sub-Total gravado
-          discount_total: Total Descuento
-          tax_total: Impueto Total
-          total: Total
-        quotation_item:
-          warehouse_id: Bodega
-          code: Código
-          description: Descripción
-          quantity: Cantidad
-          unit_price: Precio Unitario
-          discount: Descuento
-          tax: Impuesto
-          total: Total
-        quotation:
-          customer_name: Cliente #attr_accessor
-          document_number: Número
-          customer_id: Cliente
-          currency: Moneda
-          document_date: Fecha
-          valid_to: Valido hasta
-          payment_term: Término de pago
-          sub_total_free: Sub-Total exento
-          sub_total_taxed: Sub-Total gravado
-          tax_total: Impuesto total
-          discount_total: Descuento total
-          total: Total
-          notes: Observaciones
-        document_number:
-          company_id: Compañia
-          description: Descripción
-          document_type: Tipo Documento
-          number_type: Tipo Número
-          start_number: Número inicio
-          mask: Máscara
-          terminal_restriction: Restricción
-        purchase_order_payment:
-          payment_option_id: Método
-          payment_type_id: Tipo
-          number: Número
-          amount: Monto
-        company:
-          name: Nombre / Razón social
-          surname: Nombre comercial
-          company_id: Identificación
-          telephone: Teléfono
-          address: Dirección
-          email: Correo electrónico
-          web_site: Página web
-          logo: Logotipo
-          default: Usar siempre
-        discount_profile_item:
-          name: Nombre
-          item_type: Tipo de producto
-          item_types:
-            product: Producto
-            subline: Sub-Línea
-          item_id: Item ID
-          discount: Descuento
-        discount_profile:
-          description: Descripción
-          category: Categoría
-          categories:
-            a: A
-            b: B
-            c: C
-        taxis:
-          name: Nombre
-          percentage: Porcentaje
-          cc_id: Cuenta contable
-        cost_center:
-          code: Codigo
-          description: Descripción
-          employee_id: Empleado
-        purchase_payment_option:
-          payment_option_id: Método
-          payment_type_id: Tipo
-          number: Número
-          amount: Cantidad
-        payment_type:
-          id: Identificación
-          name: Descripción
-        payment_option:
-          name: Nombre
-          related_account: Cuenta relacionada
-          use_expenses: En gastos
-          use_incomes: En ingresos
-          require_transaction: Requiere Transacción
         work_benefit:
           description: Descripción
           percentage: Porcentaje
           debit_account: Cuenta de Débito
           credit_account: Cuenta de Crédito
+          is_beneficiary: Es Beneficiario
+          beneficiary_id: Beneficiario
+          costs_center_id: Centro de Costo
+          payroll_types: Tipos de planillas
         payment_method: 
           name: Nombre
           description: Descripción
@@ -775,102 +369,39 @@ es:
         payroll_type:
           description: Descripción
           payroll_type: Tipo de planilla
-        centro_de_costo:
-          iempresa: Empresa
-          icentro_costo: Id Centro de Costos
-          nombre_cc: Nombre
-          icc_padre: Padre
+          cod_doc_payroll_support: Cod Doc Soporte Planilla
+          mask_doc_payroll_support: Mascara Doc Soporte Planilla
+          cod_doc_accounting_support_mov: Cod Doc Soporte Mov Contable
+          mask_doc_accounting_support_mov: Mascara Doc Soporte Mov Contable
+          ledger_account_id: Cuenta Banco o CXP
+        costs_center:
+          icompany: Empresa
+          icost_center: Id Centro de Costos
+          name_cc: Nombre
+          icc_father: Padre
         email:
           typeemail: Tipo de email
         position:
           position: Puesto
           description: Descripción
-          codigo_ins: Código INS
-          codigo_ccss: Código CCSS
+        occupation:
+          description: Descripción
+          ins_code: Código INS
+          ccss_code: Código CCSS
         role:
           role: Rol
           description: 'Descripción'
         department:
           name: Departamento
           employee_id: Encargado
+          costs_center_id: Centro de Costo
         vendor:
           credit_limit: Crédito
         entity:
           name: Nombre
-          related_account: Cuenta relacionada
-          use_expenses: "¿En gastos?"
-          use_incomes: "¿En ingresos?"
-          require_transaction: Requiere Transacción
-        purchase_item:
-          warehouse_id: Bodega
-          discount: Descuento
-          product_id: Producto
-          description: Descripción
-          quantity: Cantidad
-          cost_unit: Costo Unitario
-          cost_total: Costo Total
-          tax: Impuesto
-        purchase:
-          vendor_name: Proveedor #THIS IS A VIRTUAL ATTRIBUTE
-          document_number: Número
-          vendor_id: Proveedor
-          completed: Completada
-          purchase_date: Fecha
-          currency: Moneda
-          subtotal: Sub-total
-          taxes: Impuestos
-          total: Total
-          purchase_type: Tipo
-          purchase_types:
-            local: local
-            imported: Importada
-          dai_tax: DAI
-          isc_tax: ISC
-        shipping_method:
-          name: Nombre
-          description: Descripción
-        purchase_order:
-          document_number: Número
-          document_date: Fecha
-          vendor_id: Proveedor
-          reference_info: Referencia
-          currency: Moneda
-          observation: Observaciones
-          subtotal: Subtotal
-          taxes: Impuestos
-          total: Total
-          delivery_date: Fecha de entrega
-          shipping_type: Forma de envío
-          created_at: Fecha
-        items_purchase_order:
-          tax: Impuesto
-          product: Producto
-          quantity: Cantidad
-          cost_unit: Costo Unit
-          warehouse_id: Bodega
-          discount: Descuento
-          description: Descripción
-        address:
-          province_id: Provincia
-          canton_id: Canton
-          district_id: Distrito
-          address: Dirección
-        contact:
-          name: Nombre
-          occupation: Ocupación
-          phone: 'Teléfono'
-          email: Correo
-          skype: Skype
-        customer:
-          asigned_seller: Vendedor asignado
-          customer_profile_id: Perfil del cliente
-        bank_account:
-          bank: Banco
-          bank_account: Cuenta
-          sinpe: Sinpe
-          account_title: 'A nombre de'
-        vendor:
-          credit_limit: 'Límite Crédito'
+          surname: Apellidos
+          entityid: Cédula
+          typeid: Tipo cédula
         employee:
           join_date: Fecha ingreso
         product_pricing:
@@ -922,6 +453,9 @@ es:
           end_date: 'Hasta'
           payment_date: 'Fecha del pago'
         employee:
+          id: Cédula
+          name: Nombre
+          surname: Apellido
           employee_id: Jefe Inmediato
           entity_id: Entidad
           join_date: Ingreso
@@ -939,12 +473,17 @@ es:
           role_id: Rol
           social_insurance: Seguro Social
           spouse: 'Cónyuge'
-          wage_payment: Salario
+          wage_payment: Precio Unidad de Pago
           position_id: Puesto
+          price_defined_work: Precio definido en Labor
+          payment_unit_id: Unidad de Pago
+          payroll_type_id: Tipo de Planilla Predeterminada
+          number_employee: Número de Empleado
+          account_bncr: Cuenta BNCR
         entity:
-          name: 'Nombre o Razón Social'
-          surname: Nombre Comercial
-          entityid: 'Identificación'
+          name: Nombre
+          surname: Apellidos
+          entityid: 'Cédula'
           typeid: 'Tipo Identificación'
         category:
           code: Código
@@ -961,58 +500,86 @@ es:
           manager:  Responsable
           address: Dirección
         province:
-          name: Nombre   
           province: Provincia
         canton:
           canton: Cantón
-          name: Nombre   
           province_id: Provincia
+        company:
+          code: Código
+          name: Nombre
+          label_reports_1: Rotulo en Reportes 1
+          label_reports_2: Rotulo en Reportes 2
+          label_reports_3: Rotulo en Reportes 3
         district:
           district: Distrito
-          name: Nombre   
           canton_id: Cantón
         task:
+          iactivity: Actividad
           itask: Codigo
           ntask: Descripción
           mlaborcost: Costo Labor
           iaccount: Cuenta
+          nunidad: Unidad
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  
-          ifather: Cuenta Padre
-          account_type: Tipo Cuenta
-          cost_center: Centro Costo
-          foreign_currency: Moneda Extrangera
-          request_entity: Entidad       
+          ifather: Cuenta Padre       
         other_salary:
           code: Codigo
           description: Descripción
           ledger_account_id: Cuenta Contable
           amount: Monto
         user:
+          username: Usuario
+          name: Nombre
+          email: Correo
+          password: Contraseña
+          password_confirmation: Confirmación de Contraseña
+          current_password: Contraseña actual
+          remember_me: Recordarme
           login:
         type_of_personnel_action:
           description: Descripción
           created_at: Creado
+        deduction_employee:
+          calculation: Valor
         deduction:
           description: Descripción
-          deduction_type: Tipo deducción
+          deduction_type: Tipo de deducción
           amount_exhaust: Monto a agotar
           calculation_type: Tipo de calculo
-          calculation: Valor
+          custom_calculation: Valor
           ledger_account_id: Cuenta de Crédito
+          is_beneficiary: El empleado es Beneficiario?
+          beneficiary_id: Beneficiario
+          payroll_types: Tipos de planillas
+          individual: Individual
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde
           end_date: Hasta
           payment_date: Fecha de pago
           state: Cerrar
+          num_oper: Numero de Operación
+          company_id: Compañia
         payroll_log:
           date: Fecha
           time_worked: Tiempo trabajado
           task_id: Tarea
           payment_type: Tipo de Pago
           payroll_id: Planilla
+          payroll_date: Fecha
+        other_payment:
+          description: Descripción
+          deduction_type: Tipo de deducción
+          calculation_type: Tipo de calculo
+          amount: Monto a agotar
+          constitutes_salary: Constituye Salario
+          individual: Individual
+          ledger_account_id: Cuenta Debito
+          costs_center_id: Centro de Costo
+          payroll_types: Tipos de planillas
+          custom_calculation: Valor
   date:
       abbr_day_names:
       - dom
@@ -1066,4 +633,5 @@ es:
       - :day
       - :month
       - :year
+
 

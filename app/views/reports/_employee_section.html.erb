@@ -1,0 +1,48 @@
+<!-- E M P L O Y E E S -->
+<div class="row">
+	<div class="col-xs-12">
+	  <div class="panel panel-default">
+			<div class="panel-heading"><h2>Empleados</h2></div>
+			<div class="panel-body">
+				<div class="form-group">
+					<div class="col-sm-12">
+				        <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox', :checked => true %>
+				        <%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
+				        <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+				        <%= label_tag 'select_method_boss', "Jefe Inmediato", class: 'checkbox-label' %>
+				        <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+				    	<%= label_tag 'select_method_department', "Por Departamento", class: 'checkbox-label' %>
+				    </div>
+				</div>
+				
+				<div class="form-group" id="list-departments">
+					<div class="col-sm-5" style="width: 46%; padding-bottom: 10px;">
+						<% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+						<%= collection_select("departments", "employees", @department, :id, :name, 
+								{:prompt => p}, {:class => 'form-control'}) %>
+					</div>
+				</div>
+				
+				<div class="form-group" id="list-superior">
+					<div class="col-sm-5" style="width: 46%; padding-bottom: 10px;">
+						<% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+					    <%= collection_select("superiors", "employees", @superior, :id, :full_name,
+					    	{:prompt => p}, {:class => 'form-control'}) %>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-12">
+					<%= select("deduction", "employee_ids", 
+						options_for_select( @employees.map {|e| ["#{e.entity.surname} #{e.entity.name}", e.id, 
+							{ 'data-id' => dom_id(e), 'data-sup' => e.employee_id, 'data-dep' => e.department_id } ]}), 
+						{ include_blank: false }, 
+						{:class => 'form-control required', :multiple => true}) %>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- E M P L O Y E E S -->

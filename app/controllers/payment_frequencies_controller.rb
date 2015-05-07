@@ -1,4 +1,5 @@
 class PaymentFrequenciesController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
   # GET /payment_frequencies
   # GET /payment_frequencies.json
@@ -62,10 +63,17 @@ class PaymentFrequenciesController < ApplicationController
   # DELETE /payment_frequencies/1.json
   def destroy
     @payment_frequency = PaymentFrequency.find(params[:id])
-    @payment_frequency.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'payment_frequency')
+
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @payment_frequency.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to payment_frequencies_url }
+      format.html { redirect_to payment_frequencies_url, notice: message }
       format.json { head :no_content }
     end
   end

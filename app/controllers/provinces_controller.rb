@@ -1,9 +1,7 @@
 class ProvincesController < ApplicationController
-  
-  after_filter :clean_cache, :only => [:new, :edit, :destroy]
-  before_filter :get_province, :only => [:edit, :update, :destroy]
-  
+  load_and_authorize_resource
   respond_to :html, :json
+  before_filter :get_province, :only => [:edit, :update, :destroy]
 
   def get_province
     @province = Province.find(params[:id])
@@ -41,7 +39,7 @@ class ProvincesController < ApplicationController
 
     respond_to do |format|
       if @province.save
-        format.html { redirect_to @province, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_created') }
+        format.html { redirect_to @province, notice: 'Province was successfully created.' }
         format.json { render json: @province, status: :created, location: @province }
       else
         format.html { render action: "new" }
@@ -55,7 +53,7 @@ class ProvincesController < ApplicationController
   def update
     respond_to do |format|
       if @province.update_attributes(params[:province])
-        format.html { redirect_to @province, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_updated') }
+        format.html { redirect_to @province, notice: 'Province was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -67,19 +65,20 @@ class ProvincesController < ApplicationController
   # DELETE /provinces/1
   # DELETE /provinces/1.json
   def destroy
-    @province.destroy
+
+    @province = Province.find(params[:id])
+    @result = Entity.check_if_exist_addresses(params[:id], "province")
+
+    if @result > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @province.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to provinces_url, notice: t('.activerecord.models.province').capitalize + t('.notice.a_successfully_deleted') }
+      format.html { redirect_to provinces_url, notice: message }
       format.json { head :no_content }
     end
-  end
-
-  def fetch
-    respond_with @province = Province.fetch
-  end
-  
-  def clean_cache
-    Province.clean_cache
   end
 end

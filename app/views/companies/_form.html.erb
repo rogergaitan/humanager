@@ -1,62 +1,74 @@
-<%= form_for @company, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :surname, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :surname, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :company_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :company_id, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :telephone, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :telephone, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :address, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :address, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :email, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :email, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :web_site, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :web_site, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :default, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.check_box :default, :class => 'check_box' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :logo, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :logo, :class => 'text_field' %>
-    </div>
-  </div>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                companies_path, :class => 'btn' %>
+    <% if @company.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@company.errors.count, "error") %> prohibited this company from being saved:</h3>
+        <% @company.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for(@company, :html => {:class => "form-horizontal row-border"}) do |f| %>
+
+          <div class="form-group">
+            <%= f.label :code, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :code, :class => 'form-control', readonly: "true" %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= f.label :name %></label>
+            <div class="col-sm-3">
+              <%= f.text_field :name, :class => 'form-control', readonly: "true" %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= f.label :label_reports_1 %></label>
+            <div class="col-sm-3">
+              <%= f.text_area :label_reports_1, :class => 'form-control', size: "24x2", 
+                :maxlength => 30, :placeholder => "max 30 characters here"  %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= f.label :label_reports_2 %></label>
+            <div class="col-sm-3">
+              <%= f.text_area :label_reports_2, :class => 'form-control', size: "24x2", 
+                :maxlength => 30, :placeholder => "max 30 characters here"  %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= f.label :label_reports_3 %></label>
+            <div class="col-sm-3">
+              <%= f.text_area :label_reports_3, :class => 'form-control', size: "24x2", 
+                :maxlength => 30, :placeholder => "max 30 characters here"  %>
+            </div>
+          </div>
+          
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  companies_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
   </div>
-<% end %>
+</div>

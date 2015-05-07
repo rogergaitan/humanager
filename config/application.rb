@@ -2,12 +2,13 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'csv'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  #Bundler.require(*Rails.groups(:assets => %w(development test)))
   # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
+  Bundler.require(:default, :assets, Rails.env)
 end
 
 CONSTANTS = YAML.load(File.read(File.expand_path('../constants.yml', __FILE__)))
@@ -64,7 +65,6 @@ module Reasapp
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.exceptions_app = self.routes
-    config.autoload_paths += Dir["#{config.root}/lib/pdfs/"]
-    config.autoload_paths += Dir["#{config.root}/lib/"]
+    config.assets.paths << Rails.root.join("template")
   end
 end

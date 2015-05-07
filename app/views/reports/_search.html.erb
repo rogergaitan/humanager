@@ -1,0 +1,42 @@
+<!-- S E A R C H   P A Y R O L L S -->
+<%= javascript_include_tag 'reports/functions' %>
+<div class="row">
+	<div class="col-xs-12">
+	  <div class="panel panel-default">
+			<div class="panel-heading"><h2>Buscar Planilla</h2></div>
+			<div class="panel-body">
+				<%= form_tag :search_payrolls_reports, :id => "search_payrolls_form", :class => "form-inline", :method => "get" do %>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<%= text_field_tag 'start_date', '', :class => 'form-control', :readonly => true, :placeholder => 'Desde' %>
+							</div>
+							<div class="form-group">
+								<%= text_field_tag 'end_date', '', :class => 'form-control', :readonly => true, :placeholder => 'Hasta'  %>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-default" id="search_payrolls" type="button">Buscar</button>
+							</div>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div id="payrolls_results"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- S E A R C H   P A Y R O L L S -->
+
+<%= render "employee_section" %>
+
+<%= render "company_section" %>

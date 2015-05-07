@@ -5,7 +5,8 @@ class CreateTasks < ActiveRecord::Migration
       t.string :itask
       t.string :ntask
       t.string :iaccount
-      t.decimal :mlaborcost, :precision => 18, :scale => 4
+      t.decimal :mlaborcost, :precision => 10, :scale => 2
+      t.string :nunidad
       t.timestamps
     end
   end

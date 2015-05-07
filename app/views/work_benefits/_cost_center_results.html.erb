@@ -1,0 +1,32 @@
+<%- model_class = CostsCenter -%>
+
+<div id="task">
+  <%= will_paginate @cost_center, :class =>'pagination pagination-centered' %>
+  <table class="table table-striped" id="employee-data">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:icost_center) %></th>
+        <th><%= model_class.human_attribute_name(:name_cc) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @cost_center.empty?  %>
+        <% @cost_center.each do |cost| %>
+          <tr>
+            <td>
+              <%= "#{cost.icost_center}" %>
+            </td>
+            <td>
+              <%= link_to "#{cost.name_cc}" %>
+              <%= hidden_field_tag "cost_num_#{cost.id}", "#{cost.id}" %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <div class="alert alert-block alert-error">
+          <%= t("notice.no_results") %>
+        </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>

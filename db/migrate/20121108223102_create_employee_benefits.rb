@@ -3,6 +3,7 @@ class CreateEmployeeBenefits < ActiveRecord::Migration
     create_table :employee_benefits do |t|
       t.references :work_benefit
       t.references :employee
+      t.boolean :completed, :default => 0
 
       t.timestamps
     end

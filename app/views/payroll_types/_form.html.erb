@@ -1,20 +1,125 @@
-<%= form_for @payroll_type, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :description, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :payroll_type, :class => 'control-label' %>
-    <div class="controls">
-			<%= f.enum_select :payroll_type, :include_blank => false %>
-    </div>
-  </div>
+<script type="text/javascript">
+  var bank_account = [];
+  <%  @bank_accounts.each do |cc| %>
+    bank_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>, <%= cc.iaccount %>));
+  <% end %>
+</script>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                payroll_types_path, :class => 'btn' %>
+<%= javascript_include_tag 'ledgerAccount/treeview' %>
+<%= javascript_include_tag 'payroll_type/payroll_type' %>
+
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+
+    <% if @payroll_type.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@payroll_type.errors.count, "error") %> prohibited this payroll type from being saved:</h3>
+        <% @payroll_type.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @payroll_type, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+
+          <div class="form-group">
+            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :description, :class => 'form-control' %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :payroll_type, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.enum_select(:payroll_type, {:include_blank => false}, html_options = {:class => 'form-control'}) %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :cod_doc_payroll_support, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :cod_doc_payroll_support, :class => 'form-control', :maxlength => "3" %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :mask_doc_payroll_support, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :mask_doc_payroll_support, :class => 'form-control', :maxlength => "5" %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :cod_doc_accounting_support_mov, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :cod_doc_accounting_support_mov, :class => 'form-control', :maxlength => "3" %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :mask_doc_accounting_support_mov, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :mask_doc_accounting_support_mov, :class => 'form-control', :maxlength => "4" %>
+            </div>
+          </div>
+
+          <div class="form-group" id="deduction_payrolls">
+            <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <%= f.hidden_field :ledger_account_id %>
+                <%= text_field_tag 'payroll_type_ledger_account',nil, :class => 'form-control', :for => :ledger_account_id %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <a data-toggle="modal" href="#myModalLabel" class="btn btn-default-alt" title="Ver lista de cuentas contables">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn-primary btn' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                            payroll_types_path, :class => 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>
+
+<input type="hidden" id="get_bank_account_ledger_accounts_path" value="<%= get_bank_account_ledger_accounts_path %>">
+
+<!-- Ledger account Modal -->
+<div class="modal fade" id="myModalLabel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 id="myModalLabel" class="modal-title">Seleccione la Cuenta de Banco</h2>
+      </div>
+      <div class="modal-body">
+        <div id="list"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

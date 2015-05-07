@@ -1,4 +1,5 @@
 class DepartmentsController < ApplicationController
+  load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit]
   respond_to :html, :json
   # GET /departments
@@ -63,15 +64,22 @@ class DepartmentsController < ApplicationController
   # DELETE /departments/1.json
   def destroy
     @department = Department.find(params[:id])
-    @department.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'department')
+
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @department.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to departments_url }
+      format.html { redirect_to departments_url, notice: message }
       format.json { head :no_content }
     end
   end
   
   def resources
-    @centro_costos = CentroDeCosto.all
+    @costs_centers = CostsCenter.all
   end
 end

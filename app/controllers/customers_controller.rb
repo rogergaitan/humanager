@@ -29,7 +29,7 @@ class CustomersController < ApplicationController
     @entity.addresses.build
     @entity.contacts.build
     @entity.telephones.build
-    @entity.bank_accounts.build
+
     respond_with @customer
   end
 
@@ -45,13 +45,8 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        if params['continue']
-          format.html { redirect_to new_customer_path, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_created') }
-          format.json { render json: @customer, status: :created, location: @customer }
-        else
-          format.html { redirect_to @customer, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_created') }
-          format.json { render json: @customer, status: :created, location: @customer }
-        end        
+        format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
+        format.json { render json: @customer, status: :created, location: @customer }
       else
         format.html { render action: "new" }
         format.json { render json: @customer.errors, status: :unprocessable_entity }
@@ -66,7 +61,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
-        format.html { redirect_to @customer, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_updated') }
+        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -82,7 +77,7 @@ class CustomersController < ApplicationController
     @customer.destroy
 
     respond_to do |format|
-      format.html { redirect_to customers_url, notice: t('.activerecord.models.customer').capitalize + t('.notice.successfully_deleted') }
+      format.html { redirect_to customers_url }
       format.json { head :no_content }
     end
   end
@@ -92,9 +87,5 @@ class CustomersController < ApplicationController
     @province ||= Province.find(:all, :select =>['id','name'])
     @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
     @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
-  end
-
-  def search_customer
-    respond_with Customer.search(params[:search]) if params[:search]
   end
 end

@@ -10,15 +10,23 @@ class CreateEmployees < ActiveRecord::Migration
       t.string :spouse
       t.date :join_date
       t.string :social_insurance
-      t.boolean :ccss_calculated
       t.references :department
       t.references :occupation
       t.references :role
+      t.references :position
       t.boolean :seller
       t.references :payment_method
       t.references :payment_frequency
       t.references :means_of_payment
-      t.decimal :wage_payment, :precision => 12, :scale => 2
+      t.references :employee
+      t.references :payment_unit
+      t.references :payroll_type
+      t.boolean :is_superior, :default => 0
+      t.boolean :price_defined_work
+      t.integer :number_employee
+      t.string :account_bncr, :limit => 12
+
+      t.decimal :wage_payment, :precision => 10, :scale => 2
 
       t.timestamps
     end
@@ -29,5 +37,10 @@ class CreateEmployees < ActiveRecord::Migration
     add_index :employees, :payment_method_id
     add_index :employees, :payment_frequency_id
     add_index :employees, :means_of_payment_id
+    add_index :employees, :position_id
+    add_index :employees, :employee_id
+    add_index :employees, :payment_unit_id
+    add_index :employees, :payroll_type_id
+    add_index :employees, :number_employee, :unique => true
   end
 end

@@ -1,28 +1,49 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :invoices do
-    collection do 
-      get :search
-    end
-  end
+  resources :other_payments
 
-  resources :quotation_items
+  resources :permissions_users
+  
+  devise_for :users
 
-  resources :quotations do
+  match "users/permissions/:id", :controller => "users", :action => 'permissions', :as => :permissions_user, via: [:get]
+  match "users", :controller => "users", :action => 'index', via: [:get]
+  match "users/:id/edit", :controller => "users", :action => 'edit', :as => :edit_user, via: [:get]
+  match "users/:id", :controller => "users", :action => 'update', via: [:put]
+  match "users", :controller => "users", :action => 'delete', :as => :user, via: [:delete]
+  match "users/usersfb", :controller => "users", :action => 'usersfb', :as => :usersfb_users, via: [:get]
+  match "users/search_user", :controller => "users", :action => 'search_user', :as => :search_user_users, via: [:get]
+  match "users/get_permissions_user", :controller => "users", :action => 'get_permissions_user', :as => :get_permissions_user_users, via: [:get]
+  match "users/save_permissions", :controller => "users", :action => 'save_permissions', :as => :save_permissions_users, via: [:post]
+
+  resources :reports do
     collection do
-      get :search_customer
-      get :search
+      get :search_payrolls
+      get :create_pdf_proof_pay_employees
+      get :general_payroll
+      get :general_payroll_xls
+      get :payment_type_report
+      get :report_between_dates
+      get :accrued_wages_between_dates_report
     end
   end
+  get "reports/index"
+  match 'reports/index', :to => 'reports#index'
 
-  resources :purchase_order_payments
+  resources :detail_personnel_actions
 
   resources :payroll_logs do
     collection do
       get :fetch_employees
+      get :search_task
+      get :search_cost
+      get :search_employee
+      get :delete_employee_to_payment
     end
   end
+  
+  resources :payroll_logs
 
   resources :payrolls do
     collection do
@@ -33,7 +54,8 @@ Reasapp::Application.routes.draw do
     end
     collection do
       post :reabrir
-      post :cerrar_planilla
+      post :close_payroll
+      post :send_to_firebird
     end
   end
 
@@ -41,8 +63,13 @@ Reasapp::Application.routes.draw do
     collection do
       get :fetch_employees
       get :get_activas
+      get :search_employee
+      get 'fetch_payroll_type'
     end
   end
+
+  resources :type_of_personnel_actions
+
 
   resources :other_salaries do
     collection do
@@ -55,22 +82,31 @@ Reasapp::Application.routes.draw do
       get 'fetch_debit_accounts'
       get 'fetch_credit_accounts'
       get 'fetch_employees'
+      get 'fetch_payroll_type'
+      get 'fetch_cost_center'
+      get 'search_cost_center'
     end
   end
 
-  resources :centro_de_costos do
+  resources :work_benefits
+
+  resources :payroll_types
+
+  resources :costs_centers do
     collection do
-      get 'sync_cc'
-    end
-    collection do
-      get 'load_cc'
+      get :sync_cc
+      get :fetch_cc
+      get :load_cc
     end
   end
+
+  resources :positions
 
   resources :ledger_accounts do
     collection do
       get 'accountfb'
       get 'fetch'
+      get 'get_bank_account'
     end
     collection do
       get 'accountfb'
@@ -80,17 +116,64 @@ Reasapp::Application.routes.draw do
   resources :tasks do
     collection do
       get 'tasksfb'
+      get 'load_cc'
+      get :fetch_tasks
+      get :search
     end
   end
+
+  resources :districts
+
+  resources :cantons
+
+  resources :provinces
+
+  resources :departments
+
+  resources :means_of_payments
+
+  resources :payment_frequencies
 
   resources :employees do
     collection do
       get 'sync'
+      get :search
+      get :search_all
     end
     collection do
       get 'load_employees'
+      get 'load_em'
+      get 'search_employee_by_id'
+      get 'search_employee_by_code'
+      get 'search_employee_by_name'
     end
   end
+
+  resources :employees
+
+  resources :occupations
+
+  resources :customers
+
+  resources :entities
+  resources :product_pricings
+  resources :products
+  resources :warehouses
+  devise_for :users
+
+  get "pages/home"
+  get "pages/about"
+  get "pages/help"
+  get "pages/contact"
+
+  match '/contact', :to => 'pages#contact'
+  match '/help', :to => 'pages#help'
+  match '/about', :to => 'pages#about'
+  match '/404', :to => 'errors#not_found'
+  match '/configuracion', :to  => 'pages#configuracion', :as  => 'dcerp_config'
+  match '/procesos', :to  => 'pages#procesos', :as  => 'dcerp_process'
+
+  root :to => 'pages#index'
 
   resources :lines do
     collection do
@@ -107,125 +190,19 @@ Reasapp::Application.routes.draw do
   resources :sublines do
     collection do
       get 'fetch'
-      get 'search'
     end
   end
 
-  resources :purchase_orders do
-    collection do
-      get 'fetch'
-      get 'search_product'
-      get 'cart_items'
-      get 'search_vendor'
-      post 'create_vendor'
-      post 'to_vendor'
-    end
-  end
-
-  resources :products do
-    collection do
-      get 'search'
-      post 'search'
-      get 'quantity_available'
-      post 'set_cart'
-      get 'get_cart'
-    end
-  end
-
-  resources :warehouses do
-    collection do
-      get 'fetch'
-    end
-  end
-
-  resources :purchases do
-    collection do
-      get 'search_vendor'
-      get 'search'
-    end
-  end
-
-  resources :provinces do
-    collection do
-      get 'fetch'
-    end
-  end
-
-  resources :cantons do
-    collection do
-      get 'fetch'
-    end
-  end
-
-  resources :districts do
-    collection do
-      get 'fetch'
-    end
-  end
-  
-  resources :customers do
-    collection do 
-      get 'search_customer'
-    end
-  end
-  
-  match '/contact', :to => 'pages#contact'
-  match '/help', :to => 'pages#help'
-  match '/about', :to => 'pages#about'
-  match '/404', :to => 'errors#not_found'
-  match '/configuracion', :to  => 'pages#configuracion', :as  => 'dcerp_config'
-  match '/procesos', :to  => 'pages#procesos', :as  => 'dcerp_process'
-  match '/links', :to => "pages#links"
-
-  root :to => 'pages#index'
-
-  devise_for :users
-  
-  resources :cost_centers
-  resources :document_numbers
-  resources :purchase_order_payments
-  resources :payroll_logs
-  resources :work_benefits
-  resources :payroll_types
-  resources :districts
-  resources :type_of_personnel_actions
-  resources :discount_profile_items
-  resources :companies
-  resources :discount_profiles
-  resources :occupations
-  resources :centro_de_costos
-  resources :positions
-  resources :taxes
-  resources :purchase_payment_options
-  resources :departments
-  resources :payment_types
-  resources :payment_options
-  resources :product_applications
-  resources :purchases
-  resources :shipping_methods
-  resources :districts
-  resources :cantons
-  resources :provinces
-  resources :roles
-  resources :departments
-  resources :means_of_payments
-  resources :payment_frequencies
-  resources :payment_methods
-  resources :payment_schedules
-  resources :employees
-  resources :deductions
-  resources :work_benefits
-  resources :occupations
-  resources :customers
-  resources :entities
-  resources :product_pricings
-  resources :warehouses
-  resources :purchase_orders
-  resources :products
   resources :vendors
   resources :sublines
   resources :categories
   resources :lines
+
+  resources :companies do
+    collection do
+      get :companies_fb
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

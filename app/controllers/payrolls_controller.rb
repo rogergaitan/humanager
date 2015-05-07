@@ -1,10 +1,13 @@
 class PayrollsController < ApplicationController
-  respond_to :html, :json
+  load_and_authorize_resource
+  respond_to :html, :json, :js
   before_filter :get_payroll_types, :only => [:new, :edit]
+  skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird]
 
   # GET /payrolls
   # GET /payrolls.json
   def index
+    logger.debug current_user.to_yaml
     #@payrolls = Payroll.all
   end
 
@@ -32,7 +35,7 @@ class PayrollsController < ApplicationController
   def create
     @payroll = Payroll.new(params[:payroll])
     @payroll_log = @payroll.build_payroll_log
-    @payroll_log.payroll_histories.build
+    # @payroll_log.payroll_histories.build
 
     respond_to do |format|
       if @payroll.save
@@ -73,13 +76,13 @@ class PayrollsController < ApplicationController
     end
   end
 
-  #Obtiene las planillas activas
+  # Obtiene las planillas activas
   def get_activas
     @activas = {}
     @activas[:activa] = Payroll.activas
 
      respond_to do |format|
-      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log])}
+      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log, :company])}
     end
   end
 
@@ -90,22 +93,23 @@ class PayrollsController < ApplicationController
     end
   end
 
-  #Obtiene las planillas inactivas
+  # Obtiene las planillas inactivas
   def get_inactivas
     @inactivas = {}
     @inactivas[:inactiva] = Payroll.inactivas
 
     respond_to do |format|
-      format.json { render json: @inactivas, :include => :payroll_type }
+      format.json { render json: @inactivas.to_json(include: [:payroll_type, :payroll_log, :company])}
     end
   end
 
-  #Obtiene todos los tipos de planillas
+  # Obtiene todos los tipos de planillas y todas las compañias
   def get_payroll_types
     @payroll_types = PayrollType.tipo_planilla
+    @companies = Company.all
   end
 
-  #Reabre una o un conjunto de planillas cerradas
+  # Reabre una o un conjunto de planillas cerradas
   def reabrir
     @payroll = JSON.parse(params[:reabrir_planilla])
 
@@ -116,15 +120,34 @@ class PayrollsController < ApplicationController
     render :index
   end
 
-  #Cierra una planilla y realiza los calculos de prestaciones
-  def cerrar_planilla
-    @payroll = JSON.parse(params[:cerrar_planilla])
+  # Cierra una planilla y realiza los calculos necesarios
+  # Closes a payroll and performs the necessary calculations
+  def close_payroll
+    puts '######################################################'
+    puts 'CLOSE PAYROLL'
+    puts '######################################################'
+    payroll_id = params[:payroll_id]
 
-    @payroll.each do |planilla|
-      p = Payroll.find(planilla)
-      p.update_attributes(:state => false)
+    @result = Payroll.close_payroll(payroll_id)
+
+    respond_to do |format|
+      format.json { render json: @result }
     end
-    render :index
+  end
+
+  def send_to_firebird
+
+    payroll_id = params[:payroll_id]
+
+    result = Payroll.send_to_firebird(payroll_id, current_user.username)
+
+    respond_to do |format|
+      if result
+        format.json { render json: { 'status' => true }, status: :created }
+      else
+        format.json { render json: { 'status' => false }, status: :unprocessable_entity }
+      end
+    end
   end
 
 end

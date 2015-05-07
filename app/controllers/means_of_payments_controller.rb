@@ -1,4 +1,5 @@
 class MeansOfPaymentsController < ApplicationController
+  load_and_authorize_resource
   respond_to :html, :json
 
   # GET /means_of_payments
@@ -63,10 +64,17 @@ class MeansOfPaymentsController < ApplicationController
   # DELETE /means_of_payments/1.json
   def destroy
     @means_of_payment = MeansOfPayment.find(params[:id])
-    @means_of_payment.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'means_of_payment')
+
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @means_of_payment.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to means_of_payments_url }
+      format.html { redirect_to means_of_payments_url, notice: message }
       format.json { head :no_content }
     end
   end

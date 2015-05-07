@@ -11,14 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130307154458) do
+ActiveRecord::Schema.define(:version => 20141125161545) do
 
   create_table "addresses", :force => true do |t|
-    t.string   "address"
     t.integer  "entity_id"
     t.integer  "province_id"
     t.integer  "canton_id"
     t.integer  "district_id"
+    t.string   "address"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -29,11 +29,11 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   add_index "addresses", ["province_id"], :name => "index_addresses_on_province_id"
 
   create_table "bank_accounts", :force => true do |t|
+    t.integer  "entity_id"
     t.string   "bank"
     t.string   "bank_account"
     t.string   "sinpe"
     t.string   "account_title"
-    t.integer  "entity_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   add_index "bank_accounts", ["entity_id"], :name => "index_bank_accounts_on_entity_id"
 
   create_table "cantons", :force => true do |t|
-    t.string   "name"
     t.integer  "province_id"
+    t.string   "name"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -57,48 +57,36 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "centro_de_costos", :force => true do |t|
-    t.string   "iempresa"
-    t.string   "icentro_costo"
-    t.string   "nombre_cc"
-    t.string   "icc_padre"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
   create_table "companies", :force => true do |t|
+    t.integer  "code"
     t.string   "name"
-    t.string   "surname"
-    t.string   "company_id"
-    t.string   "telephone"
-    t.string   "address"
-    t.string   "email"
-    t.string   "web_site"
-    t.boolean  "default"
-    t.string   "logo"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "label_reports_1"
+    t.text     "label_reports_2"
+    t.text     "label_reports_3"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "contacts", :force => true do |t|
+    t.integer  "entity_id"
     t.string   "name"
     t.string   "occupation"
     t.string   "phone"
     t.string   "email"
     t.string   "skype"
-    t.integer  "entity_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
   add_index "contacts", ["entity_id"], :name => "index_contacts_on_entity_id"
 
-  create_table "cost_centers", :force => true do |t|
-    t.string   "code"
-    t.string   "description"
-    t.integer  "employee_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+  create_table "costs_centers", :force => true do |t|
+    t.string   "icompany"
+    t.string   "icost_center"
+    t.string   "name_cc"
+    t.string   "icc_father"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "customer_profiles", :force => true do |t|
@@ -108,9 +96,9 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   end
 
   create_table "customers", :force => true do |t|
-    t.string   "asigned_seller"
     t.integer  "customer_profile_id"
     t.integer  "entity_id"
+    t.string   "asigned_seller"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
   end
@@ -121,9 +109,11 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   create_table "deduction_employees", :force => true do |t|
     t.integer  "deduction_id"
     t.integer  "employee_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.integer  "current_balance"
+    t.boolean  "completed",                                   :default => false
+    t.boolean  "boolean",                                     :default => false
+    t.decimal  "calculation",  :precision => 10, :scale => 2
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
   end
 
   add_index "deduction_employees", ["deduction_id"], :name => "index_deduction_employees_on_deduction_id"
@@ -131,15 +121,17 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
 
   create_table "deduction_payments", :force => true do |t|
     t.integer  "deduction_employee_id"
+    t.integer  "payroll_id"
     t.date     "payment_date"
-    t.integer  "previous_balance"
-    t.integer  "payment"
-    t.integer  "current_balance"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.decimal  "previous_balance",      :precision => 10, :scale => 2
+    t.decimal  "payment",               :precision => 10, :scale => 2
+    t.decimal  "current_balance",       :precision => 10, :scale => 2
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
   end
 
   add_index "deduction_payments", ["deduction_employee_id"], :name => "index_deduction_payments_on_deduction_employee_id"
+  add_index "deduction_payments", ["payroll_id"], :name => "index_deduction_payments_on_payroll_id"
 
   create_table "deduction_payrolls", :force => true do |t|
     t.integer  "deduction_id"
@@ -153,66 +145,51 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
 
   create_table "deductions", :force => true do |t|
     t.string   "description"
-    t.enum     "deduction_type",    :limit => [:Constante, :Unica, :Monto_Agotar]
-    t.decimal  "amount_exhaust",                                                   :precision => 10, :scale => 0
-    t.enum     "calculation_type",  :limit => [:porcentual, :fija]
-    t.decimal  "calculation",                                                      :precision => 18, :scale => 4
+    t.enum     "deduction_type",    :limit => [:constant, :unique, :amount_to_exhaust]
+    t.decimal  "amount_exhaust",                                                        :precision => 10, :scale => 2
+    t.decimal  "decimal",                                                               :precision => 10, :scale => 2
+    t.enum     "calculation_type",  :limit => [:percentage, :fixed]
     t.integer  "ledger_account_id"
-    t.datetime "created_at",                                                                                                        :null => false
-    t.datetime "updated_at",                                                                                                        :null => false
-    t.boolean  "state",                                                                                           :default => true
+    t.enum     "state",             :limit => [:completed, :active],                                                   :default => :active
+    t.string   "beneficiary_id"
+    t.boolean  "is_beneficiary",                                                                                       :default => true
+    t.boolean  "individual",                                                                                           :default => false
+    t.datetime "created_at",                                                                                                                :null => false
+    t.datetime "updated_at",                                                                                                                :null => false
   end
 
   create_table "departments", :force => true do |t|
-    t.string   "name"
     t.integer  "employee_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.integer  "centro_de_costos_id"
+    t.integer  "costs_center_id"
+    t.string   "name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
+  add_index "departments", ["costs_center_id"], :name => "index_departments_on_costs_center_id"
   add_index "departments", ["employee_id"], :name => "index_departments_on_employee_id"
 
-  create_table "discount_profile_items", :force => true do |t|
-    t.integer  "discount_profile_id"
-    t.enum     "item_type",           :limit => [:product, :subline]
-    t.integer  "item_id"
-    t.float    "discount"
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
+  create_table "detail_personnel_actions", :force => true do |t|
+    t.integer  "type_of_personnel_action_id"
+    t.integer  "fields_personnel_action_id"
+    t.string   "value"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
-  create_table "discount_profiles", :force => true do |t|
-    t.string   "description"
-    t.enum     "category",    :limit => [:a, :b, :c]
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-  end
+  add_index "detail_personnel_actions", ["fields_personnel_action_id"], :name => "index_detail_personnel_actions_on_fields_personnel_action_id"
+  add_index "detail_personnel_actions", ["type_of_personnel_action_id"], :name => "index_detail_personnel_actions_on_type_of_personnel_action_id"
 
   create_table "districts", :force => true do |t|
-    t.string   "name"
     t.integer  "canton_id"
+    t.integer  "province_id"
+    t.string   "name"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "province_id"
   end
 
   add_index "districts", ["canton_id"], :name => "index_districts_on_canton_id"
   add_index "districts", ["province_id"], :name => "index_districts_on_province_id"
-
-  create_table "document_numbers", :force => true do |t|
-    t.integer  "company_id"
-    t.string   "description"
-    t.enum     "document_type",        :limit => [:purchase, :purchase_order]
-    t.enum     "number_type",          :limit => [:auto_increment, :manual]
-    t.integer  "start_number"
-    t.string   "mask"
-    t.boolean  "terminal_restriction"
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
-  end
-
-  add_index "document_numbers", ["company_id"], :name => "index_document_numbers_on_company_id"
 
   create_table "emails", :force => true do |t|
     t.integer  "entity_id"
@@ -227,8 +204,9 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   create_table "employee_benefits", :force => true do |t|
     t.integer  "work_benefit_id"
     t.integer  "employee_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.boolean  "completed",       :default => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   add_index "employee_benefits", ["employee_id"], :name => "index_employee_benefits_on_employee_id"
@@ -243,29 +221,36 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.string   "spouse"
     t.date     "join_date"
     t.string   "social_insurance"
-    t.boolean  "ccss_calculated"
     t.integer  "department_id"
     t.integer  "occupation_id"
     t.integer  "role_id"
+    t.integer  "position_id"
     t.boolean  "seller"
     t.integer  "payment_method_id"
     t.integer  "payment_frequency_id"
     t.integer  "means_of_payment_id"
-    t.decimal  "wage_payment",                                                                                    :precision => 12, :scale => 2
+    t.integer  "employee_id"
+    t.integer  "payment_unit_id"
+    t.integer  "payroll_type_id"
+    t.boolean  "is_superior",                                                                                                                    :default => false
+    t.boolean  "price_defined_work"
+    t.integer  "number_employee"
+    t.string   "account_bncr",         :limit => 12
+    t.decimal  "wage_payment",                                                                                    :precision => 10, :scale => 2
     t.datetime "created_at",                                                                                                                                        :null => false
     t.datetime "updated_at",                                                                                                                                        :null => false
-    t.string   "position_id"
-    t.integer  "employee_id"
-    t.boolean  "is_superior",                                                                                                                    :default => false
   end
 
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
   add_index "employees", ["employee_id"], :name => "index_employees_on_employee_id"
   add_index "employees", ["entity_id"], :name => "index_employees_on_entity_id"
   add_index "employees", ["means_of_payment_id"], :name => "index_employees_on_means_of_payment_id"
+  add_index "employees", ["number_employee"], :name => "index_employees_on_number_employee", :unique => true
   add_index "employees", ["occupation_id"], :name => "index_employees_on_occupation_id"
   add_index "employees", ["payment_frequency_id"], :name => "index_employees_on_payment_frequency_id"
   add_index "employees", ["payment_method_id"], :name => "index_employees_on_payment_method_id"
+  add_index "employees", ["payment_unit_id"], :name => "index_employees_on_payment_unit_id"
+  add_index "employees", ["payroll_type_id"], :name => "index_employees_on_payroll_type_id"
   add_index "employees", ["position_id"], :name => "index_employees_on_position_id"
   add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
 
@@ -278,9 +263,9 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.string   "name"
     t.string   "surname"
     t.string   "entityid"
-    t.enum     "typeid",     :limit => [:national, :foreign, :company]
-    t.datetime "created_at",                                            :null => false
-    t.datetime "updated_at",                                            :null => false
+    t.enum     "typeid",     :limit => [:national_id, :residence_id, :business_id, :passport, :other]
+    t.datetime "created_at",                                                                           :null => false
+    t.datetime "updated_at",                                                                           :null => false
   end
 
   create_table "fields_personnel_actions", :force => true do |t|
@@ -290,99 +275,12 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "invoice_items", :force => true do |t|
-    t.integer  "invoice_id"
-    t.integer  "warehouse_id"
-    t.string   "code"
-    t.string   "description"
-    t.float    "ordered_quantity"
-    t.float    "available_quantity"
-    t.float    "quantity"
-    t.float    "cost_unit"
-    t.float    "discount"
-    t.float    "tax"
-    t.float    "cost_total"
-    t.integer  "product_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
-
-  add_index "invoice_items", ["invoice_id"], :name => "index_invoice_items_on_invoice_id"
-  add_index "invoice_items", ["product_id"], :name => "index_invoice_items_on_product_id"
-  add_index "invoice_items", ["warehouse_id"], :name => "index_invoice_items_on_warehouse_id"
-
-  create_table "invoices", :force => true do |t|
-    t.string   "document_number"
-    t.date     "document_date"
-    t.integer  "customer_id"
-    t.string   "currency"
-    t.string   "price_list"
-    t.string   "payment_term"
-    t.date     "due_date"
-    t.integer  "quotation_id"
-    t.boolean  "closed"
-    t.float    "sub_total_free"
-    t.float    "sub_total_taxed"
-    t.float    "discount_total"
-    t.float    "tax_total"
-    t.float    "total"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "invoices", ["customer_id"], :name => "index_invoices_on_customer_id"
-  add_index "invoices", ["quotation_id"], :name => "index_invoices_on_quotation_id"
-
-  create_table "items_purchase_orders", :force => true do |t|
-    t.integer  "purchase_order_id"
-    t.string   "product"
-    t.string   "description"
-    t.integer  "quantity"
-    t.float    "cost_unit"
-    t.float    "cost_total"
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
-    t.integer  "warehouse_id"
-    t.decimal  "discount",          :precision => 17, :scale => 2
-    t.float    "tax"
-  end
-
-  add_index "items_purchase_orders", ["purchase_order_id"], :name => "index_items_purchase_orders_on_purchase_order_id"
-  add_index "items_purchase_orders", ["warehouse_id"], :name => "index_items_purchase_orders_on_warehouse_id"
-
-  create_table "kardexes", :force => true do |t|
-    t.integer  "company_id"
-    t.date     "mov_date"
-    t.integer  "mov_id"
-    t.enum     "mov_type",     :limit => [:input, :output]
-    t.string   "doc_type"
-    t.string   "doc_number"
-    t.integer  "entity_id"
-    t.string   "current_user"
-    t.string   "code"
-    t.string   "cost_unit"
-    t.string   "discount"
-    t.string   "tax"
-    t.string   "cost_total"
-    t.string   "price_list"
-    t.float    "quantity"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-  end
-
-  add_index "kardexes", ["company_id"], :name => "index_kardexes_on_company_id"
-  add_index "kardexes", ["entity_id"], :name => "index_kardexes_on_entity_id"
-
   create_table "ledger_accounts", :force => true do |t|
     t.string   "iaccount"
     t.string   "naccount"
     t.string   "ifather"
-    t.datetime "created_at",                                                                               :null => false
-    t.datetime "updated_at",                                                                               :null => false
-    t.enum     "account_type",     :limit => [:asset, :liability, :equity, :income, :expense, :cost_sale]
-    t.boolean  "cost_center"
-    t.boolean  "foreign_currency"
-    t.boolean  "request_entity"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "lines", :force => true do |t|
@@ -411,39 +309,63 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
 
   create_table "occupations", :force => true do |t|
     t.string   "description"
+    t.string   "ins_code"
+    t.string   "ccss_code"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "other_salaries", :force => true do |t|
-    t.string   "description"
-    t.integer  "ledger_account_id"
+  create_table "other_payment_employees", :force => true do |t|
+    t.integer  "other_payment_id"
+    t.integer  "employee_id"
+    t.boolean  "completed",                                       :default => false
+    t.decimal  "calculation",      :precision => 10, :scale => 2
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
-    t.decimal  "amount",            :precision => 18, :scale => 2
-    t.boolean  "state",                                            :default => true
   end
 
-  create_table "other_salary_employees", :force => true do |t|
-    t.integer  "other_salary_id"
-    t.integer  "employee_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
-    t.decimal  "amount",          :precision => 18, :scale => 2
-  end
+  add_index "other_payment_employees", ["employee_id"], :name => "index_other_payment_employees_on_employee_id"
+  add_index "other_payment_employees", ["other_payment_id"], :name => "index_other_payment_employees_on_other_payment_id"
 
-  add_index "other_salary_employees", ["employee_id"], :name => "index_other_salary_employees_on_employee_id"
-  add_index "other_salary_employees", ["other_salary_id"], :name => "index_other_salary_employees_on_other_salary_id"
-
-  create_table "other_salary_payments", :force => true do |t|
-    t.integer  "other_salary_employee_id"
+  create_table "other_payment_payments", :force => true do |t|
+    t.integer  "other_payment_employee_id"
+    t.integer  "payroll_id"
     t.date     "payment_date"
-    t.integer  "payment"
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.decimal  "payment",                   :precision => 10, :scale => 2
+    t.boolean  "is_salary",                                                :default => false
+    t.datetime "created_at",                                                                  :null => false
+    t.datetime "updated_at",                                                                  :null => false
   end
 
-  add_index "other_salary_payments", ["other_salary_employee_id"], :name => "index_other_salary_payments_on_other_salary_employee_id"
+  add_index "other_payment_payments", ["other_payment_employee_id"], :name => "index_other_payment_payments_on_other_payment_employee_id"
+  add_index "other_payment_payments", ["payroll_id"], :name => "index_other_payment_payments_on_payroll_id"
+
+  create_table "other_payment_payrolls", :force => true do |t|
+    t.integer  "other_payment_id"
+    t.integer  "payroll_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "other_payment_payrolls", ["other_payment_id"], :name => "index_other_payment_payrolls_on_other_payment_id"
+  add_index "other_payment_payrolls", ["payroll_id"], :name => "index_other_payment_payrolls_on_payroll_id"
+
+  create_table "other_payments", :force => true do |t|
+    t.integer  "costs_center_id"
+    t.integer  "ledger_account_id"
+    t.string   "description"
+    t.enum     "deduction_type",     :limit => [:constant, :unique, :amount_to_exhaust]
+    t.enum     "calculation_type",   :limit => [:percentage, :fixed]
+    t.decimal  "amount",                                                                 :precision => 10, :scale => 2
+    t.enum     "state",              :limit => [:completed, :active],                                                   :default => :active
+    t.boolean  "constitutes_salary"
+    t.boolean  "individual"
+    t.datetime "created_at",                                                                                                                 :null => false
+    t.datetime "updated_at",                                                                                                                 :null => false
+  end
+
+  add_index "other_payments", ["costs_center_id"], :name => "index_other_payments_on_costs_center_id"
+  add_index "other_payments", ["ledger_account_id"], :name => "index_other_payments_on_ledger_account_id"
 
   create_table "payment_frequencies", :force => true do |t|
     t.string   "name"
@@ -452,90 +374,143 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "payment_methods", :force => true do |t|
-    t.string   "name"
+  create_table "payment_units", :force => true do |t|
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "payment_options", :force => true do |t|
-    t.string   "name"
-    t.string   "related_account"
-    t.boolean  "use_expenses"
-    t.boolean  "use_incomes"
-    t.boolean  "require_transaction"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-  end
-
-  create_table "payment_schedules", :force => true do |t|
-    t.string   "code"
-    t.string   "description"
-    t.date     "initial_date"
-    t.date     "end_date"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.date     "payment_date"
-  end
-
-  create_table "payment_types", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "payroll_employees", :force => true do |t|
     t.integer  "employee_id"
-    t.integer  "payroll_log_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.integer  "payroll_history_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   add_index "payroll_employees", ["employee_id"], :name => "index_payroll_employees_on_employee_id"
-  add_index "payroll_employees", ["payroll_log_id"], :name => "index_payroll_employees_on_payroll_log_id"
+  add_index "payroll_employees", ["payroll_history_id"], :name => "index_payroll_employees_on_payroll_history_id"
 
   create_table "payroll_histories", :force => true do |t|
     t.integer  "task_id"
-    t.string   "time_worked"
-    t.integer  "centro_de_costo_id"
-    t.enum     "payment_type",       :limit => [:Ordinario, :Extra, :Doble]
+    t.integer  "costs_center_id"
     t.integer  "payroll_log_id"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.string   "time_worked"
+    t.enum     "payment_type",    :limit => [:ordinary, :extra, :double]
+    t.decimal  "total",                                                   :precision => 10, :scale => 2
+    t.decimal  "task_total",                                              :precision => 10, :scale => 2
+    t.string   "task_unidad"
+    t.date     "payroll_date"
+    t.datetime "created_at",                                                                             :null => false
+    t.datetime "updated_at",                                                                             :null => false
   end
 
-  add_index "payroll_histories", ["centro_de_costo_id"], :name => "index_payroll_histories_on_centro_de_costo_id"
+  add_index "payroll_histories", ["costs_center_id"], :name => "index_payroll_histories_on_costs_center_id"
   add_index "payroll_histories", ["payroll_log_id"], :name => "index_payroll_histories_on_payroll_log_id"
   add_index "payroll_histories", ["task_id"], :name => "index_payroll_histories_on_task_id"
 
   create_table "payroll_logs", :force => true do |t|
     t.integer  "payroll_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
     t.date     "payroll_date"
+    t.decimal  "payroll_total", :precision => 10, :scale => 2
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
   end
 
   add_index "payroll_logs", ["payroll_id"], :name => "index_payroll_logs_on_payroll_id"
 
-  create_table "payroll_types", :force => true do |t|
-    t.string   "description"
-    t.enum     "payroll_type", :limit => [:Administrativa, :Campo, :Planta]
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+  create_table "payroll_type_benefits", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.integer  "work_benefit_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
+  add_index "payroll_type_benefits", ["payroll_type_id"], :name => "index_payroll_type_benefits_on_payroll_type_id"
+  add_index "payroll_type_benefits", ["work_benefit_id"], :name => "index_payroll_type_benefits_on_work_benefit_id"
+
+  create_table "payroll_type_deductions", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.integer  "deduction_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "payroll_type_deductions", ["deduction_id"], :name => "index_payroll_type_deductions_on_deduction_id"
+  add_index "payroll_type_deductions", ["payroll_type_id"], :name => "index_payroll_type_deductions_on_payroll_type_id"
+
+  create_table "payroll_type_other_payments", :force => true do |t|
+    t.integer  "payroll_type_id"
+    t.integer  "other_payment_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "payroll_type_other_payments", ["other_payment_id"], :name => "index_payroll_type_other_payments_on_other_payment_id"
+  add_index "payroll_type_other_payments", ["payroll_type_id"], :name => "index_payroll_type_other_payments_on_payroll_type_id"
+
+  create_table "payroll_types", :force => true do |t|
+    t.integer  "ledger_account_id"
+    t.string   "description"
+    t.enum     "payroll_type",                    :limit => [:administrative, :fieldwork, :plant]
+    t.boolean  "state",                                                                            :default => true
+    t.integer  "cod_doc_payroll_support"
+    t.string   "mask_doc_payroll_support",        :limit => 5
+    t.integer  "cod_doc_accounting_support_mov"
+    t.string   "mask_doc_accounting_support_mov", :limit => 5
+    t.datetime "created_at",                                                                                         :null => false
+    t.datetime "updated_at",                                                                                         :null => false
+  end
+
+  add_index "payroll_types", ["ledger_account_id"], :name => "index_payroll_types_on_ledger_account_id"
+
   create_table "payrolls", :force => true do |t|
+    t.integer  "company_id"
     t.integer  "payroll_type_id"
     t.date     "start_date"
     t.date     "end_date"
     t.date     "payment_date"
     t.boolean  "state",           :default => true
+    t.string   "num_oper"
+    t.string   "num_oper_2"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
   end
 
+  add_index "payrolls", ["company_id"], :name => "index_payrolls_on_company_id"
   add_index "payrolls", ["payroll_type_id"], :name => "index_payrolls_on_payroll_type_id"
+
+  create_table "permissions_categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "permissions_subcategories", :force => true do |t|
+    t.string   "name"
+    t.integer  "permissions_category_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "permissions_subcategories", ["permissions_category_id"], :name => "index_permissions_subcategories_on_permissions_category_id"
+
+  create_table "permissions_users", :force => true do |t|
+    t.integer  "permissions_subcategory_id"
+    t.integer  "user_id"
+    t.boolean  "p_create",                   :default => false
+    t.boolean  "p_view",                     :default => false
+    t.boolean  "p_modify",                   :default => false
+    t.boolean  "p_delete",                   :default => false
+    t.boolean  "p_close",                    :default => false
+    t.boolean  "p_accounts",                 :default => false
+    t.boolean  "p_pdf",                      :default => false
+    t.boolean  "p_exel",                     :default => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
+  end
+
+  add_index "permissions_users", ["permissions_subcategory_id"], :name => "index_permissions_users_on_permissions_subcategory_id"
+  add_index "permissions_users", ["user_id"], :name => "index_permissions_users_on_user_id"
 
   create_table "personalized_fields", :force => true do |t|
     t.integer  "type_of_personnel_action_id"
@@ -560,34 +535,14 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   create_table "positions", :force => true do |t|
     t.string   "position"
     t.string   "description"
-    t.string   "codigo_ins"
-    t.string   "codigo_ccss"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "product_aplications", :force => true do |t|
-    t.string   "name"
-    t.integer  "product_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "product_aplications", ["product_id"], :name => "index_product_aplications_on_product_id"
-
-  create_table "product_applications", :force => true do |t|
-    t.string   "name"
-    t.integer  "product_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "product_applications", ["product_id"], :name => "index_product_applications_on_product_id"
-
   create_table "product_pricings", :force => true do |t|
     t.integer  "product_id"
     t.float    "utility"
-    t.enum     "price_type", :limit => [:other, :credit, :cash]
+    t.enum     "type",       :limit => [:other, :credit, :cash]
     t.enum     "category",   :limit => [:a, :b, :c]
     t.float    "sell_price"
     t.datetime "created_at",                                     :null => false
@@ -624,144 +579,6 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "purchase_items", :force => true do |t|
-    t.integer  "purchase_id"
-    t.integer  "product_id"
-    t.string   "description"
-    t.float    "quantity"
-    t.float    "cost_unit"
-    t.float    "cost_total"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
-    t.integer  "warehouse_id"
-    t.decimal  "discount",     :precision => 17, :scale => 2
-    t.float    "tax"
-    t.string   "code"
-  end
-
-  add_index "purchase_items", ["product_id"], :name => "index_purchase_items_on_product_id"
-  add_index "purchase_items", ["purchase_id"], :name => "index_purchase_items_on_purchase_id"
-  add_index "purchase_items", ["warehouse_id"], :name => "index_purchase_items_on_warehouse_id"
-
-  create_table "purchase_order_payments", :force => true do |t|
-    t.integer  "payment_option_id"
-    t.integer  "payment_type_id"
-    t.integer  "purchase_order_id"
-    t.string   "number"
-    t.float    "amount"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
-  end
-
-  add_index "purchase_order_payments", ["payment_option_id"], :name => "index_purchase_order_payments_on_payment_option_id"
-  add_index "purchase_order_payments", ["payment_type_id"], :name => "index_purchase_order_payments_on_payment_type_id"
-  add_index "purchase_order_payments", ["purchase_order_id"], :name => "index_purchase_order_payments_on_purchase_order_id"
-
-  create_table "purchase_orders", :force => true do |t|
-    t.integer  "vendor_id"
-    t.string   "reference_info"
-    t.string   "currency"
-    t.text     "observation"
-    t.float    "subtotal"
-    t.float    "taxes"
-    t.float    "total"
-    t.date     "delivery_date"
-    t.string   "shipping_type"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.date     "document_date"
-    t.string   "document_number"
-  end
-
-  add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
-
-  create_table "purchase_payment_options", :force => true do |t|
-    t.integer  "payment_option_id"
-    t.integer  "payment_type_id"
-    t.integer  "purchase_id"
-    t.string   "number"
-    t.float    "amount"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
-  end
-
-  add_index "purchase_payment_options", ["payment_option_id"], :name => "index_purchase_payment_options_on_payment_option_id"
-  add_index "purchase_payment_options", ["payment_type_id"], :name => "index_purchase_payment_options_on_payment_type_id"
-  add_index "purchase_payment_options", ["purchase_id"], :name => "index_purchase_payment_options_on_purchase_id"
-
-  create_table "purchases", :force => true do |t|
-    t.string   "document_number"
-    t.integer  "vendor_id"
-    t.date     "purchase_date"
-    t.boolean  "completed"
-    t.string   "currency"
-    t.float    "subtotal"
-    t.float    "taxes"
-    t.float    "total"
-    t.enum     "purchase_type",   :limit => [:local, :imported]
-    t.string   "dai_tax"
-    t.string   "isc_tax"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
-  end
-
-  add_index "purchases", ["vendor_id"], :name => "index_purchases_on_vendor_id"
-
-  create_table "quotation_items", :force => true do |t|
-    t.integer  "quotation_id"
-    t.integer  "product_id"
-    t.string   "code"
-    t.string   "description"
-    t.float    "quantity"
-    t.float    "unit_price"
-    t.float    "discount"
-    t.float    "tax"
-    t.float    "total"
-    t.integer  "warehouse_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  add_index "quotation_items", ["product_id"], :name => "index_quotation_items_on_product_id"
-  add_index "quotation_items", ["quotation_id"], :name => "index_quotation_items_on_quotation_id"
-  add_index "quotation_items", ["warehouse_id"], :name => "index_quotation_items_on_warehouse_id"
-
-  create_table "quotations", :force => true do |t|
-    t.string   "document_number"
-    t.integer  "customer_id"
-    t.string   "currency"
-    t.date     "document_date"
-    t.date     "valid_to"
-    t.string   "payment_term"
-    t.float    "sub_total_free"
-    t.float    "sub_total_taxed"
-    t.float    "tax_total"
-    t.float    "discount_total"
-    t.float    "total"
-    t.text     "notes"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "quotations", ["customer_id"], :name => "index_quotations_on_customer_id"
-
-  create_table "roles", :force => true do |t|
-    t.string   "role"
-    t.string   "description"
-    t.integer  "department_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
-  add_index "roles", ["department_id"], :name => "index_roles_on_department_id"
-
-  create_table "shipping_methods", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
   create_table "sublines", :force => true do |t|
     t.string   "code"
     t.string   "description"
@@ -775,17 +592,10 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
     t.string   "itask"
     t.string   "ntask"
     t.string   "iaccount"
-    t.decimal  "mlaborcost", :precision => 18, :scale => 4
+    t.decimal  "mlaborcost", :precision => 10, :scale => 2
+    t.string   "nunidad"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-  end
-
-  create_table "taxes", :force => true do |t|
-    t.string   "name"
-    t.float    "percentage"
-    t.string   "cc_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "telephones", :force => true do |t|
@@ -805,6 +615,8 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   end
 
   create_table "users", :force => true do |t|
+    t.string   "username"
+    t.string   "name"
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
     t.string   "reset_password_token"
@@ -823,8 +635,8 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "vendors", :force => true do |t|
-    t.string   "credit_limit"
     t.integer  "entity_id"
+    t.string   "credit_limit"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
@@ -842,15 +654,33 @@ ActiveRecord::Schema.define(:version => 20130307154458) do
   end
 
   create_table "work_benefits", :force => true do |t|
+    t.integer  "costs_center_id"
     t.string   "description"
-    t.decimal  "percentage",     :precision => 12, :scale => 2
+    t.decimal  "percentage",                                       :precision => 10, :scale => 2
     t.integer  "debit_account"
     t.integer  "credit_account"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.string   "beneficiary_id"
+    t.boolean  "is_beneficiary",                                                                  :default => true
+    t.enum     "state",           :limit => [:completed, :active],                                :default => :active
+    t.datetime "created_at",                                                                                           :null => false
+    t.datetime "updated_at",                                                                                           :null => false
   end
 
+  add_index "work_benefits", ["costs_center_id"], :name => "index_work_benefits_on_costs_center_id"
   add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
   add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"
+
+  create_table "work_benefits_payments", :force => true do |t|
+    t.integer  "employee_benefits_id"
+    t.integer  "payroll_id"
+    t.date     "payment_date"
+    t.decimal  "percentage",           :precision => 10, :scale => 2
+    t.decimal  "payment",              :precision => 10, :scale => 2
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+  end
+
+  add_index "work_benefits_payments", ["employee_benefits_id"], :name => "index_work_benefits_payments_on_employee_benefits_id"
+  add_index "work_benefits_payments", ["payroll_id"], :name => "index_work_benefits_payments_on_payroll_id"
 
 end

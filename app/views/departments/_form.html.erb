@@ -1,56 +1,105 @@
 <script type="text/javascript">
-  var centro_costos = [];
-  <% @centro_costos.each do |cc| %>
-    centro_costos.push(new Array(<%= cc.icentro_costo.blank? ? 0 : cc.icentro_costo %>, '<%=h cc.nombre_cc %>', <%= cc.icc_padre.blank? ? 0 : cc.icc_padre %>, <%= cc.id %>));
+  var costs_centers = [];
+  <% @costs_centers.each do |cc| %>
+    costs_centers.push(new Array(
+          '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>', 
+          '<%= cc.name_cc %>', 
+          '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>', 
+          <%= cc.id %>)
+    );
   <% end %>
 </script>
+
+<%= javascript_include_tag 'resources' %>
 <%= javascript_include_tag 'employees/employee' %>
 <%= javascript_include_tag 'departments/department' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
-<%= form_for @department, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :employee_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.hidden_field :employee_id %>
-      <%= text_field_tag 'load_employee',nil, :class => 'text_field required 
-                          search-image-employee', :for=>:employee_id %>  
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :centro_de_costos_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.hidden_field :centro_de_costos_id %>
-      <%= text_field_tag 'load_centro_de_costo',nil, :class => 'text_field required 
-                          search-image-employee', :for=>:centro_de_costos_id %> 
-    <a href="#myModal" role="button" class="btn" data-toggle="modal"> <i class="icon-list"></i> </a> 
-    </div>
-  </div>
+<%= javascript_include_tag 'utils/modal' %>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                departments_path, :class => 'btn' %>
-  </div>
-<% end %>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Seleccione un Centro de Costos</h3>
+    <% if @department.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@department.errors.count, "error") %> prohibited this department from being saved:</h3>
+        <% @department.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+    <div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for @department, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+          
+          <div class="form-group">
+            <%= f.label :name, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :name, :class => 'form-control' %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :employee_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">                
+                <%= f.hidden_field :employee_id %>
+                <%= text_field_tag 'load_employee',nil, :class => 'form-control', :for=>:employee_id %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <%= f.hidden_field :costs_center_id %>
+                <%= text_field_tag 'load_costs_centers', nil, :class => 'form-control search-image-employee', :for => :employee_id %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit :class => 'btn btn-primary' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                              provinces_path, :class => 'btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    <div id="list"></div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-    <!--
-    <button class="btn btn-primary">Save changes</button>
-    -->
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 id="myModalLabel" class="modal-title">Seleccione un Centro de Costos</h2>
+      </div>
+
+      <div class="modal-body">
+        <div id="list"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

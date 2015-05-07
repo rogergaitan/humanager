@@ -10,9 +10,5 @@
 
 class Occupation < ActiveRecord::Base
 	has_many :employees
-  	attr_accessible :description
-  	validates :description,   
-  	:presence => true, 
-  	:uniqueness => { :case_sensitive => false }
-
+  	attr_accessible :description, :ins_code, :ccss_code
 end

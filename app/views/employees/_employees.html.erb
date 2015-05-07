@@ -1,0 +1,62 @@
+<%- model_class = Employee -%>
+<%- model_class_entity = Entity -%>
+
+<div class="panel-heading"></div>
+
+<div class="panel-body panel-no-padding" id="employees">
+  
+  <table class="table table-striped" id="task-data">
+    <thead>
+      <tr>
+        <th><%= model_class_entity.human_attribute_name(:entityid) %></th>
+        <th><%= model_class_entity.human_attribute_name(:name) %></th>
+        <th><%= model_class_entity.human_attribute_name(:surname) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <% unless @employees.empty?  %>
+        <% @employees.each do |employee| %>
+          <tr>
+            <td><%= employee.entity.entityid %></td>
+            <td>
+              <%= employee.entity.name %>
+            </td>
+            <td>
+              <%= employee.entity.surname %>
+            </td>
+
+            <td>
+              <% if can? :update, Employee %>
+                <%= link_to edit_employee_path(employee), :class => 'btn btn-xs btn-success-alt' do %>
+                  <i class="fa fa-pencil"></i>
+                <% end %>
+              <% end %>
+              <% if can? :update, DetailPersonnelAction %>
+                <%= link_to detail_personnel_actions_path, :class => 'btn btn-xs btn-inverse-alt' do %>
+                  <i class="fa fa-users"></i>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="4">
+            <div class="alert alert-dismissable alert-info">
+              <i class="fa fa-fw fa-info-circle"></i>
+              <strong>Información!</strong>
+              <%= t("notice.no_results") %>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="text-right">    
+    <%= will_paginate @employees %>
+  </div>
+</div>

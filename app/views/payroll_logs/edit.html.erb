@@ -1,6 +1,152 @@
 <%- model_class = PayrollLog -%>
-<div class="page-header">
+
+<div class="page-heading">
   <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
-                                   :default => "Edit #{model_class.model_name.human}") %></h1>
+						:default => "Edit #{model_class.model_name.human}") %> |
+			<%= @payroll_log.payroll.payroll_type.description %> del 
+			<%= @payroll_log.payroll.start_date %> al 
+			<%= @payroll_log.payroll.end_date %>
+	</h1>
+	<div class="options">
+    <div class="btn-toolbar">
+      Cant. de empleados: <%= @result.count %> <p></p>
+      Acumulado: <%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
+    </div>
+  </div>
 </div>
-<%= render :partial => 'form' %>
+
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+  	<div class="panel panel-primary" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+				
+				<%= render :partial => 'form' %>
+
+				<div class="form-group">
+			    <div class="col-sm-11 col-md-offset-1">
+			    	<h2><b><label>Detalle Empleados</label></b></h2>
+			    </div>
+			  </div>
+
+				<div class="form-group">
+          <div class="col-sm-12">
+            <div class="accordion-group" id="accordion">
+							<% @count = 0 %>
+							<% @total = 0 %>
+							<% @result.each do |e| %>
+								<div class="panel accordion-item">
+									<a class="accordion-title collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsea<%= @count %>" aria-expanded="false">
+										<h2><%= e[0][1] %></h2>
+									</a>
+									<div id="collapsea<%= @count %>" class="collapse" aria-expanded="false" style="height: 0px;">
+										<div class="accordion-body">
+											<table class="table table-hover table-bordered table-striped" id="employee_table_<%= e[0][0] %>">
+												<thead>
+													<td>Fecha</td>
+													<td>Codigo | Labor</td>
+													<td>Costo</td>
+													<td>Unidad</td>
+													<td>Cantidad</td>
+													<td>Centro de Costos</td>
+													<td>Tipo de Pago</td>
+													<td>Total</td>
+													<td>Accion</td>
+												</thead>
+												<tbody>
+													<% e[1].each do |h| %>
+														<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
+															<td><%= h.payroll_date %></td>
+															<td><%= h.task.id %> | <%= h.task.ntask %></td>
+															<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.') %></td>
+															<td><%= h.task.nunidad %></td>
+															<td><%= h.time_worked %></td>
+															<td><%= h.costs_center.name_cc %></td>
+															<td><%= h.payment_type %></td>
+															<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.') %></td>
+															<% @total += h.total.to_f %>
+															<td>
+																<button type="button" class="btn btn-xs btn-danger-alt"><i class="fa fa-trash-o"></i></button>
+																<input type="hidden" value="<%= e[0][0] %>">
+																<input type="hidden" value="<%= h.id %>">
+															</td>
+														</tr>
+													<% end %>
+														<tr class="employee_count" id="total_<%= e[0][0] %>">
+															<td colspan="6" class="align_right">Total:</td>
+															<td colspan="3"><%= number_with_precision(@total, :precision => 2, :separator => '.') %></td>
+														</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<% @total = 0 %>
+								<% @count += 1 %>
+							<% end %>
+						</div>
+          </div>
+        </div>
+
+				<p style="clear:both;">&nbsp;</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag  do %>
+
+	/************************ 
+		Type payment 
+	************************/
+	var type_payment = []
+	
+	<% CONSTANTS[:PAYMENT].each do |payment| %>
+	    type_payment.push({
+		    "name": "<%= payment["name"] %>",
+			"value": "<%= payment["type"] %>"
+		});
+	<% end %>
+	
+	/************************ 
+	Employees Information 
+	************************/
+	<% id = ''  %>
+	<% date = ''  %>
+	<% task = ''  %>
+	<% cost = ''  %>
+	<% type_payment = ''  %>
+	
+	var employees_info = []
+	var data = []
+
+	<% @result.each do |e| %>
+		
+		<% id = e[0][0]  %>
+		<% name = e[0][1]  %>
+		
+		<% e[1].each do |h| %>
+			<% date = "#{h.payroll_date}" %>
+			<% task = "#{h.task.ntask}" %>
+			<% cost = "#{h.costs_center.name_cc}" %>
+			<% type_payment = "#{h.payment_type}" %>
+
+			data.push({
+			    "date": "<%= date %>",
+			    "task": "<%= task %>",
+			    "cost": "<%= cost %>",
+			    "type_payment": "<%= type_payment %>"
+			});
+		<% end %>
+
+		employees_info.push({
+			    "id":"<%= id %>",
+			    "name":"<%= name %>",
+			    "data": data
+			}); 
+		data = []
+	<% end %>
+<% end %>

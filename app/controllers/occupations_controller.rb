@@ -1,5 +1,5 @@
 class OccupationsController < ApplicationController
-  
+  load_and_authorize_resource
   respond_to :html, :json
   # GET /occupations
   # GET /occupations.json
@@ -7,8 +7,6 @@ class OccupationsController < ApplicationController
     @occupations = Occupation.paginate(:page => params[:page], :per_page => 15)
     respond_with(@occupations)
   end
-
-  
 
   # GET /occupations/1
   # GET /occupations/1.json
@@ -36,7 +34,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.save
-        format.html { redirect_to @occupation, notice: t('activerecord.models.occupation.one').capitalize + t('.notice.a_successfully_created') }
+        format.html { redirect_to @occupation, notice: 'Occupation was successfully created.' }
         format.json { render json: @occupation, status: :created, location: @occupation }
       else
         format.html { render action: "new" }
@@ -52,7 +50,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.update_attributes(params[:occupation])
-        format.html { redirect_to @occupation, notice: t('activerecord.models.occupation.one').capitalize + t('.notice.a_successfully_updated') }
+        format.html { redirect_to @occupation, notice: 'Occupation was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -65,11 +63,17 @@ class OccupationsController < ApplicationController
   # DELETE /occupations/1.json
   def destroy
     @occupation = Occupation.find(params[:id])
-    @occupation.destroy
+    @total = Employee.check_if_exist_records(params[:id], 'occupation')
+
+    if @total > 0
+      message = t('.notice.can_be_deleted')
+    else
+      @occupation.destroy
+      message = t('.notice.successfully_deleted')
+    end
 
     respond_to do |format|
-      format.html { redirect_to occupations_url, notice: t('.activerecord.models.occupation.one').capitalize + t('.notice.a_successfully_deleted') }
-      format.json { head :no_content } 
+      format.html { redirect_to occupations_url, notice: message }
       format.json { head :no_content }
     end
   end

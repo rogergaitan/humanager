@@ -1,2 +1,0 @@
-module PaymentOptionsHelper
-end

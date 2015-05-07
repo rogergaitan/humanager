@@ -1,24 +1,6 @@
-# == Schema Information
-#
-# Table name: companies
-#
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  surname    :string(255)
-#  company_id :string(255)
-#  telephone  :string(255)
-#  address    :string(255)
-#  email      :string(255)
-#  web_site   :string(255)
-#  default    :boolean
-#  logo       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class Company < ActiveRecord::Base
-  attr_accessible :address, :company_id, :default, :email, :logo, :name, :surname, :telephone, :web_site
+  attr_accessible :code, :name, :label_reports_1, :label_reports_2, :label_reports_3
 
-  ## VALIDATIONS
-  validates :name, :company_id, :telephone, :address, :presence => true
+  has_many :payroll
+
 end

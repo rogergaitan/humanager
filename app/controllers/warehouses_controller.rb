@@ -1,11 +1,10 @@
 # -*- encoding : utf-8 -*-
 class WarehousesController < ApplicationController
-
-  after_filter :clean_cache, :only => [:new, :edit, :destroy]
-  before_filter :title 
-
+  # GET /warehouses
+  # GET /warehouses.json,
+  # index paginated
   def index
-    #@title = t('.activerecord.models.warehouse').pluralize
+    @title = t('.activerecord.models.warehouse').pluralize
     @warehouses = Warehouse.all
     @warehouses = Warehouse.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
@@ -17,7 +16,7 @@ class WarehousesController < ApplicationController
   # GET /warehouses/1
   # GET /warehouses/1.json
   def show
-    #@title = t('.activerecord.models.warehouse')
+    @title = t('.activerecord.models.warehouse')
     @warehouse = Warehouse.find(params[:id])
 
     respond_to do |format|
@@ -29,7 +28,7 @@ class WarehousesController < ApplicationController
   # GET /warehouses/new
   # GET /warehouses/new.json
   def new
-    #@title = 'Bodega'
+    @title = 'Bodega'
     @warehouse = Warehouse.new
 
     respond_to do |format|
@@ -40,7 +39,7 @@ class WarehousesController < ApplicationController
 
   # GET /warehouses/1/edit
   def edit
-    #@title = t('.activerecord.models.warehouse')
+    @title = t('.activerecord.models.warehouse')
     @warehouse = Warehouse.find(params[:id])
   end
 
@@ -92,17 +91,4 @@ class WarehousesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  def title
-    @title = t('.activerecord.models.warehouse').capitalize + " - " + t(".helpers.links.#{action_name}" ) 
-  end
-
-  def fetch
-    Warehouse.fetch
-  end
-
-  def clean_cache
-    Warehouse.clean_cache
-  end
-
 end

@@ -1,60 +1,146 @@
 <%- model_class = Payroll -%>
 <%= javascript_include_tag 'payroll/payroll' %>
-<div class="page-header">
+
+<div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+
+      <% if can? :create, Payroll %>
+        <%= link_to new_payroll_path, :class => 'btn btn-primary pull-right' do %>
+          <i class="fa fa-plus"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<div class="tabbable">
-  <div class="tabbable">
-    <ul class="nav nav-pills">
-        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.Iniciadas") %></a></li>
-        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.Cerradas") %></a></li>
-    </ul>
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+
+   <!-- error div -->
+    <input id="get_activas_payrolls_path" type="hidden" value="<%= get_activas_payrolls_path %>">
+    <input id="get_inactivas_payrolls_path" type="hidden" value="<%= get_inactivas_payrolls_path %>">
+
+    <div class="tab-container">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.iniciadas") %></a></li>
+        <li><a href="#tab2" data-toggle="tab"><%= t("tabs.cerradas") %></a></li>
+      </ul>
 
       <div class="tab-content">
-        <div class="tab-pane active" id="tab1">
+        
+        <div class="tab-pane active" id="tab1" data-url="<%= payroll_logs_path %>">
+          <input id="payrolls_path" type="hidden" value="<%= payrolls_path %>">
           <h2>Planillas Iniciadas</h2>
+          <hr>
 
-          <table class="table table-striped" id="activas">
+          <table class="table table-bordered" id="activas" data-url="<%= get_inactivas_payrolls_path %>">
             <thead>
               <tr>
-                <div class="pull-right"> <input type="checkbox"  id="chkTodos"  /> Seleccionar Todos </div>
                 <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
+                <th><%= model_class.human_attribute_name(:company_id) %></th>
                 <th><%= model_class.human_attribute_name(:start_date) %></th>
                 <th><%= model_class.human_attribute_name(:end_date) %></th>
                 <th><%= model_class.human_attribute_name(:payment_date) %></th>
+                <th>Acumulado</th>
                 <th><%= model_class.human_attribute_name(:state) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
-          <tbody>
-        
-          </tbody>
-        </table>
-         <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_payroll_path,
-            :class => 'btn btn-primary' %>
-          <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
+            <tbody></tbody>
+          </table>
+          
+          <div id="payroll_total"></div>
+          <input type="hidden" id="close_payroll_payrolls_path" value="<%= close_payroll_payrolls_path %>">
+
         </div>
 
         <div class="tab-pane" id="tab2">
           <h2>Planillas Cerradas</h2>
-            <table class="table table-striped" id="inactivas">
+          <hr>
+          <table class="table table-striped" id="inactivas">
             <thead>
               <tr>
                 <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
+                <th><%= model_class.human_attribute_name(:company_id) %></th>
                 <th><%= model_class.human_attribute_name(:start_date) %></th>
                 <th><%= model_class.human_attribute_name(:end_date) %></th>
                 <th><%= model_class.human_attribute_name(:payment_date) %></th>
-                <th>Activar</th>
+                <th>Total</th>
+                <th>Abrir</th>
+                <th><%= model_class.human_attribute_name(:num_oper) %></th>
               </tr>
             </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-        <button id="seleccion" class="btn"> Reabrir Seleccionadas</button>
+            <tbody>
+            </tbody>
+          </table>
+          <% if can? :close_payroll, Payroll %>
+            <button id="seleccion" class="btn"> Reabrir Seleccionadas</button>
+          <% end %>
         </div>
-
       </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-8 ">
+            <% if can? :close_payroll, Payroll %>
+              <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
+            <% end %>
+          </div>
+        </div>
+      </div>        
+
+    </div>
+
+  </div>
+</div>
+
+<!-- *********************************************************************************************** -->
+<!-- *********************************************************************************************** -->
+
+<% if can? :destroy, Payroll %>
+  <input type="hidden" id="payroll_destroy" value="1">
+<% else %>
+  <input type="hidden" id="payroll_destroy" value="0">
+<% end %>
+
+<% if can? :update, Payroll %>
+  <input type="hidden" id="payroll_update" value="1">
+<% else %>
+  <input type="hidden" id="payroll_update" value="0">
+<% end %>
+
+<% if can? :send_to_firebird, Payroll %>
+  <input type="hidden" id="send_to_firebird" value="1">
+<% else %>
+  <input type="hidden" id="send_to_firebird" value="0">
+<% end %>
+
+<!-- *********************************************************************************************** -->
+<!-- Modals -->
+<!-- *********************************************************************************************** -->
+
+<div id="payrollModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Mensaje</h3>
+  </div>
+  <div class="modal-body">
+    <div id="results_close_payroll">
+      <table id="table_results_close_payroll" style="display:none;" class="table table-hover">
+        <thead>
+          <tr>
+            <th>Empleado</th>
+            <th>Salario Total</th>
+            <th>Deducciones Totales</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
 </div>

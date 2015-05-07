@@ -20,8 +20,6 @@
   <dd><%= @employee.join_date %></dd>
   <dt><strong><%= model_class.human_attribute_name(:social_insurance) %>:</strong></dt>
   <dd><%= @employee.social_insurance %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:ccss_calculated) %>:</strong></dt>
-  <dd><%= @employee.ccss_calculated %></dd>
   <dt><strong><%= model_class.human_attribute_name(:department_id) %>:</strong></dt>
   <dd><%= @employee.department_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:occupation_id) %>:</strong></dt>
@@ -42,11 +40,8 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               employees_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_employee_path(@employee), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              employee_path(@employee),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+  <% if can? :update, Employee %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_employee_path(@employee), :class => 'btn' %>
+  <% end %>
 </div>

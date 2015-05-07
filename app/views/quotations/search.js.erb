@@ -1,7 +1,0 @@
-$('#quotations').html("<%= escape_javascript(render(:partial => 'search')) %>");
-var search = "<%= escape_javascript(params[:search]) %>"
-$('table.table_quotations tbody tr td:contains("'+search+'")').filter(function(){
-  this.innerHTML = this.innerHTML.replace(
-    search,"<b><span class='text-success'>" + search + "</span></b>");
-}); 
-$(".pagination").addClass("pag");

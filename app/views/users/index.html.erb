@@ -1,0 +1,63 @@
+<%- model_class = User -%>
+<%= javascript_include_tag 'users/script' %>
+
+<input type="hidden" id="usersfb_users_path" value="<%= usersfb_users_path %>">
+<input type="hidden" id="users_path" value="<%= users_path %>">
+
+<div class="page-heading">
+  <h1><%= t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <button id="users-fb" class="btn btn-primary pull-right">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:username) %></th>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:email) %></th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td><%= user.username %></td>
+                  <td><%= user.name %></td>
+                  <td><%= user.email %></td>
+                  <td>
+                    <% if can? :update, User %>
+                      <%= link_to edit_user_path(user), :class => 'btn btn-xs btn-success-alt' do %>
+                        <i class="fa fa-pencil"></i>
+                      <% end %>
+                      <%= link_to permissions_user_path(user), :class => 'btn btn-xs btn-inverse-alt' do %>
+                        <i class="fa fa-unlock-alt"></i>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="text-right">    
+            <%= will_paginate @users %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

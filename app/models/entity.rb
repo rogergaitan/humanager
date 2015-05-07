@@ -13,44 +13,38 @@
 
 class Entity < ActiveRecord::Base
 	
-  #ASSOCIATIONS
   has_one  :employee, :dependent => :destroy
 	has_many :telephones, :dependent => :destroy
   has_many :emails, :dependent => :destroy
   has_many :addresses, :dependent => :destroy
   has_many :contacts, :dependent => :destroy
-  has_many :bank_accounts, :dependent => :destroy
   has_one  :customer
   has_one  :vendor
-	
-  #ATTRIBUTES
-  accepts_nested_attributes_for :telephones, :allow_destroy => true, 
-    :reject_if => proc { |attributes| attributes["telephone"].blank? }
+	accepts_nested_attributes_for :telephones, :allow_destroy => true, :reject_if => proc { |attributes| attributes["telephone"].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
-  
-  accepts_nested_attributes_for :addresses, :allow_destroy => true 
-  
-  accepts_nested_attributes_for :contacts, :allow_destroy => true, 
-    :reject_if => proc { |attributes| attributes["name"].blank? }
+  accepts_nested_attributes_for :addresses, :allow_destroy => true
+  accepts_nested_attributes_for :contacts, :allow_destroy => true
 
-  accepts_nested_attributes_for :bank_accounts, :allow_destroy => true,
-    :reject_if => proc { |attributes| attributes["bank_account"].blank? }   
-  
   attr_accessible :entityid, :name, :surname, :typeid, :telephones_attributes, 
-                  :emails_attributes, :addresses_attributes, 
-                  :contacts_attributes, :bank_accounts_attributes
-                  
-  #VALIDATIONS
-  validates :name, :surname, :entityid, :typeid, :presence => true
-  validates :entityid, :uniqueness => true
-  
-  def create_vendor
-    unless self.vendor
-      self.build_vendor
-      self.save
-    else
-      false
-    end
+                  :emails_attributes, :addresses_attributes, :contacts_attributes
+
+  validates :name, :surname, :entityid, :presence => true
+
+  # Check if some province, canton or district it's used in any record.
+  def self.check_if_exist_addresses(id, type)
+    @total = 0
+    Entity.all().each do |e|
+      case type.to_s
+        when "province"
+          @total += e.addresses.where("province_id = ?", id).count
+        when "canton"
+          @total += e.addresses.where("canton_id = ?", id).count
+        when "district"
+          @total += e.addresses.where("district_id = ?", id).count
+      end # End Case
+    end # End Each
+    @total
   end
+
 end
 

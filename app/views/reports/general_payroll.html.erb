@@ -1,0 +1,29 @@
+<div class="page-heading">	
+	<h1>Comprobante General de Pago</h1>
+</div>
+
+<div class="container-fluid">
+	<%= render "search" %>
+	<%= javascript_include_tag 'reports/general_payroll' %>
+
+	<%= render "message" %>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<% if can? :general_proof_payments_pdf, User %>
+						<button id="btn_create_pdf">Crear archivo PDF</button> | 
+					<% end %>
+
+					<% if can? :general_proof_payments_xls, User %>
+						<button id="btn_create_excel">Exportar a XLS</button>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<input type="hidden" id="show_reports_path" value="<%= reports_path %>">
+<input type="hidden" id="type_report" value="<%= CONSTANTS[:REPORTS]['GENERAL_PAYROLL'] %>">

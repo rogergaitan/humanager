@@ -27,8 +27,7 @@ class VendorsController < ApplicationController
     @entity = @vendor.build_entity
     @entity.addresses.build
     @entity.contacts.build
-    @entity.telephones.build
-    @entity.bank_accounts.build 
+    @entity.telephones.build 
   end
 
   # GET /vendors/1/edit
@@ -43,13 +42,8 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.save
-        if params['continue']
-          format.html { redirect_to new_vendor_path, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_created') }
-          format.json { render json: @vendor, status: :created, location: @vendor }
-        else
-          format.html { redirect_to @vendor, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_created') }
-          format.json { render json: @vendor, status: :created, location: @vendor }
-        end
+        format.html { redirect_to @vendor, notice: 'Vendor was successfully created.' }
+        format.json { render json: @vendor, status: :created, location: @vendor }
       else
         format.html { render action: "new" }
         format.json { render json: @vendor.errors, status: :unprocessable_entity }
@@ -64,7 +58,7 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.update_attributes(params[:vendor])
-        format.html { redirect_to @vendor, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_updated') }
+        format.html { redirect_to @vendor, notice: 'Vendor was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -78,17 +72,14 @@ class VendorsController < ApplicationController
   def destroy
     @vendor = Vendor.find(params[:id])
     @vendor.destroy
-    respond_to do |format|
-      format.html { redirect_to vendors_url, notice: t('.activerecord.models.vendor').capitalize + t('.notice.successfully_deleted') }
-      format.json { head :no_content }
-    end
+    respond_with @vendor
   end
 
   # Before filter method to get provinces, cantons and districts
   def get_address_info
-    @province ||= Province.fetch
-    @canton ||= Canton.fetch
-    @district ||= District.fetch
+    @province ||= Province.find(:all, :select =>['id','name'])
+    @canton ||= Canton.find(:all, :select =>['id','name', 'province_id'])
+    @district ||= District.find(:all, :select =>['id','name', 'canton_id'])
   end
 
 end

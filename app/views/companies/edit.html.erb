@@ -1,6 +1,9 @@
 <%- model_class = Company -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
+<%= javascript_include_tag 'companies/script_edit' %>
+
+<div class="page-heading">
+	<h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
                                    :default => "Edit #{model_class.model_name.human}") %></h1>
 </div>
-<%= render :partial => 'form' %>
+
+<%= render 'form' %>

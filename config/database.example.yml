@@ -1,0 +1,33 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: reasapp_development
+  pool: 5
+  username: root
+  password: ''
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: reasapp_test
+  pool: 5
+  username: root
+  password: ''
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: reasapp_production
+  pool: 5
+  username: root
+  password: ''
+
+# firebird:
+#   adapter: rubyfb
+#   database: /var/lib/firebird/2.5/data/AreaT_PRUEBAS.fdb
+#   username: SYSDBA
+#   password: 'root'
+#   host: localhost

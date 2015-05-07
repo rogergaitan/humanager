@@ -13,11 +13,17 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               positions_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_position_path(@position), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              position_path(@position),
-              :method => 'delete',
-              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-              :class => 'btn btn-danger' %>
+              
+  <% if can? :update, Position %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_position_path(@position), :class => 'btn' %>
+  <% end %>
+
+  <% if can? :destroy, Position %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                position_path(@position),
+                :method => 'delete',
+                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                :class => 'btn btn-danger' %>
+  <% end %>
 </div>
