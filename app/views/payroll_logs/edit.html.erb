@@ -9,8 +9,8 @@
 	</h1>
 	<div class="options">
     <div class="btn-toolbar">
-      Cant. de empleados: <%= @result.count %> <p></p>
-      Acumulado: <%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.') %>
+      Cant. de empleados: <label id="employee_counter"><%= @result.count %></label> <p></p>
+      Acumulado: <label id="payroll_total"><%= number_with_precision(@payroll_log.payroll_total, :precision => 2, :separator => '.', :delimiter => ',') %></label>
     </div>
   </div>
 </div>
@@ -60,12 +60,12 @@
 														<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
 															<td><%= h.payroll_date %></td>
 															<td><%= h.task.id %> | <%= h.task.ntask %></td>
-															<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.') %></td>
+															<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.', :delimiter => ',') %></td>
 															<td><%= h.task.nunidad %></td>
 															<td><%= h.time_worked %></td>
 															<td><%= h.costs_center.name_cc %></td>
 															<td><%= h.payment_type %></td>
-															<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.') %></td>
+															<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.', :delimiter => ',') %></td>
 															<% @total += h.total.to_f %>
 															<td>
 																<button type="button" class="btn btn-xs btn-danger-alt"><i class="fa fa-trash-o"></i></button>
@@ -76,7 +76,9 @@
 													<% end %>
 														<tr class="employee_count" id="total_<%= e[0][0] %>">
 															<td colspan="6" class="align_right">Total:</td>
-															<td colspan="3"><%= number_with_precision(@total, :precision => 2, :separator => '.') %></td>
+															<td colspan="3">
+																<%= number_with_precision(@total, :precision => 2, :separator => '.', :delimiter => ',') %>
+															</td>
 														</tr>
 												</tbody>
 											</table>

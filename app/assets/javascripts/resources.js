@@ -35,4 +35,69 @@ $(document).ready(function() {
 		radioClass: 'iradio_minimal-blue'
 	});
 
+	resources.prettyNumber = function(input) {
+
+		// Only 2 decimals
+		input = parseFloat(input).toFixed(2);
+
+		// If the regex doesn't match, `replace` returns the string unmodified 
+		return (input.toString()).replace( 
+			// Each parentheses group (or 'capture') in this regex becomes an argument 
+			// to the function; in this case, every argument after 'match' 
+			/^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+				
+				// Less obtrusive than adding 'reverse' method on all strings
+				var reverseString = function(string) { return string.split('').reverse().join(''); }; 
+				
+				// Insert commas every three characters from the right 
+				var insertCommas = function(string) { 
+					// Reverse, because it's easier to do things from the left 
+					var reversed = reverseString(string); 
+					
+					// Add commas every three characters 
+					var reversedWithCommas = reversed.match(/.{1,3}/g).join(','); 
+
+					// Reverse again (back to normal) 
+					return reverseString(reversedWithCommas);
+				}; 
+
+				// If there was no decimal, the last capture grabs the final digit, so 
+				// we have to put it back together with the 'before' substring 
+				return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+			}
+		);
+	}
+
+	// To use this, please include this view: render "/layouts/message"
+	resources.showMessage = function(type, message) {
+	  var icon;
+	  if(type === "success") {
+	    icon = 'check';
+	  }
+	  if(type === "danger") {
+	    icon = 'times';
+	  }
+	  if(type === "warning") {
+	    icon = 'warning';
+	  }
+	  if(type === "info") {
+	    icon = 'info-circle';
+	  }
+
+	  $('#div-message').show();
+	  $('#div-message').find('div.alert.alert-dismissable').addClass('alert-'+type);
+	  $('#div-message').find('label#message').html(message);
+	  $('#div-message').find('i').addClass('fa-'+icon);
+
+	  $('div.alert.alert-'+type).fadeIn(4000, function() {
+	    setTimeout(function() {
+	        $(this).fadeOut("slow");
+	        $('#div-message').find('div.alert.alert-dismissable').removeClass('alert-' + type);
+	        $('#div-message').find('i').removeClass('fa-' + icon);
+	        $('#div-message').hide();
+	    },4000);
+	  });
+	}
+
+
 });

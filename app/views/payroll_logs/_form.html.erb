@@ -1,3 +1,4 @@
+<%= javascript_include_tag "payroll_logs/payroll_logs_functions" %>
 <%= javascript_include_tag "payroll_logs/payroll_logs_script" %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
 
@@ -80,15 +81,21 @@
 
   <div class="form-group">
     <div class="col-sm-12">
-      <div id="message" style="height:40px;"></div>
-			<table id="products_items" class=" table table-hover table-bordered table-striped">
+
+      <!-- <div id="message" style="height:40px;"></div> -->
+      <%= render "/layouts/message" %>
+
+			<table id="products_items" class="table table-hover table-bordered table-striped">
 				<tr class="header_items">
 					<td class="header_employees">Empleados</td>
-			    	<td class="header_task">Labor</td>
-			      	<td class="header_time">Tiempo Trabajado</td>
-			      	<td class="header_cc">Centro De Costo</td>
-			      	<td class="header_payment_type">Tipo de pago <%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log addFields") %></td>
-		    	</tr>
+		    	<td class="header_task">Labor</td>
+	      	<td class="header_time">Tiempo Trabajado</td>
+	      	<td class="header_cc">Centro De Costo</td>
+	      	<td class="header_payment_type">
+	      		Tipo de pago 
+	      		<%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log addFields") %>
+	      	</td>
+		    </tr>
 			</table>
     </div>
   </div>
@@ -107,99 +114,95 @@
 
 <% end %>
 
-
-
-
-
-
-
-
-
-<!-- *********************************************************************************************** -->
-<!-- *********************************************************************************************** -->
 <!--Payroll Modal-->
-<div id="payrollModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Seleccione la cuenta contable</h3>
-  </div>
-  <div class="modal-body">
-  	<div>
-	<!-- search -->
-	<legend>  
-	  <%= form_tag :search_cost_payroll_logs, :id => "search_cost_form", :class => "form-search", :method => "get" do %>
-	    <div class="control-group search">
-	      <%= text_field_tag :search_cost_name, params[:search_cost_name], :class => "search-query",
-	       :placeholder => 'Nombre' %>
-	       <button class="btn" id="clear_cost" type="button">Limpiar</button>
-	    </div>
-	  <% end %>
-	</legend>
-	<!-- search -->
+<div class="modal fade" id="payrollModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 id="myModalLabel" class="modal-title">Seleccione la Cuenta Contable</h2>
+      </div>
+      <div class="modal-body">
+        <div>
+					<%= form_tag :search_cost_payroll_logs, :id => "search_cost_form", :class => "form-inline", :method => "get" do %>
+				    <div class="control-group search">
+				      <%= text_field_tag :search_cost_name, params[:search_cost_name], :class => "form-control",
+				       :placeholder => 'Nombre' %>
+				      <button class="btn" id="clear_cost" type="button">Limpiar</button>
+				    </div>
+				  <% end %>
+        </div>
+        <div class="control-group">
+        	<div id="search_cost_results"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
     </div>
-    <div id="search_cost_results"></div>	
-  </div>
-  <div class="modal-footer">
-    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
   </div>
 </div>
-<!--Payroll Modal-->
 
 <!--Tasks Modal-->
-<div id="taskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Seleccione una Labor</h3>
-  </div>
-  <div class="modal-body">
-    <div>
-	<!-- search -->
-	<legend>  
-	  <%= form_tag :search_task_payroll_logs, :id => "search_task_form", :class => "form-search", :method => "get" do %>
-	    <div class="control-group search">
-	      <%= text_field_tag :search_task_name, params[:search_task_name], :class => "search-query",
-	       :placeholder => 'Nombre' %>
-	       <button class="btn" id="clear_task" type="button">Limpiar</button>
-	    </div>
-	  <% end %>
-	</legend>
-	<!-- search -->
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 id="myModalLabel" class="modal-title">Seleccione una Labor</h2>
+      </div>
+      <div class="modal-body">
+        <div>
+					<%= form_tag :search_task_payroll_logs, :id => "search_task_form", :class => "form-inline", :method => "get" do %>
+				    <div class="control-group search">
+				      <%= text_field_tag :search_task_name, params[:search_task_name], :class => "form-control",
+				       :placeholder => 'Nombre' %>
+				      <button class="btn" id="clear_task" type="button">Limpiar</button>
+				    </div>
+				  <% end %>
+        </div>
+        <div class="control-group">
+        	<div id="search_task_results"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
     </div>
-    <div id="search_task_results"></div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
   </div>
 </div>
-<!--Tasks Modal-->
 
 <!--Employee Modal-->
-<div id="employeeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-    	<button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
-    	<h3 id="myModalLabel">Seleccione un Empleado</h3>
-  	</div>
-  	<div class="modal-body">
-    <div>
-	<!-- search -->
-	<legend>  
-	  <%= form_tag :search_employee_payroll_logs, :id => "search_employee_form", :class => "form-search", :method => "get" do %>
-	    <div class="control-group search">
-	      <%= text_field_tag :search_name_employee, params[:search_name_employee], :class => "search-query",
-	       :placeholder => 'Nombre' %>
-	       <button class="btn" id="clear_employee" type="button">Limpiar</button>
-	    </div>
-	  <% end %>
-	</legend>
-	<!-- search -->
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 id="myModalLabel" class="modal-title">Seleccione un Empleado</h2>
+      </div>
+      <div class="modal-body">
+        <div>
+					<%= form_tag :search_employee_payroll_logs, :id => "search_employee_form", :class => "form-inline", :method => "get" do %>
+				    <div class="control-group search">
+				      <%= text_field_tag :search_name_employee, params[:search_name_employee], :class => "form-control",
+				       :placeholder => 'Nombre' %>
+				      <button class="btn" id="clear_employee" type="button">Limpiar</button>
+				    </div>
+				  <% end %>
+        </div>
+        <div class="control-group">
+        	<div id="search_employee_results"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
     </div>
-    <div id="search_employee_results"></div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
   </div>
 </div>
-<!--Employee Modal-->
 
 <input type="hidden" id="search_cost_payroll_logs_path" value="<%= search_cost_payroll_logs_path %>">
 <input type="hidden" id="search_task_payroll_logs_path" value="<%= search_task_payroll_logs_path %>">
@@ -306,5 +309,3 @@
 	employee_id = list_e_id.split(",");
 	employee_name = list_e_name.split(",");
 <% end %>
-
-<%= javascript_include_tag "payroll_logs/payroll_logs_functions" %>

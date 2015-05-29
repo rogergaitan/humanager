@@ -48,7 +48,6 @@ class Ability
         unless company.p_modify
             cannot :update, Company
         end
-
     end
     ######################################################################################
     # CANTONS | CONFIGURACION
@@ -254,7 +253,7 @@ class Ability
         end
     end
     ######################################################################################
-    # OTHER SALARIES | CONFIGURACION
+    # OTHER PAYMENTS | CONFIGURACION
     ######################################################################################
     other_payment = user.permissions_user.find_by_permissions_subcategory_id(list['Otros Pagos'])
     unless other_payment.nil?

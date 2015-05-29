@@ -1,84 +1,75 @@
 $(jQuery(document).ready(function($) {
 
-/***************************************************************************************************/
 	$('#payroll_logs_employee_ids').multiSelect({
-	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
-	    afterInit: function(ms){
-	      var that = this,
-	      $selectableSearch = that.$selectableUl.prev(),
-	      $selectionSearch = that.$selectionUl.prev(),
-	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+    afterInit: function(ms){
+      var that = this,
+      $selectableSearch = that.$selectableUl.prev(),
+      $selectionSearch = that.$selectionUl.prev(),
+      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
-	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-	      .on('keydown', function(e){
-	        if (e.which === 40){
-	          that.$selectableUl.focus();
-	          return false;
-	        }
-	      });
+      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+      .on('keydown', function(e){
+        if (e.which === 40){
+          that.$selectableUl.focus();
+          return false;
+        }
+      });
 
-	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-	      .on('keydown', function(e){
-	        if (e.which == 40){
-	          that.$selectionUl.focus();
-	          return false;
-	        }
-	      });
-	    },
-	    afterSelect: function(){
-	      // this.qs1.cache();
-	      this.qs2.cache();
-	    },
-	    afterDeselect: function(){
-	      this.qs1.cache();
-	      this.qs2.cache();
-	    }
-	  });
+      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+      .on('keydown', function(e){
+        if (e.which == 40){
+          that.$selectionUl.focus();
+          return false;
+        }
+      });
+    },
+    afterSelect: function(){
+      // this.qs1.cache();
+      this.qs2.cache();
+    },
+    afterDeselect: function(){
+      this.qs1.cache();
+      this.qs2.cache();
+    }
+	});
 
 	$('#payroll_log_payroll_date').datepicker();
 
-/***************************************************************************************************/
+	$('input[name=select_method]').parents('label').click(function() {
+		$('input[name=select_method]').prop('checked', false);
+		$(this).find('input').prop('checked', true);
+		showHideOptions($(this).find('input'));
+  	});
 
-	hideEmployess();
+  	$('input[name=select_method]').next().click(function() {
+		$('input[name=select_method]').prop('checked', false);
+		$(this).parent().find('input').prop('checked', true);
+		showHideOptions($(this).parent().find('input'));
+  	});
 
-	$('#select_method_all').click(function() {
-		$('#superiors_employees option:eq(0)').attr('selected','selected');
-		$('#departments_employees option:eq(0)').attr('selected','selected');
-		hideEmployess();
-		payroll_logs.cleanEmployeeAlone();
+  	// Select All
+  	$('#emplotee_select_all').parents('label').click(function() {
+  		emploteeSelectAll();
+  	});
+
+  	$('#emplotee_select_all').next().click(function() {
+  		emploteeSelectAll();
+  	});
+
+  	showHideOptions($('#select_method_all'));
+
+  	$('#departments_employees').change(function() {
+		filterEmployees("department", $(this).val());
 	});
 
-	$('#select_method_boss').click(function() {
-		hide($('#superiors_employees').val());
-		$('#superiors_employees').removeAttr('disabled');
-		payroll_logs.cleanEmployeeAlone();
-	});
-
-	$('#select_method_department').click(function() {
-		hide($('#departments_employees').val());
-		$('#departments_employees').removeAttr('disabled');
-		payroll_logs.cleanEmployeeAlone();
-	});
-
-	$('#superiors_employees').click(function() {
-		hide($(this).val());
-	});
-
-	$('#departments_employees').click(function() {
-		hide($(this).val());
+	$('#superiors_employees').change(function() {
+		filterEmployees("superior", $(this).val());
 	});
 	
-	$('.showTooltip').tooltip();
-	$('#remove-controls').tooltip();
-	
-	$('#add-more').click(addMoreEmployees);
-
 	$('#products_items').on('click', '.remove_fields', removeFields);
-	
-	// Populates the filter for employees
-	populateEmployeesFilter($('#search_employee_payroll_logs_path').val(), 'load_filter_employees_text', 'load_filter_employees_id');
 	
 	$('.items_purchase_orders_form .cc-filter-id:eq(0)').each(function() {
 		populateTasks($('#load_cc_tasks_path').val(), $(this).attr('id'));
@@ -91,54 +82,20 @@ $(jQuery(document).ready(function($) {
 	$('#employee_code').each( function() {
 		populateEmployees($('#load_em_employees_path').val(), $(this).attr('id'));
 	});
-	
-	// Delete the treeview after the user clicks on close
-	$('button.delete-accounts').click(function() {
-		$('#list').empty();
-	});
-	
-	// Executes different options to select the employees
-	$('input[name=select_method]').change(function() {
-		selectEmployeesLeft($(this));
-	});
-	
+
 	$('form').submit(function(e) {
 		var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
 		if((timeWorked != 0) && rowIsDisabled == false) { 
-			$('div#message').html('<div class="alert alert-error">Por favor guarde esta línea antes de guardar</div>');
-			$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
-			$('div.alert.alert-error').delay(4000).fadeOut();
+			resources.showMessage('info','Por favor guarde esta línea antes de guardar');
 			e.preventDefault();
 		} else {
 			$('#products_items input, select').attr('disabled', false);
 		}
 	});
-	
-	$('div.options-right input[name=check-employees-right]').change(selectEmployeesRight);
-	
-	// When the employees are loaded in the page move the selected to the right
-	moveEmployees();
-	
-	// Moves the selected employees to the list at the right
-	$('#add-to-list').click(moveToRight);
-	$('#remove-to-list').click(moveToLeft);
-	
-	$('#departments_employees').change(function() {
-		filterDepartment($(this).val());
-	});
-	
-	$('#superiors_employees').change(function() {
-		filterSuperior($(this).val());
-	});
-	
-	$('div#marcar-desmarcar input[name=check-employees]').change(marcarDesmarcar);
-	
+
 	// Add logs to table
 	$('form').on('click', '.add_fields', addFields);
-	$('#products_items').find('label').remove();
-
-	checkNumberEmployees();
 	
 	if( $('.controls_item:eq(1) input').val() != "" ) {
 		$('#products_items input').attr('disabled', true);
@@ -151,28 +108,93 @@ $(jQuery(document).ready(function($) {
 
 }));
 
-function hideEmployess() {
-	$('.employees-list:eq(0) div:eq(0)').hide();
-	$('.employees-list:eq(0)').css('min-height', '218px');
-	$('.employees-list:eq(0)').css('min-width', '218px');
-	$('.employees-list:eq(0)').css('float', 'left');
-	$('.employees-list:eq(0)').removeClass('employees-list');
+function showHideOptions(selected) {
+  switch($(selected).val()) {
+
+    case 'all':
+	    	// Hiden the boxes and checkbox filters
+	    	$('#ms-payroll_logs_employee_ids').hide();
+	    	$('#list-departments').hide();
+	    	$('#list-superior').hide();
+	    	$('#emplotee_select_all').parents('label').hide();
+	    	// Filters set by default the "boss" and "department"
+	    	$('#superiors_employees option:eq(0)').attr('selected','selected');
+				$('#departments_employees option:eq(0)').attr('selected','selected');
+				payroll_logs.cleanEmployeeAlone();
+      break;
+
+    case 'boss':
+	    	$('#ms-payroll_logs_employee_ids').show();
+	    	$('#emplotee_select_all').parents('label').show();
+      	$('.ms-selection').css('margin-top', '-5.5%');
+      	$('#ms-payroll_logs_employee_ids').find('input:eq(0)').hide();
+      	$('#list-departments').hide();
+      	$('#list-superior').show();
+      	filterEmployees("superior", $('#superiors_employees').val());
+    		payroll_logs.cleanEmployeeAlone();
+    		$('#superiors_employees').removeAttr('disabled');
+      break;
+
+    case 'department':
+	    	$('#ms-payroll_logs_employee_ids').show();
+	    	$('#emplotee_select_all').parents('label').show();
+	    	$('.ms-selection').css('margin-top', '-5.5%');
+	    	$('#ms-payroll_logs_employee_ids').find('input:eq(0)').hide();
+				$('#list-departments').show();
+	      $('#list-superior').hide();
+	      filterEmployees("department", $('#departments_employees').val());
+	      $('#departments_employees').removeAttr('disabled');
+	    	payroll_logs.cleanEmployeeAlone();
+      break;
+  }
 }
 
-function hide(element) {
-	$('.left-list').removeAttr('style');
-	$('.left-list').addClass('employees-list');
+function filterEmployees(type, id) {
+  
+	id = id ? id : 0;
 
-	if( element === "" ) {
-		$('.employees-list:eq(0) div:eq(0)').hide();
+  	$('#ms-payroll_logs_employee_ids .ms-selectable').find('li').each(function() {
+    
+	    if(type === "all") {
+	      if(!$(this).hasClass('ms-selected'))
+	        $(this).show();
+	    }
+
+	    var searchType = 0;
+	    if(type === "superior") {
+	      searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+	    }
+	    
+	    if(type === "department") {
+	      searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+	    }
+	    
+	    if(id != 0) {
+	      if( id == searchType ) {
+	        if(!$(this).hasClass('ms-selected'))
+	          $(this).show();
+	      } else {
+	        $(this).hide();
+	      }
+	    } else {
+	      if(!$(this).hasClass('ms-selected'))
+	        $(this).show();
+	    }
+	});
+}
+
+function emploteeSelectAll() {
+	if( $('#emplotee_select_all').is(':checked') ) {
+		$('#payroll_logs_employee_ids').multiSelect('select_all');
 	} else {
-		$('.employees-list:eq(0) div:eq(0)').show();
+	    $('#payroll_logs_employee_ids').multiSelect('deselect_all');
 	}
 }
 
 function removeFields(e) {
 
-	$(this).prev('input[type=hidden]').val(1);
+	// $(this).prev('input[type=hidden]').val(1);
+	$(this).parents('div.row').find('input[id*=_destroy]').val(1);
 	var deletedRow = $(this).closest('.success');
 	deletedRow.removeClass('success').addClass('deleted').hide();
 
@@ -185,16 +207,93 @@ function removeFields(e) {
 	e.preventDefault();
 }
 
-function addFields(e) { // kalfaro
+// Function to fill autocompletes
+function populateTasks(url, idField) {
+  $.getJSON(url, function(accounts) {
+      $(document.getElementById(idField)).next().autocomplete({
+          source: $.map(accounts, function(item){
+              $.data(document.body, 'cc_' + item.id+"", item.ntask);
+              return{
+                  label: item.ntask,
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ){
+              $(document.getElementById(idField)).val(ui.item.id);
+              payroll_logs.setTaskCode(ui.item.id);
+          },
+          focus: function(event, ui){
+              $(document.getElementById(idField)).next().val(ui.item.label);
+          }
+      });
+      if($(document.getElementById(idField)).val()){
+        var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
+        $(document.getElementById(idField)).next().val(account);
+      }
+      $(document.getElementById(idField)).next().removeClass('ui-autocomplete-input');
+  }); 
+}
+
+// Function to fill autocompletes
+function populateCentroCostos(url, textField, idField) {
+  $.getJSON(url, function(accounts) {
+      $(document.getElementById(idField)).next().autocomplete({
+          source: $.map(accounts, function(item){
+              $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
+              return{
+                  label: item.nombre_cc,
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ){
+              $(document.getElementById(idField)).val(ui.item.id);
+              payroll_logs.setCostCode(ui.item.id);
+          },
+          focus: function(event, ui){
+              $(document.getElementById(idField)).next().val(ui.item.label);
+          }
+      });
+      if($(document.getElementById(idField)).val()){
+          var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
+          $(document.getElementById(idField)).next().val(account);
+      }        
+  }); 
+}
+
+// Function to fill autocompletes (Employee)
+function populateEmployees(url, idField) {
+  $.getJSON(url, function(accounts) {
+      $(document.getElementById(idField)).next().autocomplete({
+          source: $.map(accounts, function(item){
+              $.data(document.body, 'e_' + item.id + "", item.nombre_cc);
+              return{
+                  label: item.surname + ' ' + item.name,
+                  id: item.id
+              }
+          }),
+          select: function( event, ui ) {
+              payroll_logs.setEmployeeId(ui.item.id);
+          },
+          focus: function(event, ui){
+              $(document.getElementById(idField)).next().val(ui.item.label);
+          }
+      });
+      if($(document.getElementById(idField)).val()){
+        var account = $.data(document.body, 'e_' + $('#'+idField).val()+'');
+        $(document.getElementById(idField)).next().val(account);
+      }
+      $(document.getElementById(idField)).next().removeClass('ui-autocomplete-input');
+  });
+}
+
+function addFields(e) {
 	// Valida si hay campos en blanco
 	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 	var numberRows = $('#products_items tr').length;
 	var is_select_methol_all = false;
 
-	if((timeWorked == 0 ) && numberRows > 1) { 
-		$('div#message').html('<div class="alert alert-error">Por favor complete los espacios en blanco</div>');
-		$('#products_items tr:eq(1)').effect('highlight', {color: '#F2DEDE', duration: 5000});
-		$('div.alert.alert-error').delay(4000).fadeOut();
+	if((timeWorked == 0 ) && numberRows > 1) {
+		resources.showMessage('info','Por favor complete los espacios en blanco');
 		e.preventDefault();
 	} else {
 		var numberEmployees = $('div.employees-list.list-right input').length;
@@ -209,18 +308,14 @@ function addFields(e) { // kalfaro
 			is_select_methol_all = true;
 			// Validar Empleado
 			if( $('#products_items tr:eq(1) td:eq('+payroll_logs.employee_td_eq+') input:eq(1)').val() === "" ) {
-				$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
-				$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
-				$('div.alert.alert-error').delay(4000).fadeOut();
+				resources.showMessage('info','Debe añadir al menos un empleado');
 				return false;	
 			}
 		}
 
 		// Valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
 		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
-			$('div#message').html('<div class="alert alert-error">Debe añadir al menos un empleado</div>');
-			$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
-			$('div.alert.alert-error').delay(4000).fadeOut();
+			resources.showMessage('info','Debe añadir al menos un empleado');
 			return false;
 		} else {
 			// Validate Duplicate Records
@@ -234,9 +329,8 @@ function addFields(e) { // kalfaro
 				payroll_logs.setTotal(num);
 				result = payroll_logs.validateEmployeeTask(num,is_select_methol_all);
 				if( result.status ) {
-					$('div#message').html('<div class="alert alert-error">Existe al menos un empleado con datos duplicados ['+result.username+']</div>');
-					$('div.employees-list.list-right').effect('highlight', {color: '#F2DEDE', duration: 5000});
-					$('div.alert.alert-error').delay(4000).fadeOut();
+					var message = 'Existe al menos un empleado con datos duplicados ['+result.username+']';
+					resources.showMessage('info',message);
 					return false;
 				}
 			}
@@ -285,269 +379,6 @@ function saveEmployees(isDisabled, is_select_methol_all) {
 			});
 		}
 	};
-}
-
-// FUNCTIONS FOR THE FILTER AND SELECTION OF EMPLOYEES
-
-
-// Function to check and uncheck all the employees at the left.
-function marcarDesmarcar () {
-	if ($(this).is(':checked')) {
-		$("div.left-list input[type='checkbox']").attr('checked', true);
-	} else {
-		$("div.left-list input[type='checkbox']").attr('checked', false);
-	};
-}
-
-function selectEmployeesRight() {
-	if ($(this).is(':checked')) {
-		$("div.list-right input[type='checkbox']").attr('checked', true);
-	} else {
-		$("div.list-right input[type='checkbox']").attr('checked', false);
-	};
-}
-
-// Function to filter results by department name 
-function filterDepartment(dropdown) {
-	var dep = dropdown ? dropdown : 0;
-	$('div.employees-list.left-list input[type=checkbox]').each(function() {
-		var empDep = $(this).data('dep') ? $(this).data('dep') : 0;
-		if (!(dep == 0)) {
-			if (!(dep == empDep)) {
-				$(this).closest('div.checkbox-group').hide();
-				$(this).prop('disabled', true);
-			} else {
-				$(this).prop('disabled', false);
-				$(this).closest('div.checkbox-group').show();
-			};
-		}	 else {
-				$(this).closest('div.checkbox-group').show();
-			};
-	});
-}
-
-// Function to filter results by superior name 
-function filterSuperior(dropdown) {
-	var sup = dropdown ? dropdown : 0;
-	$('div.employees-list.left-list input[type=checkbox]').each(function() {
-		var empSup = $(this).data('sup') ? $(this).data('sup') : 0;
-		if (!(sup == 0)) {
-			if (!(sup == empSup)) {
-				$(this).closest('div.checkbox-group').hide();
-				$(this).prop('disabled', true);
-			} else {
-				$(this).prop('disabled', false);
-				$(this).closest('div.checkbox-group').show();
-			};
-		}	 else {
-				$(this).closest('div.checkbox-group').show();
-			};
-	});
-}
-
-// Function to move the employees to the right
-function moveToRight(e) {
-	e.preventDefault();
-	moveEmployees();
-}
-
-// Function to move employees to the left
-function moveToLeft(e) {
-	e.preventDefault();
-	var appendEmployees = "";
-	$('div.employees-list.list-right input[type=checkbox]:not(:checked)').each(function() {
-		appendEmployees = "<div class='checkbox-group'>" +
-							"<div class='checkbox-margin'>" +
-								"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' data-id='"+ $(this).attr('id') +"' class='align-checkbox right' id='"+ $(this).attr('id')+'_left' +"' name='left-list-employees' value='"+ $(this).val() +"' />" +
-								"<label class='checkbox-label' for='"+ $(this).attr('id')+'_left' +"'>"+ $(this).next().text() +"</label>" +
-							"</div>" +
-						"</div>";	
-		$('#no-save').append(appendEmployees);
-		$(this).closest('.checkbox-group').remove();
-	});
-	if ($('input[name=select_method]:checked').val() == 'department') {
-		filterDepartment($('#departments_employees').val());
-	} else if ($('input[name=select_method]:checked').val() == 'boss') {
-		filterSuperior($('#superiors_employees').val())
-	};
-}
-
-function moveEmployees() {
-	var appendEmployees = "";
-	$('div.employees-list.left-list input[type=checkbox]:checked').each(function() {
-		if (!$(this).is(':disabled')) {
-			appendEmployees = "<div class='checkbox-group'>" +
-								"<div class='checkbox-margin'>" +
-									"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='payroll_log_employees' value='"+ $(this).val() +"' />" +
-									"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
-								"</div>" +
-							"</div>";	
-			$('#list-to-save').append(appendEmployees);
-			$(this).closest('.checkbox-group').remove();
-		};
-	});
-	$('div#marcar-desmarcar input[name=check-employees]').attr('checked', false);
-	$('div.options-right input[name=check-employees-right]').attr('checked', true);
-}
-
-function selectEmployeesLeft(selected) {
-	switch($(selected).val()) {
-		case 'all':
-			$('#employee-filter').show();
-			$('#list-departments').hide();
-			$('#list-superior').hide();	
-			$('div.employees-list.left-list input[type=checkbox]').prop('disabled', false);
-			$('.checkbox-group').show();
-			break;
-		case 'boss':
-			$('#employee-filter').hide();
-			$('#list-departments').hide();
-			filterSuperior($('#superiors_employees').val());
-			$('#list-superior').show();	
-			break;
-		case 'department':
-			$('#employee-filter').hide();
-			$('#list-superior').hide();	
-			filterDepartment($('#departments_employees').val());
-			$('#list-departments').show();			
-			break;
-	}
-}
-
-function populateEmployeesFilter(url, textField, idField) {
-  $.getJSON(url, function(employees) {
-      $(document.getElementById(textField)).autocomplete({
-          source: $.map(employees, function(item){
-              $.data(document.body, 'account_' + item.id+"", item.name + ' ' + item.surname);
-              return{
-               	label: item.surname + ' ' + item.name,
-                  id: item.id,
-					sup: item.employee_id,
-					dep: item.department_id,
-					data_id: 'employee_'+ item.id
-              }
-          }),
-          select: function( event, ui ) {
-				if (!$('#list-to-save input#'+ui.item.data_id).length) {
-					appendEmployees = "<div class='checkbox-group'>" +
-										"<div class='checkbox-margin'>" +
-											"<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep +"' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='payroll_log_employees' value='"+ ui.item.id +"' />" +
-											"<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" +
-										"</div>" +
-									"</div>";	
-					$('#list-to-save').append(appendEmployees);
-					$('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
-				}
-          }
-      })     
-  });	
-}
-// END FILTERS
-
-// Function to fill autocompletes (Employee)
-function populateEmployees(url, idField) {
-  $.getJSON(url, function(accounts) {
-      $(document.getElementById(idField)).next().autocomplete({
-          source: $.map(accounts, function(item){
-              $.data(document.body, 'e_' + item.id + "", item.nombre_cc);
-              return{
-                  label: item.surname + ' ' + item.name,
-                  id: item.id
-              }
-          }),
-          select: function( event, ui ) {
-              payroll_logs.setEmployeeId(ui.item.id);
-          },
-          focus: function(event, ui){
-              $(document.getElementById(idField)).next().val(ui.item.label);
-          }
-      });
-      if($(document.getElementById(idField)).val()){
-          var account = $.data(document.body, 'e_' + $('#'+idField).val()+'');
-          $(document.getElementById(idField)).next().val(account);
-      }        
-  });
-}
-
-// Function to fill autocompletes
-function populateCentroCostos(url, textField, idField) {
-  $.getJSON(url, function(accounts) {
-      $(document.getElementById(idField)).next().autocomplete({
-          source: $.map(accounts, function(item){
-              $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
-              return{
-                  label: item.nombre_cc,
-                  id: item.id
-              }
-          }),
-          select: function( event, ui ){
-              $(document.getElementById(idField)).val(ui.item.id);
-              payroll_logs.setCostCode(ui.item.id);
-          },
-          focus: function(event, ui){
-              $(document.getElementById(idField)).next().val(ui.item.label);
-          }
-      });
-      if($(document.getElementById(idField)).val()){
-          var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
-          $(document.getElementById(idField)).next().val(account);
-      }        
-  }); 
-}
-
-// Function to fill autocompletes
-function populateTasks(url, idField) {
-  $.getJSON(url, function(accounts) {
-      $(document.getElementById(idField)).next().autocomplete({
-          source: $.map(accounts, function(item){
-              $.data(document.body, 'cc_' + item.id+"", item.ntask);
-              return{
-                  label: item.ntask,
-                  id: item.id
-              }
-          }),
-          select: function( event, ui ){
-              $(document.getElementById(idField)).val(ui.item.id);
-              payroll_logs.setTaskCode(ui.item.id);
-          },
-          focus: function(event, ui){
-              $(document.getElementById(idField)).next().val(ui.item.label);
-          }
-      });
-      if($(document.getElementById(idField)).val()){
-          var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
-          $(document.getElementById(idField)).next().val(account);
-      }        
-  }); 
-}
-
-// Function to show the controls for adding more employees
-function addMoreEmployees (e) {
-	e.preventDefault();
-	$('#add-more').hide();
-	$('#filter-controls').slideDown();
-	$('#employee-box').slideDown();
-	$('#add-more i').removeClass('icon-plus').addClass('icon-minus');
-	$('#employee-filter').animate({marginLeft: "160px"});
-	$('#employee-header').text('Empleados');
-}
-
-// Function to remove the controls for adding more employees
-function removeControls(e) {
-	e.preventDefault();
-	$('#filter-controls').slideUp();
-	$('#employee-box').slideUp();
-	$('#add-more i').addClass('icon-plus').removeClass('icon-minus');
-	$('#add-more').show();
-	$('#employee-filter').animate({marginLeft: "0px"});
-	$('#employee-header').text('Empleado');
-	selectEmployeesRight();
-	moveToLeft(e);
-	$('#load_filter_employees_text').val("");
-}
-
-function checkNumberEmployees() {
-	$('#add-more').trigger('click');
 }
 
 function getLastFingering() {

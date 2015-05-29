@@ -31,11 +31,6 @@ $(jQuery(document).ready(function($) {
 			$('.addFields').trigger('click');
 		});
 
-		// Focus field redirect
-		//$('.paymentType').focusout(function() {
-			//$('.addFields').trigger('focus');
-		//});
-
 		$('#load_centro_de_costo').focusout(function() {
 			$('.paymentType').trigger('focus');
 		});
@@ -64,8 +59,7 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( task_code.length-1 == index ) {
-				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
-				$('div.alert.alert-error').delay(4000).fadeOut();
+				resources.showMessage('info','Codigo no fue encontrado');
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[0] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_cost[0] );
 				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val( task_unidad[0] );
@@ -101,8 +95,7 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( cost_code.length-1 === index ) {
-				$('div#message').html('<div class="alert alert-error">Codigo no fue encontrado</div>');
-				$('div.alert.alert-error').delay(4000).fadeOut();
+				resources.showMessage('info','Codigo no fue encontrado');
 				$('.success td:eq('+payroll_logs.centro_de_costo_td_eq+') input:eq(1)').val(''); // hidden (id)
 				$('#search_cost_code_').val(''); 			// text (code)
 				$('.success td:eq('+payroll_logs.centro_de_costo_td_eq+') input:eq(2)').val(''); // text (description)
@@ -131,8 +124,7 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( employee_code.length-1 === index ) {
-				$('div#message').html('<div class="alert alert-error">El numero de Identificacion no fue encontrado</div>');
-				$('div.alert.alert-error').delay(4000).fadeOut();
+				resources.showMessage('info','El numero de Identificacion no fue encontrado');
 				$('#employee_code').val('');		// Hidden id empleyee (id)
 				$('#name_employee').val('');		// Name employee
 				$('#search_code_employee').val('');	// Code employee
@@ -162,20 +154,22 @@ $(jQuery(document).ready(function($) {
 
 	payroll_logs.addNewColumn = function(num, employee_id) {
 
-		var date = $('#payroll_log_payroll_date').val(),
-			task = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').next().val(),
-			task_id = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prevAll().eq(2).val(),
-			task_cost = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().prev().val(),
-			unit = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').prev().val(),
-			mount = $('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val(),
-			cost = $('#payroll_log_payroll_histories_attributes_' + num + '_centro_de_costo_id').next('input').val(),
-			payment = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type option:selected').html(),
-			totalRow = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_total').val()),
-			subTotal = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
+		var base = '#payroll_log_payroll_histories_attributes_' + num;
 
-		$('#total_' + employee_id + ' td:eq(1)').html( (totalRow + subTotal).toFixed(2) );
+		var date 		= $('#payroll_log_payroll_date').val(),
+			task 		= $(base + '_task_id').parents('div.row').find('input[id*=load_task]').val(),
+			task_id 	= $(base + '_task_id').parents('div.row').find('input[id*=search_task_code_]').val(),
+			task_cost 	= $(base + '_task_id').parents('div.row').find('input[id*=task_cost_]').val(),
+			unit 		= $(base + '_task_id').parents('div.row').find('input[id*=task_unit_]').val(),
+			mount 		= $(base + '_time_worked').val(),
+			cost 		= $(base + '_costs_center_id').parents('div.row').find('input[id*=load_centro_de_costo]').val(),
+			payment 	= $(base + '_payment_type option:selected').html(),
+			totalRow 	= parseFloat($(base + '_total').val().replace(',', '')),
+			subTotal 	= parseFloat($('#total_' + employee_id + ' td:eq(1)').html().replace(',', ''));
+
+		$('#total_' + employee_id + ' td:eq(1)').html( resources.prettyNumber(totalRow + subTotal) );
 		
-		$('#employee_table_'+employee_id+' #total_'+employee_id).before('<tr id="tr_' + num + '_' + employee_id +'" class="tr_info">' +
+		$('#employee_table_'+employee_id+' #total_'+employee_id).before('<tr id="tr_' + num + '_' + employee_id +'" class="alert alert-dismissable alert-info">' +
 													'<td>'+ date +'</td>' +
 													'<td>'+ task_id +' | '+ task +'</td>' +
 													'<td>'+ task_cost +'</td>'+
@@ -183,7 +177,7 @@ $(jQuery(document).ready(function($) {
 													'<td>'+ mount +'</td>' +
 													'<td>'+ cost +'</td>' +
 													'<td>'+ payment +'</td>' +
-													'<td>'+ totalRow.toFixed(2)  +'</td>' +
+													'<td>'+ resources.prettyNumber(totalRow) +'</td>' +
 													'<td>' +
 														'<button type="button" class="btn btn-xs btn-danger-alt"><i class="fa fa-trash-o"></i></button>' +
 														'<input type="hidden" value="' + num + '"  />' +
@@ -204,8 +198,7 @@ $(jQuery(document).ready(function($) {
 		} else {
 			name = $('#employee_'+employee_id).next().html();			
 		}
-
-		// Kalfaro
+		
 		var theadList = ["Fecha", "Labor", "Costo", "Unidad", "Cantidad", "Centro de Costos", "Tipo de Pago", "Total"];
 		var thead = '';
 
@@ -227,24 +220,6 @@ $(jQuery(document).ready(function($) {
 			'</tr></tbody></table></div></div></div>';
 
 		$('#accordion').append(data);
-
-		/*$('#accordion').append(
-			'<div class="panel accordion-item">'+
-			'<div class="accordion-heading">'+
-				'<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse'+total+'">'+name+'</a>'+
-			'</div>'+
-			'<div id="collapse'+total+'" class="accordion-body collapse" style="height: 0px; "><div class="accordion-inner">'+
-			'<table class="table table-hover table-bordered table-striped" id="employee_table_'+employee_id+'">'+
-				'<thead><tr>'+
-					'<td>Fecha</td><td>Labor</td><td>Costo</td><td>Unidad</td><td>Cantidad</td><td>Centro de Costos</td><td>Tipo de Pago</td><td>Total</td><td>Accion</td>'+
-				'</tr></thead>'+
-			'<tbody>'+
-			'<tr class="employee_count" id="total_'+employee_id+'">'+
-					'<td colspan="6" class="align_right">Total:</td>'+
-					'<td colspan="3">00.00</td>'+
-				'</tr>'+
-			'</tbody></table></div></div></div>');*/
-
 	}
 
   	payroll_logs.search = function(name, url, type) {
@@ -413,7 +388,6 @@ $(jQuery(document).ready(function($) {
 				    "data": [data]
 				});
 
-
 		  		exists = false;
 		  	}
 	  	}
@@ -498,14 +472,14 @@ $(jQuery(document).ready(function($) {
   		var subtotal, total;
 
   		if( num != "" ) {
-  			subtotal = parseFloat($('#tr_' + num + '_' + employee_id + ' td:eq(5)').html());
+  			subtotal = parseFloat($('#tr_' + num + '_' + employee_id + ' td:eq(7)').html().replace(',', ''));
   		} else {
-  			subtotal = parseFloat($('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(5)').html());
+  			subtotal = parseFloat($('#tr_' + employee_id + '_' + payroll_history_id + ' td:eq(7)').html().replace(',', ''));
   		}
 
-  		total = parseFloat($('#total_' + employee_id + ' td:eq(1)').html());
+  		total = parseFloat($('#total_' + employee_id + ' td:eq(1)').html().replace(',', ''));
   		total = (total-subtotal);
-  		$('#total_' + employee_id + ' td:eq(1)').html(total);
+  		$('#total_' + employee_id + ' td:eq(1)').html(resources.prettyNumber(total));
   		payroll_logs.deductToPayrollTotal(subtotal);
   	}
 
@@ -540,38 +514,19 @@ $(jQuery(document).ready(function($) {
 	}
 
 	payroll_logs.addToPayrollTotal = function(num) {
-		var total = parseFloat($('#payroll_total').html());
-		$('#payroll_total').html( (total + num).toFixed(2) );
+		var total = parseFloat($('#payroll_total').html().replace(',', ''));
+		$('#payroll_total').html(resources.prettyNumber(total + num));
 	}
 
 	payroll_logs.deductToPayrollTotal = function(num) {
-		var total = parseFloat($('#payroll_total').html());
-		$('#payroll_total').html( (total - num).toFixed(2) );
+		var total = parseFloat($('#payroll_total').html().replace(',', ''));
+		$('#payroll_total').html(resources.prettyNumber(total - num));
 	}
 
 	payroll_logs.addEmployeeCounter = function() {
 		var oldCount = $('#accordion .accordion-group').length;
-		//var newCount = $('#products_items tr.success').length - 1;
-		//var totalCount = parseInt($('').html());
 		$('#employee_counter').html(oldCount);
 	}
-
-	/*payroll_logs.deductEmployeeCounter = function(counter) {
-		var totalCount = parseInt($('').html());
-		$('').html(totalCount + counter);	
-	}*/
-
-	/* payroll_logs.addCommas = function(nStr) {
-		nStr += '';
-		x = nStr.split('.');
-		x1 = x[0];
-		x2 = x.length > 1 ? '.' + x[1] : '';
-		var rgx = /(\d+)(\d{3})/;
-		while (rgx.test(x1)) {
-			x1 = x1.replace(rgx, '$1' + ',' + '$2');
-		}
-		return x1 + x2;
-	} */
 
 	payroll_logs.cleanEmployeeAlone();
 
@@ -646,7 +601,7 @@ $(jQuery(document).ready(function($) {
 
   	// Delete a Row - Employee (local)
 
-  	$('#accordion').on("click", ".tr_info button", function() {
+  	$('#accordion').on("click", ".alert-info button", function() {
 
   		var num = $(this).next().val();					// Number
   		var employee_id = $(this).next().next().val();	// Employee_id
@@ -667,13 +622,12 @@ $(jQuery(document).ready(function($) {
 		payroll_logs.removeTotalRow(num, employee_id, "");
   		$('#tr_' + num + '_' + employee_id).remove();
   		$("input[name='payroll_log[payroll_histories_attributes][" + num + "][employee_ids][]'][value='" + employee_id + "']").remove();
-  		//$(this).parents('.accordion-group').remove();
   		payroll_logs.addEmployeeCounter();
   	});
 
   	// Delete a Row - Employee (server)
 
-  	$('#accordion').on("click", "tr:not(.tr_info) button", function() {
+  	$('#accordion').on("click", "tr:not(.alert-info) button", function() {
   		
   		var employee_id = $(this).next().val();					// employee_id
   		var payroll_history_id = $(this).next().next().val();	// payroll_history_id
@@ -691,12 +645,10 @@ $(jQuery(document).ready(function($) {
 	        	payroll_logs.removeEmployeeTaskData("", employee_id, payroll_history_id);
 	        	payroll_logs.removeTotalRow("", employee_id, payroll_history_id);
   				$('#tr_' + employee_id + '_' + payroll_history_id).remove();
-  				$('div#message').html('<div class="alert alert-info">Borrado con exito</div>');
-				$('div.alert.alert-error').delay(4000).fadeOut();
+  				resources.showMessage('success','Borrado con exito');
 	        },
 			error: function(response, textStatus, errorThrown) {
-				$('div#message').html('<div class="alert alert-error">Error al intentar borrar el registro</div>');
-				$('div.alert.alert-error').delay(4000).fadeOut();
+				resources.showMessage('danger','Error al intentar borrar el registro');
 			}
       	});
   	});
