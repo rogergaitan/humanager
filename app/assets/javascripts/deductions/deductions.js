@@ -6,7 +6,13 @@ $(document).ready(function() {
     search_employee_by_code_path: $('#search_employee_by_code_path').val(),
     search_employee_by_name_path: $('#search_employee_by_name_path').val(),
     load_em_employees_path: $('#load_em_employees_path').val()
-  }
+  };
+
+  types = {
+    add: 'add',
+    remove: 'remove',
+    show: 'show'
+  };
 
   $('#deduction_payroll_type_ids').multiSelect({
     selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
@@ -71,12 +77,12 @@ $(document).ready(function() {
       });
     },
     afterSelect: function(values) { // selected
-      addEmployeeTable(values[0]);
+      searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
       this.qs1.cache();
       this.qs2.cache();
     },
     afterDeselect: function(values) { // deselected
-      removeEmployeeTable(values[0]);
+      searchEmployeeByAttr(values[0], 'id', 'multi', types.remove);
       this.qs1.cache();
       this.qs2.cache();
     }
@@ -97,7 +103,7 @@ $(document).ready(function() {
     var employeeId = $(this).parents('td').find('input:hidden').val(),
         selector = $("#employee_items input:hidden[id='in_searching'][value='1']").parents('tr');
 
-    searchEmployeeByAttr(employeeId, 'id', selector, true);
+    searchEmployeeByAttr(employeeId, 'id', 'table', types.add);
     $('#employeeModal').modal('hide'); // Close modal
     $("#employee_items input:hidden[id='in_searching'][value='1']").val('0'); // Change input status
     e.preventDefault();
@@ -203,16 +209,28 @@ $(document).ready(function() {
   // Remove a row to employee_deduction
   $('form').on('click', '.remove_fields', function(event) {
     event.preventDefault();
-    removeFields(this);
+    
+    var id = $(this).parents('tr').find("input:hidden[id*='_employee_id']").val();
+    if(id != "") {
+      searchEmployeeByAttr( id, 'id', 'table', types.remove);
+      return; 
+    }
+    $(element).parents('tr').remove();
   });
 
   $('#employee_items tr.items_deductions_form').each(function() {
-    searchEmployeeByAttr($(this).find( "input[id*='_employee_id']" ).val(), 'id', $(this), false );
+    var id = $(this).find("input[id*='_employee_id']").val();
+    if(id != "" ) {
+      console.log('id es:'+id);
+      searchEmployeeByAttr( id, 'id', 'show', '');
+    } else {
+      $(this).remove();
+    }
   });
 
   // Search Employee by code
   $('form').on('focusout', '.search_code_employee', function() {
-    searchEmployeeByAttr($(this).val(), 'code', $(this).parents('tr'), true);
+    searchEmployeeByAttr($(this).val(), 'code', 'table', types.add);
   });
 
 });
@@ -431,69 +449,6 @@ function addFields(e) {
   $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
 }
 
-function removeFields(element) {
-  var id = $(element).parents('tr').find("input:hidden[id*='_employee_id']").val();
-  
-  if(id != "") {
-    removeEmployeeMulti(id);
-    $(element).prev('input[type=hidden]').val(1);
-    $(element).parents('tr').hide();
-    return;
-  }
-  $(element).parents('tr').remove();
-}
-
-// Search a employee by attr (id, code, name)
-function searchEmployeeByAttr(value, type, selector, isNew) {
-  
-  var url, customData;
-  isNew = typeof isNew !== 'undefined' ? isNew : false;
-
-  switch(type) {
-    case "id":
-      url = deduction.search_employee_by_id_path,
-      customData = { search_id: value };
-    break;
-    
-    case "code":
-      url = deduction.search_employee_by_code_path,
-      customData = { search_code: value };
-    break;
-
-    case "name":
-      url = deduction.search_employee_by_name_path,
-      customData = { search_name: value };
-    break;
-  }
-
-  $.ajax({
-    type: "GET",
-    url: url,
-    dataType: "json",
-    data: customData,
-    success: function(data) {
-      if( data != null ) {
-        populateListEmployees(data, type, selector, isNew);
-      }
-    },
-    error: function(response, textStatus, errorThrown) {
-      showMessage("danger", "Error al intentar borrar el registro");
-    }
-  });
-}
-
-function populateListEmployees(employee, type, selector, isNew) {
-
-  if( checkIfEmployeeExist(employee) && isNew ) {
-    showMessage("info", "El empleado a sido habilitado nuevamente o ya existe en la lista");
-    addEmployeeMulti(employee.id)
-    $(selector).remove();
-  }
-
-  if(!isNew)
-    hiddenEmployees(employee.id);
-}
-
 function hiddenEmployees(id_employee) {
   if( $.inArray( parseInt(id_employee) , detailPaymentsHidden) != -1 ) {
     var data = findParentByAttr(id_employee, "id");
@@ -511,8 +466,9 @@ function checkIfEmployeeExist(employee) {
 
   var data = findParentByAttr(employee.id, "id");
 
-  if(data.destroy === "")
+  if(typeof data.destroy == 'undefined') {
     return false;
+  }
   
   $(data.parent).show();
   $(data.parent).find("input:hidden[id*='_destroy']").val("false");
@@ -524,26 +480,6 @@ function checkIfEmployeeExist(employee) {
   $(data.parent).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
 
   return true;
-}
-
-// Solo para la tabla de abajo visual
-function findParentByAttr(value, type) {
-  var parent = "", destroy = "";
-
-  $('#employee_items tr').each(function() {
-    if(type === "id") {
-      if( parseInt($(this).find("input:hidden[id*='employee_id']").val()) === parseInt(value) ) {
-        parent = $(this);
-        destroy = parseBool( $(this).find("input:hidden[id*='_destroy']").val());
-        return false;
-      }
-    }
-  });
-
-  return {
-    parent: parent,
-    destroy: destroy
-  };
 }
 
 function parseBool(str) {
@@ -568,7 +504,7 @@ function populateAutocompleteEmployees(idField) {
         }
       }),
       select: function( event, ui ) {
-        searchEmployeeByAttr(ui.item.label, "name", $(event.target).parents('tr'), true);
+        searchEmployeeByAttr(ui.item.label, "name", 'table', types.add);
       },
       focus: function(event, ui) {
       }
@@ -577,35 +513,14 @@ function populateAutocompleteEmployees(idField) {
     });  
 }
 
-// Desde el multiselect a la tabla
-function addEmployeeTable(id) {
-  var data = findParentByAttr(id, 'id');
-  
-  if(typeof data.destroy != 'undefined') {
-    $(data.parent).show();
-    $(data.parent).find("input:hidden[id*='_destroy']").val("false");
-    return false;
-  } else {
-    searchEmployeeByAttr(id, 'id', data.parent);
-  }
-}
-
 function removeEmployeeTable(id) {
   var data = findParentByAttr(id, 'id');
 
-  if(data.destroy === "")
+  if(typeof data.destroy == 'undefined') { //if(data.destroy === "")
     return false;
+  }
   
   $(data.parent).hide();
-}
-
-// Desde el tabla a la multiselect
-function addEmployeeMulti(id_employee) {
-  $('#employee_items_one .ms-selectable').find("li[id^='"+id_employee+"']").trigger('click');
-}
-
-function removeEmployeeMulti(id_employee) {
-  $('#employee_items_one .ms-selection').find("li[id^='"+id_employee+"']").trigger('click');
 }
 
 function searchAll(name) {
@@ -616,4 +531,168 @@ function searchAll(name) {
       search_employee_name: name
     }
   });
+}
+
+/******************************************************************************************/
+/* MULTISELECT - TABLA */
+function fromMulti(employee, type) {
+
+  var data = findParentByAttr(employee.id, 'id');
+
+  switch(type) {
+
+    case types.add:
+      // No existe
+      if(typeof data.parent == 'undefined') {
+        $('.add_fields ').trigger('click'); // Add new row
+        var selector = $('#employee_items tr.items_deductions_form:eq(0)');
+        $(selector).find("input:hidden[id*='_destroy']").val("false");
+        $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
+        $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
+        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+        $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+        $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+        $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+      } else { // Existe
+        $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+        $(data.parent).show();
+      }
+      showMessage("success", "Empleado agregado con exito");
+    break;
+    
+    case types.remove: // Ocutar
+      $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
+      $(data.parent).hide();
+      showMessage("success", "Empleado eliminado con exito");
+    break;
+  }
+}
+
+/******************************************************************************************/
+/* TABLA - MULTISELECT */
+function fromTable(employee, type) {
+
+  var data = findParentByAttr(employee.id, 'id');
+
+  switch(type) {
+
+    case types.add:
+      // No existe
+      if(typeof data.parent == 'undefined') {
+        var selector = $('#employee_items tr.items_deductions_form:eq(0)');
+        $(selector).find("input:hidden[id*='_destroy']").val("false");
+        $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
+        $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
+        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+        $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+        $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+        $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+      } else { // Existe
+        // Lo muestra
+        $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+        $(data.parent).show();
+        $('#employee_items tr.items_deductions_form:eq(0)').remove();
+      }
+      showMessage("success", "Empleado agregado con exito");
+      addEmployeeMulti(employee.id);
+    break;
+    
+    case types.remove: // Ocutar
+      $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
+      $(data.parent).hide();
+      showMessage("success", "Empleado eliminado con exito");
+      removeEmployeeMulti(employee.id);
+    break;
+  }
+}
+
+/******************************************************************************************/
+/* SHOW IN TABLA LOAD */
+function showEmployees(employee) {
+  var data = findParentByAttr(employee.id, 'id');
+  $(data.parent).find("input:hidden[id*='_destroy']").val("false");
+  $(data.parent).find("input:hidden[id*='_employee_id']").val(employee.id);
+  $(data.parent).find("input[id='search_code_employee']").val(employee.number_employee);
+  $(data.parent).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+  $(data.parent).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+  $(data.parent).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+  $(data.parent).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+}
+
+/******************************************************************************************/
+/* TABLA - MULTISELECT */
+function addEmployeeMulti(id_employee) {
+  $('#employee_items_one .ms-selectable').find("li[id^='"+id_employee+"']").trigger('click');
+}
+
+function removeEmployeeMulti(id_employee) {
+  $('#employee_items_one .ms-selection').find("li[id^='"+id_employee+"']").trigger('click');
+}
+
+/******************************************************************************************/
+// Search a employee by attr (id, code, name)
+function searchEmployeeByAttr(searchValue, searchType, from, typeFrom) {
+  
+  var url, customData;
+
+  switch(searchType) {
+    case "id":
+      url = deduction.search_employee_by_id_path,
+      customData = { search_id: searchValue };
+    break;
+    
+    case "code":
+      url = deduction.search_employee_by_code_path,
+      customData = { search_code: searchValue };
+    break;
+
+    case "name":
+      url = deduction.search_employee_by_name_path,
+      customData = { search_name: searchValue };
+    break;
+  }
+
+  $.ajax({
+    type: "GET",
+    url: url,
+    dataType: "json",
+    data: customData,
+    success: function(data) {
+      if( data != null ) {
+        if( from == "table" ) {
+          fromTable(data, typeFrom);
+        }
+        if( from == "multi" ) {
+          fromMulti(data, typeFrom);
+        }
+        if( from == "show" ) {
+          showEmployees(data);
+        }
+        // populateListEmployees(data, type, exist);
+      }
+    },
+    error: function(response, textStatus, errorThrown) {
+      showMessage("danger", "Error al buscar empleado");
+    }
+  });
+}
+
+// Solo para la tabla de abajo visual
+function findParentByAttr(value, type) {
+  var parent, destroy;
+
+  $('#employee_items tr').each(function() {
+    if(type === "id") {
+      if( parseInt($(this).find("input:hidden[id*='employee_id']").val()) === parseInt(value) ) {
+        parent = $(this);
+        destroy = parseBool( $(this).find("input:hidden[id*='_destroy']").val());
+        return false;
+      }
+    }
+  });
+
+  return {
+    parent: parent,
+    destroy: destroy
+  };
 }

@@ -53,8 +53,82 @@
               <%= f.text_field :description, :class => 'form-control' %>
             </div>
           </div>
+
+          <div class="form-group">
+            <%= f.label :deduction_type, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.enum_select(:deduction_type, {:include_blank => false}, { :class => 'form-control' }) %>
+            </div>
+            <div class="col-sm-1">
+              <a  id="unicPayroll" data-toggle="modal" href="#payrollModal" class="btn btn-default-alt">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+            <div class="payrolls-all">
+              <%= hidden_field_tag 'other_payment[payroll_ids][]', nil %>
+              <div class="payrolls-margin" id="payrolls-to-save"></div>
+            </div>
+          </div>
           
+          <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
+          <div class="form-group" id="other_payment_payrolls">
+            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= text_field_tag 'other_payment_payroll', nil, :class => 'form-control'%>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :calculation_type, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.enum_select(:calculation_type, {:include_blank => false}, { :class => 'form-control' }) %>
+            </div>
+          </div>
+
+          <div class="form-group" id="amount_exhaust_controls">
+            <%= f.label :amount, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :amount, :class => 'form-control', :include_blank =>false,
+                :value => number_with_precision(f.object.amount, delimiter: ',', separator: '.', precision: 2) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :constitutes_salary, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="checkbox icheck">
+                <label class="checkbox icheck">
+                  <%= f.check_box :constitutes_salary %>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :individual, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="checkbox icheck">
+                <label class="checkbox icheck">
+                  <%= f.check_box :individual %>
+                </label>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
           
+
+
+
+
+
 
           <div class="panel-footer">
             <div class="row">
@@ -77,54 +151,6 @@
 
 <%= form_for @other_payment, :validate => true, :html => { :class => 'form-horizontal' } do |f| %>
 
-  
-  <div class="control-group">
-    <%= f.label :deduction_type, :class => 'control-label' %>
-    <div class='controls'>
-      <%= f.enum_select :deduction_type, :include_blank =>false %>
-      <a id="unicPayroll" href="#payrollModal" role="button" class="btn" data-toggle="modal" rel="tooltip" title="Seleccionar planilla"> <i class="icon-list"></i> </a>
-    </div>
-    <div class="payrolls-all">
-      <%= hidden_field_tag 'other_payment[payroll_ids][]', nil %>
-      <div class="payrolls-margin" id="payrolls-to-save"></div>
-    </div>
-  </div>
-
-  <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
-  <div class="control-group" id="other_payment_payrolls">
-    <div class='controls'>
-      <%= text_field_tag 'other_payment_payroll', nil, :class => 'search-image-category'%>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :calculation_type, :class => 'control-label' %>
-    <div class='controls'>
-      <%= f.enum_select :calculation_type, :include_blank =>false %>
-    </div>
-  </div>
-
-  <div class="control-group" id="amount_exhaust_controls">
-    <%= f.label :amount, :class => 'control-label' %>
-    <div class='controls'>
-      <%= f.text_field :amount, :include_blank =>false,
-      :value => number_with_precision(f.object.amount, delimiter: ',', separator: '.', precision: 2) %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :constitutes_salary, :class => 'control-label' %>
-    <div class='controls'>
-      <%= f.check_box :constitutes_salary %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :individual, :class => 'control-label' %>
-    <div class='controls'>
-      <%= f.check_box :individual %>
-    </div>
-  </div>
 
   <div id="custom_calculation" class="control-group">
     <%= f.label :custom_calculation, :class => 'control-label' %>

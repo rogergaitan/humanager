@@ -163,6 +163,7 @@
               </div>
               <%= select("deduction", "employee_ids", options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id]}, 
                   @employee_ids.map {|j|j} ), { include_blank: false }, {:multiple => true, :selected => @employee_ids}) %>
+              <%= hidden_field_tag 'employee_ids', nil %>
             </div>
           </div>
 
@@ -185,7 +186,7 @@
               <table id="employee_items" class="table table-responsive">
                 <thead>
                   <tr class="header_items">
-                    <td class="header_employee">Empleado</td>
+                    <td class="header_employee" width='80%'>Empleado</td>
                     <td class="header_calculation">Valor</td>
                     <td class="">
                       Agregar <%= link_to_add_fields("", f, :deduction_employees, "") %>
