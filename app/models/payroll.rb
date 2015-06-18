@@ -170,15 +170,18 @@ class Payroll < ActiveRecord::Base
     new_list_employee_salary = {}
     
     list_employees.each do |employee_id, salary|
-      list_other_payments[employee_id].each do |other_payment|
-        if other_payment['constitutes_salary']
-          if new_list_employee_salary.has_key?(employee_id)
-            new_list_employee_salary[employee_id] += other_payment['payment'].to_f
-          else
-            new_list_employee_salary[employee_id] = other_payment['payment'].to_f
+      
+      if list_other_payments.key?(employee_id)
+        list_other_payments[employee_id].each do |other_payment|
+          if other_payment['constitutes_salary']
+            if new_list_employee_salary.has_key?(employee_id)
+              new_list_employee_salary[employee_id] += other_payment['payment'].to_f
+            else
+              new_list_employee_salary[employee_id] = other_payment['payment'].to_f
+            end
           end
         end
-      end
+      end      
       new_list_employee_salary[employee_id] += salary.to_f
     end
 
