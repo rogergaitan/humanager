@@ -13,7 +13,10 @@ $(jQuery(document).ready(function($) {
 
 		// Task
 		$("#search_task_code_").focusout(function() {
-			payroll_logs.searchTaskCode( $(this).val() );
+			var code = $(this).val();
+			if( code != "" ) {
+				payroll_logs.searchTaskCode( code );
+			}
 		});
 
 		// Cost
@@ -23,7 +26,11 @@ $(jQuery(document).ready(function($) {
 
 		// Employee
 		$('#search_code_employee').focusout( function() {
-			payroll_logs.searhEmployeeCode( $(this).val() );
+			if( $(this).val() == "") {
+				resources.showMessage('warning', 'Número de empleado esta vacio');
+			} else {
+				payroll_logs.searhEmployeeCode( $(this).val() );
+			}
 		});
 
 		// Add Fields last tap
@@ -211,7 +218,7 @@ $(jQuery(document).ready(function($) {
 				'<h2>'+name+'</h2></a>' +
 			'<div id="collapsea'+total+'" class="collapse" aria-expanded="false" style="height: 0px;">' +
 				'<div class="accordion-body">' +
-					'<table class="table table-hover table-bordered table-striped" id="employee_table_<%= e[0][0] %>">' +
+					'<table class="table table-hover table-bordered table-striped" id="employee_table_'+employee_id+'">' +
 						thead +
 						'<tbody>' +
 							'<tr class="employee_count" id="total_'+employee_id+'">' +
@@ -229,7 +236,10 @@ $(jQuery(document).ready(function($) {
 		if( name.length >= payroll_logs.search_length ) {
 
 			if( type == 'cost' ) {
-				d = { search_cost_name: name };
+				d = { 
+					search_cost_name: name,
+					company_id: $('#the_company_id').val()
+				};
 			} 
 			if( type == 'task' ) {
 				d = { search_task_name: name };
@@ -251,7 +261,10 @@ $(jQuery(document).ready(function($) {
 		var d = {};
 
 		if( type == 'cost' ) {
-			d = { search_cost_name: name };
+			d = { 
+				search_cost_name: name ,
+				company_id: $('#the_company_id').val()
+			};
 		} 
 		if( type == 'task' ) {
 			d = { search_task_name: name };
@@ -484,10 +497,9 @@ $(jQuery(document).ready(function($) {
   	}
 
   	payroll_logs.removeAllTotalRows = function(num) {
-
 		$('input[name="payroll_log[payroll_histories_attributes][' + num + '][employee_ids][]"]').each(function() {
 			payroll_logs.removeTotalRow(num, $(this).val(), '');
-  		});  		
+  		});
   	}
 
   	payroll_logs.cleanEmployeeAlone = function() {
@@ -591,6 +603,7 @@ $(jQuery(document).ready(function($) {
   		$('#load_centro_de_costo').val( $(this).html() );
     	payroll_logs.setCostCode( $(this).next().val() );
     	$('#payrollModal button:eq(2)').trigger('click');
+  		$('#products_items tr.items_purchase_orders_form:eq(0)').find('#search_cost_code_').focus();
   		e.preventDefault();
   	});
 

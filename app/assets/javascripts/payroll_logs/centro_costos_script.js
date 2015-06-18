@@ -2,7 +2,12 @@ $(jQuery(document).ready(function($) {
 
     treeviewhr.cc_tree(centro_costos, true);
     // Obtiene las centros de costo
-    $.getJSON($('#load_cc_centro_de_costos_path').val(), function(category_data) {
+    
+    $.getJSON($('#load_cc_centro_de_costos_path').val(),
+        {
+            company_id: $('#the_company_id').val()
+        },
+        function(category_data) {
         $( "#load_centro_de_costo" ).autocomplete({
             source: $.map(category_data, function(item){
                 $.data(document.body, 'category_' + item.id+"", item.nombre_cc);
@@ -20,7 +25,7 @@ $(jQuery(document).ready(function($) {
             var load_centro_de_costo_name = $.data(document.body, 'category_' + $('#payroll_log_centro_de_costos_id').val()+'');
             $("#load_centro_de_costo").val(load_centro_de_costo_name);
         }        
-    })
+    });
 
     $('.expand_tree').click(treeviewhr.expand);
 

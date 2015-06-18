@@ -1,39 +1,39 @@
 $(jQuery(document).ready(function($) {
 
 	$('#payroll_logs_employee_ids').multiSelect({
-    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
-    afterInit: function(ms){
-      var that = this,
-      $selectableSearch = that.$selectableUl.prev(),
-      $selectionSearch = that.$selectionUl.prev(),
-      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    afterInit: function(ms){
+	      var that = this,
+	      $selectableSearch = that.$selectableUl.prev(),
+	      $selectionSearch = that.$selectionUl.prev(),
+	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
-      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-      .on('keydown', function(e){
-        if (e.which === 40){
-          that.$selectableUl.focus();
-          return false;
-        }
-      });
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+	        if (e.which === 40){
+	          that.$selectableUl.focus();
+	          return false;
+	        }
+	      });
 
-      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-      .on('keydown', function(e){
-        if (e.which == 40){
-          that.$selectionUl.focus();
-          return false;
-        }
-      });
-    },
-    afterSelect: function(){
-      // this.qs1.cache();
-      this.qs2.cache();
-    },
-    afterDeselect: function(){
-      this.qs1.cache();
-      this.qs2.cache();
-    }
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+	        if (e.which == 40){
+	          that.$selectionUl.focus();
+	          return false;
+	        }
+	      });
+	    },
+	    afterSelect: function(){
+	      // this.qs1.cache();
+	      this.qs2.cache();
+	    },
+	    afterDeselect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    }
 	});
 
 	$('#payroll_log_payroll_date').datepicker();
@@ -193,24 +193,31 @@ function emploteeSelectAll() {
 
 function removeFields(e) {
 
+	e.preventDefault();
 	// $(this).prev('input[type=hidden]').val(1);
 	$(this).parents('div.row').find('input[id*=_destroy]').val(1);
 	var deletedRow = $(this).closest('.success');
-	deletedRow.removeClass('success').addClass('deleted').hide();
 
-	var name = $(this).prev().attr('name');
-	var num = name.match(/\d/g);
-	num = num.join('');
-	payroll_logs.removeAllEmployeeTaskData(num);
-	payroll_logs.removeAllTotalRows(num);
-	payroll_logs.deleteAllEmployeesView(num);
-	e.preventDefault();
+	if( deletedRow.find('#search_code_employee').is(':enabled') ) {
+		deletedRow.remove();
+	} else {
+		deletedRow.removeClass('success').addClass('deleted').hide();
+		var name = $(this).prev().attr('name');
+		var num = name.match(/\d/g);
+		num = num.join('');
+		payroll_logs.removeAllEmployeeTaskData(num);
+		payroll_logs.removeAllTotalRows(num);
+		payroll_logs.deleteAllEmployeesView(num);
+	}
 }
 
 // Function to fill autocompletes
 function populateTasks(url, idField) {
+
+  var textField = $(document.getElementById(idField)).next().find('input');
+
   $.getJSON(url, function(accounts) {
-      $(document.getElementById(idField)).next().autocomplete({
+      $(textField).autocomplete({
           source: $.map(accounts, function(item){
               $.data(document.body, 'cc_' + item.id+"", item.ntask);
               return{
@@ -223,40 +230,43 @@ function populateTasks(url, idField) {
               payroll_logs.setTaskCode(ui.item.id);
           },
           focus: function(event, ui){
-              $(document.getElementById(idField)).next().val(ui.item.label);
+              $(textField).val(ui.item.label);
           }
       });
       if($(document.getElementById(idField)).val()){
         var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
-        $(document.getElementById(idField)).next().val(account);
+        $(textField).val(account);
       }
-      $(document.getElementById(idField)).next().removeClass('ui-autocomplete-input');
+      $(textField).removeClass('ui-autocomplete-input');
   }); 
 }
 
-// Function to fill autocompletes
+// Function to fill autocompletes kalfaro
 function populateCentroCostos(url, textField, idField) {
-  $.getJSON(url, function(accounts) {
-      $(document.getElementById(idField)).next().autocomplete({
+  $.getJSON(url, {
+        company_id: $('#the_company_id').val()
+    }, function(accounts) {
+      $("#"+textField).autocomplete({
           source: $.map(accounts, function(item){
-              $.data(document.body, 'cc_' + item.id+"", item.nombre_cc);
+              $.data(document.body, 'cc_' + item.id+"", item.name_cc);
               return{
-                  label: item.nombre_cc,
+                  label: item.name_cc,
                   id: item.id
               }
           }),
           select: function( event, ui ){
-              $(document.getElementById(idField)).val(ui.item.id);
+              $("#"+idField).val(ui.item.id);
               payroll_logs.setCostCode(ui.item.id);
           },
           focus: function(event, ui){
-              $(document.getElementById(idField)).next().val(ui.item.label);
+              $("#"+textField).val(ui.item.label);
           }
       });
-      if($(document.getElementById(idField)).val()){
+      if($("#"+idField).val()){
           var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
-          $(document.getElementById(idField)).next().val(account);
-      }        
+          $("#"+textField).next().val(account);
+      }
+      $("#"+textField).removeClass('ui-autocomplete-input');
   }); 
 }
 
@@ -300,6 +310,20 @@ function addFields(e) {
 		var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
 		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
 		if (numberRows == 1) { rowIsDisabled = true; };
+
+		// Valida si agrego Labor
+		var task = $('#products_items tr:eq(1)').find("input[id*='task_id']").val();
+		if( task == "" ) {
+			resources.showMessage('info','Por favor agrege una Tarea');
+			return false;
+		}
+		
+		// Valida si agrego CC
+		var cc = $('#products_items tr:eq(1)').find("input[id*='_costs_center_id']").val();
+		if( cc == "" ) {
+			resources.showMessage('info','Por favor agrege un Centro de Costo');
+			return false;
+		}
 
 		// Valida si "Todos" esta seleccionado
 		if( $('#select_method_all').is(':checked') ) {

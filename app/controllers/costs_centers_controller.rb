@@ -50,9 +50,14 @@ class CostsCentersController < ApplicationController
   end
 
   def load_cc
-    @namesIds = CostsCenter.all
+    # @namesIds = CostsCenter.all
+    @namesIds = CostsCenter.where("icompany = ? and icost_center != '' ", params['company_id'])
+
+    puts params['company_id']
+    puts @namesIds
+
     respond_to do |format|
-      format.json { render json: @namesIds}
+      format.json { render json: @namesIds }
     end
   end
 
