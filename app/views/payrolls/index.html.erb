@@ -1,5 +1,6 @@
 <%- model_class = Payroll -%>
 <%= javascript_include_tag 'payroll/payroll' %>
+<%= javascript_include_tag 'resources' %>
 
 <div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
@@ -29,7 +30,7 @@
       </ul>
 
       <div class="tab-content">
-        
+        <%= render "/layouts/message" %>
         <div class="tab-pane active" id="tab1" data-url="<%= payroll_logs_path %>">
           <input id="payrolls_path" type="hidden" value="<%= payrolls_path %>">
           <h2>Planillas Iniciadas</h2>
