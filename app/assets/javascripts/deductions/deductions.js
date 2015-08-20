@@ -221,7 +221,6 @@ $(document).ready(function() {
   $('#employee_items tr.items_deductions_form').each(function() {
     var id = $(this).find("input[id*='_employee_id']").val();
     if(id != "" ) {
-      console.log('id es:'+id);
       searchEmployeeByAttr( id, 'id', 'show', '');
     } else {
       $(this).remove();
@@ -242,23 +241,28 @@ function selectUnselectEmployees(isSelect) {
   if(isSelect) {
     theClass = 'ms-selectable';
   }
-
-  $('#ms-deduction_employee_ids div.'+theClass).find('li').each( function() {
+  
+  $('#ms-deduction_employee_ids div.'+theClass).find('li:visible').each( function() {
     var id = $(this).attr('id').replace('-selectable','');
     if(isSelect) {
-      addEmployeeTable(id);
+      searchEmployeeByAttr(id, 'id', 'multi', types.add);
     } else {
-      removeEmployeeTable(id);
+      searchEmployeeByAttr(id, 'id', 'multi', types.remove);
     }
   });
+
+  if(isSelect) {
+    $('#deduction_employee_ids').multiSelect('select_all');
+  } else {
+    $('#deduction_employee_ids').multiSelect('deselect_all');
+  }
 }
+
 
 function emploteeSelectAll() {
   if( $('#emplotee_select_all').is(':checked') ) {
-    $('#deduction_employee_ids').multiSelect('select_all');
     selectUnselectEmployees(true);
   } else {
-    $('#deduction_employee_ids').multiSelect('deselect_all');    
     selectUnselectEmployees(false);
   }
 }
@@ -269,37 +273,6 @@ function payrollSelectAll() {
   } else {
     $('#deduction_payroll_type_ids').multiSelect('deselect_all');  
   }
-}
-
-function showMessage(type, message) {
-  var icon;
-  if(type === "success") {
-    icon = 'check';
-  }
-  if(type === "danger") {
-    icon = 'times';
-  }
-  if(type === "warning") {
-    icon = 'warning';
-  }
-  if(type === "info") {
-    icon = 'info-circle';
-  }
-
-  $('#div-message').show();
-  $('#div-message').find('div.alert.alert-dismissable').addClass('alert-'+type);
-  $('#div-message').find('label#message').html(message);
-  $('#div-message').find('i').addClass('fa-'+icon);
-
-
-  $('div.alert.alert-'+type).fadeIn(4000, function() {
-    setTimeout(function() {
-        $(this).fadeOut("slow");
-        $('#div-message').find('div.alert.alert-dismissable').removeClass('alert-' + type);
-        $('#div-message').find('i').removeClass('fa-' + icon);
-        $('#div-message').hide();
-    },4000);
-  });
 }
 
 function typeDeduction(selected) {
@@ -513,16 +486,6 @@ function populateAutocompleteEmployees(idField) {
     });  
 }
 
-function removeEmployeeTable(id) {
-  var data = findParentByAttr(id, 'id');
-
-  if(typeof data.destroy == 'undefined') { //if(data.destroy === "")
-    return false;
-  }
-  
-  $(data.parent).hide();
-}
-
 function searchAll(name) {
   return $.ajax({
     url: deduction.search_employee_payroll_logs_path,
@@ -557,13 +520,13 @@ function fromMulti(employee, type) {
         $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
         $(data.parent).show();
       }
-      showMessage("success", "Empleado agregado con exito");
+      resources.PNotify('Empleado', 'Agregado con exito', 'success');
     break;
     
     case types.remove: // Ocutar
       $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
       $(data.parent).hide();
-      showMessage("success", "Empleado eliminado con exito");
+      resources.PNotify('Empleado', 'Eliminado con exito', 'success');
     break;
   }
 }
@@ -593,14 +556,14 @@ function fromTable(employee, type) {
         $(data.parent).show();
         $('#employee_items tr.items_deductions_form:eq(0)').remove();
       }
-      showMessage("success", "Empleado agregado con exito");
+      resources.PNotify('Empleado', 'Agregado con exito', 'success');
       addEmployeeMulti(employee.id);
     break;
     
     case types.remove: // Ocutar
       $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
       $(data.parent).hide();
-      showMessage("success", "Empleado eliminado con exito");
+      resources.PNotify('Empleado', 'Eliminado con exito', 'success');
       removeEmployeeMulti(employee.id);
     break;
   }
@@ -672,7 +635,7 @@ function searchEmployeeByAttr(searchValue, searchType, from, typeFrom) {
       }
     },
     error: function(response, textStatus, errorThrown) {
-      showMessage("danger", "Error al buscar empleado");
+      resources.PNotify('Empleado', 'Error al buscar', 'danger');
     }
   });
 }
