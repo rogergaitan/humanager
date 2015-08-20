@@ -84,10 +84,11 @@ $(jQuery(document).ready(function($) {
 	});
 
 	$('form').submit(function(e) {
+		// debugger;
 		var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
 		if((timeWorked != 0) && rowIsDisabled == false) { 
-			resources.showMessage('info','Por favor guarde esta línea antes de guardar');
+			resources.PNotify('Planilla', 'Por favor save su última línea', 'info');
 			e.preventDefault();
 		} else {
 			$('#products_items input, select').attr('disabled', false);
@@ -303,7 +304,7 @@ function addFields(e) {
 	var is_select_methol_all = false;
 
 	if((timeWorked == 0 ) && numberRows > 1) {
-		resources.showMessage('info','Por favor complete los espacios en blanco');
+		resources.PNotify('Planilla', 'Por favor complete los espacios en blanco', 'info');
 		e.preventDefault();
 	} else {
 		var numberEmployees = $('div.employees-list.list-right input').length;
@@ -314,14 +315,14 @@ function addFields(e) {
 		// Valida si agrego Labor
 		var task = $('#products_items tr:eq(1)').find("input[id*='task_id']").val();
 		if( task == "" ) {
-			resources.showMessage('info','Por favor agrege una Tarea');
+			resources.PNotify('Labor', 'Por favor agrege una Labor', 'info');
 			return false;
 		}
 		
 		// Valida si agrego CC
 		var cc = $('#products_items tr:eq(1)').find("input[id*='_costs_center_id']").val();
 		if( cc == "" ) {
-			resources.showMessage('info','Por favor agrege un Centro de Costo');
+			resources.PNotify('Centro de Costo', 'Por favor agrege un Centro de Costo', 'info');
 			return false;
 		}
 
@@ -332,14 +333,14 @@ function addFields(e) {
 			is_select_methol_all = true;
 			// Validar Empleado
 			if( $('#products_items tr:eq(1) td:eq('+payroll_logs.employee_td_eq+') input:eq(1)').val() === "" ) {
-				resources.showMessage('info','Debe añadir al menos un empleado');
+				resources.PNotify('Empleado', 'Debe añadir al menos un empleado', 'info');
 				return false;	
 			}
 		}
 
 		// Valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
 		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
-			resources.showMessage('info','Debe añadir al menos un empleado');
+			resources.PNotify('Empleado', 'Debe añadir al menos un empleado', 'info');
 			return false;
 		} else {
 			// Validate Duplicate Records
@@ -354,7 +355,7 @@ function addFields(e) {
 				result = payroll_logs.validateEmployeeTask(num,is_select_methol_all);
 				if( result.status ) {
 					var message = 'Existe al menos un empleado con datos duplicados ['+result.username+']';
-					resources.showMessage('info',message);
+					resources.PNotify('Planilla', message, 'info');
 					return false;
 				}
 			}

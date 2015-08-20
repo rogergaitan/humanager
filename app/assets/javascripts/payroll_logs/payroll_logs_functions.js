@@ -2,7 +2,9 @@ payroll_logs = {
 	search_length : 3,
 	employee_td_eq: 0,
 	task_td_eq: 1,
+	time_worked_td_eq: 2,
 	centro_de_costo_td_eq: 3,
+	payment_type_td_eq: 5,
 }
 
 $(jQuery(document).ready(function($) {
@@ -10,6 +12,13 @@ $(jQuery(document).ready(function($) {
 	payroll_logs.reloadSelectorsEvents = function() {
 
 		$('.success td:eq(4) select').addClass('input-medium');
+
+		// Employee
+		$('#search_code_employee').focusout( function() {
+			if( $(this).val() != "") {
+				payroll_logs.searhEmployeeCode( $(this).val() );
+			}
+		});
 
 		// Task
 		$("#search_task_code_").focusout(function() {
@@ -19,17 +28,33 @@ $(jQuery(document).ready(function($) {
 			}
 		});
 
-		// Cost
-		$('#search_cost_code_').focusout(function() {
-			payroll_logs.searchCostCode( $(this).val().toUpperCase() );
+		$("#search_task_code_").focus(function() {
+			var employeeId = $('.success td:eq('+payroll_logs.employee_td_eq+') input:hidden:eq(0)').val();
+			if( employeeId == '' ) {
+				resources.PNotify('Empleado', 'Seleciona un empleado', 'warning');
+			}
 		});
 
-		// Employee
-		$('#search_code_employee').focusout( function() {
-			if( $(this).val() == "") {
-				resources.showMessage('warning', 'Número de empleado esta vacio');
-			} else {
-				payroll_logs.searhEmployeeCode( $(this).val() );
+		// Time Worked
+		$('.success td:eq('+payroll_logs.time_worked_td_eq+') input').focus(function() {
+			var taskId = $('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val();
+			if(taskId == "") {
+				resources.PNotify('Labor', 'Seleciona una Labor', 'warning');
+			}
+		});
+
+		// Cost Center
+		$('#search_cost_code_').focusout(function() {
+			if($(this).val()!="") {
+				payroll_logs.searchCostCode( $(this).val().toUpperCase() );
+			}
+		});
+
+		// Payment Type
+		$('.success td:eq('+payroll_logs.payment_type_td_eq+') select').focus(function() {
+			var costCenterId = $('.success td:eq('+payroll_logs.centro_de_costo_td_eq+') input:hidden').val();
+			if( costCenterId == "" ) {
+				resources.PNotify('Centro de Costo', 'Seleciona un Centro de Costo', 'warning');
 			}
 		});
 
@@ -66,12 +91,14 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( task_code.length-1 == index ) {
-				resources.showMessage('info','Codigo no fue encontrado');
-				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val( task_id[0] );
-				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val( task_cost[0] );
-				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val( task_unidad[0] );
-				$('#load_task').val( task_desc[0] );
-				payroll_logs.setTaskCode( task_id[0] );
+				resources.PNotify('Labor', "Codigo no fue encontrado", 'info');
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(0)').val('');
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(1)').val('');
+				$('.success td:eq('+payroll_logs.task_td_eq+') input:hidden:eq(2)').val('');
+				$('#load_task').val('');
+				$('#search_task_code_').val('');
+				$('#task_cost_').val('');
+				$('#task_unit_').val('');
 			}
 		});
 	}
@@ -102,7 +129,7 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( cost_code.length-1 === index ) {
-				resources.showMessage('info','Codigo no fue encontrado');
+				resources.PNotify('Centro de Costo', "Codigo no fue encontrado", 'info');
 				$('.success td:eq('+payroll_logs.centro_de_costo_td_eq+') input:eq(1)').val(''); // hidden (id)
 				$('#search_cost_code_').val(''); 			// text (code)
 				$('.success td:eq('+payroll_logs.centro_de_costo_td_eq+') input:eq(2)').val(''); // text (description)
@@ -131,7 +158,7 @@ $(jQuery(document).ready(function($) {
 			}
 
 			if( employee_code.length-1 === index ) {
-				resources.showMessage('info','El numero de Identificacion no fue encontrado');
+				resources.PNotify('Empleado', "El numero de Identificacion no fue encontrado", 'info');
 				$('#employee_code').val('');		// Hidden id empleyee (id)
 				$('#name_employee').val('');		// Name employee
 				$('#search_code_employee').val('');	// Code employee
@@ -658,10 +685,10 @@ $(jQuery(document).ready(function($) {
 	        	payroll_logs.removeEmployeeTaskData("", employee_id, payroll_history_id);
 	        	payroll_logs.removeTotalRow("", employee_id, payroll_history_id);
   				$('#tr_' + employee_id + '_' + payroll_history_id).remove();
-  				resources.showMessage('success','Borrado con exito');
+  				resources.PNotify('Planilla', "Borrado con exito", 'success');
 	        },
 			error: function(response, textStatus, errorThrown) {
-				resources.showMessage('danger','Error al intentar borrar el registro');
+				resources.PNotify('Planilla', "Error al intentar borrar el registro", 'danger');
 			}
       	});
   	});

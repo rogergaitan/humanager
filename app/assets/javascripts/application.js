@@ -59,6 +59,8 @@
 //= require ../template/plugins/wijets/wijets
 //= require ../template/plugins/form-parsley/parsley
 
+//= require ../template/plugins/pines-notify/pnotify.min
+
 //= require date/date
 
 //= require_directory .

@@ -34,5 +34,7 @@
  *= require ../template/plugins/iCheck/skins/square/_all
  *= require ../template/plugins/card/lib/css/card
 
+ *= require ../template/plugins/pines-notify/pnotify
+
  */
 
