@@ -1,6 +1,95 @@
 var otherPayment = {};
 
 $(document).ready(function() {
+	
+	/*********************************************************************************************************************************************************/
+	/* N E W */
+	/*********************************************************************************************************************************************************/
+	
+	$('#other_payment_payroll_type_ids').multiSelect({
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    afterInit: function(ms){
+	      var that = this,
+	      $selectableSearch = that.$selectableUl.prev(),
+	      $selectionSearch = that.$selectionUl.prev(),
+	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+	        if (e.which === 40){
+	          that.$selectableUl.focus();
+	          return false;
+	        }
+	      });
+
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+	        if (e.which == 40){
+	          that.$selectionUl.focus();
+	          return false;
+	        }
+	      });
+	    },
+	    afterSelect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    },
+	    afterDeselect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    }
+	});
+
+	$('#other_payment_employee_ids').multiSelect({
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    afterInit: function(ms){
+	      var that = this,
+	      $selectableSearch = that.$selectableUl.prev(),
+	      $selectionSearch = that.$selectionUl.prev(),
+	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+	        if (e.which === 40){
+	          that.$selectableUl.focus();
+	          return false;
+	        }
+	      });
+
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+	        if (e.which == 40){
+	          that.$selectionUl.focus();
+	          return false;
+	        }
+	      });
+	    },
+	    afterSelect: function(){
+	      // this.qs1.cache();
+	      this.qs2.cache();
+	    },
+	    afterDeselect: function(){
+	      this.qs1.cache();
+	      this.qs2.cache();
+	    }
+	});
+	
+	// Individual
+	$('#other_payment_individual').parents('label').click(function() {
+		otherPayment.showHideEmployees(false);
+	});
+
+	$('#other_payment_individual').next().click(function() {
+		otherPayment.showHideEmployees(false);
+	});
+
+	/*********************************************************************************************************************************************************/
+	/* N E W */
+	/*********************************************************************************************************************************************************/
 
 	// List of the routes
 	otherPayment.fetch_ledger_accounts_path = $('#fetch_ledger_accounts_path').val();
@@ -81,15 +170,6 @@ $(document).ready(function() {
 		otherPayment.selectEmployeesOptionsFilter($(this));
 	});
 
-	$('div.options-right input[name=check-employees-right]').change(otherPayment.selectEmployeesRight);
-	$('#marcar-desmarcar input[name=check-employees]').change(otherPayment.selectEmployeesLeft)
-
-	// Add Employee to the list
-	$('#add-to-list').click(function(event) {
-		event.preventDefault();
-		otherPayment.moveEmployeesToRight();
-	});
-
 	// Remove Employee to the list
 	$('#remove-to-list').click(function(event) {
 		event.preventDefault();
@@ -104,7 +184,6 @@ $(document).ready(function() {
 		otherPayment.filterDepartment( $(this).val() );
 	});
 
-	otherPayment.moveEmployeesToRight();
 	otherPayment.disableInputs();
 
 	// Search Employee by code
@@ -142,11 +221,6 @@ $(document).ready(function() {
 
 	otherPayment.searchAll("");
 	otherPayment.showHideEmployees(true); // Call the function to show/hide the div about employees
-
-	// Individual
-	$('#other_payment_individual').change(function() {
-		otherPayment.showHideEmployees(false);
-	});
 
 	$('#other_payment_custom_calculation').on('change', function() {
 		var value = $(this).val();
@@ -198,6 +272,30 @@ $(document).ready(function() {
 	$('#other_payment_custom_calculation').keyup(resources.twoDecimals);
 
 });
+
+/*********************************************************************************************************************************************************/
+/* N E W */
+/*********************************************************************************************************************************************************/
+// Show/Hide The differents view based in the checkbox "individual"
+// KALFARO FALTA EL EMPLOYEE INDIVIDUAL
+otherPayment.showHideEmployees = function(isIndividual) {
+	if( $('#other_payment_individual').is(':checked') ) {
+		$('#employee_items_one').hide();
+		$('#employee_items_two').show();
+		$('#custom_calculation').hide();
+	} else {
+		$('#employee_items_one').show();
+		$('#employee_items_two').hide();
+		$('#custom_calculation').show();
+	}
+	if(isIndividual) {
+		$('#other_payment_custom_calculation').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
+	}
+}
+
+/*********************************************************************************************************************************************************/
+/* N E W */
+/*********************************************************************************************************************************************************/
 
 // Show messages
 otherPayment.showMessage = function(type, message) {
@@ -325,24 +423,6 @@ otherPayment.filterDepartment = function(dropdown) {
 	});
 }
 
-// Select the Employees in the right
-otherPayment.selectEmployeesRight = function() {
-	if( $(this).is(':checked') ) {
-		$("#list-to-save input[type='checkbox']:not(:disabled)").prop('checked', true);
-	} else {
-		$("#list-to-save input[type='checkbox']:not(:disabled)").prop('checked', false);
-	}
-}
-
-// Select the Employee in the left
-otherPayment.selectEmployeesLeft = function() {
-	if( $(this).is(':checked') ) {
-		$("div.left-list input[type='checkbox']").prop('checked', true);
-	} else {
-		$("div.left-list input[type='checkbox']").prop('checked', false);
-	}
-}
-
 // Select the Employees options filter
 otherPayment.selectEmployeesOptionsFilter = function(selected) {
 	switch($(selected).val()) {
@@ -366,30 +446,6 @@ otherPayment.selectEmployeesOptionsFilter = function(selected) {
 			$('#list-departments').show();			
 			break;
 	}
-}
-
-// Move the employees to right
-otherPayment.moveEmployeesToRight = function() {
-	var appendEmployees = "";
-	$('div.employees-list.left-list input[type=checkbox]:checked').each(function() {
-
-		// Add To Table
-		otherPayment.addToTable( $(this).val(), $(this).next('label').text() );
-
-		if (!$(this).is(':disabled')) {
-			appendEmployees = "<div class='checkbox-group'>" +
-					"<div class='checkbox-margin'>" +
-					"<input type='checkbox' data-sup='"+ $(this).data('sup') +"' data-dep='"+ $(this).data('dep') +"' checked='checked' class='align-checkbox right' id='"+ $(this).data('id') +"' name='employee_ids' value='"+ $(this).val() +"' />" +
-					"<label class='checkbox-label' for='"+ $(this).data('id') +"'>"+ $(this).next().text() +"</label>" +
-					"</div>" +
-					"</div>"; 
-			$('#list-to-save').append(appendEmployees);
-			$(this).closest('.checkbox-group').remove();
-		};
-		// disableInputs();
-	});
-	$('div#marcar-desmarcar input[name=check-employees]').attr('checked', false);
-	$('div.options-right input[name=check-employees-right]').attr('checked', true);
 }
 
 // Move the employees to left
@@ -484,22 +540,6 @@ otherPayment.parseBool = function(str) {
   if(str=="true" || str=="1") return true;
 
   return false;
-}
-
-// Show/Hide The differents view based in the checkbox "individual"
-otherPayment.showHideEmployees = function(isIndividual) {
-	if( $('#other_payment_individual').is(':checked') ) {
-		$('#employee_items_one').hide();
-		$('#employee_items_two').show();
-		$('#custom_calculation').hide();
-	} else {
-		$('#employee_items_one').show();
-		$('#employee_items_two').hide();
-		$('#custom_calculation').show();
-	}
-	if(isIndividual) {
-		$('#other_payment_custom_calculation').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
-	}
 }
 
 // Check the type deduction and based in the value, run the differents options
@@ -710,30 +750,7 @@ otherPayment.searchAll = function(name) {
 	});
 }
 
-// From top to bottom
-otherPayment.addToTable = function(id, name) {
-  
-	var exist = false;
-	var parent = otherPayment.findParentByAttr(id, "id"),
-		parent2 = otherPayment.findParentByAttr(id, "id", true);
-
-	if(typeof parent != 'undefined') {
-		exist = true;
-	} else {
-		if(typeof parent2 != 'undefined') {
-			$(parent2).show();
-			$(parent2).find("input:hidden[id*='_destroy']").val("false");
-			exist = true;
-		}
-	}
-
-	if( !exist ) {
-		$('.add_fields').trigger('click');
-		var selector = $('#employee_items').find('tr:eq(1)');
-		otherPayment.searchEmployeeByAttr(name, "name", selector[0], true);
-	}
-}
-
+// kalfaro
 otherPayment.removeToTable = function(id) {
   
 	var parent = otherPayment.findParentByAttr(id, "id");
