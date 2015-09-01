@@ -171,6 +171,8 @@ class Payroll < ActiveRecord::Base
     
     list_employees.each do |employee_id, salary|
       
+      new_list_employee_salary[employee_id] = salary.to_f
+      
       if list_other_payments.key?(employee_id)
         list_other_payments[employee_id].each do |other_payment|
           if other_payment['constitutes_salary']
@@ -181,8 +183,7 @@ class Payroll < ActiveRecord::Base
             end
           end
         end
-      end      
-      new_list_employee_salary[employee_id] += salary.to_f
+      end
     end
 
     new_list_employee_salary
