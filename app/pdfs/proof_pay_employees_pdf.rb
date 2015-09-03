@@ -21,12 +21,11 @@ include ActionView::Helpers::NumberHelper
     c = 0
     cp = 0
     
-    @payroll_log_id = PayrollLog.includes(:payroll)
-                                .where(payrolls:{company_id: @company.id, state: false }, payroll_logs: {payroll_id: 1})
-                                .collect(&:id)
-    #@payroll_log_id = PayrollLog.select('id').where('payroll_id = ?', @payroll.id)
+    #@payroll_log_id = PayrollLog.includes(:payroll)
+    #                            .where(payrolls:{company_id: @company.id, state: false }, payroll_logs: {payroll_id: 1})
+    #                            .collect(&:id)
+    @payroll_log_id = PayrollLog.select('id').where('payroll_id = ?', @payroll.id)
     @payroll_history_ids = PayrollHistory.select('id').where('payroll_log_id = ?', @payroll_log_id)
-
     if @payroll_history_ids.length == 0
       no_info
     else
