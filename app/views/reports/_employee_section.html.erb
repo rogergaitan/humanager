@@ -6,6 +6,11 @@
 			<div class="panel-body">
 				<div class="form-group">
 					<div class="col-sm-12">
+						<div class="checkbox icheck">
+			            	<label>
+			                	<input type="checkbox" id="emplotee_select_all"> Seleccionar/Deseleccionar
+			            	</label>
+			            </div>
 				        <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox', :checked => true %>
 				        <%= label_tag 'select_method_all', "Todos", class: 'checkbox-label' %>
 				        <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>

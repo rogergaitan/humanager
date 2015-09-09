@@ -10,7 +10,7 @@
     ));
   <% end %>
 
-  var detailPayments = []; // Are the ids that can not be eliminated
+  var detailPayments = []; // Are the ids that can not be eliminate
   var detailPaymentsHidden = []; // They are the ids that are hidden from view
 
   <% @object.each do |id| %>
@@ -72,9 +72,20 @@
           
           <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
           <div class="form-group" id="other_payment_payrolls">
-            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <%= label_tag '', nil, class: 'col-sm-2 control-label' %>
+
             <div class="col-sm-3">
-              <%= text_field_tag 'other_payment_payroll', nil, :class => 'form-control'%>
+              <div class="input-group">
+                <% if params[:action] == "edit" %>
+                  <%= text_field_tag 'other_payment_payroll', nil, :class => 'form-control', 
+                    :value => @other_payment.payrolls[0] ? @other_payment.payrolls[0].payroll_type.description.to_s : "" %>
+                <% else %>
+                  <%= text_field_tag 'other_payment_payroll', nil, :class => 'form-control'%>
+                <% end %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
             </div>
           </div>
 
@@ -140,7 +151,7 @@
             <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <%= f.hidden_field :costs_center_id %>
-              <%= text_field_tag 'other_payment_centro_de_costo_name',nil, :class => 'form-control', :for => :costs_center_id %>
+              <%= text_field_tag 'other_payment_costs_center_name',nil, :class => 'form-control', :for => :costs_center_id %>
             </div>
             <div class="col-sm-1">
               <a id="centroCostoButton" data-toggle="modal" href="#centroCostoModal" class="btn btn-default-alt">
@@ -165,9 +176,9 @@
             </div>
           </div>
 
-          <!-- E M P L O Y E E S -->
+          <!-- E M P L O Y E E S   L I S T  -->
           
-          <div class="form-group" >
+          <div class="form-group" id="employee_items_one">
             <%= f.label :Empleados, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-8">
               <div class="checkbox icheck">
@@ -215,15 +226,40 @@
             </div>
           </div>
 
+          <!-- E M P L O Y E E S   L I S T   D E T A I L -->
+
+          <div class="form-group" id="employee_items_two">
+            <label class="col-sm-2 control-label">Agregar Empleados</label>
+            <div class="col-sm-8">
+              <table id="employee_items" class="table table-responsive">
+                <thead>
+                  <tr class="header_items">
+                    <td class="header_employee" width='80%'>Empleado</td>
+                    <td class="header_calculation">Valor</td>
+                    <td class="">
+                      Agregar <%= link_to_add_fields("", f, :other_payment_employees, "") %>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody class="table-bordered">
+                  <%= f.fields_for :other_payment_employees do |de| %>
+                    <%= render 'forms/other_payment_employee_form', :f => de %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div class="panel-footer">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2">
                 <%= f.submit nil, :class => 'btn-primary btn', :id => "member_submit" %>
                 <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                  deductions_path, :class => 'btn-default btn' %>
+                  other_payments_path, :class => 'btn-default btn' %>
               </div>
             </div>
           </div>
+
         <% end %>
       </div>
     </div>
@@ -231,8 +267,6 @@
 </div>
 
 <!-- ********************************************************************************************************************************** -->
-<!-- ********************************************************************************************************************************** -->
-
 
 <!-- Routes -->
 <input type="hidden" id="fetch_ledger_accounts_path" value="<%= fetch_ledger_accounts_path %>">
@@ -248,11 +282,6 @@
 <input type="hidden" id="get_activas_payrolls_path" value="<%= get_activas_payrolls_path %>">
 
 <!-- Modals -->
-
-
-<!-- ****************************************************************************************************************** -->
-<!-- NEW MODALS -->
-
 <!-- Ledger account Modal -->
 <div class="modal fade" id="ledgerAccountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -376,4 +405,3 @@
     </div>
   </div>
 </div>
-

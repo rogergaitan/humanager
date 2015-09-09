@@ -12,6 +12,11 @@
 				<div class="panel-heading"><h2>Labores</h2></div>
 				<div class="panel-body">
 					<div class="col-md-12">
+						<div class="checkbox icheck">
+					      <label>
+					        <input type="checkbox" id="task_id_select_all"> Seleccionar/Deseleccionar
+					      </label>
+					    </div>
 						<%= select("report", "task_ids", 
 							options_for_select( @tasks.map {|t| ["#{t.ntask}", t.id ]}), 
 							{ include_blank: false }, 
@@ -21,7 +26,6 @@
 			</div>
 		</div>
 	</div>
-
 	
 	<div class="row">
 		<div class="col-xs-12">
@@ -29,6 +33,11 @@
 				<div class="panel-heading"><h2>Centro de Costos</h2></div>
 				<div class="panel-body">
 					<div class="col-md-12">
+						<div class="checkbox icheck">
+					      <label>
+					        <input type="checkbox" id="cc_id_select_all"> Seleccionar/Deseleccionar
+					      </label>
+					    </div>
 						<%= select("report", "cc_ids", 
 							options_for_select( @cc.map {|c| ["#{c.name_cc}", c.id ]}), 
 							{ include_blank: false }, 

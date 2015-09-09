@@ -108,4 +108,14 @@ $(document).ready(function() {
 		});
 	}
 
+	resources.parseBool = function(str) {
+	  if(str==null) return false;
+	  if(str=="false") return false;
+	  if(str=="0") return false;
+	  if(str=="true") return true;
+	  if(str=="1") return true;
+
+	  return false;
+	}
+
 });

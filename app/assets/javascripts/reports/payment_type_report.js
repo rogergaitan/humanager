@@ -38,6 +38,15 @@ $(document).ready(function() {
       this.qs2.cache();
     }
   });
+
+  // task_id_select_all
+  $('#task_id_select_all').parents('label').click(function() {
+    payment_type_reports.selectUnselectTaks();
+  });
+
+  $('#task_id_select_all').next().click(function() {
+    payment_type_reports.selectUnselectTaks();
+  });
   
   // CC
   $('#report_cc_ids').multiSelect({
@@ -76,6 +85,15 @@ $(document).ready(function() {
     }
   });
 
+  // cc_id_select_all
+  $('#cc_id_select_all').parents('label').click(function() {
+    payment_type_reports.selectUnselectCC();
+  });
+
+  $('#cc_id_select_all').next().click(function() {
+    payment_type_reports.selectUnselectCC();
+  });
+
 	// Button Create PDF
 	$('#btn_create_pdf').on('click', function() {
 		payment_type_reports.validate_data('pdf');
@@ -87,6 +105,22 @@ $(document).ready(function() {
 	});
 
 });
+
+payment_type_reports.selectUnselectTaks = function(){
+  if( $('#task_id_select_all').is(':checked') ) {
+    $('#report_task_ids').multiSelect('select_all');
+  } else {
+    $('#report_task_ids').multiSelect('deselect_all');
+  }
+}
+
+payment_type_reports.selectUnselectCC = function(){
+  if( $('#cc_id_select_all').is(':checked') ) {
+    $('#report_cc_ids').multiSelect('select_all');
+  } else {
+    $('#report_cc_ids').multiSelect('deselect_all');
+  }
+}
 
 payment_type_reports.create_pdf_or_exel = function(format) {
 

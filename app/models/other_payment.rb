@@ -5,9 +5,9 @@ class OtherPayment < ActiveRecord::Base
 
   attr_accessible :description, :deduction_type, :calculation_type, :amount, :state, :constitutes_salary, 
       :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
-      :custom_calculation, :payroll_ids
+      :custom_calculation, :payroll_ids, :employee_ids
 
-  attr_accessor :custom_calculation
+  attr_accessor :custom_calculation, :employee_ids
 
   # association other_payments with payrolls
   has_many :other_payment_payrolls, :dependent => :destroy

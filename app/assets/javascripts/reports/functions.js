@@ -38,6 +38,15 @@ $(document).ready(function() {
     }
   });
 
+  // Employees Select All
+  $('#emplotee_select_all').parents('label').click(function() {
+    general_functions.selectUnselectEmployees();
+  });
+
+  $('#emplotee_select_all').next().click(function() {
+    general_functions.selectUnselectEmployees();
+  });
+
 	general_functions.datePicker();
   general_functions.searchInfoPayrolls();
   general_functions.showHideOptions($('#select_method_all')); // Set default
@@ -68,6 +77,14 @@ $(document).ready(function() {
   });
 
 })
+
+general_functions.selectUnselectEmployees = function (argument) {
+  if( $('#emplotee_select_all').is(':checked') ) {
+    $('#deduction_employee_ids').multiSelect('select_all');
+  } else {
+    $('#deduction_employee_ids').multiSelect('deselect_all');
+  }
+}
 
 // Establishing the datepicker
 general_functions.datePicker = function() {

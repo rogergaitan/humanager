@@ -90,6 +90,11 @@ $(document).ready(function() {
   
   typeDeduction($('#deduction_deduction_type'));
 
+  // When change the value called the function typeDeduction
+  $('#deduction_deduction_type').change(function() {
+    typeDeduction(this);
+  });
+
   // En caso de seleccionar una planilla unica si se quiere cambiar se limpia la anterios 
   // para que no se vayan a guardar 2 ids
   $('#unicPayroll').on({ click: clearPayrolls });
@@ -124,11 +129,11 @@ $(document).ready(function() {
 
   // Deduction Individual
   $('#deduction_individual').parents('label').click(function() {
-    showHideEmployees($('#deduction_is_beneficiary').is(':checked'));
+    showHideEmployees($('#deduction_individual').is(':checked'));
   });
 
   $('#deduction_individual').next().click(function() {
-    showHideEmployees($('#deduction_is_beneficiary').is(':checked'));
+    showHideEmployees($('#deduction_individual').is(':checked'));
   });
 
   $('#emplotee_select_all').parents('label').click(function() {
@@ -155,16 +160,13 @@ $(document).ready(function() {
   $('#deduction_is_beneficiary').next().click(function() {
     isBeneficiary($('#deduction_is_beneficiary').is(':checked'));
   });
-
+  
+  /* N O */
   $('#member_submit').click(function( event ) {
     $("form[id*='edit_deduction']").parsley().validate();
   });
+  /* N O */
   
-  // When change the value called the function typeDeduction
-  $('#deduction_deduction_type').change(function() {
-    typeDeduction(this);
-  });
-
   // Al precionar click sobre una planilla se establece el id de la planilla
   $('#activas').on("click", "td.payroll-type a", setPayroll);
 
@@ -181,14 +183,16 @@ $(document).ready(function() {
     mouseleave: function() {
       $(this).css("text-decoration", "none");
   }}, ".node_link");
-
+  
   // En caso de que exista algun error al cargar las planillas si se preciona click en el enlase para volver a cargarlas
   $("#error a").click(function (e){
     e.preventDefault();
     getPayrolls();
   });
 
+  /* KALFARO */
   CContables(); // Llama la funcion para el autocomplete de cuentas contables
+  /* KALFARO */
 
   $("#employee_items input:text[id*='_calculation']").keyup(resources.twoDecimals);
 
@@ -556,7 +560,7 @@ function fromTable(employee, type) {
         $(data.parent).show();
         $('#employee_items tr.items_deductions_form:eq(0)').remove();
       }
-      resources.PNotify('Empleado', 'Agregado con exito', 'success');
+      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
       addEmployeeMulti(employee.id);
     break;
     
