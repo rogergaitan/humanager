@@ -205,7 +205,7 @@ $(document).ready(function() {
         $(this).find("input:text[id*='_calculation']").val(value);
       }
     });
-  });  
+  });
 
   // Add new row to employee_deduction
   $('form').on('click', '.add_fields', addFields);
@@ -394,7 +394,6 @@ function CContables() {
       var deducciones_cuentas = $.data(document.body, 'category_' + $("#deduction_ledger_account_id").val()+'');
       $("#deduction_ledger_account").val(deducciones_cuentas);
     }
-    $("#deduction_ledger_account").removeClass('ui-autocomplete-input');
   }); 
 }
 
@@ -486,8 +485,7 @@ function populateAutocompleteEmployees(idField) {
       focus: function(event, ui) {
       }
     });
-    $(idField).removeClass('ui-autocomplete-input');
-    });  
+  });  
 }
 
 function searchAll(name) {

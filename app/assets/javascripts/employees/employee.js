@@ -25,7 +25,6 @@ $(document).ready(function($) {
         }
       }
     });
-    $('#load_employee').removeClass('ui-autocomplete-input');
     if($('#department_employee_id').val()) {
         var load_employee_name = $.data(document.body, 'employee_' + $('#department_employee_id').val() + '');
         $('#load_employee').val(load_employee_name);

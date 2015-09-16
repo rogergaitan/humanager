@@ -283,8 +283,6 @@ function fetchPopulateAutocomplete(url, textField, idField) {
           }
       });
 
-      $("#"+textField).removeClass('ui-autocomplete-input');
-
       if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
           $(document.getElementById(textField)).val(account);
@@ -318,8 +316,6 @@ function populateEmployeesFilter(url, textField, idField) {
 							}
 	      }
 	  });
-
-	  $("#"+textField).removeClass('ui-autocomplete-input');
   });	
 }
 
@@ -349,8 +345,6 @@ function populatePayrollTypesFilter(url, textField, idField) {
 				}
           }
       });
-
-	  $("#"+textField).removeClass('ui-autocomplete-input');
   });	
 }
 
@@ -380,7 +374,6 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
               $(document.getElementById(textField)).val(ui.item.name_cc);
           }
       });
-      $("#"+textField).removeClass('ui-autocomplete-input');
       if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
           $(document.getElementById(textField)).val(account);

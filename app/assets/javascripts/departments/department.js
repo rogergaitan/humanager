@@ -19,7 +19,6 @@ $(jQuery(document).ready(function($) {
         $('#department_costs_center_id').val(ui.item.id);
       }
     });
-    $('#load_costs_centers').removeClass('ui-autocomplete-input');
     if($('#department_costs_center_id').val()) {
       var load_costs_center_name = $.data(document.body, 'category_' + $('#department_costs_center_id').val() + '');
       $('#load_costs_centers').val(load_costs_center_name);

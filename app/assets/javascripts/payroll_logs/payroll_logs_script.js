@@ -267,7 +267,6 @@ function populateCentroCostos(url, textField, idField) {
           var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
           $("#"+textField).next().val(account);
       }
-      $("#"+textField).removeClass('ui-autocomplete-input');
   }); 
 }
 

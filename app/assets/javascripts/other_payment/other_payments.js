@@ -154,6 +154,14 @@ $(document).ready(function() {
     op.payrollSelectAll();
   });
 
+  $('#emplotee_select_all').parents('label').click(function() {
+    op.payrollSelectAll();
+  });
+  
+  $('#emplotee_select_all').next().click(function() {
+    op.payrollSelectAll();
+  });
+
   // Al precionar click sobre una planilla se establece el id de la planilla
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
 
@@ -595,7 +603,6 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
     if( $(idField).val() ) {
       $(textField).val( $.data(document.body, 'account_' + $(idField).val() + '') );
     }
-    $(textField).removeClass('ui-autocomplete-input');
   });
 }
 
