@@ -238,7 +238,6 @@ function populateTasks(url, idField) {
         var account = $.data(document.body, 'cc_' + $('#'+idField).val()+'');
         $(textField).val(account);
       }
-      $(textField).removeClass('ui-autocomplete-input');
   }); 
 }
 
@@ -292,7 +291,6 @@ function populateEmployees(url, idField) {
         var account = $.data(document.body, 'e_' + $('#'+idField).val()+'');
         $(document.getElementById(idField)).next().val(account);
       }
-      $(document.getElementById(idField)).next().removeClass('ui-autocomplete-input');
   });
 }
 

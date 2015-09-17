@@ -149,6 +149,11 @@
                     <% if can? :read, User %>
                         <li><a href=<%= users_path%>> Usuarios</a></li>
                     <% end %>
+                    
+                    <% if can? :read, PaymentType %>
+                        <li><a href=<%= payment_types_path%>> Tipos de Pago</a></li>
+                    <% end %>
+
                 </ul>
             </li>
 

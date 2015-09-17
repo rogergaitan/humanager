@@ -403,6 +403,27 @@ class Ability
         end
     end
     ######################################################################################
+    # PAYMENT TYPES | CONFIGURACION
+    ######################################################################################
+    payment_type = user.permissions_user.find_by_permissions_subcategory_id(list['Tipos de Pago'])
+    unless payment_type.nil?
+        if payment_type.p_create
+            can :create, PaymentType
+        end
+
+        if payment_type.p_view
+            can :read, PaymentType
+        end
+
+        if payment_type.p_modify
+            can :update, PaymentType
+        end
+
+        if payment_type.p_delete
+            can :destroy, PaymentType
+        end
+    end
+    ######################################################################################
     # PAYROLLS | PROCESOS
     ######################################################################################
     payroll = user.permissions_user.find_by_permissions_subcategory_id(list['Planillas'])

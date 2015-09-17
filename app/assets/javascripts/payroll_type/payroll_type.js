@@ -51,7 +51,6 @@ payrollType.autocompleteBackAccounts = function() {
 				$( "#payroll_type_ledger_account" ).val(ui.item.label);
 			}
 		});
-		$('#payroll_type_ledger_account').removeClass('ui-autocomplete-input');
 		if($("#payroll_type_ledger_account_id").val()) {
 			var deducciones_cuentas = $.data(document.body, 'category_' + $("#payroll_type_ledger_account_id").val()+'');
 			$("#payroll_type_ledger_account").val(deducciones_cuentas);
