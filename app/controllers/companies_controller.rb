@@ -34,7 +34,7 @@ class CompaniesController < ApplicationController
   end
 
   def companies_fb
-    @empmaestcc = Empmaestcc.find(:all, :select =>['iemp', 'ncc'], :conditions => ['inivel = ?', 0])
+    @empmaestcc = Empmaestcc.find(:all, :select =>['iemp', 'ncc'], :conditions => ['icc = ?', ''])
     @c = 0; @ca = 0
     @companies = []
     @companies_fb = {}
