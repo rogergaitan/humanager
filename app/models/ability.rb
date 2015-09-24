@@ -407,6 +407,10 @@ class Ability
     ######################################################################################
     payment_type = user.permissions_user.find_by_permissions_subcategory_id(list['Tipos de Pago'])
     unless payment_type.nil?
+
+        # Default values, available for all
+        can [:manage], PaymentType
+
         if payment_type.p_create
             can :create, PaymentType
         end

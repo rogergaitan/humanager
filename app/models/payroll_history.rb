@@ -2,11 +2,12 @@ class PayrollHistory < ActiveRecord::Base
   belongs_to :task
   belongs_to :costs_center
   belongs_to :payroll_log
+  belongs_to :payment_type
+  
   has_many :payroll_employees, :dependent => :destroy
   has_many :employees, :through => :payroll_employees
-  attr_accessible :time_worked, :task_id, :costs_center_id, :payment_type, 
+  attr_accessible :time_worked, :task_id, :costs_center_id, :payment_type_id, 
   		:payroll_log_id, :employee_ids, :total, :task_total, :task_unidad, :payroll_date
-
 
   	# KALFARO
 	def self.list_to_oprpla5_detalle(payroll_log_id)
@@ -19,21 +20,11 @@ class PayrollHistory < ActiveRecord::Base
 			unless ph.task_id.blank?
 
 				count = ph.payroll_employees.count
-				payment_type_id = ''
+				payment_type_id = ph.payment_type.contract_code
 				index = ''
 				object = {}
 				object2 = {}
 				#cost_center_code = CentroDeCosto.where('id = ?', )
-
-				# 1 si es ordinario, 2 extra, 3 doble (tipo de pago)
-				case ph.payment_type.to_s
-		            when CONSTANTS[:PAYMENT][0]['name'].to_s # Ordinario
-		            	payment_type_id = 1
-		            when CONSTANTS[:PAYMENT][1]['name'].to_s # Extra
-		            	payment_type_id = 2
-		            when CONSTANTS[:PAYMENT][2]['name'].to_s # Doble
-		            	payment_type_id = 3
-          		end # end case
 
 				object['itask'] = ph.task.itask
 				object['costs_center_id'] = ph.centro_de_costo.icentro_costo

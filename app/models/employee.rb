@@ -1,28 +1,3 @@
-# == Schema Information
-# 
-# Table name: employees
-# 
-#  id                   :integer          not null, primary key
-#  entity_id            :integer
-#  gender               :enum([:male, :fe
-#  birthday             :date
-#  marital_status       :enum([:single, :
-#  number_of_dependents :integer
-#  spouse               :string(255)
-#  join_date            :date
-#  social_insurance     :string(255)
-#  ccss_calculated      :boolean
-#  department_id        :integer
-#  occupation_id        :integer
-#  role_id              :integer
-#  seller               :boolean
-#  payment_frequency_id :integer
-#  means_of_payment_id  :integer
-#  wage_payment         :decimal(12, 2)
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-
-
 class Employee < ActiveRecord::Base
   attr_accessible :gender, :birthday, :marital_status, :join_date, 
   					:number_of_dependents, :seller, :social_insurance, :spouse, 
@@ -231,21 +206,21 @@ class Employee < ActiveRecord::Base
       if data.include?(obj)
         index = data.index(obj)
 
-        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+        if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
           infoData[index]['total_unid_ord'] += ph.time_worked.to_f
           infoData[index]['valor_total_ord'] += ph.total.to_f
           @total['total_unid_ord'] += ph.time_worked.to_f
           @total['valor_total_ord'] += ph.total.to_f
         end
         
-        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+        if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
           infoData[index]['total_unid_extra'] += ph.time_worked.to_f
           infoData[index]['valor_total_extra'] += ph.total.to_f
           @total['total_unid_extra'] += ph.time_worked.to_f
           @total['valor_total_extra'] += ph.total.to_f
         end
 
-        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+        if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
           infoData[index]['total_unid_doble'] += ph.time_worked.to_f
           infoData[index]['valor_total_doble'] += ph.total.to_f
           @total['total_unid_doble'] += ph.time_worked.to_f
@@ -253,7 +228,7 @@ class Employee < ActiveRecord::Base
         end
 
         infoData[index]['total'] += ph.total.to_f
-        @total['total'] += ph.total.to_
+        @total['total'] += ph.total.to_f
 
       else
         
@@ -275,21 +250,21 @@ class Employee < ActiveRecord::Base
         info['valor_total_doble'] = 0
         info['total'] = 0
 
-        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+        if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
           info['total_unid_ord'] = ph.time_worked.to_f
           info['valor_total_ord'] = ph.total.to_f
           @total['total_unid_ord'] += ph.time_worked.to_f
           @total['valor_total_ord'] += ph.total.to_f
         end
         
-        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+        if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
           info['total_unid_extra'] = ph.time_worked.to_f
           info['valor_total_extra'] = ph.total.to_f
           @total['total_unid_extra'] += ph.time_worked.to_f
           @total['valor_total_extra'] += ph.total.to_f
         end
 
-        if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+        if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
           info['total_unid_doble'] = ph.time_worked.to_f
           info['valor_total_doble'] = ph.total.to_f
           @total['total_unid_doble'] += ph.time_worked.to_f
@@ -334,21 +309,21 @@ class Employee < ActiveRecord::Base
         if data.include?(obj)
           index = data.index(obj)
           
-          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+          if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
             infoData[index]['total_unid_ord'] += ph.time_worked.to_f
             infoData[index]['valor_total_ord'] += ph.total.to_f
             @total['total_unid_ord'] += ph.time_worked.to_f
             @total['valor_total_ord'] += ph.total.to_f
           end
           
-          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+          if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
             infoData[index]['total_unid_extra'] += ph.time_worked.to_f
             infoData[index]['valor_total_extra'] += ph.total.to_f
             @total['total_unid_extra'] += ph.time_worked.to_f
             @total['valor_total_extra'] += ph.total.to_f
           end
 
-          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+          if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
             infoData[index]['total_unid_doble'] += ph.time_worked.to_f
             infoData[index]['valor_total_doble'] += ph.total.to_f
             @total['total_unid_doble'] += ph.time_worked.to_f
@@ -377,21 +352,21 @@ class Employee < ActiveRecord::Base
           info['valor_total_doble'] = 0
           info['total'] = 0
           
-          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
+          if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][0]['name'] # Ordinario
             info['total_unid_ord'] = ph.time_worked.to_f
             info['valor_total_ord'] = ph.total.to_f
             @total['total_unid_ord'] += ph.time_worked.to_f
             @total['valor_total_ord'] += ph.total.to_f
           end
           
-          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
+          if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][1]['name'] # Extra
             info['total_unid_extra'] = ph.time_worked.to_f
             info['valor_total_extra'] = ph.total.to_f
             @total['total_unid_extra'] += ph.time_worked.to_f
             @total['valor_total_extra'] += ph.total.to_f
           end
 
-          if ph.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
+          if ph.payment_type.payment_type.to_s == CONSTANTS[:PAYMENT][2]['name'] # Doble
             info['total_unid_doble'] = ph.time_worked.to_f
             info['valor_total_doble'] = ph.total.to_f
             @total['total_unid_doble'] += ph.time_worked.to_f

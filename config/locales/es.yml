@@ -69,6 +69,7 @@ es:
     a_unsuccessfully_updated: ' actualizada incorrectamente'
     no_results: 'No se encontraron resultados'
     can_be_deleted: "El Registro no es puede eliminar pues ya ha sido utilizado en la base de datos"
+    change_status: "¿Desea cambiar el estado?"
   content:
     titles: 
       tools: Herramientas
@@ -353,6 +354,9 @@ es:
           name: Nombre
           description: Descripción
           factor: Factor
+          contract_code: Codigo de Contrato
+          payment_type: Tipo de Pago
+          state: Estado
         work_benefit:
           description: Descripción
           percentage: Porcentaje

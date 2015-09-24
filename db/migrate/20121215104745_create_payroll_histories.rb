@@ -4,8 +4,8 @@ class CreatePayrollHistories < ActiveRecord::Migration
       t.references :task
       t.references :costs_center
       t.references :payroll_log
+      t.references :payment_type
       t.string :time_worked
-      t.column :payment_type, :enum, :limit => [:ordinary, :extra, :double]
       t.decimal :total, :precision => 10, :scale => 2
       t.decimal :task_total, :precision => 10, :scale => 2
       t.string :task_unidad
@@ -16,5 +16,6 @@ class CreatePayrollHistories < ActiveRecord::Migration
     add_index :payroll_histories, :task_id
     add_index :payroll_histories, :costs_center_id
     add_index :payroll_histories, :payroll_log_id
+    add_index :payroll_histories, :payment_type_id
   end
 end

@@ -1,8 +1,6 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
-  resources :payment_types
-
   resources :other_payments
 
   resources :permissions_users
@@ -18,6 +16,12 @@ Reasapp::Application.routes.draw do
   match "users/search_user", :controller => "users", :action => 'search_user', :as => :search_user_users, via: [:get]
   match "users/get_permissions_user", :controller => "users", :action => 'get_permissions_user', :as => :get_permissions_user_users, via: [:get]
   match "users/save_permissions", :controller => "users", :action => 'save_permissions', :as => :save_permissions_users, via: [:post]
+
+  resources :payment_types do
+    collection do
+      post :change_status
+    end
+  end
 
   resources :reports do
     collection do

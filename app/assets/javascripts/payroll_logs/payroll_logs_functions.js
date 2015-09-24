@@ -197,7 +197,7 @@ $(jQuery(document).ready(function($) {
 			unit 		= $(base + '_task_id').parents('div.row').find('input[id*=task_unit_]').val(),
 			mount 		= $(base + '_time_worked').val(),
 			cost 		= $(base + '_costs_center_id').parents('div.row').find('input[id*=load_centro_de_costo]').val(),
-			payment 	= $(base + '_payment_type option:selected').html(),
+			payment 	= $(base + '_payment_type_id option:selected').text(),
 			totalRow 	= parseFloat($(base + '_total').val().replace(',', '')),
 			subTotal 	= parseFloat($('#total_' + employee_id + ' td:eq(1)').html().replace(',', ''));
 
@@ -236,9 +236,9 @@ $(jQuery(document).ready(function($) {
 		var theadList = ["Fecha", "Labor", "Costo", "Unidad", "Cantidad", "Centro de Costos", "Tipo de Pago", "Total"];
 		var thead = '';
 
-		for (var i = theadList.length - 1; i >= 0; i--) {
-			thead += '<td>'+theadList[i]+'</td>';
-		}
+		$.each(theadList, function( index, data ) {
+			thead += '<td>'+data+'</td>';
+		});
 
 		var data = '<div class="panel accordion-item">' +
 			'<a class="accordion-title collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsea'+total+'" aria-expanded="false">' +
@@ -318,13 +318,20 @@ $(jQuery(document).ready(function($) {
 
   	payroll_logs.validateEmployeeTask = function(num, is_select_methol_all) {
 
-  		var v_cost, v_date, v_task, v_payment_type, username, id;
-  		var b_cost, b_date, b_task, b_payment_type, exists = false;
-  		var result, data, employee_id = new Array();
-  		v_cost = $('#load_centro_de_costo').val();
-  		v_date = $('#payroll_log_payroll_date').val();
-  		v_task = $('#load_task').val();
-  		v_payment_type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type').val();
+  		var v_cost = $('#load_centro_de_costo').val();
+  		var v_date = $('#payroll_log_payroll_date').val();
+  		var v_task = $('#load_task').val();
+  		var v_payment_type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type_id option:selected').text();
+  		var username;
+  		var id;
+  		var b_cost;
+  		var b_date;
+  		var b_task;
+  		var b_payment_type;
+  		var exists = false;
+  		var result;
+  		var data;
+  		var employee_id = new Array();
 
   		data = {
 			"date": v_date,
@@ -483,18 +490,17 @@ $(jQuery(document).ready(function($) {
 
   	payroll_logs.setTotal = function(num) {
 
-  		var hours, cost, id, index, type, payment;
-
-  		hours = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val());
-  		id = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').val();
+  		var payment;
+  		var hours = parseFloat($('#payroll_log_payroll_histories_attributes_' + num + '_time_worked').val());
+  		var id = $('#payroll_log_payroll_histories_attributes_' + num + '_task_id').val();
   		// Search the index where the id are equals
-  		index = $.inArray(id, task_id);
+  		var index = $.inArray(id, task_id);
   		// Get the value
-  		cost = parseFloat(task_cost[index]);
+  		var cost = parseFloat(task_cost[index]);
   		// Set task_cost (history)
   		$('#payroll_log_payroll_histories_attributes_' + num + '_task_total').val(cost);
   		// Get the type payment selected
-  		type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type').val();
+  		var type = $('#payroll_log_payroll_histories_attributes_' + num + '_payment_type_id option:selected').text();
   		
   		// Search the type payment and get the value (%)
   		for( var x=0; x<=type_payment.length-1; x++ ) {

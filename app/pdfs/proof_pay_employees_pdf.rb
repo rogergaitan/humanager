@@ -214,9 +214,9 @@ include ActionView::Helpers::NumberHelper
     
     payroll_history_ids = PayrollEmployee.where('employee_id = ?', employee_id).map(&:payroll_history_id)
 
-    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type, payroll_date, SUM(total) as total, task_unidad")
+    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type_id, payroll_date, SUM(total) as total, task_unidad")
                   .where(:payroll_log_id => @payroll.id, :id => payroll_history_ids)
-                  .group("payment_type, payroll_date").order("payroll_date").each do |p|
+                  .group("payment_type_id, payroll_date").order("payroll_date").each do |p|
 
       obj = {}
       obj['labor'] = p.task.ntask
@@ -225,17 +225,17 @@ include ActionView::Helpers::NumberHelper
       if data.include?(obj)
         index = data.index(obj)
 
-        if p.payment_type.to_s == list_payments_types[0]
+        if p.payment_type.payment_type.to_s == list_payments_types[0]
           result[index]['ordinario'] += p.time_worked.to_f
           totals['ordinario'] += p.total.to_f
         end
         
-        if p.payment_type.to_s == list_payments_types[1]
+        if p.payment_type.payment_type.to_s == list_payments_types[1]
           result[index]['extra'] += p.time_worked.to_f
           totals['extra'] += p.total.to_f
         end
 
-        if p.payment_type.to_s == list_payments_types[2]
+        if p.payment_type.payment_type.to_s == list_payments_types[2]
           result[index]['doble'] += p.time_worked.to_f
           totals['doble'] += p.total.to_f
         end
@@ -249,17 +249,17 @@ include ActionView::Helpers::NumberHelper
         info['extra'] = 0
         info['doble'] = 0
         
-        if p.payment_type.to_s == list_payments_types[0]
+        if p.payment_type.payment_type.to_s == list_payments_types[0]
           info['ordinario'] = p.time_worked.to_f
           totals['ordinario'] += p.total.to_f
         end
         
-        if p.payment_type.to_s == list_payments_types[1]
+        if p.payment_type.payment_type.to_s == list_payments_types[1]
           info['extra'] = p.time_worked.to_f
           totals['extra'] += p.total.to_f
         end
 
-        if p.payment_type.to_s == list_payments_types[2]
+        if p.payment_type.payment_type.to_s == list_payments_types[2]
           info['doble'] = p.time_worked.to_f
           totals['doble'] += p.total.to_f
         end

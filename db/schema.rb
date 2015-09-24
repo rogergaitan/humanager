@@ -377,9 +377,12 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
   create_table "payment_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.decimal  "factor",      :precision => 10, :scale => 2
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.decimal  "factor",                                                :precision => 10, :scale => 2
+    t.string   "contract_code"
+    t.enum     "payment_type",  :limit => [:ordinary, :extra, :double]
+    t.enum     "state",         :limit => [:completed, :active],                                       :default => :active
+    t.datetime "created_at",                                                                                                :null => false
+    t.datetime "updated_at",                                                                                                :null => false
   end
 
   create_table "payment_units", :force => true do |t|
@@ -402,17 +405,18 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.integer  "task_id"
     t.integer  "costs_center_id"
     t.integer  "payroll_log_id"
+    t.integer  "payment_type_id"
     t.string   "time_worked"
-    t.enum     "payment_type",    :limit => [:ordinary, :extra, :double]
-    t.decimal  "total",                                                   :precision => 10, :scale => 2
-    t.decimal  "task_total",                                              :precision => 10, :scale => 2
+    t.decimal  "total",           :precision => 10, :scale => 2
+    t.decimal  "task_total",      :precision => 10, :scale => 2
     t.string   "task_unidad"
     t.date     "payroll_date"
-    t.datetime "created_at",                                                                             :null => false
-    t.datetime "updated_at",                                                                             :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
   end
 
   add_index "payroll_histories", ["costs_center_id"], :name => "index_payroll_histories_on_costs_center_id"
+  add_index "payroll_histories", ["payment_type_id"], :name => "index_payroll_histories_on_payment_type_id"
   add_index "payroll_histories", ["payroll_log_id"], :name => "index_payroll_histories_on_payroll_log_id"
   add_index "payroll_histories", ["task_id"], :name => "index_payroll_histories_on_task_id"
 

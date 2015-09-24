@@ -78,8 +78,9 @@
 
 	<td class="controls_item" style="width: 15%;">
 		<div class="row no-gutter">
-			<div class="col-md-8">
-				<%= f.enum_select :payment_type, {:tabindex => '9' , :include_blank => false }, { :class => 'paymentType form-control' } %>
+			<div class="col-md-8">			
+				<%= f.collection_select(:payment_type_id, @payment_types, :id, :name, 
+				{include_blank: false }, {:class => "paymentType form-control", :tabindex => "9" }) %>
 			</div>
 			<div class="col-md-3">
 				&nbsp;

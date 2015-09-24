@@ -95,6 +95,7 @@ class PayrollLogsController < ApplicationController
     @department = Department.all
     @superior = Employee.superior
     @tasks = Task.all
+    @payment_types = PaymentType.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
   end
 
   def search_task

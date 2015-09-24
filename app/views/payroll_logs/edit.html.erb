@@ -64,7 +64,7 @@
 															<td><%= h.task.nunidad %></td>
 															<td><%= h.time_worked %></td>
 															<td><%= h.costs_center.name_cc %></td>
-															<td><%= h.payment_type %></td>
+															<td><%= h.payment_type.payment_type %></td>
 															<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.', :delimiter => ',') %></td>
 															<% @total += h.total.to_f %>
 															<td>
@@ -106,10 +106,10 @@
 	************************/
 	var type_payment = []
 	
-	<% CONSTANTS[:PAYMENT].each do |payment| %>
+	<% @payment_types.each do |payment| %>
 	    type_payment.push({
 		    "name": "<%= payment["name"] %>",
-			"value": "<%= payment["type"] %>"
+				"value": "<%= payment["factor"] %>"
 		});
 	<% end %>
 	

@@ -35,6 +35,7 @@ class PayrollsController < ApplicationController
   def create
     @payroll = Payroll.new(params[:payroll])
     @payroll_log = @payroll.build_payroll_log
+    @payroll.payroll_log.payroll_total = 0
     # @payroll_log.payroll_histories.build
 
     respond_to do |format|
