@@ -5,7 +5,7 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits
   # GET /work_benefits.json
   def index
-    @work_benefits = WorkBenefit.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
+    @work_benefits = WorkBenefit.where('state = ? and company_id = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], current_user.company_id)
         .paginate(:page => params[:page], :per_page => 15)
         .includes(:credit, :debit)
     respond_with(@work_benefits)
@@ -46,7 +46,7 @@ class WorkBenefitsController < ApplicationController
 
     respond_to do |format|
       if @work_benefit.save
-        format.html { redirect_to @work_benefit, notice: 'Work benefit was successfully created.' }
+        format.html { redirect_to action: :index }
         format.json { render json: @work_benefit, status: :created, location: @work_benefit }
       else
         format.html { render action: "new" }
@@ -125,7 +125,7 @@ class WorkBenefitsController < ApplicationController
 
     respond_to do |format|
       if @work_benefit.save
-        format.html { redirect_to work_benefits_path, notice: 'Work benefit was successfully updated.' }
+        format.html { redirect_to action: :index }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -182,7 +182,7 @@ class WorkBenefitsController < ApplicationController
   end
 
   def fetch_cost_center
-    @cost_center = CostsCenter.all
+    @cost_center = CostsCenter.where(company_id: current_user.company_id)
     respond_to do |format|
       format.json { render json: @cost_center }
     end
@@ -203,14 +203,14 @@ class WorkBenefitsController < ApplicationController
   end
 
   def search_cost_center
-    @cost_center = WorkBenefit.search_cost_center(params[:search_cost_center_name], params[:page], params[:per_page])
+    @cost_center = WorkBenefit.search_cost_center(params[:search_cost_center_name], current_user.company_id, params[:page], params[:per_page])
     respond_with @cost_center
   end
   
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
     @credit_accounts = LedgerAccount.credit_accounts
-    @payroll_types = PayrollType.all
+    @payroll_types = PayrollType.where(company_id: current_user.company_id)
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior

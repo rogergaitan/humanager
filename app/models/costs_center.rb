@@ -1,9 +1,13 @@
 class CostsCenter < ActiveRecord::Base
   
+  attr_accessible :icc_father, :icost_center, :company_id, :name_cc
+
+  belongs_to :company
+  has_many :companies
+  
   has_many :other_payments
   has_many :departments
   has_many :payroll_logs
-  attr_accessible :icc_father, :icost_center, :icompany, :name_cc
   has_many :work_benefits
 
   before_destroy :confirm_presence_of_children

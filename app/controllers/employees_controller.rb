@@ -152,7 +152,7 @@ class EmployeesController < ApplicationController
      @position = Position.find(:all, :select =>['id','position'])
      @superior = Employee.all
      @payment_unit = Employee.all_payment_unit
-     @payroll_type = Employee.all_payroll_type
+     @payroll_type = Employee.all_payroll_type(current_user.company_id)
   end
 
   def search

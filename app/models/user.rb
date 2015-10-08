@@ -20,6 +20,8 @@
 class User < ActiveRecord::Base
 
   has_many :permissions_user, :dependent => :destroy
+  belongs_to :company
+  has_many :companies
   # after_create :create_permissions
 
   # Include default devise modules. Others available are:
@@ -29,7 +31,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :encrypted_password, :password_confirmation, :remember_me, :username, :name
+  attr_accessible :email, :password, :encrypted_password, :password_confirmation, :remember_me, 
+    :username, :name, :company_id
   # attr_accessible :title, :body
 
   validates :name,

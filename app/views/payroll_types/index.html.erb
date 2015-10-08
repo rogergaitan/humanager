@@ -32,7 +32,7 @@
             <tbody>
               <% @payroll_types.each do |payroll_type| %>
                 <tr>
-                  <td><%= link_to payroll_type.description, payroll_type_path(payroll_type) %></td>
+                  <td><%= payroll_type.description %></td>
                   <td><%= payroll_type.payroll_type %></td>
                   <td>
                     <% if can? :update, PayrollType %>

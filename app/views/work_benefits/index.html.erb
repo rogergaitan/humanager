@@ -33,7 +33,7 @@
             <tbody>
               <% @work_benefits.each do |work_benefit| %>
                 <tr>
-                  <td><%= link_to work_benefit.description, work_benefit_path(work_benefit) %></td>
+                  <td><%= work_benefit.description %></td>
                   <td><%= work_benefit.percentage %></td>
                   <td><%= work_benefit.debit.naccount if work_benefit.debit %></td>
                   <td><%= work_benefit.credit.naccount if work_benefit.debit %></td>

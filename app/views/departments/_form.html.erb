@@ -11,10 +11,8 @@
 </script>
 
 <%= javascript_include_tag 'resources' %>
-<%= javascript_include_tag 'employees/employee' %>
 <%= javascript_include_tag 'departments/department' %>
 <%= javascript_include_tag 'centro_costos/treeview' %>
-<%= javascript_include_tag 'utils/modal' %>
 
 <div class="container-fluid">
   <div data-widget-group="group1" class="ui-sortable">
@@ -56,8 +54,8 @@
               </div>
             </div>
           </div>
-          
-          <div class="form-group">
+
+          <div class="form-group" id="deduction_payrolls">
             <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <div class="input-group">
@@ -68,8 +66,13 @@
                 </span>
               </div>
             </div>
+            <div class="col-sm-1">
+              <a data-toggle="modal" href="#myModal" class="btn btn-default-alt" title="Ver lista de cuentas contables">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
           </div>
-          
+
           <div class="panel-footer">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2">

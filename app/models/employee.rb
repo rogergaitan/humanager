@@ -65,8 +65,8 @@ class Employee < ActiveRecord::Base
     @payment_unit = PaymentUnit.all
   end
 
-  def self.all_payroll_type
-    @payroll_type = PayrollType.all
+  def self.all_payroll_type(company_id)
+    @payroll_type = PayrollType.where(company_id: company_id)
   end
   
   def self.all_departments

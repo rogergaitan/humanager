@@ -26,8 +26,9 @@ class Payroll < ActiveRecord::Base
   has_many :deduction_payment
   has_many :other_payment_payment
 
-  scope :activas, where(state: true)
-  scope :inactivas, where(state: false)
+  scope :activas, ->(company_id){ where(state: true, company_id: company_id) }
+  scope :inactivas, ->(company_id){ where(state: false, company_id: company_id)}
+  
   #consulta todas las planillas para un tipo de planilla especifico especifico
   #scope :tipo_planilla, lambda {|type_payroll| joins(:payroll_type).where("payroll_type = ?", type_payroll).
   #	select(['payroll_type', 'description']) }

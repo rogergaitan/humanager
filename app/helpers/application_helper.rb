@@ -25,9 +25,6 @@ module ApplicationHelper
 			id: association, data: {id: id, fields: fields.gsub("\n", "")} do
 			content_tag(:i, "", :class => 'fa fa-plus')
 		end
-		
-		# link_to(name, '#', tabindex: '10', class: "add_fields btn btn-mini btn-success " + fieldClass, 
-		# 	id: association, data: {id: id, fields: fields.gsub("\n", "")})
 	end
 
 	# change the default link renderer for will_paginate
@@ -38,8 +35,15 @@ module ApplicationHelper
 		options[:outer_window] ||= 1
 		super *[collection, options].compact
 	end
-end
 
-# <%= link_to new_deduction_path, :class => 'btn btn-primary pu' do %>
-#   <i class="fa fa-plus"></i>
-# <% end %>
+	def all_companies_selector(company_id)
+		@companies = Company.all
+		collection_select(:user, :company_id, @companies, :id, :name,
+		    options = { :prompt => true, :selected => company_id }, 
+		    html_options = { :class => 'form-control', :style => 'margin-top: 10px', 
+		    	:data => { :url => change_company_users_path }
+		    }
+		)
+	end
+
+end

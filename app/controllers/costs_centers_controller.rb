@@ -5,12 +5,8 @@ class CostsCentersController < ApplicationController
   # GET /costs_centers
   # GET /costs_centers.json
   def index
-    @costs_centers = CostsCenter.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @costs_centers }
-    end
+    @costs_centers = CostsCenter.where(company_id: current_user.company_id)
+    respond_with(@costs_centers)
   end
 
   def sync_cc
@@ -20,7 +16,7 @@ class CostsCentersController < ApplicationController
     
     @empmaest.each do |costsCenters|
       if CostsCenter.where("icost_center = ?", costsCenters.icc).empty?
-        @new_cc = CostsCenter.create(:icompany => costsCenters.iemp, :icost_center => 
+        @new_cc = CostsCenter.create(:company_id => costsCenters.iemp, :icost_center => 
                                 firebird_encoding(costsCenters.icc.to_s), :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
                                 :icc_father => firebird_encoding(costsCenters.iccpadre.to_s))
         if @new_cc.save
@@ -34,7 +30,7 @@ class CostsCentersController < ApplicationController
       else
         # UPDATE
         @update_cc = CostsCenter.find_by_icost_center(costsCenters.icc)
-        params[:costsCenter] = { :icompany => costsCenters.iemp, :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
+        params[:costsCenter] = { :company_id => costsCenters.iemp, :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
                                 :icc_father => firebird_encoding(costsCenters.iccpadre.to_s) }
         if @update_cc.update_attributes(params[:costsCenter])
           @ca += 1
@@ -50,12 +46,7 @@ class CostsCentersController < ApplicationController
   end
 
   def load_cc
-    # @namesIds = CostsCenter.all
-    @namesIds = CostsCenter.where("icompany = ? and icost_center != '' ", params['company_id'])
-
-    puts params['company_id']
-    puts @namesIds
-
+    @namesIds = CostsCenter.where("company_id = ? and icost_center != '' ", current_user.company_id)
     respond_to do |format|
       format.json { render json: @namesIds }
     end
@@ -67,7 +58,8 @@ class CostsCentersController < ApplicationController
 
   # Search for Costs Centers
   def fetch_cc
-    @cc = CostsCenter.all
+    #@cc = CostsCenter.all
+    @cc = CostsCenter.where(company_id: current_user.company_id)
     respond_with(@cc, :only => [:id, :icost_center, :name_cc])
   end
 

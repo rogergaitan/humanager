@@ -90,7 +90,7 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
   var pay_total = parseFloat(payrolld.payroll_log.payroll_total)
 
   var data = '<tr>' + 
-      '<td><a href="/payrolls/' + payrolld.id + '">' + payrolld.payroll_type.description + '</a></td>' +
+      '<td>' + payrolld.payroll_type.description + '</td>' +
       '<td>' + (payrolld.company != null ? payrolld.company.name : '--' ) + '</td>' +
       '<td>' + date_format(payrolld.start_date) + '</td>' +
       '<td>' + date_format(payrolld.end_date) + '</td>' +
@@ -145,9 +145,7 @@ payroll.add_inactivas = function (payroll, target_table) {
   }
   
   var row = $(target_table + '> tbody:last').append('<tr>' + 
-      '<td>' +
-        '<a href="/payrolls/' + payroll.id + '">' + payroll.payroll_type.description + '</a>' +
-      '</td>' +
+      '<td>' + payroll.payroll_type.description + '</td>' +
       '<td>' + (payroll.company != null ? payroll.company.name : '--' ) + '</td>' +
       '<td>' +  date_format(payroll.start_date) + '</td>' +
       '<td>' +  date_format(payroll.end_date) + '</td>' +

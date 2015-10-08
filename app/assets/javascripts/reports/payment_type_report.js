@@ -131,7 +131,6 @@ payment_type_reports.create_pdf_or_exel = function(format) {
 	    tasks = [],
       cc = [];
   var orderBy = $('#order_by').val();
-  var company = $('#company').val();
 
 	$('#payrolls_results input:checked').each(function() {
 		payroll_ids.push($(this).val());
@@ -163,7 +162,6 @@ payment_type_reports.create_pdf_or_exel = function(format) {
               + '&order=' + orderBy
               + '&tasks=' + tasks
               + '&cc=' + cc
-              + '&company=' + company
             );
 }
 
@@ -181,12 +179,6 @@ payment_type_reports.validate_data = function(format) {
     general_functions.showMessage("warning", "Por favor selecione los empleados");
 		return false;
 	}
-
-  // Validate Company
-  if( $('#company').val() == "" ) {
-    general_functions.showMessage("warning", "Por favor selecione una compañia");
-    return false;
-  }
 
 	payment_type_reports.create_pdf_or_exel(format);
 }

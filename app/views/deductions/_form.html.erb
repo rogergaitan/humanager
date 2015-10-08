@@ -28,12 +28,14 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @deduction, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for @deduction, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator'} } do |f| %>
 
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :description, :class => 'form-control' %>
+            <div class="col-sm-3 form-group_">
+              <%= f.text_field :description, :class => 'form-control', :required => true %>
+              <div class="help-block with-errors"></div>
+              <%= f.hidden_field :company_id, :value => current_user.company_id %>
             </div>
           </div>
           
@@ -85,10 +87,11 @@
           <div class="form-group" id="deduction_payrolls">
             <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <div class="input-group">
-                <%= f.hidden_field :ledger_account_id %>
+              <div class="input-group form-group_">
+                <%= f.hidden_field :ledger_account_id, :required => true %>
                 <%= text_field_tag 'deduction_ledger_account', nil, :class => 'form-control', 
-                    :for => :ledger_account_id %>
+                    :for => :ledger_account_id, :required => true %>
+                <div class="help-block with-errors"></div>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>

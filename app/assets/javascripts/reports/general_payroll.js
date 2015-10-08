@@ -28,12 +28,6 @@ reports_general_payroll.validate_data = function(format) {
 		return false;
 	}
 
-	// Validate Company
-	if( $('#company').val() == "" ) {
-		general_functions.showMessage("warning", "Por favor selecione una compañia");
-		return false;
-	}
-
 	reports_general_payroll.create_pdf_or_exel(format);
 };
 
@@ -41,7 +35,6 @@ reports_general_payroll.create_pdf_or_exel = function(format) {
 
 	var url = $('#show_reports_path').val();
   	var type = $('#type_report').val();
-  	var company = $('#company').val();
   	var payroll_ids = [];
   	var employees = [];
 
@@ -65,6 +58,5 @@ reports_general_payroll.create_pdf_or_exel = function(format) {
                 + '&format=' + format
                 + '&employees=' + employees
                 + '&payroll_ids=' + payroll_ids
-                + '&company=' + company
               );
 };

@@ -81,13 +81,15 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
   add_index "contacts", ["entity_id"], :name => "index_contacts_on_entity_id"
 
   create_table "costs_centers", :force => true do |t|
-    t.string   "icompany"
+    t.integer  "company_id"
     t.string   "icost_center"
     t.string   "name_cc"
     t.string   "icc_father"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  add_index "costs_centers", ["company_id"], :name => "index_costs_centers_on_company_id"
 
   create_table "customer_profiles", :force => true do |t|
     t.string   "name"
@@ -144,6 +146,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
   add_index "deduction_payrolls", ["payroll_id"], :name => "index_deduction_payrolls_on_payroll_id"
 
   create_table "deductions", :force => true do |t|
+    t.integer  "company_id"
     t.string   "description"
     t.enum     "deduction_type",    :limit => [:constant, :unique, :amount_to_exhaust]
     t.decimal  "amount_exhaust",                                                        :precision => 10, :scale => 2
@@ -157,6 +160,8 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.datetime "created_at",                                                                                                                :null => false
     t.datetime "updated_at",                                                                                                                :null => false
   end
+
+  add_index "deductions", ["company_id"], :name => "index_deductions_on_company_id"
 
   create_table "departments", :force => true do |t|
     t.integer  "employee_id"
@@ -461,6 +466,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
   add_index "payroll_type_other_payments", ["payroll_type_id"], :name => "index_payroll_type_other_payments_on_payroll_type_id"
 
   create_table "payroll_types", :force => true do |t|
+    t.integer  "company_id"
     t.integer  "ledger_account_id"
     t.string   "description"
     t.enum     "payroll_type",                    :limit => [:administrative, :fieldwork, :plant]
@@ -473,6 +479,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.datetime "updated_at",                                                                                         :null => false
   end
 
+  add_index "payroll_types", ["company_id"], :name => "index_payroll_types_on_company_id"
   add_index "payroll_types", ["ledger_account_id"], :name => "index_payroll_types_on_ledger_account_id"
 
   create_table "payrolls", :force => true do |t|
@@ -629,6 +636,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "name"
+    t.integer  "company_id"
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
     t.string   "reset_password_token"
@@ -643,6 +651,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.datetime "updated_at",                             :null => false
   end
 
+  add_index "users", ["company_id"], :name => "index_users_on_company_id"
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
@@ -666,6 +675,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
   end
 
   create_table "work_benefits", :force => true do |t|
+    t.integer  "company_id"
     t.integer  "costs_center_id"
     t.string   "description"
     t.decimal  "percentage",                                       :precision => 10, :scale => 2
@@ -678,6 +688,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.datetime "updated_at",                                                                                           :null => false
   end
 
+  add_index "work_benefits", ["company_id"], :name => "index_work_benefits_on_company_id"
   add_index "work_benefits", ["costs_center_id"], :name => "index_work_benefits_on_costs_center_id"
   add_index "work_benefits", ["credit_account"], :name => "index_work_benefits_on_credit_account"
   add_index "work_benefits", ["debit_account"], :name => "index_work_benefits_on_debit_account"

@@ -1,6 +1,7 @@
 class CreateWorkBenefits < ActiveRecord::Migration
   def change
     create_table :work_benefits do |t|
+      t.references :company
       t.references :costs_center
       t.string :description
       t.decimal :percentage, :precision => 10, :scale => 2
@@ -12,6 +13,7 @@ class CreateWorkBenefits < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :work_benefits, :company_id
     add_index :work_benefits, :debit_account
     add_index :work_benefits, :credit_account
     add_index :work_benefits, :costs_center_id

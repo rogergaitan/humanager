@@ -47,19 +47,22 @@
 
       <div class="panel-body panel-no-padding">
 
-        <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator'} } do |f| %>
 
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :description, :class => 'form-control' %>
+            <div class="col-sm-3 form-group_">
+              <%= f.text_field :description, :class => 'form-control', :required => true %>
+              <div class="help-block with-errors"></div>
+              <%= f.hidden_field :company_id, :value => current_user.company_id %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :percentage, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :percentage, :class => 'form-control' %>
+            <div class="col-sm-3 form-group_">
+              <%= f.text_field :percentage, :class => 'form-control', :required => true %>
+              <div class="help-block with-errors"></div>
             </div>
           </div>
 

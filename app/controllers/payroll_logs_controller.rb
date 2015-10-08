@@ -90,7 +90,7 @@ class PayrollLogsController < ApplicationController
 
   def resources
     company_id = PayrollLog.find(params[:id]).payroll.company_id
-    @costs_centers = CostsCenter.where(" costs_centers.icompany = '#{company_id}' and costs_centers.icost_center != '' ")
+    @costs_centers = CostsCenter.where(" costs_centers.company_id = '#{company_id}' and costs_centers.icost_center != '' ")
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior

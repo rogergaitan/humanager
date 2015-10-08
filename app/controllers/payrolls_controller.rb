@@ -80,15 +80,15 @@ class PayrollsController < ApplicationController
   # Obtiene las planillas activas
   def get_activas
     @activas = {}
-    @activas[:activa] = Payroll.activas
+    @activas[:activa] = Payroll.activas(current_user.company_id)
 
-     respond_to do |format|
+    respond_to do |format|
       format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log, :company])}
     end
   end
 
   def load_payrolls
-    @payrolls = Payroll.activas
+    @payrolls = Payroll.activas(current_user.company_id)
     respond_to do |format|
       format.json { render json: @payrolls, :include => :payroll_type }
     end
@@ -97,7 +97,7 @@ class PayrollsController < ApplicationController
   # Obtiene las planillas inactivas
   def get_inactivas
     @inactivas = {}
-    @inactivas[:inactiva] = Payroll.inactivas
+    @inactivas[:inactiva] = Payroll.inactivas(current_user.company_id)
 
     respond_to do |format|
       format.json { render json: @inactivas.to_json(include: [:payroll_type, :payroll_log, :company])}

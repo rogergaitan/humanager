@@ -1,6 +1,7 @@
 class CreatePayrollTypes < ActiveRecord::Migration
   def change
     create_table :payroll_types do |t|
+      t.references :company
       t.references :ledger_account
       t.string :description
       t.column :payroll_type, :enum, :limit => [:administrative, :fieldwork, :plant]
@@ -13,5 +14,6 @@ class CreatePayrollTypes < ActiveRecord::Migration
       t.timestamps
     end
     add_index :payroll_types, :ledger_account_id
+    add_index :payroll_types, :company_id
   end
 end

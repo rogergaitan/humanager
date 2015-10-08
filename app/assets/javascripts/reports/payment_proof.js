@@ -14,9 +14,11 @@ $(document).ready(function() {
 
   $('#btn_create').click(reports_payment_proof.validate_data);
 
-  var input = $('#messages_to_employees'), display = $('#char-count'), count = 0, limit = 320;
+  var input = $('#messages_to_employees');
+  var display = $('#char-count');
+  var count = input.val().length
+  var limit = 320;
 
-  count = input.val().length
   remaining = limit - count
   update(remaining);
 
@@ -49,12 +51,6 @@ reports_payment_proof.validate_data = function(e) {
     return false;
   }
 
-  // Validate Company
-  if( $('#company').val() == "" ) {
-    general_functions.showMessage("warning", "Por favor selecione una compañia");
-    return false;
-  }
-
   reports_payment_proof.create_pdf();
 }
 
@@ -64,7 +60,6 @@ reports_payment_proof.create_pdf = function() {
   var payroll_id = $('#payrolls_results input:checked').val();
   var type = $('#type_report').val();
   var msg = $('#messages_to_employees').val();
-  var company = $('#company').val();
   var employees = [];
 
   $('#ms-deduction_employee_ids .ms-selection li.ms-selected').each(function() {
@@ -76,7 +71,6 @@ reports_payment_proof.create_pdf = function() {
                 + '?type=' + type
                 + '&employees=' + employees
                 + '&payroll_id=' + payroll_id
-                + '&company=' + company
                 + '&msg=' + msg
               );
 }

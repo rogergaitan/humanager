@@ -1,9 +1,12 @@
 class PayrollType < ActiveRecord::Base
   attr_accessible :description, :payroll_type, :state, :cod_doc_payroll_support,
   		:mask_doc_payroll_support, :cod_doc_accounting_support_mov, :mask_doc_accounting_support_mov,
-  		:ledger_account_id
+  		:ledger_account_id, :company_id
   
   validates :description, :presence => true, :uniqueness => true
+
+  belongs_to :company
+  has_many :companies
 
   has_many :employees
   has_many :payroll_type_benefits, :dependent => :destroy

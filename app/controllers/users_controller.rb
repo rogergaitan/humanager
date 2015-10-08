@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!, :except => [:permissions]
   load_and_authorize_resource
   respond_to :html, :json, :js
-  skip_before_filter :verify_authenticity_token, :only => [:update, :save_permissions]
+  skip_before_filter :verify_authenticity_token, :only => [:update, :save_permissions, :change_company]
 
   # GET /users
   # GET /users.json
@@ -140,9 +140,21 @@ class UsersController < ApplicationController
   end
 
   def get_permissions_user
-    
     @data = User.get_permissions(params[:id])
     render :json => { :data => @data }
+  end
+
+  def change_company
+    user = current_user
+    user.company_id = params['company_id']
+    
+    respond_to do |format|
+      if user.save
+        format.json { render json: { 'status' => true }, status: :ok }
+      else
+        format.json { render json: { 'status' => false, 'errors' => user.errors }, status: :unprocessable_entity }
+      end
+    end
   end
 
   def test

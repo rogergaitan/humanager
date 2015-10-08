@@ -80,6 +80,6 @@ class DepartmentsController < ApplicationController
   end
   
   def resources
-    @costs_centers = CostsCenter.all
+    @costs_centers = CostsCenter.where(company_id: current_user.company_id)
   end
 end

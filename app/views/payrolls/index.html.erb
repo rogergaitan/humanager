@@ -6,7 +6,6 @@
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
   <div class="options">
     <div class="btn-toolbar">
-
       <% if can? :create, Payroll %>
         <%= link_to new_payroll_path, :class => 'btn btn-primary pull-right' do %>
           <i class="fa fa-plus"></i>

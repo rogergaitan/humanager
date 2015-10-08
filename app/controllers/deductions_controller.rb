@@ -6,7 +6,7 @@ class DeductionsController < ApplicationController
   # GET /deductions
   # GET /deductions.json
   def index
-    @deductions = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
+    @deductions = Deduction.where('state = ? and company_id = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], current_user.company_id)
         .paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
   end
@@ -67,10 +67,10 @@ class DeductionsController < ApplicationController
 
     respond_to do |format|
       if @deduction.save
-        format.html { redirect_to @deduction, notice: 'Deduction was successfully created.' }
+        format.html { redirect_to action: :index }
         format.json { render json: @deduction, status: :created, location: @deduction }
       else
-        format.html { render action: "new" }
+        format.html { render action: :new }
         format.json { render json: @deduction.errors, status: :unprocessable_entity }
       end
     end
@@ -141,7 +141,6 @@ class DeductionsController < ApplicationController
   # DELETE /deductions/1
   # DELETE /deductions/1.json
   def destroy
-      
     @deduction = Deduction.find(params[:id])
 
     if @deduction.deduction_employees.empty?
@@ -169,7 +168,6 @@ class DeductionsController < ApplicationController
       format.html { redirect_to deductions_url, notice: message }
       format.json { head :no_content }
     end
-
   end
 
   #Search for employees
@@ -196,7 +194,7 @@ class DeductionsController < ApplicationController
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
-    @payroll_types = PayrollType.all
+    @payroll_types = PayrollType.where(company_id: current_user.company_id)
   end
 
 end

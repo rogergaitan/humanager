@@ -5,15 +5,8 @@ class PayrollTypesController < ApplicationController
   # GET /payroll_types
   # GET /payroll_types.json
   def index
-    @payroll_types = PayrollType.where(:state => 1).paginate(:page => params[:page], :per_page => 15)
+    @payroll_types = PayrollType.where(:state => 1, :company_id => current_user.company_id).paginate(:page => params[:page], :per_page => 15)
     respond_with(@payroll_types)
-  end
-
-  # GET /payroll_types/1
-  # GET /payroll_types/1.json
-  def show
-    @payroll_type = PayrollType.find(params[:id])
-    respond_with(@payroll_type)
   end
 
   # GET /payroll_types/new
@@ -35,7 +28,7 @@ class PayrollTypesController < ApplicationController
 
     respond_to do |format|
       if @payroll_type.save
-        format.html { redirect_to @payroll_type, notice: 'Payroll type was successfully created.' }
+        format.html { redirect_to action: :index }
         format.json { render json: @payroll_type, status: :created, location: @payroll_type }
       else
         format.html { render action: "new" }
@@ -51,7 +44,7 @@ class PayrollTypesController < ApplicationController
 
     respond_to do |format|
       if @payroll_type.update_attributes(params[:payroll_type])
-        format.html { redirect_to @payroll_type, notice: 'Payroll type was successfully updated.' }
+        format.html { redirect_to action: :index }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

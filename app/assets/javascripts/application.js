@@ -61,6 +61,6 @@
 //= require ../template/plugins/pines-notify/pnotify.min
 //= require ../template/plugins/bootstrap-switch/bootstrap-switch
 
-//= require date/date
+//= require menus
 //= require validator
 //= require_directory .

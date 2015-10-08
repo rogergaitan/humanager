@@ -384,7 +384,7 @@ es:
           mask_doc_accounting_support_mov: Mascara Doc Soporte Mov Contable
           ledger_account_id: Cuenta Banco o CXP
         costs_center:
-          icompany: Empresa
+          company_id: Empresa
           icost_center: Id Centro de Costos
           name_cc: Nombre
           icc_father: Padre

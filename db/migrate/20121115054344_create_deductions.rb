@@ -1,6 +1,7 @@
 class CreateDeductions < ActiveRecord::Migration
   def change
     create_table :deductions do |t|
+      t.references :company
       t.string :description
       t.column :deduction_type, :enum, :limit =>[:constant, :unique, :amount_to_exhaust]
       t.decimal :amount_exhaust, :decimal, :precision => 10, :scale => 2
@@ -13,5 +14,6 @@ class CreateDeductions < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :deductions, :company_id
   end
 end

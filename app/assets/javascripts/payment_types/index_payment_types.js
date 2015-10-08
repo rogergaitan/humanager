@@ -3,7 +3,6 @@ $(document).ready(function() {
 	$('input.bootstrap-switch').bootstrapSwitch();
 
 	$('table input[name="state_payment_type"]').on('switchChange.bootstrapSwitch', function(event, state) {
-
 		var id = $(this).data("id");
 		change_status(id, state);
 	});
@@ -62,20 +61,20 @@ $(document).ready(function() {
 		var url = $('#change_status_payment_types_path').val();
 
 		$.ajax({
-      type: "POST",
-      url: url,
-      data: {
-        id: id,
-        state: state
-      },
-      success: function(data) {
-      	show_state($('input[id="show_closed"]').prop('checked'));
-      	resources.PNotify('Estado', 'Actualizado', 'success');
-      },
-      error: function(response, textStatus, errorThrown) {
-      	resources.PNotify('Error', 'Error al Actualizar estado', 'warning');
-      }
-    });
+	      type: "POST",
+	      url: url,
+	      data: {
+	        id: id,
+	        state: state
+	      },
+	      success: function(data) {
+	      	show_state($('input[id="show_closed"]').prop('checked'));
+	      	resources.PNotify('Estado', 'Actualizado', 'success');
+	      },
+	      error: function(response, textStatus, errorThrown) {
+	      	resources.PNotify('Error', 'Error al Actualizar estado', 'warning');
+	      }
+	    });
 	}
 	
 	$('table input[name="state_payment_type"]').each(function () {

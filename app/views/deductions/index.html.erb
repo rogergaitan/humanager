@@ -37,7 +37,7 @@
             <tbody>
               <% @deductions.each do |deduction| %>
                 <tr>
-                  <td><%= link_to deduction.description, deduction_path(deduction) %></td>
+                  <td><%= deduction.description %></td>
                   <td><%= deduction.deduction_type %></td>
                   <td><%= deduction.amount_exhaust %></td>
                   <td><%= deduction.calculation_type %></td>

@@ -7,13 +7,14 @@ class ReportsController < ApplicationController
   end
 
 	def search_payrolls
-    @payrolls = Payroll.search_payrolls_to_reports(params[:start_date], params[:end_date], params[:company_id], params[:page], 5)
+    @payrolls = Payroll.search_payrolls_to_reports(params[:start_date], params[:end_date], 
+      current_user.company_id, params[:page], 5)
     respond_with @payrolls
   end
 
   def show
 
-    @company_id = params[:company]
+    @company_id = current_user.company_id
 
     case params[:type].to_s
       
@@ -38,10 +39,6 @@ class ReportsController < ApplicationController
         @format = params[:format]
 
         @data = general_payroll_data(@payroll_ids, @employees)
-
-        #puts "--------------------------"
-        #puts @data
-        #puts "--------------------------"
 
         if @format.to_s == "pdf"
 
@@ -75,11 +72,6 @@ class ReportsController < ApplicationController
         
         @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order, cc)
 
-
-        puts "<<---------------------------------------------------------------------->>"
-        puts @data
-        puts "<<---------------------------------------------------------------------->>"
-
         if format.to_s == "pdf"
 
           respond_to do |format|
@@ -98,20 +90,19 @@ class ReportsController < ApplicationController
         employee_ids = params[:employee_ids].split(",")
         start_date = params[:start_date]
         end_date = params[:end_date]
-        company_id = params[:company_id]
 
-        @data = accrued_wages_dates_date(employee_ids, start_date, end_date, company_id)
+        @data = accrued_wages_dates_date(employee_ids, start_date, end_date, @company_id)
 
         if params[:format].to_s == "pdf"
           respond_to do |format|
             format.pdf do
-              pdf = AccruedWagesDatesPDF.new(@data, company_id, start_date, end_date)
+              pdf = AccruedWagesDatesPDF.new(@data, @company_id, start_date, end_date)
               send_data pdf.render, filename: "test.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
         else
-          accrued_wages_dates_date_xls(@data, company_id, start_date, end_date)
+          accrued_wages_dates_date_xls(@data, @company_id, start_date, end_date)
         end
 
     end # End case

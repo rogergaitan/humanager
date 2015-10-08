@@ -34,7 +34,7 @@ class PayrollLog < ActiveRecord::Base
   end
 
   def self.search_cost(search_cost_name, company_id, page, per_page = nil)
-    @costs = CostsCenter.where(" costs_centers.icompany = '#{company_id}' and costs_centers.name_cc like '%#{search_cost_name}%' and costs_centers.icost_center != '' ")
+    @costs = CostsCenter.where(" costs_centers.company_id = '#{company_id}' and costs_centers.name_cc like '%#{search_cost_name}%' and costs_centers.icost_center != '' ")
     .paginate(:page => page, :per_page => 5)
   end
 

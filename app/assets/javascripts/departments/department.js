@@ -1,10 +1,7 @@
 $(jQuery(document).ready(function($) {
 
-  $('form').on('dblclick', '#load_costs_centers', function() {
-    $('#myModal').modal('show');
-  });
-
   treeviewhr.cc_tree(costs_centers, true);
+
   // Get the Costs Centers
   $.getJSON('/costs_centers/load_cc', function(category_data) {
     $('#load_costs_centers').autocomplete({
@@ -37,6 +34,39 @@ $(jQuery(document).ready(function($) {
       $(this).css("text-decoration", "none");
     }
   });
+
+  /* Employee */
+  $.getJSON('/employees/load_employees', function(employee_data) {
+    $("#load_employee").autocomplete({
+      source: $.map(employee_data, function(item){
+      $.data(document.body, 'employee_'+ item.id+"", item.entity.name + ' ' + item.entity.surname);
+      return{
+        label: item.entity. name + ' ' + item.entity.surname,                        
+        id: item.id
+      }
+      }),
+      select: function( event, ui ) {
+        if(ui.item.id){
+          $("#department_employee_id").val(ui.item.id);    
+        }
+      },
+      focus: function(event, ui){
+        $( "#load_employee" ).val(ui.item.label);
+      },
+      change: function(event, ui){
+        if(!ui.item){
+          alert('Ningún resultado contiene ' + $( "#load_employee" ).val());
+          $( "#load_employee" ).val("");
+          $("#load_employee_id").val("");    
+        }
+      }
+    })
+    if($("#department_employee_id").val()){
+      var load_employee_name = $.data(document.body, 'employee_' + $("#department_employee_id").val()+'');
+      $("#load_employee").val(load_employee_name);
+    }
+  });
+
 }));
 
 function set_account(e) {
