@@ -388,6 +388,7 @@ es:
           icost_center: Id Centro de Costos
           name_cc: Nombre
           icc_father: Padre
+          iactivity: Actividad
         email:
           typeemail: Tipo de email
         position:

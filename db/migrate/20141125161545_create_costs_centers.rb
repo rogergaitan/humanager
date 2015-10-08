@@ -5,6 +5,7 @@ class CreateCostsCenters < ActiveRecord::Migration
       t.string :icost_center
       t.string :name_cc
       t.string :icc_father
+      t.string :iactivity
 
       t.timestamps
     end

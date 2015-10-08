@@ -10,15 +10,18 @@ class CostsCentersController < ApplicationController
   end
 
   def sync_cc
-    @empmaest = Empmaestcc.find(:all, :select => ['iemp', 'icc', 'ncc', 'iccpadre'])
+    @empmaest = Empmaestcc.find(:all, :select => ['iemp', 'icc', 'ncc', 'iccpadre', 'iactividad'])
     @costs_centers = []; @syn_data = {}
     @c = 0; @ca = 0
     
     @empmaest.each do |costsCenters|
       if CostsCenter.where("icost_center = ?", costsCenters.icc).empty?
-        @new_cc = CostsCenter.create(:company_id => costsCenters.iemp, :icost_center => 
-                                firebird_encoding(costsCenters.icc.to_s), :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
-                                :icc_father => firebird_encoding(costsCenters.iccpadre.to_s))
+        @new_cc = CostsCenter.create(:company_id => costsCenters.iemp, 
+          :icost_center => firebird_encoding(costsCenters.icc.to_s), 
+          :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
+          :icc_father => firebird_encoding(costsCenters.iccpadre.to_s),
+          :iactivity => firebird_encoding(costsCenters.iactividad.to_s))
+
         if @new_cc.save
           @costs_centers << @new_cc
           @c += 1

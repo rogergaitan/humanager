@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.string   "icost_center"
     t.string   "name_cc"
     t.string   "icc_father"
+    t.string   "iactivity"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end

@@ -1,6 +1,6 @@
 class CostsCenter < ActiveRecord::Base
   
-  attr_accessible :icc_father, :icost_center, :company_id, :name_cc
+  attr_accessible :icc_father, :icost_center, :company_id, :name_cc, :iactivity
 
   belongs_to :company
   has_many :companies
