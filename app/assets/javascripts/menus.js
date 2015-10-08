@@ -98,6 +98,14 @@ $(document).ready( function() {
       }
   });
 
+  $('form').submit(function(event) {
+    if($('#user_company_id option:selected').val() == "" ){
+      event.preventDefault();
+      var message = 'Seleccione una Compañia';
+      resources.PNotify('Compañia', message, 'warning');
+    }
+  });
+
   $('#user_company_id').on('change', function() {
     $.ajax({
       type: "POST",
