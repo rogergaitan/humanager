@@ -106,7 +106,7 @@ class PayrollsController < ApplicationController
 
   # Obtiene todos los tipos de planillas y todas las compañias
   def get_payroll_types
-    @payroll_types = PayrollType.tipo_planilla
+    @payroll_types = PayrollType.tipo_planilla(current_user.company_id)
     @companies = Company.all
   end
 
@@ -124,9 +124,6 @@ class PayrollsController < ApplicationController
   # Cierra una planilla y realiza los calculos necesarios
   # Closes a payroll and performs the necessary calculations
   def close_payroll
-    puts '######################################################'
-    puts 'CLOSE PAYROLL'
-    puts '######################################################'
     payroll_id = params[:payroll_id]
 
     @result = Payroll.close_payroll(payroll_id)

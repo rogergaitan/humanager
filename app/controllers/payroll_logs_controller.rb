@@ -90,7 +90,7 @@ class PayrollLogsController < ApplicationController
 
   def resources
     company_id = PayrollLog.find(params[:id]).payroll.company_id
-    @costs_centers = CostsCenter.where(" costs_centers.company_id = '#{company_id}' and costs_centers.icost_center != '' ")
+    @costs_centers = CostsCenter.where("costs_centers.company_id = '#{company_id}' and costs_centers.icost_center != '' ")
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
@@ -104,9 +104,6 @@ class PayrollLogsController < ApplicationController
   end
 
   def search_cost
-    
-    puts params[:company_id]
-
     @costs = PayrollLog.search_cost(params[:search_cost_name], params[:company_id], params[:page], params[:per_page])
     respond_with @costs
   end

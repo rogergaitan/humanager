@@ -14,7 +14,7 @@ class PayrollType < ActiveRecord::Base
 
   belongs_to :ledger_account
   
-  scope :tipo_planilla, select(['id','description','payroll_type']).where(:state => 1 ).order('payroll_type')
+  scope :tipo_planilla,->(company_id){select(['id','description','payroll_type']).where(:state => 1, company_id: company_id ).order('payroll_type')}
   #scope :tipo_planilla, lambda {|type_payroll| where("payroll_type = ?", type_payroll).
   #select(['id', 'payroll_type', 'description']) }
 end
