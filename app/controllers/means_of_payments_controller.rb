@@ -1,5 +1,10 @@
 class MeansOfPaymentsController < ApplicationController
   load_and_authorize_resource
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(MeansOfPayment, params[:id])
+  end
+
   respond_to :html, :json
 
   # GET /means_of_payments

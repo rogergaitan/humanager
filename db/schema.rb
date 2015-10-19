@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150910165421) do
+ActiveRecord::Schema.define(:version => 20151014154908) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "entity_id"
@@ -313,6 +313,12 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "model_names", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "occupations", :force => true do |t|
     t.string   "description"
     t.string   "ins_code"
@@ -598,6 +604,18 @@ ActiveRecord::Schema.define(:version => 20150910165421) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "session_validations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "model_name_id"
+    t.integer  "reference_id"
+    t.string   "ip_address"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "session_validations", ["model_name_id"], :name => "index_session_validations_on_model_name_id"
+  add_index "session_validations", ["user_id"], :name => "index_session_validations_on_user_id"
 
   create_table "sublines", :force => true do |t|
     t.string   "code"

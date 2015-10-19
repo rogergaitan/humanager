@@ -5,12 +5,7 @@ $(document).ready(function() {
   }
 
   $('#task-fb').click(function() { 
-    $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
-    $.getJSON('tasks/tasksfb', function(element) {
-      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(function(){location.reload();}); });
-      $(element.task).each(function() { add_tasks(this, 'table#task-data')});
-      $('#task-fb').hide();
-    })
+    task_fb();
   });
 
   $('#task-data a').click( function(e) {
@@ -60,22 +55,33 @@ $(document).ready(function() {
     });
   }
 
-  function add_tasks(task, target_table) {
-    var row = $(target_table + '> tbody:last').append('<tr>' + 
-        '<td><a href="/tasks/'+ task.id +'">'+ task.id +'</a></td>' +
-        '<td>' + replace_value(task.iactivity) + '</td>' +
-        '<td>' + replace_value(task.itask) + '</td>' +
-        '<td>' + replace_value(task.ntask) + '</td>' +
-        '<td>' + replace_value(task.iaccount) + '</td>' +
-        '<td>' + replace_value(task.mlaborcost) + '</td>' +
-        '<td><a href="/tasks/'+ task.id +'" class="btn btn-mini btn-danger" ' +
-        'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
-      '</tr>');
-    return row;
+  function task_fb() {
+    $.ajax('tasks/tasksfb', {
+      type: 'GET',
+      beforeSend: function() {
+        resources.showMessage(
+          'info',
+          'Sincronización en Proceso, por favor espere...', 
+          {'dissipate': false, 'icon': 'fa fa-fw fa-spinner fa-spin'}
+        );
+      },
+      complete: function() {
+        setTimeout(function() {
+          resources.showMessage('info', 'Resfrescando...');
+          location.reload();
+        },2000);
+      },
+      success: function(result) {
+        var msj = jQuery.map( result.notice, function( value, index ) {
+          return value + '';
+        });
+        resources.showMessage('info', msj);
+        $('#task-fb').hide();
+      },
+      error: function(result) {
+        resources.showMessage('danger','Imposible cargar las Labores');
+      }
+    });
   }
 
-  function replace_value(value) {
-    if (value == null) value = "";
-    return value;
-  }
 })

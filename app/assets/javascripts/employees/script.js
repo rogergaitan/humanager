@@ -1,15 +1,12 @@
 Employee = {
-  search_length : 3
+  search_length : 3,
+  per_page : 15
 }
 
 $(document).ready(function() {
+
   $('#sync-fb').click(function() {
-    $('section.nav').append('<div class="notice">Sincronización en Proceso</div>');
-    $.getJSON('employees/sync', function(element) {
-      $(element.notice).each(function() { $('section.nav').append('<div class="notice">'+ this +'</div>').delay(5000).fadeOut(function(){location.reload();}); });
-      $(element.employee).each(function() { add_employees(this, 'table#employee-data') });
-      $('#sync-fb').hide();
-    })
+    syn_fb();
   });
 
   $('#search_form input').keyup(function() {
@@ -28,26 +25,36 @@ $(document).ready(function() {
     $('#search_department option:eq(0)').attr('selected', 'selected');
     $('#search_entities option:eq(0)').attr('selected', 'selected');
   });
+
 });
 
-function add_employees(employee, target_table) {
-  var row = $(target_table + '> tbody:last').append('<tr>' + 
-    '<td><a href="/employees/'+ employee.id +'">'+ employee.id +'</a></td>' +
-    '<td>' + replace_value(employee.entity.entityid) + '</td>' +
-    '<td>' + replace_value(employee.entity.name) + '</td>' +
-    '<td>' + replace_value(employee.entity.surname) + '</td>' +
-    '<td>' + replace_value(employee.department_id) + '</td>' +
-    '<td>' + replace_value(employee.wage_payment) + '</td>' +
-    '<td><a href="/employees/'+ employee.id +'/edit" class="btn btn-mini">Editar</a> ' +
-    '<a href="/employees/'+ employee.id +'" class="btn btn-mini btn-danger" ' +
-    'data-confirm="¿Está seguro(a)?" data-method="delete" rel="nofollow">Eliminar</a></td>' +
-  '</tr>');
-  return row;
-}
-
-function replace_value(value) {
-  if (value == null) value = "";
-  return value;
+function syn_fb() {
+  $.ajax('employees/sync', {
+    type: 'GET',
+    beforeSend: function() {
+      resources.showMessage(
+        'info',
+        'Sincronización en Proceso, por favor espere...', 
+        {'dissipate': false, 'icon': 'fa fa-fw fa-spinner fa-spin'}
+      );
+    },
+    complete: function() {
+      setTimeout(function() {
+        resources.showMessage('info', 'Resfrescando...');
+        location.reload();
+      },2000);
+    },
+    success: function(result) {
+      var msj = jQuery.map( result.notice, function( value, index ) {
+        return value + '';
+      });
+      resources.showMessage('info', msj);
+      $('#account-fb').hide();
+    },
+    error: function(result) {
+      resources.showMessage('danger','Imposible cargar los Empleados');
+    }
+  });
 }
 
 Employee.search = function() {

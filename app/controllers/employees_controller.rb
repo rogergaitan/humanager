@@ -2,9 +2,14 @@ class EmployeesController < ApplicationController
   load_and_authorize_resource
   before_filter :get_address_info, :only => [:new, :edit]
   before_filter :get_employee_info, :only => [:new, :edit]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Employee, params[:id])
+  end
+
   respond_to :json, :html, :js
   
-  # GET /employees
+  # GET /employees 
   # GET /employees.json
   def index
     @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
@@ -66,14 +71,13 @@ class EmployeesController < ApplicationController
   end
 
   def sync
-    @abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido'])
+    abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido'])
 
-    @c = 0
-    @ca = 0
+    c = 0
+    ca = 0
     @syn_data = {}
-    @employees = []
 
-    @abanits.each do |employee|
+    abanits.each do |employee|
 
       full_name = employee.ntercero
       last_name = employee.napellido
@@ -84,20 +88,19 @@ class EmployeesController < ApplicationController
 
       if Entity.where("entityid = ?", employee.init).empty?
 
-        @new_employee = Employee.new
-        @entity = @new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
+        new_employee = Employee.new
+        entity = new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
                                               :surname => firebird_encoding(last_name.to_s), 
                                               :entityid => employee.init)
-        @entity.telephones.build
-        @new_employee.build_photo
-        @entity.emails.build
-        @entity.addresses.build
+        entity.telephones.build
+        new_employee.build_photo
+        entity.emails.build
+        entity.addresses.build
 
-        if @new_employee.save
-          @employees << @new_employee
-          @c += 1
+        if new_employee.save
+          c += 1
         else
-          @new_employee.errors.each do |error|
+          new_employee.errors.each do |error|
             Rails.logger.error "Error creando empleado: #{employee.init}, el nombre no ha sido especificado"
           end
         end
@@ -106,13 +109,12 @@ class EmployeesController < ApplicationController
         @update_entity = Entity.find_by_entityid(employee.init)
         params[:entity] = { :name => firebird_encoding(full_name.to_s), :surname => firebird_encoding(last_name.to_s) }
         if @update_entity.update_attributes(params[:entity])
-          @ca += 1
+          ca += 1
         end
       end
     end
 
-    @syn_data[:employee] = @employees
-    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
+    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
     respond_to do |format|
       format.json { render json: @syn_data, :include => :entity }
     end

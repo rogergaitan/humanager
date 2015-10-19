@@ -1,8 +1,9 @@
 class PayrollsController < ApplicationController
   load_and_authorize_resource
-  respond_to :html, :json, :js
   before_filter :get_payroll_types, :only => [:new, :edit]
   skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird]
+  
+  respond_to :html, :json, :js
 
   # GET /payrolls
   # GET /payrolls.json

@@ -24,7 +24,7 @@
 
 <%= javascript_include_tag 'resources' %>
 <%= javascript_include_tag 'other_payment/other_payments' %>
-<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'costs_center/treeview' %>
 
 <div class="container-fluid">
   <div data-widget-group="group1" class="ui-sortable">
@@ -45,7 +45,8 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @other_payment, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for @other_payment, :validate => true, :html => { :class => 'form-horizontal row-border', 
+          :data => {:toggle => 'validator', :model_name => OtherPayment.model_name, :reference_id => @other_payment.id} } do |f| %>
 
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>

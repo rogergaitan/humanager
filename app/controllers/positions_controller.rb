@@ -1,5 +1,10 @@
 class PositionsController < ApplicationController
   load_and_authorize_resource
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Position, params[:id])
+  end
+
   # GET /positions
   # GET /positions.json
   def index

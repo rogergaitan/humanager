@@ -1,6 +1,11 @@
 class OtherPaymentsController < ApplicationController
   #load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(OtherPayment, params[:id])
+  end
+
   respond_to :html, :json, :js
 
   # GET /other_payments

@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  post "session_validation/update_time"
+
   resources :other_payments
 
   resources :permissions_users
@@ -76,7 +78,6 @@ Reasapp::Application.routes.draw do
   end
 
   resources :type_of_personnel_actions
-
 
   resources :other_salaries do
     collection do

@@ -3,6 +3,10 @@ class ProvincesController < ApplicationController
   respond_to :html, :json
   before_filter :get_province, :only => [:edit, :update, :destroy]
 
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Province, params[:id])
+  end
+
   def get_province
     @province = Province.find(params[:id])
   end

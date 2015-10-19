@@ -69,34 +69,69 @@ $(document).ready(function() {
 	}
 
 	// To use this, please include this view: render "/layouts/message"
-	resources.showMessage = function(type, message) {
-	  var icon;
-	  if(type === "success") {
-	    icon = 'check';
-	  }
-	  if(type === "danger") {
-	    icon = 'times';
-	  }
-	  if(type === "warning") {
-	    icon = 'warning';
-	  }
-	  if(type === "info") {
-	    icon = 'info-circle';
-	  }
+	/*
+		options {
+			icon: [icon-name],
+			dissipate: [true|false]
+		}
+	*/
+	resources.showMessage = function(type, message, options) {
 
-	  $('#div-message').show();
-	  $('#div-message').find('div.alert.alert-dismissable').addClass('alert-'+type);
-	  $('#div-message').find('label#message').html(message);
-	  $('#div-message').find('i').addClass('fa-'+icon);
+	  var json = [
+			{
+				'type':'success',
+				'icon':'check',
+				'title':'Étixo'
+			},
+			{
+				'type':'danger',
+				'icon':'times',
+				'title':'Peligro'
+			},
+			{
+				'type':'warning',
+				'icon':'warning',
+				'title':'Advertencia'
+			},
+			{
+				'type':'info',
+				'icon':'info-circle',
+				'title':'Información'
+			}
+		];
+		var that = $('#div-message');
+		var i_icon = '';
 
-	  $('div.alert.alert-'+type).fadeIn(4000, function() {
+		if (typeof options === "undefined" || options === null) {
+	  	var options = {
+	  		'dissipate': true
+	  	}
+	  }
+  	
+  	if(options.hasOwnProperty('icon')) {
+  		i_icon = '<i id="custom-icon" class="'+options.icon+'"></i>';
+		}
+
+		$.each(json, function(idx, obj) {
+			if(obj.type == type) {
+			  $(that).addClass('alert-'+obj.type);
+			  $(that).find('i').addClass('fa-'+obj.icon);
+	  		$(that).find('h3 label').text(obj.title);
+			} else {
+				$(that).removeClass('alert-'+obj.type);
+			  $(that).find('i').removeClass('fa-'+obj.icon);
+			}
+		});
+
+	  $(that).find('#message').html(i_icon+message);
+	  $(that).show();
+
+	  if(options.dissipate) {
 	    setTimeout(function() {
-	        $(this).fadeOut("slow");
-	        $('#div-message').find('div.alert.alert-dismissable').removeClass('alert-' + type);
-	        $('#div-message').find('i').removeClass('fa-' + icon);
-	        $('#div-message').hide();
+	      $(that).fadeOut("slow");
+	      $(that).hide();
 	    },4000);
-	  });
+	  }
 	}
 
 	resources.PNotify = function(title, text, type) {
@@ -116,6 +151,25 @@ $(document).ready(function() {
 	  if(str=="1") return true;
 
 	  return false;
+	}
+
+	resources.updateValidation = function(model_name, reference_id) {
+		
+		$.ajax('/session_validation/update_time', {
+	    type: 'POST',
+	    data: {
+	    	model_name: model_name,
+	    	reference_id: reference_id
+	    },
+	    success: function(result) {
+	    },
+	    error: function(result) {
+	    	setTimeout(function() {
+          resources.PNotify('Tiempo vencido', 'Resfrescando...','info');
+          location.reload();
+        },2000);
+	    }
+	  });
 	}
 
 });

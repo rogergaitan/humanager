@@ -1,6 +1,11 @@
 class WorkBenefitsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(WorkBenefit, params[:id])
+  end
+
   respond_to :html, :json, :js
   # GET /work_benefits
   # GET /work_benefits.json

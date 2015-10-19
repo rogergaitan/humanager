@@ -72,6 +72,13 @@ $(jQuery(document).ready(function($) {
 	    }
 	  });
 	
+	// Update validation
+  $('#work_benefit_employee_ids, #work_benefit_payroll_type_ids').change(function() {
+    var modelName = $('form:eq(0)').data('modelName');
+    var referenceId = $('form:eq(0)').data('referenceId');
+    resources.updateValidation(modelName, referenceId);
+  });
+	
 	// Generates the treeview with the different accounts
 	$('#debit-button').click(function(){
 		treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');

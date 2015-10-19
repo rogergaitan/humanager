@@ -1,11 +1,20 @@
 class PayrollLogsController < ApplicationController
   before_filter :resources, :only => [:new, :edit]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(PayrollLog, params[:id])
+  end
+
   respond_to :html, :json, :js
+
   # GET /payroll_logs
   # GET /payroll_logs.json
   def index
-    @payroll_logs = PayrollLog.paginate(:page => params[:page], :per_page => 15)
-    respond_with(@payroll_logs)
+    # redirect to root path and sending any flash messages
+    redirect_to root_path, flash: flash
+
+    # @payroll_logs = PayrollLog.paginate(:page => params[:page], :per_page => 15)
+    # respond_with(@payroll_logs)
   end
 
   # GET /payroll_logs/1

@@ -3,6 +3,10 @@ class PaymentTypesController < ApplicationController
   before_filter :set_payment_type, only: [:show, :edit, :update, :destroy]
   skip_before_filter :verify_authenticity_token, :only => [:change_status, :destroy]
 
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(PaymentType, params[:id])
+  end
+
   respond_to :html, :json, :js
 
   def index

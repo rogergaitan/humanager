@@ -1,6 +1,12 @@
 class PaymentFrequenciesController < ApplicationController
   load_and_authorize_resource
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(PaymentFrequency, params[:id])
+  end
+
   respond_to :html, :json
+  
   # GET /payment_frequencies
   # GET /payment_frequencies.json
   def index

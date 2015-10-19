@@ -1,8 +1,8 @@
 class CreatePayrollTypeDeductions < ActiveRecord::Migration
   def change
     create_table :payroll_type_deductions do |t|
-    	t.references :payroll_type
-      	t.references :deduction
+      t.references :payroll_type
+      t.references :deduction
 
       t.timestamps
     end

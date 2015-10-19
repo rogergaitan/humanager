@@ -92,6 +92,14 @@ var dynamic_fields = new function() {
 };
 
 $(document).ready(function() {
+
+
+	$('#employee_number_of_dependents, #employee_marital_status, #employee_department_id, #employee_payment_unit_id').change(function() {
+    var modelName = $('form:eq(0)').data('modelName');
+    var referenceId = $('form:eq(0)').data('referenceId');
+    resources.updateValidation(modelName, referenceId);
+  });
+
 	check_input_price_defined();
 	$('#employee_birthday').datepicker();
 	$('#employee_join_date').datepicker();

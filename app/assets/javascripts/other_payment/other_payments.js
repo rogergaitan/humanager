@@ -100,6 +100,11 @@ $(document).ready(function() {
       this.qs2.cache();
     }
   });
+
+  // Update validation
+  $('#other_payment_payroll_type_ids, #other_payment_employee_ids').change(function() {
+    op.updateValidation();
+  });
 	
 	op.typeDeduction($('#other_payment_deduction_type'));
 
@@ -275,6 +280,11 @@ $(document).ready(function() {
 /*********************************************************************************************************************************************************/
 /* F U N C T I O N S */
 /*********************************************************************************************************************************************************/
+op.updateValidation = function(){
+  var modelName = $('form:eq(0)').data('modelName');
+  var referenceId = $('form:eq(0)').data('referenceId');
+  resources.updateValidation(modelName, referenceId);
+}
 
 op.searchEmployeeByAttr = function(searchValue, searchType, from, typeFrom) {
   
@@ -607,6 +617,7 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
 }
 
 op.addFields = function(e) {
+  op.updateValidation();
   e.preventDefault();
   var time = new Date().getTime();
   var regexp = new RegExp($(this).data('id'), 'g');

@@ -21,19 +21,17 @@ class LedgerAccountsController < ApplicationController
   end
 
   def accountfb
-    @cntpuc = Cntpuc.where("bvisible = ?", 'T').find(:all, :select => ['icuenta', 'ncuenta', 'ipadre'])
+    cntpuc = Cntpuc.where("bvisible = ?", 'T').find(:all, :select => ['icuenta', 'ncuenta', 'ipadre'])
 
-    @c = 0; @ca = 0
-    @accounts = []
+    c = 0; ca = 0
     @accounts_fb = {}
 
-    @cntpuc.each do |account|
+    cntpuc.each do |account|
       if LedgerAccount.where("iaccount = ?", account.icuenta).empty?
-        @new_account = LedgerAccount.new(:iaccount => account.icuenta, :naccount => firebird_encoding(account.ncuenta),
+        new_account = LedgerAccount.new(:iaccount => account.icuenta, :naccount => firebird_encoding(account.ncuenta),
           :ifather => account.ipadre)
-        if @new_account.save
-          @accounts << @new_account
-          @c += 1
+        if new_account.save
+          c += 1
         else
           @new_task.er.each do |error|
             Rails.logger.error "Error Creating account: #{account.icuenta}, 
@@ -42,14 +40,13 @@ class LedgerAccountsController < ApplicationController
         end
       else
         # UPDATE
-        @update_cntpuc = LedgerAccount.find_by_iaccount(account.icuenta)
+        update_cntpuc = LedgerAccount.find_by_iaccount(account.icuenta)
         params[:ledgerAccount] = { :naccount => firebird_encoding(account.ncuenta), :ifather => account.ipadre }
-        if @update_cntpuc.update_attributes(params[:ledgerAccount])
-          @ca += 1
+        if update_cntpuc.update_attributes(params[:ledgerAccount])
+          ca += 1
         end
       end 
-      @accounts_fb[:account] = @accounts
-      @accounts_fb[:notice] = ["#{t('helpers.titles.tasksfb').capitalize}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
+      @accounts_fb[:notice] = ["#{t('helpers.titles.tasksfb').capitalize}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
     end 
 
     respond_to do |format|

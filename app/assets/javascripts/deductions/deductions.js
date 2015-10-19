@@ -102,6 +102,12 @@ $(document).ready(function() {
   searchAll(""); // Call the function to get all employee list
 
   /* E V E N T S */
+  // Update validation
+  $('#deduction_employee_ids, #deduction_payroll_type_ids').change(function() {
+    var modelName = $('form:eq(0)').data('modelName');
+    var referenceId = $('form:eq(0)').data('referenceId');
+    resources.updateValidation(modelName, referenceId);
+  });
 
   $("#search_employee_results").on("click", "table tr a", function(e) {
     
@@ -190,9 +196,7 @@ $(document).ready(function() {
     getPayrolls();
   });
 
-  /* KALFARO */
   CContables(); // Llama la funcion para el autocomplete de cuentas contables
-  /* KALFARO */
 
   $("#employee_items input:text[id*='_calculation']").keyup(resources.twoDecimals);
 
@@ -262,7 +266,6 @@ function selectUnselectEmployees(isSelect) {
   }
 }
 
-
 function emploteeSelectAll() {
   if( $('#emplotee_select_all').is(':checked') ) {
     selectUnselectEmployees(true);
@@ -322,7 +325,7 @@ function getPayrolls() {
     error: function(result) {
       $('#error').show();
     }
- });
+  });
 }
 
 // Carga las planillas activas en una tabla
@@ -522,13 +525,13 @@ function fromMulti(employee, type) {
         $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
         $(data.parent).show();
       }
-      resources.PNotify('Empleado', 'Agregado con exito', 'success');
+      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
     break;
     
     case types.remove: // Ocutar
       $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
       $(data.parent).hide();
-      resources.PNotify('Empleado', 'Eliminado con exito', 'success');
+      // resources.PNotify('Empleado', 'Eliminado con exito', 'success');
     break;
   }
 }

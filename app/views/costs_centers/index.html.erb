@@ -1,9 +1,9 @@
 <%- model_class = CostsCenter -%>
 
 <script type="text/javascript">
-  var centro_costos = [];
+  var costs_center = [];
   <% @costs_centers.each do |cc| %>
-    centro_costos.push(new Array(
+    costs_center.push(new Array(
       '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>',
       '<%=h cc.name_cc %>',
       '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>',
@@ -12,8 +12,8 @@
   <% end %>
 </script>
 
-<%= javascript_include_tag 'centro_costos/sync_cc' %>
-<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'costs_center/sync_cc' %>
+<%= javascript_include_tag 'costs_center/treeview' %>
 
 <div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
@@ -27,6 +27,9 @@
 </div>
 
 <div class="container-fluid">
+
+  <%= render "/layouts/message" %>
+
   <div class="row">
     <div class="col-xs-12">
       <div class="panel panel-primary">

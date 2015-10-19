@@ -28,7 +28,8 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @deduction, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator'} } do |f| %>
+        <%= form_for @deduction, :html => { :class => 'form-horizontal row-border', 
+          :data => {:toggle => 'validator', :model_name => Deduction.model_name, :reference_id => @deduction.id} } do |f| %>
 
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>

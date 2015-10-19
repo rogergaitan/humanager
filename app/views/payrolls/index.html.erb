@@ -92,30 +92,13 @@
       </div>        
 
     </div>
-
   </div>
 </div>
 
 <!-- *********************************************************************************************** -->
-<!-- *********************************************************************************************** -->
-
-<% if can? :destroy, Payroll %>
-  <input type="hidden" id="payroll_destroy" value="1">
-<% else %>
-  <input type="hidden" id="payroll_destroy" value="0">
-<% end %>
-
-<% if can? :update, Payroll %>
-  <input type="hidden" id="payroll_update" value="1">
-<% else %>
-  <input type="hidden" id="payroll_update" value="0">
-<% end %>
-
-<% if can? :send_to_firebird, Payroll %>
-  <input type="hidden" id="send_to_firebird" value="1">
-<% else %>
-  <input type="hidden" id="send_to_firebird" value="0">
-<% end %>
+<input type="hidden" id="payroll_destroy" value="<%= (can? :destroy, Payroll) ? '1' : '0' %>">
+<input type="hidden" id="payroll_update" value="<%= (can? :update, Payroll) ? '1' : '0' %>">
+<input type="hidden" id="send_to_firebird" value="<%= (can? :send_to_firebird, Payroll) ? '1' : '0' %>">
 
 <!-- *********************************************************************************************** -->
 <!-- Modals -->

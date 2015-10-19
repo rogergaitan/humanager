@@ -10,39 +10,37 @@ class CostsCentersController < ApplicationController
   end
 
   def sync_cc
-    @empmaest = Empmaestcc.find(:all, :select => ['iemp', 'icc', 'ncc', 'iccpadre', 'iactividad'])
-    @costs_centers = []; @syn_data = {}
-    @c = 0; @ca = 0
+    empmaest = Empmaestcc.find(:all, :select => ['iemp', 'icc', 'ncc', 'iccpadre', 'iactividad'])
+    @syn_data = {}
+    c = 0; ca = 0
     
-    @empmaest.each do |costsCenters|
+    empmaest.each do |costsCenters|
       if CostsCenter.where("icost_center = ?", costsCenters.icc).empty?
-        @new_cc = CostsCenter.create(:company_id => costsCenters.iemp, 
+        new_cc = CostsCenter.create(:company_id => costsCenters.iemp, 
           :icost_center => firebird_encoding(costsCenters.icc.to_s), 
           :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
           :icc_father => firebird_encoding(costsCenters.iccpadre.to_s),
           :iactivity => firebird_encoding(costsCenters.iactividad.to_s))
 
-        if @new_cc.save
-          @costs_centers << @new_cc
-          @c += 1
+        if new_cc.save
+          c += 1
         else
-          @new_cc.errors.each do |error|
+          new_cc.errors.each do |error|
             Rails.logger.error "Error creando centro de costos: #{costsCenters.icc}"
           end
         end
       else
         # UPDATE
-        @update_cc = CostsCenter.find_by_icost_center(costsCenters.icc)
+        update_cc = CostsCenter.find_by_icost_center(costsCenters.icc)
         params[:costsCenter] = { :company_id => costsCenters.iemp, :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
                                 :icc_father => firebird_encoding(costsCenters.iccpadre.to_s) }
-        if @update_cc.update_attributes(params[:costsCenter])
-          @ca += 1
+        if update_cc.update_attributes(params[:costsCenter])
+          ca += 1
         end
       end
     end
 
-    @syn_data[:costscenters] = @costs_centers
-    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
+    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
     respond_to do |format|
       format.json { render json: @syn_data}
     end

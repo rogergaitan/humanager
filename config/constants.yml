@@ -6,6 +6,7 @@ development:
   INPUT_SELECT: "select"
   INPUT_TEXTAREA: "textarea"
   INPUT_DATE: "datepicture"
+  VALIDATION_TIME: "5"
   PAYROLLS_STATES: {
   	COMPLETED: "completed",
   	ACTIVE: "active"

@@ -1,4 +1,7 @@
 <%- model_class = PayrollLog -%>
+
+<%= render "/layouts/message" %>
+
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
 </div>
@@ -8,7 +11,6 @@
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:payroll_id) %></th>
-      <th><%= model_class.human_attribute_name(:record_date) %></th>
       <th><%= model_class.human_attribute_name(:task_id) %></th>
       <th><%= model_class.human_attribute_name(:time_worked) %></th>
       <th><%= model_class.human_attribute_name(:centro_de_costo_id) %></th>
@@ -21,7 +23,6 @@
       <tr>
         <td><%= link_to payroll_log.id, payroll_log_path(payroll_log) %></td>
         <td><%= payroll_log.payroll_id %></td>
-        <td><%= payroll_log.payroll_histories.record_date %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_payroll_log_path(payroll_log), :class => 'btn btn-mini' %>

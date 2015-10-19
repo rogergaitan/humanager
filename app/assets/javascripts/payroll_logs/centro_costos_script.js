@@ -1,6 +1,6 @@
 $(jQuery(document).ready(function($) {
 
-    treeviewhr.cc_tree(centro_costos, true);
+    treeviewhr.cc_tree(costs_centers, true);
     // Obtiene las centros de costo
     
     $.getJSON($('#load_cc_centro_de_costos_path').val(),

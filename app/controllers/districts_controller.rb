@@ -3,6 +3,10 @@ class DistrictsController < ApplicationController
   respond_to :html, :json
   before_filter :get_district, :only => [:edit, :update, :destroy]
 
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(District, params[:id])
+  end
+
   def get_district
      @district = District.find(params[:id])
   end

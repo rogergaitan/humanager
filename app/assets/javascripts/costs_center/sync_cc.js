@@ -1,27 +1,16 @@
 $(document).ready(function() {
 
-  $('#account-fb').on("click", AllLedgerAccounts );
-
-  $('#error').hide();
-  $('#loading').hide();
-
-  treeviewhr.cc_tree(cuenta_contable);
-  $('.expand_tree').on('click', treeviewhr.expand);
-  $('a[rel=tooltip]').tooltip();
-
-  $("#error a").click(function (e){
-    e.preventDefault();
-    AllLedgerAccounts();
+	$('#sync-cc').on("click", function() {
+    sync_cc();
   });
 
+	treeviewhr.cc_tree(costs_center);
+	$('.expand_tree').on('click', treeviewhr.expand);
+	$('a[rel=tooltip]').tooltip();
 });
 
-function AllLedgerAccounts() {
-
-  var cc_array = [];
-  $('#account-fb').attr("disabled", true); // Disable button
-
-  $.ajax('/ledger_accounts/accountfb', {
+function sync_cc() {
+  $.ajax('costs_centers/sync_cc', {
     type: 'GET',
     beforeSend: function() {
       resources.showMessage(
@@ -41,10 +30,10 @@ function AllLedgerAccounts() {
         return value + '';
       });
       resources.showMessage('info', msj);
-      $('#account-fb').hide();
+      $('#sync-cc').hide();
     },
     error: function(result) {
-      resources.showMessage('danger','Imposible cargar las Cuentas Contables');
+      resources.showMessage('danger','Imposible cargar las Centro de Costos');
     }
   });
 }

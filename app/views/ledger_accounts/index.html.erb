@@ -6,6 +6,7 @@
 </script>
 
 <%- model_class = LedgerAccount -%>
+<%= javascript_include_tag 'resources' %>
 <%= javascript_include_tag 'ledgerAccount/accounts' %>
 <%= javascript_include_tag 'ledgerAccount/treeview' %>
 
@@ -21,30 +22,8 @@
 </div>
 
 <div class="container-fluid">
-  
-  <div class="row">
-    <div class="col-xs-12">
-      <div id="loading" class="alert alert-dismissable alert-info">
-        <strong>
-          <i class="fa fa-fw fa-info-circle">&nbsp;Información!</i>
-        </strong>
-        <p>
-          <i class="fa fa-spinner fa-spin"></i>
-          Espere un momento mientras se cargan las cuentas contables disponibles.
-        </p>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      </div>
 
-      <div id="error" class="alert alert-dismissable alert-danger">
-        <strong>
-          <i class="fa fa-fw fa-times">&nbsp;Error!</i>
-        </strong>
-        <p>Imposible cargar las cuentas contables</p>
-        <a href='#'>Click Aqui</a> para volver a intentarlo<p>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      </div>
-    </div>
-  </div>
+  <%= render "/layouts/message" %>
 
   <div class="row">
     <div class="col-xs-12">
@@ -59,8 +38,3 @@
     </div>
   </div>
 </div>
-
-<!-- ************************************************************************************* -->
-
-
-

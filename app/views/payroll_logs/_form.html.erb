@@ -1,8 +1,9 @@
 <%= javascript_include_tag "payroll_logs/payroll_logs_functions" %>
 <%= javascript_include_tag "payroll_logs/payroll_logs_script" %>
-<%= javascript_include_tag 'centro_costos/treeview' %>
+<%= javascript_include_tag 'costs_center/treeview' %>
 
-<%= form_for @payroll_log, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+<%= form_for @payroll_log, :validate => true, :html => { :class => 'form-horizontal row-border', 
+  :data => {:toggle => 'validator', :model_name => PayrollLog.model_name, :reference_id => @payroll_log.id} } do |f| %>
 	
 	<div class="form-group">
     <div class="col-sm-11 col-md-offset-1">

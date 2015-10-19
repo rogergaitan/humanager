@@ -295,6 +295,8 @@ function populateEmployees(url, idField) {
 }
 
 function addFields(e) {
+	// Time Validation
+	validation();
 	// Valida si hay campos en blanco
 	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
 	var numberRows = $('#products_items tr').length;
@@ -417,4 +419,10 @@ function getLastFingering() {
 		}
 	});
 	$('#'+id).addClass("tr_info");
+}
+
+function validation() {
+	var modelName = $('form:eq(0)').data('modelName');
+    var referenceId = $('form:eq(0)').data('referenceId');
+    resources.updateValidation(modelName, referenceId);
 }

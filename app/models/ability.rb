@@ -539,6 +539,10 @@ class Ability
             cannot [:task_type_payment_xls], User
         end        
     end
-    
+    ######################################################################################
+    # SESSION VALIDATION | --
+    ######################################################################################
+    can [:manage], SessionValidation
+
   end
 end

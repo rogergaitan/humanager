@@ -1,7 +1,13 @@
 class PayrollTypesController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(PayrollType, params[:id])
+  end
+
   respond_to :html, :json
+
   # GET /payroll_types
   # GET /payroll_types.json
   def index

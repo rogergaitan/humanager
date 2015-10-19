@@ -1,5 +1,10 @@
 class OccupationsController < ApplicationController
   load_and_authorize_resource
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Occupation, params[:id])
+  end
+
   respond_to :html, :json
   # GET /occupations
   # GET /occupations.json

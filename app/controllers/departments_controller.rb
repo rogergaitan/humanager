@@ -1,6 +1,11 @@
 class DepartmentsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Department, params[:id])
+  end
+
   respond_to :html, :json
   # GET /departments
   # GET /departments.json

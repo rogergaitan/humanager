@@ -4,6 +4,10 @@ class UsersController < ApplicationController
   respond_to :html, :json, :js
   skip_before_filter :verify_authenticity_token, :only => [:update, :save_permissions, :change_company]
 
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(User, params[:id])
+  end
+
   # GET /users
   # GET /users.json
   def index
@@ -46,28 +50,26 @@ class UsersController < ApplicationController
   end
 
   def usersfb
-    @usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
-    @c = 0; @ca = 0
-    @users = []
+    usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
+    c = 0; ca = 0
     @users_fb = {}
 
-    @usersfb.each do |ufb|
+    usersfb.each do |ufb|
       
       if User.where("username = ?", ufb.nusr).empty?
 
-        @numer = randow_string
-        @new_user = User.new( :username => "#{ufb.nusr}",
+        numer = randow_string
+        new_user = User.new( :username => "#{ufb.nusr}",
                               :name => "#{ufb.snombre} #{ufb.sapellido}", 
                               :email => "#{ufb.semail}", 
-                              :password => @numer, 
-                              :password_confirmation => @numer )
+                              :password => numer, 
+                              :password_confirmation => numer )
 
-        if @new_user.save
-          @users << @new_user
+        if new_user.save
           # Create default Permissions
           PermissionsSubcategory.all.each do |sub|
             a = PermissionsUser.new(  :permissions_subcategory_id => sub.id,
-                                      :user_id => @new_user.id,
+                                      :user_id => new_user.id,
                                       :p_create => false,
                                       :p_view => false,
                                       :p_modify => false,
@@ -79,27 +81,25 @@ class UsersController < ApplicationController
             a.save
           end
 
-          @c += 1
+          c += 1
         else
-          @new_user.errors.each do |error|
+          new_user.errors.each do |error|
             Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}"
           end
         end
       else
 
-        @update_user = User.find_by_username(ufb.nusr)
+        update_user = User.find_by_username(ufb.nusr)
         params[:user] = { :name => "#{ufb.snombre} #{ufb.sapellido}", :email => "#{ufb.semail}" }
 
-        if @update_user.update_attributes(params[:user])
-          @ca += 1
+        if update_user.update_attributes(params[:user])
+          ca += 1
         end
         
       end # End if
     end # End each usersfb
 
-    @users_fb[:user] = @users
-    @users_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
-
+    @users_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
     respond_to do |format|
       format.json { render json: @users_fb }
     end

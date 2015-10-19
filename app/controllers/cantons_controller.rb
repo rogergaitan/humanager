@@ -3,6 +3,10 @@ class CantonsController < ApplicationController
   respond_to :html, :json
   before_filter :get_canton, :only => [:edit, :update, :destroy]
 
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Canton, params[:id])
+  end
+
   def get_canton
     @canton = Canton.find(params[:id])
   end

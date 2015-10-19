@@ -1,6 +1,11 @@
 class TypeOfPersonnelActionsController < ApplicationController
   load_and_authorize_resource
   before_filter :load_fields, :only => [:new, :edit]
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(TypeOfPersonnelAction, params[:id])
+  end
+
   respond_to :html, :json
   # GET /type_of_personnel_actions
   # GET /type_of_personnel_actions.json
