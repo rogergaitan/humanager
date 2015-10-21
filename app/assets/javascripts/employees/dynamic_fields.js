@@ -101,8 +101,16 @@ $(document).ready(function() {
   });
 
 	check_input_price_defined();
-	$('#employee_birthday').datepicker();
-	$('#employee_join_date').datepicker();
+	$('#employee_birthday').datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: "es"
+  });
+	$('#employee_join_date').datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: "es"
+  });
 	dynamic_fields.countFields();
 	$('div.employee_contact_fields a.telephone-remove.remove_fields:eq(0)').remove();
 	$('div.employee_contact_fields a.email-remove.remove_fields:eq(0)').remove();

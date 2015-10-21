@@ -1,5 +1,10 @@
 class DetailPersonnelActionsController < ApplicationController
   load_and_authorize_resource
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(DetailPersonnelAction, params[:id])
+  end
+
   # GET /detail_personnel_actions
   # GET /detail_personnel_actions.json
   def index

@@ -1,4 +1,5 @@
 <tr class="success items_purchase_orders_form">
+
 	<td class="controls_item" style="width: 20%;">
 		<div class="row no-gutter">
 			<div class="col-md-3">
@@ -14,6 +15,27 @@
               	</a>
 			</div>
 
+		</div>
+	</td>
+
+	<td class="controls_item" style="width: 20%;">
+		<div class="row no-gutter">
+			<div class="col-md-4">
+				<%= text_field 'search_cost_code', '', :class => 'form-control', :placeholder => 'codigo', :tabindex => '7' %>
+				<%= f.hidden_field :costs_center_id, class: "cc-filter-id centro-costo" %>
+			</div>
+			<div class="col-md-8">
+				<div class="input-group">
+					<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter form-control search-image-employee centro-costo', 
+					:for => :costs_center_id, :tabindex => '8' %>
+					
+					<span class="input-group-btn">
+						<a data-toggle="modal" href="#payrollModal" class="btn btn-default-alt centro-costo">
+		                	<i class="fa fa-bars"></i>
+		              	</a>
+					</span>
+				</div>
+			</div>
 		</div>
 	</td>
 
@@ -53,27 +75,6 @@
 		</div>
 	</td>
 
-	<td class="controls_item" style="width: 20%;">
-		<div class="row no-gutter">
-			<div class="col-md-4">
-				<%= text_field 'search_cost_code', '', :class => 'form-control', :placeholder => 'codigo', :tabindex => '7' %>
-				<%= f.hidden_field :costs_center_id, class: "cc-filter-id centro-costo" %>
-			</div>
-			<div class="col-md-8">
-				<div class="input-group">
-					<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter form-control search-image-employee centro-costo', 
-					:for => :costs_center_id, :tabindex => '8' %>
-					
-					<span class="input-group-btn">
-						<a data-toggle="modal" href="#payrollModal" class="btn btn-default-alt centro-costo">
-		                	<i class="fa fa-bars"></i>
-		              	</a>
-					</span>
-				</div>
-			</div>
-		</div>
-	</td>
-
 	<td class="save-employees" style="display:none;"></td>
 
 	<td class="controls_item" style="width: 15%;">
@@ -94,4 +95,5 @@
 			</div>			
 		</div>
 	</td>
+
 </tr>

@@ -88,11 +88,16 @@ general_functions.selectUnselectEmployees = function (argument) {
 
 // Establishing the datepicker
 general_functions.datePicker = function() {
-  $("#start_date").datepicker({ //'dd/mm/yyyy'
-    format: 'yyyy-mm-dd'
+  $("#start_date").datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: "es"
   });
+
   $("#end_date").datepicker({
-    format: 'yyyy-mm-dd'
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: "es"
   });
 }
 

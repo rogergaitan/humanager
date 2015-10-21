@@ -36,7 +36,11 @@ $(jQuery(document).ready(function($) {
 	    }
 	});
 
-	$('#payroll_log_payroll_date').datepicker();
+	$('#payroll_log_payroll_date').datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: "es"
+	});
 
 	$('input[name=select_method]').parents('label').click(function() {
 		$('input[name=select_method]').prop('checked', false);

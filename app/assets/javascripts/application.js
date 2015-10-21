@@ -34,6 +34,7 @@
 //= require ../template/plugins/form-colorpicker/js/bootstrap-colorpicker.min
 //= require ../template/plugins/form-daterangepicker/daterangepicker
 //= require ../template/plugins/bootstrap-datepicker/bootstrap-datepicker
+//= require ../template/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.es
 //= require ../template/plugins/bootstrap-timepicker/bootstrap-timepicker
 //= require ../template/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker
 //= require ../template/plugins/form-daterangepicker/moment.min

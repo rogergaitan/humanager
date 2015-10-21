@@ -69,8 +69,8 @@
     <%= f.label :payroll_date, :class => 'col-sm-2 control-label' %>
     <div class="col-sm-3" id="dp3">
       <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
         <%= f.text_field :payroll_date, :class => 'form-control', :value => Time.now.to_date - 1.days %>
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
       </div>
     </div>
     <div class="col-sm-3">
@@ -85,11 +85,11 @@
 
 			<table id="products_items" class="table table-hover table-bordered table-striped">
 				<tr class="header_items">
-					<td class="header_employees">Empleados</td>
-		    	<td class="header_task">Labor</td>
-	      	<td class="header_time">Tiempo Trabajado</td>
-	      	<td class="header_cc">Centro De Costo</td>
-	      	<td class="header_payment_type">
+					<td id="header_employees" class="header_employees">Empleados</td>
+	      	<td id="header_cc" class="header_cc">Centro De Costo</td>
+          <td id="header_task" class="header_task">Labor</td>
+          <td id="header_time" class="header_time">Cant. Trabajado</td>
+	      	<td id="header_payment_type" class="header_payment_type">
 	      		Tipo de pago 
 	      		<%= link_to_add_fields("", f, :payroll_histories, "icon-plus btn_plus right add-payroll-log addFields") %>
 	      	</td>

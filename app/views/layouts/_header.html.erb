@@ -13,6 +13,10 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
+                    <% if can? :read, Company %>
+                        <li><a href=<%= companies_path%>> Compañias</a></li>
+                    <% end %>
+
                     <% if can? :read, Province %>
                         <li><a href=<%= provinces_path%>> Provincias</a></li>
                     <% end %>
@@ -131,7 +135,10 @@
         </li>
 
         <li class="dropdown">
-            <input id="global_date" type="text" class="form-control" style="margin-top: 10px;">
+            <!-- <div class="input-group"> -->
+                <input id="global_date" type="text" class="form-control" style="margin-top: 10px;">
+                <!-- <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div> -->
         </li>
 
         <li class="dropdown toolbar-icon-bg hidden-xs">

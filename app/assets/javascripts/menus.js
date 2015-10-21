@@ -1,5 +1,10 @@
 $(document).ready( function() {
-	$('#global_date').datepicker('setDate', new Date());
+  
+  $('#global_date').datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: "es"
+  }).datepicker('setDate', new Date());
 
 	var date = new Date();
   var d = date.getDate();
@@ -130,3 +135,6 @@ $(document).ready( function() {
   });
 
 });
+
+// mes/dia/año
+// 10/13/2015

@@ -36,7 +36,7 @@ class PaymentTypesController < ApplicationController
   def update
     @payment_type.update_attributes(params[:payment_type])
     respond_to do |format|
-      format.html { redirectd_to payment_types_url }
+      format.html { redirect_to action: :index }
       format.json { head :no_content }
     end
   end
