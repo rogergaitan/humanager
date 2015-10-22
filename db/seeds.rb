@@ -33,6 +33,7 @@ ModelName.create([
 	{ name: Payroll.model_name },
 	{ name: PayrollLog.model_name },
 	{ name: DetailPersonnelAction.model_name }
+	{ name: Task.model_name }
 ])
 
 puts "Creating permisionss from SQL file in db/permissions.sql"

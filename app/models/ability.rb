@@ -169,6 +169,11 @@ class Ability
         if task.p_view
             can :read, Task
         end
+
+        if task.p_modify
+            can :update, Task
+        end
+
     end
     ######################################################################################
     # DEDUCTIONS | CONFIGURACION

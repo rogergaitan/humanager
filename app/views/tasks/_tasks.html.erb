@@ -13,6 +13,8 @@
         <th><%= model_class.human_attribute_name(:iaccount) %></th>
         <th><%= model_class.human_attribute_name(:mlaborcost) %></th>
         <th><%= model_class.human_attribute_name(:nunidad) %></th>
+        <th><%= model_class.human_attribute_name(:unit_performance) %></th>
+        <th><%=t '.actions', :default => t("helpers.actions") %></th>
       </tr>
     </thead>
     <tbody>
@@ -20,13 +22,18 @@
         <tr>
           <td><%= task.iactivity %></td>
           <td><%= task.itask %></td>
-          <td>
-            <%= link_to task.ntask, '#' %>
-            <%= hidden_field_tag '', task_path(task) %>
-          </td>
+          <td><%= task.ntask %></td>
           <td><%= task.iaccount %></td>
           <td><%= task.mlaborcost %></td>
           <td><%= task.nunidad %></td>
+          <td><%= task.unit_performance %></td>
+          <td>
+            <% if can? :update, Task %>
+              <%= link_to edit_task_path(task), :class => 'btn btn-xs btn-success-alt' do %>
+                <i class="fa fa-pencil"></i>
+              <% end %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

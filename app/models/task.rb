@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
 
 	has_many :payroll_logs
- 	attr_accessible  :iaccount, :iactivity, :itask, :mlaborcost, :ntask, :nunidad
+ 	attr_accessible  :iaccount, :iactivity, :itask, :mlaborcost, :ntask, :nunidad, :unit_performance
 
  	def self.search(search_code, search_desc, page, per_page = nil)
 	    query = ""

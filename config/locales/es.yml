@@ -530,7 +530,8 @@ es:
           ntask: Descripción
           mlaborcost: Costo Labor
           iaccount: Cuenta
-          nunidad: Unidad
+          nunidad: Unidad Pago
+          unit_performance: Unidad Rendimiento
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  

@@ -8,15 +8,6 @@ $(document).ready(function() {
     task_fb();
   });
 
-  $('#task-data a').click( function(e) {
-    e.preventDefault();
-  });
-
-  $('#task-data a').dblclick( function(e) {
-    var url = $(this).next().val();
-    document.location.href = url;
-  });
-
   $('#search_form input').keyup(function() {
     return search_task();
   });

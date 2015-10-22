@@ -630,10 +630,11 @@ ActiveRecord::Schema.define(:version => 20151014154908) do
     t.string   "itask"
     t.string   "ntask"
     t.string   "iaccount"
-    t.decimal  "mlaborcost", :precision => 10, :scale => 2
+    t.decimal  "mlaborcost",       :precision => 10, :scale => 2
     t.string   "nunidad"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.string   "unit_performance"
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
   end
 
   create_table "telephones", :force => true do |t|

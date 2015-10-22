@@ -1,5 +1,10 @@
 class TasksController < ApplicationController
   load_and_authorize_resource
+
+  before_filter :only => [:edit, :update] do |controller|
+    session_edit_validation(Task, params[:id])
+  end
+
   respond_to :html, :json, :js
 
   # GET /tasks
@@ -9,11 +14,23 @@ class TasksController < ApplicationController
     respond_with(@tasks)
   end
 
-  # GET /tasks/1
-  # GET /tasks/1.json
-  def show
-    @task = Task.find(params[:id])
-    respond_with(@task)
+  # GET /provinces/1/edit
+  def edit
+  end
+
+  # PUT /provinces/1
+  # PUT /provinces/1.json
+  def update
+    respond_to do |format|
+      if @task.update_attributes(params[:task])
+        flash[:success] = "Task was successfully updated."
+        format.html { redirect_to action: :index }
+        format.json { render json: @task, status: :created, location: @task }
+      else
+        format.html { render action: :edit }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def tasksfb
