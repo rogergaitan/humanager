@@ -4,6 +4,7 @@ class PayrollType < ActiveRecord::Base
   		:ledger_account_id, :company_id
   
   validates :description, :presence => true, :uniqueness => true
+  validates :description, :presence => true
 
   belongs_to :company
   has_many :companies

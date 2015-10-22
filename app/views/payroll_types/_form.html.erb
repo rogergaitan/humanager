@@ -76,9 +76,9 @@
           <div class="form-group" id="deduction_payrolls">
             <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <div class="input-group">
+              <div class="input-group form-group_">
                 <%= f.hidden_field :ledger_account_id %>
-                <%= text_field_tag 'payroll_type_ledger_account',nil, :class => 'form-control', :for => :ledger_account_id %>
+                <%= text_field_tag 'payroll_type_ledger_account',nil, :class => 'form-control', :required => true, :for => :ledger_account_id %>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
