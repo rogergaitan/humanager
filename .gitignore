@@ -27,3 +27,4 @@ doc/app
 
 #ignore uploaded photos
 public/uploads/photo
+.vagrant

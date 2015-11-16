@@ -10,5 +10,4 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 apt-get install -y git mysql-server-5.5 mysql-client-5.5 mysql-common libmysqlclient-dev imagemagick libmagickwand-dev firebird2.5-dev nodejs firefox
 
-
 #apt-get install ruby-dev
