@@ -1,73 +1,50 @@
 <tr class="success items_purchase_orders_form">
 
-	<td class="controls_item" style="width: 20%;">
+	<td class="controls_item" id="td_employees" style="width: 22%;">
 		<div class="row no-gutter">
-			<div class="col-md-3">
-				<%= text_field_tag 'search_code_employee', '', :class => 'form-control', :placeholder => 'Número',:tabindex => '1' %>
+			<div class="col-md-4">
+				<%= hidden_field_tag 'search_code_employee', '', :tabindex => '1' %>
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-8">
 				<%= hidden_field_tag 'employee_code', ''%>
-				<%= text_field_tag 'name_employee', '', :class => 'form-control', :placeholder => 'Nombre Empleado', :tabindex => '2' %>
+				<!-- <%= text_field_tag 'name_employee', '', :class => 'form-control', :placeholder => 'Nombre Empleado', :tabindex => '' %> -->
+				<%= hidden_field_tag 'search_name_employee', '', :tabindex => '2' %>
 			</div>
-			<div class="col-md-2">
-				<a data-toggle="modal" href="#employeeModal" class="btn btn-default-alt centro-costo" title="Ver lista de Empleados">
-                	<i class="fa fa-bars"></i>
-              	</a>
-			</div>
-
 		</div>
 	</td>
 
-	<td class="controls_item" style="width: 20%;">
+	<td class="controls_item" id="td_cc" style="width: 22%;">
 		<div class="row no-gutter">
 			<div class="col-md-4">
-				<%= text_field 'search_cost_code', '', :class => 'form-control', :placeholder => 'codigo', :tabindex => '7' %>
+				<%= hidden_field_tag 'search_code_cc', '', :tabindex => '3' %>
 				<%= f.hidden_field :costs_center_id, class: "cc-filter-id centro-costo" %>
 			</div>
 			<div class="col-md-8">
-				<div class="input-group">
-					<%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter form-control search-image-employee centro-costo', 
-					:for => :costs_center_id, :tabindex => '8' %>
-					
-					<span class="input-group-btn">
-						<a data-toggle="modal" href="#payrollModal" class="btn btn-default-alt centro-costo">
-		                	<i class="fa fa-bars"></i>
-		              	</a>
-					</span>
-				</div>
+				<%= hidden_field_tag 'search_name_cc', '', :tabindex => '4' %>
+				<!-- <%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter form-control search-image-employee centro-costo', 
+				:for => :costs_center_id, :tabindex => '' %> -->
 			</div>
 		</div>
 	</td>
 
-	<td class="controls_item" style="width: 36%;">
+	<td class="controls_item" id="td_task" style="width: 22%;">
 		<div class="row no-gutter">
-			<div class="col-md-2">
-				<%= text_field 'search_task_code', '', :class => 'form-control', :placeholder => 'Código', :tabindex => '4' %>
+			<div class="col-md-4">
+				<%= hidden_field_tag 'search_code_task', '', :tabindex => '4' %>
 			</div>
-			<div class="col-md-2">
-				<%= text_field 'task_cost', '', :class => 'form-control', :placeholder => 'Costo', :readonly => true %>
-			</div>
-			<div class="col-md-2">
-				<%= text_field 'task_unit', '', :class => 'form-control', :placeholder => 'Unidad', :readonly => true %>
-			</div>
-			<div class="col-md-6">
+
+			<div class="col-md-8">
+
+				<%= hidden_field_tag 'search_name_task', '', :tabindex => '5' %>
+
 				<%= f.hidden_field :task_id, class: "cc-filter-id" %>
-				<div class="input-group">
-					<%= text_field_tag 'load_task', nil, :class => 'cc-filter form-control search-image-employee', 
-					:for => :task_id, :tabindex => '5' %>
-					<span class="input-group-btn">
-						<a data-toggle="modal" href="#taskModal" class="btn btn-default-alt centro-costo" title="Ver lista de Labores">
-		                	<i class="fa fa-bars"></i>
-		              	</a>
-					</span>
-				</div>
 				<%= f.hidden_field :task_total, class: "cc-filter-id" %>
 				<%= f.hidden_field :task_unidad, class: "cc-filter-id" %>
 			</div>
 		</div>
 	</td>
 
-	<td class="controls_item" style="width: 9%;">
+	<td class="controls_item" id="td_time_worked" style="width: 9%;">
 		<div class="row no-gutter">
 			<div class="col-md-12">
 				<%= f.number_field :time_worked, :class => 'form-control input-table time-worked', :tabindex => '6' %>
@@ -75,9 +52,20 @@
 		</div>
 	</td>
 
+	<td class="controls_item" id="td_performance" style="width: 12%;">
+		<div class="row no-gutter">
+			<div class="col-md-6">
+				<%= f.text_field :performance, :class => "form-control" %>
+			</div>
+			<div class="col-md-6">
+				<%= text_field 'text_unit_performance', '', :class => 'form-control', :readonly => true %>
+			</div>
+		</div>
+	</td> 
+
 	<td class="save-employees" style="display:none;"></td>
 
-	<td class="controls_item" style="width: 15%;">
+	<td class="controls_item" id="td_payment_type" style="width: 13%;">
 		<div class="row no-gutter">
 			<div class="col-md-8">			
 				<%= f.collection_select(:payment_type_id, @payment_types, :id, :name, 

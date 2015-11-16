@@ -46,6 +46,7 @@
 //= require ../template/plugins/quicksearch/jquery.quicksearch.min
 //= require ../template/plugins/form-typeahead/typeahead.bundle.min
 //= require ../template/plugins/form-select2/select2.min
+//= require ../template/plugins/form-select2/select2_locale_es
 //= require ../template/plugins/form-autosize/jquery.autosize-min
 //= require ../template/plugins/form-colorpicker/js/bootstrap-colorpicker.min
 //= require ../template/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin

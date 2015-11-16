@@ -421,6 +421,7 @@ ActiveRecord::Schema.define(:version => 20151014154908) do
     t.string   "time_worked"
     t.decimal  "total",           :precision => 10, :scale => 2
     t.decimal  "task_total",      :precision => 10, :scale => 2
+    t.decimal  "performance",     :precision => 10, :scale => 2
     t.string   "task_unidad"
     t.date     "payroll_date"
     t.datetime "created_at",                                     :null => false

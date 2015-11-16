@@ -374,7 +374,7 @@ function addFields(e) {
 		);
 		populateCentroCostos(
 			$('#load_cc_centro_de_costos_path').val(), 
-			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), 
+			$('#products_items <div class="items_pur"></div>chase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), 
 			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(2)').attr('id')
 		);
 		populateEmployees(
@@ -427,6 +427,6 @@ function getLastFingering() {
 
 function validation() {
 	var modelName = $('form:eq(0)').data('modelName');
-    var referenceId = $('form:eq(0)').data('referenceId');
-    resources.updateValidation(modelName, referenceId);
+  var referenceId = $('form:eq(0)').data('referenceId');
+  resources.updateValidation(modelName, referenceId);
 }

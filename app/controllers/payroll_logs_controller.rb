@@ -98,35 +98,35 @@ class PayrollLogsController < ApplicationController
   end
 
   def resources
-    company_id = PayrollLog.find(params[:id]).payroll.company_id
-    @costs_centers = CostsCenter.where("costs_centers.company_id = '#{company_id}' and costs_centers.icost_center != '' ")
+    # New
+    @payment_types = PaymentType.all_payment_types
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
-    @tasks = Task.all
-    @payment_types = PaymentType.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
   end
 
   def search_task
-    @tasks = PayrollLog.search_task(params[:search_task_name], params[:page], params[:per_page])
-    respond_with @tasks
+    tasks = PayrollLog.search_task(params[:task_name],params[:task_code], params[:page], params[:per_page])
+    responses(process_response(tasks), :ok)
   end
 
-  def search_cost
-    @costs = PayrollLog.search_cost(params[:search_cost_name], params[:company_id], params[:page], params[:per_page])
-    respond_with @costs
+  def search_cost # new
+    costs = PayrollLog.search_cost(params[:cc_name], params[:cc_code], current_user.company_id, params[:page], params[:per_page])
+    responses(process_response(costs), :ok)
   end
 
-  def search_employee
-    @entities = PayrollLog.search_employee(params[:search_employee_name], params[:page], params[:per_page])
-    respond_with @entities
+  def search_employee # new
+    entities = PayrollLog.search_employee(params[:employee_name], params[:employee_code], 
+      params[:page], params[:per_page])
+    responses(process_response(entities), :ok)
   end
 
   def delete_employee_to_payment
 
     PayrollLog.delete_employee_to_payment(params[:employee_id], params[:payroll_history_id])
 
-    if PayrollEmployee.where("payroll_employees.employee_id = ? AND payroll_employees.payroll_history_id = ?", params[:employee_id], params[:payroll_history_id]).exists?
+    if PayrollEmployee.where("payroll_employees.employee_id = ? AND payroll_employees.payroll_history_id = ?", 
+      params[:employee_id], params[:payroll_history_id]).exists?
       render :json => {:data => 'true'}
     else 
       render :json => {:data => 'false', :status => :unprocessable_entity}

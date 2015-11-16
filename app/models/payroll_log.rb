@@ -28,20 +28,43 @@ class PayrollLog < ActiveRecord::Base
     result
   end
 
-  def self.search_task(search_task_name, page, per_page = nil)
-    @tasks = Task.where(" tasks.ntask like '%#{search_task_name}%' " )
-    .paginate(:page => page, :per_page => 5)
+  # def self.search_task(search_task_name, page, per_page = 5)
+  #   @tasks = Task.where("tasks.ntask like '%#{search_task_name}%'")
+  #   .paginate(:page => page, :per_page => per_page)
+  # end
+
+  # def self.search_cost(search_cost_name, company_id, page, per_page = 5)
+  #   @costs = CostsCenter.where("costs_centers.company_id = '#{company_id}' and costs_centers.name_cc like '%#{search_cost_name}%' and costs_centers.icost_center != ''")
+  #   .paginate(:page => page, :per_page => per_page)
+  # end
+
+
+  # NEW
+  def self.search_employee(employee_name, employee_code, page, per_page)
+    entities = Entity.joins(:employee)
+      .select("employees.id, employees.number_employee, entities.name, entities.surname")
+    entities = entities.where("entities.name like ? ", "%#{employee_name}%") if employee_name.present?
+    entities = entities.where("employees.number_employee like ? ", "%#{employee_code}%") if employee_code.present?
+    entities = entities.paginate(:page => page, :per_page => per_page)
   end
 
-  def self.search_cost(search_cost_name, company_id, page, per_page = nil)
-    @costs = CostsCenter.where(" costs_centers.company_id = '#{company_id}' and costs_centers.name_cc like '%#{search_cost_name}%' and costs_centers.icost_center != '' ")
-    .paginate(:page => page, :per_page => 5)
+  # NEW 
+  def self.search_cost(cc_name, cc_code, company_id, page, per_page)
+    cc = CostsCenter.select("*")
+    cc = cc.where("icost_center like ?", "%#{cc_code}%") if cc_code.present?
+    cc = cc.where("name_cc like ?", "%#{cc_name}%") if cc_name.present?
+    cc = cc.paginate(:page => page, :per_page => per_page)
   end
 
-  def self.search_employee(search_employee_name, page, per_page = nil)
-    @entities = Entity.where(" entities.name like '%#{search_employee_name}%' ")
-    .paginate(:page => page, :per_page => 5)
+  # NEW
+  def self.search_task(task_name, task_code, page, per_page)
+    tasks = Task.select("*")
+    tasks = tasks.where("ntask like ?", "%#{task_name}%") if task_name.present?
+    tasks = tasks.where("itask like ?", "%#{task_code}%") if task_code.present?
+    tasks = tasks.paginate(:page => page, :per_page => per_page)
   end
+
+
 
   def self.delete_employee_to_payment(employee_id, payroll_history_id)
     PayrollEmployee.find_by_payroll_history_id_and_employee_id(payroll_history_id, employee_id).destroy()

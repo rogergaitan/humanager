@@ -21,7 +21,7 @@ module ApplicationHelper
 		  render("forms/" + association.to_s.singularize + "_form", f: builder)
 		end
 
-		link_to name, tabindex: '10', class: "add_fields btn btn-success btn-xs " + fieldClass, 
+		link_to name, tabindex: '10', class: "add_fields btn btn-success-alt btn-xs icon-plus" + fieldClass, 
 			id: association, data: {id: id, fields: fields.gsub("\n", "")} do
 			content_tag(:i, "", :class => 'fa fa-plus')
 		end
@@ -44,6 +44,20 @@ module ApplicationHelper
 		    	:data => { :url => change_company_users_path }
 		    }
 		)
+	end
+
+	def build_query(data)
+		query = ""
+		if data
+			data.each_with_index do |q, i|
+				if i < data.length - 1
+					query += q + " AND "
+				else
+					query += q
+				end
+			end
+		end
+		query
 	end
 
 end
