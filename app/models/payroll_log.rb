@@ -110,7 +110,13 @@ class PayrollLog < ActiveRecord::Base
   end
 
   def self.delete_employee_to_payment(employee_id, payroll_history_id)
+
+    ph = PayrollHistory.find(payroll_history_id)
+    newTotal = ph.payroll_log.payroll_total.to_i - ph.total.to_i
+    ph.payroll_log.payroll_total = newTotal
+    ph.payroll_log.save
     PayrollEmployee.find_by_payroll_history_id_and_employee_id(payroll_history_id, employee_id).destroy()
+
   end
 
   private
@@ -119,7 +125,6 @@ class PayrollLog < ActiveRecord::Base
     att["time_worked"].blank? && new_record? &&
     att["costs_center_id"].blank? && new_record? && 
     att["payment_type_id"].blank? && new_record?
-    # att['username'].blank? && new_record?
   end
 
 end

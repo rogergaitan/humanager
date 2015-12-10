@@ -369,7 +369,6 @@ pl.removeEmployee = function(employee_id, identificador) {
 				var prv = $(that).html().replace(',', '');
 				var total = parseFloat(prv) -	parseFloat(clsEmployee.data[index].subtotal);
 				$(that).html(resources.prettyNumber(total));
-				// Kalfaro
 				pl.changeAccumulated(pl.employee_options.remove, clsEmployee.data[index].subtotal);
 
 				// Remove obj
