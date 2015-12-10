@@ -249,7 +249,7 @@ $(jQuery(document).ready(function($) {
 						thead +
 						'<tbody>' +
 							'<tr class="employee_count" id="total_'+employee_id+'">' +
-								'<td colspan="6" class="align_right">Total:</td>' +
+								'<td colspan="7" class="align_right">Total:</td>' +
 								'<td colspan="3">00.00</td>' +
 			'</tr></tbody></table></div></div></div>';
 

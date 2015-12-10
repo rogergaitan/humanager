@@ -32,7 +32,7 @@ ModelName.create([
 	{ name: OtherPayment.model_name },
 	{ name: Payroll.model_name },
 	{ name: PayrollLog.model_name },
-	{ name: DetailPersonnelAction.model_name }
+	{ name: DetailPersonnelAction.model_name },
 	{ name: Task.model_name }
 ])
 

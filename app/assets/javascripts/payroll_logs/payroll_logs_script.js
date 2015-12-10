@@ -368,6 +368,7 @@ function addFields(e) {
 		var time = new Date().getTime();
 		var regexp = new RegExp($(this).data('id'), 'g');
 		$('.header_items').after($(this).data('fields').replace(regexp, time));
+
 		populateTasks(
 			$('#load_cc_tasks_path').val(), 
 			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id')
@@ -381,6 +382,7 @@ function addFields(e) {
 			$('#load_em_employees_path').val(), 
 			$('#employee_code').attr('id')
 		);
+		
 		$('#products_items').find('label').remove();
 		saveEmployees(rowIsDisabled, is_select_methol_all);
 		payroll_logs.reloadSelectorsEvents();

@@ -3,12 +3,12 @@
 	<td class="controls_item" id="td_employees" style="width: 22%;">
 		<div class="row no-gutter">
 			<div class="col-md-4">
-				<%= hidden_field_tag 'search_code_employee', '', :tabindex => '1' %>
+				<%= hidden_field_tag 'search_code_employee', '' %>
 			</div>
 			<div class="col-md-8">
 				<%= hidden_field_tag 'employee_code', ''%>
 				<!-- <%= text_field_tag 'name_employee', '', :class => 'form-control', :placeholder => 'Nombre Empleado', :tabindex => '' %> -->
-				<%= hidden_field_tag 'search_name_employee', '', :tabindex => '2' %>
+				<%= hidden_field_tag 'search_name_employee', '' %>
 			</div>
 		</div>
 	</td>
@@ -16,11 +16,12 @@
 	<td class="controls_item" id="td_cc" style="width: 22%;">
 		<div class="row no-gutter">
 			<div class="col-md-4">
-				<%= hidden_field_tag 'search_code_cc', '', :tabindex => '3' %>
+				<%= hidden_field_tag 'search_code_cc', '' %>
 				<%= f.hidden_field :costs_center_id, class: "cc-filter-id centro-costo" %>
+				<%= hidden_field_tag 'iactivity_cc', '' %>
 			</div>
 			<div class="col-md-8">
-				<%= hidden_field_tag 'search_name_cc', '', :tabindex => '4' %>
+				<%= hidden_field_tag 'search_name_cc', '' %>
 				<!-- <%= text_field_tag 'load_centro_de_costo', nil, :class => 'cc-filter form-control search-image-employee centro-costo', 
 				:for => :costs_center_id, :tabindex => '' %> -->
 			</div>
@@ -30,46 +31,41 @@
 	<td class="controls_item" id="td_task" style="width: 22%;">
 		<div class="row no-gutter">
 			<div class="col-md-4">
-				<%= hidden_field_tag 'search_code_task', '', :tabindex => '4' %>
+				<%= hidden_field_tag 'search_code_task', '', :class => 'a-not-active' %>
 			</div>
 
 			<div class="col-md-8">
-
-				<%= hidden_field_tag 'search_name_task', '', :tabindex => '5' %>
-
-				<%= f.hidden_field :task_id, class: "cc-filter-id" %>
-				<%= f.hidden_field :task_total, class: "cc-filter-id" %>
-				<%= f.hidden_field :task_unidad, class: "cc-filter-id" %>
+				<%= hidden_field_tag 'search_name_task', '',:class => 'a-not-active' %>
+				<%= f.hidden_field :task_id %>
+				<%= f.hidden_field :task_total %>
+				<%= f.hidden_field :task_unidad %>
 			</div>
 		</div>
 	</td>
 
 	<td class="controls_item" id="td_time_worked" style="width: 9%;">
 		<div class="row no-gutter">
-			<div class="col-md-12">
-				<%= f.number_field :time_worked, :class => 'form-control input-table time-worked', :tabindex => '6' %>
+			<div class="col-md-12 form-group_">
+				<%= f.number_field :time_worked, :class => 'form-control input-table time-worked', :tabindex => '1', :value => 1, :required => true %>
 			</div>
 		</div>
 	</td>
 
-	<td class="controls_item" id="td_performance" style="width: 12%;">
+	<td class="controls_item" id="td_performance" style="width: 9%;">
 		<div class="row no-gutter">
-			<div class="col-md-6">
-				<%= f.text_field :performance, :class => "form-control" %>
-			</div>
-			<div class="col-md-6">
-				<%= text_field 'text_unit_performance', '', :class => 'form-control', :readonly => true %>
+			<div class="col-md-12">
+				<%= f.text_field :performance, :class => "form-control", :tabindex => '2' %>
 			</div>
 		</div>
 	</td> 
 
-	<td class="save-employees" style="display:none;"></td>
+	<td id="td_save_employees" class="save-employees" style="display:none;"></td>
 
-	<td class="controls_item" id="td_payment_type" style="width: 13%;">
+	<td class="controls_item" id="td_payment_type" style="width: 16%;">
 		<div class="row no-gutter">
-			<div class="col-md-8">			
-				<%= f.collection_select(:payment_type_id, @payment_types, :id, :name, 
-				{include_blank: false }, {:class => "paymentType form-control", :tabindex => "9" }) %>
+			<div class="col-md-8">
+				<%= f.select :payment_type_id, options_for_select(@payment_types.map{ |c| [c.name, c.id, 
+					{'data-factor' => c.factor}] }), {include_blank: false}, {:class => "form-control", :tabindex => '3'} %>
 			</div>
 			<div class="col-md-3">
 				&nbsp;
@@ -78,10 +74,8 @@
 					<i class="fa fa-trash-o"></i>
 				<% end %>
 				<%= f.hidden_field :total %>
-				<%= f.hidden_field :task_total %>
 				<%= f.hidden_field :payroll_date %>
 			</div>			
 		</div>
 	</td>
-
 </tr>

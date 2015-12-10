@@ -1,0 +1,8 @@
+.a-not-active {
+	cursor: not-allowed;
+	color: black!important;
+}
+
+.a-not-active > * {
+    pointer-events:none;
+}

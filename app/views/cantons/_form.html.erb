@@ -17,20 +17,22 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @canton, :html => { :class => 'form-horizontal row-border' } do |f| %>
+
+        <%= form_for @canton, :validate => true, :html => { :class => 'form-horizontal row-border', 
+          :data => {:toggle => 'validator'} } do |f| %>
 
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :name, :class => 'form-control' %>
+            <div class="col-sm-3 form-group_">
+              <%= f.text_field :name, :class => 'form-control', :required => true %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :province_id, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
+            <div class="col-sm-3 form-group_">
               <%= collection_select(:canton, :province_id, @province, :id, :name, 
-                  options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+                  options = {:prompt => true}, html_options = {:class => 'form-control', :required => true}) %>
             </div>
           </div>
 

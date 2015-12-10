@@ -49,6 +49,8 @@ Reasapp::Application.routes.draw do
       get :search_cost
       get :search_employee
       get :delete_employee_to_payment
+      get :get_history_json
+      get :get_employees
     end
   end
   

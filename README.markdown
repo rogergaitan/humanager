@@ -39,6 +39,27 @@ http://dl.atrpms.net/el6-x86_64/atrpms/stable/
 Install atrpms-repo rpm:
 rpm -Uvh atrpms-repo*rpm
 
-Install firebird-devel rpm package:
-yum install firebird-devel
+Error with mysql (gem)
+sudo apt-get install mysql-client libmysqlclient-dev
 
+Error with magick (gem)
+sudo apt-get install imagemagick libmagickcore-dev libmagickwand-dev
+
+Install Firebird
+$ sudo add-apt-repository ppa:mapopa
+$ sudo apt-get update
+$ sudo apt-get install firebird2.5-super
+$ sudo dpkg-reconfigure firebird2.5-super
+
+example:
+$ cd /usr/share/doc/firebird2.5-examples/examples/empbuild/
+$ sudo gunzip employee.fdb.gz
+$ sudo chown firebird.firebird employee.fdb
+$ sudo mv employee.fdb /var/lib/firebird/2.5/data/
+
+Add user permissions
+$ sudo adduser `id -un` firebird
+
+Test connection:
+$ isql-fb
+SQL> connect "localhost:/var/lib/firebird/2.5/data/employee.fdb" user 'SYSDBA' password 'SYSDBApassword'

@@ -70,7 +70,6 @@ class PayrollLogsController < ApplicationController
         format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
         format.json { head :no_content }
 
-
       else
         format.html { render action: "edit" }
         format.json { render json: @payroll_log.errors, status: :unprocessable_entity }
@@ -105,8 +104,8 @@ class PayrollLogsController < ApplicationController
     @superior = Employee.superior
   end
 
-  def search_task
-    tasks = PayrollLog.search_task(params[:task_name],params[:task_code], params[:page], params[:per_page])
+  def search_task # new
+    tasks = PayrollLog.search_task(params[:task_name], params[:task_code], params[:task_iactivity], params[:page], params[:per_page])
     responses(process_response(tasks), :ok)
   end
 
@@ -130,6 +129,21 @@ class PayrollLogsController < ApplicationController
       render :json => {:data => 'true'}
     else 
       render :json => {:data => 'false', :status => :unprocessable_entity}
+    end
+  end
+
+  def get_history_json
+    history = PayrollLog.employees_data(1)
+    respond_to do |format|
+      format.json { render json: history, status: :ok }
+    end
+  end
+
+  def get_employees
+    ids = params[:employee_ids].scan( /\d+/ )
+    entities = PayrollLog.get_employee_list(ids)
+    respond_to do |format|
+      format.json { render json: entities, status: :ok }
     end
   end
 

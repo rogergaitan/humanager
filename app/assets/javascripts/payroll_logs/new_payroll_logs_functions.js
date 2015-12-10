@@ -1,4 +1,3 @@
-
 // Multi-Select: Select or deselect all Employees
 pl.employeeSelectAll = function (argument) {
 	var that = $('#payroll_logs_employee_ids');
@@ -20,7 +19,7 @@ pl.showHideOptions = function(selected) {
 			// Filters set by default the "boss" and "department"
 			$('#superiors_employees option:eq(0)').attr('selected','selected');
 			$('#departments_employees option:eq(0)').attr('selected','selected');
-			// pl.cleanEmployeeAlone();
+			pl.cleanEmployeeAlone();
 		break;
 
 		case 'boss':
@@ -32,7 +31,7 @@ pl.showHideOptions = function(selected) {
 			$('#list_superior').show();
 			pl.filterEmployees("superior", $('#superiors_employees').val());
 			$('#superiors_employees').removeAttr('disabled');
-			// pl.cleanEmployeeAlone();
+			pl.cleanEmployeeAlone();
 		break;
 
 		case 'department':
@@ -42,9 +41,9 @@ pl.showHideOptions = function(selected) {
 			$('#ms-payroll_logs_employee_ids').find('input:eq(0)').hide();
 			$('#list_departments').show();
 			$('#list_superior').hide();
-			pl.filterEmployees("department", $('#departments_employees').val());
+			pl.filterEmployees('department', $('#departments_employees').val());
 			$('#departments_employees').removeAttr('disabled');
-			// pl.cleanEmployeeAlone();
+			pl.cleanEmployeeAlone();
 		break;
 	}
 }
@@ -90,425 +89,501 @@ pl.filterEmployees = function(type, id) {
 
 pl.cleanEmployeeAlone = function() {
   		
-	if( !$('#select_method_all').is(':checked') ) {
-		$('#products_items tr:eq(1) td:eq(0) a').hide();
-		$('#products_items tr:eq(1) td:eq(0) input').each(function() {
-			$(this).val('');
-			$(this).attr( "disabled", "disabled" );
-		});
-		$('#employee-box').css("display", "block");
-		$('#filter-controls input:checkbox').css("display", "");
-		$('#filter-controls input:checkbox').next().css("display", "");
+	if( $('#select_method_all').is(':checked') ) {
+		// Deselect all employees
+		$('#payroll_logs_employee_ids').multiSelect('deselect_all');
+		// Show simple employee in the line Code/Name
+		$(pl.current_employee).find('#s2id_search_code_employee').removeClass('a-not-active');
+		$(pl.current_employee).find('#s2id_search_name_employee').removeClass('a-not-active');
 	} else {
-		$('#products_items tr:eq(1) td:eq(0) a').show();
-		$('#products_items tr:eq(1) td:eq(0) input').each(function() {
-			$(this).removeAttr( "disabled", "disabled" );
-		});
-		$('#employee-filter').css("display", "none");
-		$('#employee-box').css("display", "none");
-		$('#filter-controls input:checkbox').css("display", "none");
-		$('#filter-controls input:checkbox').next().css("display", "none");
+		// Clear and Hide simple employee in the line
+		// Set Code
+		var that = $(pl.current_employee).find('a:eq(0)');
+		$(that).find('span:eq(0)').html('#');
+ 		$(that).addClass('select2-default');
+ 		$(pl.current_employee).find('#s2id_search_code_employee').addClass('a-not-active');
+ 		// Set Name
+ 		that = $(pl.current_employee).find('a:eq(1)');
+ 		$(that).find('span:eq(0)').html('Nombre');
+		$(that).addClass('select2-default');
+		$(pl.current_employee).find('#s2id_search_name_employee').addClass('a-not-active');
+		// Code (ID)
+		$(pl.current_employee).find('#employee_code').val('');
 	}
 }
 
 // Add new Row
 pl.addFields = function(e) {
 	e.preventDefault();
+	// Check Time Session
+	pl.UpdateTime();
+	var numberRows = $('#products_items tbody tr').length;
+	var rowIsDisabled = $(pl.current_payments_type).find('select[id*=_payment_type_id]').is(':disabled');
+	var dRecords = Object();
+	var newRow = true;
+	var currentEmployees = $(pl.current_save_employees).find('input').length;
 
-
-
-	/**************************************************************************************/
-	/* TEST */
-	/**************************************************************************************/
-	var time = new Date().getTime();
-	var regexp = new RegExp($(this).data('id'), 'g');
-	$('#products_items > tbody').prepend($(this).data('fields').replace(regexp, time));
-	// Seach Employees
-	pl.searchEmployeeByName();
-	pl.searchEmployeeByCode();
-	// Seach Costs Centers
-	pl.searchCcByCode();
-	pl.searchCcByName();
-	// Seach Tasks
-	pl.searchTaskByCode();
-	pl.searchTaskByName();
-
-	// pl.searchEmployeeByCode(); // Seach Employee by Code
-	$(pl.current_employee).find('#search_code_employee').select2("open");
-
-
-
-	// Time Validation
-	// validation();
-
-	// Valida si hay campos en blanco
-	var timeWorked = $.trim($('#products_items tr:eq(1) input.time-worked').val()).length
-	var numberRows = $('#products_items tr').length;
-	var is_select_methol_all = false;
-
-	if((timeWorked == 0 ) && numberRows > 1) {
-		resources.PNotify('Planilla', 'Por favor complete los espacios en blanco', 'info');
-		// e.preventDefault();
-	} else {
-		var numberEmployees = $('div.employees-list.list-right input').length;
-		var employeesChecked = $('div.employees-list.list-right input[type=checkbox]').is(':checked');
-		var rowIsDisabled = $('#products_items tr:eq(1) td:first select').is(':disabled');
-		if (numberRows == 1) { rowIsDisabled = true; };
-
-		// Valida si agrego Labor
-		// var task = $('#products_items tr:eq(1)').find("input[id*='task_id']").val();
-		// if( task == "" ) {
-		// 	resources.PNotify('Labor', 'Por favor agrege una Labor', 'info');
-		// 	return false;
-		// }
-		
-		// Valida si agrego CC
-		// var cc = $('#products_items tr:eq(1)').find("input[id*='_costs_center_id']").val();
-		// if( cc == "" ) {
-		// 	resources.PNotify('Centro de Costo', 'Por favor agrege un Centro de Costo', 'info');
-		// 	return false;
-		// }
-
-		// Valida si "Todos" esta seleccionado
-		// if( $('#select_method_all').is(':checked') ) {
-		// 	numberEmployees = 1;
-		// 	employeesChecked = true;
-		// 	is_select_methol_all = true;
-		// 	// Validar Empleado
-		// 	if( $('#products_items tr:eq(1) td:eq('+payroll_logs.employee_td_eq+') input:eq(1)').val() === "" ) {
-		// 		resources.PNotify('Empleado', 'Debe añadir al menos un empleado', 'info');
-		// 		return false;	
-		// 	}
-		// }
-
-		// Valida si se ha seleccionado al menos un empleado antes de agregar una línea nueva
-		if ((numberEmployees == 0 || employeesChecked == false) && (rowIsDisabled == false) && (numberRows > 1)) {
-			resources.PNotify('Empleado', 'Debe añadir al menos un empleado', 'info');
-			return false;
+	if( numberRows > 0 && rowIsDisabled == false && currentEmployees == 0 ) {
+		// Validate Employee
+		if( $('#select_method_all').is(':checked') ) {
+			var oneEmployee = $(pl.current_employee).find('#employee_code').val();
+			if( oneEmployee == '' ) {
+				resources.PNotify('Planilla', pl.messages.employee_not_found , 'info');
+				return false;
+			}
 		} else {
-			// Validate Duplicate Records
-			if( !rowIsDisabled ) {
-				var name = $('#products_items tr:eq(1) td:eq('+payroll_logs.task_td_eq+') input:hidden').attr('name');
-				var num = name.match(/\d/g);
-				num = num.join('');
+			var listEmployees = $('#payroll_logs_employee_ids').val(); // Array[] or Null
+			if( listEmployees == null ) {
+				resources.PNotify('Planilla', pl.messages.employees_not_found , 'info');
+				return false;
+			}	
+		}
 
-				
+		// Validate CC
+		var cc = $(pl.current_cc).find('input:hidden[id*=_costs_center_id]').val();
+		if( cc == "" ) {
+			resources.PNotify('Planilla', pl.messages.cc_not_found , 'info');
+			return false;
+		}
 
-				// Set Date
-				$('#payroll_log_payroll_histories_attributes_' + num + '_payroll_date').val($('#payroll_log_payroll_date').val());
-				payroll_logs.setTotal(num);
-				result = payroll_logs.validateEmployeeTask(num,is_select_methol_all);
-				if( result.status ) {
-					var message = 'Existe al menos un empleado con datos duplicados ['+result.username+']';
-					resources.PNotify('Planilla', message, 'info');
-					return false;
-				}
+		// Validate Tasks
+		var task = $(pl.current_task).find('input:hidden[id*=_task_id]').val();
+		if( task == "" ) {
+			resources.PNotify('Planilla', pl.messages.task_not_found , 'info');
+			return false;
+		}
+
+		// Validate Cant. Working
+		var timeWorked = $(pl.current_cant_working).find('input[id*=_time_worked]').val();
+		if( timeWorked == "" ) {
+			resources.PNotify('Planilla', pl.messages.cant_working_not_found , 'info');
+			return false;
+		}
+
+		timeWorked = parseInt(timeWorked);
+		if( timeWorked <= 0 ) {
+			resources.PNotify('Planilla', pl.messages.cant_working_greater_zero , 'info');
+			return false;
+		}
+
+		// Validate Performance
+		var performance = $(pl.current_performance).find('input[id*=_performance]').val();
+		if( performance != "" && typeof performance != 'undefined' ) {
+			performance = parseInt(performance);
+			if( isNaN(performance) ) {
+				resources.PNotify('Planilla', pl.messages.performance_wrong_format , 'info');
+				return false;
+			}
+			
+			if( !(performance > 0 || performance <= 99.99) ) {
+				resources.PNotify('Planilla', pl.messages.performance_range , 'info');
+				return false;
 			}
 		}
 
-		// $('#products_items tr input, select').attr('disabled', true);
+		// Validate Date
+		var date = $('#payroll_log_payroll_date').val();
+		if( date == "" ) {
+			resources.PNotify('Planilla', pl.messages.date_not_found , 'info');
+			return false;
+		}
+
+		// Set Date
+		$(pl.current_payments_type).find('input[id*=_payroll_date]').val(date);
+
+		// Validate Duplicate Records
+		dRecords = pl.validateDuplicateRecords();
+	}
+
+	if( dRecords.hasOwnProperty('employeesAdded') ) {
+
+		if( dRecords.employeesAdded.length == 0 ) {
+			newRow = false;
+		} else {
+			// Disabled Current Row
+			pl.disableRow();
+			// Add Hidden Employee to Current Row
+			pl.addHiddenEmployees(dRecords.employeesAdded);
+			// Detail list
+			pl.addDetailsList();
+		}
+
+		if(dRecords.employeesRemoved.length > 0) {
+			var mjs = pl.messages.employees_duplicated;
+			$.each(dRecords.employeesRemoved, function(key, obj) {
+				mjs += obj.name + " " + obj.surname + " ";
+			});
+			resources.PNotify('Planilla', mjs , 'info');
+			return false;
+		}
+	}
+
+	if(newRow) {
 		// Add new Row
 		var time = new Date().getTime();
 		var regexp = new RegExp($(this).data('id'), 'g');
 		$('#products_items > tbody').prepend($(this).data('fields').replace(regexp, time));
+		// Seach Employees
+		pl.searchEmployeeByCode();
+		pl.searchEmployeeByName();
+		// Seach Costs Centers
+		pl.searchCcByCode();
+		pl.searchCcByName();
+		// Seach Tasks
+		pl.searchTaskByCode();
+		pl.searchTaskByName();
+		$(pl.current_employee).find('#search_code_employee').select2("open");
+	}
+}
 
-		populateTasks(
-			$('#load_cc_tasks_path').val(), 
-			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(0)').attr('id')
-		);
-		populateCentroCostos(
-			$('#load_cc_centro_de_costos_path').val(), 
-			$('#products_items <div class="items_pur"></div>chase_orders_form').first().find('input.cc-filter:eq(1)').attr('id'), 
-			$('#products_items .items_purchase_orders_form').first().find('input.cc-filter-id:eq(2)').attr('id')
-		);
-		populateEmployees(
-			$('#load_em_employees_path').val(), 
-			$('#employee_code').attr('id')
-		);
-		$('#products_items').find('label').remove();
-		saveEmployees(rowIsDisabled, is_select_methol_all);
-		payroll_logs.reloadSelectorsEvents();
-		payroll_logs.cleanEmployeeAlone();
-		// $('#search_code_employee').focus();
-		e.preventDefault();
+// Disable the Current Row
+pl.disableRow = function() {
+	// Employees
+	$(pl.current_employee).find('#s2id_search_code_employee').addClass('a-not-active');
+	$(pl.current_employee).find('#s2id_search_name_employee').addClass('a-not-active');
+	// CC
+	$(pl.current_cc).find('#s2id_search_code_cc').addClass('a-not-active');
+	$(pl.current_cc).find('#s2id_search_name_cc').addClass('a-not-active');
+	// Tasks
+	$(pl.current_task).find('#s2id_search_code_task').addClass('a-not-active');
+	$(pl.current_task).find('#s2id_search_name_task').addClass('a-not-active');
+	// Cant Working
+	$(pl.current_cant_working).find('input[id*=_time_worked]').prop('readonly', true);
+	$(pl.current_cant_working).find('input[id*=_time_worked]').prop('tabindex', -1);
+	// Performance
+	$(pl.current_performance).find('input[id*=_performance]').prop('readonly', true);
+	$(pl.current_performance).find('input[id*=_performance]').prop('tabindex', -1);
+	// Payments Type
+	$(pl.current_payments_type).find('select[id*=_payment_type_id]').parent('div').addClass('a-not-active');
+	$(pl.current_payments_type).find('select[id*=_payment_type_id]').prop('tabindex', -1);
+}
+
+// Hidden Employees
+pl.addHiddenEmployees = function(employeesAdded) {
+	var identificador = pl.getIdentificador();
+	$.each(employeesAdded, function(key, id) {
+		var name = 'payroll_log[payroll_histories_attributes]['+ identificador +'][employee_ids][]';
+		$(pl.current_save_employees).append('<input type="hidden" name="'+ name +'" value="'+ id +'" >');
+	});
+}
+
+pl.UpdateTime = function() {
+	var modelName = $('form:eq(0)').data('modelName');
+  var referenceId = $('form:eq(0)').data('referenceId');
+  resources.updateValidation(modelName, referenceId);
+}
+
+// Check Validate Records
+pl.validateDuplicateRecords = function() {
+	// Get History Information
+	var history = pl.getSessionStorage(pl.search_types.history);
+	// Temporal Data
+	var tmpData = pl.getTemporalData();
+	// Employees Removed
+	var er = Array();
+
+	if(history != null) {
+		$.each( history.employees, function( key, clsEmployee ) {
+
+			var index = $.inArray( clsEmployee.id.toString(), tmpData.employees);
+
+			if (index > -1) { // (-1) cuando no lo encuentra o retorna el [index]
+				$.each(clsEmployee.data, function(k, dataStructure) {
+					// Check Task, Payment Type and Date
+					var tIdCC = tmpData.data.cc.id == dataStructure.cc.id;
+					var tIdTaks = tmpData.data.type_payment == dataStructure.type_payment;
+					var tDate = tmpData.data.date == dataStructure.date;
+
+					if(tIdCC && tIdTaks && tDate) {
+						er.push(pl.findEmployeeById(clsEmployee.id));
+						tmpData.employees.splice([index], 1);
+						return false;
+					}
+				});
+			}
+		});
 	}
 
+	if( tmpData.employees.length > 0 ) {
+		// Set Total
+		$(pl.current_payments_type).find('input:hidden[id*=_total]').val(tmpData.data.subtotal);
+		pl.addEmployees(tmpData);
+	}
+
+	return {
+		employeesRemoved: er,
+		employeesAdded: tmpData.employees
+	}
 }
 
-/**************************************************************************************/
-/* Seach Employee By Code */
-/**************************************************************************************/
-pl.searchEmployeeByCode = function() {
-	$(pl.current_employee).find('#search_code_employee').select2({
-		placeholder: "#",
-		minimumInputLength: 1,
-		width: '100%',
-		ajax: {
-			url: $('#search_employee_payroll_logs_path').val(),
-			dataType: 'json',
-			quietMillis: 100,
-			// Page is the one-based page number tracked by Select2
-			data: function (term, page) { 
-				return {
-					employee_code: term, // Search Term
-					per_page: pl.per_page, // Page Size
-					page: page // Page Number
-				};
-			},
-			results: function (data, page) {
-				// Whether or not there are more results available
-				var more = (page * pl.per_page) < data.total;
-				// Notice we return the value of more so Select2 knows if more results can be loaded
-				return {results: data.entries, more: more};
+pl.addEmployees = function(tmpData) {
+	
+	var history = pl.getSessionStorage(pl.search_types.history);
+	if(history == null) {
+		history = new pl.PayrollHistories();
+	}
+		
+	$.each(tmpData.employees, function (key, id) {
+		var add = true;
+		$.each(history.employees, function (k, clsEmployee) {
+			if(id == clsEmployee.id) {
+				clsEmployee.data.push(tmpData.data);
+				clsEmployee.add.push(tmpData.data.identification);
+				add = false;
+				return false;
 			}
-		},
-		formatResult: pl.employeeCodeFormatResult,
-		formatSelection: pl.employeeCodeFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+		});
+
+		if(add) {
+			var employee = new pl.Employee();
+			var e = pl.findEmployeeById(id);
+			employee.id = e.id;
+			employee.name = e.name + " " + e.surname;
+			employee.data.push(tmpData.data);
+			employee.add.push(tmpData.data.identification);
+			history.employees.push(employee);
+		}
 	});
+
+	pl.setSessionStorage(pl.search_types.history, history);
 }
 
-pl.employeeCodeFormatResult = function(employee) {
-	var markup = "<table><tr>";
-	markup += "<td><div>" + employee.number_employee + " - " + employee.name + " " + employee.surname + "</div>";
-	markup += "</td></tr></table>";
-	return markup;
-}
+pl.removeEmployee = function(employee_id, identificador) {
+	var objHistory = pl.getSessionStorage(pl.search_types.history);
 
-pl.employeeCodeFormatSelection = function(employee) {
-	// console.log(employee.id);
-	return employee.number_employee;
-}
-/**************************************************************************************/
-/* Seach Employee By Name */
-/**************************************************************************************/
-pl.searchEmployeeByName = function() {
-	$(pl.current_employee).find('#search_name_employee').select2({
-		placeholder: "Nombre",
-		minimumInputLength: 1,
-		width: '100%',
-		cache: true,
-		ajax: {
-			url: $('#search_employee_payroll_logs_path').val(),
-			dataType: 'json',
-			quietMillis: 100,
-			// Page is the one-based page number tracked by Select2
-			data: function (term, page) { 
-				return {
-					employee_name: term, // Search Term
-					per_page: pl.per_page, // Page Size
-					page: page // Page Number
-				};
-			},
-			results: function (data, page) {
-				// Whether or not there are more results available
-				var more = (page * pl.per_page) < data.total;
-				// Notice we return the value of more so Select2 knows if more results can be loaded
-				return {results: data.entries, more: more};
+	$.each(objHistory.employees, function (key, clsEmployee) {
+
+		if(clsEmployee.id == employee_id) {
+
+			var index = null;
+			$.each(clsEmployee.data, function(k, dta) {
+				if(dta.identification == identificador) {
+					index = k;
+					return false;
+				}
+			});
+
+			if(index != null) {
+				// Set Total all Row
+				var that = $('#total_' + employee_id + ' td:eq(1)');
+				var prv = $(that).html().replace(',', '');
+				var total = parseFloat(prv) -	parseFloat(clsEmployee.data[index].subtotal);
+				$(that).html(resources.prettyNumber(total));
+				// Kalfaro
+				pl.changeAccumulated(pl.employee_options.remove, clsEmployee.data[index].subtotal);
+
+				// Remove obj
+				clsEmployee.data.splice([index], 1); // Remove
+				return false;
 			}
-		},
-		formatResult: pl.employeeNameFormatResult,
-		formatSelection: pl.employeeNameFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+		}
 	});
+	pl.setSessionStorage(pl.search_types.history, objHistory);
 }
 
-pl.employeeNameFormatResult = function(employee) {
-	var markup = "<table><tr>";
-	markup += "<td><div>" + employee.name + " " + employee.surname + "</div>";
-	markup += "</td></tr></table>";
-	return markup;
+// Get Temporal Data
+pl.getTemporalData = function() {
+	var tmpData = new pl.DataStructure();
+	tmpData.identification = pl.getIdentificador();
+	tmpData.type_payment = $(pl.current_payments_type).find('select[id*=_payment_type_id] option:selected').text();
+	tmpData.type_payment_factor = $(pl.current_payments_type).find('select[id*=_payment_type_id] option:selected').data('factor');
+	tmpData.time_worked = $(pl.current_cant_working).find('input[id*=_time_worked]').val();
+	tmpData.performance = $(pl.current_performance).find('input[id*=_performance]').val();
+	tmpData.date = $('#payroll_log_payroll_date').val();
+	// CC
+	tmpData.cc = pl.findCcById($(pl.current_cc).find('input:hidden[id*=_costs_center_id]').val());
+	// Taks
+	tmpData.task = pl.findTaskById($(pl.current_task).find('input:hidden[id*=_task_id]').val());
+
+	// List Employees
+	var arrayEmployees = Array();
+	if( $('#select_method_all').is(':checked') ) {
+		arrayEmployees.push($(pl.current_employee).find('#employee_code').val());
+	} else {
+		arrayEmployees = $('#payroll_logs_employee_ids').val(); // Array[] or Null
+	}
+
+	tmpData.subtotal = pl.setSubTotalByRow(tmpData);
+
+	return {
+		employees: arrayEmployees,
+		data: tmpData
+	}
 }
 
-pl.employeeNameFormatSelection = function(employee) {
-	// console.log(employee.id);
-	return employee.name + " " + employee.surname;
+pl.setSubTotalByRow = function(tmpData) {
+	var cost = parseFloat(tmpData.task.mlaborcost);
+	var hours = parseFloat(tmpData.time_worked);
+	var payment = parseFloat(tmpData.type_payment_factor);
+	return cost*hours*payment;
 }
 
-/**************************************************************************************/
-/* Seach Costs Center By Code */
-/**************************************************************************************/
-pl.searchCcByCode = function() {
-	$(pl.current_cc).find('#search_code_cc').select2({
-		placeholder: "#",
-		minimumInputLength: 1,
-		width: '100%',
-		ajax: {
-			url: $('#search_cost_payroll_logs_path').val(),
-			dataType: 'json',
-			quietMillis: 100,
-			// Page is the one-based page number tracked by Select2
-			data: function (term, page) { 
-				return {
-					cc_code: term, // Search Term
-					per_page: pl.per_page, // Page Size
-					page: page // Page Number
-				};
-			},
-			results: function (data, page) {
-				// Whether or not there are more results available
-				var more = (page * pl.per_page) < data.total;
-				// Notice we return the value of more so Select2 knows if more results can be loaded
-				return {results: data.entries, more: more};
-			}
-		},
-		formatResult: pl.ccCodeFormatResult,
-		formatSelection: pl.ccCodeFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+// Get Identificador for the current row
+pl.getIdentificador = function() {
+	return $(pl.current_task).find('input:hidden[id*=_task_id]').attr('name').match(/\d/g).join('');
+}
+
+// Set session Storage
+pl.setSessionStorage = function(key, object) {
+	sessionStorage.setItem(key, JSON.stringify(object));
+}
+
+// Get session Storage
+pl.getSessionStorage = function(key) {
+	return JSON.parse(sessionStorage.getItem(key));
+}
+
+// Clear session Storage
+pl.clearSessionStorage = function() {
+	sessionStorage.clear();
+}
+
+// Find CC by ID
+pl.findCcById = function(id) {
+	var cc = pl.getSessionStorage(pl.search_types.cc);
+	return pl.seach(id, cc);
+}
+
+// Find Taks by ID
+pl.findTaskById = function(id) {
+	var tasks = pl.getSessionStorage(pl.search_types.tasks);
+	return pl.seach(id, tasks);
+}
+
+// Find Employee by ID
+pl.findEmployeeById = function(id) {
+	var employee = pl.getSessionStorage(pl.search_types.employees);
+	return pl.seach(id, employee);
+}
+
+// Seach Function
+pl.seach = function(id, array) {
+	var result = null;
+	$.each( array, function( key, obj ) {
+		if(obj.id == id) {
+			result = obj;
+			return false;
+		}
 	});
+	return result;
 }
 
-pl.ccCodeFormatResult = function(cc) {
-	var markup = "<table><tr>";
-	markup += "<td><div>" + cc.icost_center + " - " + cc.name_cc + "</div>";
-	markup += "</td></tr></table>";
-	return markup;
-}
+pl.addDetailsList = function() {
+	var objHistory = pl.getSessionStorage(pl.search_types.history);
 
-pl.ccCodeFormatSelection = function(cc) {
-	// console.log(employee.id);
-	return cc.icost_center;
-}
+	$.each(objHistory.employees, function(k, clsEmployee) {
+		if(clsEmployee.add.length > 0) {
 
-/**************************************************************************************/
-/* Seach Costs Center By Name */
-/**************************************************************************************/
-pl.searchCcByName = function() {
-	$(pl.current_cc).find('#search_name_cc').select2({
-		placeholder: "Nombre",
-		minimumInputLength: 1,
-		width: '100%',
-		ajax: {
-			url: $('#search_cost_payroll_logs_path').val(),
-			dataType: 'json',
-			quietMillis: 100,
-			// Page is the one-based page number tracked by Select2
-			data: function (term, page) { 
-				return {
-					cc_name: term, // Search Term
-					per_page: pl.per_page, // Page Size
-					page: page // Page Number
-				};
-			},
-			results: function (data, page) {
-				// Whether or not there are more results available
-				var more = (page * pl.per_page) < data.total;
-				// Notice we return the value of more so Select2 knows if more results can be loaded
-				return {results: data.entries, more: more};
-			}
-		},
-		formatResult: pl.ccNameFormatResult,
-		formatSelection: pl.ccNameFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+			$.each(clsEmployee.data, function(key, dta) {
+
+				var index = $.inArray( dta.identification, clsEmployee.add);
+				if(index > -1) { // (-1) cuando no lo encuentra o retorna el [index]
+					
+					if(!$('#employee_table_' + clsEmployee.id).length) {
+						pl.addNewSection(clsEmployee.id, clsEmployee.name);
+					}
+					pl.addNewColumn(clsEmployee.id, dta);
+					// return false;
+					clsEmployee.add.splice([index], 1); // Remove
+				}
+			});
+		}
 	});
+
+	pl.setSessionStorage(pl.search_types.history, objHistory);
 }
 
-pl.ccNameFormatResult = function(cc) {
-	var markup = "<table><tr>";
-	markup += "<td><div>" + cc.name_cc + "</div>";
-	markup += "</td></tr></table>";
-	return markup;
+pl.addNewSection = function(employee_id, name) {
+	var total = $('#accordion div.panel.accordion-item').length + 1;
+	var thead = '';
+
+	var colspan = pl.theadList.length - 2;
+	$.each(pl.theadList, function( index, data ) { thead += '<td>' + data + '</td>'; });
+
+	var data = '<div class="panel accordion-item">' +
+		'<a class="accordion-title collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsea' + total + '" aria-expanded="false">' +
+			'<h2>' + name + '</h2></a>' +
+		'<div id="collapsea' + total + '" class="collapse" aria-expanded="false" style="height: 0px;">' +
+			'<div class="accordion-body">' +
+				'<table class="table table-hover table-bordered table-striped" id="employee_table_' + employee_id + '">' +
+					thead + '<tbody>' +
+						'<tr class="employee_count" id="total_' + employee_id + '">' +
+							'<td colspan="' + colspan + '" class="align_right">Total:</td>' +
+							'<td colspan="2">00.00</td>' +
+		'</tr></tbody></table></div></div></div>';
+
+	$('#accordion').append(data);
 }
 
-pl.ccNameFormatSelection = function(cc) {
-	// console.log(employee.id);
-	return cc.name_cc;
+pl.addNewColumn = function(employee_id, data) {
+	var filterData = Array();
+	filterData.push(data.date); // Date
+	filterData.push(data.task.itask); // Task - Code
+	filterData.push(data.task.ntask); // Task
+	filterData.push(data.task.mlaborcost); // Task - Cost
+	filterData.push(data.task.nunidad); // Task - Unit
+	filterData.push(data.time_worked); // Quantity
+	filterData.push(data.cc.icost_center); // CC - Code
+	filterData.push(data.cc.name_cc); // CC
+	filterData.push(data.performance); // Performance
+	filterData.push(data.task.unit_performance); // Performance - Unit
+	filterData.push(data.type_payment); // Payment Type
+	filterData.push(resources.prettyNumber(data.subtotal)); // Total per row
+
+	pl.changeAccumulated(pl.employee_options.add, data.subtotal);
+
+	var tds = '';
+	$.each(filterData, function(key, value) { tds += '<td>' + value + '</td>'; });
+
+	// Set Total all rows
+	var that = $('#total_' + employee_id + ' td:eq(1)');
+	var prv = $(that).html().replace(',', '');
+	var total = parseFloat(prv) +	parseFloat(data.subtotal);
+
+	$(that).html(resources.prettyNumber(total));
+	
+	var tr = '<tr id="tr_' + data.identification + '_' + employee_id +
+		'" class="alert alert-dismissable alert-info">' + tds + '<td>' +
+			'<button type="button" class="btn btn-xs btn-danger-alt"><i class="fa fa-trash-o"></i></button>' +
+			'<input type="hidden" name="identificador" id="payroll_history_id" value="' + data.identification + '"/>' +
+			'<input type="hidden" id="employee_id" value="' + employee_id + '"/>' +
+			'<input type="hidden" id="new" value="true"/></td></tr>';
+
+	$('#employee_table_' + employee_id + ' #total_' + employee_id).before(tr);
 }
 
-/**************************************************************************************/
-/* Seach Task By Code */
-/**************************************************************************************/
-pl.searchTaskByCode = function() {
-	$(pl.current_task).find('#search_code_task').select2({
-		placeholder: "#",
-		minimumInputLength: 1,
-		width: '100%',
-		ajax: {
-			url: $('#search_task_payroll_logs_path').val(),
-			cache: "true",
-			dataType: 'json',
-			quietMillis: 100,
-			// Page is the one-based page number tracked by Select2
-			data: function (term, page) { 
-				return {
-					task_code: term, // Search Term
-					per_page: pl.per_page, // Page Size
-					page: page // Page Number
-				};
-			},
-			results: function (data, page) {
-				// Whether or not there are more results available
-				var more = (page * pl.per_page) < data.total;
-				// Notice we return the value of more so Select2 knows if more results can be loaded
-				return {results: data.entries, more: more};
-			}
-		},
-		formatResult: pl.taskCodeFormatResult,
-		formatSelection: pl.taskCodeFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-	});
+pl.multiSelectGetEmployees = function(ids) {
+	if(ids.length > 0) {
+		$.ajax({
+	    type: "GET",
+	    url: $(get_employees_payroll_logs_path).val(),
+	    dataType: "json",
+	    data: {
+	    	employee_ids: JSON.stringify(ids)
+	    },
+	    success: function(employees) {
+	    	$.each(employees, function(key, employee) {
+	    		pl.saveSearchSessionStorage(pl.search_types.employees, employee);
+	    	});
+	    }
+	  });
+	}
 }
 
-pl.taskCodeFormatResult = function(task) {
-	var markup = "<table><tr>";
-	markup += "<td><div>" + task.itask + " - " + task.ntask + "</div>";
-	markup += "</td></tr></table>";
-	return markup;
-}
+pl.changeAccumulated = function(option, total) {
+	var tmpHistory =  pl.getSessionStorage(pl.search_types.history);
+	var ac = $('#payroll_total').html().replace(',', '');
+ 	ac = parseFloat(ac);
+ 	var newTotal = 0;
 
-pl.taskCodeFormatSelection = function(task) {
-	// console.log(employee.id);
-	return task.itask;
-}
+ 	if(option == pl.employee_options.remove) {
+ 		newTotal = ac - total;
+ 	}
 
-/**************************************************************************************/
-/* Seach Task By name */
-/**************************************************************************************/
-pl.searchTaskByName = function() {
-	$(pl.current_task).find('#search_name_task').select2({
-		placeholder: "Nombre",
-		minimumInputLength: 1,
-		width: '100%',
-		ajax: {
-			url: $('#search_task_payroll_logs_path').val(),
-			cache: "true",
-			dataType: 'json',
-			quietMillis: 100,
-			// Page is the one-based page number tracked by Select2
-			data: function (term, page) { 
-				return {
-					task_name: term, // Search Term
-					per_page: pl.per_page, // Page Size
-					page: page // Page Number
-				};
-			},
-			results: function (data, page) {
-				// Whether or not there are more results available
-				var more = (page * pl.per_page) < data.total;
-				// Notice we return the value of more so Select2 knows if more results can be loaded
-				return {results: data.entries, more: more};
-			}
-		},
-		formatResult: pl.taskNameFormatResult,
-		formatSelection: pl.taskNameFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-	});
-}
+ 	if(option == pl.employee_options.add) {
+ 		newTotal = ac + total;
+ 	}
 
-pl.taskNameFormatResult = function(task) {
-	var markup = "<table><tr>";
-	markup += "<td><div>" + task.ntask + "</div>";
-	markup += "</td></tr></table>";
-	return markup;
-}
-
-pl.taskNameFormatSelection = function(task) {
-	// console.log(employee.id);
-	return task.ntask;
+ 	$('#payroll_total').html(resources.prettyNumber(newTotal));
+ 	$('#employee_counter').html(tmpHistory.employees.length);
 }

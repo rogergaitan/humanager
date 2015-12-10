@@ -22,7 +22,6 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-				
 				<%= render :partial => 'form' %>
 
 				<div class="form-group">
@@ -46,36 +45,45 @@
 											<table class="table table-hover table-bordered table-striped" id="employee_table_<%= e[0][0] %>">
 												<thead>
 													<td>Fecha</td>
-													<td>Codigo | Labor</td>
+													<td>Código</td>
+													<td>Labor</td>
 													<td>Costo</td>
 													<td>Unidad</td>
-													<td>Cantidad</td>
+													<td>Cant. Trabajada</td>
+													<td>Código</td>
 													<td>Centro de Costos</td>
+													<td>Rendimiento</td>
+													<td>Unidad</td>
 													<td>Tipo de Pago</td>
 													<td>Total</td>
-													<td>Accion</td>
+													<td>Acción</td>													
 												</thead>
 												<tbody>
 													<% e[1].each do |h| %>
 														<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
 															<td><%= h.payroll_date %></td>
-															<td><%= h.task.id %> | <%= h.task.ntask %></td>
+															<td><%= h.task.itask %></td>
+															<td><%= h.task.ntask %></td>
 															<td><%= number_with_precision(h.task.mlaborcost, :precision => 2, :separator => '.', :delimiter => ',') %></td>
 															<td><%= h.task.nunidad %></td>
 															<td><%= h.time_worked %></td>
+															<td><%= h.costs_center.icost_center %></td>
 															<td><%= h.costs_center.name_cc %></td>
-															<td><%= h.payment_type.payment_type %></td>
+															<td><%= h.performance %></td>
+															<td><%= h.task.unit_performance %></td>
+															<td><%= h.payment_type.present? ? h.payment_type.name.to_s : '' %></td>
 															<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.', :delimiter => ',') %></td>
 															<% @total += h.total.to_f %>
 															<td>
 																<button type="button" class="btn btn-xs btn-danger-alt"><i class="fa fa-trash-o"></i></button>
-																<input type="hidden" value="<%= e[0][0] %>">
-																<input type="hidden" value="<%= h.id %>">
+																<input type="hidden" name="identificador" id="payroll_history_id" value="<%= h.id %>">
+																<input type="hidden" id="employee_id" value="<%= e[0][0] %>">
+																<input type="hidden" id="new" value="false"/>
 															</td>
 														</tr>
 													<% end %>
 														<tr class="employee_count" id="total_<%= e[0][0] %>">
-															<td colspan="6" class="align_right">Total:</td>
+															<td colspan="11" class="align_right">Total:</td>
 															<td colspan="3">
 																<%= number_with_precision(@total, :precision => 2, :separator => '.', :delimiter => ',') %>
 															</td>
