@@ -77,7 +77,6 @@ class PayrollLog < ActiveRecord::Base
   # end
   
   def self.get_employee_list(employees_list)
-    puts employees_list
     entities = Entity.joins(:employee)
       .select("employees.id, employees.number_employee, entities.name, entities.surname")
       .where("employees.id in (?)", employees_list)

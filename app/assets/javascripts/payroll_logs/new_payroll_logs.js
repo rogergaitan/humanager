@@ -233,6 +233,9 @@ $(jQuery(document).ready(function($) {
     type: "GET",
     url: $(get_history_json_payroll_logs_path).val(),
     dataType: "json",
+    data: {
+      id: $('form').data('reference-id')
+    },
     success: function(history) {
       pl.setSessionStorage(pl.search_types.history, history);
     }

@@ -133,7 +133,7 @@ class PayrollLogsController < ApplicationController
   end
 
   def get_history_json
-    history = PayrollLog.employees_data(1)
+    history = PayrollLog.employees_data(params[:id])
     respond_to do |format|
       format.json { render json: history, status: :ok }
     end
