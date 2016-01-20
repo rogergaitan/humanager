@@ -117,7 +117,6 @@ pl.employeeNameFormatSelection = function(employee) {
 	pl.setValuesFromSearch(pl.search_types.employees, employee);
 	return employee.name + " " + employee.surname;
 }
-
 /**************************************************************************************/
 /* Seach Costs Center By Code */
 /**************************************************************************************/
@@ -176,7 +175,6 @@ pl.ccCodeFormatSelection = function(cc) {
 	pl.setValuesFromSearch(pl.search_types.cc, cc);
 	return cc.icost_center;
 }
-
 /**************************************************************************************/
 /* Seach Costs Center By Name */
 /**************************************************************************************/
@@ -235,7 +233,6 @@ pl.ccNameFormatSelection = function(cc) {
 	pl.setValuesFromSearch(pl.search_types.cc, cc);
 	return cc.name_cc;
 }
-
 /**************************************************************************************/
 /* Seach Task By Code */
 /**************************************************************************************/
@@ -298,7 +295,6 @@ pl.taskCodeFormatSelection = function(task) {
 	pl.setValuesFromSearch(pl.search_types.tasks, task);
 	return task.itask;
 }
-
 /**************************************************************************************/
 /* Seach Task By name */
 /**************************************************************************************/
@@ -449,4 +445,114 @@ pl.saveSearchSessionStorage = function(key, object) {
 		array.push(object);
 		pl.setSessionStorage(key, array);
 	}
+}
+/**************************************************************************************/
+/* Custom performance functionality | Search Task By Code */
+/**************************************************************************************/
+pl.customSearchTaskByCode = function() {
+	$('#group_search_code_task').select2({
+		placeholder: "#",
+		minimumInputLength: 1,
+		width: '100%',
+		ajax: {
+			url: $('#search_task_payroll_logs_path').val(),
+			cache: "true",
+			dataType: 'json',
+			quietMillis: 100,
+			// Page is the one-based page number tracked by Select2
+			data: function (term, page) { 
+				return {
+					task_code: term, // Search Term
+					per_page: pl.per_page, // Page Size
+					page: page // Page Number
+				};
+			},
+			results: function (data, page) {
+				// Whether or not there are more results available
+				var more = (page * pl.per_page) < data.total;
+				// Notice we return the value of more so Select2 knows if more results can be loaded
+				return {results: data.entries, more: more};
+			}
+		},
+		formatResult: pl.customTaskCodeFormatResult,
+		formatSelection: pl.customTaskCodeFormatSelection,
+		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	}).on("select2-close", function (e) {
+		if( $('#group_id_task').val() == '' ) {
+			$('#group_search_name_task').select2('open');
+			$('#s2id_group_search_name_task').find('span:eq(0)').html("Nombre");
+		}
+	}).on("select2-highlight", function (e) {
+	 	$('#s2id_group_search_name_task').find('span:eq(0)').html(e.choice.ntask);
+  });
+}
+
+pl.customTaskCodeFormatResult = function(task) {
+	var markup = "<table><tr>";
+	markup += "<td><div>" + task.itask + "</div>";
+	markup += "</td></tr></table>";
+	return markup;
+}
+
+pl.customTaskCodeFormatSelection = function(task) {
+	// Set Name
+	$('#s2id_group_search_name_task').find('span:eq(0)').html(task.ntask);
+	$('#group_id_task').val(task.id);
+	return task.itask;
+}
+/**************************************************************************************/
+/* Custom performance functionality | Search Task By Name */
+/**************************************************************************************/
+pl.customSearchTaskByName = function() {
+	$('#group_search_name_task').select2({
+		placeholder: "Nombre",
+		minimumInputLength: 1,
+		width: '100%',
+		ajax: {
+			url: $('#search_task_payroll_logs_path').val(),
+			cache: "true",
+			dataType: 'json',
+			quietMillis: 100,
+			// Page is the one-based page number tracked by Select2
+			data: function (term, page) { 
+				return {
+					task_name: term, // Search Term
+					per_page: pl.per_page, // Page Size
+					page: page // Page Number
+				};
+			},
+			results: function (data, page) {
+				// Whether or not there are more results available
+				var more = (page * pl.per_page) < data.total;
+				// Notice we return the value of more so Select2 knows if more results can be loaded
+				return {results: data.entries, more: more};
+			}
+		},
+		formatResult: pl.customTaskNameFormatResult,
+		formatSelection: pl.customTaskNameFormatSelection,
+		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	}).on("select2-close", function (e) {
+		if( $('#group_id_task').val() == '' ) {
+			// $('#group_search_code_task').select2('open');
+			$('#s2id_group_search_code_task').find('span:eq(0)').html("#");
+		}
+	}).on("select2-highlight", function (e) {
+	 	$('#s2id_group_search_code_task').find('span:eq(0)').html(e.choice.itask);
+  });
+}
+
+pl.customTaskNameFormatResult = function(task) {
+	var markup = "<table><tr>";
+	markup += "<td><div>" + task.ntask + "</div>";
+	markup += "</td></tr></table>";
+	return markup;
+}
+
+pl.customTaskNameFormatSelection = function(task) {
+	// Set Code
+	$('#s2id_group_search_code_task').find('span:eq(0)').html(task.itask);
+	$('#group_id_task').val(task.id);
+	return task.ntask;
 }

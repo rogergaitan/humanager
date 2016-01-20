@@ -24,6 +24,7 @@ $(document).ready(function() {
     this.subtotal = null;
     this.cc = Object();
     this.task = Object();
+    this.old = false;
   };
 
   // pl.CostCenter = function() {

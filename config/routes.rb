@@ -51,6 +51,7 @@ Reasapp::Application.routes.draw do
       get :delete_employee_to_payment
       get :get_history_json
       get :get_employees
+      post :set_custom_update
     end
   end
   

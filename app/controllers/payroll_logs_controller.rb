@@ -1,5 +1,7 @@
 class PayrollLogsController < ApplicationController
+  load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit]
+  skip_before_filter :verify_authenticity_token, :only => [:set_custom_update]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(PayrollLog, params[:id])
@@ -144,6 +146,16 @@ class PayrollLogsController < ApplicationController
     entities = PayrollLog.get_employee_list(ids)
     respond_to do |format|
       format.json { render json: entities, status: :ok }
+    end
+  end
+
+  def set_custom_update
+    respond_to do |format|
+      if PayrollHistory.update(params['data'].keys, params['data'].values)
+        format.json { head :no_content }
+      else
+        format.json { render status: :unprocessable_entity }
+      end
     end
   end
 

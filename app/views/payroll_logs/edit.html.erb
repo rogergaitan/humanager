@@ -60,7 +60,7 @@
 												</thead>
 												<tbody>
 													<% e[1].each do |h| %>
-														<tr id="tr_<%= e[0][0] %>_<%= h.id %>">
+														<tr id="tr_<%= h.id %>_<%= e[0][0] %>">
 															<td><%= h.payroll_date %></td>
 															<td><%= h.task.itask %></td>
 															<td><%= h.task.ntask %></td>
@@ -69,7 +69,7 @@
 															<td><%= h.time_worked %></td>
 															<td><%= h.costs_center.icost_center %></td>
 															<td><%= h.costs_center.name_cc %></td>
-															<td><%= h.performance %></td>
+															<td id="performance_<%= h.id %>"><%= h.performance %></td>
 															<td><%= h.task.unit_performance %></td>
 															<td><%= h.payment_type.present? ? h.payment_type.name.to_s : '' %></td>
 															<td><%= number_with_precision(h.total.to_f, :precision => 2, :separator => '.', :delimiter => ',') %></td>

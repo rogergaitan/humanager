@@ -75,28 +75,58 @@
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-2">
     	<div class="input-group">
       	<input id="last_fingering" type="button" value="Ultima digitacion" class="btn btn-primary" style="margin-bottom: 16px;" >
     	</div>
     </div>
+
+    <div id="custom_performance_search" style="display: none;">
+      <div class="row no-gutter col-sm-3">
+        <div class="col-sm-5">
+          <%= hidden_field_tag 'group_search_code_task', '' %>
+          <%= hidden_field_tag 'group_id_task', '' %>
+        </div>
+        <div class="col-sm-7">
+          <%= hidden_field_tag 'group_search_name_task', '' %>
+        </div>
+      </div>
+      
+      <div class="col-sm-1">
+        <input type="text" id="group_performance" class="form-control" placeholder="Rendimiento">
+      </div>
+
+      <div class="col-sm-1">
+        <a href="" class="btn btn-primary btn-xs icon-plusright" id="apply_performance" >
+          <i class="fa fa-plus"></i>
+        </a>
+      </div>
+    </div>
+
   </div>
 
   <div class="form-group">
-    <div class="col-sm-12">
-
-      <%= link_to_add_fields("", f, :payroll_histories, "right add-payroll-log addFields") %>
-      
+    <div class="col-sm-12">      
       <div class="panel-body">
         <table id="products_items" class="table table-hover table-bordered table-striped" cellspacing="0">
           <thead>
             <tr>
-              <th id="th_employees">Empleados</th>
-              <th id="th_cc">Centro De Costo</th>
-              <th id="th_task">Labor</th>
-              <th id="th_time">Cant. Trabajada</th>
-              <th id="th_performace">Rendimiento</th>
-              <th id="th_payment_type">Tipo de pago</th>
+              <th id="th_employees" style="width: 22%;">Empleados</th>
+              <th id="th_cc" style="width: 22%;">Centro De Costo</th>
+              <th id="th_task" style="width: 22%;">Labor</th>
+              <th id="th_time" style="width: 9%;">Cant. Trabajada</th>
+              <th id="th_performace" style="width: 9%;">
+                Rendimiento
+                <label class="checkbox-inline icheck">
+                  <input type="checkbox" id="perf_is_simple" checked>
+                <label>
+              </th>
+              <th id="th_payment_type" style="width: 16%;">
+                <div class="col-md-8">Tipo de pago</div>
+                <div class="col-md-3">
+                  <%= link_to_add_fields("", f, :payroll_histories, "right add-payroll-log addFields") %>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -126,6 +156,7 @@
 <input type="hidden" id="search_task_payroll_logs_path" value="<%= search_task_payroll_logs_path %>">
 <input type="hidden" id="get_history_json_payroll_logs_path" value="<%= get_history_json_payroll_logs_path %>">
 <input type="hidden" id="get_employees_payroll_logs_path" value="<%= get_employees_payroll_logs_path %>">
+
 
 <!--
 <input type="hidden" id="load_em_employees_path" value="<%= load_em_employees_path %>">

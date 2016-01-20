@@ -58,6 +58,7 @@ class PayrollLog < ActiveRecord::Base
         a[:subtotal] = h.total
         a[:cc] = h.costs_center
         a[:task] = h.task
+        a[:old] = true
         objE[:data] << a
       end
       obj[:employees] << objE
@@ -65,16 +66,6 @@ class PayrollLog < ActiveRecord::Base
     end
     obj
   end
-
-  # def self.search_task(search_task_name, page, per_page = 5)
-  #   @tasks = Task.where("tasks.ntask like '%#{search_task_name}%'")
-  #   .paginate(:page => page, :per_page => per_page)
-  # end
-
-  # def self.search_cost(search_cost_name, company_id, page, per_page = 5)
-  #   @costs = CostsCenter.where("costs_centers.company_id = '#{company_id}' and costs_centers.name_cc like '%#{search_cost_name}%' and costs_centers.icost_center != ''")
-  #   .paginate(:page => page, :per_page => per_page)
-  # end
   
   def self.get_employee_list(employees_list)
     entities = Entity.joins(:employee)
@@ -104,18 +95,16 @@ class PayrollLog < ActiveRecord::Base
     tasks = Task.select("*")
     tasks = tasks.where("ntask like ?", "%#{task_name}%") if task_name.present?
     tasks = tasks.where("itask like ?", "%#{task_code}%") if task_code.present?
-    tasks = tasks.where("iactivity = ?", task_iactivity)
+    tasks = tasks.where("iactivity = ?", task_iactivity) if task_iactivity.present?
     tasks = tasks.paginate(:page => page, :per_page => per_page)
   end
 
   def self.delete_employee_to_payment(employee_id, payroll_history_id)
-
     ph = PayrollHistory.find(payroll_history_id)
     newTotal = ph.payroll_log.payroll_total.to_i - ph.total.to_i
     ph.payroll_log.payroll_total = newTotal
     ph.payroll_log.save
     PayrollEmployee.find_by_payroll_history_id_and_employee_id(payroll_history_id, employee_id).destroy()
-
   end
 
   private

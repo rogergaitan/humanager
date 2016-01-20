@@ -21,7 +21,7 @@ module ApplicationHelper
 		  render("forms/" + association.to_s.singularize + "_form", f: builder)
 		end
 
-		link_to name, tabindex: '10', class: "add_fields btn btn-success-alt btn-xs icon-plus" + fieldClass, 
+		link_to name, tabindex: '10', class: "add_fields btn btn-primary btn-xs icon-plus" + fieldClass, 
 			id: association, data: {id: id, fields: fields.gsub("\n", "")} do
 			content_tag(:i, "", :class => 'fa fa-plus')
 		end

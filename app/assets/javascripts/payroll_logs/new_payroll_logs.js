@@ -5,7 +5,7 @@ $(jQuery(document).ready(function($) {
   /* Load Selectors */
   /**************************************************************************************/
   pl.employee_options       = { add: 'add', remove: 'remove' };
-  pl.search_types           = { employees: 'employees', cc: 'cc', tasks: 'tasks', history: 'history' };
+  pl.search_types           = { employees: 'employees', cc: 'cc', tasks: 'tasks', history: 'history', custom: 'custom' };
   pl.theadList              = ["Fecha", "Código", "Labor", "Costo", "Unidad", "Cant. Trabajada", 
                               "Código", "Centro de Costos", "Rendimiento", "Unidad", 
                               "Tipo de Pago", "Total", "Acción"];
@@ -30,7 +30,11 @@ $(jQuery(document).ready(function($) {
     performance_wrong_format: 'Rendimiento formato incorrecto',
     date_not_found: 'Fecha no seleccionada',
     employees_duplicated: 'Empleados con datos duplicados: ',
-    last_line: 'Por favor elimine o save su última línea'
+    last_line: 'Por favor elimine o save su última línea',
+    incomplete_data: 'Datos incompletos.',
+    perf_not_found: 'La labor indicada para el rendimiento no ha sido registrada, no se puede agregar el dato.',
+    success_update: 'Actualización con Éxito.',
+    changes_applied: 'Cambios aplicados a: ',
   };
 
 	/**************************************************************************************/
@@ -106,10 +110,13 @@ $(jQuery(document).ready(function($) {
 		pl.filterEmployees("superior", $(this).val());
 	});
 
+  // Multi-Select: Custom Search Task
+  pl.customSearchTaskByCode();
+  pl.customSearchTaskByName();
+
 	/**************************************************************************************/
 	/* Multi-Select */
 	/**************************************************************************************/
-
 	// Date
 	$('#payroll_log_payroll_date').datepicker({
     format: 'dd/mm/yyyy',
@@ -138,17 +145,20 @@ $(jQuery(document).ready(function($) {
   });
 
   $('#products_items').on('change','input[id*=_time_worked]', function() {
-    
-    var value = parseInt($(this).val());
-    var performance = $(pl.current_performance).find('input[id*=_performance]');
-
-    if(value == 0 || value < 0 || isNaN(value)) {
-      $(performance).val('');
-      $(performance).prop("disabled", true);
-    } else {
-      $(performance).prop("disabled", false);
-    }
+    pl.checkPerformance();
   });
+
+  // Group performance is simple or not
+  // Performance Checked
+  $('#perf_is_simple').parents('label').click(function() {
+    pl.checkPerformance();
+  });
+
+  $('#perf_is_simple').next().click(function() {
+    pl.checkPerformance();
+  });
+
+  $('#group_performance').on('keyup', resources.twoDecimals);
 
   // Performance keyup for numbers with 2 decimals
   $('#products_items').on('keyup', 'input[id*=_performance]',resources.twoDecimals);
@@ -241,10 +251,31 @@ $(jQuery(document).ready(function($) {
     }
   });
 
-  $('form').submit(function(e) {
-    if( $(pl.current_save_employees).find('input').length == 0 ) {
+  $("input[name='commit']").click(function(e) {
+    e.preventDefault();
+    
+    var currentEmployees = $(pl.current_save_employees).length;
+    var rowIsDisabled = $(pl.current_payments_type+' select[id*=_payment_type_id]').parent('div').hasClass('a-not-active');
+
+    if( currentEmployees == 1 && !rowIsDisabled) {
       resources.PNotify('Planilla', pl.messages.last_line, 'info');
-      e.preventDefault();
+    } else {
+      pl.ajaxUpdatePerformance();
+    }    
+  });
+
+  // Click to apply general performance by Task
+  $('#apply_performance').on('click', function(e) {
+    e.preventDefault();
+
+    var newPerformance = $('#group_performance').val();
+    var idTask = $('#group_id_task').val();
+    var date = $('#payroll_log_payroll_date').val();
+
+    if( newPerformance == '' || idTask == '' || date == '' ) {
+      resources.PNotify('Planilla', pl.messages.incomplete_data , 'info');
+    } else {
+      pl.applyGroupPerformance(newPerformance, idTask, date);
     }
   });
 

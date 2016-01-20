@@ -1,8 +1,18 @@
 // Multi-Select: Select or deselect all Employees
-pl.employeeSelectAll = function (argument) {
+pl.employeeSelectAll = function() {
 	var that = $('#payroll_logs_employee_ids');
-	var array = Array('3-selectable');
-	$('#emplotee_select_all').is(':checked') ? $(that).multiSelect('select_all', array) : $(that).multiSelect('deselect_all', array);
+	var select = Array();
+	var deselect = Array();
+
+	$('#ms-payroll_logs_employee_ids div.ms-selectable li:visible').each(function () {
+		select.push( $(this).attr("id").split('-', 1)[0] );
+	});
+
+	$('#ms-payroll_logs_employee_ids div.ms-selection li:visible').each(function () {
+		deselect.push( $(this).attr("id").split('-', 1)[0] );
+	});
+
+	$('#emplotee_select_all').is(':checked') ? $(that).multiSelect('select', select) : $(that).multiSelect('deselect', deselect);
 }
 
 // Multi-Select: Show or Hide Options
@@ -233,6 +243,7 @@ pl.addFields = function(e) {
 		pl.searchTaskByCode();
 		pl.searchTaskByName();
 		$(pl.current_employee).find('#search_code_employee').select2("open");
+		pl.checkPerformance();
 	}
 }
 
@@ -585,4 +596,162 @@ pl.changeAccumulated = function(option, total) {
 
  	$('#payroll_total').html(resources.prettyNumber(newTotal));
  	$('#employee_counter').html(tmpHistory.employees.length);
+}
+
+pl.checkPerformance = function () {
+
+	var checked = $('#perf_is_simple').is(':checked');
+
+	if( $(pl.current_performance).length === 1 ) {
+		var value = parseInt($('#products_items input[id*=_time_worked]').val());
+		var currentPerformance = $(pl.current_performance).find('input[id*=_performance]');
+
+	  if(value == 0 || value < 0 || isNaN(value) || !checked) {
+	    $(currentPerformance).prop("readonly", true);
+	    $(currentPerformance).val('');
+	  } else {
+	    $(currentPerformance).prop("readonly", false);
+	  }
+	}
+	pl.showHideCustomSearch(checked);
+}
+
+pl.showHideCustomSearch = function(checked) {
+	if( checked ) {
+		$('#custom_performance_search').hide();
+    // remove data inputs
+    $('#group_id_task').val('');
+    $('#group_performance').val('');
+    $('#s2id_group_search_code_task').find('span:eq(0)').html('#');
+    $('#s2id_group_search_name_task').find('span:eq(0)').html('Nombre');
+	} else {
+		$('#custom_performance_search').show();
+	}
+}
+
+pl.applyGroupPerformance = function (newPerformance, idTask, date) {
+	
+	var history = pl.getSessionStorage(pl.search_types.history);
+	var serverEmployeeIds = Array();
+	var localEmployee = Array();
+	var count = 0;
+	var split = date.split('/'); //DD/MM/YYYY
+	var tDate = new Date(split[2], split[1] - 1, split[0]); //Y M D 
+	var timestamp = tDate.getTime();
+
+	if(history != null) {
+		$.each( history.employees, function( key, clsEmployee ) {
+			$.each(clsEmployee.data, function(k, dataStructure) {
+
+				split = dataStructure.date.split('/'); //DD/MM/YYYY
+				var tDate2 = new Date(split[2], split[1] - 1, split[0]); //Y M D 
+				var timestamp2 = tDate2.getTime();
+
+				if( timestamp == timestamp2 ) {
+					if( parseInt(dataStructure.task.id) === parseInt(idTask) ) {
+						count++;
+						
+						if(dataStructure.old) {
+							serverEmployeeIds.push(dataStructure.identification);
+						}
+
+						var obj = Array();
+						obj['identification'] = dataStructure.identification;
+						obj['employee_id'] = clsEmployee.id;
+						obj['old'] = dataStructure.old;
+						localEmployee.push(obj);
+					}
+				}
+			});
+		});
+	}
+
+	if(count == 0) {
+		resources.PNotify('Planilla', pl.messages.perf_not_found, 'info');
+		return false;
+	}
+
+	newPerformance = newPerformance / count;
+
+	if(serverEmployeeIds.length > 0) {
+		pl.saveCustomPerformance(serverEmployeeIds, newPerformance);
+	}
+
+	if(localEmployee.length > 0) {
+		pl.changeHtmlPerformance(localEmployee, newPerformance);
+	}
+
+	// Changes Applied and Clear inputs
+	resources.PNotify('Planilla', pl.messages.changes_applied + count + ' empleados.', 'info');
+	// newPerformance
+	$('#group_performance').val('');
+  // idTask
+  $('#group_id_task').val('');
+  // Name
+  $('#s2id_group_search_name_task').find('span:eq(0)').html('Nombre');
+  // Code
+	$('#s2id_group_search_code_task').find('span:eq(0)').html('#');
+	
+
+
+}
+
+pl.saveCustomPerformance = function(ids, performance) {
+	var custom = pl.getSessionStorage(pl.search_types.custom);
+	if(custom == null) { custom = {}; }
+	
+	$.each(ids, function(key, id) {
+		var included = false;
+
+		$.each(custom, function(key, array) {
+			if( key === id ) {
+				array = {'performance' : performance};
+				included = true;
+				return false;
+			}
+		});
+
+		if(!included) {
+			custom[id] = {'performance' : performance};
+		}
+	});
+
+	pl.setSessionStorage(pl.search_types.custom, custom);
+}
+
+pl.ajaxUpdatePerformance = function() {
+	var dta = pl.getSessionStorage(pl.search_types.custom);
+
+	if(dta != null) {
+		$.ajax({
+			type: "POST",
+			url: '/payroll_logs/set_custom_update',
+			dataType: "json",
+			data: {
+				"data": dta
+			},
+			success: function(response) {
+				$("form").trigger( "submit" );
+			},
+			error: function() {
+				resources.PNotify('Planilla', 'ERROR al Actualizar' , 'info');
+			}
+		});
+	} else {
+		$("form").trigger( "submit" );
+	}	
+}
+
+pl.changeHtmlPerformance = function(localEmployee, newPerformance) {
+
+	$.each(localEmployee, function(k, d) {
+		if(d['old']) {
+			// Only change HTML in the datail table
+			$('#performance_' + d['identification']).html(newPerformance);
+		} else {
+			// Only change HTML in the datail table
+			$('#payroll_log_payroll_histories_attributes_' + d['identification'] + '_performance').val(newPerformance);
+			$('#tr_' + d['identification'] + '_' + d['employee_id']).find('td:eq(8)').html(newPerformance);
+		}
+	});
 }
