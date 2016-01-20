@@ -27,17 +27,4 @@ $(document).ready(function() {
     this.old = false;
   };
 
-  // pl.CostCenter = function() {
-  //   this.code = null
-  //   this.desc = null
-  // };
-
-  // pl.Task = function() {
-  //   this.code = null;
-  //   this.desc = null
-  //   this.total = null;
-  //   this.unidad = null;
-  //   this.unit_performance = null;
-  // };
-
 });
