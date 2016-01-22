@@ -808,4 +808,8 @@ class Payroll < ActiveRecord::Base
       query
   end
 
+  def self.get_main_calendar()
+    Payroll.joins(:payroll_type, :payroll_log).select('payroll_logs.id, payrolls.payment_date, payroll_types.description').where('payrolls.state = true')
+  end
+
 end

@@ -1,7 +1,7 @@
 class PayrollsController < ApplicationController
   load_and_authorize_resource
   before_filter :get_payroll_types, :only => [:new, :edit]
-  skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird]
+  skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird, :get_main_calendar]
   
   respond_to :html, :json, :js
 
@@ -135,9 +135,7 @@ class PayrollsController < ApplicationController
   end
 
   def send_to_firebird
-
     payroll_id = params[:payroll_id]
-
     result = Payroll.send_to_firebird(payroll_id, current_user.username)
 
     respond_to do |format|
@@ -147,6 +145,11 @@ class PayrollsController < ApplicationController
         format.json { render json: { 'status' => false }, status: :unprocessable_entity }
       end
     end
+  end
+
+  def get_main_calendar
+    calendar = Payroll.get_main_calendar()
+    responses(calendar, :ok)
   end
 
 end

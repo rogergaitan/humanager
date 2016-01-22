@@ -6,16 +6,44 @@ $(document).ready( function() {
     language: "es"
   }).datepicker('setDate', new Date());
 
-	var date = new Date();
-  var d = date.getDate();
-  var m = date.getMonth();
-  var y = date.getFullYear();
+  if($('#get_main_calendar_payrolls_path').length != 0) {
+    $.ajax({
+      type: "GET",
+      url: $('#get_main_calendar_payrolls_path').val(),
+      dataType: "json",
+      success: function(data) {
+        set_events(data);
+      }
+    });
+  }
 
-  var calendar = $('#calendar-drag').fullCalendar({
+  function set_events(data) {
+    var myEvents = [];
+
+    $.each(data, function(key, d) {
+      var split = d['payment_date'].split('-'); //YYYY/MM/DD
+      var date = new Date(split[0], split[1] - 1, split[2]); //Y M D 
+      myEvents.push({
+        url: '/payroll_logs/'+d['id']+'/edit',
+        title: 'Pago '+ d['description'],
+        start: date,
+        backgroundColor: Utility.getBrandColor('success')
+      });
+    });
+
+    set_calendar(myEvents);
+  }
+
+  function set_calendar(myEvents) {
+    var calendar = $('#calendar-drag').fullCalendar({
       header: {
           left: 'title',
           right: 'prev,next month,agendaWeek,agendaDay'
       },
+      monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      monthNamesShort: ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'],
+      dayNames: ['Sábado','Lunes','Martes','Miércoles','Jueves','Viernes','Domingo'],
+      dayNamesShort: ['Sábado','Lunes','Martes','Miércoles','Jueves','Viernes','Domingo'],
       titleFormat: {
           day: "ddd, MMM d, yy"
       },
@@ -36,72 +64,20 @@ $(document).ready( function() {
           }
           calendar.fullCalendar('unselect');
       },
-      editable: true,
-      events: [
-          {
-              title: 'All Day Event',
-              start: new Date(y, m, 8),
-              backgroundColor: Utility.getBrandColor('midnightblue')
-          },
-          {
-              title: 'Long Event',
-              start: new Date(y, m, d-5),
-              end: new Date(y, m, d-2),
-              backgroundColor: Utility.getBrandColor('primary')
-          },
-          {
-              id: 999,
-              title: 'Repeating Event',
-              start: new Date(y, m, d-3, 16, 0),
-              allDay: false,
-              backgroundColor: Utility.getBrandColor('success')
-          },
-          {
-              id: 999,
-              title: 'Repeating Event',
-              start: new Date(y, m, d+4, 16, 0),
-              allDay: false,
-              backgroundColor: Utility.getBrandColor('success')
-          },
-          {
-              title: 'Meeting',
-              start: new Date(y, m, d, 10, 30),
-              allDay: false,
-              backgroundColor: Utility.getBrandColor('alizarin')
-          },
-          {
-              title: 'Lunch',
-              start: new Date(y, m, d, 12, 0),
-              end: new Date(y, m, d, 14, 0),
-              allDay: false,
-              backgroundColor: Utility.getBrandColor('inverse')
-          },
-          {
-              title: 'Birthday Party',
-              start: new Date(y, m, d+1, 19, 0),
-              end: new Date(y, m, d+1, 22, 30),
-              allDay: false,
-              backgroundColor: Utility.getBrandColor('warning')
-          },
-          {
-              title: 'Click for Google',
-              start: new Date(y, m, 28),
-              end: new Date(y, m, 29),
-              url: 'http://google.com/',
-              backgroundColor: Utility.getBrandColor('inverse')
-          }
-      ],
+      editable: false,
+      events: myEvents,
       buttonText: {
           prev: '<i class="fa fa-angle-left"></i>',
           next: '<i class="fa fa-angle-right"></i>',
           prevYear: '<i class="fa fa-angle-double-left"></i>',  // <<
           nextYear: '<i class="fa fa-angle-double-right"></i>',  // >>
-          today:    '<span class="hidden-xs">Today</span><span class="visible-xs">T</span>',
-          month:    '<span class="hidden-xs">Month</span><span class="visible-xs">M</span>',
-          week:     '<span class="hidden-xs">Week</span><span class="visible-xs">W</span>',
-          day:      '<span class="hidden-xs">Day</span><span class="visible-xs">D</span>'
+          today:    '<span class="hidden-xs">Hoy</span><span class="visible-xs">T</span>',
+          month:    '<span class="hidden-xs">Mes</span><span class="visible-xs">M</span>',
+          week:     '<span class="hidden-xs">Semana</span><span class="visible-xs">W</span>',
+          day:      '<span class="hidden-xs">Día</span><span class="visible-xs">D</span>'
       }
-  });
+    });
+  }
 
   $('form').submit(function(event) {
     if($('#user_company_id option:selected').val() == "" ){
@@ -135,6 +111,3 @@ $(document).ready( function() {
   });
 
 });
-
-// mes/dia/año
-// 10/13/2015

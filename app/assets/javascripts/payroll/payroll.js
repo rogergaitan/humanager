@@ -112,7 +112,7 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
 
   data = data + '</td></tr>';
   var row = $(target_table + '> tbody:last').append(data);
-  console.log(payrolld);
+  
   if(count == totalCount) {
     row2 = $(target_table + '> tbody:last').append(
       '<tr>' + 

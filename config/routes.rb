@@ -63,6 +63,7 @@ Reasapp::Application.routes.draw do
       get :get_inactivas
       get :get_payroll_types
       get :load_payrolls
+      get :get_main_calendar
     end
     collection do
       post :reabrir
