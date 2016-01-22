@@ -242,8 +242,13 @@ pl.addFields = function(e) {
 		// Seach Tasks
 		pl.searchTaskByCode();
 		pl.searchTaskByName();
-		$(pl.current_employee).find('#search_code_employee').select2("open");
+		if( $('#select_method_all').is('checked') ){
+			$(pl.current_employee).find('#search_code_employee').select2("open");
+		} else {
+			$(pl.current_cc).find('#search_code_cc').select2("open");
+		}
 		pl.checkPerformance();
+		pl.showHideOptions( $('#options_employees').find('input:checked') );
 	}
 }
 
@@ -685,15 +690,12 @@ pl.applyGroupPerformance = function (newPerformance, idTask, date) {
 	resources.PNotify('Planilla', pl.messages.changes_applied + count + ' empleados.', 'info');
 	// newPerformance
 	$('#group_performance').val('');
-  // idTask
-  $('#group_id_task').val('');
-  // Name
-  $('#s2id_group_search_name_task').find('span:eq(0)').html('Nombre');
-  // Code
+	// idTask
+	$('#group_id_task').val('');
+	// Name
+	$('#s2id_group_search_name_task').find('span:eq(0)').html('Nombre');
+	// Code
 	$('#s2id_group_search_code_task').find('span:eq(0)').html('#');
-	
-
-
 }
 
 pl.saveCustomPerformance = function(ids, performance) {
@@ -754,4 +756,36 @@ pl.changeHtmlPerformance = function(localEmployee, newPerformance) {
 			$('#tr_' + d['identification'] + '_' + d['employee_id']).find('td:eq(8)').html(newPerformance);
 		}
 	});
+}
+
+pl.getLastFingering = function() {
+	var history = pl.getSessionStorage(pl.search_types.history);
+	var lastId = 0;
+	var employeeId;
+
+	if(history != null) {
+		$.each( history.employees, function( key, clsEmployee ) {
+			$.each(clsEmployee.data, function(k, dataStructure) {
+				if( dataStructure.old && dataStructure.identification > lastId ) {
+					lastId = dataStructure.identification;
+					employeeId = clsEmployee.id;
+				}
+			});
+		});
+	}
+
+	var that = $('#tr_'+lastId+'_'+employeeId);
+
+	if( !$(that).is(':visible') ) {
+		$(that).parents('.panel .accordion-item').find('a').trigger('click');
+	}
+
+	$('html,body').animate({
+        scrollTop: $(that).offset().top
+    }, 1000);
+
+	$(that).pulsate({
+	  color: "#09f", reach: 50, speed: 100, pause: 2, glow: true, repeat: 3, onHover: false
+	});
+
 }

@@ -62,6 +62,7 @@
 //= require ../template/plugins/form-parsley/parsley
 //= require ../template/plugins/pines-notify/pnotify.min
 //= require ../template/plugins/bootstrap-switch/bootstrap-switch
+//= require ../template/plugins/pulsate/jQuery.pulsate.min
 
 //= require menus
 //= require validator

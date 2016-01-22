@@ -279,4 +279,8 @@ $(jQuery(document).ready(function($) {
     }
   });
 
+  $('#last_fingering').on('click', function(e) {
+    pl.getLastFingering();
+  });
+
 }));
