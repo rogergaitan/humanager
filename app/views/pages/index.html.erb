@@ -126,7 +126,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="col-md-12">
-					<div class="panel panel-default" data-widget=''>
+					<div class="panel panel-default" data-widget='' id="panel_calendario">
 						<div class="panel-heading">
 							<h2>Calendario</h2>
 							<div class="panel-ctrls button-icon-bg"
@@ -136,7 +136,17 @@
 								data-action-colorpicker=''
 								data-action-edit=''
 								data-action-close=''>
-								<a href="#" class="button-icon custom-icon has-bg"><i class="fa fa-cog"></i></a>
+								<div id="checkbox_calendar">
+									<label class="checkbox-inline icheck">
+										<input type="checkbox" id="check_start" value="start" checked> Inicio
+									</label>
+									<label class="checkbox-inline icheck">
+										<input type="checkbox" id="check_end" value="end" checked> Final
+									</label>
+									<label class="checkbox-inline icheck">
+										<input type="checkbox" id="check_payment" value="payment" checked> Pago
+									</label>
+								</div>
 							</div>
 						</div>
 						<div class="panel-editbox" data-widget-controls=""></div>
@@ -151,3 +161,5 @@
 
 	</div>
 </div>
+
+<%= javascript_include_tag 'calendar/main_calendar' %>

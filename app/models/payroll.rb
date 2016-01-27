@@ -808,8 +808,16 @@ class Payroll < ActiveRecord::Base
       query
   end
 
-  def self.get_main_calendar()
-    Payroll.joins(:payroll_type, :payroll_log).select('payroll_logs.id, payrolls.payment_date, payroll_types.description').where('payrolls.state = true')
+  def self.get_main_calendar(d_start, d_end, company_id)
+    
+    where =  "payrolls.start_date BETWEEN '#{DateTime.parse(d_start)}' and '#{DateTime.parse(d_end)}' or "
+    where += "payrolls.end_date BETWEEN '#{DateTime.parse(d_start)}' and '#{DateTime.parse(d_end)}' and "
+    where += "payrolls.company_id = #{company_id} and "
+    where += "payrolls.state = true"
+
+    Payroll.joins(:payroll_type, :payroll_log)
+    .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, payrolls.payment_date, payroll_types.description')
+    .where(where)
   end
 
 end

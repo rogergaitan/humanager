@@ -55,7 +55,8 @@ pl.employeeCodeFormatResult = function(employee) {
 
 pl.employeeCodeFormatSelection = function(employee) {
 	pl.setValuesFromSearch(pl.search_types.employees, employee);
-	return employee.number_employee;
+	return employee.number_employee;xit
+	
 }
 /**************************************************************************************/
 /* Seach Employee By Name */
