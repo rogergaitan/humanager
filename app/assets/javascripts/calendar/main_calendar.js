@@ -64,8 +64,8 @@ $(document).ready( function() {
       },
       monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       monthNamesShort: ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'],
-      dayNames: ['Sábado','Lunes','Martes','Miércoles','Jueves','Viernes','Domingo'],
-      dayNamesShort: ['Sábado','Lunes','Martes','Miércoles','Jueves','Viernes','Domingo'],
+      dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+      dayNamesShort: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
       titleFormat: {
           day: "ddd, MMM d, yy"
       },

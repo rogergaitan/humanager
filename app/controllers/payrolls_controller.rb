@@ -149,9 +149,6 @@ class PayrollsController < ApplicationController
 
   def get_main_calendar
     calendar = Payroll.get_main_calendar(params[:start], params[:end], current_user.company_id)
-    puts "------------"
-    puts calendar.to_json
-    puts "------------"
     responses(calendar, :ok)
   end
 
