@@ -71,7 +71,7 @@ $(jQuery(document).ready(function($) {
       // values => array[] with all IDs
       pl.multiSelectGetEmployees(values);
       // this.qs1.cache();
-      this.qs2.cache();      
+      this.qs2.cache();
     },
     afterDeselect: function() {
       // this.qs1.cache();

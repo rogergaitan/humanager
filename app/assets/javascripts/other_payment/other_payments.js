@@ -90,13 +90,17 @@ $(document).ready(function() {
       });
     },
     afterSelect: function(values) { // selected
-      op.searchEmployeeByAttr(values[0], 'id', 'multi', op.types.add);
-      this.qs1.cache();
+      $.each(values, function (key, value) {
+        op.searchEmployeeByAttr(value, 'id', 'multi', op.types.add);  
+      });
+      // this.qs1.cache();
       this.qs2.cache();
     },
     afterDeselect: function(values) { // deselected
-      op.searchEmployeeByAttr(values[0], 'id', 'multi', op.types.remove);
-      this.qs1.cache();
+      $.each(values, function (key, value) {
+        op.searchEmployeeByAttr(value, 'id', 'multi', op.types.remove);
+      });
+      // this.qs1.cache();
       this.qs2.cache();
     }
   });
@@ -120,10 +124,7 @@ $(document).ready(function() {
   op.searchAll(""); // Call the function to get all employee list
 
   $("#search_employee_results").on("click", "table tr a", function(e) {
-
     var employeeId = $(this).parents('td').find('input:hidden').val();
-    var selector = $("#employee_items input:hidden[id='in_searching'][value='1']").parents('tr'); // kalfaro no hace nada esta linea
-
     op.searchEmployeeByAttr(employeeId, 'id', 'table', op.types.add);
     $('#employeeModal').modal('hide'); // Close modal
     $("#employee_items input:hidden[id='in_searching'][value='1']").val('0'); // Change input status
@@ -151,6 +152,7 @@ $(document).ready(function() {
     op.showHideEmployees($('#other_payment_individual').is(':checked'));
   });
 
+  // Payrolls Types
   $('#payroll_select_all').parents('label').click(function() {
     op.payrollSelectAll();
   });
@@ -159,12 +161,13 @@ $(document).ready(function() {
     op.payrollSelectAll();
   });
 
+  // Employees
   $('#emplotee_select_all').parents('label').click(function() {
-    op.payrollSelectAll();
+    op.employeeSelectAll();
   });
   
   $('#emplotee_select_all').next().click(function() {
-    op.payrollSelectAll();
+    op.employeeSelectAll();
   });
 
   // Al precionar click sobre una planilla se establece el id de la planilla
@@ -388,17 +391,21 @@ op.fromMulti = function(employee, type) {
         $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
         $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
         $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+        if( !$('#other_payment_individual').is(':checked') ) {
+          $(selector).find("input[id*='_calculation']").val($('#other_payment_custom_calculation').val());
+        }
       } else { // Existe
         $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+        if( !$('#other_payment_individual').is(':checked') ) {
+          $(data.parent).find("input[id*='_calculation']").val($('#other_payment_custom_calculation').val());
+        }
         $(data.parent).show();
       }
-      resources.PNotify('Empleado', 'Agregado con exito', 'success');
     break;
     
     case op.types.remove: // Ocutar
       $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
       $(data.parent).hide();
-      resources.PNotify('Empleado', 'Eliminado con exito', 'success');
     break;
   }
 }
@@ -537,11 +544,24 @@ op.showHideEmployees = function(isIndividual) {
 }
 
 op.payrollSelectAll = function() {
-  if( $('#payroll_select_all').is(':checked') ) {
-    $('#other_payment_payroll_type_ids').multiSelect('select_all');
-  } else {
-    $('#other_payment_payroll_type_ids').multiSelect('deselect_all');  
-  }
+  var that = $('#other_payment_payroll_type_ids');
+  $('#payroll_select_all').is(':checked') ? $(that).multiSelect('select_all') : $(that).multiSelect('deselect_all');
+}
+
+op.employeeSelectAll = function() {
+  var that = $('#other_payment_employee_ids');
+  var select = Array();
+  var deselect = Array();
+
+  $('#ms-other_payment_employee_ids div.ms-selectable li:visible').each(function () {
+    select.push( $(this).attr("id").split('-', 1)[0] );
+  });
+
+  $('#ms-other_payment_employee_ids div.ms-selection li:visible').each(function () {
+    deselect.push( $(this).attr("id").split('-', 1)[0] );
+  });
+
+  $('#emplotee_select_all').is(':checked') ? $(that).multiSelect('select', select) : $(that).multiSelect('deselect', deselect);
 }
 
 // Establece el campo oculto de con el id de la planilla unica seleccionada

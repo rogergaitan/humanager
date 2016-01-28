@@ -34,7 +34,7 @@
             <tbody>
               <% @other_payments.each do |other_payment| %>
                 <tr>
-                  <td><%= link_to other_payment.description, other_payment_path(other_payment) %></td>
+                  <td><%= other_payment.description %></td>
                   <td>
                     <% if can? :update, OtherPayment %>
                       <%= link_to edit_other_payment_path(other_payment), :class => 'btn btn-xs btn-success-alt' do %>

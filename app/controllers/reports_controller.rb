@@ -14,19 +14,18 @@ class ReportsController < ApplicationController
 
   def show
 
-    @company_id = current_user.company_id
+    company_id = current_user.company_id
 
     case params[:type].to_s
       
       when CONSTANTS[:REPORTS]['PAYMENT_PROOF']
 
-        @employees = params[:employees].split(",")
-        @payroll = Payroll.find(params[:payroll_id])
-        @msg = params[:msg]
+        employees = params[:employees].split(",")
+        payroll = Payroll.find(params[:payroll_id])
         
         respond_to do |format|
           format.pdf do
-            pdf = ProofPayEmployeesPDF.new(@payroll, @employees, @msg, @company_id)
+            pdf = ProofPayEmployeesPDF.new(payroll, employees, params[:msg], company_id)
             send_data pdf.render, filename: "payment_proof.pdf",
               type: "application/pdf", disposition: "inline"
           end

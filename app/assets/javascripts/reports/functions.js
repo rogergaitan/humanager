@@ -33,7 +33,7 @@ $(document).ready(function() {
       this.qs2.cache();
     },
     afterDeselect: function(){
-      this.qs1.cache();
+      // this.qs1.cache();
       this.qs2.cache();
     }
   });
@@ -78,12 +78,21 @@ $(document).ready(function() {
 
 })
 
-general_functions.selectUnselectEmployees = function (argument) {
-  if( $('#emplotee_select_all').is(':checked') ) {
-    $('#deduction_employee_ids').multiSelect('select_all');
-  } else {
-    $('#deduction_employee_ids').multiSelect('deselect_all');
-  }
+general_functions.selectUnselectEmployees = function () {
+  var that = $('#deduction_employee_ids');
+  var select = Array();
+  var deselect = Array();
+
+  $('#ms-deduction_employee_ids div.ms-selectable li:visible').each(function () {
+    select.push( $(this).attr("id").split('-', 1)[0] );
+  });
+
+  $('#ms-deduction_employee_ids div.ms-selection li:visible').each(function () {
+    deselect.push( $(this).attr("id").split('-', 1)[0] );
+  });
+
+  $('#emplotee_select_all').is(':checked') ? $(that).multiSelect('select', select) : $(that).multiSelect('deselect', deselect);
+
 }
 
 // Establishing the datepicker
