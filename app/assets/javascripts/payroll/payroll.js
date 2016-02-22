@@ -197,8 +197,7 @@ payroll.closePayrollSelected = function(payroll_id) {
     });
 
     resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
-    // setTimeout('location.reload()', 5000); // Kalfaro remover comentario
-
+    setTimeout('location.reload()', 5000);
   }
 }
 

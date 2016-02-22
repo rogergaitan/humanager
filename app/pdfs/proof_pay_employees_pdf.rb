@@ -71,7 +71,7 @@ include ActionView::Helpers::NumberHelper
         grid(0,2).bounding_box do
           move_down 100
           text "Otros Pagos Aplicados", character_spacing: 1, :align => :right
-          table_other_payments(data_other_payments_no_salary) # kalfaro
+          table_other_payments(data_other_payments_no_salary)
           
           move_down 100
           text "Deducciones Aplicadas", character_spacing: 1, :align => :right
@@ -332,7 +332,6 @@ include ActionView::Helpers::NumberHelper
     tRows
   end
 
-  # kalfaro
   def get_data_other_payments(employee_id)
     
     row = []
