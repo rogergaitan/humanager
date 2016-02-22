@@ -7,15 +7,84 @@
 
     <div class="yamm navbar-left navbar-collapse collapse in">
         <ul class="nav navbar-nav">
-            <li class="dropdown" id="widget-classicmenu">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuración<span class="caret"></span></a>
+                <ul class="dropdown-menu" style="width: 500px;">
+                    <li>
+                        <div class="yamm-content container-sm-height">
+                            <div class="row row-sm-height yamm-col-bordered">
+                                <div class="col-sm-6 col-sm-height yamm-col">
+                                            
+                                    <h3 class="yamm-category">General</h3>
+                                    <ul class="list-unstyled mb20">
+                                        <% if can? :read, Company %>
+                                            <li><a href=<%= companies_path%>> Compañias</a></li>
+                                        <% end %>
+                                        <% if can? :read, User %>
+                                            <li><a href=<%= users_path%>> Usuarios</a></li>
+                                        <% end %>
+                                    </ul>
+
+                                    <h3 class="yamm-category">Organizacion</h3>
+                                    <ul class="list-unstyled">
+                                        <% if can? :read, Employee %>
+                                            <li><a href=<%= employees_path%>> Empleados</a></li>
+                                        <% end %>
+                                        <% if can? :read, Department %>
+                                            <li><a href=<%= departments_path%>> Departamentos</a></li>
+                                        <% end %>
+                                        <% if can? :read, Occupation %>
+                                            <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
+                                        <% end %>
+                                        <% if can? :read, Position %>
+                                            <li><a href=<%= positions_path%>> Puestos</a></li>
+                                        <% end %>
+                                        <!--<% if can? :read, TypeOfPersonnelAction %>
+                                            <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
+                                        <% end %>-->
+                                    </ul>
+                                </div>
+                                <div class="col-sm-4 col-sm-height yamm-col">
+                                    <h3 class="yamm-category">Planillas </h3>
+                                    <ul class="list-unstyled mb20">
+                                        <% if can? :read, Task %>
+                                            <li><a href=<%= tasks_path%>> Labores</a></li> 
+                                        <% end %>
+                                        <% if can? :read, Deduction %>
+                                            <li><a href=<%= deductions_path%>> Deducciones</a></li>
+                                        <% end %>
+                                        <% if can? :read, WorkBenefit %>
+                                            <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
+                                        <% end %>
+                                        <% if can? :read, OtherPayment %>
+                                            <li><a href=<%= other_payments_path%>>Otros Pagos</a></li>
+                                        <% end %>
+                                        <% if can? :read, PayrollType %>
+                                            <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
+                                        <% end %>
+                                        <% if can? :read, PaymentType %>
+                                            <li><a href=<%= payment_types_path%>> Tipos de Pago</a></li>
+                                        <% end %>
+                                        <% if can? :read, MeansOfPayment %>
+                                            <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
+                                        <% end %>
+                                        <% if can? :read, PaymentFrequency %>
+                                            <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+
+            <!--<li class="dropdown" id="widget-classicmenu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Configuración
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <% if can? :read, Company %>
-                        <li><a href=<%= companies_path%>> Compañias</a></li>
-                    <% end %>
 
                     <% if can? :read, Province %>
                         <li><a href=<%= provinces_path%>> Provincias</a></li>
@@ -29,30 +98,6 @@
                         <li><a href=<%= districts_path%>> Distritos</a></li>
                     <% end %>
 
-                    <% if can? :read, Employee %>
-                        <li><a href=<%= employees_path%>> Empleados</a></li>
-                    <% end %>
-
-                    <% if can? :read, Department %>
-                        <li><a href=<%= departments_path%>> Departamentos</a></li>
-                    <% end %>
-
-                    <% if can? :read, Position %>
-                        <li><a href=<%= positions_path%>> Puestos</a></li>
-                    <% end %>
-
-                    <% if can? :read, Task %>
-                        <li><a href=<%= tasks_path%>> Labores</a></li> 
-                    <% end %>
-
-                    <% if can? :read, Deduction %>
-                        <li><a href=<%= deductions_path%>> Deducciones</a></li>
-                    <% end %>
-
-                    <% if can? :read, WorkBenefit %>
-                        <li><a href=<%= work_benefits_path%>>Prestaciones</a></li>
-                    <% end %>
-
                     <% if can? :read, CostsCenter %>
                         <li><a href=<%= costs_centers_path%>> Centro de Costos</a></li>
                     <% end %>
@@ -64,37 +109,8 @@
                     <% if can? :read, OtherSalary %>
                         <li><a href=<%= other_salaries_path%>> Otros Salarios</a></li>
                     <% end %>
-
-                    <% if can? :read, Occupation %>
-                        <li><a href=<%= occupations_path%>> Ocupaciones</a></li>
-                    <% end %>
-
-                    <% if can? :read, MeansOfPayment %>
-                        <li><a href=<%= means_of_payments_path%>> Medios de Pago</a></li>
-                    <% end %>
-
-                    <% if can? :read, PaymentFrequency %>
-                        <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
-                    <% end %>
-
-                    <% if can? :read, TypeOfPersonnelAction %>
-                        <li><a href=<%= type_of_personnel_actions_path%>> Tipos Acciones del personal</a></li>
-                    <% end %>
-
-                    <% if can? :read, PayrollType %>
-                        <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
-                    <% end %>
-
-                    <% if can? :read, User %>
-                        <li><a href=<%= users_path%>> Usuarios</a></li>
-                    <% end %>
-                    
-                    <% if can? :read, PaymentType %>
-                        <li><a href=<%= payment_types_path%>> Tipos de Pago</a></li>
-                    <% end %>
-
                 </ul>
-            </li>
+            </li>-->
 
             <li class="dropdown" id="widget-classicmenu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -105,9 +121,9 @@
                     <% if can? :read, Payroll %>
                         <li><a href=<%= payrolls_path%>>Planillas</a></li>
                     <% end %>
-                    <% if can? :read, DetailPersonnelAction %>
+                    <!--<% if can? :read, DetailPersonnelAction %>
                         <li><a href=<%= detail_personnel_actions_path%>>Acciones de Personal</a></li>
-                    <% end %>
+                    <% end %>-->
                 </ul>
             </li>
             
