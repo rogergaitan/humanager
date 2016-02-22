@@ -84,61 +84,14 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1
   # PUT /deductions/1.json
   def update
-
-    ActiveRecord::Base.transaction do
-      
-      @deduction = Deduction.find(params[:id])
-
-      # Employees from the view
-      params[:deduction][:deduction_employees_attributes].each do |de|
-        deduction_obj = de[1]
-        if deduction_obj["id"].nil?
-          # New
-          unless to_bool( deduction_obj["_destroy"] )
-            new_deduction_employee = DeductionEmployee.new
-            new_deduction_employee.deduction_id = params[:id]
-            new_deduction_employee.employee_id = deduction_obj["employee_id"]
-            new_deduction_employee.calculation = deduction_obj["calculation"]
-            new_deduction_employee.completed = false
-            new_deduction_employee.save
-          end
-        else
-          # Old
-          deduction_employee = DeductionEmployee.find( deduction_obj["id"] )
-          if to_bool( deduction_obj["_destroy"] ) # Change status
-            unless deduction_employee.deduction_payments.empty?
-              # if there are records.
-              deduction_employee.completed = true
-            else
-              # No records.
-              deduction_employee.destroy
-            end
-          else
-            deduction_employee.completed = false
-            deduction_employee.calculation = deduction_obj["calculation"]
-          end
-          deduction_employee.save
-        end
-      end
-
-      @deduction.description = params[:deduction][:description]
-      @deduction.individual = params[:deduction][:individual]
-      @deduction.deduction_type = params[:deduction][:deduction_type]
-      @deduction.amount_exhaust = params[:deduction][:amount_exhaust]
-      @deduction.calculation_type = params[:deduction][:calculation_type]
-      @deduction.ledger_account_id = params[:deduction][:ledger_account_id]
-      @deduction.is_beneficiary = params[:deduction][:is_beneficiary]
-      @deduction.beneficiary_id = params[:deduction][:beneficiary_id]
-      @deduction.payroll_type_ids = params[:deduction][:payroll_type_ids]
-
-      respond_to do |format|
-        if @deduction.save
-          format.html { redirect_to deductions_path, notice: 'Deduction was successfully updated.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: "edit" }
-          format.json { render json: @deduction.errors, status: :unprocessable_entity }
-        end
+    @deduction = Deduction.find(params[:id])
+    respond_to do |format|
+      if @deduction.update_attributes(params[:deduction])
+        format.html { redirect_to deductions_path, notice: 'Deduction was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @deduction.errors, status: :unprocessable_entity }
       end
     end
   end

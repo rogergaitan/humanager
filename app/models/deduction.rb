@@ -26,33 +26,18 @@ class Deduction < ActiveRecord::Base
   # validates :calculation, :presence => true
 
 
-  def self.get_list_to_general_payment
-      
-    deductions = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
-    list_deductions = []
+  def self.get_list_to_general_payment(payroll_ids, limit)
+    listId = DeductionPayment.joins(:deduction_employee)
+        .select('DISTINCT deduction_employees.deduction_id')
+        .where('deduction_payments.payroll_id in (?)', payroll_ids)
+        .map(&:deduction_id)
 
-    if deductions.count > 4
-      
-      deductions = Deduction.where('state = ? and deduction_type = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], CONSTANTS[:DEDUCTION]['CONSTANTE']).limit(4)
-      
-      deductions.each do |d|
-        list_deductions.push d.id
-      end # End each deductions
+    orderByDeductionType = "CASE deduction_type WHEN 'constant' THEN 1 WHEN 'unique' THEN 2 WHEN 'amount_to_exhaust' THEN 3 END";
+    list_deductions = Deduction.where('id in (?)', listId)
+                      .order("state desc, #{orderByDeductionType}")
+                      .limit(limit)
+                      .map(&:id)
 
-      unless deductions.count == 4
-        num_limit = 4 - deductions.count
-        deductions = Deduction.where('state = ? and id NOT IN (?)', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], list_deductions).limit(num_limit)
-        deductions.each do |d|
-          list_deductions.push d.id
-        end # End each deductions
-      end
-
-    else 
-      deductions.each do |d|
-        list_deductions.push d.id
-      end # End each deductions
-    end # End if
-    list_deductions
   end
 
 end

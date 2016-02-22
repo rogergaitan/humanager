@@ -36,7 +36,7 @@
   <td>
     <div class="controls_item">
       <div class="controls">
-        <%= f.hidden_field :_destroy  %>
+        <%= f.hidden_field :_destroy, :value => f.object.completed %>
         <%= link_to '#', class: "remove_fields btn btn-xs btn-danger" do %>
           <i class="fa fa-trash-o"></i>
         <% end %>

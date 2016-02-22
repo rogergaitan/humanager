@@ -45,7 +45,6 @@ class Payroll < ActiveRecord::Base
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
     
     result = {}
-
     if detail_report.empty?
       # Save information, close the payroll and close deductions
       ActiveRecord::Base.transaction do
@@ -809,15 +808,13 @@ class Payroll < ActiveRecord::Base
   end
 
   def self.get_main_calendar(d_start, d_end, company_id)
-    
-    where =  "payrolls.start_date BETWEEN '#{DateTime.parse(d_start)}' and '#{DateTime.parse(d_end)}' or "
-    where += "payrolls.end_date BETWEEN '#{DateTime.parse(d_start)}' and '#{DateTime.parse(d_end)}' and "
-    where += "payrolls.company_id = #{company_id} and "
-    where += "payrolls.state = true"
-
     Payroll.joins(:payroll_type, :payroll_log)
     .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, payrolls.payment_date, payroll_types.description')
-    .where(where)
+    .where("payrolls.start_date >= ? and payrolls.end_date <= ? and payrolls.company_id = '?' and payrolls.state = ?",
+      DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
+    #.where("payrolls.start_date BETWEEN ? and ? or payrolls.end_date BETWEEN ? and ? and payrolls.company_id = '?' and payrolls.state = ?",
+      #DateTime.parse(d_start), DateTime.parse(d_end), DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
+    # .where(where)
   end
 
 end

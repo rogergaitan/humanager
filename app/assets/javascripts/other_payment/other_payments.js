@@ -413,7 +413,7 @@ op.fromMulti = function(employee, type) {
 // SHOW IN TABLA LOAD
 op.showEmployees = function(employee) {
   var data = op.findParentByAttr(employee.id, 'id');
-  $(data.parent).find("input:hidden[id*='_destroy']").val("false");
+  // $(data.parent).find("input:hidden[id*='_destroy']").val("false");
   $(data.parent).find("input:hidden[id*='_employee_id']").val(employee.id);
   $(data.parent).find("input[id='search_code_employee']").val(employee.number_employee);
   $(data.parent).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);

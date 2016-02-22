@@ -1,14 +1,17 @@
 class GeneralPayrollPDF < Prawn::Document
 include ActionView::Helpers::NumberHelper
-
-  def initialize(data, payroll_ids, company_id)
-    
+  
+  # t_d = total deductions
+  # t_o = total other payments
+  def initialize(data, payroll_ids, company_id, t_d, t_o)
     super(top_margin: 5, :page_size => "A4", :page_layout => :landscape)
     @data = data
     @end_date = nil
     @start_date = nil
     @name_payrolls = nil
     @company = Company.find(company_id)
+    @t_d = t_d
+    @t_o = t_o
     get_dates(payroll_ids)
     start
   end
@@ -22,7 +25,6 @@ include ActionView::Helpers::NumberHelper
 
     font_size(10) do
       text_box "Reporte General de Planilla", :align => :right, style: :bold, character_spacing: 1
-
       # string = "Planilla #{@payroll.payroll_type.description} del #{@payroll.start_date} al #{@payroll.end_date}"
       # text_box string, :align => :right, :at => [0, y - 50]
       string = "Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"
@@ -42,8 +44,6 @@ include ActionView::Helpers::NumberHelper
     header = get_header(data[0])
     rows = []
 
-    #text "#{data}"
-
     data.each_with_index do |d, i|
       row = []
 
@@ -56,19 +56,25 @@ include ActionView::Helpers::NumberHelper
           row << {:content => "#{value}", :font_style => a}
         else
           if value == 0
-            row << { :content => "N/A", :align => :right, :font_style => a }
+            row << { :content => "N/A", :align => :right, :font_style => a, :width => 60 }
           else
-            row << { :content => "#{number_to_format(value)}", :align => :right, :font_style => a }
+            row << { :content => "#{number_to_format(value)}", :align => :right, :font_style => a, :width => 60 }
           end
         end
       end
       rows << row
     end # End data
+    main = [
+      {:content => "", :colspan => 2, :borders => [:bottom]},
+      {:content => "Deducciones", :colspan => @t_d+1, :font_style => :bold, :align => :center },
+      {:content => "Otros Pagos", :colspan => @t_o+1, :font_style => :bold, :align => :center },
+      {:content => "", :borders => [:bottom]}
+    ]
 
     table(
-      [header] +
+      [main,header] +
       rows.map do |row| row end,
-      :cell_style => { :size => 10 }
+      :cell_style => { :size => 8 }
     )
   end
 

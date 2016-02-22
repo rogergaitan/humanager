@@ -17,7 +17,7 @@ $(document).ready(function() {
   var input = $('#messages_to_employees');
   var display = $('#char-count');
   var count = input.val().length
-  var limit = 320;
+  var limit = 230;
 
   remaining = limit - count
   update(remaining);

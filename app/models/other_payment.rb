@@ -7,6 +7,8 @@ class OtherPayment < ActiveRecord::Base
       :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
       :custom_calculation, :payroll_ids, :employee_ids
 
+  before_update :check_is_salary
+
   attr_accessor :custom_calculation, :employee_ids
 
   # association other_payments with payrolls
@@ -23,5 +25,27 @@ class OtherPayment < ActiveRecord::Base
   has_many :employees, :through => :other_payment_employees
   accepts_nested_attributes_for :other_payment_employees, :allow_destroy => true
   accepts_nested_attributes_for :employees, :allow_destroy => true
+
+  def self.get_list_to_general_payment(payroll_ids, limit)
+
+    listId = OtherPaymentPayment.joins(:other_payment_employee)
+            .select('DISTINCT other_payment_employees.other_payment_id')
+            .where('other_payment_payments.payroll_id in (?)', payroll_ids)
+            .map(&:other_payment_id)
+              
+    orderByDeductionType = "CASE deduction_type WHEN 'constant' THEN 1 WHEN 'unique' THEN 2 WHEN 'amount_to_exhaust' THEN 3 END";
+    list_other_payments = OtherPayment.where('id in (?) and constitutes_salary = ?', listId, false)
+                        .order("state desc, #{orderByDeductionType}")
+                        .limit(limit)
+                        .map(&:id)
+  end
+
+  def check_is_salary
+    if self.constitutes_salary_changed?      
+      a = OtherPaymentPayment.joins(:other_payment_employee).select('count(*) as total')
+        .where('other_payment_employees.other_payment_id = ?', self.id).first
+      self.constitutes_salary = a.total == 0 ? self.constitutes_salary : self.constitutes_salary_was
+    end  
+  end
 
 end

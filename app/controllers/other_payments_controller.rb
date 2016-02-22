@@ -68,62 +68,16 @@ class OtherPaymentsController < ApplicationController
   # PUT /other_payments/1
   # PUT /other_payments/1.json
   def update
-    
-    ActiveRecord::Base.transaction do
-
-      @other_payment = OtherPayment.find(params[:id])
-
-      params[:other_payment][:other_payment_employees_attributes].each do |pe|
-        if pe[1]["id"].nil?
-          # New
-          unless to_bool(pe[1]["_destroy"])
-            other_payment_employee = OtherPaymentEmployee.new
-            other_payment_employee.other_payment_id = params[:id]
-            other_payment_employee.employee_id = pe[1]["employee_id"]
-            other_payment_employee.calculation = pe[1]["calculation"]
-            other_payment_employee.completed = false
-            other_payment_employee.save
-          end
-        else
-          # Old
-          other_payment_employee = OtherPaymentEmployee.find(pe[1]["id"])
-          if to_bool( pe[1]["_destroy"] ) # Change status
-            unless other_payment_employee.other_payment_payments.empty?
-              # if there are records.
-              other_payment_employee.completed = true
-            else
-              # No records.
-              other_payment_employee.destroy
-            end
-          else
-            other_payment_employee.completed = false
-            other_payment_employee.calculation = pe[1]["calculation"]
-          end
-          other_payment_employee.save
-        end
+    @other_payment = OtherPayment.find(params[:id])
+    respond_to do |format|
+      if @other_payment.update_attributes(params[:other_payment])
+        format.html { redirect_to other_payments_path, notice: 'Other Payment was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @other_payment.errors, status: :unprocessable_entity }
       end
-
-      @other_payment.description = params[:other_payment][:description]
-      @other_payment.individual = params[:other_payment][:individual]
-      @other_payment.deduction_type = params[:other_payment][:deduction_type]
-      @other_payment.amount = params[:other_payment][:amount]
-      @other_payment.calculation_type = params[:other_payment][:calculation_type]
-      @other_payment.ledger_account_id = params[:other_payment][:ledger_account_id]
-      @other_payment.costs_center_id = params[:other_payment][:costs_center_id]
-      @other_payment.constitutes_salary = params[:other_payment][:constitutes_salary]      
-      @other_payment.payroll_type_ids = params[:other_payment][:payroll_type_ids]
-      @other_payment.payroll_ids = params[:other_payment][:payroll_ids]
-
-      respond_to do |format|
-        if @other_payment.save
-          format.html { redirect_to other_payments_path, notice: 'Other payment was successfully updated.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: "edit" }
-          format.json { render json: @other_payment.errors, status: :unprocessable_entity }
-        end
-      end 
-    end # End Transaction
+    end
   end
 
   # DELETE /other_payments/1
@@ -166,5 +120,4 @@ class OtherPaymentsController < ApplicationController
       end
     end
   end
-
 end

@@ -33,23 +33,28 @@ class ReportsController < ApplicationController
 
       when CONSTANTS[:REPORTS]['GENERAL_PAYROLL']
 
-        @employees = params[:employees].split(",")
+        employees = params[:employees].split(",")
         @payroll_ids = params[:payroll_ids].split(",")
-        @format = params[:format]
+        format = params[:format]
 
-        @data = general_payroll_data(@payroll_ids, @employees)
+        limitRows = 4
+        list_deductions = Deduction.get_list_to_general_payment(@payroll_ids, limitRows)
+        @t_d = list_deductions.length # Total deductions
+        list_other_payments = OtherPayment.get_list_to_general_payment(@payroll_ids, limitRows)
+        @t_o = list_other_payments.length # Total Other Payments
 
-        if @format.to_s == "pdf"
+        @data = general_payroll_data(@payroll_ids, employees, list_deductions, list_other_payments, limitRows)
 
+        if format.to_s == "pdf"
           respond_to do |format|
             format.pdf do
-              pdf = GeneralPayrollPDF.new(@data, @payroll_ids, @company_id)
+              pdf = GeneralPayrollPDF.new(@data, @payroll_ids, company_id, @t_d, @t_o)
               send_data pdf.render, filename: "general_payroll.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
         else
-          general_payroll_xls(@data, @payroll_ids, @company_id)
+          general_payroll_xls(@data, @payroll_ids, company_id)
         end
 
       when CONSTANTS[:REPORTS]['PAYMENT_TYPE_REPORT']
@@ -75,13 +80,13 @@ class ReportsController < ApplicationController
 
           respond_to do |format|
             format.pdf do
-              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids, @company_id)
+              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids, company_id)
               send_data pdf.render, filename: "payment_type_report.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
         else
-          payment_type_report_xls(@data, payroll_ids, order, @company_id)
+          payment_type_report_xls(@data, payroll_ids, order, company_id)
         end
 
       when CONSTANTS[:REPORTS]['ACCRUED_WAGES_DATES']
@@ -90,18 +95,18 @@ class ReportsController < ApplicationController
         start_date = params[:start_date]
         end_date = params[:end_date]
 
-        @data = accrued_wages_dates_date(employee_ids, start_date, end_date, @company_id)
+        @data = accrued_wages_dates_date(employee_ids, start_date, end_date, company_id)
 
         if params[:format].to_s == "pdf"
           respond_to do |format|
             format.pdf do
-              pdf = AccruedWagesDatesPDF.new(@data, @company_id, start_date, end_date)
+              pdf = AccruedWagesDatesPDF.new(@data, company_id, start_date, end_date)
               send_data pdf.render, filename: "test.pdf",
                 type: "application/pdf", disposition: "inline"
             end
           end
         else
-          accrued_wages_dates_date_xls(@data, @company_id, start_date, end_date)
+          accrued_wages_dates_date_xls(@data, company_id, start_date, end_date)
         end
 
     end # End case
@@ -131,9 +136,8 @@ class ReportsController < ApplicationController
     @companies = Company.all
   end
 
-  def general_payroll_data(payroll_ids, employees)
+  def general_payroll_data(payroll_ids, employees, list_deductions, list_other_payments, limitRows)
 
-    list_deductions = Deduction.get_list_to_general_payment
     list_desc_deductions = {}
     employees_names = []
     list_payrolls = []
@@ -161,68 +165,98 @@ class ReportsController < ApplicationController
           
         # G E T   T O T A L   E A R N
           total_earn = 0
-          PayrollHistory.where('payroll_log_id = ?', payroll_id).each do |p|
-            unless p.payroll_employees.where('employee_id = ?', employee_id).empty?
-              total_earn += p.total.to_f
-            end
-          end # End PayrollHistory
-          detail['Total Devengado'] = total_earn
-          if totals['Total Devengado'].blank?
-            totals['Total Devengado'] = total_earn
-          else
-            totals['Total Devengado'] += total_earn
+          total_earn = PayrollHistory.joins(:payroll_employees).select('sum(total) as total')
+                      .where('payroll_histories.payroll_log_id = ? and payroll_employees.employee_id = ?', payroll_id, employee_id)[0]
+                      .total.to_f
+          
+          # Other Payments when Constitutes Salary
+          a = OtherPaymentPayment.select('sum(payment) as total').joins(:other_payment_employee)
+            .where('other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?',
+              payroll_id, employee_id, true).first
+
+          unless a.total.nil?
+            total_earn = total_earn + a.total
           end
+
+          detail['Total Devengado'] = total_earn
+          totals['Total Devengado'].blank? ? (totals['Total Devengado'] = total_earn) : (totals['Total Devengado'] += total_earn)
         # G E T   T O T A L   E A R N
 
         # G E T   D E D U C T I O N S
           # Set default values
-          list_deductions.each do |id|
-            d = Deduction.find(id)
-            list_desc_deductions["#{d.description}"] = "#{d.description}"
-            detail["#{d.description}"] = 0
-            if totals["#{d.description}"].blank?
-              totals["#{d.description}"] = 0
-            else
-              totals["#{d.description}"] += 0
-            end
+          Deduction.where('id in (?)', list_deductions).each do |d|
+            list_desc_deductions["#{d.description[0...10]}.."] = "#{d.description[0...10]}.."
+            detail["#{d.description[0...10]}.."] = 0
+            totals["#{d.description[0...10]}.."].blank? ? (totals["#{d.description[0...10]}.."] = 0) : (totals["#{d.description[0...10]}.."] += 0)
           end
 
           detail["Otras Deducciones"] = 0
-          if totals["Otras Deducciones"].blank?
-            totals["Otras Deducciones"] = 0
-          else
-            totals["Otras Deducciones"] = 0
-          end
+          totals["Otras Deducciones"].blank? ? (totals["Otras Deducciones"] = 0) : nil
 
           total_deductions = 0
-          DeductionPayment.where('payroll_id = ?', payroll_id).each do |a|
-            if a.deduction_employee.employee_id.to_f == employee_id.to_f
-              if list_deductions.include?(a.deduction_employee.deduction.id)
-                detail["#{a.deduction_employee.deduction.description}"] += a.payment.to_f
-                totals["#{a.deduction_employee.deduction.description}"] += a.payment.to_f
+          DeductionPayment.joins(:deduction_employee)
+                            .where('deduction_payments.payroll_id = ? and deduction_employees.employee_id = ?',payroll_id, employee_id).each do |a|
+            if list_deductions.include?(a.deduction_employee.deduction.id)
+              detail["#{a.deduction_employee.deduction.description[0...10]}.."] += a.payment.to_f
+              totals["#{a.deduction_employee.deduction.description[0...10]}.."] += a.payment.to_f
+              total_deductions += a.payment.to_f
+            else
+              if list_deductions.count < limitRows
+                list_deductions.push a.deduction_employee.deduction.id
+                detail["#{a.deduction_employee.deduction.description[0...10]}.."] = a.payment.to_f
+                totals["#{a.deduction_employee.deduction.description[0...10]}.."] = a.payment.to_f
                 total_deductions += a.payment.to_f
               else
-                if list_deductions.count < 4
-                  list_deductions.push a.deduction_employee.deduction.id
-                  detail["#{a.deduction_employee.deduction.description}"] = a.payment.to_f
-                  totals["#{a.deduction_employee.deduction.description}"] = a.payment.to_f
-                  total_deductions += a.payment.to_f
-                else
-                  detail["Otras Deducciones"] += a.payment.to_f
-                  totals["Otras Deducciones"] += a.payment.to_f
-                  total_deductions += a.payment.to_f
-                end
-              end #End include
-            end
-          end # End WorkBenefitsPayment
+                detail["Otras Deducciones"] += a.payment.to_f
+                totals["Otras Deducciones"] += a.payment.to_f
+                total_deductions += a.payment.to_f
+              end
+            end #End include
+          end
+
           list_desc_deductions["Otras Deducciones"] = "Otras Deducciones"
         # G E T   D E D U C T I O N S
 
-        detail["Total"] = (total_earn-total_deductions)
+        # G E T   O T H E R  P A Y M E N T S
+          OtherPayment.where('id in (?)', list_other_payments).each do |d|
+            list_desc_deductions["#{d.description[0...10]}.."] = "#{d.description[0...10]}.."
+            detail["#{d.description[0...10]}.."] = 0
+            totals["#{d.description[0...10]}.."].blank? ? (totals["#{d.description[0...10]}.."] = 0) : (totals["#{d.description[0...10]}.."] += 0)
+          end
+          detail["Otros Pagos"] = 0          
+          totals["Otros Pagos"].blank? ? (totals["Otros Pagos"] = 0) : nil
+
+          total_other_payments = 0
+          OtherPaymentPayment.joins(:other_payment_employee)
+            .where('other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?', 
+              payroll_id, employee_id, false)
+            .each do |a|
+
+            if list_other_payments.include?(a.other_payment_employee.other_payment_id)
+              detail["#{a.other_payment_employee.other_payment.description[0...10]}.."] += a.payment.to_f
+              totals["#{a.other_payment_employee.other_payment.description[0...10]}.."] += a.payment.to_f
+              total_other_payments += a.payment.to_f
+            else
+              if list_other_payments.count < limitRows
+                list_other_payments.push a.other_payment_employee.other_payment_id
+                detail["#{a.other_payment_employee.other_payment.description[0...10]}.."] = a.payment.to_f
+                totals["#{a.other_payment_employee.other_payment.description[0...10]}.."] = a.payment.to_f
+                total_other_payments += a.payment.to_f
+              else
+                detail["Otros Pagos"] += a.payment.to_f
+                totals["Otros Pagos"] += a.payment.to_f
+                total_other_payments += a.payment.to_f
+              end
+            end
+          end
+        # G E T   O T H E R  P A Y M E N T S
+
+
+        detail["Total"] = (total_earn-total_deductions+total_other_payments)
         if totals["Total"].blank?
-          totals["Total"] = (total_earn-total_deductions)
+          totals["Total"] = (total_earn-total_deductions+total_other_payments)
         else
-          totals["Total"] += (total_earn-total_deductions)
+          totals["Total"] += (total_earn-total_deductions+total_other_payments)
         end
 
         if(index.nil?)
@@ -239,6 +273,7 @@ class ReportsController < ApplicationController
             list_payrolls[index]["#{value}"] += detail["#{value}"]
           end
         end
+
       end # End employees
     end # End payroll_ids
 
