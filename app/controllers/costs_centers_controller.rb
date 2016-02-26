@@ -10,17 +10,22 @@ class CostsCentersController < ApplicationController
   end
 
   def sync_cc
-    empmaest = Empmaestcc.find(:all, :select => ['iemp', 'icc', 'ncc', 'iccpadre', 'iactividad'])
+    empmaest = Empmaestcc.select('iemp, icc, ncc, iccpadre, iactividad').order('iemp')
     @syn_data = {}
     c = 0; ca = 0
     
     empmaest.each do |costsCenters|
-      if CostsCenter.where("icost_center = ?", costsCenters.icc).empty?
-        new_cc = CostsCenter.create(:company_id => costsCenters.iemp, 
+      cc = CostsCenter.where("icost_center = ? and icc_father = ? and company_id = ?", 
+        costsCenters.icc, costsCenters.iccpadre.to_s, costsCenters.iemp).first
+
+      if cc.nil?
+        new_cc = CostsCenter.create(
+          :company_id => costsCenters.iemp, 
           :icost_center => firebird_encoding(costsCenters.icc.to_s), 
           :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
           :icc_father => firebird_encoding(costsCenters.iccpadre.to_s),
-          :iactivity => firebird_encoding(costsCenters.iactividad.to_s))
+          :iactivity => firebird_encoding(costsCenters.iactividad.to_s)
+        )
 
         if new_cc.save
           c += 1
@@ -31,10 +36,10 @@ class CostsCentersController < ApplicationController
         end
       else
         # UPDATE
-        update_cc = CostsCenter.find_by_icost_center(costsCenters.icc)
-        params[:costsCenter] = { :company_id => costsCenters.iemp, :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
-                                :icc_father => firebird_encoding(costsCenters.iccpadre.to_s) }
-        if update_cc.update_attributes(params[:costsCenter])
+        params[:costsCenter] = { :company_id => costsCenters.iemp, 
+                                :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
+                                :icc_father => firebird_encoding(costsCenters.iccpadre.to_s)}
+        if cc.update_attributes(params[:costsCenter])
           ca += 1
         end
       end

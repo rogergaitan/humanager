@@ -41,11 +41,19 @@ class TasksController < ApplicationController
     ca = 0
     @tasks_fb = {}
 
-    labmaests.each  do |task|
-      if Task.where("itask = ?", task.ilabor).empty?
-        new_task = Task.new(:iactivity => task.iactividad, :itask => task.ilabor, 
-          :ntask => firebird_encoding(task.nlabor), :iaccount => task.icuenta, 
-          :mlaborcost => task.mcostolabor, :nunidad => task.nunidad)
+    labmaests.each do |task|
+
+      # task = Task.find_by_itask(task.ilabor)
+      theTask = Task.where("itask = ?", task.ilabor).first
+
+      if theTask.nil?
+        new_task = Task.new(:iactivity => task.iactividad, 
+          :itask => task.ilabor, 
+          :ntask => firebird_encoding(task.nlabor), 
+          :iaccount => task.icuenta, 
+          :mlaborcost => task.mcostolabor, 
+          :nunidad => firebird_encoding(task.nunidad)
+        )
 
         if new_task.save
           c +=  1
@@ -55,11 +63,11 @@ class TasksController < ApplicationController
           end
         end
       else
-        update_task = Task.find_by_itask(task.ilabor)
+        # update_task = Task.find_by_itask(task.ilabor)
         params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
                     :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
 
-        if update_task.update_attributes(params[:task])
+        if theTask.update_attributes(params[:task])
           ca += 1
         end
       end
