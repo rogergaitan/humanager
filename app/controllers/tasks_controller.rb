@@ -42,10 +42,7 @@ class TasksController < ApplicationController
     @tasks_fb = {}
 
     labmaests.each do |task|
-
-      # task = Task.find_by_itask(task.ilabor)
       theTask = Task.where("itask = ?", task.ilabor).first
-
       if theTask.nil?
         new_task = Task.new(:iactivity => task.iactividad, 
           :itask => task.ilabor, 
@@ -63,7 +60,6 @@ class TasksController < ApplicationController
           end
         end
       else
-        # update_task = Task.find_by_itask(task.ilabor)
         params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
                     :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
 
