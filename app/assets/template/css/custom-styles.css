@@ -6,3 +6,11 @@
 .a-not-active > * {
     pointer-events:none;
 }
+
+.last-sync-msg {
+	text-align: right;
+}
+
+.last-sync-msg label {
+	font-weight: bold;	
+}

@@ -48,5 +48,274 @@ class ApplicationController < ActionController::Base
 			entries: object
 		} unless @object
 	end
+	
+	def after_sign_in_path_for(resource)		
+
+		@sync_status = firebird_sync_from_sign
+		#require 'pry'; binding.pry
+		super    
+	end
+
+	def firebird_sync_from_sign
+		@last_sync = SyncLog.last
+		today = Time.now
+		users = User.all
+		first_sign = true
+		users.each do |user|
+			last_sign_in_at = user[:last_sign_in_at] ? user[:last_sign_in_at].to_date : 0
+			if last_sign_in_at === today.to_date
+				first_sign = false
+				break
+			end
+		end
+
+		if first_sign === false
+			firebird_sync = firebird_sync_process
+			return firebird_sync
+		end
+	end
+
+	# Sync all tables
+	def firebird_sync_process
+		@sync = {}
+		@sync[:companies] = companiesfb
+		@sync[:tasks] = tasksfb
+		@sync[:users] = usersfb
+		@sync[:employees] = sync
+		@sync[:account] = accountfb
+
+		log_sync
+
+		return @sync
+	end
+
+	#save sync log
+	def log_sync
+		new_log = SyncLog.new( :user_id => current_user.id, 
+								:last_sync => Time.now )
+
+		new_log.save
+
+	end
+
+	# Sync companies
+  	def companiesfb
+	    @empmaestcc = Empmaestcc.find(:all, :select =>['iemp', 'ncc'], :conditions => ['icc = ?', ''])
+	    @c = 0; @ca = 0
+	    @companies = []
+	    @companies_fb = {}
+	    
+	    @empmaestcc.each do |cfb|
+	      if Company.where('code = ?', cfb.iemp).empty?
+	        @new_company = Company.new( :code => cfb.iemp,
+	                                    :name => "#{cfb.ncc}" )
+
+	        if @new_company.save
+	          @companies << @new_company
+	          @c += 1
+	        else
+	          @new_company.errors.each do |error|
+	            Rails.logger.error "Error Creating Company: #{cfb.ncc}, Description: #{error}"
+	          end
+	        end
+	      else
+	        # UPDATE
+	        @update_company = Company.find_by_code(cfb.iemp)
+	        params[:company] = { :name => "#{cfb.ncc}" }
+
+	        if @update_company.update_attributes(params[:company])
+	          @ca += 1
+	        end
+	      end
+	    end
+		@companies_fb[:companies] = @companies
+		@companies_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
+
+
+	    return @companies_fb
+  	end
+	
+	# Sync tasks
+  	def tasksfb
+	    labmaests = Labmaest.find( :all, 
+	                                :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'] )
+
+	    c = 0
+	    ca = 0
+	    @tasks_fb = {}
+
+	    labmaests.each do |task|
+	      theTask = Task.where("itask = ?", task.ilabor).first
+	      if theTask.nil?
+	        new_task = Task.new(:iactivity => task.iactividad, 
+	          :itask => task.ilabor, 
+	          :ntask => firebird_encoding(task.nlabor), 
+	          :iaccount => task.icuenta, 
+	          :mlaborcost => task.mcostolabor, 
+	          :nunidad => firebird_encoding(task.nunidad)
+	        )
+
+	        if new_task.save
+	          c +=  1
+	        else
+	          new_task.er.each do |error|
+	            Rails.logger.error "Error Creating task: #{task.ilabor}, Description: #{error}"
+	          end
+	        end
+	      else
+	        params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
+	                    :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
+
+	        if theTask.update_attributes(params[:task])
+	          ca += 1
+	        end
+	      end
+	    end
+    	@tasks_fb[:notice] =  ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
+
+    	return @tasks_fb
+ 	end
+	
+	# Sync users
+  	def usersfb
+	    usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
+	    c = 0; ca = 0
+	    @users_fb = {}
+
+	    usersfb.each do |ufb|
+	      
+	      if User.where("username = ?", ufb.nusr).empty?
+
+	        numer = randow_string
+	        new_user = User.new( :username => "#{ufb.nusr}",
+	                              :name => "#{ufb.snombre} #{ufb.sapellido}", 
+	                              :email => "#{ufb.semail}", 
+	                              :password => numer, 
+	                              :password_confirmation => numer )
+
+	        if new_user.save
+	          # Create default Permissions
+	          PermissionsSubcategory.all.each do |sub|
+	            a = PermissionsUser.new(  :permissions_subcategory_id => sub.id,
+	                                      :user_id => new_user.id,
+	                                      :p_create => false,
+	                                      :p_view => false,
+	                                      :p_modify => false,
+	                                      :p_delete => false,
+	                                      :p_close => false,
+	                                      :p_accounts => false,
+	                                      :p_pdf => false,
+	                                      :p_exel => false )
+	            a.save
+	          end
+
+	          c += 1
+	        else
+	          new_user.errors.each do |error|
+	            Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}"
+	          end
+	        end
+	      else
+
+	        update_user = User.find_by_username(ufb.nusr)
+	        params[:user] = { :name => "#{ufb.snombre} #{ufb.sapellido}", :email => "#{ufb.semail}" }
+
+	        if update_user.update_attributes(params[:user])
+	          ca += 1
+	        end
+	        
+	      end # End if
+	    end # End each usersfb
+	    @users_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
+
+	    return @users_fb
+  	end
+
+  	def randow_string
+	    value = ""; 8.times{ value << (65 + rand(25)).chr }
+	    return value
+	end
+	
+	# Sync employees
+  	def sync
+	    abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido'])
+
+	    c = 0
+	    ca = 0
+	    @syn_data = {}
+
+	    abanits.each do |employee|
+
+	      full_name = employee.ntercero
+	      last_name = employee.napellido
+
+	      if last_name.empty?
+	        last_name = 'nr'
+	      end
+
+	      if Entity.where("entityid = ?", employee.init).empty?
+
+	        new_employee = Employee.new
+	        entity = new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
+	                                              :surname => firebird_encoding(last_name.to_s), 
+	                                              :entityid => employee.init)
+	        entity.telephones.build
+	        new_employee.build_photo
+	        entity.emails.build
+	        entity.addresses.build
+
+	        if new_employee.save
+	          c += 1
+	        else
+	          new_employee.errors.each do |error|
+	            Rails.logger.error "Error creando empleado: #{employee.init}, el nombre no ha sido especificado"
+	          end
+	        end
+	      else
+	        # UPDATE
+	        @update_entity = Entity.find_by_entityid(employee.init)
+	        params[:entity] = { :name => firebird_encoding(full_name.to_s), :surname => firebird_encoding(last_name.to_s) }
+	        if @update_entity.update_attributes(params[:entity])
+	          ca += 1
+	        end
+	      end
+	    end
+	    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
+
+	    return @syn_data
+  	end
+	
+	# Sync ledger accounts 
+  	def accountfb
+	    cntpuc = Cntpuc.where("bvisible = ?", 'T').find(:all, :select => ['icuenta', 'ncuenta', 'ipadre'])
+
+	    c = 0; ca = 0
+	    @accounts_fb = {}
+
+	    cntpuc.each do |account|
+	      if LedgerAccount.where("iaccount = ?", account.icuenta).empty?
+	        new_account = LedgerAccount.new(:iaccount => account.icuenta, :naccount => firebird_encoding(account.ncuenta),
+	          :ifather => account.ipadre)
+	        if new_account.save
+	          c += 1
+	        else
+	          @new_task.er.each do |error|
+	            Rails.logger.error "Error Creating account: #{account.icuenta}, 
+	                              Description: #{error}"
+	          end
+	        end
+	      else
+	        # UPDATE
+	        update_cntpuc = LedgerAccount.find_by_iaccount(account.icuenta)
+	        params[:ledgerAccount] = { :naccount => firebird_encoding(account.ncuenta), :ifather => account.ipadre }
+	        if update_cntpuc.update_attributes(params[:ledgerAccount])
+	          ca += 1
+	        end
+	      end 
+	      @accounts_fb[:notice] = ["#{t('helpers.titles.tasksfb').capitalize}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
+	    end 
+
+	    return @accounts_fb
+  	end 
 
 end

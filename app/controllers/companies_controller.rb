@@ -4,7 +4,7 @@ class CompaniesController < ApplicationController
   # GET /companies.json
   def index
     @companies = Company.paginate(:page => params[:page], :per_page => 15).all
-
+    @last_sync = SyncLog.last
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @companies }
@@ -34,6 +34,7 @@ class CompaniesController < ApplicationController
   end
 
   def companies_fb
+=begin    
     @empmaestcc = Empmaestcc.find(:all, :select =>['iemp', 'ncc'], :conditions => ['icc = ?', ''])
     @c = 0; @ca = 0
     @companies = []
@@ -62,9 +63,11 @@ class CompaniesController < ApplicationController
         end
       end
     end
-
-    @companies_fb[:companies] = @companies
-    @companies_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{@c} #{t('helpers.titles.tasksfb_update')}: #{@ca}"]
+=end
+    @companies = firebird_sync_process
+    @last_sync = SyncLog.last
+    @companies_fb[:companies] = @companies[:companies][:companies]
+    @companies_fb[:notice] = @companies[:companies][:notice]
 
     respond_to do |format|
       format.json { render json: @companies_fb }

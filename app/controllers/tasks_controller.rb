@@ -68,7 +68,6 @@ class TasksController < ApplicationController
         end
       end
     end
-    
     @tasks_fb[:notice] =  ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
     respond_to do |format|
       format.json {render json: @tasks_fb }
