@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
 			end
 		end
 
-		if first_sign === false
+		if first_sign === true
 			firebird_sync = firebird_sync_process
 			return firebird_sync
 		end
