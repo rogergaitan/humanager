@@ -362,6 +362,7 @@ function set_account(e) {
     $(document.getElementById($('#idFieldPopup').val())).val(accountId);
     $(document.getElementById($('#textFieldPopup').val())).val(accountName);
 	$('#list').empty();
+	$('#accountsModal .modal-content button:eq(1)').trigger('click');
 }
 
 function fetchCostCenterAutocomplete(url, textField, idField) {
