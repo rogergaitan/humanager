@@ -72,7 +72,7 @@ permissions.savePermissions = function() {
 
 	var tr_id = "", t = 0, id = "", str = "", opction = "";
 
-	$('#accordion .accordion-group table tbody tr').each(function() {
+	$('#accordion .panel-body table tbody tr').each(function() {
 		
 		tr_id = $(this).attr('id');
 		t = tr_id.length - tr_id.indexOf("_");

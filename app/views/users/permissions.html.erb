@@ -54,11 +54,11 @@
 
 	<div class="row">
 	    <div class="col-xs-12">
-	    	<div class="panel-group panel-default" id="accordionA">
+	    	<div class="panel-group panel-default" id="accordion">
 	    		<% count = 0 %>
 				<% @permissionsCategory.each do |pc| %>
 		    		<div class="panel panel-default">
-						<a data-toggle="collapse" data-parent="#accordionA" href="#collapse<%= count %>" aria-expanded="false" class="collapsed">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= count %>" aria-expanded="false" class="collapsed">
 							<div class="panel-heading"><h2><%= pc.name %></h2></div>
 						</a>
 						<div id="collapse<%= count %>" class="collapse" aria-expanded="false" style="height: 0px;">

@@ -127,7 +127,6 @@ class UsersController < ApplicationController
     
     data = params['permissions_user']
     user_id = params['user_id']
-
     respond_to do |format|
 
       if User.save_permissions_user(data, user_id)
