@@ -62,14 +62,14 @@ class User < ActiveRecord::Base
     # EmailQueue.save_email(email_object, CONFIG[:email_templates]['welcome']['template'], template_data)
   end
 
-  def self.search_users(username, name, page, per_page)
+  def self.search_users(username, name, actualuser, page, per_page)
       
       query = ""
       params = []
       params.push(" username like '%#{username}%' ") unless username.empty?
       params.push(" name like '%#{name}%' ") unless name.empty?
+      params.push(" id  <> '#{actualuser}' ") unless actualuser.empty?
       query = build_query(params)
-
       @users = User.where(query).paginate(:page => page, :per_page => per_page)
   end
 

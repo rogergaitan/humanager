@@ -30,6 +30,8 @@
 			                  <%= text_field_tag 'name', '', :class => 'form-control', :placeholder => 'Nombre'  %>
 			                </div>
 
+			                <input type="hidden" id="userId" value="<%= @user.id %>">
+
 			                <div class="form-group">
 			                	<button class="btn btn-primary" id="search_users" type="button">Buscar</button>
 			                </div>

@@ -119,7 +119,7 @@ class UsersController < ApplicationController
   end
 
   def search_user
-    @users = User.search_users(params[:username], params[:name], params[:page], 5)
+    @users = User.search_users(params[:username], params[:name], params[:actualuser], params[:page], 5)
     respond_with @users
   end
 

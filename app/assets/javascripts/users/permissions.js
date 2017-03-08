@@ -46,14 +46,15 @@ $(document).ready(function() {
 });
 
 // Search the users
-permissions.searchUsers = function(username, name, url) {
+permissions.searchUsers = function(username, name, url, actualuser) {
 
 	return $.ajax({
 		url: url,
 		dataType: "script",
 		data: {
 			username: username,
-			name: name
+			name: name,
+			actualuser: actualuser
 		}
 	});
 }
@@ -64,8 +65,9 @@ permissions.searchInfoUsers = function() {
 	var username = $('#username').val();
 	var name = $('#name').val();
 	var url = $("form[id=search_users_form]").attr('action');
+	var actualuser = $('#userId').val();
 
-	permissions.searchUsers(username, name, url);
+	permissions.searchUsers(username, name, url, actualuser);
 }
 
 permissions.savePermissions = function() {

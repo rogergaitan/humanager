@@ -16,12 +16,12 @@
     <tbody>
       <% unless @users.empty?  %>
         <% @users.each do |user| %>
-          <tr>
-            <td><%= "#{user.username}" %></td>
-            <td><%= "#{user.name}" %></td>
-            <td><%= "#{user.email}" %></td>
-            <td><input type="button" id="<%= user.id %>" value="Cargar" ></td>
-          </tr>
+            <tr>
+              <td><%= "#{user.username}" %></td>
+              <td><%= "#{user.name}" %></td>
+              <td><%= "#{user.email}" %></td>
+              <td><input type="button" id="<%= user.id %>" value="Cargar" ></td>
+            </tr>
         <% end %>
       <% else %>
       <tr>
