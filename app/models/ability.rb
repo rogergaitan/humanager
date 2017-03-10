@@ -416,20 +416,20 @@ class Ability
         # Default values, available for all
         can [:manage], PaymentType
 
-        if payment_type.p_create
-            can :create, PaymentType
+        unless payment_type.p_create
+            cannot :create, PaymentType
         end
 
-        if payment_type.p_view
-            can :read, PaymentType
+        unless payment_type.p_view
+            cannot :read, PaymentType
         end
 
-        if payment_type.p_modify
-            can :update, PaymentType
+        unless payment_type.p_modify
+            cannot :update, PaymentType
         end
 
-        if payment_type.p_delete
-            can :destroy, PaymentType
+        unless payment_type.p_delete
+            cannot :destroy, PaymentType
         end
     end
     ######################################################################################
@@ -500,14 +500,14 @@ class Ability
     unless payment_proof_employee.nil?
 
         # Default values, available for all
-        can [:payment_proof_employee_pdf, :payment_proof_employee_xls], User
+        can [:payment_proof_employee_pdf, :payment_proof_employee_xls], PermissionsUser
 
         unless payment_proof_employee.p_pdf
-            cannot [:payment_proof_employee_pdf], User
+            cannot [:payment_proof_employee_pdf], PermissionsUser
         end
 
         unless payment_proof_employee.p_exel
-            cannot [:payment_proof_employee_xls], User
+            cannot [:payment_proof_employee_xls], PermissionsUser
         end
     end
     ######################################################################################
@@ -517,14 +517,14 @@ class Ability
     unless general_proof_payments.nil?
         
         # Default values, available for all
-        can [:general_proof_payments_pdf, :general_proof_payments_xls], User
+        can [:general_proof_payments_pdf, :general_proof_payments_xls], PermissionsUser
 
         unless general_proof_payments.p_pdf
-            cannot [:general_proof_payments_pdf], User
+            cannot [:general_proof_payments_pdf], PermissionsUser
         end
 
         unless general_proof_payments.p_exel
-            cannot [:general_proof_payments_xls], User
+            cannot [:general_proof_payments_xls], PermissionsUser
         end
     end
     ######################################################################################
@@ -534,14 +534,14 @@ class Ability
     unless task_type_payment.nil?
         
         # Default values, available for all
-        can [:task_type_payment_pdf, :task_type_payment_xls], User
+        can [:task_type_payment_pdf, :task_type_payment_xls], PermissionsUser
 
         unless task_type_payment.p_pdf
-            cannot [:task_type_payment_pdf], User
+            cannot [:task_type_payment_pdf], PermissionsUser
         end
 
         unless task_type_payment.p_exel
-            cannot [:task_type_payment_xls], User
+            cannot [:task_type_payment_xls], PermissionsUser
         end        
     end
     ######################################################################################

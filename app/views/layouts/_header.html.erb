@@ -133,9 +133,15 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href=<%= reports_path %> >Comprobante Pago trabajadores</a></li>
-                    <li><a href=<%= general_payroll_reports_path %> >Comprobante General de Pago</a></li>
-                    <li><a href=<%= payment_type_report_reports_path %> >Labores por Tipo de Pago</a></li>
+                    <% if can? :payment_proof_employee_pdf, PermissionsUser %>
+                        <li><a href=<%= reports_path %> >Comprobante Pago trabajadores</a></li>
+                    <% end %>
+                    <% if can? :general_proof_payments_pdf, PermissionsUser %>
+                        <li><a href=<%= general_payroll_reports_path %> >Comprobante General de Pago</a></li>
+                    <% end %>
+                    <% if can? :task_type_payment_pdf, PermissionsUser %>
+                        <li><a href=<%= payment_type_report_reports_path %> >Labores por Tipo de Pago</a></li>
+                    <% end %>
                 </ul>
             </li>  
         </ul>

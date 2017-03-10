@@ -16154,7 +16154,7 @@ body {
   display: table;
   width: 100%;
   table-layout: fixed;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 #layout-static {
   display: table-row;
