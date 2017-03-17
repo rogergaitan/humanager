@@ -27,6 +27,10 @@ module ApplicationHelper
 		end
 	end
 
+  	def translate_enum(enum)
+    	I18n.t(enum).map { |key, value| [ value, key ] }
+  	end
+
 	# change the default link renderer for will_paginate
 	def will_paginate(collection = nil, options = {})
 		options[:renderer] ||= WillPaginationHelper::LinkRenderer

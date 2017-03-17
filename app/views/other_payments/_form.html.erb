@@ -58,7 +58,7 @@
           <div class="form-group">
             <%= f.label :deduction_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.enum_select(:deduction_type, {:include_blank => false}, { :class => 'form-control' }) %>
+              <%= f.select(:deduction_type, translate_enum(:deduction_type), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
             <div class="col-sm-1">
               <a  id="unicPayroll" data-toggle="modal" href="#payrollModal" class="btn btn-default-alt">
@@ -93,7 +93,7 @@
           <div class="form-group">
             <%= f.label :calculation_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.enum_select(:calculation_type, {:include_blank => false}, { :class => 'form-control' }) %>
+              <%= f.select(:calculation_type, translate_enum(:calculation_type), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
           </div>
 

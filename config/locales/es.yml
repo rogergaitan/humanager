@@ -71,6 +71,23 @@ es:
     can_be_deleted: "El Registro no es puede eliminar pues ya ha sido utilizado en la base de datos"
     change_status: "¿Desea cambiar el estado?"
     can_not_edit: "El registro que trata de modificar está en uso. Por favor intente más tarde"
+  
+  deduction_type:
+    constant: Constante
+    unique: único
+    amount_exhaust: Monto a agotar
+  calculation_type:
+    percentage: Porcentaje
+    fixed: Fijo
+  payroll_type:
+    administrative: Administrativa
+    fieldwork: Trabajo de Campo
+    plant: Planta
+  payment_type:
+    ordinary: Ordinario
+    extra: Extra
+    double: Doble
+
   content:
     titles: 
       tools: Herramientas

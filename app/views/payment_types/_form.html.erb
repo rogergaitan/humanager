@@ -55,7 +55,7 @@
           <div class="form-group">
             <%= f.label :payment_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.enum_select :payment_type, {:include_blank => false }, { :class => 'form-control' } %>
+              <%= f.select :payment_type, translate_enum(:payment_type), {:include_blank => false }, { :class => 'form-control' } %>
             </div>
           </div>
 

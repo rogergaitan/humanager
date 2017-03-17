@@ -41,7 +41,7 @@
           <div class="form-group">
             <%= f.label :payroll_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.enum_select(:payroll_type, {:include_blank => false}, html_options = {:class => 'form-control'}) %>
+              <%= f.select(:payroll_type, translate_enum(:payroll_type), {:include_blank => false}, html_options = {:class => 'form-control'}) %>
             </div>
           </div>
           
