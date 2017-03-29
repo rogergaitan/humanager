@@ -95,6 +95,16 @@ $(document).ready(function() {
     typeDeduction(this);
   });
 
+  typeCalculation($('#deduction_calculation_type'));
+
+  $('#deduction_calculation_type').change(function() {
+    typeCalculation(this);
+  });
+
+  $('#deduction_custom_calculation').focusout(function(){
+    typeCalculation($('#deduction_calculation_type'));
+  });
+
   // En caso de seleccionar una planilla unica si se quiere cambiar se limpia la anterios 
   // para que no se vayan a guardar 2 ids
   $('#unicPayroll').on({ click: clearPayrolls });
@@ -289,20 +299,48 @@ function typeDeduction(selected) {
       $('#payrolls-to-save').empty();
       $('#unicPayroll').show();
       $('#deduction_payrolls').show();
+      $('#deduction_payroll').prop('required', 'required');
+      $('#deduction_amount_exhaust').prop('required', '');
       getPayrolls();
     break;
-    case 'amount_to_exhaust':
+    case 'amount_exhaust':
       $('#amount_exhaust_controls').show();
       $('#payrolls-to-save').empty();
       $('#unicPayroll').hide();
       $('#deduction_payrolls').hide();
+      $('#deduction_payroll').val('');
+      $('#deduction_payroll').prop('required', '');
+      $('#deduction_amount_exhaust').prop('required', 'required');    
     break;
     case 'constant':
       $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty();
       $('#unicPayroll').hide();
       $('#deduction_payrolls').hide();
+      $('#deduction_payroll').val('');
+      $('#deduction_payroll').prop('required', ''); 
+      $('#deduction_amount_exhaust').prop('required', '');
     break;
+  }
+}
+
+function typeCalculation(selected) {
+  var deductionVal = $("#deduction_custom_calculation");
+  switch($(selected).val()) {
+    case 'percentage':
+      if (deductionVal.val() != '' && (parseFloat(deductionVal.val()) > 0 && parseFloat(deductionVal.val()) <= 100)) {
+        deductionVal.val(parseFloat(deductionVal.val()).toFixed(2));
+      } else {
+        deductionVal.val('');
+      }
+      break;
+    case 'fixed':
+      if (deductionVal.val() != '' && parseFloat(deductionVal.val()) != 0) {
+        deductionVal.val(parseFloat(deductionVal.val()).toFixed(2));
+      } else {
+        deductionVal.val('');
+      }
+      break;
   }
 }
 
@@ -364,11 +402,11 @@ function showHideEmployees(isIndividual) {
   if( $('#deduction_individual').is(':checked') ) {
     $('#employee_items_one').hide()
     $('#employee_items_two').show();
-    $('#custom_calculation').hide();
+    $('.custom_calculation').hide();
   } else {
     $('#employee_items_one').show();
     $('#employee_items_two').hide();
-    $('#custom_calculation').show();
+    $('.custom_calculation').show();
   }
   if(isIndividual) {
     $('#deduction_custom_calculation').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
@@ -378,7 +416,14 @@ function showHideEmployees(isIndividual) {
 // Consulta las cuentas contables para hacer el autocomplete
 function CContables() {
   $.getJSON('/ledger_accounts/fetch', function(category_data) {
-    $("#deduction_ledger_account").autocomplete({
+    $.map(category_data, function(item){
+        $.data(document.body, 'category_' + item.id+"", item.naccount);
+        return{
+            label: item.naccount,                        
+            id: item.id
+        }
+    });
+    /*$("#deduction_ledger_account").autocomplete({
       source: $.map(category_data, function(item){
         $.data(document.body, 'category_' + item.id+"", item.naccount);
         return{
@@ -392,7 +437,7 @@ function CContables() {
       focus: function(event, ui){
         $( "#deduction_ledger_account" ).val(ui.item.label);
       }
-    })
+    })*/
     if($("#deduction_ledger_account_id").val()){
       var deducciones_cuentas = $.data(document.body, 'category_' + $("#deduction_ledger_account_id").val()+'');
       $("#deduction_ledger_account").val(deducciones_cuentas);

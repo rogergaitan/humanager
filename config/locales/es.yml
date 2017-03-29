@@ -579,12 +579,12 @@ es:
           deduction_type: Tipo de deducción
           amount_exhaust: Monto a agotar
           calculation_type: Tipo de calculo
-          custom_calculation: Valor
-          ledger_account_id: Cuenta de Crédito
+          custom_calculation: Valor Deducción
+          ledger_account_id: Cuenta a Acreditar
           is_beneficiary: El empleado es Beneficiario?
           beneficiary_id: Beneficiario
           payroll_types: Tipos de planillas
-          individual: Individual
+          individual: ¿Aplica individualmente?
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde

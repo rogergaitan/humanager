@@ -14,3 +14,33 @@
 .last-sync-msg label {
 	font-weight: bold;	
 }
+
+.beneficiary-check label {
+	/*display: inline-block;*/
+}
+
+.beneficiary-check .checkbox.icheck {
+	/*display: inline-block;*/
+}
+
+.individual-check .beneficiary-check {	
+	width: 100%;
+}
+
+.individual-check label {
+	width: 92%;
+}
+
+.individual-check .col-sm-3 {
+	padding-right: 0px;
+    width: 8%;
+}
+
+.beneficiary-check label {
+	width: 92%;
+}
+
+.beneficiary-check .col-sm-3 {
+	padding-right: 0px;
+    width: 8%;
+}
