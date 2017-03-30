@@ -380,11 +380,11 @@ es:
         work_benefit:
           description: Descripción
           percentage: Porcentaje
-          debit_account: Cuenta de Débito
-          credit_account: Cuenta de Crédito
+          debit_account: Cuenta a Debitar
+          credit_account: Cuenta a Acreditar
           is_beneficiary: Es Beneficiario
           beneficiary_id: Beneficiario
-          costs_center_id: Centro de Costo
+          costs_center_id: Centro de Costos
           payroll_types: Tipos de planillas
         payment_method: 
           name: Nombre

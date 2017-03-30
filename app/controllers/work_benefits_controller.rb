@@ -215,6 +215,7 @@ class WorkBenefitsController < ApplicationController
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
     @credit_accounts = LedgerAccount.credit_accounts
+    @cost_centers = CostsCenter.where(company_id: current_user.company_id)
     @payroll_types = PayrollType.where(company_id: current_user.company_id)
     @employees = Employee.order_employees
     @department = Department.all

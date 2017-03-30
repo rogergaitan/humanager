@@ -1,6 +1,7 @@
 <script type="text/javascript">
   var debit_account = [];
 	var credit_account = [];
+  var costs_center = []
  
   <% @debit_accounts.each do |cc| %>
     debit_account.push(new Array(
@@ -19,6 +20,15 @@
         <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
         <%= cc.id %>,
         <%= cc.iaccount %>
+    ));
+  <% end %>
+
+  <% @cost_centers.each do |cc| %>
+    costs_center.push(new Array(
+      '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>',
+      '<%=h cc.name_cc %>',
+      '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>',
+      <%= cc.id %>
     ));
   <% end %>
 </script>
@@ -57,14 +67,11 @@
               <div class="help-block with-errors"></div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>
             </div>
-          </div>
-
-          <div class="form-group">
             <%= f.label :percentage, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
               <%= f.text_field :percentage, :class => 'form-control', :required => true %>
               <div class="help-block with-errors"></div>
-            </div>
+            </div>            
           </div>
 
           <div class="form-group">
@@ -84,10 +91,7 @@
                 <i class="fa fa-bars"></i>
               </a>
             </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :credit_account, :class => 'col-sm-2 control-label' %>
+            <%= f.label :credit_account, :class => 'col-sm-1 control-label' %>
             <div class="col-sm-3">
               <div class="input-group">
                 <%= f.hidden_field :credit_account %>
@@ -102,10 +106,24 @@
               <a id="credit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
                 <i class="fa fa-bars"></i>
               </a>
-            </div>
+            </div>            
           </div>
           
           <div class="form-group">
+            <%= f.label :beneficiary_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.text_field :beneficiary_id, :class => 'form-control' %>
+              <div class="beneficiary-check">
+                <%= f.label :is_beneficiary, :class => 'col-sm-2 control-label' %>
+                <div class="col-sm-3">
+                  <label class="checkbox icheck">
+                    <%= f.check_box :is_beneficiary, :class => 'form-control' %>
+                  </label>
+                </div>              
+              </div>
+            </div>
+            
+
             <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <div class="input-group">
@@ -118,23 +136,9 @@
               </div>
             </div>
             <div class="col-sm-1">
-              <a id="cost-centrt-button" href="#costCenterModal" class="btn btn-default-alt" data-toggle="modal">
+              <a id="cost-centrt-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
                 <i class="fa fa-bars"></i>
               </a>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :is_beneficiary, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.check_box :is_beneficiary, :class => '' %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :beneficiary_id, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :beneficiary_id, :class => 'form-control' %>
             </div>
           </div>
           
@@ -225,7 +229,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
-        <h2 id="myModalLabel">Seleccione la cuenta contable</h2>
+        <h2 id="myModalLabel"></h2>
       </div>
       <div class="modal-body">
         <div id="list"></div>
@@ -238,14 +242,13 @@
 </div>
 
 <div class="modal fade" id="costCenterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <!--<div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close delete-accounts" data-dismiss="modal" aria-hidden="true">×</button>
         <h2 id="myModalLabel">Seleccione un Centro de costo</h2>
       </div>
       <div class="modal-body">
-        <!-- search -->
         <div class="panel-body">
           <%= form_tag :search_cost_center_work_benefits, :id => "search_cost_center_form", :class => "form-inline", :method => "get" do %>
             <div class="row control-group search">
@@ -260,7 +263,6 @@
             </div>
           <% end %>
         </div>
-        <!-- search -->
         <div id="search_cost_center_results"></div>
       </div>
 
@@ -268,5 +270,5 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
-  </div>
+  </div>-->
 </div>

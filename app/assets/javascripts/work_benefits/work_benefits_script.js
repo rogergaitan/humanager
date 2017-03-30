@@ -81,11 +81,18 @@ $(jQuery(document).ready(function($) {
 	
 	// Generates the treeview with the different accounts
 	$('#debit-button').click(function(){
+		$('#myModalLabel').html('Seleccione la cuenta contable');
 		treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');
 	});
 
 	$('#credit-button').click(function(){
+		$('#myModalLabel').html('Seleccione la cuenta contable');
 		treeviewhr.cc_tree(credit_account, true, 'load_credit_account_name', 'work_benefit_credit_account');
+	});
+
+	$('#cost-centrt-button').click(function(){
+		$('#myModalLabel').html('Seleccione un Centro de costo');
+		treeviewhr.cc_tree(costs_center, true, 'load_costs_center_name', 'work_benefit_costs_center_id');
 	});
 	
 	// Populates the autocompletes for the accounts
@@ -274,7 +281,14 @@ function is_beneficiary(value) {
 
 function fetchPopulateAutocomplete(url, textField, idField) {
   $.getJSON(url, function(accounts) {
-      $(document.getElementById(textField)).autocomplete({
+      	$.map(accounts, function(item) {
+            $.data(document.body, 'account_' + item.id+"", item.naccount);
+            return{
+                label: item.naccount,                        
+                id: item.id
+            }
+        });
+      /*$(document.getElementById(textField)).autocomplete({
           source: $.map(accounts, function(item) {
               $.data(document.body, 'account_' + item.id+"", item.naccount);
               return{
@@ -288,7 +302,7 @@ function fetchPopulateAutocomplete(url, textField, idField) {
           focus: function(event, ui) {
               $(document.getElementById(textField)).val(ui.item.label);
           }
-      });
+      });*/
 
       if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
@@ -367,7 +381,14 @@ function set_account(e) {
 
 function fetchCostCenterAutocomplete(url, textField, idField) {
 	$.getJSON(url, function(accounts) {
-      $(document.getElementById(textField)).autocomplete({
+      	$.map(accounts, function(item) {
+            $.data(document.body, 'account_' + item.id + "", item.name_cc);
+            return{
+                label: item.name_cc,                        
+                id: item.id
+            }
+        });
+      /*$(document.getElementById(textField)).autocomplete({
           source: $.map(accounts, function(item) {
               $.data(document.body, 'account_' + item.id + "", item.name_cc);
               return{
@@ -381,7 +402,7 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
           focus: function(event, ui) {
               $(document.getElementById(textField)).val(ui.item.name_cc);
           }
-      });
+      });*/
       if($(document.getElementById(idField)).val()) {
           var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
           $(document.getElementById(textField)).val(account);
