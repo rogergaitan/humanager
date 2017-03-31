@@ -124,7 +124,7 @@ $(jQuery(document).ready(function($) {
 
 	is_beneficiary( $('#work_benefit_is_beneficiary').is(':checked') );
 
-	$('#work_benefit_is_beneficiary').change(function() { is_beneficiary($('#work_benefit_is_beneficiary').is(':checked')) });
+	$('#work_benefit_is_beneficiary').next().click(function() { is_beneficiary($('#work_benefit_is_beneficiary').is(':checked')) });
 
 	// Seach Cost Center
 	searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center");

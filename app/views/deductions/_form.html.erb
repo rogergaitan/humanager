@@ -65,8 +65,9 @@
             <div id="deduction_payrolls">
               <%= label_tag 'Planilla a Aplicar', nil, class: 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <div class="input-group">
+                <div class="input-group form-group_">
                   <%= text_field_tag 'deduction_payroll', nil, :class => 'form-control'%>
+                  <div class="help-block with-errors"></div>
                   <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                   </span>
@@ -84,10 +85,11 @@
             </div>
             <div id="amount_exhaust_controls">
               <%= f.label :amount_exhaust, :class => 'col-sm-1 control-label' %>
-              <div class="col-sm-3">
+              <div class="col-sm-3 form-group_">
                 <%= f.text_field :amount_exhaust, :class => 'form-control', 
                     :value => number_with_precision(f.object.amount_exhaust, 
                     delimiter: ',', separator: '.', precision: 2) %>
+                    <div class="help-block with-errors"></div>
               </div>              
             </div>                                   
           </div>
@@ -114,6 +116,9 @@
                   </label>
                 </div>
               </div>
+            </div>
+            <div class="col-sm-1 percentage-col">
+              <label class="percentage">%</label>
             </div>
           </div>
           

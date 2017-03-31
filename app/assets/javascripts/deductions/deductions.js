@@ -301,6 +301,7 @@ function typeDeduction(selected) {
       $('#deduction_payrolls').show();
       $('#deduction_payroll').prop('required', 'required');
       $('#deduction_amount_exhaust').prop('required', '');
+      $('#deduction_amount_exhaust').val('');
       getPayrolls();
     break;
     case 'amount_exhaust':
@@ -320,6 +321,7 @@ function typeDeduction(selected) {
       $('#deduction_payroll').val('');
       $('#deduction_payroll').prop('required', ''); 
       $('#deduction_amount_exhaust').prop('required', '');
+      $('#deduction_amount_exhaust').val('');
     break;
   }
 }
@@ -328,6 +330,7 @@ function typeCalculation(selected) {
   var deductionVal = $("#deduction_custom_calculation");
   switch($(selected).val()) {
     case 'percentage':
+      $('.percentage').html('%');
       if (deductionVal.val() != '' && (parseFloat(deductionVal.val()) > 0 && parseFloat(deductionVal.val()) <= 100)) {
         deductionVal.val(parseFloat(deductionVal.val()).toFixed(2));
       } else {
@@ -335,6 +338,7 @@ function typeCalculation(selected) {
       }
       break;
     case 'fixed':
+      $('.percentage').html('')
       if (deductionVal.val() != '' && parseFloat(deductionVal.val()) != 0) {
         deductionVal.val(parseFloat(deductionVal.val()).toFixed(2));
       } else {
@@ -385,7 +389,8 @@ function setPayroll(e) {
   var payrollName = $(e.target).text();
   appendPayrolls = "<input type='hidden" +"' name='deduction[payroll_ids][]' value='"+ payrollId +"' />";
   $('#payrolls-to-save').append(appendPayrolls);
-  $('#deduction_payroll').val(payrollName);  
+  $('#deduction_payroll').val(payrollName);
+  $('#deduction_payroll').focusout();  
 }
 
 // Establece el campo oculto con el id d la cuenta de credito y muestra el texto en el campo cuenta credito
@@ -394,19 +399,23 @@ function setAccount(e) {
   var accountId = $(this).closest('li').data('id');
   var accountName = $(this).text();
   $('#deduction_ledger_account_id').val(accountId);
-  $('#deduction_ledger_account').val(accountName);  
+  $('#deduction_ledger_account').val(accountName);
+  $('#deduction_ledger_account').focusout();  
 }
 
 // Show/Hide The differents view based in the checkbox "individual"
 function showHideEmployees(isIndividual) {
   if( $('#deduction_individual').is(':checked') ) {
-    $('#employee_items_one').hide()
+    $('#deduction_custom_calculation').val('');
+    $('#deduction_custom_calculation').attr('readonly', true);
+    /*$('#employee_items_one').hide()
     $('#employee_items_two').show();
-    $('.custom_calculation').hide();
+    $('.custom_calculation').hide();*/
   } else {
-    $('#employee_items_one').show();
+    $('#deduction_custom_calculation').attr('readonly', false);
+    /*$('#employee_items_one').show();
     $('#employee_items_two').hide();
-    $('.custom_calculation').show();
+    $('.custom_calculation').show();*/
   }
   if(isIndividual) {
     $('#deduction_custom_calculation').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
