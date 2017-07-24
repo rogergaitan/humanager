@@ -35,7 +35,8 @@
                 <th><%= model_class.human_attribute_name(:label_reports_1) %></th>
                 <th><%= model_class.human_attribute_name(:label_reports_2) %></th>
                 <th><%= model_class.human_attribute_name(:label_reports_3) %></th>
-                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+                <th><%= model_class.human_attribute_name(:page_footer)%></th>
+                <!--<th><%=t '.actions', :default => t("helpers.actions") %></th>-->
               </tr>
             </thead>
             <tbody>
@@ -46,13 +47,14 @@
                 <td><%= company.label_reports_1 %></td>
                 <td><%= company.label_reports_2 %></td>
                 <td><%= company.label_reports_3 %></td>
-                <td>
+                <td><%= company.page_footer %></td>
+                <!--<td>
                   <% if can? :update, Company %>
                     <%= link_to edit_company_path(company), :class => 'btn btn-xs btn-success-alt' do %>
                       <i class="fa fa-pencil"></i>
                     <% end %>
                   <% end %>
-                </td>
+                </td>-->
               </tr>
               <% end %>
             </tbody>
@@ -61,8 +63,12 @@
       </div>
     </div>
   </div>
-  <div id="div-message" class="alert alert-dismissable alert-success" >
-  <p id="message" class="last-sync-msg">
-    <label>Último Proceso de Sincronización completado el <%= @last_sync.last_sync.to_date %> a las <%= @last_sync.last_sync.to_s(:time) %></label></p>
-</div>
+  
+  <% if @last_sync %>
+    <div id="div-message" class="alert alert-dismissable alert-success" >
+        <p id="message" class="last-sync-msg">
+            <label>Último Proceso de Sincronización completado el <%= @last_sync.last_sync.to_date %> a las <%= @last_sync.last_sync.to_s(:time) %></label>
+        </p>
+    </div>
+  <% end %>
 </div>
