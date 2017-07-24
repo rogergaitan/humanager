@@ -1,5 +1,19 @@
+# == Schema Information
+#
+# Table name: companies
+#
+#  id              :integer          not null, primary key
+#  code            :integer
+#  name            :string(255)
+#  label_reports_1 :text
+#  label_reports_2 :text
+#  label_reports_3 :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
 class Company < ActiveRecord::Base
-  attr_accessible :code, :name, :label_reports_1, :label_reports_2, :label_reports_3
+  attr_accessible :code, :name, :label_reports_1, :label_reports_2, :label_reports_3, :page_footer
 
   has_many :payroll
 
