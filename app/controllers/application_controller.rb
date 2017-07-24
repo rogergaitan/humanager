@@ -104,11 +104,19 @@ class ApplicationController < ActionController::Base
 	    @c = 0; @ca = 0
 	    @companies = []
 	    @companies_fb = {}
-	    
+        
 	    @empmaestcc.each do |cfb|
+          empagropecuaria = Empagropecuaria.find_by_iemp cfb.iemp  #get related empagropecuaria to add or update report and page footer fields
+            
 	      if Company.where('code = ?', cfb.iemp).empty?
+            
 	        @new_company = Company.new( :code => cfb.iemp,
-	                                    :name => "#{cfb.ncc}" )
+	                                    :name => "#{cfb.ncc}",
+                                        :label_reports_1 => empagropecuaria.srotulorpt1,
+                                        :label_reports_2 => empagropecuaria.srotulorpt2,
+                                        :label_reports_3 => empagropecuaria.srotulorpt3,
+                                        :page_footer => empagropecuaria.sinfopiepagina
+                                      )
 
 	        if @new_company.save
 	          @companies << @new_company
@@ -121,7 +129,11 @@ class ApplicationController < ActionController::Base
 	      else
 	        # UPDATE
 	        @update_company = Company.find_by_code(cfb.iemp)
-	        params[:company] = { :name => "#{cfb.ncc}" }
+	        params[:company] = { :name => "#{cfb.ncc}", 
+                                 :label_reports_1 => empagropecuaria.srotulorpt1,
+                                 :label_reports_2 => empagropecuaria.srotulorpt2,
+                                 :label_reports_3 => empagropecuaria.srotulorpt3,
+                                 :page_footer => empagropecuaria.sinfopiepagina }
 
 	        if @update_company.update_attributes(params[:company])
 	          @ca += 1
