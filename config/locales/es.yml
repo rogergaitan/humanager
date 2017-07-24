@@ -540,6 +540,7 @@ es:
           label_reports_1: Rotulo en Reportes 1
           label_reports_2: Rotulo en Reportes 2
           label_reports_3: Rotulo en Reportes 3
+          page_footer: Pie de Página
         district:
           district: Distrito
           canton_id: Cantón
