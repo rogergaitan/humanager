@@ -210,7 +210,7 @@ Reasapp::Application.routes.draw do
   resources :categories
   resources :lines
 
-  resources :companies do
+  resources :companies, only: [:index] do
     collection do
       get :companies_fb
     end
