@@ -215,6 +215,9 @@ Reasapp::Application.routes.draw do
       get :companies_fb
     end
   end
+  
+  
+  resources :currencies, only: [:index, :edit, :update]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
