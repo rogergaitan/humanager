@@ -1,0 +1,7 @@
+<% if @last_sync %>
+    <div id="div-message" class="alert alert-dismissable alert-success" >
+        <p id="message" class="last-sync-msg">
+            <label>Último Proceso de Sincronización completado el <%= @last_sync.last_sync.to_date %> a las <%= @last_sync.last_sync.to_s(:time) %></label>
+        </p>
+    </div>
+<% end %>

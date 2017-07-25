@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.paginate(:page => params[:page], :per_page => 15).all
+    @last_sync = SyncLog.last
 
     respond_to do |format|
       format.html
