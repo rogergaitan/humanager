@@ -40,11 +40,11 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        flash[:notice] = 'User was successfully updated.'
+        flash[:notice] = 'Usuario actualizado correctamente.'
         format.html { redirect_to action: "index" }
         format.json { head :no_content }
       else
-        format.html { render action: "index" }
+        format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

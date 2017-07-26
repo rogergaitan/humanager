@@ -23,6 +23,9 @@
                                         <% if can? :read, User %>
                                             <li><a href=<%= users_path%>> Usuarios</a></li>
                                         <% end %>
+                                        <% if can? :read, Currency %>
+                                          <li><%= link_to "Monedas", currencies_path %></li>
+                                        <% end %>
                                     </ul>
 
                                     <h3 class="yamm-category">Organizacion</h3>

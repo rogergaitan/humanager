@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <div data-widget-group="group1" class="ui-sortable">
+
+   <%= render partial: 'shared/form_errors', locals: {model: @currency} %>
+
+    <div class="panel panel-primary">
+
+      <div class="panel-heading"></div>
+
+      <div class="panel-body panel-no-padding">
+        <%= form_for(@currency, :html => {:class => "form-horizontal row-border"}) do |f| %>
+          
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= f.label :name %></label>
+            <div class="col-sm-3">
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= f.label :symbol %></label>
+            <div class="col-sm-3">
+              <%= f.text_field :symbol, class: 'form-control' %>
+            </div>
+          </div>
+         
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <%= f.submit class: 'btn-primary btn'  %>
+                <%= link_to t('.cancel', default: t("helpers.links.cancel")),
+                  currencies_path, class: 'btn-default btn' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div> 

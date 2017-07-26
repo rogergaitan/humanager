@@ -109,16 +109,16 @@
 												<tr id="tr_<%= c.id %>" >
 													<td><%= c.name %></td>
 													<td><%= check_box_tag "create_#{c.id}", "#{c.id}", 
-														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_create %>
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_create) %>
 													</td>
 													<td><%= check_box_tag "view_#{c.id}", "#{c.id}", 
-														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_view %>
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_view) %>
 													</td>
 													<td><%= check_box_tag "modify_#{c.id}", "#{c.id}", 
-														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_modify %>
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_modify) %>
 													</td>
 													<td><%= check_box_tag "delete_#{c.id}", "#{c.id}", 
-														@permissionsUser.find_by_permissions_subcategory_id(c.id).p_delete %>
+														@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_delete) %>
 													</td>
 												</tr>
 											<% end %>
@@ -127,22 +127,22 @@
 												<tr id="tr_<%= c.id %>" >
 													<td><%= c.name %></td>
 													<td><%= check_box_tag "create_#{c.id}", "#{c.id}",
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_create %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_create) %>
 													</td>
 													<td><%= check_box_tag "view_#{c.id}", "#{c.id}", 
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_view %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_view) %>
 													</td>
 													<td><%= check_box_tag "modify_#{c.id}", "#{c.id}",
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_modify %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_modify) %>
 													</td>
 													<td><%= check_box_tag "delete_#{c.id}", "#{c.id}",
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_delete %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_delete) %>
 													</td>
 													<td><%= check_box_tag "close_#{c.id}", "#{c.id}", 
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_close %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_close) %>
 													</td>
 													<td><%= check_box_tag "accounts_#{c.id}", "#{c.id}",
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_accounts %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_accounts) %>
 													</td>
 												</tr>
 											<% end %>
@@ -151,10 +151,10 @@
 												<tr id="tr_<%= c.id %>" >
 													<td><%= c.name %></td>
 													<td><%= check_box_tag "pdf_#{c.id}", "#{c.id}",
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_pdf %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_pdf) %>
 													</td>
 													<td><%= check_box_tag "exel_#{c.id}", "#{c.id}",
-															@permissionsUser.find_by_permissions_subcategory_id(c.id).p_exel %>
+															@permissionsUser.find_by_permissions_subcategory_id(c.id).try(:p_exel) %>
 													</td>
 												</tr>
 											<% end %>
