@@ -1,15 +1,7 @@
 <div class="container-fluid">
   <div data-widget-group="group1" class="ui-sortable">
 
-    <% if @currency.errors.any? %>
-      <div class="alert alert-dismissable alert-danger">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <% @currency.errors.full_messages.each do |msg| %>
-          <p><%= msg %></p>
-        <% end %>
-        <br>
-      </div>
-    <% end %>
+   <%= render partial: 'shared/form_errors', locals: {model: @currency} %>
 
     <div class="panel panel-primary">
 
@@ -35,9 +27,9 @@
           <div class="panel-footer">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2">
-                <%= f.submit %>
-                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                  currencies_path, :class => 'btn-default btn' %>
+                <%= f.submit class: 'btn-primary btn'  %>
+                <%= link_to t('.cancel', default: t("helpers.links.cancel")),
+                  currencies_path, class: 'btn-default btn' %>
               </div>
             </div>
           </div>

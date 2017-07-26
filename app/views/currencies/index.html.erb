@@ -22,7 +22,7 @@
                <tbody>
                  <% @currencies.each do |currency|%>
                    <tr>
-                    <td><%= t("activerecord.models.currency.#{currency.currency_type}") %></td>
+                    <td><%= t("activerecord.attributes.currency.#{currency.currency_type}") %></td>
                     <td><%= currency.name %></td>
                     <td><%= currency.symbol %></td>
                     <td>
