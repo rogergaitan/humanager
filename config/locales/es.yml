@@ -27,6 +27,7 @@ es:
     personal_data: 'Datos Personales'
     employment_data: 'Empresa'
     contact: Contacto
+    page_gap: "&hellip;"
   routes:
     new: nuevo
     edit: editar
