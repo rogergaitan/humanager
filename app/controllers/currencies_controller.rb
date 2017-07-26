@@ -21,7 +21,7 @@ class CurrenciesController < ApplicationController
     def set_currency
       @currency = Currency.find params[:id]    
     rescue ActiveRecord::RecordNotFound
-      redirect_to currencies_path, alert: "La moneda que busca no existe"
+      redirect_to currencies_path
     end
   
 end
