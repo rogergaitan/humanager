@@ -298,6 +298,12 @@ es:
               other_payment:
                 blank: Este campo no puede quedar en blanco
                 invalid: Formato incorrecto
+          currency:
+            attributes:
+              name:
+                blank: es requerido
+              symbol:
+                blank: es requerido
       models:
         currency:
           one: Moneda
