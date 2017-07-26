@@ -25,7 +25,7 @@ class Entity < ActiveRecord::Base
   accepts_nested_attributes_for :addresses, :allow_destroy => true
   accepts_nested_attributes_for :contacts, :allow_destroy => true
 
-  attr_accessible :entityid, :name, :surname, :typeid, :telephones_attributes, 
+  attr_accessible :entityid, :name, :surname, :telephones_attributes,
                   :emails_attributes, :addresses_attributes, :contacts_attributes
 
   validates :name, :surname, :entityid, :presence => true
