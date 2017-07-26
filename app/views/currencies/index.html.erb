@@ -3,7 +3,7 @@
 </div>
 
 <div class="container-fluid">
-  <%= render "/layouts/message" %>
+  <%= render "/layouts/messages" %>
 
   <div class="row">
     <div class="col-xs-12">
@@ -22,13 +22,13 @@
                <tbody>
                  <% @currencies.each do |currency|%>
                    <tr>
-                    <td><%= currency.currency_type %></td>
+                    <td><%= t("activerecord.models.currency.#{currency.currency_type}") %></td>
                     <td><%= currency.name %></td>
                     <td><%= currency.symbol %></td>
                     <td>
                       <%= link_to edit_currency_path(currency), class: 'btn btn-xs btn-success-alt' do %>
                         <i class="fa fa-pencil"></i>
-                      <%end%>
+                      <% end %>
                     </td>
                    </tr>
                   <% end%>

@@ -299,6 +299,12 @@ es:
                 blank: Este campo no puede quedar en blanco
                 invalid: Formato incorrecto
       models:
+        currency:
+          name: Nombre
+          currency_type: Tipo
+          symbol: Simbolo
+          foreign: Extranjera
+          local: Local
         payment_type: Tipos de Pago
         detail_personnel_action:
           one: Accion de Personal
@@ -612,6 +618,7 @@ es:
           costs_center_id: Centro de Costo
           payroll_types: Tipos de planillas
           custom_calculation: Valor
+       
   date:
       abbr_day_names:
       - dom
