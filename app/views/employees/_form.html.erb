@@ -28,9 +28,9 @@
     
     <div class="tab-container">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
+        <li class="active"><a href="#tab1" data-toggle="tab">Personal</a></li>
         <li><a href="#tab2" data-toggle="tab"><%= t("tabs.contact") %></a></li>
-        <li><a href="#tab3" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
+        <li><a href="#tab3" data-toggle="tab">Laboral</a></li>
       </ul>
       <%= form_for @employee, :validate => true, :html => { :class => 'form-horizontal', :multipart => true, 
         :data => {:toggle => 'validator', :model_name => Employee.model_name, :reference_id => @employee.id} } do |f| %>
