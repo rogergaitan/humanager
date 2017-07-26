@@ -301,9 +301,9 @@ es:
           currency:
             attributes:
               name:
-                blank: es requerido
+                blank: no puede quedar en blanco
               symbol:
-                blank: es requerido
+                blank: no puede quedar en blanco
       models:
         currency:
           one: Moneda
