@@ -10,7 +10,7 @@ class CurrenciesController < ApplicationController
   
   def update
     if @currency.update_attributes params[:currency]
-      redirect_to currencies_path, notice: "Moneda actualizada correctamente"
+      redirect_to currencies_path, notice: "Moneda actualizada correctamente."
     else
       render :edit
     end
@@ -20,6 +20,8 @@ class CurrenciesController < ApplicationController
   
     def set_currency
       @currency = Currency.find params[:id]    
+    rescue ActiveRecord::RecordNotFound
+      redirect_to currencies_path, alert: "La moneda que busca no existe"
     end
   
 end
