@@ -548,6 +548,28 @@ class Ability
     # SESSION VALIDATION | --
     ######################################################################################
     can [:manage], SessionValidation
+    
+    ######################################################################################
+    # CURRENCIES | CONFIGURACION
+    ######################################################################################
+    currency = user.permissions_user.find_by_permissions_subcategory_id(list['Monedas'])
+    unless currency.nil?
+        if currency.p_create
+            can :create, Currency
+        end
+
+        if currency.p_view
+            can :read, Currency
+        end
+
+        if currency.p_modify
+            can :update, Currency
+        end
+
+        if currency.p_delete
+            can :destroy, Currency
+        end
+    end
 
   end
 end
