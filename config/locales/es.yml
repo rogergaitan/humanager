@@ -300,11 +300,7 @@ es:
                 invalid: Formato incorrecto
       models:
         currency:
-          name: Nombre
-          currency_type: Tipo
-          symbol: Simbolo
-          foreign: Extranjera
-          local: Local
+          one: Moneda
         payment_type: Tipos de Pago
         detail_personnel_action:
           one: Accion de Personal
@@ -618,6 +614,12 @@ es:
           costs_center_id: Centro de Costo
           payroll_types: Tipos de planillas
           custom_calculation: Valor
+        currency:
+          name: Nombre
+          currency_type: Tipo
+          symbol: Simbolo
+          foreign: Extranjera
+          local: Local
        
   date:
       abbr_day_names:
