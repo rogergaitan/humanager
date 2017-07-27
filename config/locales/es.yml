@@ -505,7 +505,7 @@ es:
           ccss_calculated: Calcula CCSS?
           department_id: Departamento
           means_of_payment_id: Medio de Pago
-          number_of_dependents: Dependientes
+          number_of_dependents: Numero de Dependientes
           occupation_id: 'Ocupación'
           payment_frequency_id: Frecuencia de Pago
           payment_method_id: Forma de Pago
