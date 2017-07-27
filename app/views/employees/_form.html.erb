@@ -117,8 +117,10 @@
                 </div>
               </div>
             </div>
-            
-            <%= image_tag(@employee.photo.photo_url, :class => 'img-thumbnail') if @employee.photo.photo_url %>
+            <% if @employee.photo.photo_url %>
+              <%= f.label :photo, :class => 'col-sm-2 control-label' %>
+              <%= image_tag(@employee.photo.photo_url, :class => 'img-thumbnail', :id => 'photo')  %>
+            <% end %>
           </div>
           
           <div class="tab-pane" id="tab3">
