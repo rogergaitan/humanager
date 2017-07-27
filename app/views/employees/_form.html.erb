@@ -75,7 +75,7 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">G</span>
-                  <%= f.enum_select( :gender, {:include_blank => false}, {:class => 'form-control'}) %>
+                  <%= f.select( :gender, translate_enum(:gender), {:include_blank => false}, {:class => 'form-control'}) %>
                 </div>
               </div>
             </div>
@@ -95,7 +95,7 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">EC</span>
-                  <%= f.enum_select( :marital_status, {:include_blank => false}, {:class => 'form-control'}) %>
+                  <%= f.select( :marital_status, translate_enum(:marital_status), {:include_blank => false}, {:class => 'form-control'}) %>
                 </div>
               </div>
             </div>

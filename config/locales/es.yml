@@ -96,6 +96,16 @@ es:
       home: Inicio
       other: Otros
       messages_general: Mensaje General
+  marital_status:
+    single: Soltero
+    married: Casado
+    divorced: Divorciado
+    widowed: Viudo
+    civil_union: Unión civil
+    engage: Comprometido
+  gender:
+    male: Masculino
+    female: Femenino
   activerecord:
       errors:
         models:
@@ -519,6 +529,7 @@ es:
           payroll_type_id: Tipo de Planilla Predeterminada
           number_employee: Número de Empleado
           account_bncr: Cuenta BNCR
+          photo: Foto
         entity:
           name: Nombre
           surname: Apellidos
