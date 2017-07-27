@@ -20,7 +20,7 @@
 		<div class="col-sm-3">
 			<div class="input-group">
 				<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-				<%= f.enum_select( :typephone, {:include_blank => false}, {:class => 'form-control'}) %>
+				<%= f.select(:typephone, translate_enum(:typephone), {:include_blank => false}, {:class => 'form-control'}) %>
 			</div>
 		</div>
 	</div>

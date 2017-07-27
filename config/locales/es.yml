@@ -106,6 +106,13 @@ es:
   gender:
     male: Masculino
     female: Femenino
+  typephone:
+    personal: Personal
+    home: Hogar
+    work: Trabajo
+  typeemail:
+    personal: Personal
+    work: Trabajo
   activerecord:
       errors:
         models:
@@ -638,6 +645,11 @@ es:
           symbol: Simbolo
           foreign: Extranjera
           local: Local
+        address:
+          province_id: Provincia
+          district_id: Distrito
+          canton_id: Cantón
+          address: Dirección
        
   date:
       abbr_day_names:
