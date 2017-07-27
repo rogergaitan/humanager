@@ -246,7 +246,8 @@ class ApplicationController < ActionController::Base
 	
 	# Sync employees
   	def sync
-	    abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido'])
+	    abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido', 
+                                                                                       'fnacimiento', 'isexo', 'zfoto'])
 
 	    c = 0
 	    ca = 0
@@ -256,6 +257,8 @@ class ApplicationController < ActionController::Base
 
 	      full_name = employee.ntercero
 	      last_name = employee.napellido
+        gender = employee.isexo
+        birthday = employee.fnacimiento
 
 	      if last_name.empty?
 	        last_name = 'nr'
@@ -263,12 +266,12 @@ class ApplicationController < ActionController::Base
 
 	      if Entity.where("entityid = ?", employee.init).empty?
 
-	        new_employee = Employee.new
+	        new_employee = Employee.new(:gender => gender, :birthday => birthday)
 	        entity = new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
 	                                              :surname => firebird_encoding(last_name.to_s), 
 	                                              :entityid => employee.init)
 	        entity.telephones.build
-	        new_employee.build_photo
+	        new_employee.build_photo 
 	        entity.emails.build
 	        entity.addresses.build
 
@@ -282,8 +285,13 @@ class ApplicationController < ActionController::Base
 	      else
 	        # UPDATE
 	        @update_entity = Entity.find_by_entityid(employee.init)
-	        params[:entity] = { :name => firebird_encoding(full_name.to_s), :surname => firebird_encoding(last_name.to_s) }
-	        if @update_entity.update_attributes(params[:entity])
+	        
+          @update_entity.name = firebird_encoding full_name.to_s
+          @update_entity.surname = firebird_encoding last_name.to_s
+          @update_entity.employee.gender = gender
+          @update_entity.employee.birthday = birthday
+
+	        if @update_entity.save
 	          ca += 1
 	        end
 	      end
