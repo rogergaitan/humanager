@@ -61,7 +61,7 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
-        format.html { redirect_to employees_path, notice: 'Employee was successfully updated.' }
+        format.html { redirect_to employees_path, notice: 'Empleado actualizado correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
