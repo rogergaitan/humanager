@@ -67,15 +67,7 @@
             <hr>
               <%= render 'forms/entity_form', :f => builder %>
 
-              <div class="form-group">
-                <%= f.label :number_employee, :class => 'col-sm-2 control-label' %>
-                <div class="col-sm-3">
-                  <div class="input-group">
-                    <span class="input-group-addon">N</span>
-                    <%= f.text_field :number_employee, :class => 'form-control' %>
-                  </div>
-                </div>
-              </div>
+              
 
             <% end %>
             <div class="form-group">
@@ -127,25 +119,24 @@
                 </div>
               </div>
             </div>
-
-            <%= f.fields_for :photo do |builder| %>
-              <div class="form-group">
-                <%= builder.label :photo, :class => 'col-sm-2 control-label' %>
-                <div class="col-sm-3">
-                  <%= image_tag(@employee.photo.photo_url, :class => 'img-thumbnail') if @employee.photo %>
-                  <span class="btn btn-default btn-file">
-                    <span class="fileinput-new">Select file</span>
-                    <%= builder.file_field :photo, :class => 'file_field' %>
-                  </span>
-                </div>
-              </div>
-            <% end %>   
+            
+            <%= image_tag(@employee.photo.photo_url, :class => 'img-thumbnail') if @employee.photo.photo_url %>
           </div>
           
           <div class="tab-pane" id="tab3">
             <h2>Datos Laborales</h2>
             <hr>
-
+            
+            <div class="form-group">
+              <%= f.label :number_employee, :class => 'col-sm-2 control-label' %>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <span class="input-group-addon">N</span>
+                  <%= f.text_field :number_employee, :class => 'form-control' %>
+                </div>
+              </div>
+            </div>
+            
             <div class="form-group">
               <%= f.label :join_date, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
