@@ -66,16 +66,14 @@
             <h2>Datos Personales</h2>
             <hr>
               <%= render 'forms/entity_form', :f => builder %>
-
-              
-
             <% end %>
+            
             <div class="form-group">
               <%= f.label :gender, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">G</span>
-                  <%= f.select( :gender, translate_enum(:gender), {:include_blank => false}, {:class => 'form-control'}) %>
+                  <%= f.select(:gender, translate_enum(:gender), {:include_blank => false}, {:class => 'form-control', :disabled => 'true'}) %>
                 </div>
               </div>
             </div>
@@ -84,7 +82,7 @@
               <%= f.label :birthday, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group">
-                  <%= f.text_field :birthday, :class => 'form-control' %>
+                  <%= f.text_field :birthday, :class => 'form-control', :disabled => 'true' %>
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
               </div>
