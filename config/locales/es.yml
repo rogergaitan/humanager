@@ -511,7 +511,7 @@ es:
           payment_method_id: Forma de Pago
           role_id: Rol
           social_insurance: Seguro Social
-          spouse: 'Cónyuge'
+          spouse: Nombre del Cónyuge
           wage_payment: Precio Unidad de Pago
           position_id: Puesto
           price_defined_work: Precio definido en Labor
@@ -522,7 +522,7 @@ es:
         entity:
           name: Nombre
           surname: Apellidos
-          entityid: 'Cédula'
+          entityid: Identificación
           typeid: 'Tipo Identificación'
         category:
           code: Código
