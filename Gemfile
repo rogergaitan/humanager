@@ -23,6 +23,7 @@ gem 'rack', '~> 1.4.5'
 gem 'thin'
 gem 'cancan'
 gem 'hirb', '~> 0.7.0'
+gem 'jquery_mask_rails', '~> 0.1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
