@@ -39,7 +39,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.save
-        format.html { redirect_to @occupation, notice: 'Occupation was successfully created.' }
+        format.html { redirect_to occupations_path, notice: 'Ocupación creada existosamente.' }
         format.json { render json: @occupation, status: :created, location: @occupation }
       else
         format.html { render action: "new" }
@@ -55,7 +55,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.update_attributes(params[:occupation])
-        format.html { redirect_to @occupation, notice: 'Occupation was successfully updated.' }
+        format.html { redirect_to occupations_path, notice: 'Ocupación actualizada exitosamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -74,7 +74,7 @@ class OccupationsController < ApplicationController
       message = t('.notice.can_be_deleted')
     else
       @occupation.destroy
-      message = t('.notice.successfully_deleted')
+      message = 'Ocupación eliminada existosamente.'
     end
 
     respond_to do |format|

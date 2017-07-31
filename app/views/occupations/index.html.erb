@@ -34,7 +34,7 @@
             <tbody>
               <% @occupations.each do |occupation| %>
                 <tr>
-                  <td><%= link_to occupation.description, occupation_path(occupation) %></td>
+                  <td><%= link_to occupation.name, occupation_path(occupation) %></td>
                   <td>
                     <% if can? :update, Occupation %>
                       <%= link_to edit_occupation_path(occupation), :class => 'btn btn-xs btn-success-alt' do %>
