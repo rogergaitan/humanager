@@ -1,5 +1,6 @@
 $(document).ready(function($) {
   //Gets all data from employees
+  
   $.getJSON('/employees/load_employees', function(employee_data) {
     $('#load_employee').autocomplete({
       source: $.map(employee_data, function(item) {
@@ -31,3 +32,5 @@ $(document).ready(function($) {
     }
   });
 })
+
+$('.telephone-field').mask('0000-0000');

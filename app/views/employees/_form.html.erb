@@ -11,6 +11,7 @@
 
 <%= javascript_include_tag 'resources' %>
 <%= javascript_include_tag 'employees/dynamic_fields' %>
+<%= javascript_include_tag 'employees/employee' %>
 
 <div class="container-fluid">
   <div data-widget-group="group1" class="ui-sortable">
@@ -158,7 +159,7 @@
             <div class="form-group">
               <%= f.label :account_bncr, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.text_field :account_bncr, :class => 'form-control', :maxlength=>"12", type: "number" %>
+                <%= f.text_field :account_bncr, :class => 'form-control', :maxlength=>"12" %>
               </div>
             </div>
 
@@ -243,7 +244,7 @@
             <div class="form-group">
               <%= f.label :wage_payment, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.text_field :wage_payment, :class => 'form-control' %>
+                <%= f.number_field :wage_payment, :class => 'form-control', :min => '0' %>
               </div>
             </div>
           </div>
@@ -265,3 +266,4 @@
 
   </div>
 </div>
+
