@@ -140,7 +140,9 @@ Reasapp::Application.routes.draw do
 
   resources :provinces
 
-  resources :departments
+  resources :departments do
+    get 'search', on: :collection 
+  end
 
   resources :means_of_payments
 

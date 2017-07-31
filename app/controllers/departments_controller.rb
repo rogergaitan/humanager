@@ -87,4 +87,8 @@ class DepartmentsController < ApplicationController
   def resources
     @costs_centers = CostsCenter.where(company_id: current_user.company_id)
   end
+  
+  def search
+    @deparments = Department.search params[:query]
+  end
 end
