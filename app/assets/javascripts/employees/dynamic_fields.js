@@ -133,8 +133,10 @@ $(document).ready(function() {
 		if($('#employee_price_defined_work').is(':checked')){
 			$('#employee_wage_payment').attr('disabled','disabled');
 			$('#employee_wage_payment').val('');
+      $('#employee_currency_id').attr('disabled', 'disabled');
 		} else {
 			$('#employee_wage_payment').removeAttr('disabled');
+      $('#employee_currency_id').removeAttr('disabled');
 		}
 	}
 
