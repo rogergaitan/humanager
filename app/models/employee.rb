@@ -5,7 +5,7 @@ class Employee < ActiveRecord::Base
   					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
             :photo_attributes, :position_id, :employee_id, :is_superior,
             :payment_unit_id, :price_defined_work, :payroll_type_id,
-            :number_employee, :account_bncr
+            :number_employee, :account_bncr, :currency_id
   
   validates_uniqueness_of :number_employee, :allow_nil => true
 
@@ -18,6 +18,7 @@ class Employee < ActiveRecord::Base
   belongs_to :position
   belongs_to :payment_unit
   belongs_to :payroll_type
+  belongs_to :currency
   has_one :photo, :dependent => :destroy
   has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits

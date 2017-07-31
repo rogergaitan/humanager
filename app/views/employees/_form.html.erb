@@ -247,8 +247,16 @@
                 <%= f.number_field :wage_payment, :class => 'form-control', :min => '0' %>
               </div>
             </div>
+            
+            <div class="form-group">
+              <%= f.label :currency_id, :class => 'col-sm-2 control-label' %>
+              <div class="col-sm-3">
+                <%= f.collection_select(:currency_id, @currencies, :id, :name, 
+                  options = {:prompt => false}, html_options = {:class => 'form-control' }) %>
+              </div>
+            </div>
           </div>
-
+          
         </div>    
 
         <div class="panel-footer">

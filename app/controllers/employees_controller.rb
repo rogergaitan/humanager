@@ -155,6 +155,7 @@ class EmployeesController < ApplicationController
      @superior = Employee.all
      @payment_unit = Employee.all_payment_unit
      @payroll_type = Employee.all_payroll_type(current_user.company_id)
+     @currencies = Currency.all
   end
 
   def search

@@ -514,7 +514,7 @@ es:
           surname: Apellido
           employee_id: Jefe Inmediato
           entity_id: Entidad
-          join_date: Ingreso
+          join_date: Fecha Ingreso
           seller: Vendedor
           gender: 'Género'
           birthday: 'Nacimiento'
@@ -527,7 +527,7 @@ es:
           payment_frequency_id: Frecuencia de Pago
           payment_method_id: Forma de Pago
           role_id: Rol
-          social_insurance: Seguro Social
+          social_insurance: Numero de Seguro Social
           spouse: Nombre del Cónyuge
           wage_payment: Precio Unidad de Pago
           position_id: Puesto
@@ -535,8 +535,9 @@ es:
           payment_unit_id: Unidad de Pago
           payroll_type_id: Tipo de Planilla Predeterminada
           number_employee: Número de Empleado
-          account_bncr: Cuenta BNCR
+          account_bncr: Numero de Cuenta Bancaria
           photo: Foto
+          currency_id: Moneda
         entity:
           name: Nombre
           surname: Apellidos
