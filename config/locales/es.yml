@@ -322,6 +322,15 @@ es:
                 blank: no puede quedar en blanco
               symbol:
                 blank: no puede quedar en blanco
+          occupation:
+            attributes:
+              name:
+                blank: no puede quedar en blanco
+                too_long: maximo 30 caracteres
+              inss_code:
+                too_long: maximo 30 caracteres
+              other_code:
+                too_long: maximo 30 caracteres
       models:
         currency:
           one: Moneda
@@ -438,12 +447,12 @@ es:
         email:
           typeemail: Tipo de email
         position:
-          position: Puesto
+          position: Nombre del Puesto
           description: Descripción
         occupation:
-          description: Descripción
-          ins_code: Código INS
-          ccss_code: Código CCSS
+          name: Nombre de la Ocupación
+          inss_code: Código para Reportes INSS
+          other_code: Código para Reportes Otro
         role:
           role: Rol
           description: 'Descripción'
