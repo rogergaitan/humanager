@@ -166,7 +166,7 @@
             <div class="form-group">
               <%= f.label :occupation_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.collection_select(:occupation_id, @occupation, :id, :description , 
+                <%= f.collection_select(:occupation_id, @occupation, :id, :name,
                       options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
               </div>
             </div>
@@ -244,7 +244,7 @@
             <div class="form-group">
               <%= f.label :wage_payment, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.number_field :wage_payment, :class => 'form-control', :min => '0' %>
+                <%= f.text_field :wage_payment, :class => 'form-control' %>
               </div>
             </div>
             
