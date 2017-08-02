@@ -58,7 +58,7 @@
       <div class="panel-body panel-no-padding">
 
         <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator',
-          :model_name => WorkBenefit.model_name, :reference_id => @work_benefit.id} } do |f| %>
+          :model_name => WorkBenefit.model_name, :reference_id => @work_benefit.id, :company => true} } do |f| %>
 
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>

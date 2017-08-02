@@ -6,7 +6,7 @@ $(document).ready( function() {
     language: "es"
   }).datepicker('setDate', new Date());
 
-  $('form').submit(function(event) {
+  $('form[data-company="true"]').submit(function(event) {
     if($('#user_company_id option:selected').val() == "" ){
       event.preventDefault();
       var message = 'Seleccione una Compañia';

@@ -19,7 +19,8 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @payroll, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator'} } do |f| %>
+        <%= form_for @payroll, :html => { :class => 'form-horizontal row-border', 
+          :data => {:toggle => 'validator', :company => true} } do |f| %>
           <div class="form-group">
             <%= f.label :payroll_type_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
