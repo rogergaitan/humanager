@@ -156,6 +156,7 @@ es:
               name:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
+                too_long: maximo 30 carácteres
               employee_id:
                 blank: Este campo no puede quedar en blanco
           user:
@@ -460,9 +461,9 @@ es:
           role: Rol
           description: 'Descripción'
         department:
-          name: Departamento
-          employee_id: Encargado
-          costs_center_id: Centro de Costo
+          name: Nombre del Departamento
+          employee_id: Nombre del Encargado
+          costs_center_id: Centro de Costos
         vendor:
           credit_limit: Crédito
         entity:
