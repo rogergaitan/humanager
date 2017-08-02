@@ -39,7 +39,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.save
-        format.html { redirect_to occupations_path, notice: 'Ocupación creada existosamente.' }
+        format.html { redirect_to @occupation, notice: 'Ocupación creada existosamente.' }
         format.json { render json: @occupation, status: :created, location: @occupation }
       else
         format.html { render action: "new" }
@@ -55,7 +55,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.update_attributes(params[:occupation])
-        format.html { redirect_to occupations_path, notice: 'Ocupación actualizada exitosamente.' }
+        format.html { redirect_to @occupation, notice: 'Ocupación actualizada exitosamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

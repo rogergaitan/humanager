@@ -17,7 +17,7 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @occupation, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for @occupation, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
           
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
