@@ -4,4 +4,7 @@ class Position < ActiveRecord::Base
   
   validates :position,  :presence => true,
                         :uniqueness => true
+  
+  validates :position, length: { maximum: 30 }
+  validates :description, length: { maximum: 200 }
 end
