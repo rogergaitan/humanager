@@ -148,7 +148,7 @@ class EmployeesController < ApplicationController
    
   def get_employee_info
      @department = Department.find(:all, :select =>['id','name'])
-     @occupation = Occupation.find(:all, :select =>['id','description'])
+     @occupation = Occupation.find(:all, :select =>['id','name'])
      @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
      @position = Position.find(:all, :select =>['id','position'])
