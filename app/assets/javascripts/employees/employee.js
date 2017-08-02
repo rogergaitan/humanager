@@ -34,3 +34,5 @@ $(document).ready(function($) {
 })
 
 $('.telephone-field').mask('0000-0000');
+
+
