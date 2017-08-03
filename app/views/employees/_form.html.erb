@@ -166,16 +166,26 @@
             <div class="form-group">
               <%= f.label :occupation_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.collection_select(:occupation_id, @occupation, :id, :name,
-                      options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+                <div class="input-group">
+                  <%=  f.hidden_field :occupation_id %>
+                  <%= text_field_tag 'load_occupation', nil, :class => 'form-control', :for => :occupation_id %>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
             <div class="form-group">
               <%= f.label :position_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.collection_select(:position_id, @position, :id, :position, 
-                      options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+                <div class="input-group">
+                  <%= f.hidden_field :position_id  %>
+                  <%= text_field_tag 'load_position', nil, :class => 'form-control', :for => :position_id  %>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -196,9 +206,14 @@
             <div class="form-group">
               <%= f.label :department_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <% h = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
-                <%= f.collection_select(:department_id, @department, :id, :name , 
-                      options = {:prompt => h}, html_options = {:class => 'form-control'}) %>
+                <div class="input-group">
+                  <%= f.hidden_field :department_id %>
+                  <%= text_field_tag 'load_department', nil, :class => 'form-control', :for => :department_id %>
+                  
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
 

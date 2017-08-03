@@ -15,4 +15,8 @@ class Occupation < ActiveRecord::Base
   validates :name, presence: true
   validates :name, length: { maximum: 30 }
   validates :inss_code, :other_code, length: { maximum: 20 }
+  
+  def self.search(name)
+    where("name LIKE ?", "#{name}%") 
+  end
 end

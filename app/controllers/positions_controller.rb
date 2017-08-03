@@ -1,6 +1,6 @@
 class PositionsController < ApplicationController
   load_and_authorize_resource
-
+  skip_load_and_authorize_resource :only => [:search]
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Position, params[:id])
   end
@@ -91,6 +91,13 @@ class PositionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to positions_url, notice: message }
       format.json { head :no_content }
+    end
+  end
+  
+  def search
+    @positions = Position.search params[:name]
+    respond_to do |format|
+      format.json { render json: @positions }
     end
   end
 end

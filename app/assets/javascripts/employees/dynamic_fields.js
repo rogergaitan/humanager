@@ -167,10 +167,81 @@ $(document).ready(function() {
             }
         });
         if($("#employee_employee_id").val()){
-            var load_employee_name = $.data(document.body, 'employee_' + $("#employee_employee_id").val()+'');
+            var load_employee_name = $.data(document.body, 'employee_' + $("#employee_employee_id").val());
             $("#load_employee").val(load_employee_name);
         }
     });
+    
+    $.getJSON('/departments/search', function(data) {
+      $('#load_department').autocomplete({
+        source: $.map(data, function(item){
+          $.data(document.body, 'department_' + item.id + "", item.name);
+            return { label: item.name, id: item.id }
+        }),
+        
+        select: function(event, ui) {
+          if(ui.item.id) {
+           $('#employee_department_id').val(ui.item.id);
+          }
+        },
+        
+        focus: function(event, ui) {
+          $('#load_department').val(ui.item.label);  
+        }
+      });
+      
+      if($('#employee_department_id').val()) {
+        var load_department_name = $.data(document.body, 'department_' + $('#employee_department_id').val());
+        $('#load_department').val(load_department_name);
+      }
+    });
+    
+    $.getJSON('/positions/search', function(data) {
+      $('#load_position').autocomplete({
+        source: $.map(data, function(item){
+          $.data(document.body, 'position_' + item.id + "", item.position);
+            return { label: item.position, id: item.id }
+        }),
+        
+        select: function(event, ui) {
+          if(ui.item.id) {
+           $('#employee_position_id').val(ui.item.id);
+          }
+        },
+        
+        focus: function(event, ui) {
+          $('#load_position').val(ui.item.label);  
+        }
+      });
+      
+      if($('#employee_position_id').val()) {
+        $('#load_position').val($.data(document.body, 'position_' + $('#employee_department_id').val()));
+      }
+    });
+    
+    $.getJSON('/occupations/search', function(data) {
+      $('#load_occupation').autocomplete({
+        source: $.map(data, function(item){
+          $.data(document.body, 'occupation_' + item.id + "", item.name);
+            return { label: item.name, id: item.id }
+        }),
+        
+        select: function(event, ui) {
+          if(ui.item.id) {
+           $('#employee_occupation_id').val(ui.item.id);
+          }
+        },
+        
+        focus: function(event, ui) {
+          $('#load_occupation').val(ui.item.label);
+        }
+      });
+      
+      if($('#employee_occupation_id').val()) {
+        $('#load_occupation').val($.data(document.body, 'occupation_' + $('#employee_occupation_id').val()));
+      }
+    });
+    
 
 	$('form').submit(function(e) {
 		if(!$(this).parsley().validate()) {

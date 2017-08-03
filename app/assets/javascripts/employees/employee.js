@@ -36,3 +36,4 @@ $(document).ready(function($) {
 $('.telephone-field').mask('0000-0000');
 
 
+$('#employee_wage_payment').mask('0000000000.00');
