@@ -246,20 +246,26 @@ class ApplicationController < ActionController::Base
 	
 	# Sync employees
   	def sync
-	    abanits = Abanit.where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido', 
-                                                                                       'fnacimiento', 'isexo', 'zfoto'])
+	    abanits = Abanit.includes(:abamunicipios, :abanitsddirecciones)
+                       .where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido', 
+                                                                              'fnacimiento', 'isexo', 'zfoto'])
 
 	    c = 0
 	    ca = 0
 	    @syn_data = {}
 
 	    abanits.each do |employee|
-
-	      full_name = employee.ntercero
+        
+        full_name = employee.ntercero
 	      last_name = employee.napellido
         gender = employee.isexo
         birthday = employee.fnacimiento
-
+        country = employee.abamunicipios.try :nnombre
+        province = employee.abamunicipios.try :idep
+        canton = employee.abamunicipios.try :imun
+        photo = employee.zfoto
+        address = employee.abanitsddirecciones.try :tdireccion
+        
 	      if last_name.empty?
 	        last_name = 'nr'
 	      end
@@ -270,11 +276,21 @@ class ApplicationController < ActionController::Base
 	        entity = new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
 	                                              :surname => firebird_encoding(last_name.to_s), 
 	                                              :entityid => employee.init)
-	        entity.telephones.build
-	        new_employee.build_photo 
-	        entity.emails.build
-	        entity.addresses.build
-
+	        
+          new_employee.build_photo photo
+          entity.telephones.build
+ 	        entity.emails.build
+          
+	        if province
+            province = Province.where(:name => province).first_or_initialize(:name => province)
+            canton = Canton.where(:name => imun).first_or_initialize(:name => imun, :provice => province)
+            
+            entity.addresses.build(:province => province, :canton => canton, 
+                                                 :country => country, :address => address)
+          else
+            entity.addresses.build
+          end
+          
 	        if new_employee.save
 	          c += 1
 	        else
@@ -288,8 +304,6 @@ class ApplicationController < ActionController::Base
 	        
           @update_entity.name = firebird_encoding full_name.to_s
           @update_entity.surname = firebird_encoding last_name.to_s
-          @update_entity.employee.gender = gender
-          @update_entity.employee.birthday = birthday
 
 	        if @update_entity.save
 	          ca += 1
