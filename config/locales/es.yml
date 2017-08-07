@@ -660,10 +660,10 @@ es:
           foreign: Extranjera
           local: Local
         address:
-          province_id: Provincia
-          district_id: Distrito
-          canton_id: Cantón
+          department: Departamento o Provincia
+          municipality: Municipio o Ciudad
           address: Dirección
+          country: País
        
   date:
       abbr_day_names:
