@@ -159,6 +159,8 @@ es:
                 too_long: maximo 30 carácteres
               employee_id:
                 blank: Este campo no puede quedar en blanco
+              costs_center_id:
+                blank: Este campo no puede quedar en blanco
           user:
             attributes:
               name:

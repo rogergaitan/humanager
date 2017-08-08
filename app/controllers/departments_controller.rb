@@ -1,7 +1,7 @@
 class DepartmentsController < ApplicationController
   load_and_authorize_resource
   skip_load_and_authorize_resource :only => [:search]
-  before_filter :resources, :only => [:new, :edit]
+  before_filter :resources, :only => [:new, :edit, :create, :update]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Department, params[:id])
