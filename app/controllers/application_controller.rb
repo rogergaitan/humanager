@@ -83,6 +83,7 @@ class ApplicationController < ActionController::Base
 		@sync[:users] = usersfb
 		@sync[:employees] = sync
 		@sync[:account] = accountfb
+    @sync[:payment_type] = PaymentType.sync_fb
 
 		log_sync
 
