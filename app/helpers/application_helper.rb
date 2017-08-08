@@ -42,7 +42,7 @@ module ApplicationHelper
 
 	def all_companies_selector(company_id)
 		@companies = Company.all
-		collection_select(:user, :company_id, @companies, :id, :name,
+		collection_select(:user, :company_id, @companies, :code, :name,
 		    options = { :prompt => true, :selected => company_id }, 
 		    html_options = { :class => 'form-control', :style => 'margin-top: 10px', 
 		    	:data => { :url => change_company_users_path }
