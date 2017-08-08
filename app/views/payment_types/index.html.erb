@@ -22,16 +22,9 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <div class="panel panel-default">
+      <div class="panel panel-primary">
         
-        <div class="panel-heading">
-          <div class="panel-ctrls">
-            Mostrar Cerradas
-            <input id="show_closed" checked class="bootstrap-switch" type="checkbox" data-size="mini" data-on-text= "<i class='fa fa-check'></i>"
-              data-on-color= "success" data-off-text= "<i class='fa fa-times'></i>" data-off-color="danger">
-          </div>
-        </div>
-
+        <div class="panel-heading"></div>
         <div class="panel-body panel-no-padding">
           <table class="table table-striped">
             <thead>
@@ -40,7 +33,6 @@
                 <th><%= model_class.human_attribute_name(:name) %></th>
                 <th><%= model_class.human_attribute_name(:performance_unit) %></th>
                 <th><%= model_class.human_attribute_name(:factor) %></th>
-                
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
