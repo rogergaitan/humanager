@@ -16,7 +16,7 @@ class PaymentType < ActiveRecord::Base
       #seach for both fields to find unique payment type
       if PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).empty?
         payment_type = PaymentType.new(company_id:  labtdcto.iemp, contract_code: labtdcto.itdcontrato,
-                                      name: labtdcto.ntdcontrato, performance_unit: labtdcto.nunidadrec,
+                                      name: labtdcto.ntdcontrato, performance_unit: labtdcto.nunidadrec.encode('UTF-8', 'iso-8859-1'),
                                       factor: labtdcto.itdcalculo)
         
         if payment_type.save
@@ -28,7 +28,7 @@ class PaymentType < ActiveRecord::Base
         end
       else
         payment_type = PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).first
-        payment_type_params = {name: labtdcto.ntdcontrato, performance_unit: labtdcto.nunidadrec,
+        payment_type_params = {name: labtdcto.ntdcontrato, performance_unit: labtdcto.nunidadrec.encode('UTF-8', 'iso-8859-1'),
                                                    factor: labtdcto.itdcalculo}
     
         if payment_type.update_attributes(payment_type_params)
