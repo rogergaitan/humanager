@@ -25,29 +25,29 @@
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :name, :class => 'form-control', :required => true %>
+              <%= f.text_field :name, :class => 'form-control', :required => true, :disabled => true %>
               <div class="help-block with-errors"></div>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <%= f.label :performance_unit, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :description, :class => 'form-control' %>
+              <%= f.text_field :performance_unit, :class => 'form-control', :disabled => true %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :contract_code, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :contract_code, :class => 'form-control', :required => true %>
+              <%= f.text_field :contract_code, :class => 'form-control', :required => true, :disabled => true %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :factor, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :factor, :class => 'form-control', :required => true %>
+              <%= f.text_field :factor, :class => 'form-control', :required => true, :disabled => true %>
               <div class="help-block with-errors"></div>
             </div>
           </div>
