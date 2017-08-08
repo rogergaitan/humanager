@@ -5,15 +5,6 @@
 
 <div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
-  <div class="options">
-    <div class="btn-toolbar">
-      <% if can? :create, PaymentType %>
-        <%= link_to new_payment_type_path, :class => 'btn btn-primary' do %>
-          <i class="fa fa-plus"></i>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
 </div>
 
 <div class="container-fluid">
@@ -23,7 +14,6 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="panel panel-primary">
-        
         <div class="panel-heading"></div>
         <div class="panel-body panel-no-padding">
           <table class="table table-striped">
