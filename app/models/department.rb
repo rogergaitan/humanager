@@ -20,9 +20,6 @@ class Department < ActiveRecord::Base
 	validates :name, :presence => true, :uniqueness => true
   validates :name, :length => { maximum: 30 }
   
-	validates :employee_id, :presence => true
-	validates :costs_center_id, :presence => true
-  
   def self.search(query)
     where("name LIKE ?", "#{query}%")
   end
