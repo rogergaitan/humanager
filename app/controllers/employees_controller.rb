@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
   load_and_authorize_resource
   before_filter :get_address_info, :only => [:new, :edit]
   before_filter :get_employee_info, :only => [:new, :edit]
-  before_filter :set_employee_superior_and_departments, :only => [:index, :search]
+  before_filter :set_employee_superior_and_departments, :only => [:index, :search, :search_all]
   
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Employee, params[:id])
