@@ -1,0 +1,39 @@
+<%- model_class = Task -%>
+
+<div class="panel-heading"></div>
+
+<div class="panel-body panel-no-padding" id="list_tasks">
+  
+  <table class="table table-striped" id="task-data">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:nactivity) %></th>
+        <th><%= model_class.human_attribute_name(:itask) %></th>
+        <th><%= model_class.human_attribute_name(:ntask) %></th>
+        <th><%= model_class.human_attribute_name(:nunidad) %></th>
+        <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= task.nactivity %></td>
+          <td><%= task.itask %></td>
+          <td><%= task.ntask %></td>
+          <td><%= task.nunidad %></td>
+          <td>
+            <% if can? :update, Task %>
+              <%= link_to edit_task_path(task), :class => 'btn btn-xs btn-success-alt' do %>
+                <i class="fa fa-pencil"></i>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="text-right">    
+    <%= will_paginate @task %>
+  </div>
+</div>

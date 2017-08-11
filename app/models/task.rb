@@ -3,17 +3,18 @@ class Task < ActiveRecord::Base
 	has_many :payroll_logs
  	attr_accessible  :iactivity, :itask, :ntask, :nunidad, :currency_id, :cost, :nactivity
 
- 	def self.search(search_code, search_desc, page, per_page = nil)
+ 	def self.search(search_activity, search_code, search_desc, page)
 	    query = ""
 	    params = []
+      params.push("tasks.nactivity like '%#{search_activity}%'") unless search_activity.empty?
 	    params.push(" tasks.itask like '%#{search_code}%' ") unless search_code.empty?
 	    params.push(" tasks.ntask like '%#{search_desc}%' ") unless search_desc.empty?
 	    query = build_query(params)
 	    
 	    if(query != "")
-	    	Task.where(query).paginate(:page => page, :per_page => 15)
+	    	Task.where(query).paginate(:page => page, :per_page => 10)
 	    else
-	    	Task.paginate(:page => page, :per_page => 15)
+	    	Task.paginate(:page => page, :per_page => 10)
 	    end
 	end
 

@@ -16,20 +16,25 @@ $(document).ready(function() {
     search_all();
     $('#search_code').val('');
     $('#search_desc').val('');
+    $('#search_activity').val('');
   });
 
   function search_task() {
     var code = $('#search_code').val(),
-        description = $('#search_desc').val();
+        description = $('#search_desc').val(),
+        activity = $('#search_activity').val();
 
-    if( code.length >= 1 || description.length >= task.search_length || code != "" || description != "") {
+    if( code.length >= 1 || description.length >= task.search_length || activity.length >= task.search_length || 
+         code != "" || description != "" || activity != "") 
+    {
 
       return $.ajax({
         url: $('#search_form').attr('action'),
         dataType: "script",
         data: {
           search_code: code,
-          search_desc: description
+          search_desc: description,
+          search_activity: activity
         }
       });
     }
@@ -41,7 +46,8 @@ $(document).ready(function() {
       dataType: "script",
       data: {
           search_code: "",
-          search_desc: ""
+          search_desc: "",
+          search_activity: ""
         }
     });
   }

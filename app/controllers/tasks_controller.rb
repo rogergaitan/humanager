@@ -49,7 +49,7 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks = Task.search(params[:search_code], params[:search_desc], params[:page], params[:per_page])
+    @tasks = Task.search(params[:search_activity], params[:search_code], params[:search_desc], params[:page])
     respond_with @tasks
   end
   
