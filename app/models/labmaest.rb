@@ -4,4 +4,5 @@ class Labmaest < ActiveRecord::Base
 	  establish_connection :firebird
   	attr_accessible :iactividad, :ilabor, :nlabor, :icuenta, :mcostolabor
 
+    has_one :actividad, foreign_key: :iactividad
 end
