@@ -17,12 +17,12 @@
       <% unless @employees.empty?  %>
         <% @employees.each do |employee| %>
           <tr>
-            <td><%= employee.entity.entityid %></td>
+            <td><%= employee.entity.try :entityid %></td>
             <td>
-              <%= employee.entity.name %>
+              <%= employee.entity.try :name %>
             </td>
             <td>
-              <%= employee.entity.surname %>
+              <%= employee.entity.try :surname %>
             </td>
 
             <td>
