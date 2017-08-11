@@ -58,7 +58,7 @@
 
               <h2>Dirección</h2>
               <hr>
-              <%= builder.fields_for :addresses do |address| %>
+              <%= builder.fields_for :address do |address| %>
                 <%= render 'forms/address_form', :f => address %>
               <% end %>
           </div>
