@@ -14,7 +14,7 @@ RSpec.describe PaymentType, :type => :model do
   context "when payment type exists" do
     it "updates data from firebird" do
       payment_type = PaymentType.create(company_id:  1, contract_code: 1,
-                                      name: "test name", performance_unit: "test unit",
+                                      name: "test name", payment_unit: "test unit",
                                       factor: "test factor")
       
       PaymentType.sync_fb
@@ -22,7 +22,7 @@ RSpec.describe PaymentType, :type => :model do
       payment_type.reload
       
       expect(payment_type.name).not_to eq("test name")
-      expect(payment_type.performance_unit).not_to eq("test unit")
+      expect(payment_type.payment_unit).not_to eq("test unit")
       expect(payment_type.factor).not_to eq("test factor")
     end
   end
