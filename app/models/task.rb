@@ -1,6 +1,7 @@
 class Task < ActiveRecord::Base
 
 	has_many :payroll_logs
+  belongs_to :currency
  	attr_accessible  :iactivity, :itask, :ntask, :nunidad, :currency_id, :cost, :nactivity
 
  	def self.search(search_activity, search_code, search_desc, page)
@@ -29,7 +30,11 @@ class Task < ActiveRecord::Base
 		    end
 		  end
 		end
-		query
+		query.includes(:currency)
 	end
+  
+  def self.find_by_currency(currency_id)
+    where currency_id: currency_id
+  end
 
 end
