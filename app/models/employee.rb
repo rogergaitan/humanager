@@ -34,8 +34,8 @@ class Employee < ActiveRecord::Base
   validates :account_bncr, length: {is: 12}, allow_blank: true
 
   #association with other_salaries through other_salary_employees
-  has_many :other_salary_employees, :dependent => :destroy
-  has_many :other_salaries, :through => :other_salary_employees
+#   has_many :other_salary_employees, :dependent => :destroy
+#   has_many :other_salaries, :through => :other_salary_employees
 
   #association with other_salaries through other_payment_employees
   has_many :other_payment_employees, :dependent => :destroy
