@@ -418,7 +418,7 @@ es:
           contract_code: Codigo de Contrato
           payment_type: Tipo de Pago
           state: Estado
-          performance_unit: Unid. Rendimiento
+          payment_unit: Unid. Pago
         work_benefit:
           description: Descripción
           percentage: Porcentaje
