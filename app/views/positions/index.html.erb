@@ -28,7 +28,6 @@
             <thead>
               <tr>
                 <th><%= model_class.human_attribute_name(:position) %></th>
-                <th><%= model_class.human_attribute_name(:description) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
@@ -36,7 +35,6 @@
               <% @positions.each do |position| %>
                 <tr>
                   <td><%= link_to position.position, position_path(position) %></td>
-                  <td><%= position.description %></td>
                   <td>
                     <% if can? :update, Position %>
                       <%= link_to edit_position_path(position), :class => 'btn btn-xs btn-success-alt' do %>

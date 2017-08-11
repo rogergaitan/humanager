@@ -99,4 +99,7 @@
 class Abanit < ActiveRecord::Base
 	establish_connection :firebird
 	attr_accessible :init, :ntercero
+  
+  has_one :abamunicipios, primary_key: :ipais, foreign_key: :ipais
+  has_one :abanitsddirecciones, primary_key: :init, foreign_key: :init
 end

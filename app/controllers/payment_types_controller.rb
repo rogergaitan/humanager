@@ -10,8 +10,9 @@ class PaymentTypesController < ApplicationController
   respond_to :html, :json, :js
 
   def index
-    @payment_types = PaymentType.all
-        #.paginate(:page => params[:page], :per_page => 15)
+    @payment_types = PaymentType.find_by_company_id(current_user.company_id)
+                                      .paginate(:page => params[:page], :per_page => 15)
+                                          
     respond_with(@payment_types)
   end
 

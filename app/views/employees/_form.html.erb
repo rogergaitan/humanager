@@ -11,6 +11,7 @@
 
 <%= javascript_include_tag 'resources' %>
 <%= javascript_include_tag 'employees/dynamic_fields' %>
+<%= javascript_include_tag 'employees/employee' %>
 
 <div class="container-fluid">
   <div data-widget-group="group1" class="ui-sortable">
@@ -28,9 +29,9 @@
     
     <div class="tab-container">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab"><%= t("tabs.general") %></a></li>
+        <li class="active"><a href="#tab1" data-toggle="tab">Personal</a></li>
         <li><a href="#tab2" data-toggle="tab"><%= t("tabs.contact") %></a></li>
-        <li><a href="#tab3" data-toggle="tab"><%= t("tabs.employment_data") %></a></li>
+        <li><a href="#tab3" data-toggle="tab">Laboral</a></li>
       </ul>
       <%= form_for @employee, :validate => true, :html => { :class => 'form-horizontal', :multipart => true, 
         :data => {:toggle => 'validator', :model_name => Employee.model_name, :reference_id => @employee.id} } do |f| %>
@@ -66,24 +67,14 @@
             <h2>Datos Personales</h2>
             <hr>
               <%= render 'forms/entity_form', :f => builder %>
-
-              <div class="form-group">
-                <%= f.label :number_employee, :class => 'col-sm-2 control-label' %>
-                <div class="col-sm-3">
-                  <div class="input-group">
-                    <span class="input-group-addon">N</span>
-                    <%= f.text_field :number_employee, :class => 'form-control' %>
-                  </div>
-                </div>
-              </div>
-
             <% end %>
+            
             <div class="form-group">
               <%= f.label :gender, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">G</span>
-                  <%= f.enum_select( :gender, {:include_blank => false}, {:class => 'form-control'}) %>
+                  <%= f.select(:gender, translate_enum(:gender), {:include_blank => false}, {:class => 'form-control', :disabled => 'true'}) %>
                 </div>
               </div>
             </div>
@@ -92,7 +83,7 @@
               <%= f.label :birthday, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group">
-                  <%= f.text_field :birthday, :class => 'form-control' %>
+                  <%= f.text_field :birthday, :class => 'form-control', :disabled => 'true' %>
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
               </div>
@@ -103,7 +94,7 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">EC</span>
-                  <%= f.enum_select( :marital_status, {:include_blank => false}, {:class => 'form-control'}) %>
+                  <%= f.select( :marital_status, translate_enum(:marital_status), {:include_blank => false}, {:class => 'form-control'}) %>
                 </div>
               </div>
             </div>
@@ -113,7 +104,7 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">D</span>
-                  <%= f.number_field :number_of_dependents, :class => 'form-control' %>
+                  <%= f.number_field :number_of_dependents, :class => 'form-control', :min => '0' %>
                 </div>
               </div>
             </div>
@@ -127,25 +118,26 @@
                 </div>
               </div>
             </div>
-
-            <%= f.fields_for :photo do |builder| %>
-              <div class="form-group">
-                <%= builder.label :photo, :class => 'col-sm-2 control-label' %>
-                <div class="col-sm-3">
-                  <%= image_tag(@employee.photo.photo_url, :class => 'img-thumbnail') if @employee.photo %>
-                  <span class="btn btn-default btn-file">
-                    <span class="fileinput-new">Select file</span>
-                    <%= builder.file_field :photo, :class => 'file_field' %>
-                  </span>
-                </div>
-              </div>
-            <% end %>   
+            <% if @employee.photo.photo_url %>
+              <%= f.label :photo, :class => 'col-sm-2 control-label' %>
+              <%= image_tag(@employee.photo.photo_url, :class => 'img-thumbnail', :id => 'photo')  %>
+            <% end %>
           </div>
           
           <div class="tab-pane" id="tab3">
             <h2>Datos Laborales</h2>
             <hr>
-
+            
+            <div class="form-group">
+              <%= f.label :number_employee, :class => 'col-sm-2 control-label' %>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <span class="input-group-addon">N</span>
+                  <%= f.text_field :number_employee, :class => 'form-control' %>
+                </div>
+              </div>
+            </div>
+            
             <div class="form-group">
               <%= f.label :join_date, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
@@ -167,23 +159,33 @@
             <div class="form-group">
               <%= f.label :account_bncr, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.text_field :account_bncr, :class => 'form-control', :maxlength=>"12", type: "number" %>
+                <%= f.text_field :account_bncr, :class => 'form-control', :maxlength=>"12" %>
               </div>
             </div>
 
             <div class="form-group">
               <%= f.label :occupation_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.collection_select(:occupation_id, @occupation, :id, :description , 
-                      options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+                <div class="input-group">
+                  <%=  f.hidden_field :occupation_id %>
+                  <%= text_field_tag 'load_occupation', nil, :class => 'form-control', :for => :occupation_id %>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
             <div class="form-group">
               <%= f.label :position_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.collection_select(:position_id, @position, :id, :position, 
-                      options = {:prompt => true}, html_options = {:class => 'form-control'}) %>
+                <div class="input-group">
+                  <%= f.hidden_field :position_id  %>
+                  <%= text_field_tag 'load_position', nil, :class => 'form-control', :for => :position_id  %>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -204,9 +206,14 @@
             <div class="form-group">
               <%= f.label :department_id, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <% h = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
-                <%= f.collection_select(:department_id, @department, :id, :name , 
-                      options = {:prompt => h}, html_options = {:class => 'form-control'}) %>
+                <div class="input-group">
+                  <%= f.hidden_field :department_id %>
+                  <%= text_field_tag 'load_department', nil, :class => 'form-control', :for => :department_id %>
+                  
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -255,8 +262,16 @@
                 <%= f.text_field :wage_payment, :class => 'form-control' %>
               </div>
             </div>
+            
+            <div class="form-group">
+              <%= f.label :currency_id, :class => 'col-sm-2 control-label' %>
+              <div class="col-sm-3">
+                <%= f.collection_select(:currency_id, @currencies, :id, :name, 
+                  options = {:prompt => false}, html_options = {:class => 'form-control' }) %>
+              </div>
+            </div>
           </div>
-
+          
         </div>    
 
         <div class="panel-footer">
@@ -274,3 +289,4 @@
 
   </div>
 </div>
+

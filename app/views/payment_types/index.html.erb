@@ -5,15 +5,6 @@
 
 <div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human(:count => 2) %></h1>
-  <div class="options">
-    <div class="btn-toolbar">
-      <% if can? :create, PaymentType %>
-        <%= link_to new_payment_type_path, :class => 'btn btn-primary' do %>
-          <i class="fa fa-plus"></i>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
 </div>
 
 <div class="container-fluid">
@@ -22,61 +13,30 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <div class="panel panel-default">
-        
-        <div class="panel-heading">
-          <div class="panel-ctrls">
-            Mostrar Cerradas
-            <input id="show_closed" checked class="bootstrap-switch" type="checkbox" data-size="mini" data-on-text= "<i class='fa fa-check'></i>"
-              data-on-color= "success" data-off-text= "<i class='fa fa-times'></i>" data-off-color="danger">
-          </div>
-        </div>
-
+      <div class="panel panel-primary">
+        <div class="panel-heading"></div>
         <div class="panel-body panel-no-padding">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th><%= model_class.human_attribute_name(:name) %></th>
-                <th><%= model_class.human_attribute_name(:description) %></th>
-                <th><%= model_class.human_attribute_name(:factor) %></th>
                 <th><%= model_class.human_attribute_name(:contract_code) %></th>
-                <th><%= model_class.human_attribute_name(:state) %></th>
-                <th><%= model_class.human_attribute_name(:payment_type) %></th>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:payment_unit) %></th>
+                <th><%= model_class.human_attribute_name(:factor) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
             <tbody>
               <% @payment_types.each do |payment_type| %>
                 <tr>
-                  <td><%= payment_type.name %></td>
-                  <td><%= payment_type.description %></td>
-                  <td><%= payment_type.factor %></td>
                   <td><%= payment_type.contract_code %></td>
-                  <td>
-                    <%= check_box_tag 'state_payment_type', '',
-                      payment_type.state.to_s === CONSTANTS[:PAYROLLS_STATES]['ACTIVE'] ? true : false,
-                      'data-id' => payment_type.id,
-                      class: 'bootstrap-switch',
-                      "data-size" => "mini",
-                      "data-on-text" => "<i class='fa fa-check'></i>",
-                      "data-on-color" => "success",
-                      "data-off-text" => "<i class='fa fa-times'></i>",
-                      "data-off-color" => "danger"
-                    %>
-                  </td>
-                  <td><%= payment_type.payment_type %></td>
+                  <td><%= payment_type.name %></td>
+                  <td><%= payment_type.payment_unit %></td>
+                  <td><%= payment_type.factor %></td>
                   <td>
                     <% if can? :update, PaymentType %>
                       <%= link_to edit_payment_type_path(payment_type), :class => 'btn btn-xs btn-success-alt' do %>
                         <i class="fa fa-pencil"></i>
-                      <% end %>
-                    <% end %>
-
-                    <% if can? :destroy, PaymentType %>
-                      <%= link_to payment_type_path(payment_type), :method => :delete,
-                                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                                  :class => 'btn btn-xs btn-danger-alt' do %>
-                        <i class="fa fa-trash-o"></i>
                       <% end %>
                     <% end %>
                   </td>
@@ -84,6 +44,9 @@
               <% end %>
             </tbody>
           </table>
+          <div class="text-right">
+            <%= will_paginate @payment_types %>
+          </div>
         </div>
       </div>
     </div>

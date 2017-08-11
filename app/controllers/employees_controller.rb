@@ -2,20 +2,18 @@ class EmployeesController < ApplicationController
   load_and_authorize_resource
   before_filter :get_address_info, :only => [:new, :edit]
   before_filter :get_employee_info, :only => [:new, :edit]
-
+  before_filter :set_employee_superior_and_departments, :only => [:index, :search, :search_all]
+  
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Employee, params[:id])
   end
-
+  
   respond_to :json, :html, :js
   
   # GET /employees 
   # GET /employees.json
   def index
     @employees = Employee.paginate(:page => params[:page], :per_page => 15).includes(:entity, :department).all
-    @employees_s = Employee.superior
-
-    @all_departments = Employee.all_departments
 
     respond_to do |format|
       format.html # index.html.erb
@@ -61,7 +59,7 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
-        format.html { redirect_to employees_path, notice: 'Employee was successfully updated.' }
+        format.html { redirect_to employees_path, notice: 'Empleado actualizado correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -148,18 +146,20 @@ class EmployeesController < ApplicationController
    
   def get_employee_info
      @department = Department.find(:all, :select =>['id','name'])
-     @occupation = Occupation.find(:all, :select =>['id','description'])
+     @occupation = Occupation.find(:all, :select =>['id','name'])
      @payment_frequency = PaymentFrequency.find(:all, :select =>['id','name'])
      @mean_of_payment = MeansOfPayment.find(:all, :select =>['id','name'])
      @position = Position.find(:all, :select =>['id','position'])
      @superior = Employee.all
      @payment_unit = Employee.all_payment_unit
      @payroll_type = Employee.all_payroll_type(current_user.company_id)
+     @currencies = Currency.all
   end
 
   def search
     @employees = Employee.search(params[:search_id], params[:search_name], params[:search_surname], 
       params[:search_department], params[:search_entities], params[:page], params[:per_page])
+
     respond_with @employees
   end
 
@@ -186,5 +186,12 @@ class EmployeesController < ApplicationController
   def search_employee_by_name
     respond_with Employee.search_employee_by_name(params[:search_name])
   end
+  
+  private
+  
+    def set_employee_superior_and_departments
+      @employees_s = Employee.superior
+      @all_departments = Employee.all_departments    
+    end
 
 end

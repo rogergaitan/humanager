@@ -1,11 +1,15 @@
+require 'concerns/encodable'
+
 class Employee < ActiveRecord::Base
+  include Encodable
+  
   attr_accessible :gender, :birthday, :marital_status, :join_date, 
   					:number_of_dependents, :seller, :social_insurance, :spouse, 
   					:wage_payment, :entity_attributes, :department_id, 
   					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
             :photo_attributes, :position_id, :employee_id, :is_superior,
             :payment_unit_id, :price_defined_work, :payroll_type_id,
-            :number_employee, :account_bncr
+            :number_employee, :account_bncr, :currency_id
   
   validates_uniqueness_of :number_employee, :allow_nil => true
 
@@ -18,6 +22,7 @@ class Employee < ActiveRecord::Base
   belongs_to :position
   belongs_to :payment_unit
   belongs_to :payroll_type
+  belongs_to :currency
   has_one :photo, :dependent => :destroy
   has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits
@@ -434,5 +439,82 @@ class Employee < ActiveRecord::Base
                     .select('employees.id, entities.name, entities.surname, employees.number_employee').limit(1)
     @result[0]
   end
+  
+  def self.sync_fb
+    abanits = Abanit.includes(:abamunicipios, :abanitsddirecciones)
+                       .where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido', 
+                                                                              'fnacimiento', 'isexo', 'zfoto'])
+    created_records = 0
+    updated_records = 0
+    sync_data = {}
+    
+    abanits.each do |employee|
+      
+      full_name = employee.ntercero
+      last_name = employee.napellido
+      gender = employee.isexo
+      birthday = employee.fnacimiento
+      country = employee.abamunicipios.try :nnombre
+      department = employee.abamunicipios.try :idep
+      municipality = employee.abamunicipios.try :imun
+      photo = employee.zfoto
+      address = employee.abanitsddirecciones.try :tdireccion
+      
+      if last_name.empty?
+        last_name = 'nr'
+      end
+      
+      if Entity.where("entityid = ?", employee.init).empty?
 
+        new_employee = Employee.new(:gender => gender, :birthday => birthday)
+        entity = new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
+                                              :surname => firebird_encoding(last_name.to_s), 
+                                              :entityid => employee.init)
+        
+        entity.telephones.build
+        entity.emails.build
+        entity.build_address(department: department, municipality: municipality,
+                                            country: country, address: address)
+
+        new_employee.build_photo
+    
+        if photo
+          #create temporary file from blob field and upload it
+          photo_file = Tempfile.new ["", ".jpg"]
+          begin
+            photo_file.write photo
+            photo_file.rewind
+            new_employee.photo.photo = photo_file 
+          ensure
+            photo_file.close
+            photo_file.unlink
+          end
+        end
+        
+        if new_employee.save
+          created_records += 1
+        else
+          new_employee.errors.each do |error|
+            Rails.logger.error "Error creando empleado: #{employee.init}, #{error}"
+          end
+        end
+      else
+        entity = Entity.find_by_entityid(employee.init)
+        employee_params = {name: firebird_encoding(full_name), surname: firebird_encoding(last_name), 
+                                                   employee_attributes: {gender: gender, birthday: birthday}, 
+                                                   address_attributes:
+                                                   {
+                                                      department: department, municipality: municipality,
+                                                      country: country, address: address
+                                                    }
+                                                  }
+    
+        if entity.update_attributes employee_params
+          updated_records += 1
+        end
+      end
+    end
+      sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
+                                                 #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+  end
 end

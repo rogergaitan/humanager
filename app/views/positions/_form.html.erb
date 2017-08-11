@@ -4,7 +4,7 @@
     <% if @position.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@position.errors.count, "error") %> prohibited this position from being saved:</h3>
+        <h3><%= pluralize(@position.errors.count, "error") %> no permitieron crear el puesto:</h3>
         <% @position.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -17,7 +17,7 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @position, :validate => true, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for @position, :validate => true,  :html => { :class => 'form-horizontal row-border' } do |f| %>
           
           <div class="form-group">
             <%= f.label :position, :class => 'col-sm-2 control-label' %>
@@ -37,6 +37,7 @@
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2">
                 <%= f.submit :class => 'btn btn-primary' %>
+                
                 <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                               positions_path, :class => 'btn' %>
               </div>

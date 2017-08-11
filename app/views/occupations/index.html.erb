@@ -27,18 +27,14 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th><%= model_class.human_attribute_name(:description) %></th>
-                <th><%= model_class.human_attribute_name(:ins_code) %></th>
-                <th><%= model_class.human_attribute_name(:ccss_code) %></th>
+                <th><%= model_class.human_attribute_name(:name) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
             <tbody>
               <% @occupations.each do |occupation| %>
                 <tr>
-                  <td><%= link_to occupation.description, occupation_path(occupation) %></td>
-                  <td><%= occupation.ins_code %></td>
-                  <td><%= occupation.ccss_code %></td>
+                  <td><%= link_to occupation.name, occupation_path(occupation) %></td>
                   <td>
                     <% if can? :update, Occupation %>
                       <%= link_to edit_occupation_path(occupation), :class => 'btn btn-xs btn-success-alt' do %>

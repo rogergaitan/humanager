@@ -112,7 +112,9 @@ Reasapp::Application.routes.draw do
     end
   end
 
-  resources :positions
+  resources :positions do
+    get 'search', on: :collection
+  end
 
   resources :ledger_accounts do
     collection do
@@ -140,7 +142,9 @@ Reasapp::Application.routes.draw do
 
   resources :provinces
 
-  resources :departments
+  resources :departments do
+    get 'search', on: :collection 
+  end
 
   resources :means_of_payments
 
@@ -163,7 +167,9 @@ Reasapp::Application.routes.draw do
 
   resources :employees
 
-  resources :occupations
+  resources :occupations do
+    get 'search', on: :collection  
+  end
 
   resources :customers
 

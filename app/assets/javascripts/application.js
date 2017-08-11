@@ -66,4 +66,5 @@
 
 //= require menus
 //= require validator
+//= require jquery.mask
 //= require_directory .

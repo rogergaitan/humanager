@@ -27,6 +27,7 @@ es:
     personal_data: 'Datos Personales'
     employment_data: 'Empresa'
     contact: Contacto
+    page_gap: "&hellip;"
   routes:
     new: nuevo
     edit: editar
@@ -95,6 +96,23 @@ es:
       home: Inicio
       other: Otros
       messages_general: Mensaje General
+  marital_status:
+    single: Soltero
+    married: Casado
+    divorced: Divorciado
+    widowed: Viudo
+    civil_union: Unión civil
+    engage: Comprometido
+  gender:
+    male: Masculino
+    female: Femenino
+  typephone:
+    personal: Personal
+    home: Hogar
+    work: Trabajo
+  typeemail:
+    personal: Personal
+    work: Trabajo
   activerecord:
       errors:
         models:
@@ -130,12 +148,18 @@ es:
               position:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este puesto ya existe'
+                too_long: maximo 20 carácteres
+              description:
+                too_long: maximo 200 carácteres
           department:
             attributes:
               name:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este código ya existe'
+                too_long: maximo 30 carácteres
               employee_id:
+                blank: Este campo no puede quedar en blanco
+              costs_center_id:
                 blank: Este campo no puede quedar en blanco
           user:
             attributes:
@@ -304,6 +328,15 @@ es:
                 blank: no puede quedar en blanco
               symbol:
                 blank: no puede quedar en blanco
+          occupation:
+            attributes:
+              name:
+                blank: no puede quedar en blanco
+                too_long: maximo 30 caracteres
+              inss_code:
+                too_long: maximo 30 caracteres
+              other_code:
+                too_long: maximo 30 caracteres
       models:
         currency:
           one: Moneda
@@ -385,6 +418,7 @@ es:
           contract_code: Codigo de Contrato
           payment_type: Tipo de Pago
           state: Estado
+          payment_unit: Unid. Pago
         work_benefit:
           description: Descripción
           percentage: Porcentaje
@@ -420,19 +454,19 @@ es:
         email:
           typeemail: Tipo de email
         position:
-          position: Puesto
+          position: Nombre del Puesto
           description: Descripción
         occupation:
-          description: Descripción
-          ins_code: Código INS
-          ccss_code: Código CCSS
+          name: Nombre de la Ocupación
+          inss_code: Código para Reportes INSS
+          other_code: Código para Reportes Otro
         role:
           role: Rol
           description: 'Descripción'
         department:
-          name: Departamento
-          employee_id: Encargado
-          costs_center_id: Centro de Costo
+          name: Nombre del Departamento
+          employee_id: Nombre del Encargado
+          costs_center_id: Centro de Costos
         vendor:
           credit_limit: Crédito
         entity:
@@ -496,7 +530,7 @@ es:
           surname: Apellido
           employee_id: Jefe Inmediato
           entity_id: Entidad
-          join_date: Ingreso
+          join_date: Fecha Ingreso
           seller: Vendedor
           gender: 'Género'
           birthday: 'Nacimiento'
@@ -504,24 +538,26 @@ es:
           ccss_calculated: Calcula CCSS?
           department_id: Departamento
           means_of_payment_id: Medio de Pago
-          number_of_dependents: Dependientes
+          number_of_dependents: Numero de Dependientes
           occupation_id: 'Ocupación'
           payment_frequency_id: Frecuencia de Pago
           payment_method_id: Forma de Pago
           role_id: Rol
-          social_insurance: Seguro Social
-          spouse: 'Cónyuge'
+          social_insurance: Numero de Seguro Social
+          spouse: Nombre del Cónyuge
           wage_payment: Precio Unidad de Pago
           position_id: Puesto
           price_defined_work: Precio definido en Labor
           payment_unit_id: Unidad de Pago
           payroll_type_id: Tipo de Planilla Predeterminada
           number_employee: Número de Empleado
-          account_bncr: Cuenta BNCR
+          account_bncr: Numero de Cuenta Bancaria
+          photo: Foto
+          currency_id: Moneda
         entity:
           name: Nombre
           surname: Apellidos
-          entityid: 'Cédula'
+          entityid: Identificación
           typeid: 'Tipo Identificación'
         category:
           code: Código
@@ -626,6 +662,11 @@ es:
           symbol: Simbolo
           foreign: Extranjera
           local: Local
+        address:
+          department: Departamento o Provincia
+          municipality: Municipio o Ciudad
+          address: Dirección
+          country: País
        
   date:
       abbr_day_names:

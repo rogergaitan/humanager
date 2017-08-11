@@ -1,0 +1,44 @@
+<%- model_class = Employee -%>
+<%- model_class_entity = Entity -%>
+
+<div class="panel-body panel-no-padding" id="employees">
+  
+  <table class="table table-striped" id="task-data">
+    <thead>
+      <tr>
+        <th><%= model_class_entity.human_attribute_name(:entityid) %></th>
+        <th><%= model_class_entity.human_attribute_name(:name) %></th>
+        <th><%= model_class_entity.human_attribute_name(:surname) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <% unless @employees.empty?  %>
+        <% @employees.each do |employee| %>
+          <tr>
+            <td><%= employee.entity.entityid %></td>
+            <td>
+              <%= employee.entity.name %>
+            </td>
+            <td>
+              <%= employee.entity.surname %>
+            </td>
+
+            <td>
+              <% if can? :update, Employee %>
+                <%= link_to edit_employee_path(employee), :class => 'btn btn-xs btn-success-alt' do %>
+                  <i class="fa fa-pencil"></i>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="text-right">
+    <%= will_paginate @employees %>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 class OccupationsController < ApplicationController
   load_and_authorize_resource
-
+  skip_load_and_authorize_resource :only => [:search]
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Occupation, params[:id])
   end
@@ -39,7 +39,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.save
-        format.html { redirect_to @occupation, notice: 'Occupation was successfully created.' }
+        format.html { redirect_to @occupation, notice: 'Ocupación creada existosamente.' }
         format.json { render json: @occupation, status: :created, location: @occupation }
       else
         format.html { render action: "new" }
@@ -55,7 +55,7 @@ class OccupationsController < ApplicationController
 
     respond_to do |format|
       if @occupation.update_attributes(params[:occupation])
-        format.html { redirect_to @occupation, notice: 'Occupation was successfully updated.' }
+        format.html { redirect_to @occupation, notice: 'Ocupación actualizada exitosamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -74,12 +74,19 @@ class OccupationsController < ApplicationController
       message = t('.notice.can_be_deleted')
     else
       @occupation.destroy
-      message = t('.notice.successfully_deleted')
+      message = 'Ocupación eliminada existosamente.'
     end
 
     respond_to do |format|
       format.html { redirect_to occupations_url, notice: message }
       format.json { head :no_content }
+    end
+  end
+  
+  def search
+    @occupations = Occupation.search params[:name]
+    respond_to do |format|
+      format.json { render json: @occupations }
     end
   end
 end

@@ -10,5 +10,13 @@
 
 class Occupation < ActiveRecord::Base
 	has_many :employees
-  	attr_accessible :description, :ins_code, :ccss_code
+  attr_accessible :name, :inss_code, :other_code
+  
+  validates :name, presence: true
+  validates :name, length: { maximum: 30 }
+  validates :inss_code, :other_code, length: { maximum: 20 }
+  
+  def self.search(name)
+    where("name LIKE ?", "#{name}%") 
+  end
 end
