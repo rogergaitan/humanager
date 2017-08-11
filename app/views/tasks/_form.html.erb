@@ -20,13 +20,6 @@
         <%= form_for @task, :html => { :class => 'form-horizontal row-border' } do |f| %>
 
           <div class="form-group">
-            <%= f.label :iaccount, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :iaccount, :class => 'form-control', :readonly => true %>
-            </div>
-          </div>
-
-          <div class="form-group">
             <%= f.label :iactivity, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
                <%= f.text_field :iactivity, :class => 'form-control', :readonly => true %>
@@ -39,14 +32,7 @@
                <%= f.text_field :itask, :class => 'form-control', :readonly => true %>
             </div>
           </div>
-
-          <div class="form-group">
-            <%= f.label :mlaborcost, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-               <%= f.text_field :mlaborcost, :class => 'form-control', :readonly => true %>
-            </div>
-          </div>
-
+          
           <div class="form-group">
             <%= f.label :ntask, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
@@ -55,16 +41,17 @@
           </div>
 
           <div class="form-group">
-            <%= f.label :nunidad, :class => 'col-sm-2 control-label' %>
+            <%= f.label :currency_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-               <%= f.text_field :nunidad, :class => 'form-control', :readonly => true %>
+               <%= f.collection_select(:currency_id, @currencies, :id, :name,
+                  options = {:prompt => false}, html_options = {:class => 'form-control' }) %>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :unit_performance, :class => 'col-sm-2 control-label' %>
+            <%= f.label :cost, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-               <%= f.text_field :unit_performance, :class => 'form-control', :maxlength => 4 %>
+               <%= f.text_field :cost, :class => 'form-control' %>
             </div>
           </div>
 

@@ -593,6 +593,8 @@ es:
           itask: Cód. Labor
           ntask: Nombre
           nunidad: Unid. Rendimiento
+          currency_id: Moneda
+          cost: Costo
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  
