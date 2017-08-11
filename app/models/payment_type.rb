@@ -1,3 +1,5 @@
+require 'concerns/encodable'
+
 class PaymentType < ActiveRecord::Base
   include Encodable
   
@@ -14,6 +16,7 @@ class PaymentType < ActiveRecord::Base
     
     created_records = 0
     updated_records = 0
+    sync_data = {}
     
     labtdctos.each do |labtdcto|
       #seach for both fields to find unique payment type
@@ -40,7 +43,7 @@ class PaymentType < ActiveRecord::Base
         end
       end
     end
-      
+      sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
+                                                #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
   end
-
 end
