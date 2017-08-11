@@ -590,12 +590,9 @@ es:
           canton_id: Cantón
         task:
           iactivity: Actividad
-          itask: Codigo
-          ntask: Descripción
-          mlaborcost: Costo Labor
-          iaccount: Cuenta
-          nunidad: Unidad Pago
-          unit_performance: Unidad Rendimiento
+          itask: Cód. Labor
+          ntask: Nombre
+          nunidad: Unid. Rendimiento
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  
