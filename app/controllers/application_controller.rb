@@ -146,8 +146,7 @@ class ApplicationController < ActionController::Base
 	
 	# Sync tasks
   	def tasksfb
-	    labmaests = Labmaest.find( :all, 
-	                                :select => ['iactividad', 'ilabor', 'nlabor', 'icuenta', 'mcostolabor', 'nunidad'] )
+	    labmaests = Labmaest.includes(:actividad).find( :all, :select => ['iactividad', 'ilabor', 'nlabor', 'nunidad'] )
 
 	    c = 0
 	    ca = 0
@@ -159,9 +158,8 @@ class ApplicationController < ActionController::Base
 	        new_task = Task.new(:iactivity => task.iactividad, 
 	          :itask => task.ilabor, 
 	          :ntask => firebird_encoding(task.nlabor), 
-	          :iaccount => task.icuenta, 
-	          :mlaborcost => task.mcostolabor, 
-	          :nunidad => firebird_encoding(task.nunidad)
+            :nunidad => firebird_encoding(task.nunidad),
+            :nactivity=> firebird_encoding(task.actividad.try(:nactividad))
 	        )
 
 	        if new_task.save
@@ -173,7 +171,8 @@ class ApplicationController < ActionController::Base
 	        end
 	      else
 	        params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
-	                    :iaccount => task.icuenta, :mlaborcost => task.mcostolabor, :nunidad => task.nunidad }
+                                           :nunidad => firebird_encoding(task.nunidad), 
+                                           :nactivity => firebird_encoding(task.actividad.try(:nactividad)) }
 
 	        if theTask.update_attributes(params[:task])
 	          ca += 1
