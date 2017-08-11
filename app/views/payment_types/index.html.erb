@@ -21,7 +21,7 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:contract_code) %></th>
                 <th><%= model_class.human_attribute_name(:name) %></th>
-                <th><%= model_class.human_attribute_name(:performance_unit) %></th>
+                <th><%= model_class.human_attribute_name(:payment_unit) %></th>
                 <th><%= model_class.human_attribute_name(:factor) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
@@ -31,7 +31,7 @@
                 <tr>
                   <td><%= payment_type.contract_code %></td>
                   <td><%= payment_type.name %></td>
-                  <td><%= payment_type.performance_unit %></td>
+                  <td><%= payment_type.payment_unit %></td>
                   <td><%= payment_type.factor %></td>
                   <td>
                     <% if can? :update, PaymentType %>
