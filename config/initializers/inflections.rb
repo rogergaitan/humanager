@@ -14,4 +14,5 @@
  ActiveSupport::Inflector.inflections do |inflect|
    inflect.irregular 'Ocupación', 'Ocupaciones' 
    inflect.irregular 'Error', 'Errores'
+   inflect.irregular 'Labor', 'Labores'
  end
