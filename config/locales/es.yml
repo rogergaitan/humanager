@@ -595,6 +595,7 @@ es:
           nunidad: Unid. Rendimiento
           currency_id: Moneda
           cost: Costo
+          nactivity: Actividad
         ledger_account:
           iaccount: Cuenta
           naccount: Descripción Cuenta  

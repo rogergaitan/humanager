@@ -4,7 +4,7 @@
     <% if @task.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h3>
+        <h3><%= pluralize(@task.errors.count, "error") %> no permitieron actualizar esta labor:</h3>
         <% @task.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -20,9 +20,9 @@
         <%= form_for @task, :html => { :class => 'form-horizontal row-border' } do |f| %>
 
           <div class="form-group">
-            <%= f.label :iactivity, :class => 'col-sm-2 control-label' %>
+            <%= f.label :nactivity, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-               <%= f.text_field :iactivity, :class => 'form-control', :readonly => true %>
+               <%= f.text_field :nactivity, :class => 'form-control', :readonly => true %>
             </div>
           </div>
 
