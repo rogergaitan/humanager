@@ -335,9 +335,9 @@ es:
                 too_long: maximo 30 caracteres
                 taken: debe ser unico
               inss_code:
-                too_long: maximo 30 caracteres
+                too_long: maximo 20 caracteres
               other_code:
-                too_long: maximo 30 caracteres
+                too_long: maximo 20 caracteres
       models:
         currency:
           one: Moneda
