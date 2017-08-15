@@ -1,0 +1,57 @@
+<div id="tasks_selection" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+        <h4 class="modal-title">Indique el tipo de selección</h4>
+      </div>
+      
+      <div class="modal-body">
+        <%= button_tag "Visibles en la Lista", class: "btn btn-primary",  data: {list: true} %>
+        <%= button_tag "Todas las existentes", class: "btn btn-primary", data:  {all: true}%>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div  id="update_costs_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+        <h4 class="modal-title">Actualizar costo</h4>
+      </div>
+      
+      <div class="modal-body">
+        
+          <%= form_tag update_costs_tasks_path, id: "update_costs_form", remote: true, method: :put do %>
+            
+            <div class="form-group">
+              
+              <%= label_tag :cost, "Costo:" %>
+              <%= text_field_tag :cost, '',  class: "form-control" %>
+            </div>
+            
+            <div class="form-group">
+              <%= label_tag :currency, "Moneda:", class: "control-label" %>
+              <%= select_tag :currency, options_from_collection_for_select(@currencies, :id, :name), class: "form-control" %>
+            </div>
+            
+            <%= hidden_field_tag :update_all, false %>
+            <%= hidden_field_tag :tasks_ids %>
+         
+            <%= button_tag "Cancelar", class: "btn btn-default", data: {dismiss: "modal"} %>
+            <%= submit_tag "Actualizar Costo", class: "btn btn-primary", 
+              data: {confirm: "¿Está Seguro?  (Esta acción no se puede deshacer)"  } %>
+         
+          <% end %>  
+        </div>
+      
+     </div>
+    </div>
+  </div>
+</div>

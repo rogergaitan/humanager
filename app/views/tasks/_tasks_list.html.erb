@@ -11,12 +11,17 @@
         <th><%= model_class.human_attribute_name(:itask) %></th>
         <th><%= model_class.human_attribute_name(:ntask) %></th>
         <th><%= model_class.human_attribute_name(:nunidad) %></th>
-        <th><%= model_class.human_attribute_name(:currency_id) %></th>
+        <th>
+          <%= select_tag :currency, options_from_collection_for_select(@currencies, :id, :name), 
+            prompt: "Filtrar por moneda" %><br>
+          <%= model_class.human_attribute_name(:currency_id) %>
+        </th>
         <th><%= model_class.human_attribute_name(:cost) %></th>
         <% if can? :update, Task %>
           <th>
-            <%= button_tag "Actualizar Costo", class: "btn btn-primary", disabled: true %><br>
-            <%= check_box_tag :select_all %>
+            <%= button_tag "Actualizar Costo", class: "btn btn-primary", id: "update_costs",  
+              disabled: true, data: { update_all: false } %><br>
+            <%= check_box_tag :select_all  %>
           </th>
         <% end %>
       </tr>
@@ -29,10 +34,10 @@
           <td><%= task.ntask %></td>
           <td><%= task.nunidad %></td>
           <td><%= task.currency.try :name %></td>
-          <td><%= task.cost %></td>
+          <td><%= task.currency.try :symbol%><%= task.cost %></td>
           <td>
             <% if can? :update, Task %>
-              <%= check_box_tag :update_cost %>
+              <%= check_box_tag :update_cost, task.id %>
             <% end %>
           </td>
         </tr>
@@ -44,3 +49,5 @@
     <%= will_paginate @task %>
   </div>
 </div>
+
+<%= render "modals" %>

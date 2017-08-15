@@ -133,6 +133,7 @@ Reasapp::Application.routes.draw do
       get 'load_cc'
       get :fetch_tasks
       get :search
+      put :update_costs
     end
   end
 

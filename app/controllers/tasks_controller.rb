@@ -1,11 +1,12 @@
 class TasksController < ApplicationController
   load_and_authorize_resource
-
+  skip_load_and_authorize_resource :only => [:update_costs]
+  
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Task, params[:id])
   end
   
-  before_filter :set_currencies, :only => [:edit, :update]
+  before_filter :set_currencies, :only => [:index, :edit, :update, :search]
 
   respond_to :html, :json, :js
 
@@ -49,8 +50,20 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks = Task.search(params[:search_activity], params[:search_code], params[:search_desc], params[:page])
+    @tasks = Task.search(params[:search_activity], params[:search_code], params[:search_desc], params[:currency], params[:page])
     respond_with @tasks
+  end
+  
+  def update_costs
+    if params[:update_all] == "true"
+      Task.update_all cost: params[:cost], currency_id: params[:currency]
+    else
+      Task.where(id: params[:tasks_ids].split(",")).update_all cost: params[:cost], currency_id: params[:currency]
+    end
+    
+    respond_to do |format|
+        format.js
+    end
   end
   
   private
