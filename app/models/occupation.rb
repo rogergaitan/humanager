@@ -12,8 +12,9 @@ class Occupation < ActiveRecord::Base
 	has_many :employees
   attr_accessible :name, :inss_code, :other_code
   
-  validates :name, presence: true
-  validates :name, length: { maximum: 30 }
+  validates :name, presence: true, length: { maximum: 30 }
+  validates_uniqueness_of :name, case_sensitive: false
+  
   validates :inss_code, :other_code, length: { maximum: 20 }
   
   def self.search(name)

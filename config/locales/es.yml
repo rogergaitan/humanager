@@ -333,6 +333,7 @@ es:
               name:
                 blank: no puede quedar en blanco
                 too_long: maximo 30 caracteres
+                taken: debe ser unico
               inss_code:
                 too_long: maximo 30 caracteres
               other_code:
