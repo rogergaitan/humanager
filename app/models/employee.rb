@@ -33,7 +33,7 @@ class Employee < ActiveRecord::Base
   
   validates :account_bncr, length: {is: 12}, allow_blank: true
 
-  #association with other_salaries through other_salary_employees
+ #association with other_salaries through other_salary_employees
 #   has_many :other_salary_employees, :dependent => :destroy
 #   has_many :other_salaries, :through => :other_salary_employees
 
@@ -450,15 +450,15 @@ class Employee < ActiveRecord::Base
     
     abanits.each do |employee|
       
-      full_name = employee.ntercero
-      last_name = employee.napellido
+      full_name =firebird_encoding  employee.ntercero
+      last_name = firebird_encoding employee.napellido
       gender = employee.isexo
       birthday = employee.fnacimiento
       country = employee.abamunicipios.try :nnombre
       department = employee.abamunicipios.try :idep
       municipality = employee.abamunicipios.try :imun
-      photo = employee.zfoto
       address = employee.abanitsddirecciones.try :tdireccion
+      photo = employee.zfoto
       
       if last_name.empty?
         last_name = 'nr'
@@ -467,14 +467,14 @@ class Employee < ActiveRecord::Base
       if Entity.where("entityid = ?", employee.init).empty?
 
         new_employee = Employee.new(:gender => gender, :birthday => birthday)
-        entity = new_employee.build_entity(:name => firebird_encoding(full_name.to_s), 
-                                              :surname => firebird_encoding(last_name.to_s), 
+        entity = new_employee.build_entity(:name => full_name, 
+                                              :surname => last_name,
                                               :entityid => employee.init)
         
         entity.telephones.build
         entity.emails.build
         entity.build_address(department: department, municipality: municipality,
-                                            country: country, address: address)
+                                                  country: country, address: address)
 
         new_employee.build_photo
     
@@ -500,16 +500,15 @@ class Employee < ActiveRecord::Base
         end
       else
         entity = Entity.find_by_entityid(employee.init)
-        employee_params = {name: firebird_encoding(full_name), surname: firebird_encoding(last_name), 
-                                                   employee_attributes: {gender: gender, birthday: birthday}, 
-                                                   address_attributes:
-                                                   {
-                                                      department: department, municipality: municipality,
-                                                      country: country, address: address
-                                                    }
-                                                  }
-    
-        if entity.update_attributes employee_params
+        
+        entity.name = full_name 
+        entity.surname = last_name
+        entity.employee.gender = gender
+        entity.employee.birthday = birthday
+        entity.address_attributes = { address: address, department: department, 
+                                                           municipality: municipality, country: country }
+        
+        if entity.save
           updated_records += 1
         end
       end
