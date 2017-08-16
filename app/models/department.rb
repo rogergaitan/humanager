@@ -17,8 +17,8 @@ class Department < ActiveRecord::Base
 	has_many :employees
 	attr_accessible :name, :employee_id, :costs_center_id
 
-	validates :name, :presence => true, :uniqueness => true
-  validates :name, :length => { maximum: 30 }
+	validates :name, :presence => true, :length => { maximum: 30 }
+  validates_uniqueness_of :name, case_sensitive: false
   
   def self.search(query)
     where("name LIKE ?", "#{query}%")

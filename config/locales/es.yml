@@ -155,7 +155,7 @@ es:
             attributes:
               name:
                 blank: Este campo no puede quedar en blanco
-                taken: 'Este código ya existe'
+                taken: 'Este departamento ya existe'
                 too_long: maximo 30 carácteres
               employee_id:
                 blank: Este campo no puede quedar en blanco
