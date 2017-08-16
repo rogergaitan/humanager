@@ -148,7 +148,7 @@ es:
               position:
                 blank: Este campo no puede quedar en blanco
                 taken: 'Este puesto ya existe'
-                too_long: maximo 20 carácteres
+                too_long: maximo 30 carácteres
               description:
                 too_long: maximo 200 carácteres
           department:
