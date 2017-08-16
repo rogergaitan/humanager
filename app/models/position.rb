@@ -2,10 +2,9 @@ class Position < ActiveRecord::Base
   attr_accessible :description, :position
   has_many :employees
   
-  validates :position,  :presence => true,
-                        :uniqueness => true
-  
-  validates :position, length: { maximum: 30 }
+  validates :position,  :presence => true,  length: { maximum: 30 }
+  validates_uniqueness_of :position, case_sensitive: false                        
+
   validates :description, length: { maximum: 200 }
   
   def self.search(position)
