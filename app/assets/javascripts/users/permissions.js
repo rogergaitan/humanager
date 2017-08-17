@@ -3,8 +3,15 @@ permissions = {
 }
 
 $(document).ready(function() {
-
-	permissions.searchInfoUsers();
+  
+  //hide and show search form and results
+  $("#copy_permissions").on("change", function() {
+    if($(this).prop("checked")) {
+      $("#users_results , #user_permissions_search").removeClass("hidden");
+    } else {
+      $("#users_results , #user_permissions_search").addClass("hidden");
+    }
+  });
 
 	$('#search_users').click(function() {
 		permissions.searchInfoUsers();
@@ -190,6 +197,7 @@ permissions.loadPermissions = function(data) {
 	  id_subcategory = obj['permissions_subcategory_id']
 
 	  $.each(obj, function(index, value) {
+      console.log(index, id_subcategory);
 	  	permissions.setValue(index, value, id_subcategory);
 	  });
 	});
@@ -200,35 +208,36 @@ permissions.setValue = function(opction, value, id_subcategory) {
 	switch (opction) {
     	
 		case 'p_create':
-			$('#create_' + id_subcategory).attr('checked', value);
+			$('#create_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_view':
-			$('#view_' + id_subcategory).attr('checked', value);
+			$('#view_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_modify':
-			$('#modify_' + id_subcategory).attr('checked', value);
+			$('#modify_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_delete':
-			$('#delete_' + id_subcategory).attr('checked', value);
+			$('#delete_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_close':
-			$('#close_' + id_subcategory).attr('checked', value);
+			$('#close_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_accounts':
-			$('#accounts_' + id_subcategory).attr('checked', value);
+			$('#accounts_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_pdf':
-			$('#pdf_' + id_subcategory).attr('checked', value);
+			$('#pdf_' + id_subcategory).prop('checked', value);
 		break;
 
 		case 'p_exel':
-			$('#exel_' + id_subcategory).attr('checked', value);
+			$('#exel_' + id_subcategory).prop('checked', value);
 		break;
 	}
 }
+

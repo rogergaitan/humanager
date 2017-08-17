@@ -2,26 +2,25 @@
 <%= javascript_include_tag 'users/permissions' %>
 
 <div class="page-heading">
-	<h1><%=t '.title', :default => t('helpers.titles.permissions', :model => model_class.model_name.human,
-									:default => "New #{model_class.model_name.human}") %></h1>
-	<div class="options">
-    	<div class="btn-toolbar">
-    		<h3>Usuario: <%= @user.name %></h3>
-		</div>
-	</div>
+	<h1>Administración de Permisos | <%= @user.name %></h1><br>
 </div>
 
 <div class="container-fluid">
-	
 	<!-- S E A R C H   U S E R S -->
+	
+	<div id="copy_permissions_checkbox">
+    <%= check_box_tag :copy_permissions %> Copiar Permisos de otro Usuario
+  </div>
+	
 	<div class="row">
 		<div class="col-xs-12">
-	      <div class="panel panel-default">
-	        <div class="panel-heading"><h2>Search</h2></div>
-	        <div class="panel-body">
+      <div class="panel panel-default hidden" id="user_permissions_search">
+      <div class="panel-body">
+        
 				<%= form_tag :search_user_users, :id => "search_users_form", :class => "form-inline", :method => "get" do %>
 		            <div class="row">
 		            	<div class="col-md-12">
+		            	  <span>Buscar Usuario: </span>
 			                <div class="form-group">
 			                	<%= text_field_tag 'username', '', :class => 'form-control', :placeholder => 'Usuario' %>
 			                </div>
@@ -45,7 +44,7 @@
 	
 	<div class="row">
 	    <div class="col-xs-12">
-	    	<div class="panel panel-primary" id="users_results"></div>
+	    	<div class="panel panel-primary hidden" id="users_results"></div>
 		</div>
 	</div>
 
@@ -61,7 +60,9 @@
 				<% @permissionsCategory.each do |pc| %>
 		    		<div class="panel panel-default">
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= count %>" aria-expanded="false" class="collapsed">
-							<div class="panel-heading"><h2><%= pc.name %></h2></div>
+							<div class="panel-heading"><h2><%= pc.name %></h2> 
+							  <i class="fa fa-chevron-down" aria-hidden="true"></i>
+              </div>
 						</a>
 						<div id="collapse<%= count %>" class="collapse" aria-expanded="false" style="height: 0px;">
 							<div class="panel-body panel-no-padding">
@@ -172,7 +173,8 @@
 
 	<div class="row">
 	    <div class="col-xs-12">
-			<input type="button" id="btn_save" value="Salvar" class="btn btn-primary">
+			<input type="button" id="btn_save" value="Guardar" class="btn btn-primary">
+			<%= link_to "Cancelar", users_path, class: "btn btn-default" %>
 	    </div>
 	</div>
 </div>
