@@ -14,7 +14,6 @@ $(document).ready(function() {
   
   $("#list_tasks").on("change", "#currency", function(event) {
      search_task();
-     
   });
 
   $('#clear').click(function(e){
@@ -133,7 +132,7 @@ $(document).ready(function() {
       messages: {
         cost: {
           required:  "Campo costo es requerido",
-          min: "El costo no puede ser 0"
+          min: "Campo costo no puede ser 0"
         },
         currency: "Campo moneda es requerido"
       }
@@ -150,16 +149,19 @@ $(document).ready(function() {
   });
   
   //select all checkbox on listing
-  $("#list_tasks").on("click",  "button[data-list=true], button[data-all=true]", function() {
+  $("button[data-list=true], button[data-all=true]").on("click", function() {
       $("input[name=update_cost]").prop("checked", true);
       
       //only enable update costs button if there are result when customer chooses visible on list
       if($(this).attr("data-list") &&  $("input[name=update_cost]:checked").length  >= 1) {
         $("#update_costs").prop("disabled", false);
+        $("#update_all").attr("value", false);
       }
       
       if($(this).attr("data-all")) {
-        $("#update_costs").prop("disabled", false);    
+        $("#update_costs").prop("disabled", false);
+        //add value true to hidden field to select all checkboxes on each page
+        $("#update_all").attr("value", true);
       }
       
       //add update all records attribute to update costs button when customer selects update all records
@@ -171,5 +173,8 @@ $(document).ready(function() {
       
       $("#tasks_selection").modal('hide'); 
   });
+  
+  //add ajax to pagination
+  $(".pagination a").attr("data-remote", true);
 
 })
