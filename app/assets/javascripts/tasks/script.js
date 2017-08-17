@@ -115,16 +115,26 @@ $(document).ready(function() {
   $("#list_tasks").on("click", "#update_costs" ,function() {
     $("#update_costs_modal").modal();
     
-    $("#update_costs_form input[name=cost]").mask("0000000000.00");
-  
+    $("#update_costs_form input[name=cost]").mask("0NNNNNNNNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true}
+      }
+    });
+    
     //form validations
     $("#update_costs_form").validate({
       rules: {
-        cost: "required",
+        cost: {
+          required: true,
+          min: 1
+        },
         currency: "required"
       } ,
       messages: {
-        cost: "Campo costo es requerido",
+        cost: {
+          required:  "Campo costo es requerido",
+          min: "El costo no puede ser 0"
+        },
         currency: "Campo moneda es requerido"
       }
     });
