@@ -92,28 +92,44 @@ $(document).ready(function() {
   //enable update costs button
   $("#list_tasks").on("click", "input[name='update_cost']" , function() {
     var elem = $( this );
+    var checkboxes = $("#list_tasks input[name=update_cost]:checked")
     
-    if(elem.prop('checked')) {
-        $("#update_costs").prop('disabled', false)
-     } else if ($("#list_tasks input:checked").length == 0) {
-        $("#update_costs").prop('disabled', true)
-    } 
+    if(elem.prop("checked")) {
+      $("#update_costs").prop("disabled", false);
+    } else  {
+        $("#select_all").prop("checked", false);
+    }
+    
+    if (checkboxes.length == 0 ) {
+      $("#update_costs").prop("disabled", true);
+    }
   } );
   
   //launch modal when checkbox is selected
   $("#list_tasks").on("click", "#select_all", function() {
-    if($(this).prop('checked')) {
+    if($(this).prop("checked")) {
       $("#tasks_selection").modal();
     } else {
       $("#list_tasks input[type=checkbox]").prop("checked", false);
-      $("#update_costs").prop('disabled', true)
+      $("#update_costs").prop("disabled", true)
     }
   }); 
   
-  //open updates costs modal and add hidden field values to pass parameters
+  //open updates costs modal and add hidden field values to pass as parameters
   $("#list_tasks").on("click", "#update_costs" ,function() {
     $("#update_costs_modal").modal();
     
+    var update_costs_form = $("#update_costs_form");
+    
+    if ($(this).attr("data-update-all")  == "true") {
+      update_costs_form.find("#update_all").attr("value", true);
+      update_costs_form.find("#tasks_ids").attr("value", "");
+    } else {
+      var tasks_ids = $("#list_tasks input[name=update_cost]:checked").map(function() { return this.value}).get().join();
+      update_costs_form.find("#tasks_ids").attr("value", tasks_ids);
+    }
+    
+    //apply mask to cost field to only allow decimal numbers
     $("#update_costs_form input[name=cost]").mask("0NNNNNNNNN.NN", {
       translation: {
        'N': {pattern: /\d/, optional: true}
@@ -137,15 +153,6 @@ $(document).ready(function() {
         currency: "Campo moneda es requerido"
       }
     });
-    
-    var update_costs_form = $("#update_costs_form");
-    
-    if ($(this).attr("data-update-all")  == "true") {
-      update_costs_form.find("#update_all").attr("value", true);
-    } else {
-      var tasks_ids = $("#list_tasks input[name=update_cost]:checked").map(function() { return this.value}).get().join();
-      update_costs_form.find("#tasks_ids").attr("value", tasks_ids);
-    }
   });
   
   //select all checkbox on listing
