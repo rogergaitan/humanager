@@ -30,9 +30,9 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:description) %></th>
                 <th><%= model_class.human_attribute_name(:deduction_type) %></th>
-                <th><%= model_class.human_attribute_name(:amount_exhaust) %></th>
                 <th><%= model_class.human_attribute_name(:calculation_type) %></th>
-                <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
+                <th><%= model_class.human_attribute_name(:deduction_value) %></th>
+                <th><%= model_class.human_attribute_name(:state) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
@@ -40,10 +40,10 @@
               <% @deductions.each do |deduction| %>
                 <tr>
                   <td><%= deduction.description %></td>
-                  <td><%= deduction.deduction_type %></td>
-                  <td><%= deduction.amount_exhaust %></td>
-                  <td><%= deduction.calculation_type %></td>
-                  <td><%= deduction.ledger_account.naccount if deduction.ledger_account %></td>
+                  <td><%= t "deduction_type.#{deduction.deduction_type}" %></td>
+                  <td><%=t "calculation_type.#{deduction.calculation_type}" %></td>
+                  <td><%= deduction_value_helper deduction.deduction_value %></td>
+                  <td><%= active_helper deduction.state %></td>
                   <td>
                     <% if can? :update, Deduction %>
                       <%= link_to edit_deduction_path(deduction), :class => 'btn btn-xs btn-success-alt'  do %>
@@ -60,7 +60,6 @@
                       <% end %>
                     <% end %>
                   </td>
-
                 </tr>
               <% end %>
             </tbody>

@@ -23,9 +23,9 @@ class Deduction < ActiveRecord::Base
 
   belongs_to :ledger_account
 
-  # validates :calculation, :presence => true
-
-
+  validates :description, length: { maximum: 30 }
+  validates_numericality_of :deduction_value, greater_than: 0
+  
   def self.get_list_to_general_payment(payroll_ids, limit)
     listId = DeductionPayment.joins(:deduction_employee)
         .select('DISTINCT deduction_employees.deduction_id')

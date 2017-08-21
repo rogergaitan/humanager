@@ -75,8 +75,8 @@ es:
   
   deduction_type:
     constant: Constante
-    unique: único
-    amount_exhaust: Monto a agotar
+    unique: Único
+    amount_exhaust: Monto a Agotar
   calculation_type:
     percentage: Porcentaje
     fixed: Fijo
@@ -621,16 +621,17 @@ es:
         deduction_employee:
           calculation: Valor
         deduction:
-          description: Descripción
-          deduction_type: Tipo de deducción
+          description: Nombre
+          deduction_type: Tipo de Deducción
           amount_exhaust: Monto a agotar
-          calculation_type: Tipo de calculo
-          custom_calculation: Valor Deducción
+          calculation_type: Tipo de Calculo
+          deduction_value: Valor de la Deducción
           ledger_account_id: Cuenta a Acreditar
           is_beneficiary: El empleado es Beneficiario?
           beneficiary_id: Beneficiario
           payroll_types: Tipos de planillas
           individual: ¿Aplica individualmente?
+          state: Activa
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde
