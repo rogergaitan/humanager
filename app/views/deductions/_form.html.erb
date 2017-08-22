@@ -97,7 +97,7 @@
               <div class="col-sm-6 pull-right">
                 <%= f.label :currency_id, "Moneda para Monto a Agotar", :class => "col-sm-2  control-label" %>
                 <div class="col-sm-6 form-group_">
-                  <%= f.collection_select :currency_id, @currencies, :id, :name,
+                  <%= f.collection_select :amount_exhaust_currency_id, @currencies, :id, :name,
                       options = {:prompt => false}, html_options = {:class => "form-control" } %>
                 </div>
                </div>
@@ -113,10 +113,10 @@
               <%= f.select(:calculation_type, translate_enum(:calculation_type), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
             <div class="col-sm-2 control-label">
-              <%= f.label :deduction_value, :class => ' custom_calculation'  %>
+              <%= f.label :deduction_value, :class => 'deduction_value'  %>
             </div>
             <div class="col-sm-3">
-              <%= f.text_field :custom_calculation, :class => 'form-control custom_calculation', 
+              <%= f.text_field :deduction_value, :class => 'form-control deduction_value', 
                   :value => number_with_precision(f.object.custom_calculation, delimiter: ',', 
                   separator: '.', precision: 2) %>
               <div class="individual-check">
@@ -131,6 +131,15 @@
             <div class="col-sm-1 percentage-col">
               <label class="percentage">%</label>
             </div>
+            <div class="col-sm-6 pull-right" id="deduction_currency">
+              <%= f.label :currency_id, "Moneda para Deducción", :class => "col-sm-2  control-label" %>
+              <div class="col-sm-6 form-group_">
+                <%= f.collection_select :deduction_currency_id, @currencies, :id, :name,
+                    options = {:prompt => false}, html_options = {:class => "form-control" } %>
+              </div>
+            </div>
+            
+            
           </div>
           
           <div class="form-group">
