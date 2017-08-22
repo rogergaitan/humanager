@@ -7,6 +7,9 @@ class Deduction < ActiveRecord::Base
 
   attr_accessor :custom_calculation, :employee_ids
 
+  belongs_to :amount_exhaust_currency_id, class_name: :currency
+  belongs_to :deduction_currency_id, class_name: :currency
+  
   belongs_to :company
   has_many :companies
 
@@ -23,8 +26,9 @@ class Deduction < ActiveRecord::Base
 
   belongs_to :ledger_account
 
-  validates :description, length: { maximum: 30 }
+  validates :description, presence: true,  length: { maximum: 30 }
   validates_numericality_of :deduction_value, greater_than: 0
+  validates_numericality_of :amount_exhaust, greater_than: 0
   
   def self.get_list_to_general_payment(payroll_ids, limit)
     listId = DeductionPayment.joins(:deduction_employee)
@@ -39,5 +43,13 @@ class Deduction < ActiveRecord::Base
                       .map(&:id)
 
   end
-
+  
+  def active
+    if self.state == :active
+      1
+    else
+      0
+    end  
+  end
+  
 end
