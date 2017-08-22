@@ -5,6 +5,8 @@ class DeductionsController < ApplicationController
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Deduction, params[:id])
   end
+  
+  before_filter :set_currencies, :only => [:edit, :new]
 
   respond_to :html, :json, :js
 
@@ -87,7 +89,7 @@ class DeductionsController < ApplicationController
     @deduction = Deduction.find(params[:id])
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
-        format.html { redirect_to deductions_path, notice: 'Deduction was successfully updated.' }
+        format.html { redirect_to deductions_path, notice: 'Deduction actualizada exitosamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -154,5 +156,11 @@ class DeductionsController < ApplicationController
     @superior = Employee.superior
     @payroll_types = PayrollType.where(company_id: current_user.company_id)
   end
-
+  
+  private
+  
+    def set_currencies
+      @currencies = Currency.all
+    end
+  
 end

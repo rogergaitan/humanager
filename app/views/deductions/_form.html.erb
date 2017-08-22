@@ -90,9 +90,19 @@
                 <%= f.text_field :amount_exhaust, :class => 'form-control', 
                     :value => number_with_precision(f.object.amount_exhaust, 
                     delimiter: ',', separator: '.', precision: 2) %>
-                    <div class="help-block with-errors"></div>
-              </div>              
-            </div>                                   
+              
+                 <div class="help-block with-errors"></div>
+              </div>
+              
+              <div class="col-sm-6 pull-right">
+                <%= f.label :currency_id, "Moneda para Monto a Agotar", :class => "col-sm-2  control-label" %>
+                <div class="col-sm-6 form-group_">
+                  <%= f.collection_select :currency_id, @currencies, :id, :name,
+                      options = {:prompt => false}, html_options = {:class => "form-control" } %>
+                </div>
+               </div>
+               
+            </div>
           </div>
           
           <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
@@ -103,7 +113,7 @@
               <%= f.select(:calculation_type, translate_enum(:calculation_type), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
             <div class="col-sm-2 control-label">
-              <%= f.label :custom_calculation, :class => ' custom_calculation' %>
+              <%= f.label :deduction_value, :class => ' custom_calculation'  %>
             </div>
             <div class="col-sm-3">
               <%= f.text_field :custom_calculation, :class => 'form-control custom_calculation', 
@@ -138,6 +148,14 @@
             </div>
           </div>
           
+          <div class="form-group">
+            <div class="col-sm-3">
+              <div class="text-center">
+                <%= f.label :active, "Activo" %>
+                <%= f.check_box  :active %>
+              </div>
+            </div>
+          </div>
           
           <!-- P A Y R O L L    T Y P E S -->
           <div class="form-group">
