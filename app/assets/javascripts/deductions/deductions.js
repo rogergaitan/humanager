@@ -249,6 +249,13 @@ $(document).ready(function() {
   $('form').on('focusout', '.search_code_employee', function() {
     searchEmployeeByAttr($(this).val(), 'code', 'table', types.add);
   });
+  
+  $("#deduction_amount_exhaust").mask("FNNNNNNNNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true},
+       "F": {pattern: /[1-9]/}
+      }
+  });
 
 });
 
