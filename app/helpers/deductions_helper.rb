@@ -1,5 +1,5 @@
 module DeductionsHelper
-  def active_helper(state)
+  def state_helper(state)
     if state == :active
       "Si"
     else
@@ -8,7 +8,7 @@ module DeductionsHelper
   end
   
   def deduction_value_helper(deduction)
-    if deduction.individual?
+    if deduction.individual
       "Individual"
     elsif deduction.calculation_type == :percentage
       "%#{deduction.deduction_value}"
