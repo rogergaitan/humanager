@@ -15,8 +15,6 @@ $(document).ready(function() {
   };
 
   $('#deduction_payroll_type_ids').multiSelect({
-    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
     afterInit: function(ms){
       var that = this,
       $selectableSearch = that.$selectableUl.prev(),
