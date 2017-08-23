@@ -394,7 +394,7 @@ es:
           one: Prestación
           other: Prestaciones
         deduction:
-          one: Deduccion
+          one: Deducción
           other: Deducciones
         occupation:
           one: Ocupación
@@ -629,6 +629,8 @@ es:
           ledger_account_id: Cuenta a Acreditar
           is_beneficiary: El empleado es Beneficiario?
           beneficiary_id: Beneficiario
+          creditor_id: Pagar a
+          pay_to_employee: ¿Se paga al Empleado?
           payroll_types: Tipos de planillas
           individual: ¿Aplica individualmente?
           state: Activa
