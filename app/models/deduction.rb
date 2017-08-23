@@ -3,12 +3,15 @@ class Deduction < ActiveRecord::Base
   attr_accessible :payroll_ids, :amount_exhaust, :calculation_type, #:calculation
         :ledger_account_id, :deduction_type, :description,
         :payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id, :individual, 
-        :deduction_employees_attributes, :custom_calculation, :employee_ids, :company_id
+        :deduction_employees_attributes, :custom_calculation, :employee_ids, :company_id, :creditor_id,
+        :deduction_currency_id, :amount_exhaust_currency_id
 
   attr_accessor :custom_calculation, :employee_ids
 
   belongs_to :amount_exhaust_currency_id, class_name: :currency
   belongs_to :deduction_currency_id, class_name: :currency
+  
+  belongs_to :creditor
   
   belongs_to :company
   has_many :companies

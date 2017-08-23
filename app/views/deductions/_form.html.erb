@@ -116,9 +116,7 @@
               <%= f.label :deduction_value, :class => 'deduction_value'  %>
             </div>
             <div class="col-sm-3">
-              <%= f.text_field :deduction_value, :class => 'form-control deduction_value', 
-                  :value => number_with_precision(f.object.custom_calculation, delimiter: ',', 
-                  separator: '.', precision: 2) %>
+              <%= f.text_field :deduction_value, :class => 'form-control deduction_value' %>
               <div class="individual-check">
                 <%= f.label :individual, :class => 'col-sm-5 control-label' %>
                 <div class="col-sm-3">
@@ -131,26 +129,27 @@
             <div class="col-sm-1 percentage-col">
               <label class="percentage">%</label>
             </div>
+            
             <div class="col-sm-6 pull-right" id="deduction_currency">
-              <%= f.label :currency_id, "Moneda para Deducción", :class => "col-sm-2  control-label" %>
+              <%= f.label :deduction_currency_id, "Moneda para Deducción", :class => "col-sm-2  control-label" %>
               <div class="col-sm-6 form-group_">
                 <%= f.collection_select :deduction_currency_id, @currencies, :id, :name,
                     options = {:prompt => false}, html_options = {:class => "form-control" } %>
               </div>
             </div>
             
-            
           </div>
           
           <div class="form-group">
-            <%= f.label :beneficiary_id, :class => 'col-sm-2 control-label' %>
+            <%= f.label :creditor_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :beneficiary_id, :class => 'form-control' %>
+              <%= f.hidden_field :creditor_id %>
+              <%= text_field_tag :load_creditor, nil,  :class => 'form-control', :for => :creditor_id %>
               <div class="beneficiary-check">
-                <%= f.label :is_beneficiary, :class => 'control-label col-sm-5' %>
+                <%= f.label :pay_to_employee, :class => 'control-label col-sm-5' %>
                 <div class="col-sm-3">
-                  <label class="checkbox icheck" id="div_deduction_is_beneficiary">
-                    <%= f.check_box :is_beneficiary %>
+                  <label class="checkbox icheck" id="div_deduction_pay_to_employee">
+                    <%= f.check_box :pay_to_employee %>
                   </label>
                 </div>
               </div>

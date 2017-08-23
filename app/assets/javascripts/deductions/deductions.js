@@ -101,7 +101,7 @@ $(document).ready(function() {
     typeCalculation(this);
   });
 
-  $('#deduction_custom_calculation').focusout(function(){
+  $('#deduction_deduction_value').focusout(function(){
     typeCalculation($('#deduction_calculation_type'));
   });
 
@@ -141,7 +141,7 @@ $(document).ready(function() {
   });
 
   showHideEmployees(true); // Call the function to show/hide the div about employees
-  isBeneficiary($('#deduction_is_beneficiary').is(':checked'));
+  isBeneficiary($("#deduction_pay_to_employee").prop("checked"));
 
   // Deduction Individual
   $('#deduction_individual').parents('label').click(function() {
@@ -169,12 +169,12 @@ $(document).ready(function() {
   });
 
   // Is Beneficiary
-  $('#deduction_is_beneficiary').parents('label').click(function() {
-    isBeneficiary($('#deduction_is_beneficiary').is(':checked'));
+  $('#deduction_pay_to_employee').parents('label').click(function() {
+    isBeneficiary($('#deduction_pay_to_employee').is(':checked'));
   });
 
-  $('#deduction_is_beneficiary').next().click(function() {
-    isBeneficiary($('#deduction_is_beneficiary').is(':checked'));
+  $('#deduction_pay_to_employee').next().click(function() {
+    isBeneficiary($('#deduction_pay_to_employee').is(':checked'));
   });
   
   /* N O */
@@ -210,9 +210,9 @@ $(document).ready(function() {
 
   $("#employee_items input:text[id*='_calculation']").keyup(resources.twoDecimals);
 
-  $('#deduction_custom_calculation').keyup(resources.twoDecimals);
+  $('#deduction_deduction_value').keyup(resources.twoDecimals);
 
-  $('#deduction_custom_calculation').on('change', function() {
+  $('#deduction_deduction_value').on('change', function() {
     var value = $(this).val();
     $('#employee_items tr').each(function() {
       if( !parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
@@ -250,16 +250,47 @@ $(document).ready(function() {
     searchEmployeeByAttr($(this).val(), 'code', 'table', types.add);
   });
   
-  $("#deduction_amount_exhaust").mask("FNNNNNNNNN.NN", {
+  applyDecimalMask("#deduction_amount_exhaust");
+  
+  
+//Search creditors
+$.getJSON("/creditors", function(data) {
+    $('#load_creditor').autocomplete({
+      minLength: 3,
+      
+      source: $.map(data, function(item){
+        $.data(document.body, 'creditor_' + item.id + "", item.name);
+          return { label: item.name, id: item.id }
+      }),
+      
+      select: function(event, ui) {
+        if(ui.item.id) {
+          $('#deduction_creditor_id').val(ui.item.id);
+        }
+      },
+      
+      focus: function(event, ui) {
+        $('#load_creditor').val(ui.item.label);  
+      }
+    });
+    
+    if($('deduction_creditor_id').val()) {
+      $('#load_creditor').val($.data(document.body, 'creditor_' + $('#deduction_creditor_id').val()));
+    }
+});
+  
+});
+
+/* F U N C T I O N S */
+function applyDecimalMask(selector) {
+   $(selector).mask("FNNNNNNNNN.NN", {
       translation: {
        'N': {pattern: /\d/, optional: true},
        "F": {pattern: /[1-9]/}
       }
-  });
+  });    
+}
 
-});
-
-/* F U N C T I O N S */
 function selectUnselectEmployees(isSelect) {
   
   var theClass = 'ms-selection';
@@ -309,6 +340,7 @@ function typeDeduction(selected) {
       $('#deduction_payroll').prop('required', 'required');
       $('#deduction_amount_exhaust').prop('required', '');
       $('#deduction_amount_exhaust').val('');
+      $("#deduction_deduction_currency_id").prop("disabled", false);
       getPayrolls();
     break;
     case 'amount_exhaust':
@@ -318,7 +350,8 @@ function typeDeduction(selected) {
       $('#deduction_payrolls').hide();
       $('#deduction_payroll').val('');
       $('#deduction_payroll').prop('required', '');
-      $('#deduction_amount_exhaust').prop('required', 'required');    
+      $('#deduction_amount_exhaust').prop('required', 'required');  
+      $("#deduction_deduction_currency_id").prop("disabled", true);
     break;
     case 'constant':
       $('#amount_exhaust_controls').hide();
@@ -329,28 +362,24 @@ function typeDeduction(selected) {
       $('#deduction_payroll').prop('required', ''); 
       $('#deduction_amount_exhaust').prop('required', '');
       $('#deduction_amount_exhaust').val('');
+      $("#deduction_deduction_currency_id").prop("disabled", false);
     break;
   }
 }
 
 function typeCalculation(selected) {
-  var deductionVal = $("#deduction_custom_calculation");
+  var deductionVal = $("#deduction_deduction_value");
   switch($(selected).val()) {
     case 'percentage':
       $('.percentage').html('%');
-      if (deductionVal.val() != '' && (parseFloat(deductionVal.val()) > 0 && parseFloat(deductionVal.val()) <= 100)) {
-        deductionVal.val(parseFloat(deductionVal.val()).toFixed(2));
-      } else {
-        deductionVal.val('');
-      }
+      $("#deduction_currency").hide();
+      $("#deduction_deduction_value").inputmask("Regex", { regex: "^[1-9][0-9]?$|^100$" }); //TODO improve decimal mask
       break;
     case 'fixed':
-      $('.percentage').html('')
-      if (deductionVal.val() != '' && parseFloat(deductionVal.val()) != 0) {
-        deductionVal.val(parseFloat(deductionVal.val()).toFixed(2));
-      } else {
-        deductionVal.val('');
-      }
+      $('.percentage').html('');
+      $("#deduction_currency").show();
+      $("#deduction_deduction_value").inputmask("remove");
+      $("#deduction_deduction_value").inputmask("Regex", {regex: "^([1-9][0-9]{0,9})(\.{1}[0-9]{0,2})?$"} );
       break;
   }
 }
@@ -413,19 +442,19 @@ function setAccount(e) {
 // Show/Hide The differents view based in the checkbox "individual"
 function showHideEmployees(isIndividual) {
   if( $('#deduction_individual').is(':checked') ) {
-    $('#deduction_custom_calculation').val('');
-    $('#deduction_custom_calculation').attr('readonly', true);
+    $('#deduction_deduction_value').val('');
+    $('#deduction_deduction_value').attr('readonly', true);
     /*$('#employee_items_one').hide()
     $('#employee_items_two').show();
     $('.custom_calculation').hide();*/
   } else {
-    $('#deduction_custom_calculation').attr('readonly', false);
+    $('#deduction_deduction_value').attr('readonly', false);
     /*$('#employee_items_one').show();
     $('#employee_items_two').hide();
     $('.custom_calculation').show();*/
   }
   if(isIndividual) {
-    $('#deduction_custom_calculation').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
+    $('#deduction_deduction_value').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
   }
 }
 
@@ -470,12 +499,10 @@ function clearPayrolls(){
 
 function isBeneficiary(value) {
   if( value ) {
-    $('#beneficiary_id').attr('disabled', 'disabled');
-    $('#deduction_beneficiary_id').val('');
-    $('#deduction_beneficiary_id').attr('readonly', true);
+    $("#deduction_creditor_id").prop("disabled", true);
+    $("#deduction_creditor_id").val('');
   } else {
-    $('#deduction_beneficiary_id').attr('readonly', false);
-    $('#beneficiary_id').removeAttr('disabled', 'disabled');
+    $("#deduction_creditor_id").prop("disabled", false);
   }
 }
 
