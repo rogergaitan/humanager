@@ -254,7 +254,7 @@ $(document).ready(function() {
   
   
 //Search creditors
-$.getJSON("/creditors", function(data) {
+  $.getJSON("/creditors", function(data) {
     $('#load_creditor').autocomplete({
       minLength: 3,
       
@@ -277,7 +277,18 @@ $.getJSON("/creditors", function(data) {
     if($('deduction_creditor_id').val()) {
       $('#load_creditor').val($.data(document.body, 'creditor_' + $('#deduction_creditor_id').val()));
     }
-});
+  }).done(function(data) {
+    $.each(data, function(i, item) {
+      $("#creditors_modal .modal-body").append("<p id="+ item.id + ">" + item.name + "</p>");
+    });
+  });
+  
+  $("#creditors_modal .modal-body").on("click", "p", function() {
+    var creditor = $(this);
+    $("#load_creditor").val(creditor.text());
+    $("#deduction_creditor_id").val(creditor.attr("id"));
+    $("#creditors_modal").modal("hide");
+  });
   
 });
 
@@ -499,10 +510,10 @@ function clearPayrolls(){
 
 function isBeneficiary(value) {
   if( value ) {
-    $("#deduction_creditor_id").prop("disabled", true);
-    $("#deduction_creditor_id").val('');
+    $("#load_creditor").prop("disabled", true);
+    $("#load_creditor").val('');
   } else {
-    $("#deduction_creditor_id").prop("disabled", false);
+    $("#load_creditor").prop("disabled", false);
   }
 }
 
