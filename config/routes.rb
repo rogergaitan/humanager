@@ -223,8 +223,9 @@ Reasapp::Application.routes.draw do
     end
   end
   
-  
   resources :currencies, only: [:index, :edit, :update]
+  
+  resources :creditors, only: [:index]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
