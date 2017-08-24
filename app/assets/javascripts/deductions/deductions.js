@@ -49,8 +49,8 @@ $(document).ready(function() {
   });
 
   $('#deduction_employee_ids').multiSelect({
-    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
+    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
     afterInit: function(ms){
       var that = this,
       $selectableSearch = that.$selectableUl.prev(),
@@ -350,6 +350,7 @@ function typeDeduction(selected) {
       $('#deduction_amount_exhaust').prop('required', '');
       $('#deduction_amount_exhaust').val('');
       $("#deduction_deduction_currency_id").prop("disabled", false);
+      disablePayrollTypes();
       getPayrolls();
     break;
     case 'amount_exhaust':
@@ -361,6 +362,7 @@ function typeDeduction(selected) {
       $('#deduction_payroll').prop('required', '');
       $('#deduction_amount_exhaust').prop('required', 'required');  
       $("#deduction_deduction_currency_id").prop("disabled", true);
+      enablePayrollTypes();
     break;
     case 'constant':
       $('#amount_exhaust_controls').hide();
@@ -372,6 +374,7 @@ function typeDeduction(selected) {
       $('#deduction_amount_exhaust').prop('required', '');
       $('#deduction_amount_exhaust').val('');
       $("#deduction_deduction_currency_id").prop("disabled", false);
+      enablePayrollTypes();
     break;
   }
 }
@@ -760,4 +763,17 @@ function findParentByAttr(value, type) {
     parent: parent,
     destroy: destroy
   };
+}
+
+// Disable/Enable payroll types
+function disablePayrollTypes() {
+  $("#deduction_payroll_type_ids").prop("disabled", true);
+  $("#deduction_payroll_type_ids").multiSelect("refresh");
+  $("#payroll_select_all").iCheck("disable");
+}
+
+function enablePayrollTypes() {
+    $("#deduction_payroll_type_ids").prop("disabled", false);
+    $("#deduction_payroll_type_ids").multiSelect("refresh");
+    $("#payroll_select_all").iCheck("enable");
 }
