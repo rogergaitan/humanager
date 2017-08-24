@@ -166,10 +166,12 @@
           </div>
           
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <div class="text-center">
-                <%= f.label :active, "Activo" %>
-                <%= f.check_box  :active %>
+                <%= f.label :active, "Activo", :class => "control-label col-sm-6" %>
+                <label class="checkbox icheck" id="div_deduction_pay_to_employee">
+                  <%= f.check_box  :active %>
+                </label>
               </div>
             </div>
           </div>
