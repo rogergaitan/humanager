@@ -283,8 +283,11 @@ $(document).ready(function() {
   
   $("#creditors_modal .modal-body").on("click", "p", function() {
     var creditor = $(this);
-    $("#load_creditor").val(creditor.text());
-    $("#deduction_creditor_id").val(creditor.attr("id"));
+    var load_creditor = $("#load_creditor");
+    if(!load_creditor.prop("disabled")) {
+      $("#load_creditor").val(creditor.text());
+      $("#deduction_creditor_id").val(creditor.attr("id"));
+    }
     $("#creditors_modal").modal("hide");
   });
   
@@ -513,8 +516,11 @@ function isBeneficiary(value) {
   if( value ) {
     $("#load_creditor").prop("disabled", true);
     $("#load_creditor").val('');
+    $("#deduction_creditor_id").val("");
+    $("a[href=#creditors_modal]").prop("disabled", true);
   } else {
     $("#load_creditor").prop("disabled", false);
+    $("a[href=#creditors_modal]").prop("disabled", false);
   }
 }
 
