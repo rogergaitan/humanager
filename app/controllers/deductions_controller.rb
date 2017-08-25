@@ -1,12 +1,12 @@
 class DeductionsController < ApplicationController
   load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit]
+  before_filter :resources, :only => [:new, :edit, :create]
   
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Deduction, params[:id])
   end
   
-  before_filter :set_currencies, :only => [:edit, :new]
+  before_filter :set_currencies, :only => [:edit, :new, :create]
 
   respond_to :html, :json, :js
 
@@ -70,8 +70,7 @@ class DeductionsController < ApplicationController
   # POST /deductions.json
   def create
     @deduction = Deduction.new(params[:deduction])
-    @deduction.state = CONSTANTS[:PAYROLLS_STATES]['ACTIVE']
-
+    
     respond_to do |format|
       if @deduction.save
         format.html { redirect_to action: :index }
