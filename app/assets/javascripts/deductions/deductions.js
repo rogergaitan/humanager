@@ -391,14 +391,15 @@ function typeCalculation(selected) {
       $('.percentage').html('%');
       $("#deduction_currency").hide();
       $("#maximum_deduction").show();
-      $("#deduction_deduction_value").inputmask('decimal',{integerDigits: 3, digits: 2, min:1, max:10});
+      $("#deduction_maximum_deduction");
+      $("#deduction_deduction_value");
       break;
     case 'fixed':
       $('.percentage').html('');
       $("#deduction_currency").show();
       $("#maximum_deduction").hide();
       $("#maximum_deduction").val("");
-      $("#deduction_deduction_value").inputmask("decimal", {integerDigits: 10, digits: 2, min: 1});
+      applyDecimalMask("#deduction_deduction_value");
       break;
   }
 }

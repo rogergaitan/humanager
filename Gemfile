@@ -24,7 +24,6 @@ gem 'thin'
 gem 'cancan'
 gem 'hirb', '~> 0.7.0'
 gem 'jquery_mask_rails', '~> 0.1.0'
-gem 'jquery-inputmask-rails', :git => 'https://github.com/douglas-dksh/jquery-inputmask-rails.git'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -57,9 +56,4 @@ group :development, :test do
   #gem 'capistrano'
   #gem 'capistrano-rails'
   gem "rspec-rails"
-  gem "byebug"
-end
-
-group :test do
-  gem "capybara"
 end
