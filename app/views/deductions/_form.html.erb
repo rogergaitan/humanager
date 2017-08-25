@@ -15,7 +15,7 @@
     <% if @deduction.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@deduction.errors.count, "error") %> prohibited this deduction from being saved:</h3>
+        <h3><%= pluralize(@deduction.errors.count, "error") %> no permitieron guardar esta deducción </h3>
         <% @deduction.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -163,18 +163,36 @@
               <a data-toggle="modal" href="#creditors_modal" class="btn btn-default-alt" title="Ver lista de acreedores">
                 <i class="fa fa-bars"></i>
               </a>
-          </div>
-          
-          <div class="form-group">
-            <div class="col-sm-4">
-              <div class="text-center">
-                <%= f.label :active, "Activo", :class => "control-label col-sm-6" %>
-                <label class="checkbox icheck">
-                  <%= f.check_box  :active %>
-                </label>
+              
+            <div class="col-sm-6 pull-right" id="maximum_deduction">
+              <%= f.label :maximum_deduction, "Deducción Máxima", :class => "col-sm-2 control-label" %>
+              <div class="col-sm-6 form-group_">
+                <%= f.text_field :maximum_deduction, :class => "form-control" %>
+              </div>
+              <br><br><br>
+             
+              <%= f.label :maximum_deduction_currency_id, "Moneda", :class => "col-sm-2  control-label" %>
+              <div class="col-sm-6 form-group_">
+                <%= f.collection_select :maximum_deduction_currency_id, @currencies, :id, :name,
+                    options = {:prompt => false}, html_options = {:class => "form-control" } %>
               </div>
             </div>
+               
           </div>
+          
+          <%# only show this field when editing default value is active %>
+          <% if @deduction.persisted? %>
+            <div class="form-group">
+              <div class="col-sm-4">
+                <div class="text-center">
+                  <%= f.label :active, "Activo", :class => "control-label col-sm-6" %>
+                  <label class="checkbox icheck">
+                    <%= f.check_box  :active %>
+                  </label>
+                </div>
+              </div>
+            </div>
+          <% end %>
           
           <!-- P A Y R O L L    T Y P E S -->
           <div class="form-group">
@@ -220,7 +238,7 @@
           </div>
           
           <div class="form-group" id="employee_items_two">
-            <label class="col-sm-2 control-label">Agregar Empleados</label>
+            <label class="col-sm-2 control-label">Detalle de Aplicación Individual</label>
             <div class="col-sm-8">
               <table id="employee_items" class="table table-responsive">
                 <thead>
@@ -228,7 +246,7 @@
                     <td class="header_employee" width='80%'>Empleado</td>
                     <td class="header_calculation">Valor</td>
                     <td class="">
-                      Agregar <%= link_to_add_fields("", f, :deduction_employees, "") %>
+                      <%= link_to_add_fields("", f, :deduction_employees, "") %>
                     </td>
                   </tr>
                 </thead>

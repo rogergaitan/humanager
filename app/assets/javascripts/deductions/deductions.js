@@ -13,6 +13,8 @@ $(document).ready(function() {
     remove: 'remove',
     show: 'show'
   };
+  
+  $(".add_fields").hide(); //hide add employee button  as required
 
   $('#deduction_payroll_type_ids').multiSelect({
     afterInit: function(ms){
@@ -388,13 +390,15 @@ function typeCalculation(selected) {
     case 'percentage':
       $('.percentage').html('%');
       $("#deduction_currency").hide();
-      $("#deduction_deduction_value").inputmask("Regex", { regex: "^[1-9][0-9]?$|^100$" }); //TODO improve decimal mask
+      $("#maximum_deduction").show();
+      $("#deduction_deduction_value").inputmask('decimal',{integerDigits: 3, digits: 2, min:1, max:10});
       break;
     case 'fixed':
       $('.percentage').html('');
       $("#deduction_currency").show();
-      $("#deduction_deduction_value").inputmask("remove");
-      $("#deduction_deduction_value").inputmask("Regex", {regex: "^([1-9][0-9]{0,9})(\.{1}[0-9]{0,2})?$"} );
+      $("#maximum_deduction").hide();
+      $("#maximum_deduction").val("");
+      $("#deduction_deduction_value").inputmask("decimal", {integerDigits: 10, digits: 2, min: 1});
       break;
   }
 }
@@ -459,11 +463,13 @@ function showHideEmployees(isIndividual) {
   if( $('#deduction_individual').is(':checked') ) {
     $('#deduction_deduction_value').val('');
     $('#deduction_deduction_value').attr('readonly', true);
+    enableDeductionEmployeeIds();
     /*$('#employee_items_one').hide()
     $('#employee_items_two').show();
     $('.custom_calculation').hide();*/
   } else {
     $('#deduction_deduction_value').attr('readonly', false);
+    disableDeductionEmployeeIds();
     /*$('#employee_items_one').show();
     $('#employee_items_two').hide();
     $('.custom_calculation').show();*/
@@ -619,18 +625,18 @@ function fromMulti(employee, type) {
       // No existe
       if(typeof data.parent == 'undefined') {
         $('.add_fields ').trigger('click'); // Add new row
-        var selector = $('#employee_items tr.items_deductions_form:eq(0)');
-        $(selector).find("input:hidden[id*='_destroy']").val("false");
-        $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
-        $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
-        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
-        $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
-        $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
-        $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
-      } else { // Existe
-        $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
-        $(data.parent).show();
-      }
+          var selector = $('#employee_items tr.items_deductions_form:eq(0)');
+          $(selector).find("input:hidden[id*='_destroy']").val("false");
+          $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
+          $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
+          $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+          $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+          $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+          $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+        } else { // Existe
+          $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+          $(data.parent).show();
+        }
       // resources.PNotify('Empleado', 'Agregado con exito', 'success');
     break;
     
@@ -782,4 +788,21 @@ function enablePayrollTypes() {
     $("#deduction_payroll_type_ids").prop("disabled", false);
     $("#deduction_payroll_type_ids").multiSelect("refresh");
     $("#payroll_select_all").iCheck("enable");
+}
+
+// Disable/Enable Deduction Employee ids
+function disableDeductionEmployeeIds() {
+  $("#deduction_employee_ids").prop("disabled", true);
+  $("#deduction_employee_ids").multiSelect("refresh");
+  $("#emplotee_select_all").iCheck("disable");
+  $(".items_deductions_form").prop("disabled", true);
+  $("#employee_items_two").hide();
+}
+
+function enableDeductionEmployeeIds() {
+  $("#deduction_employee_ids").prop("disabled", false);
+  $("#emplotee_select_all").iCheck("enable");
+  $("#deduction_employee_ids").multiSelect("refresh");
+  $("#employee_items_two").show();
+  $(".items_deductions_form").prop("disabled", false);
 }

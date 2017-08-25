@@ -42,8 +42,8 @@
                   <td><%= deduction.description %></td>
                   <td><%= t "deduction_type.#{deduction.deduction_type}" %></td>
                   <td><%=t "calculation_type.#{deduction.calculation_type}" %></td>
-                  <td><%= deduction_value_helper deduction.deduction_value %></td>
-                  <td><%= active_helper deduction.state %></td>
+                  <td><%= deduction_value_helper deduction %></td>
+                  <td><%= state_helper deduction.state %></td>
                   <td>
                     <% if can? :update, Deduction %>
                       <%= link_to edit_deduction_path(deduction), :class => 'btn btn-xs btn-success-alt'  do %>
