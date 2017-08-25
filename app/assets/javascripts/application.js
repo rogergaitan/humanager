@@ -67,4 +67,5 @@
 //= require menus
 //= require validator
 //= require jquery.mask
+//= require jquery.inputmask.bundle.min
 //= require_directory .
