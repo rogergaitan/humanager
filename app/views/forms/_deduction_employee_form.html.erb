@@ -5,21 +5,8 @@
       <div class="col-md-12">
         <%= f.hidden_field :employee_id %>
         <%= hidden_field_tag 'in_searching', '0' %>
-        <div class="col-md-2">
-          <%= text_field_tag 'search_code_employee', '', :class => 'form-control search_code_employee', 
-              :placeholder => 'Número' %>
-        </div>
-
-        <div class="input-group">
-          <%= text_field_tag 'search_name_employee', '', :class => 'form-control', 
-              :placeholder => 'Nombre Empleado' %>
-          <span class="input-group-btn">
-            <a id="openEmployeeModal" class="btn btn-default" data-keyboard="false" data-backdrop="static" 
-                href="#employeeModal" role="button" data-toggle="modal" >
-              <i class="fa fa-list"></i>
-            </a>
-          </span>
-        </div>
+        <%= text_field_tag 'search_name_employee', '', :class => 'form-control', 
+          :placeholder => 'Nombre Empleado' %>
       </div>
     </div>
   </td>
@@ -27,23 +14,10 @@
   <td class="controls_item">
     <div class="input-append">
       <div class="controls">
-        <%= f.text_field :calculation, :size => "5x5", :class => 'form-control',
-        :value => number_with_precision(f.object.calculation, delimiter: ',', separator: '.', precision: 2) %>
-      </div>
-    </div>
-  </td>
-
-  <td>
-    <div class="controls_item">
-      <div class="controls">
-        <%= f.hidden_field :_destroy, :value => f.object.completed %>
-        <%= link_to '#', class: "remove_fields btn btn-xs btn-danger" do %>
-          <i class="fa fa-trash-o"></i>
-        <% end %>
+        <%= f.text_field :calculation, :size => "5x5", :class => 'form-control'  %>
       </div>
     </div>
   </td>
 
   <%= f.hidden_field :completed, :value => false %>
-
 </tr>
