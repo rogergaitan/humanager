@@ -315,6 +315,12 @@ es:
             attributes:
               calculation:
                 blank: Este campo no puede quedar en blanco
+              deduction_value:
+                not_a_number: Valor debe ser un numero
+              amount_exhaust:
+                not_a_number: Valor deber un numero
+              creditor_id:
+                blank: Este campo no puede quedar en blanco
           other_payment:
             attributes:
               payrolls:
