@@ -11,7 +11,7 @@ module DeductionsHelper
     if deduction.individual
       "Individual"
     elsif deduction.calculation_type == :percentage
-      "%#{deduction.deduction_value}"
+      "#{deduction.deduction_value}%"
     elsif deduction.calculation_type == :fixed
       "#{deduction.currency.try :symbol}#{deduction.deduction_value}"
     end 
