@@ -1,0 +1,37 @@
+<div class="page-heading"> 
+  <h1>Tablas de IR</h1>
+</div>
+
+<div class="container-fluid">
+  <%= render "/layouts/message" %>
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading"></div>
+        
+        <div class="panel-body panel-no-padding">
+          <table class="table table-stripped">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <% @ir_tables.each do |ir_table| %>
+                <tr>
+                  <td><%= ir_table.name %></td>
+                  <td><%= ir_table.start_date %></td>
+                  <td><%= ir_table.end_date %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

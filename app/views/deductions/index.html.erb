@@ -9,9 +9,19 @@
         <%= link_to new_deduction_path, :class => 'btn btn-primary pu' do %>
           <i class="fa fa-plus"></i>
         <% end %>
-      <% end %>
-    </div>
-  </div>
+        
+        <div class="dropdown pull-right">
+            <a  data-target="#"  data-toggle="dropdown" class="btn btn-primary">
+              <span class="caret"></span>
+            </a>
+            
+            <ul class="dropdown-menu">
+              <li><%= link_to  "Tabla de Rangos IR", ir_tables_path %></li>
+            </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>  
 </div>
 
 <div class="container-fluid">
