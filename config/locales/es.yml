@@ -344,6 +344,14 @@ es:
                 too_long: maximo 20 caracteres
               other_code:
                 too_long: maximo 20 caracteres
+          ir_table:
+            attributes:
+              name:
+                blank: no puede quedar en blanco
+              start_date:
+                blank: no puede quedar en blanco
+              end_date:
+                blank: no puede quedar en blanco
       models:
         currency:
           one: Moneda
@@ -385,6 +393,7 @@ es:
         district: Distrito
         canton: Cantones
         company: Compañias
+        ir_table: Tabla IR
         task: 
           one: Labor
           other: Labores
@@ -677,6 +686,10 @@ es:
           municipality: Municipio o Ciudad
           address: Dirección
           country: País
+        ir_table:
+          name: Nombre
+          start_date: Fecha Inicio
+          end_date: Fecha Fin
        
   date:
       abbr_day_names:

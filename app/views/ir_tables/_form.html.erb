@@ -1,0 +1,147 @@
+<div class="container-fluid">
+  
+  <% if @ir_table.errors.any? %>
+      <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h3><%= pluralize(@ir_table.errors.count, "error") %> no permitieron guardar esta tabla ir </h3>
+        <% @ir_table.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <br>
+      </div>
+    <% end %>
+
+  <div class="panel panel-primary">
+    
+    <div class="panel-heading"></div>
+    
+    <div class="panel-body panel-no-padding">
+      <%= form_for @ir_table, html: { class:  'form-horizontal row-border', data: {toggle: "validator"} } do |f| %>
+      
+        <div class="form-group">
+          <%= f.label :name, "Nombre", class: "col-sm-2 control-label" %>
+          <div class="col-sm-3 form-group_">
+            <%= f.text_field :name, class: "form-control", required: true  %>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :start_date, "Fecha Inicio", class: "col-sm-2 control-label" %>
+          <div class="col-sm-3 form-group_">
+            <div class="input-group">
+              <%= f.text_field :start_date, class: "form-control", required: true %>
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :end_date, "Fecha Fin", class: "col-sm-2 control-label" %>
+          <div class="col-sm-3 form-group_">
+            <div class="input-group">
+              <%= f.text_field :end_date, class: "form-control", required: true %>
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+        </div>
+        
+        <table class="table table-stripped">
+          <thead>
+            <tr>
+              <th>Estratos de Renta Neta Anual</th>
+              <th>Impuesto base</th>
+              <th>Porcentaje aplicable</th>
+              <th>Sobre exceso de</th>
+            </tr>
+            <tr>
+              <th>De C$ Hasta C$ </th>
+              <th>C$</th>
+              <th>%</th>
+              <th>C$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>100,000.01 200,000.00</td>
+              <td>0</td>
+              <td>15.00%</td>
+              <td>100,000</td>
+            </tr>
+            
+            <tr>
+              <td>200,000.01 350,000.00</td>
+              <td>15,000.00</td>
+              <td>20.00%</td>
+              <td>200,000.00</td>
+            </tr>
+            
+            <tr>
+              <td>350,000.01 500,000.00</td>
+              <td>45,000.00</td>
+              <td>25.00%</td>
+              <td>350,000.00</td>
+            </tr>
+            
+            <tr>
+              <td>500,000.01 a más</td>
+              <td>82,500.00</td>
+              <td>30.00%</td>
+              <td>500,000.00</td>
+            </tr>
+            
+            <% @ir_table.ir_table_values.each do |ir_table_value| %>
+              <tr>
+                <td><%= ir_table_value.from %></td>
+                <td><%= ir_table_value.until %></td>
+                <td><%= ir_table_value.base %></td>
+                <td><%= ir_table_value.percent %></td>
+                <td><%= ir_table_value.excess %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        
+        <div class="ir_table_values_fields">
+          <%= f.fields_for :ir_table_values do |ir_table_value_fields| %>
+          
+            <div class="form-group">
+              <%= ir_table_value_fields.label :from, "Desde", class: "col-sm-2 control-label" %>
+              <div class="col-sm-3 form-group_">
+                <%= ir_table_value_fields.text_field :from, class: "form-control" %>
+              </div>
+              
+              <%= ir_table_value_fields.label :until, "Hasta", class: "col-sm-2 control-label" %>
+              <div class="col-sm-3 form-group_">
+                <%= ir_table_value_fields.text_field :until, class: "form-control" %>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <%= ir_table_value_fields.label :percent, "Porcentaje", class: "col-sm-2 control-label"  %>
+              <div class="col-sm-3 form-group_">
+                <%= ir_table_value_fields.text_field :percent, class: "form-control" %>
+              </div>
+              
+              <%= ir_table_value_fields.label :excess, "Exceso", class: "col-sm-2 control-label" %>
+              <div class="col-sm-3 form-group_">
+                <%= ir_table_value_fields.text_field :excess, class: "form-control" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+              <%= f.submit :class => 'btn-primary btn' %>
+              <%= link_to "Cancelar", ir_tables_path, :class => 'btn-default btn' %>
+            </div>
+          </div>
+        </div>
+        
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_include_tag "ir_tables/ir_tables" %>

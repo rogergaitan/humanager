@@ -227,7 +227,7 @@ Reasapp::Application.routes.draw do
   
   resources :creditors, only: [:index]
   
-  resources :ir_tables, only: [:index]
+  resources :ir_tables
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

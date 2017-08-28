@@ -1,5 +1,13 @@
 <div class="page-heading"> 
-  <h1>Tablas de IR</h1>
+  <h1>Tabla de Rangos IR</h1>
+  
+  <div class="options">
+    <div class="btn-toolbar ">
+      <%= link_to new_ir_table_path, :class => 'btn btn-primary pu' do %>
+          <i class="fa fa-plus"></i>
+        <% end %>
+    </div>
+  </div>
 </div>
 
 <div class="container-fluid">
@@ -17,6 +25,7 @@
                 <th>Nombre</th>
                 <th>Fecha Inicio</th>
                 <th>Fecha Fin</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             
@@ -26,6 +35,16 @@
                   <td><%= ir_table.name %></td>
                   <td><%= ir_table.start_date %></td>
                   <td><%= ir_table.end_date %></td>
+                  <td>
+                    <%= link_to edit_ir_table_path(ir_table), class: "btn btn-xs btn-success-alt" do %>
+                      <i class="fa fa-pencil"></i>
+                    <% end %>
+                    
+                    <%= link_to ir_table_path(ir_table), class: "btn btn-xs btn-danger-alt",
+                      method: :delete, data: {confirm: "Esta seguro?"}  do %>
+                      <i class="fa fa-trash-o"></i>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %>
             </tbody>
