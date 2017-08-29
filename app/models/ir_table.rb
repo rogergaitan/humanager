@@ -7,4 +7,16 @@ class IrTable < ActiveRecord::Base
   
   validates :name, :start_date, :end_date, presence: true
   
+  validate :validate_ir_table_values
+  
+  def validate_ir_table_values
+    self.ir_table_values.each_with_index do |ir_table, index|
+      unless index == 0
+         if ir_table.from <= self.ir_table_values[index -1].until
+           errors.add(:base, "Valor del campo desde debe ser al menos un numero mayor que el campo hasta del estrato anterior")  
+         end
+      end
+    end
+  end
+  
 end
