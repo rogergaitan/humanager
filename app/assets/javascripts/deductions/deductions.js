@@ -252,8 +252,7 @@ $(document).ready(function() {
   
   applyDecimalMask("#deduction_amount_exhaust");
   
-  
-//Search creditors
+//Creditors list
   $.getJSON("/creditors", function(data) {
     $('#load_creditor').autocomplete({
       minLength: 3,
@@ -292,6 +291,27 @@ $(document).ready(function() {
     }
     $("#creditors_modal").modal("hide");
   });
+  
+  changeCurrencySymbol();
+  
+  $("#deduction_maximum_deduction_currency_id").on("change", function () {
+    changeCurrencySymbol();
+  });
+  
+  $("#deduction_amount_exhaust_currency_id").on("change", function () {
+     $("#deduction_deduction_currency_id") .val($(this).val());
+  });
+  
+  //employee search fields
+  showHideOptions( $('#select_method_all') );
+  
+  $('input[name=select_method]').parents('label').click(function() {
+		showHideOptions( $(this).find('input') );
+	});
+
+	$('input[name=select_method]').next().click(function() {
+		showHideOptions( $(this).parents('label').find('input') );
+	});
   
 });
 
@@ -464,13 +484,11 @@ function showHideEmployees(isIndividual) {
   if( $('#deduction_individual').is(':checked') ) {
     $('#deduction_deduction_value').val('');
     $('#deduction_deduction_value').attr('readonly', true);
-    enableDeductionEmployeeIds();
     /*$('#employee_items_one').hide()
     $('#employee_items_two').show();
     $('.custom_calculation').hide();*/
   } else {
     $('#deduction_deduction_value').attr('readonly', false);
-    disableDeductionEmployeeIds();
     /*$('#employee_items_one').show();
     $('#employee_items_two').hide();
     $('.custom_calculation').show();*/
@@ -806,4 +824,72 @@ function enableDeductionEmployeeIds() {
   $("#deduction_employee_ids").multiSelect("refresh");
   $("#employee_items_two").show();
   $(".items_deductions_form").prop("disabled", false);
+}
+
+function changeCurrencySymbol() {
+  var currency = $("#deduction_maximum_deduction_currency_id :selected").text();
+      
+  var symbol = $("input[name=" + currency + "]").val();
+  
+  $("#maximum_deduction_currency_symbol").text(symbol);
+}
+
+function showHideOptions(selected) {
+  switch($(selected).val()) {
+    case 'all':
+      $('#ms-deduction_employee_ids').find('input:eq(0)').show();
+      $('#list-departments').hide();
+      $('#list-superior').hide(); 
+      $('#ms-deduction_employee_ids').find('.ms-selection').css('margin-top', '-1px');
+      filterEmployees("all");
+      break;
+    case 'boss':
+      $('#ms-deduction_employee_ids').find('.ms-selection').css('margin-top', '-5.7%');
+      $('#ms-deduction_employee_ids').find('input:eq(0)').hide();
+      $('#list-departments').hide();
+      filterEmployees("superior", $('#superiors_employees').val());
+      $('#list-superior').show(); 
+      break;
+    case 'department':
+      $('#ms-deduction_employee_ids').find('.ms-selection').css('margin-top', '-5.7%');
+      $('#ms-deduction_employee_ids').find('input:eq(0)').hide();
+      $('#list-superior').hide(); 
+      filterEmployees("department", $('#departments_employees').val());
+      $('#list-departments').show();
+      break;
+  }
+}
+
+function filterEmployees(type, id) {
+  
+  id = id ? id : 0;
+
+  $('#ms-deduction_employee_ids .ms-selectable').find('li').each(function() {
+    
+    if(type === "all") {
+      if(!$(this).hasClass('ms-selected'))
+        $(this).show();
+    }
+
+    var searchType = 0;
+    if(type === "superior") {
+      searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+    }
+    
+    if(type === "department") {
+      searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+    }
+    
+    if(id != 0) {
+      if( id == searchType ) {
+        if(!$(this).hasClass('ms-selected'))
+          $(this).show();
+      } else {
+        $(this).hide();
+      }
+    } else {
+      if(!$(this).hasClass('ms-selected'))
+        $(this).show();
+    }
+  });
 }
