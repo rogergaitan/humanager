@@ -313,6 +313,14 @@ $(document).ready(function() {
 		showHideOptions( $(this).parents('label').find('input') );
 	});
   
+  $('#departments_employees').change(function() {
+		filterEmployees("department", $(this).val());
+	});
+
+	$('#superiors_employees').change(function() {
+    	filterEmployees("superior", $(this).val());
+  });
+  
 });
 
 /* F U N C T I O N S */
