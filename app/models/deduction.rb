@@ -40,6 +40,8 @@ class Deduction < ActiveRecord::Base
   validates_numericality_of :amount_exhaust, greater_than: 0,
       message: "debe ser mayor que cero", if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false}
   
+  before_save :save_state
+  
   def self.get_list_to_general_payment(payroll_ids, limit)
     listId = DeductionPayment.joins(:deduction_employee)
         .select('DISTINCT deduction_employees.deduction_id')
@@ -69,6 +71,14 @@ class Deduction < ActiveRecord::Base
     def add_deduction_currency_id
       if self.calculation_type == :fixed
         self.deduction_currency_id = self.amount_exhaust_currency_id
+      end
+    end
+    
+    def save_state
+      if active == :active
+        self.state = :active
+      else
+        self.state = :completed
       end
     end
   
