@@ -67,7 +67,6 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1.json
   def update
     @deduction = Deduction.find(params[:id])
-    @employee_ids = []
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
         format.html { redirect_to deductions_path, notice: 'Deducción actualizada correctamente.' }
