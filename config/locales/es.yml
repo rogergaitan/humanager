@@ -315,10 +315,6 @@ es:
             attributes:
               calculation:
                 blank: Este campo no puede quedar en blanco
-              deduction_value:
-                not_a_number: Valor debe ser un numero
-              amount_exhaust:
-                not_a_number: Valor deber un numero
               creditor_id:
                 blank: Este campo no puede quedar en blanco
           other_payment:
@@ -394,6 +390,7 @@ es:
         canton: Cantones
         company: Compañias
         ir_table: Tabla IR
+        ir_table_values: Valores Tabla IR
         task: 
           one: Labor
           other: Labores
@@ -690,6 +687,12 @@ es:
           name: Nombre
           start_date: Fecha Inicio
           end_date: Fecha Fin
+        ir_table_values:
+          from: Desde
+          until: Hasta
+          percent: Porcentaje
+          base: Base
+          excess: Exceso
        
   date:
       abbr_day_names:
