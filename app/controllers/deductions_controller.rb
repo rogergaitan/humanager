@@ -13,7 +13,7 @@ class DeductionsController < ApplicationController
   # GET /deductions
   # GET /deductions.json
   def index
-    @deductions = Deduction.where('state = ? and company_id = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], current_user.company_id)
+    @deductions = Deduction.where('company_id = ?', current_user.company_id)
         .paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
   end
@@ -39,7 +39,7 @@ class DeductionsController < ApplicationController
   # GET /deductions/1/edit
   def edit
     begin
-      @deduction = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE']).find(params[:id])
+      @deduction = Deduction.find(params[:id])
     rescue
       respond_to do |format|
         format.html { redirect_to( deductions_path, notice: t('.notice.no_results')) }
