@@ -116,7 +116,7 @@
               <%= f.label :deduction_value, :class => 'deduction_value'  %>
             </div>
             <div class="col-sm-3">
-              <%= f.text_field :deduction_value, :class => 'form-control deduction_value' %>
+              <%= f.text_field :deduction_value, :class => 'form-control' %>
               <div class="individual-check">
                 <%= f.label :individual, :class => 'col-sm-5 control-label' %>
                 <div class="col-sm-3">
@@ -167,18 +167,22 @@
             <div class="col-sm-6 pull-right" id="maximum_deduction">
               <%= f.label :maximum_deduction, "Deducción Máxima", :class => "col-sm-2 control-label" %>
               <div class="col-sm-6 form-group_">
-                <%= f.text_field :maximum_deduction, :class => "form-control" %>
-              </div>
+                <%= f.text_field :maximum_deduction, :class => "form-control", :required => true  %>
+              </div><span id="maximum_deduction_currency_symbol"></span>
               <br><br><br>
              
               <%= f.label :maximum_deduction_currency_id, "Moneda", :class => "col-sm-2  control-label" %>
               <div class="col-sm-6 form-group_">
                 <%= f.collection_select :maximum_deduction_currency_id, @currencies, :id, :name,
-                    options = {:prompt => false}, html_options = {:class => "form-control" } %>
+                    options = {:prompt => false}, html_options = {:class => "form-control"  } %>
               </div>
             </div>
-               
+
           </div>
+          
+          <% @currencies.each do |currency| %>
+            <%= hidden_field_tag currency.name, currency.symbol %>
+          <% end %>
           
           <%# only show this field when editing default value is active %>
           <% if @deduction.persisted? %>
@@ -218,9 +222,41 @@
                   <input type="checkbox" id="emplotee_select_all"> Seleccionar/Deseleccionar
                 </label>
               </div>
-              <%= select("deduction", "employee_ids", options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id]}, 
-                  @employee_ids.map {|j|j} ), { include_blank: false }, {:multiple => true, :selected => @employee_ids}) %>
-              <%= hidden_field_tag 'employee_ids', nil %>
+              
+              <div class="checkbox icheck">
+                <label>
+                  <%= radio_button_tag 'select_method', 'all', true, class: 'align-checkbox', :checked => true %>
+                  Todos
+                </label>
+                <label>
+                  <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
+                  Jefe Inmediato
+                </label>
+                <label>
+                  <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
+                  Por Departamento
+                </label>
+              </div>
+              
+              <div class="" id="list-departments" style="border-top:0px;">
+                <div class="col-sm-5" style="width: 46%; padding-bottom: 10px;padding-left: 1px;">
+                  <% p = @department.empty? ? "No existen departamentos todavía" : "Por favor selecciona" %>
+                  <%= collection_select("departments", "employees", @department, :id, :name, 
+                      {:prompt => p}, {:class => 'form-control'}) %>
+                </div>
+              </div>
+
+              <div class="" id="list-superior" style="border-top:0px;">
+                <div class="col-sm-5" style="width: 46%; padding-bottom: 10px;padding-left: 1px;">
+                  <% p = @superior.empty? ? "No existen jefes todavía" : "Por favor selecciona" %>
+                    <%= collection_select("superiors", "employees", @superior, :id, :full_name,
+                      {:prompt => p}, {:class => 'form-control'}) %>
+                </div>
+              </div>
+            
+              <%= select("deduction", "employee_ids",   options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
+                { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
+                { include_blank: false }, {:multiple => true, :selected => @employee_ids}) %>
             </div>
           </div>
 
