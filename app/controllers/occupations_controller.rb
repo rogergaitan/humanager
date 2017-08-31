@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class OccupationsController < ApplicationController
   load_and_authorize_resource
   skip_load_and_authorize_resource :only => [:search]
