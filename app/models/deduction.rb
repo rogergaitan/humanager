@@ -41,6 +41,7 @@ class Deduction < ActiveRecord::Base
       message: "debe ser mayor que cero", if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false}
   
   before_save :save_state
+  before_save :add_deduction_currency_id
   
   def self.get_list_to_general_payment(payroll_ids, limit)
     listId = DeductionPayment.joins(:deduction_employee)
@@ -69,7 +70,7 @@ class Deduction < ActiveRecord::Base
   
     #deduction_currency_id must be same as amount_exhaust_currency_id
     def add_deduction_currency_id
-      if self.calculation_type == :fixed
+      if self.calculation_type == :fixed && self.deduction_type == :amount_exhaust
         self.deduction_currency_id = self.amount_exhaust_currency_id
       end
     end

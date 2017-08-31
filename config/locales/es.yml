@@ -76,7 +76,7 @@ es:
   deduction_type:
     constant: Constante
     unique: Único
-    amount_exhaust: Monto a Agotar
+    amount_to_exhaust: Monto a Agotar
   calculation_type:
     percentage: Porcentaje
     fixed: Fijo
