@@ -70,7 +70,7 @@ class Deduction < ActiveRecord::Base
   
     #deduction_currency_id must be same as amount_exhaust_currency_id
     def add_deduction_currency_id
-      if self.calculation_type == :fixed && self.deduction_type == :amount_exhaust
+      if self.calculation_type == :fixed && self.deduction_type == :amount_to_exhaust
         self.deduction_currency_id = self.amount_exhaust_currency_id
       end
     end
