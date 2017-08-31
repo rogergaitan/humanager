@@ -237,7 +237,7 @@ $(document).ready(function() {
   
   applyDecimalMask("#deduction_amount_exhaust");
   
-//Creditors list
+   //creditors list
   $.getJSON("/creditors", function(data) {
     $('#load_creditor').autocomplete({
       minLength: 3,
@@ -258,16 +258,17 @@ $(document).ready(function() {
       }
     });
     
-    if($('deduction_creditor_id').val()) {
+    if($('#deduction_creditor_id').val()) {
       var load_creditor_name = $.data(document.body, 'creditor_' + $('#deduction_creditor_id').val());
       $('#load_creditor').val(load_creditor_name);
     }
+   
   }).done(function(data) {
     $.each(data, function(i, item) {
       $("#creditors_modal .modal-body").append("<p id="+ item.id + ">" + item.name + "</p>");
     });
   });
-  
+    
   $("#creditors_modal .modal-body").on("click", "p", function() {
     var creditor = $(this);
     var load_creditor = $("#load_creditor");
