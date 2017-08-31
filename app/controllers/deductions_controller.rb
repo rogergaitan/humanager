@@ -1,12 +1,12 @@
 class DeductionsController < ApplicationController
   load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit, :create]
+  before_filter :resources, :only => [:new, :edit, :create, :update]
   
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Deduction, params[:id])
   end
   
-  before_filter :set_currencies, :only => [:edit, :new, :create]
+  before_filter :set_currencies, :only => [:edit, :new, :create, :update]
 
   respond_to :html, :json, :js
 
@@ -40,25 +40,6 @@ class DeductionsController < ApplicationController
   def edit
     begin
       @deduction = Deduction.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE']).find(params[:id])
-      @object = []
-      @object_hidden = []
-
-      @deduction.deduction_employees.each do |de|
-        unless de.deduction_payments.empty?
-          # if there are records.
-          @object << "#{de.employee_id}"
-        end
-
-        if de.completed
-          @object_hidden << "#{de.employee_id}"
-        end
-      end
-
-      @employee_ids = []
-
-      @deduction.deduction_employees.where('completed = ?', false ).select('employee_id').each do |e|
-        @employee_ids << e['employee_id']
-      end
     rescue
       respond_to do |format|
         format.html { redirect_to( deductions_path, notice: t('.notice.no_results')) }
@@ -70,7 +51,7 @@ class DeductionsController < ApplicationController
   # POST /deductions.json
   def create
     @deduction = Deduction.new(params[:deduction])
-    
+    @employee_ids = []
     respond_to do |format|
       if @deduction.save
         format.html { redirect_to action: :index }
@@ -86,9 +67,10 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1.json
   def update
     @deduction = Deduction.find(params[:id])
+    @employee_ids = []
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
-        format.html { redirect_to deductions_path, notice: 'Deduction actualizada exitosamente.' }
+        format.html { redirect_to deductions_path, notice: 'Deducción actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -154,6 +136,26 @@ class DeductionsController < ApplicationController
     @department = Department.all
     @superior = Employee.superior
     @payroll_types = PayrollType.where(company_id: current_user.company_id)
+    
+    @object = []
+    @object_hidden = []
+
+    @deduction.deduction_employees.each do |de|
+      unless de.deduction_payments.empty?
+        # if there are records.
+        @object << "#{de.employee_id}"
+      end
+
+      if de.completed
+        @object_hidden << "#{de.employee_id}"
+      end
+    end
+
+    @employee_ids = []
+
+    @deduction.deduction_employees.where('completed = ?', false ).select('employee_id').each do |e|
+      @employee_ids << e['employee_id']
+    end
   end
   
   private
