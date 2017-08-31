@@ -13,7 +13,7 @@ module DeductionsHelper
     elsif deduction.calculation_type == :percentage
       "#{deduction.deduction_value}%"
     elsif deduction.calculation_type == :fixed
-      "#{deduction.currency.try :symbol}#{deduction.deduction_value}"
+      "#{deduction.deduction_currency.try :symbol}#{deduction.deduction_value}"
     end 
   end
    
