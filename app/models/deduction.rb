@@ -26,11 +26,19 @@ class Deduction < ActiveRecord::Base
   has_many :payrolls, :through => :deduction_payrolls
 
   belongs_to :ledger_account
+  
+  belongs_to :deduction_currency, :class_name => "Currency"
 
   validates :description, presence: true,  length: { maximum: 30 }
   
-  validates_numericality_of :deduction_value, greater_than: 0, allow_nil: true
-  validates_numericality_of :amount_exhaust, greater_than: 0, allow_nil: true
+  validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
+    message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage } 
+  
+  validates_numericality_of :deduction_value, greater_than: 0, 
+      message: "debe ser mayor que cero",  if: Proc.new {|d| d.calculation_type == :fixed && d.individual == false }
+  
+  validates_numericality_of :amount_exhaust, greater_than: 0,
+      message: "debe ser mayor que cero", if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false}
   
   def self.get_list_to_general_payment(payroll_ids, limit)
     listId = DeductionPayment.joins(:deduction_employee)
@@ -46,6 +54,7 @@ class Deduction < ActiveRecord::Base
 
   end
   
+  #used to fill active checkbox
   def active
     if self.state == :active
       1
@@ -53,5 +62,14 @@ class Deduction < ActiveRecord::Base
       0
     end  
   end
+  
+  private
+  
+    #deduction_currency_id must be same as amount_exhaust_currency_id
+    def add_deduction_currency_id
+      if self.calculation_type == :fixed
+        self.deduction_currency_id = self.amount_exhaust_currency_id
+      end
+    end
   
 end
