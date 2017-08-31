@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class DeductionsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create, :update]
