@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+  $(".add_fields").hide(); //hide add employee button  as required
+  
   deduction = {
     search_employee_payroll_logs_path: $('#search_employee_payroll_logs_path').val(),
     search_employee_by_id_path: $('#search_employee_by_id_path').val(),
@@ -13,8 +15,6 @@ $(document).ready(function() {
     remove: 'remove',
     show: 'show'
   };
-  
-  $(".add_fields").hide(); //hide add employee button  as required
 
   $('#deduction_payroll_type_ids').multiSelect({
     afterInit: function(ms){
@@ -203,8 +203,6 @@ $(document).ready(function() {
 
   CContables(); // Llama la funcion para el autocomplete de cuentas contables
 
-  $("#employee_items input:text[id*='_calculation']").keyup(resources.twoDecimals);
-
   // Add new row to employee_deduction
   $('form').on('click', '.add_fields', addFields);
 
@@ -292,6 +290,8 @@ $(document).ready(function() {
      changeEmployeeValueCurrencySymbol();
   });
   
+  employeeValueMask();
+  
   //employee search fields
   showHideOptions( $('#select_method_all') );
   
@@ -314,8 +314,17 @@ $(document).ready(function() {
 });
 
 /* F U N C T I O N S */
-function applyDecimalMask(selector) {
+function currencyMask(selector) {
    $(selector).mask("FNNNNNNNNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true},
+       "F": {pattern: /[1-9]/}
+      }
+  });    
+}
+
+function percentMask(selector) {
+   $(selector).mask("FNN.NN", {
       translation: {
        'N': {pattern: /\d/, optional: true},
        "F": {pattern: /[1-9]/}
@@ -410,6 +419,8 @@ function typeCalculation(selected) {
       $("#maximum_deduction").show();
       $("#deduction_maximum_deduction");
       changeEmployeeValueCurrencySymbol();
+      percentMask("#deduction_deduction_value");
+      employeeValueMask();
       break;
     case 'fixed':
       $('.percentage').html('');
@@ -417,6 +428,8 @@ function typeCalculation(selected) {
       $("#maximum_deduction").hide();
       $("#maximum_deduction").val("");      
       changeEmployeeValueCurrencySymbol();
+      currencyMask("#deduction_deduction_value");
+      employeeValueMask();
       break;
   }
 }
@@ -480,10 +493,9 @@ function setAccount(e) {
 function showHideEmployees() {
   if( $('#deduction_individual').is(':checked') ) {
     $('#deduction_deduction_value').val('');
-    $('#deduction_deduction_value').attr('readonly', true);
+    $('#deduction_deduction_value').prop("disabled", true);
     $('#employee_items_two').show();
     $("#employee_items_two input").prop("disabled", false);
-     $('#deduction_deduction_value').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
     /*$('#employee_items_one').hide()
     $('.custom_calculation').hide();*/
   } else {
@@ -556,6 +568,7 @@ function addFields(e) {
   $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
   
   changeEmployeeValueCurrencySymbol();
+  employeeValueMask();
 }  
 
 function hiddenEmployees(id_employee) {
@@ -798,12 +811,14 @@ function findParentByAttr(value, type) {
 // Disable/Enable payroll types
 function disablePayrollTypes() {
   $("#deduction_payroll_type_ids").prop("disabled", true);
+  $("#deduction_payroll_type_ids").prop("required", false);
   $("#deduction_payroll_type_ids").multiSelect("refresh");
   $("#payroll_select_all").iCheck("disable");
 }
 
 function enablePayrollTypes() {
     $("#deduction_payroll_type_ids").prop("disabled", false);
+    $("#deduction_payroll_type_ids").prop("required", true);
     $("#deduction_payroll_type_ids").multiSelect("refresh");
     $("#payroll_select_all").iCheck("enable");
 }
@@ -905,4 +920,20 @@ function changeEmployeeValueCurrencySymbol() {
   }  else {
     $(".employee_calculation_currency_symbol").text("%");
   }
+}
+
+function employeeValueMask () {
+  var calculation_type = $("#deduction_calculation_type").val()
+  
+  if(calculation_type == "fixed") {
+    currencyMask($("#employee_items input:text[id*='_calculation']"));
+    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-gte");
+    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-lte");
+  } else {
+    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-gte", 1);
+    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-lte", 100);
+    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-type", "number");
+    percentMask($("#employee_items input:text[id*='_calculation']"));
+  }
+  
 }

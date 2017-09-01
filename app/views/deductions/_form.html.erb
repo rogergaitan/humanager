@@ -29,7 +29,7 @@
 
       <div class="panel-body panel-no-padding">
         <%= form_for @deduction, :html => { :class => 'form-horizontal row-border', 
-          :data => {:toggle => 'validator', :model_name => Deduction.model_name, 
+          :data => {:toggle => "validator", :model_name => Deduction.model_name, 
           :reference_id => @deduction.id, :company => true} } do |f| %>
 
           <div class="form-group">
@@ -87,10 +87,7 @@
             <div id="amount_exhaust_controls">
               <%= f.label :amount_exhaust, :class => 'col-sm-1 control-label' %>
               <div class="col-sm-3 form-group_">
-                <%= f.text_field :amount_exhaust, :class => 'form-control', 
-                    :value => number_with_precision(f.object.amount_exhaust, 
-                    delimiter: ',', separator: '.', precision: 2) %>
-              
+                <%= f.text_field :amount_exhaust, :class => 'form-control' %>              
                  <div class="help-block with-errors"></div>
               </div>
               
@@ -116,7 +113,8 @@
               <%= f.label :deduction_value, :class => 'deduction_value'  %>
             </div>
             <div class="col-sm-3">
-              <%= f.text_field :deduction_value, :class => 'form-control' %>
+              <%= f.text_field :deduction_value,  :class => 'form-control' %>
+              <div class="help-block with-errors"></div>
               <div class="individual-check">
                 <%= f.label :individual, :class => 'col-sm-5 control-label' %>
                 <div class="col-sm-3">
@@ -145,7 +143,7 @@
             <div class="col-sm-3">
               <div class="input-group form-group_">
                 <%= f.hidden_field :creditor_id %>
-                <%= text_field_tag :load_creditor, nil,  :class => 'form-control', :for => :creditor_id %>
+                <%= text_field_tag :load_creditor, nil,  :class => 'form-control',:for => :creditor_id %>
                 <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                 </span>
@@ -167,7 +165,7 @@
             <div class="col-sm-6 pull-right" id="maximum_deduction">
               <%= f.label :maximum_deduction, "Deducción Máxima", :class => "col-sm-2 control-label" %>
               <div class="col-sm-6 form-group_">
-                <%= f.text_field :maximum_deduction, :class => "form-control"  %>
+                <%= f.text_field :maximum_deduction, :class => "form-control", :required => true  %>
               </div><span id="maximum_deduction_currency_symbol"></span>
               <br><br><br>
              
@@ -203,14 +201,17 @@
             <%= f.label :payroll_types, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-8">
               <div class="checkbox icheck">
+              
                 <label>
                   <input type="checkbox" id="payroll_select_all"> Seleccionar/Deseleccionar
                 </label>
               </div>
               <%= select("deduction", "payroll_type_ids", options_for_select( @payroll_types.map {|p| [p.description, p.id]}, 
                   @deduction.payroll_type_ids.map {|j|j} ), { include_blank: false }, 
-                  {:class => 'form-control', :multiple => true, :selected => @deduction.payroll_type_ids}) %>
+                  {:class => 'form-control', :required => true, :multiple => true, :data => {:error => "Debe elegir un tipo de planilla"}, 
+                    :selected => @deduction.payroll_type_ids}) %>
             </div>
+            
           </div>
 
           <!-- E M P L O Y E E S   L I S T  -->

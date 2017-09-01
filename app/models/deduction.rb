@@ -32,7 +32,7 @@ class Deduction < ActiveRecord::Base
   validates :description, presence: true,  length: { maximum: 30 }
   
   validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
-    message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage } 
+    message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false} 
   
   validates_numericality_of :deduction_value, greater_than: 0, 
       message: "debe ser mayor que cero",  if: Proc.new {|d| d.calculation_type == :fixed && d.individual == false }
