@@ -499,7 +499,7 @@ function showHideEmployees() {
     /*$('#employee_items_one').hide()
     $('.custom_calculation').hide();*/
   } else {
-    $('#deduction_deduction_value').attr('readonly', false);
+    $('#deduction_deduction_value').prop('disabled', false);
     $('#employee_items_two').hide();
     $("#employee_items_two input").prop("disabled", true);
     /*$('#employee_items_one').show();
@@ -927,12 +927,7 @@ function employeeValueMask () {
   
   if(calculation_type == "fixed") {
     currencyMask($("#employee_items input:text[id*='_calculation']"));
-    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-gte");
-    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-lte");
   } else {
-    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-gte", 1);
-    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-lte", 100);
-    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-type", "number");
     percentMask($("#employee_items input:text[id*='_calculation']"));
   }
   
