@@ -136,16 +136,15 @@ $(document).ready(function() {
     return searchAll($('#search_name_employee_modal').val());
   });
 
-  showHideEmployees(true); // Call the function to show/hide the div about employees
+  showHideEmployees(); // Call the function to show/hide the div about employees
   isBeneficiary($("#deduction_pay_to_employee").prop("checked"));
 
-  // Deduction Individual
-  $('#deduction_individual').parents('label').click(function() {
-    showHideEmployees($('#deduction_individual').is(':checked'));
+  $("label[for=deduction_individual]").click(function() {
+    showHideEmployees();
   });
 
   $('#deduction_individual').next().click(function() {
-    showHideEmployees($('#deduction_individual').is(':checked'));
+    showHideEmployees();
   });
 
   $('#emplotee_select_all').parents('label').click(function() {
@@ -165,7 +164,7 @@ $(document).ready(function() {
   });
 
   // Is Beneficiary
-  $('#deduction_pay_to_employee').parents('label').click(function() {
+  $('label[for=deduction_pay_to_employee]').click(function() {
     isBeneficiary($('#deduction_pay_to_employee').is(':checked'));
   });
 
@@ -234,8 +233,6 @@ $(document).ready(function() {
   $('form').on('focusout', '.search_code_employee', function() {
     searchEmployeeByAttr($(this).val(), 'code', 'table', types.add);
   });
-  
-  applyDecimalMask("#deduction_amount_exhaust");
   
    //creditors list
   $.getJSON("/creditors", function(data) {
@@ -480,24 +477,21 @@ function setAccount(e) {
 }
 
 // Show/Hide The differents view based in the checkbox "individual"
-function showHideEmployees(isIndividual) {
+function showHideEmployees() {
   if( $('#deduction_individual').is(':checked') ) {
     $('#deduction_deduction_value').val('');
     $('#deduction_deduction_value').attr('readonly', true);
     $('#employee_items_two').show();
-    $("#employee_items_two input").prop("disabled", false)
+    $("#employee_items_two input").prop("disabled", false);
+     $('#deduction_deduction_value').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
     /*$('#employee_items_one').hide()
-    
     $('.custom_calculation').hide();*/
   } else {
     $('#deduction_deduction_value').attr('readonly', false);
     $('#employee_items_two').hide();
-    $("#employee_items_two input").prop("disabled", true)
+    $("#employee_items_two input").prop("disabled", true);
     /*$('#employee_items_one').show();
     $('.custom_calculation').show();*/
-  }
-  if(isIndividual) {
-    $('#deduction_deduction_value').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
   }
 }
 
