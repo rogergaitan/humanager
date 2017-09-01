@@ -291,6 +291,7 @@ $(document).ready(function() {
   });
   
   employeeValueMask();
+  currencyMask("#deduction_maximum_deduction");
   
   //employee search fields
   showHideOptions( $('#select_method_all') );
