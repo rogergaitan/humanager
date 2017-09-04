@@ -57,15 +57,6 @@ class Deduction < ActiveRecord::Base
 
   end
   
-  #used to fill active checkbox
-  def active
-    if self.state == :active
-      1
-    else
-      0
-    end  
-  end
-  
   private
   
     #deduction_currency_id must be same as amount_exhaust_currency_id
@@ -76,7 +67,7 @@ class Deduction < ActiveRecord::Base
     end
     
     def save_state
-      if active == :active
+      if active == "1"
         self.state = :active
       else
         self.state = :completed
