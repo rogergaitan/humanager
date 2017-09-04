@@ -103,7 +103,7 @@ $(document).ready(function() {
 
   // En caso de seleccionar una planilla unica si se quiere cambiar se limpia la anterios 
   // para que no se vayan a guardar 2 ids
-  $('#unicPayroll').on({ click: clearPayrolls });
+  $('#unicPayroll').on("click", function () { clearPayrolls });
 
   searchAll(""); // Call the function to get all employee list
 
@@ -375,7 +375,6 @@ function typeDeduction(selected) {
   switch($(selected).val()) {
     case 'unique':
       $('#amount_exhaust_controls').hide();
-      $('#payrolls-to-save').empty();
       $('#unicPayroll').show();
       $('#deduction_payrolls').show();
       $('#deduction_payroll').prop('required', 'required');
@@ -476,6 +475,7 @@ function setPayroll(e) {
   var payrollId = $(e.target).parent().prev().text();
   var payrollName = $(e.target).text();
   appendPayrolls = "<input type='hidden" +"' name='deduction[payroll_ids][]' value='"+ payrollId +"' />";
+  $('#payrolls-to-save').empty();
   $('#payrolls-to-save').append(appendPayrolls);
   $('#deduction_payroll').val(payrollName);
   $('#deduction_payroll').focusout();  
@@ -507,7 +507,7 @@ function showHideEmployees() {
     enableDeductionValueValidations();
     employeeValueValidation();
     $("#employee_items_two input").prop("disabled", true);
-    $('#employee_items_two').hide();
+    $('#employee_items_two').show();
     /*$('#employee_items_one').show();
     $('.custom_calculation').show();*/
   }

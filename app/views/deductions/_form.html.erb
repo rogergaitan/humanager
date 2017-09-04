@@ -67,7 +67,7 @@
               <%= label_tag 'Planilla a Aplicar', nil, class: 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group form-group_">
-                  <%= text_field_tag 'deduction_payroll', nil, :class => 'form-control'%>
+                  <%= text_field_tag 'deduction_payroll', f.object.payrolls.first.try(:payroll_type).try(:description),  :class => 'form-control'%>
                   <div class="help-block with-errors"></div>
                   <span class="input-group-addon">
                     <i class="fa fa-search"></i>
@@ -81,8 +81,10 @@
               </a>
             </div>            
             <div class="payrolls-all">
-              <%= hidden_field_tag 'deduction[payroll_ids][]', nil %>
-              <div class="payrolls-margin" id="payrolls-to-save"></div>
+              <%= hidden_field_tag 'deduction[payroll_ids][]' %>
+              <div class="payrolls-margin" id="payrolls-to-save"> 
+                <%= hidden_field_tag 'deduction[payroll_ids][]', f.object.payrolls.first.try(:id) %> 
+              </div>
             </div>
             <div id="amount_exhaust_controls">
               <%= f.label :amount_exhaust, :class => 'col-sm-1 control-label' %>
