@@ -28,8 +28,8 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @deduction, :html => { :class => 'form-horizontal row-border', 
-          :data => {:toggle => "validator", :model_name => Deduction.model_name, 
+        <%= form_for @deduction, :html => { :class => 'form-horizontal row-border',  
+          :data => {:model_name => Deduction.model_name, :toggle => "validator",
           :reference_id => @deduction.id, :company => true} } do |f| %>
 
           <div class="form-group">
@@ -113,7 +113,7 @@
               <%= f.label :deduction_value, :class => 'deduction_value'  %>
             </div>
             <div class="col-sm-3">
-              <%= f.text_field :deduction_value,  :class => 'form-control' %>
+              <%= f.text_field :deduction_value,  :class => 'form-control', :required => true %>
               <div class="help-block with-errors"></div>
               <div class="individual-check">
                 <%= f.label :individual, :class => 'col-sm-5 control-label' %>
@@ -179,7 +179,7 @@
           </div>
           
           <% @currencies.each do |currency| %>
-            <%= hidden_field_tag currency.name, currency.symbol %>
+            <%= hidden_field_tag currency.name, currency.symbol, html_options: { disabled: "true" } %>
           <% end %>
           
           <%# only show this field when editing default value is active %>

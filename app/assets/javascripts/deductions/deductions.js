@@ -174,7 +174,7 @@ $(document).ready(function() {
   
   /* N O */
   $('#member_submit').click(function( event ) {
-    $("form[id*='edit_deduction']").parsley().validate();
+    $("form[id*='_deduction']").parsley().validate();
   });
   /* N O */
   
@@ -290,7 +290,6 @@ $(document).ready(function() {
      changeEmployeeValueCurrencySymbol();
   });
   
-  employeeValueMask();
   currencyMask("#deduction_maximum_deduction");
   
   //employee search fields
@@ -421,8 +420,8 @@ function typeCalculation(selected) {
       $("#deduction_maximum_deduction");
       changeEmployeeValueCurrencySymbol();
       percentMask("#deduction_deduction_value");
-      employeeValueMask();
-      $("#deduction_deduction_value").attr("data-parsley-range", "[1, 100]");
+      employeeValueValidation();
+      deductionValuePercentValidation();
       break;
     case 'fixed':
       $('.percentage').html('');
@@ -431,8 +430,8 @@ function typeCalculation(selected) {
       $("#maximum_deduction").val("");      
       changeEmployeeValueCurrencySymbol();
       currencyMask("#deduction_deduction_value");
-      employeeValueMask();
-      $("#deduction_deduction_value").removeAttr("data-parsley-range");
+      employeeValueValidation();
+      deductionValueCurrencyValidation();
       break;
   }
 }
@@ -497,14 +496,18 @@ function showHideEmployees() {
   if( $('#deduction_individual').is(':checked') ) {
     $('#deduction_deduction_value').val('');
     $('#deduction_deduction_value').prop("disabled", true);
+    disableDeductionValueValidations();
+    employeeValueValidation();
     $('#employee_items_two').show();
     $("#employee_items_two input").prop("disabled", false);
     /*$('#employee_items_one').hide()
     $('.custom_calculation').hide();*/
   } else {
     $('#deduction_deduction_value').prop('disabled', false);
-    $('#employee_items_two').hide();
+    enableDeductionValueValidations();
+    employeeValueValidation();
     $("#employee_items_two input").prop("disabled", true);
+    $('#employee_items_two').hide();
     /*$('#employee_items_one').show();
     $('.custom_calculation').show();*/
   }
@@ -571,7 +574,7 @@ function addFields(e) {
   $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
   
   changeEmployeeValueCurrencySymbol();
-  employeeValueMask();
+  employeeValueValidation();
 }  
 
 function hiddenEmployees(id_employee) {
@@ -925,14 +928,52 @@ function changeEmployeeValueCurrencySymbol() {
   }
 }
 
-function employeeValueMask () {
+function employeeValueValidation () {
   var calculation_type = $("#deduction_calculation_type").val()
   
-  if(calculation_type == "fixed") {
-    currencyMask($("#employee_items input:text[id*='_calculation']"));
-    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
+  if($('#deduction_individual').is(':checked')) {
+    $("#employee_items input:text[id*='_calculation']").attr("required", true); 
+    
+    if(calculation_type == "fixed") {
+      currencyMask($("#employee_items input:text[id*='_calculation']"));
+      $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
+    } else {
+      percentMask($("#employee_items input:text[id*='_calculation']"));
+      $("#employee_items input:text[id*='_calculation']").attr("data-parsley-range", "[1, 100]");
+    }
+    
   } else {
-    percentMask($("#employee_items input:text[id*='_calculation']"));
-    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-range", "[1, 100]");
-  }  
+    $("#employee_items input:text[id*='_calculation']").removeAttr("required");
+    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
+  }
+  
+  $("form[id*='_deduction']").parsley().destroy();
+}
+
+function enableDeductionValueValidations () {
+  if($("#deduction_calculation_type").val() == "percentage" ) {
+    deductionValuePercentValidation();
+  } else {
+    deductionValueCurrencyValidation();
+  }
+  $("form[id*='_deduction']").parsley().destroy();
+}
+
+function disableDeductionValueValidations () {
+  $("#deduction_deduction_value").removeAttr("data-parsley-range");
+  $("#deduction_deduction_value").removeAttr("required");
+}
+
+function deductionValuePercentValidation() {
+  if(!$("#deduction_individual").is(":checked")) {
+    $("#deduction_deduction_value").attr("data-parsley-range", "[1, 100]");
+    $("#deduction_deduction_value").attr("required", true);  
+  }
+}
+
+function deductionValueCurrencyValidation () {
+  if(!$("#deduction_individual").is(":checked")) {
+    $("#deduction_deduction_value").removeAttr("data-parsley-range");
+    $("#deduction_deduction_value").attr("required", true);
+  }
 }
