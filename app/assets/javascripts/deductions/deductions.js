@@ -928,8 +928,9 @@ function employeeValueMask () {
   
   if(calculation_type == "fixed") {
     currencyMask($("#employee_items input:text[id*='_calculation']"));
+    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
   } else {
     percentMask($("#employee_items input:text[id*='_calculation']"));
-  }
-  
+    $("#employee_items input:text[id*='_calculation']").attr("data-parsley-range", "[1, 100]");
+  }  
 }
