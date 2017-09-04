@@ -422,6 +422,7 @@ function typeCalculation(selected) {
       changeEmployeeValueCurrencySymbol();
       percentMask("#deduction_deduction_value");
       employeeValueMask();
+      $("#deduction_deduction_value").attr("data-parsley-range", "[1, 100]");
       break;
     case 'fixed':
       $('.percentage').html('');
@@ -431,6 +432,7 @@ function typeCalculation(selected) {
       changeEmployeeValueCurrencySymbol();
       currencyMask("#deduction_deduction_value");
       employeeValueMask();
+      $("#deduction_deduction_value").removeAttr("data-parsley-range");
       break;
   }
 }
