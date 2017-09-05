@@ -507,7 +507,7 @@ function showHideEmployees() {
     enableDeductionValueValidations();
     employeeValueValidation();
     $("#employee_items_two input").prop("disabled", true);
-    $('#employee_items_two').show();
+    $('#employee_items_two').hide();
     /*$('#employee_items_one').show();
     $('.custom_calculation').show();*/
   }
