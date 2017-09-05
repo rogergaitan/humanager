@@ -65,6 +65,16 @@ class Deduction < ActiveRecord::Base
     end
   end
   
+  def self.search(deduction_type, calculation_type, state, company, page)
+    query = Deduction.includes :ledger_account
+    query = query.where company_id: company
+    query = query.where deduction_type: deduction_type unless deduction_type.empty?
+    query = query.where calculation_type: calculation_type unless deduction_type.empty?
+    query = query.where state: state unless deduction_type.empty?
+    
+    query.paginate page: page, per_page: 15
+  end
+  
   private
   
     #deduction_currency_id must be same as amount_exhaust_currency_id
