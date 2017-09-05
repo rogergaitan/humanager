@@ -13,7 +13,7 @@
         <th><%= model_class.human_attribute_name(:nunidad) %></th>
         <th>
           <%= select_tag :currency, options_from_collection_for_select(@currencies, :id, :name), 
-            prompt: "Filtrar por moneda" %><br>
+            prompt: "Filtrar por moneda",  class: "form-control"%>
           <%= model_class.human_attribute_name(:currency_id) %>
         </th>
         <th><%= model_class.human_attribute_name(:cost) %></th>

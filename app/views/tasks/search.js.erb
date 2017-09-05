@@ -1,8 +1,0 @@
-$('#list_tasks').html("<%= escape_javascript(render(:partial => 'tasks_list')) %>");
-
-$(".pagination a").attr("data-remote", true);
-
-if($("#update_all").val() == "true") {
-  $(" input[type=checkbox]").prop("checked", true);
-  $("#update_costs").prop("disabled", false);
-}

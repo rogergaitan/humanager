@@ -6,8 +6,8 @@ class TasksController < ApplicationController
     session_edit_validation(Task, params[:id])
   end
   
-  before_filter :set_currencies, :only => [:index, :edit, :update, :search]
-
+  before_filter :set_currencies, :only => [:index, :edit, :update, :update_costs, :search]
+  
   respond_to :html, :json, :js
 
   # GET /tasks
@@ -51,7 +51,7 @@ class TasksController < ApplicationController
 
   def search
     @tasks = Task.search(params[:search_activity], params[:search_code], params[:search_desc], params[:currency], params[:page])
-    respond_with @tasks
+     respond_with @tasks
   end
   
   def update_costs
@@ -61,8 +61,10 @@ class TasksController < ApplicationController
       Task.where(id: params[:tasks_ids].split(",")).update_all cost: params[:cost], currency_id: params[:currency]
     end
     
+    currency = Currency.find params[:currency]
+    
     respond_to do |format|
-        format.js
+      format.json { render json:  {cost: params[:cost], currency: currency.name, currency_symbol: currency.symbol }}
     end
   end
   
@@ -70,4 +72,5 @@ class TasksController < ApplicationController
     def set_currencies
       @currencies = Currency.all  
     end
+    
 end

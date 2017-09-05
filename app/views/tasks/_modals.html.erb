@@ -16,7 +16,6 @@
   </div>
 </div>
 
-
 <div  id="update_costs_modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -28,7 +27,7 @@
       
     <div class="modal-body">
       
-        <%= form_tag update_costs_tasks_path, id: "update_costs_form", remote: true, method: :put do %>
+        <%= form_tag update_costs_tasks_path, id: "update_costs_form" do %>
           
           <div class="form-group">
             <%= label_tag :cost, "Costo:" %>
@@ -42,10 +41,10 @@
           
           <%= hidden_field_tag :update_all, false %>
           <%= hidden_field_tag :tasks_ids %>
+          <%= hidden_field_tag :render_action, params[:action] %> <!--save current action name to pass as parameter to update cost action-->
         
           <%= button_tag "Cancelar", class: "btn btn-default", data: {dismiss: "modal"} %>
-          <%= submit_tag "Actualizar Costo", class: "btn btn-primary", 
-            data: {confirm: "¿Está Seguro?  (Esta acción no se puede deshacer)"  } %>
+          <%= submit_tag "Actualizar Costo", class: "btn btn-primary" %>
         
         <% end %>  
       </div>
