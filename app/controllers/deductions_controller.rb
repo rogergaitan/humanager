@@ -53,7 +53,6 @@ class DeductionsController < ApplicationController
   # POST /deductions.json
   def create
     @deduction = Deduction.new(params[:deduction])
-    @employee_ids = []
     respond_to do |format|
       if @deduction.save
         format.html { redirect_to action: :index }
@@ -128,6 +127,13 @@ class DeductionsController < ApplicationController
     @fetch_payroll_type = PayrollType.all
     respond_to do |format|
       format.json { render json: @fetch_payroll_type, :only => [:id, :description] }
+    end
+  end
+  
+  def search
+    @deductions = Deduction.search params[:deduction_type], params[:calculation_type], params[:state], current_user.company_id, params[:page]
+    respond_to do |format|
+      format.js { render :index }
     end
   end
 

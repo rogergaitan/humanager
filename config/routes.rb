@@ -78,6 +78,7 @@ Reasapp::Application.routes.draw do
       get :get_activas
       get :search_employee
       get 'fetch_payroll_type'
+      get :search
     end
   end
 

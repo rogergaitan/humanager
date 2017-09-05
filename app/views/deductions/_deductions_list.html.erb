@@ -1,0 +1,26 @@
+<% @deductions.each do |deduction| %>
+    <tr>
+      <td><%= deduction.description %></td>
+      <td><%= t "deduction_type.#{deduction.deduction_type}" %></td>
+      <td><%=t "calculation_type.#{deduction.calculation_type}" %></td>
+      <td><%= deduction_value_helper deduction %></td>
+      <td><%= state_helper deduction.state %></td>
+      <td>
+        <% if can? :update, Deduction %>
+          <%= link_to edit_deduction_path(deduction), :class => 'btn btn-xs btn-success-alt'  do %>
+            <i class="fa fa-pencil"></i>
+          <% end %>
+        <% end %>
+
+        <% if can? :destroy, Deduction %>
+          <%= link_to deduction_path(deduction),
+                      :method => :delete,
+                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                      :class => 'btn btn-xs btn-danger-alt' do %>
+            <i class="fa fa-trash-o"></i>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+  

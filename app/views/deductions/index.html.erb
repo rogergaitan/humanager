@@ -40,108 +40,32 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:description) %></th>
                 <th>
-                  <%= select_tag(:deduction_type, options_for_select(translate_enum(:deduction_type))) %><br>
+                  <%= select_tag(:deduction_type, options_for_select(translate_enum(:deduction_type)), :class => "form-control") %>
                   <%= model_class.human_attribute_name(:deduction_type) %>
                 </th>
                 <th>
-                  <%= select_tag(:calculation_type, options_for_select(translate_enum(:calculation_type))) %><br>
+                  <%= select_tag(:calculation_type, options_for_select(translate_enum(:calculation_type)), :class => "form-control") %>
                   <%= model_class.human_attribute_name(:calculation_type) %>
                 </th>
                 <th><%= model_class.human_attribute_name(:deduction_value) %></th>
                 <th>
-                  <%= select_tag(:state, options_for_select([["Si", :active], ["No", :completed]])) %><br>
+                  <%= select_tag(:state, options_for_select([["Si", :active], ["No", :completed]]), :class => "form-control") %>
                   <%= model_class.human_attribute_name(:state) %>
                 </th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
             <tbody>
-              <% @deductions.each do |deduction| %>
-                <tr>
-                  <td><%= deduction.description %></td>
-                  <td><%= t "deduction_type.#{deduction.deduction_type}" %></td>
-                  <td><%=t "calculation_type.#{deduction.calculation_type}" %></td>
-                  <td><%= deduction_value_helper deduction %></td>
-                  <td><%= state_helper deduction.state %></td>
-                  <td>
-                    <% if can? :update, Deduction %>
-                      <%= link_to edit_deduction_path(deduction), :class => 'btn btn-xs btn-success-alt'  do %>
-                        <i class="fa fa-pencil"></i>
-                      <% end %>
-                    <% end %>
-
-                    <% if can? :destroy, Deduction %>
-                      <%= link_to deduction_path(deduction),
-                                  :method => :delete,
-                                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                                  :class => 'btn btn-xs btn-danger-alt' do %>
-                        <i class="fa fa-trash-o"></i>
-                      <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
+              <%= render "deductions_list" %>
             </tbody>
           </table>
+            <div id="deductions_pagination" class="pull-right">
+             <%= render "pagination" %>
+           </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>
 
-  
-
-
-
-
-
-
-
-
-
-
-<!-- ---------------------------------------------------------------------------------------- -->
-
-
-<%= will_paginate :class =>'pagination pagination-centered' %>
-
-
-<!-- <table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%= model_class.human_attribute_name(:deduction_type) %></th>
-      <th><%= model_class.human_attribute_name(:amount_exhaust) %></th>
-      <th><%= model_class.human_attribute_name(:calculation_type) %></th>
-      <th><%= model_class.human_attribute_name(:ledger_account_id) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @deductions.each do |deduction| %>
-      <tr>
-        <td><%= link_to deduction.description, deduction_path(deduction) %></td>
-        <td><%= deduction.deduction_type %></td>
-        <td><%= deduction.amount_exhaust %></td>
-        <td><%= deduction.calculation_type %></td>
-        <td><%= deduction.ledger_account.naccount if deduction.ledger_account %></td>
-        <td>
-          <% if can? :update, Deduction %>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                        edit_deduction_path(deduction), :class => 'btn btn-mini' %>
-          <% end %>
-
-          <% if can? :destroy, Deduction %>
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                        deduction_path(deduction),
-                        :method => :delete,
-                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                        :class => 'btn btn-mini btn-danger' %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table> -->
-
+<%= javascript_include_tag "deductions/deductions_index" %>
