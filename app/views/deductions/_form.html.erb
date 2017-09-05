@@ -38,7 +38,16 @@
               <%= f.text_field :description, :class => 'form-control', :required => true %>
               <div class="help-block with-errors"></div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>
+        
+              <div>
+                <%= f.label :active, "Activa", :class => "control-label col-sm-3" %>
+                <label class="checkbox icheck">
+                  <%= check_box_tag "deduction[active]",1 ,  f.object.active? %>
+                </label>
+             </div>
+        
             </div>
+            
             <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <div class="input-group form-group_">
@@ -184,19 +193,6 @@
             <%= hidden_field_tag currency.name, currency.symbol, html_options: { disabled: "true" } %>
           <% end %>
           
-          <%# only show this field when editing default value is active %>
-          <% if @deduction.persisted? %>
-            <div class="form-group">
-              <div class="col-sm-4">
-                <div class="text-center">
-                  <%= f.label :active, "Activo", :class => "control-label col-sm-6" %>
-                  <label class="checkbox icheck">
-                    <%= f.check_box  :active %>
-                  </label>
-                </div>
-              </div>
-            </div>
-          <% end %>
           
           <!-- P A Y R O L L    T Y P E S -->
           <div class="form-group">

@@ -57,6 +57,14 @@ class Deduction < ActiveRecord::Base
 
   end
   
+  def active?
+    if self.state == :active
+      true
+    else
+      false
+    end
+  end
+  
   private
   
     #deduction_currency_id must be same as amount_exhaust_currency_id
@@ -67,7 +75,7 @@ class Deduction < ActiveRecord::Base
     end
     
     def save_state
-      if active == "1"
+      if active
         self.state = :active
       else
         self.state = :completed
