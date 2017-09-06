@@ -3,7 +3,7 @@
 		<%= f.label :email, :class => 'col-sm-2 control-label' %>
 		<div class="col-sm-3">
 			<div class="input-group">
-				<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+				<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
 				<%= f.email_field :email, :class => 'form-control email-field' %>
 			</div>
 		</div>
@@ -19,7 +19,7 @@
 		<%= f.label :typeemail, :class => 'col-sm-2 control-label' %>
 		<div class="col-sm-3">
 			<div class="input-group">
-				<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+				<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
 				<%= f.select(:typeemail, translate_enum(:typeemail), {:include_blank => false}, {:class => 'form-control'}) %>
 			</div>
 		</div>
