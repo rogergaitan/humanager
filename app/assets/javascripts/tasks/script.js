@@ -222,7 +222,8 @@ $(document).ready(function() {
   
   //uncheck select all checkbox when closing modal when not all checkboxes are checked
   $("#tasks_selection").on("hidden.bs.modal", function () {
-    if($("#list_tasks input[name=update_cost]:not(:checked)").lenght >= 1) {
+    
+    if($("#list_tasks input[name=update_cost]:not(:checked)").length >= 1) {
       $("#select_all").prop("checked", false);
     }
   });
