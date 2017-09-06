@@ -63,28 +63,15 @@ class User < ActiveRecord::Base
   end
 
   def self.search_users(username, name, actualuser, page, per_page)
-      
-      query = ""
-      params = []
-      params.push(" username like '%#{username}%' ") unless username.empty?
-      params.push(" name like '%#{name}%' ") unless name.empty?
-      params.push(" id  <> '#{actualuser}' ") unless actualuser.empty?
-      query = build_query(params)
-      @users = User.where(query).paginate(:page => page, :per_page => per_page)
-  end
-
-  def self.build_query(data)
-    query = ""
-      if data
-        data.each_with_index do |q, i|
-            if i < data.length - 1
-              query += q + " AND "
-            else
-          query += q
-            end
-          end
-      end
-      query
+    query = User.includes :permissions_user
+    query = query.where("username LIKE ?", "%#{username}%") unless username.empty?
+    query = query.where("name LIKE ?", "%#{name}%") unless name.empty?
+    unless name.empty? && username.empty?
+      query = query.where("id <> ?", "#{actualuser}") unless actualuser.empty? 
+      query.paginate :page => page, :per_page => per_page
+    else
+      User.limit 0
+    end
   end
 
   def self.save_permissions_user(data, user_id)

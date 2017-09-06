@@ -30,15 +30,16 @@
             <i class="fa fa-fw fa-info-circle"></i>
             <strong>Información!</strong>
             <%= t("notice.no_results") %>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
           </div>
         </td>
       </tr>
       <% end %>
     </tbody>
   </table>
-
-  <div class="text-right">    
-    <%= will_paginate @task %>
-  </div>
+  
+  <% unless @users.empty? %>
+    <div class="text-right">    
+      <%= will_paginate @task %>
+    </div>
+  <% end %>
 </div>
