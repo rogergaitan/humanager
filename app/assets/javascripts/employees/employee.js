@@ -1,5 +1,13 @@
 $(document).ready(function($) {
   //Gets all data from employees
+  $('.telephone-field').mask('0000-0000');
+  
+  $('#employee_wage_payment').mask("FNNNNNNNNN.NN", {
+    translation: {
+      'N': {pattern: /\d/, optional: true},
+      "F": {pattern: /[1-9]/}
+    }
+  });
   
   $.getJSON('/employees/load_employees', function(employee_data) {
     $('#load_employee').autocomplete({
@@ -32,8 +40,3 @@ $(document).ready(function($) {
     }
   });
 })
-
-$('.telephone-field').mask('0000-0000');
-
-
-$('#employee_wage_payment').mask('0000000000.00');
