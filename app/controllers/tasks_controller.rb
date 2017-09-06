@@ -56,7 +56,7 @@ class TasksController < ApplicationController
   
   def update_costs
     if params[:update_all] == "true"
-      Task.update_all cost: params[:cost], currency_id: params[:currency]
+      Task.where("id NOT IN (?)", params[:unchecked_tasks_ids].split(",")).update_all cost: params[:cost], currency_id: params[:currency]
     else
       Task.where(id: params[:tasks_ids].split(",")).update_all cost: params[:cost], currency_id: params[:currency]
     end
@@ -64,7 +64,7 @@ class TasksController < ApplicationController
     currency = Currency.find params[:currency]
     
     respond_to do |format|
-      format.json { render json:  {cost: params[:cost], currency: currency.name, currency_symbol: currency.symbol, update_all: params[:update_all] }}
+      format.json { render json:  {cost: params[:cost], currency: currency.name, currency_symbol: currency.symbol }}
     end
   end
   

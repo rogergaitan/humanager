@@ -170,10 +170,11 @@ $(document).ready(function() {
               currency: form.find("#currency").val(),
               tasks_ids: form.find("#tasks_ids").val(),
               update_all: form.find("#update_all").val(),
+              unchecked_tasks_ids: $("#list_tasks input[name=update_cost]:not(:checked)").map(function() { return this.value}).get().join()
             }     
           }).done(function (data) {
   
-            var selector = data.update_all == "true" ? $("#list_tasks input[name=update_cost]") : $("#list_tasks input[name=update_cost]:checked");
+            var selector = $("#list_tasks input[name=update_cost]:checked");
             
             $(selector).each(function (index) {
                $(this).parent().prev().text(data.currency_symbol + data.cost);
@@ -220,7 +221,7 @@ $(document).ready(function() {
   
   //uncheck select all checkbox when closing modal when not all checkboxes are checked
   $("#tasks_selection").on("hidden.bs.modal", function () {
-    if($("input[name=update_cost]:checked").length < $("input[name=update_cost]").length) {
+    if($("#list_tasks input[name=update_cost]:not(:checked)").lenght >= 1) {
       $("#select_all").prop("checked", false);
     }
   });
