@@ -175,9 +175,10 @@ $(document).ready(function() {
           }).done(function (data) {
   
             var selector = $("#list_tasks input[name=update_cost]:checked");
+            var cost = new Number(data.cost).toFixed(2);
             
             $(selector).each(function (index) {
-               $(this).parent().prev().text(data.currency_symbol + data.cost);
+               $(this).parent().prev().text(data.currency_symbol + cost);
                $(this).parent().prev().prev().text(data.currency);
             });
           });
