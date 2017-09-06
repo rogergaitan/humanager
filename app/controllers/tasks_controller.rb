@@ -64,7 +64,7 @@ class TasksController < ApplicationController
     currency = Currency.find params[:currency]
     
     respond_to do |format|
-      format.json { render json:  {cost: params[:cost], currency: currency.name, currency_symbol: currency.symbol }}
+      format.json { render json:  {cost: params[:cost], currency: currency.name, currency_symbol: currency.symbol, update_all: params[:update_all] }}
     end
   end
   

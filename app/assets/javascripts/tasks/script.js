@@ -112,6 +112,7 @@ $(document).ready(function() {
     } else {
       $("#list_tasks input[type=checkbox]").prop("checked", false);
       $("#update_costs").prop("disabled", true)
+      $("#update_all").attr("value", false);
     }
   }); 
   
@@ -135,31 +136,64 @@ $(document).ready(function() {
        'N': {pattern: /\d/, optional: true}
       }
     });
-    
-    //form validations
-    $("#update_costs_form").validate({
+  });
+  
+  //form validations
+  $("#update_costs_form").validate({
       rules: {
         cost: {
           required: true,
-          min: 1
+          min: 0
         },
         currency: "required"
-      } ,
+      },
       messages: {
         cost: {
           required:  "Campo costo es requerido",
-          min: "Campo costo no puede ser 0"
+          min: "Campo costo no puede ser menor que 0"
         },
         currency: "Campo moneda es requerido"
-      }
-    });
+      },
+      
+      //handle form submit
+      submitHandler:  function(form) {
+        var form = $(form);
+        
+        if(confirm("¿Está Seguro? (Esta acción no se puede deshacer)")) {
+          $.ajax({
+            url: form.attr("action"),
+            beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+            dataType: "json",
+            method: "PUT",
+            data: {
+              cost: form.find("#cost").val(),
+              currency: form.find("#currency").val(),
+              tasks_ids: form.find("#tasks_ids").val(),
+              update_all: form.find("#update_all").val(),
+            }     
+          }).done(function (data) {
+  
+            var selector = data.update_all == "true" ? $("#list_tasks input[name=update_cost]") : $("#list_tasks input[name=update_cost]:checked");
+            
+            $(selector).each(function (index) {
+               $(this).parent().prev().text(data.currency_symbol + data.cost);
+               $(this).parent().prev().prev().text(data.currency);
+            });
+          });
+          
+          $("#update_costs_modal").modal("hide");
+        
+        } else {
+          $("#update_costs_modal").modal("hide");
+      }  
+    }
   });
   
   //select all checkbox on listing
   $("button[data-list=true], button[data-all=true]").on("click", function() {
       $("input[name=update_cost]").prop("checked", true);
       
-      //only enable update costs button if there are result when customer chooses visible on list
+      //only enable update costs button if there are results when customer chooses visible on list
       if($(this).attr("data-list") &&  $("input[name=update_cost]:checked").length  >= 1) {
         $("#update_costs").prop("disabled", false);
         $("#update_all").attr("value", false);
@@ -178,10 +212,17 @@ $(document).ready(function() {
         $("#update_costs").attr("data-update-all", false);
       }
       
-      $("#tasks_selection").modal('hide'); 
+      $("#tasks_selection").modal("hide");
   });
   
   //add ajax to pagination
-  $(".pagination a").attr("data-remote", true);
+  $(".pagination a[href]").attr("data-remote", true);
+  
+  //uncheck select all checkbox when closing modal when not all checkboxes are checked
+  $("#tasks_selection").on("hidden.bs.modal", function () {
+    if($("input[name=update_cost]:checked").length < $("input[name=update_cost]").length) {
+      $("#select_all").prop("checked", false);
+    }
+  });
 
-})
+});
