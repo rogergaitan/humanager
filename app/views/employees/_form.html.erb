@@ -19,7 +19,7 @@
     <% if @employee.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@employee.errors.count, "error") %> prohibited this employee from being saved:</h3>
+        <h3><%= pluralize(@employee.errors.count, "error") %> no permitieron guardar este empleado </h3>
         <% @employee.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -151,15 +151,16 @@
             <div class="form-group">
               <%= f.label :social_insurance, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.text_field :social_insurance, :class => 'form-control', 
-                    :data => {'parsley-maxlength' => '12'} %>
+                <%= f.text_field :social_insurance, :class => 'form-control',  :required => true,
+                    :data => {:parsley_maxlength => 20, :parsley_minlength => 6} %>
               </div>
             </div>
 
             <div class="form-group">
               <%= f.label :account_bncr, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.text_field :account_bncr, :class => 'form-control', :maxlength=>"12" %>
+                <%= f.text_field :account_bncr, :class => 'form-control', :required => true, 
+                  :data => {:parsle_minlength => 6, :parsley_maxlength=> 20} %>
               </div>
             </div>
 
