@@ -30,8 +30,6 @@ class Employee < ActiveRecord::Base
 
   has_many :deduction_employees, :dependent => :destroy
   has_many :deductions, :through => :deduction_employees
-  
-  validates :account_bncr, length: {is: 12}, allow_blank: true
 
  #association with other_salaries through other_salary_employees
 #   has_many :other_salary_employees, :dependent => :destroy
