@@ -55,6 +55,14 @@ class Employee < ActiveRecord::Base
   
   before_save :update_superior
   
+  validates_numericality_of :social_insurance, greater_than_or_equal_to: 6, less_than_or_equal_to: 20, 
+    message: "Numero de seguro social debe tener entre 6 y 20 numeros"
+  
+  validates_numericality_of :account_bncr, greater_than_or_equal_to: 6, less_than_or_equal_to: 20, 
+    message: "Numero de cuenta bancaria debe tener entre 6 y 20 numeros"
+  
+  validates :join_date
+  
   def update_superior
     if self.employee_id
       s = Employee.find(self.employee_id)
@@ -506,7 +514,7 @@ class Employee < ActiveRecord::Base
         entity.employee.gender = gender
         entity.employee.birthday = birthday
         entity.address_attributes = { address: address, department: department, 
-                                                           municipality: municipality, country: country }
+                                                                 municipality: municipality, country: country }
         
         if entity.save
           updated_records += 1
