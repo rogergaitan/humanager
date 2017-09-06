@@ -56,12 +56,19 @@ class Employee < ActiveRecord::Base
   before_save :update_superior
   
   validates_numericality_of :social_insurance, greater_than_or_equal_to: 6, less_than_or_equal_to: 20, 
-    message: "Numero de seguro social debe tener entre 6 y 20 numeros"
+    message: "Debe tener entre 6 y 20 numeros"
   
   validates_numericality_of :account_bncr, greater_than_or_equal_to: 6, less_than_or_equal_to: 20, 
-    message: "Numero de cuenta bancaria debe tener entre 6 y 20 numeros"
+    message: "Debe tener entre 6 y 20 numeros"
   
-  validates :join_date
+  validates :join_date, presence: true
+  validate :join_date_cannot_be_in_future
+  
+  def join_date_cannot_be_in_future
+    if join_date &&  join_date > Date.today()
+      errors.add :join_date, "Fecha de ingreso no puede ser despues de la fecha actual"
+    end
+  end
   
   def update_superior
     if self.employee_id
