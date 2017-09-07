@@ -1,4 +1,4 @@
 class Abamtdsop < ActiveRecord::Base
-  self.table = "Abamtdsop"
+  self.table_name = "ABAMTDSOP"
   establish_connection "firebird"
 end
