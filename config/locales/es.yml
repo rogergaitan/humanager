@@ -458,7 +458,7 @@ es:
           cod_doc_payroll_support: Doc Soporte Planilla
           mask_doc_payroll_support: Máscara Doc Soporte Planilla
           cod_doc_accounting_support_mov: Doc Soporte Mov Contable
-          mask_doc_accounting_support_mov: Mascara Doc Mov Contable
+          mask_doc_accounting_support_mov: Máscara Doc Mov Contable
           ledger_account_id: Cuenta Banco o CXP
           calendar_color: Color Para Calendario
           allow_register_from_app: Permite Registro desde App Móvil
