@@ -53,11 +53,8 @@ class Employee < ActiveRecord::Base
   
   before_save :update_superior
   
-  validates_numericality_of :social_insurance, greater_than_or_equal_to: 6, less_than_or_equal_to: 20, 
-    message: "Debe tener entre 6 y 20 numeros"
-  
-  validates_numericality_of :account_bncr, greater_than_or_equal_to: 6, less_than_or_equal_to: 20, 
-    message: "Debe tener entre 6 y 20 numeros"
+  validates_length_of :account_bncr, in: 6..20, too_short: "Debe tener minimo 6 numeros", too_long: "Debe tener maximo 20 numeros"
+  validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", too_long: "Debe tener maximo 20 numeros"
   
   validates :join_date, presence: true
   validate :join_date_cannot_be_in_future
