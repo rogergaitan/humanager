@@ -5,6 +5,20 @@ $(document).ready(function() {
   $("#payroll_type_calendar_color").colorpicker();
   payrollSupports();
   
+  $("#payroll_accounting_supports_modal").on("click", "p", function () {
+    $("#load_payroll_accounting_supports").val($(this).text());
+    $("#payroll_type_cod_doc_accounting_support_mov").val( $(this).attr("data-id") );
+    $("#payroll_type_mask_doc_accounting_support_mov").val($(this).attr("data-smask"));
+    $("#payroll_accounting_supports_modal").modal("hide");
+  })
+  
+  $("#payroll_supports_modal").on("click", "p", function () {
+    $("#load_payroll_supports").val($(this).text());
+    $("#payroll_type_cod_doc_payroll_support").val($(this).attr("data-id"));
+    $("#payroll_type_mask_doc_payroll_support").val($(this).attr("data-smask"));
+    $("#payroll_supports_modal").modal("hide");
+  })
+  
 	// Load Routes
 	payrollType.bank_accounts_path = $('#get_bank_account_ledger_accounts_path').val();
 
@@ -110,9 +124,11 @@ payrollSupports = function () {
       var load_support_name = $.data(document.body, 'support_' + $('#payroll_type_cod_doc_accounting_support_mov').val());
       $('#load_payroll_accounting_supports').val(load_support_name);
     }
-
+    
+  }).done(function (data) {
+     $.each(data, function (i, item) {
+       $("#payroll_supports_modal .modal-body, #payroll_accounting_supports_modal .modal-body")
+         .append("<p data-id=" + "'" + item.id +"'" +  "data-smask=" + item.smask  + ">" + item.ntdsop +  "</p>");
+    }) 
   });
-  
 }
-
-  
