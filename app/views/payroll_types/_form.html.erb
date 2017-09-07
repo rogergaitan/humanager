@@ -90,6 +90,20 @@
               </a>
             </div>
           </div>
+          
+          <div class="form-group">
+            <%= f.label :calendar_color, :class => "col-sm-2 control-label" %>
+            <div class="col-sm-3">
+              <%= f.text_field :calendar_color, :class => "form-control" %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :allow_register_from_app, :class => "col-sm-2 control-label" %>
+            <div class="col-sm-3">
+              <%= f.check_box :allow_register_from_app %>
+            </div>
+          </div>
 
           <div class="panel-footer">
             <div class="row">

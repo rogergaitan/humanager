@@ -455,11 +455,13 @@ es:
         payroll_type:
           description: Nombre
           payroll_type: Tipo de planilla
-          cod_doc_payroll_support: Cod Doc Soporte Planilla
-          mask_doc_payroll_support: Mascara Doc Soporte Planilla
-          cod_doc_accounting_support_mov: Cod Doc Soporte Mov Contable
-          mask_doc_accounting_support_mov: Mascara Doc Soporte Mov Contable
+          cod_doc_payroll_support: Doc Soporte Planilla
+          mask_doc_payroll_support: Máscara Doc Soporte Planilla
+          cod_doc_accounting_support_mov: Doc Soporte Mov Contable
+          mask_doc_accounting_support_mov: Mascara Doc Mov Contable
           ledger_account_id: Cuenta Banco o CXP
+          calendar_color: Color Para Calendario
+          allow_register_from_app: Permite Registro desde App Movil
         costs_center:
           company_id: Empresa
           icost_center: Id Centro de Costos

@@ -1,6 +1,9 @@
 var payrollType = {};
 
 $(document).ready(function() {
+  
+  $("#payroll_type_calendar_color").colorpicker();
+  
 	// Load Routes
 	payrollType.bank_accounts_path = $('#get_bank_account_ledger_accounts_path').val();
 
