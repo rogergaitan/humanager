@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 Reasapp::Application.routes.draw do
 
+  get "supports/index"
+
   post "session_validation/update_time"
 
   resources :other_payments
@@ -229,6 +231,8 @@ Reasapp::Application.routes.draw do
   resources :creditors, only: [:index]
   
   resources :ir_tables
+  
+  resources :supports, only: [:index]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
