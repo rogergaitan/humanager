@@ -82,7 +82,7 @@ es:
     fixed: Fijo
   payroll_type:
     administrative: Administrativa
-    fieldwork: Trabajo de Campo
+    fieldwork: Campo
     plant: Planta
   payment_type:
     ordinary: Ordinario
@@ -453,7 +453,7 @@ es:
           name: Nombre
           description: Descripción
         payroll_type:
-          description: Descripción
+          description: Nombre
           payroll_type: Tipo de planilla
           cod_doc_payroll_support: Cod Doc Soporte Planilla
           mask_doc_payroll_support: Mascara Doc Soporte Planilla

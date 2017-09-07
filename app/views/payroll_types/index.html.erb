@@ -35,7 +35,7 @@
               <% @payroll_types.each do |payroll_type| %>
                 <tr>
                   <td><%= payroll_type.description %></td>
-                  <td><%= payroll_type.payroll_type %></td>
+                  <td><%= t("payroll_type.#{payroll_type.payroll_type}") %></td>
                   <td>
                     <% if can? :update, PayrollType %>
                       <%= link_to edit_payroll_type_path(payroll_type), :class => 'btn btn-xs btn-success-alt' do %>
