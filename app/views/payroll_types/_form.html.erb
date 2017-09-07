@@ -48,28 +48,40 @@
           <div class="form-group">
             <%= f.label :cod_doc_payroll_support, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :cod_doc_payroll_support, :class => 'form-control', :maxlength => "3" %>
+              <div class="input-group form-group_">
+                <%= f.hidden_field :cod_doc_payroll_support %>
+                <%= text_field_tag :load_payroll_supports, "", :class => "form-control" %>
+                <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+              </div>
             </div>
           </div>
           
           <div class="form-group">
             <%= f.label :mask_doc_payroll_support, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :mask_doc_payroll_support, :class => 'form-control', :maxlength => "5" %>
+              <%= f.text_field :mask_doc_payroll_support, :class => 'form-control', :readonly => true %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :cod_doc_accounting_support_mov, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :cod_doc_accounting_support_mov, :class => 'form-control', :maxlength => "3" %>
+              <div class="input-group form-group_">
+                <%= f.hidden_field :cod_doc_accounting_support_mov %>
+                <%= text_field_tag :load_payroll_accounting_supports, "", :class => "form-control" %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :mask_doc_accounting_support_mov, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :mask_doc_accounting_support_mov, :class => 'form-control', :maxlength => "4" %>
+              <%= f.text_field :mask_doc_accounting_support_mov, :class => 'form-control', :readonly => true %>
             </div>
           </div>
 

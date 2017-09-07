@@ -3,6 +3,7 @@ var payrollType = {};
 $(document).ready(function() {
   
   $("#payroll_type_calendar_color").colorpicker();
+  payrollSupports();
   
 	// Load Routes
 	payrollType.bank_accounts_path = $('#get_bank_account_ledger_accounts_path').val();
@@ -24,7 +25,7 @@ $(document).ready(function() {
 
 	// Autocomplete to Bank Account
 	payrollType.autocompleteBackAccounts();
-
+  
 });
 
 // Set the hidden field with the Id and show the text (Bank Account)
@@ -60,3 +61,58 @@ payrollType.autocompleteBackAccounts = function() {
 		}
 	});
 }
+
+payrollSupports = function () { 
+  $.getJSON("/supports", function(data) {
+    $("#load_payroll_supports").autocomplete({
+      
+      source: $.map(data, function(item) {
+        $.data(document.body, 'support_' + item.id + "",  item.ntdsop);
+          return { label: item.ntdsop, id: item.id, smask: item.smask }
+      }),
+      
+      select: function(event, ui) {
+        if(ui.item.id) {
+          $('#payroll_type_cod_doc_payroll_support').val(ui.item.id);
+          $("#payroll_type_mask_doc_payroll_support").val(ui.item.smask);
+        }
+      },
+      
+      focus: function(event, ui) {
+        $('#load_payroll_supports').val(ui.item.label); 
+      }
+    });
+      
+    if($('#payroll_type_cod_doc_payroll_support').val()) {
+      var load_support_name = $.data(document.body, 'support_' + $('#payroll_type_cod_doc_payroll_support').val());
+      $('#load_payroll_supports').val(load_support_name);
+    }
+  
+    $("#load_payroll_accounting_supports").autocomplete({
+      source: $.map(data, function(item) {
+        $.data(document.body, 'support_' + item.id + "",  item.ntdsop);
+          return { label: item.ntdsop, id: item.id, smask: item.smask }
+      }),
+      
+      select: function(event, ui) {
+        if(ui.item.id) {
+          $('#payroll_type_cod_doc_accounting_support_mov').val(ui.item.id);
+          $("#payroll_type_mask_doc_accounting_support_mov").val(ui.item.smask);
+        }
+      },
+      
+      focus: function(event, ui) {
+        $('#load_payroll_accounting_supports').val(ui.item.label); 
+      }
+    })
+    
+    if($('#payroll_type_cod_doc_accounting_support_mov').val()) {
+      var load_support_name = $.data(document.body, 'support_' + $('#payroll_type_cod_doc_accounting_support_mov').val());
+      $('#load_payroll_accounting_supports').val(load_support_name);
+    }
+
+  });
+  
+}
+
+  

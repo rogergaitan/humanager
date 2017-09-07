@@ -461,7 +461,7 @@ es:
           mask_doc_accounting_support_mov: Mascara Doc Mov Contable
           ledger_account_id: Cuenta Banco o CXP
           calendar_color: Color Para Calendario
-          allow_register_from_app: Permite Registro desde App Movil
+          allow_register_from_app: Permite Registro desde App Móvil
         costs_center:
           company_id: Empresa
           icost_center: Id Centro de Costos
