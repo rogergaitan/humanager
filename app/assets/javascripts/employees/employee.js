@@ -12,7 +12,6 @@ $(document).ready(function($) {
   $("#employee_social_insurance").mask("00000000000000000000");
   $("#employee_account_bncr").mask("00000000000000000000");
   
-  
   $.getJSON('/employees/load_employees', function(employee_data) {
     $('#load_employee').autocomplete({
       source: $.map(employee_data, function(item) {
