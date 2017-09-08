@@ -51,11 +51,13 @@ class Employee < ActiveRecord::Base
   
   scope :superior, where("is_superior = ?", 1)
   
-  validates_length_of :account_bncr, in: 6..20, too_short: "Debe tener minimo 6 numeros", too_long: "Debe tener maximo 20 numeros"
-  validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", too_long: "Debe tener maximo 20 numeros"
+  validates_length_of :account_bncr, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
+    too_long: "Debe tener maximo 20 numeros", on: :update
+  validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
+    too_long: "Debe tener maximo 20 numeros", on: :update
   
-  validates :join_date, presence: true
-  validate :join_date_cannot_be_in_future
+  validates :join_date, presence: true, on: :update
+  validate :join_date_cannot_be_in_future, on: :update
   
   before_save :update_superior
   
@@ -459,7 +461,6 @@ class Employee < ActiveRecord::Base
     sync_data = {}
     
     abanits.each do |employee|
-      
       full_name =firebird_encoding  employee.ntercero
       last_name = firebird_encoding employee.napellido
       gender = employee.isexo
