@@ -429,7 +429,7 @@ function typeCalculation(selected) {
       $("#deduction_currency").show();
       $("#maximum_deduction").hide();
       $("#maximum_deduction").val("");      
-      $("#maximum_deduction").prop("required", false);
+      $("#deduction_maximum_deduction").prop("required", false);
       changeEmployeeValueCurrencySymbol();
       currencyMask("#deduction_deduction_value");
       employeeValueValidation();
