@@ -174,7 +174,9 @@ $(document).ready(function() {
   
   /* N O */
   $('#member_submit').click(function( event ) {
-    $("form[id*='_deduction']").parsley().validate();
+    if(!$('#member_submit').hasClass("disabled")) {
+      $("form[id*='_deduction']").parsley().validate();
+    }
   });
   /* N O */
   
@@ -416,7 +418,7 @@ function typeCalculation(selected) {
       $('.percentage').html('%');
       $("#deduction_currency").hide();
       $("#maximum_deduction").show();
-      $("#deduction_maximum_deduction");
+      $("#deduction_maximum_deduction").prop("required", true);
       changeEmployeeValueCurrencySymbol();
       percentMask("#deduction_deduction_value");
       employeeValueValidation();
@@ -427,6 +429,7 @@ function typeCalculation(selected) {
       $("#deduction_currency").show();
       $("#maximum_deduction").hide();
       $("#maximum_deduction").val("");      
+      $("#maximum_deduction").prop("required", false);
       changeEmployeeValueCurrencySymbol();
       currencyMask("#deduction_deduction_value");
       employeeValueValidation();
