@@ -151,22 +151,21 @@ $(document).ready(function() {
                 }
             }),
             select: function( event, ui ) {
-                if(ui.item.id){
-                    $("#employee_employee_id").val(ui.item.id);
-                }
+              if(ui.item.id) {
+                $("#employee_employee_id").val(ui.item.id);
+              }
             },
-            focus: function(event, ui){
-                $( "#load_employee" ).val(ui.item.label);
+            focus: function(event, ui) {
+              $( "#load_employee" ).val(ui.item.label);
             },
-            change: function(event, ui){
-                if(!ui.item){
-                    alert('Ningún resultado contiene ' + $( "#load_employee" ).val());
-                    $( "#load_employee" ).val("");
-                    $("#load_employee_id").val("");
-                }
+            change: function(event, ui) {
+              if(!ui.item) {
+                $( "#load_employee" ).val("");
+                $("#load_employee_id").val("");
+              }
             }
         });
-        if($("#employee_employee_id").val()){
+        if($("#employee_employee_id").val()) {
             var load_employee_name = $.data(document.body, 'employee_' + $("#employee_employee_id").val());
             $("#load_employee").val(load_employee_name);
         }
