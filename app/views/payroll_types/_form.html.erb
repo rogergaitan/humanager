@@ -14,7 +14,7 @@
     <% if @payroll_type.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@payroll_type.errors.count, "error") %> prohibited this payroll type from being saved:</h3>
+        <h3><%= pluralize(@payroll_type.errors.count, "error") %> no permitieron guardar este tipo de planilla:</h3>
         <% @payroll_type.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -32,7 +32,7 @@
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :description, :class => 'form-control', :required => true %>
+              <%= f.text_field :description, :class => 'form-control', :required => true, :maxlength => 30 %>
               <div class="help-block with-errors"></div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>
             </div>
@@ -50,7 +50,7 @@
             <div class="col-sm-3">
               <div class="input-group form-group_">
                 <%= f.hidden_field :cod_doc_payroll_support %>
-                <%= text_field_tag :load_payroll_supports, "", :class => "form-control" %>
+                <%= text_field_tag :load_payroll_supports, "", :required => true, :class => "form-control" %>
                 <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                   </span>
@@ -66,7 +66,7 @@
           <div class="form-group">
             <%= f.label :mask_doc_payroll_support, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :mask_doc_payroll_support, :class => 'form-control', :readonly => true %>
+              <%= f.text_field :mask_doc_payroll_support, :required => true, :class => 'form-control', :readonly => true %>
             </div>
           </div>
 
@@ -75,7 +75,7 @@
             <div class="col-sm-3">
               <div class="input-group form-group_">
                 <%= f.hidden_field :cod_doc_accounting_support_mov %>
-                <%= text_field_tag :load_payroll_accounting_supports, "", :class => "form-control" %>
+                <%= text_field_tag :load_payroll_accounting_supports, "", :required => true, :class => "form-control" %>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
@@ -91,7 +91,7 @@
           <div class="form-group">
             <%= f.label :mask_doc_accounting_support_mov, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :mask_doc_accounting_support_mov, :class => 'form-control', :readonly => true %>
+              <%= f.text_field :mask_doc_accounting_support_mov, :required => true, :class => 'form-control', :readonly => true %>
             </div>
           </div>
 
@@ -116,7 +116,7 @@
           <div class="form-group">
             <%= f.label :calendar_color, :class => "col-sm-2 control-label" %>
             <div class="col-sm-3">
-              <%= f.text_field :calendar_color, :class => "form-control" %>
+              <%= f.text_field :calendar_color, :required => true, :class => "form-control" %>
             </div>
           </div>
           

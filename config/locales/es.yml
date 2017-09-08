@@ -137,6 +137,16 @@ es:
               description:
                 blank: Este campo no puede quedar en blanco
                 taken: La descripción especificada ya existe
+              cod_doc_payroll_support:
+                blank: Este campo no puede quedar en blanco
+              cod_doc_accounting_support_mov:
+                blank: Este campo no puede quedar en blanco
+              mask_doc_payroll_support:
+                blank: Este campo no puede quedar en blanco
+              mask_doc_accounting_support_mov:
+                blank: Este campo no puede quedar en blanco
+              calendar_color:
+                blank: Este campo no puede quedar en blanco
           entity:
             attributes:
               name:
