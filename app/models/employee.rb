@@ -26,7 +26,9 @@ class Employee < ActiveRecord::Base
   has_one :photo, :dependent => :destroy
   has_many :employee_benefits, :dependent => :destroy
   has_many :work_benefits, :through => :employee_benefits
+  
   has_many :employees
+  belongs_to :employees
 
   has_many :deduction_employees, :dependent => :destroy
   has_many :deductions, :through => :deduction_employees
@@ -38,8 +40,6 @@ class Employee < ActiveRecord::Base
   #association with other_salaries through other_payment_employees
   has_many :other_payment_employees, :dependent => :destroy
   has_many :other_salaries, :through => :other_payment_employees
-
-  belongs_to :employees
   
   has_many :payroll_employees, :dependent => :destroy
   has_many :payroll_histories, :through => :payroll_employees
@@ -51,13 +51,13 @@ class Employee < ActiveRecord::Base
   
   scope :superior, where("is_superior = ?", 1)
   
-  before_save :update_superior
-  
   validates_length_of :account_bncr, in: 6..20, too_short: "Debe tener minimo 6 numeros", too_long: "Debe tener maximo 20 numeros"
   validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", too_long: "Debe tener maximo 20 numeros"
   
   validates :join_date, presence: true
   validate :join_date_cannot_be_in_future
+  
+  before_save :update_superior
   
   def join_date_cannot_be_in_future
     if join_date &&  join_date > Date.today()
@@ -68,7 +68,7 @@ class Employee < ActiveRecord::Base
   def update_superior
     if self.employee_id
       s = Employee.find(self.employee_id)
-      s.update_attributes(:is_superior => 1)
+      s.update_column(:is_superior, 1)
     end    
   end
   
