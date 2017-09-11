@@ -20,11 +20,11 @@ class Entity < ActiveRecord::Base
   has_many :contacts, :dependent => :destroy
   has_one  :customer
   has_one  :vendor
-	accepts_nested_attributes_for :telephones, :allow_destroy => true, :reject_if => proc { |attributes| attributes["telephone"].blank? }
+	accepts_nested_attributes_for :telephones, :allow_destroy => true
   accepts_nested_attributes_for :emails, :allow_destroy => true
   accepts_nested_attributes_for :address, :allow_destroy => true
   accepts_nested_attributes_for :contacts, :allow_destroy => true
-  accepts_nested_attributes_for :employee
+  accepts_nested_attributes_for :employee, :allow_destroy => true
 
   attr_accessible :entityid, :name, :surname, :telephones_attributes,
                   :emails_attributes, :address_attributes, :contacts_attributes, :employee_attributes
