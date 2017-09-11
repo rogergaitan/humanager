@@ -25,7 +25,7 @@ $(document).ready( function() {
         200: function(e, xhr, settings) {
           resources.PNotify('Compañia', 'Actualizada con exito', 'success');
           
-          if ($("a:contains(Cancelar)").attr("href")  == "/payment_types") {
+          if ($("a:contains(Cancelar)").attr("href")  == "/payment_types") { //redirect to index of payment types
             location.assign($("a:contains(Cancelar)").attr("href"));
           }
       
