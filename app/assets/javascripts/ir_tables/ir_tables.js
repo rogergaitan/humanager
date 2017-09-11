@@ -20,7 +20,7 @@ $("#add_stratus").on("click", function (e) {
   );
 });
 
-$(".delete_stratus").on("click", function () {
+$("tbody").on("click", ".delete_stratus", function () {
   $(this).parent().parent().hide();
   $(this).next().val(1);
 });
