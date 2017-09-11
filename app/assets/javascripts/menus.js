@@ -23,15 +23,20 @@ $(document).ready( function() {
       },
       statusCode: {
         200: function(e, xhr, settings) {
-            resources.PNotify('Compañia', 'Actualizada con exito', 'success');
-            setTimeout(function() { location.reload(); }, 3000);
+          resources.PNotify('Compañia', 'Actualizada con exito', 'success');
+          
+          if ($("a:contains(Cancelar)").attr("href")  == "/payment_types") {
+            location.assign($("a:contains(Cancelar)").attr("href"));
+          }
+      
+          setTimeout(function() { location.reload(); }, 3000);
         },
         409: function(e, xhr, settings) {
-            var message = e.responseJSON.notice;
-            resources.PNotify('Compañia', message, 'warning');
+          var message = e.responseJSON.notice;
+          resources.PNotify('Compañia', message, 'warning');
         },
         422: function(e, xhr, settings) {
-            resources.PNotify('Compañia', e.notice, 'success');
+          resources.PNotify('Compañia', e.notice, 'success');
         }
       }
     });
