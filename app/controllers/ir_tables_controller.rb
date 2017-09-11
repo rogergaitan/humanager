@@ -1,27 +1,26 @@
 class IrTablesController < ApplicationController
   
-  before_filter :set_ir_table, only: [:update, :destroy]
+  before_filter :set_ir_table, only: [:update, :destroy, :edit]
   
   def index
     @ir_tables = IrTable.all
   end
   
   def new
-     @ir_table = IrTable.new 
-     @ir_table.ir_table_values.build
+    @ir_table = IrTable.new
+    @ir_table.ir_table_values.build
   end
   
   def create
-      @ir_table = IrTable.new params[:ir_table]
-      if @ir_table.save
-        redirect_to ir_tables_path, notice: "Tabla IR creada correctamente."
-      else
-        render :new
-      end
+    @ir_table = IrTable.new params[:ir_table]
+    if @ir_table.save
+      redirect_to ir_tables_path, notice: "Tabla IR creada correctamente."
+    else
+      render :new
+    end
   end
   
   def edit
-    @ir_table = IrTable.new
   end
   
   def update
