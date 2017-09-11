@@ -151,7 +151,7 @@
             <div class="form-group">
               <%= f.label :social_insurance, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
-                <%= f.text_field :social_insurance, :class => 'form-control',  :required => true,
+                <%= f.text_field :social_insurance, :class => 'form-control',  :required => true, :size => 20,
                     :data => {:parsley_maxlength => 20, :parsley_minlength => 6} %>
               </div>
             </div>

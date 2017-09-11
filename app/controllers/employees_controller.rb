@@ -51,6 +51,7 @@ class EmployeesController < ApplicationController
   # GET /employees/1/edit
   def edit
     @employee = Employee.find(params[:id])
+    @employee.entity.build_address unless @employee.entity.address
   end
 
   # PUT /employees/1

@@ -51,6 +51,8 @@ class Employee < ActiveRecord::Base
   
   scope :superior, where("is_superior = ?", 1)
   
+  validates_numericality_of :account_bncr, :social_insurance, only_integer: true, on: :update, message: "solo permite numeros"
+  
   validates_length_of :account_bncr, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
     too_long: "Debe tener maximo 20 numeros", on: :update
   validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
