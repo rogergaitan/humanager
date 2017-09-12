@@ -7,7 +7,7 @@ $("#ir_table_start_date, #ir_table_end_date").datepicker({
 $(".mark_for_destruction").hide();
 
 $("#add_stratus").on("click", function (e) {
-  timestamp = new Date().getTime();
+  var timestamp = new Date().getTime();
   
   $("tbody").append("<tr>" + 
     "<td><input id=ir_table_ir_table_values_attributes_"+ timestamp +"_from name=ir_table[ir_table_values_attributes]["+ timestamp+"][from]  type=text></td>" +
@@ -21,6 +21,19 @@ $("#add_stratus").on("click", function (e) {
 });
 
 $("tbody").on("click", ".delete_stratus", function () {
-  $(this).parent().parent().hide();
+  $(this).parent().parent().remove();
   $(this).next().val(1);
 });
+
+$("#is_last").on("click", function () {
+  $("input[name$='[until]']").filter(":last").val(9999999999.99);
+});
+
+function currencyMask() {
+   $("tbody input").mask("FNNNNNNNNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true},
+       'F': {pattern: /\d/}
+      }
+  });    
+}

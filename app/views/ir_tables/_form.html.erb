@@ -68,8 +68,8 @@
           <tbody>
             <%= f.fields_for :ir_table_values do |ir_table_value_fields| %>
               <tr>
-                <td><%= ir_table_value_fields.text_field :from %></td>
-                <td><%= ir_table_value_fields.text_field :until %></td>
+                <td><%= ir_table_value_fields.text_field :from, value: number_to_currency(ir_table_value_fields.object.from, unit: "", delimiter: "") %></td>
+                <td><%= ir_table_value_fields.text_field :until, value: number_to_currency(ir_table_value_fields.object.until, unit: "", delimiter: "") %></td>
                 <td><%= ir_table_value_fields.text_field :base %></td>
                 <td><%= ir_table_value_fields.text_field :percent %></td>
                 <td><%= ir_table_value_fields.text_field :excess %></td>
@@ -80,6 +80,11 @@
               </tr>
             <% end %>
           </tbody>
+          <tfoot>
+           <tr>
+              <td colspan="6"><a class="btn btn-primary" id="is_last">Es último</a></td>
+            </tr>
+          </tfooter>
         </table>
         
         <div class="panel-footer">
