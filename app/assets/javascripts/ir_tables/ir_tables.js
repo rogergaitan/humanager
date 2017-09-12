@@ -11,7 +11,7 @@ $("#add_stratus").on("click", function (e) {
   
   $("tbody").append("<tr>" + 
     "<td><input id=ir_table_ir_table_values_attributes_"+ timestamp +"_from name=ir_table[ir_table_values_attributes]["+ timestamp+"][from]  type=text></td>" +
-    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+" _until name=ir_table[ir_table_values_attributes]["+timestamp+"][until]  type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_until name=ir_table[ir_table_values_attributes]["+timestamp+"][until]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_base name=ir_table[ir_table_values_attributes]["+timestamp+"][base]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_excess name=ir_table[ir_table_values_attributes]["+timestamp+"][excess]  type=text></td>" +
