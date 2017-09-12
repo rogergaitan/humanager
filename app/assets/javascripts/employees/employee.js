@@ -42,4 +42,17 @@ $(document).ready(function($) {
         $('#load_employee').val(load_employee_name);
     }
   });
-})
+  
+  window.ParsleyValidator
+    .addValidator("joinDate", function () {
+       var currentDate = new Date();
+       var selectedDate = $("#employee_join_date").datepicker("getDate");
+  
+       if(selectedDate > currentDate) {
+         return false;                  
+       } else {
+         return true;
+      }
+      }).addMessage("en", "joinDate",  "Fecha de ingreso no puede ser despues de la fecha actual.");
+      
+});
