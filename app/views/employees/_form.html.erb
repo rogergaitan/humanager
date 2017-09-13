@@ -142,7 +142,7 @@
               <%= f.label :join_date, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group">
-                  <%= f.text_field :join_date, :class => 'form-control' %>
+                  <%= f.text_field :join_date, :class => 'form-control', :data => { :parsley_join_date => "" } %>
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
               </div>
