@@ -19,11 +19,11 @@ $("#add_stratus").on("click", function (e) {
   
   $("tbody").append("<tr>" + 
     "<td><input id=ir_table_ir_table_values_attributes_"+ timestamp +"_from name=ir_table[ir_table_values_attributes]["+ timestamp+"][from]" +
-    "data-parsley-from-until-validation type=text></td>" +
-    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_until name=ir_table[ir_table_values_attributes]["+timestamp+"][until]  type=text></td>" +
-    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_base name=ir_table[ir_table_values_attributes]["+timestamp+"][base]  type=text></td>" +
-    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent]  type=text></td>" +
-    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_excess name=ir_table[ir_table_values_attributes]["+timestamp+"][excess]  type=text></td>" +
+    "data-parsley-from-until-validation required type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_until name=ir_table[ir_table_values_attributes]["+timestamp+"][until] required  type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_base name=ir_table[ir_table_values_attributes]["+timestamp+"][base]  required type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent] required  type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_excess name=ir_table[ir_table_values_attributes]["+timestamp+"][excess] required  type=text></td>" +
     "<td><a class='btn btn-xs btn-danger-alt delete_stratus'><i class='fa fa-trash-o'></i></a></td>" +
     "</tr>"
   );
