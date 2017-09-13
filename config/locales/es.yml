@@ -356,6 +356,7 @@ es:
             attributes:
               name:
                 blank: no puede quedar en blanco
+                taken: debe ser único
               start_date:
                 blank: no puede quedar en blanco
               end_date:
@@ -699,8 +700,8 @@ es:
           country: País
         ir_table:
           name: Nombre
-          start_date: Fecha Inicio
-          end_date: Fecha Fin
+          start_date: Fecha Desde
+          end_date: Fecha Hasta
         ir_table_values:
           from: Desde
           until: Hasta
