@@ -58,6 +58,7 @@
 //= require ../template/plugins/jquery-mousewheel/jquery.mousewheel.min
 //= require ../template/plugins/wijets/wijets
 //= require ../template/plugins/form-parsley/parsley
+//= require ../template/plugins/form-parsley/es
 //= require ../template/plugins/pines-notify/pnotify.min
 //= require ../template/plugins/bootstrap-switch/bootstrap-switch
 //= require ../template/plugins/pulsate/jQuery.pulsate.min
