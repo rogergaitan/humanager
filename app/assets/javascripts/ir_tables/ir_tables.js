@@ -1,3 +1,9 @@
+$('form').submit(function(e) {
+  if(!$(this).parsley().validate()) {
+    e.preventDefault();
+  }
+});
+
 $("#ir_table_start_date, #ir_table_end_date").datepicker({
     format: 'dd/mm/yyyy',
     autoclose: true,
@@ -37,3 +43,23 @@ function currencyMask() {
       }
   });    
 }
+
+window.Parsley
+  .addValidator("fromUntilValidation", {
+    validateNumber: function (value, requirement, instance) {    
+      
+      var fromValue = Number.parseFloat(instance.$element.val());
+      var untilValue = Number.parseFloat(instance.$element.parent().next().children().val());
+      
+      if(fromValue >  untilValue) {
+        return false;
+      }
+    },
+    
+    messages: {
+      en: "valor de este campo no puede ser mayor al del campo Hasta."
+    }
+    
+  })
+ 
+  

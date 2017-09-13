@@ -68,7 +68,10 @@
           <tbody>
             <%= f.fields_for :ir_table_values do |ir_table_value_fields| %>
               <tr>
-                <td><%= ir_table_value_fields.text_field :from, value: number_to_currency(ir_table_value_fields.object.from, unit: "", delimiter: "") %></td>
+                <td><%= ir_table_value_fields.text_field :from, 
+                  value: number_to_currency(ir_table_value_fields.object.from, unit: "", delimiter: ""), 
+                  data: {parsley_from_until_validation: ""} %>
+                </td>
                 <td><%= ir_table_value_fields.text_field :until, value: number_to_currency(ir_table_value_fields.object.until, unit: "", delimiter: "") %></td>
                 <td><%= ir_table_value_fields.text_field :base %></td>
                 <td><%= ir_table_value_fields.text_field :percent %></td>
