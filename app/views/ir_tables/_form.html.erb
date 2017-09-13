@@ -74,12 +74,12 @@
                 </td>
                 <td><%= ir_table_value_fields.text_field :until, required: true,
                   value: number_to_currency(ir_table_value_fields.object.until, unit: "", delimiter: "") %></td>
-                <td><%= ir_table_value_fields.text_field :base, 
-                  value: number_to_currency(ir_table_value_fields.object.base, unit: "", delimiter: ""), required: true %></td>
-                <td><%= ir_table_value_fields.text_field :percent, 
-                  value: number_to_currency(ir_table_value_fields.object.percent, unit: "", delimiter: ""), required: true %></td>
-                <td><%= ir_table_value_fields.text_field :excess, 
-                  value: number_to_currency(ir_table_value_fields.object.excess, unit: "", delimiter: ""), required: true %></td>
+                <td><%= ir_table_value_fields.text_field :base, required: true,
+                  value: number_to_currency(ir_table_value_fields.object.base, unit: "", delimiter: "") %></td>
+                <td><%= ir_table_value_fields.text_field :percent, required: true,
+                  value: number_to_currency(ir_table_value_fields.object.percent, unit: "", delimiter: "") %></td>
+                <td><%= ir_table_value_fields.text_field :excess, required: true,
+                  value: number_to_currency(ir_table_value_fields.object.excess, unit: "", delimiter: "") %></td>
                 <td>
                   <a class='btn btn-xs btn-danger-alt delete_stratus'><i class='fa fa-trash-o'></i></a>
                   <%= ir_table_value_fields.check_box :_destroy, class: "mark_for_destruction" if ir_table_value_fields.object.persisted? %>
