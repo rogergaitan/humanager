@@ -78,7 +78,7 @@ $(document).ready(function() {
     },
     afterSelect: function(values) { // selected
       searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
-      this.qs1.cache();
+//       this.qs1.cache();
       this.qs2.cache();
     },
     afterDeselect: function(values) { // deselected
