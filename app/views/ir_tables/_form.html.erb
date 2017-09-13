@@ -29,7 +29,7 @@
           <%= f.label :start_date,  class: "col-sm-2 control-label" %>
           <div class="col-sm-3 form-group_">
             <div class="input-group">
-              <%= f.text_field :start_date, class: "form-control", required: true %>
+              <%= f.text_field :start_date, class: "form-control", required: true, data: {parsley_start_date_validation: ""} %>
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
@@ -73,9 +73,9 @@
                   data: {parsley_from_until_validation: ""} %>
                 </td>
                 <td><%= ir_table_value_fields.text_field :until, value: number_to_currency(ir_table_value_fields.object.until, unit: "", delimiter: "") %></td>
-                <td><%= ir_table_value_fields.text_field :base %></td>
-                <td><%= ir_table_value_fields.text_field :percent %></td>
-                <td><%= ir_table_value_fields.text_field :excess %></td>
+                <td><%= ir_table_value_fields.text_field :base, value: number_to_currency(ir_table_value_fields.object.base, unit: "", delimiter: "") %></td>
+                <td><%= ir_table_value_fields.text_field :percent, value: number_to_currency(ir_table_value_fields.object.percent, unit: "", delimiter: "") %></td>
+                <td><%= ir_table_value_fields.text_field :excess, value: number_to_currency(ir_table_value_fields.object.excess, unit: "", delimiter: "") %></td>
                 <td>
                   <a class='btn btn-xs btn-danger-alt delete_stratus'><i class='fa fa-trash-o'></i></a>
                   <%= ir_table_value_fields.check_box :_destroy, class: "mark_for_destruction" if ir_table_value_fields.object.persisted? %>

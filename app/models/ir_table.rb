@@ -8,7 +8,14 @@ class IrTable < ActiveRecord::Base
   validates :name, :start_date, :end_date, presence: true
   validates :name, uniqueness: true
   
+  validate :validate_start_date_end_date
   validate :validate_ir_table_values
+  
+  def validate_start_date_end_date
+    if self.start_date > self.end_date
+      errors.add :start_date, "Fecha desde no puede ser luego de Fecha hasta."
+    end
+  end
   
   def validate_ir_table_values
     self.ir_table_values.each_with_index do |ir_table_value, index|

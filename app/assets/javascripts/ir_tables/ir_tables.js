@@ -18,7 +18,8 @@ $("#add_stratus").on("click", function (e) {
   var timestamp = new Date().getTime();
   
   $("tbody").append("<tr>" + 
-    "<td><input id=ir_table_ir_table_values_attributes_"+ timestamp +"_from name=ir_table[ir_table_values_attributes]["+ timestamp+"][from]  type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+ timestamp +"_from name=ir_table[ir_table_values_attributes]["+ timestamp+"][from]" + 
+    "type=text data-parsley-from-until-validation=''></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_until name=ir_table[ir_table_values_attributes]["+timestamp+"][until]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_base name=ir_table[ir_table_values_attributes]["+timestamp+"][base]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent]  type=text></td>" +
@@ -50,8 +51,8 @@ window.Parsley
   .addValidator("fromUntilValidation", {
     validateNumber: function (value, requirement, instance) {    
       
-      var fromValue = Number.parseFloat(instance.$element.val());
-      var untilValue = Number.parseFloat(instance.$element.parent().next().children().val());
+      var fromValue = value;
+      var untilValue =instance.$element.parent().next().children().val();
       
       if(fromValue >  untilValue) {
         return false;
@@ -61,7 +62,22 @@ window.Parsley
     messages: {
       en: "valor de este campo no puede ser mayor al del campo Hasta."
     }
-    
-  })
+  });
  
+window.Parsley
+  .addValidator("startDateValidation", {
+    validateString: function (value, requirement, instance) {
+      
+      var startDate = $("#ir_table_start_date").datepicker("getDate");
+      var endDate = $("#ir_table_end_date").datepicker("getDate");
+      
+      if(startDate > endDate) {
+        return false;
+      }
+    },
+    
+    messages: {
+      en: "Fecha desde no puede ser luego de Fecha hasta."
+    }
+  });
   
