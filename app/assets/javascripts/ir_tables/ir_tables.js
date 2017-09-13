@@ -12,6 +12,8 @@ $("#ir_table_start_date, #ir_table_end_date").datepicker({
 
 $(".mark_for_destruction").hide();
 
+currencyMask();
+
 $("#add_stratus").on("click", function (e) {
   var timestamp = new Date().getTime();
   
