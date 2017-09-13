@@ -11,18 +11,15 @@ class IrTable < ActiveRecord::Base
   validate :validate_ir_table_values
   
   def validate_ir_table_values
-    error = false
     self.ir_table_values.each_with_index do |ir_table_value, index|
-      
       unless index == 0
         unless ir_table_value.from.nil? || self.ir_table_values[index -1].until.nil?
           if ir_table_value.from <= self.ir_table_values[index -1].until
-           error = true
+           errors.add :base, "Valor del campo De debe ser al menos un numero mayor que el campo Hasta del estrato anterior"
          end
         end
       end
     end
-    errors.add :base, "Valor del campo De debe ser al menos un numero mayor que el campo Hasta del estrato anterior"  if error
   end
   
 end
