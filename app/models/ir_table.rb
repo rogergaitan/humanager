@@ -13,7 +13,7 @@ class IrTable < ActiveRecord::Base
   
   def validate_start_date_end_date
     if self.start_date > self.end_date
-      errors.add :start_date, "Fecha desde no puede ser luego de Fecha hasta."
+      errors.add :start_date, "Fecha desde no puede ser despues de Fecha hasta."
     end
   end
   

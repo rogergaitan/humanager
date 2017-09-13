@@ -77,7 +77,7 @@ window.Parsley
     },
     
     messages: {
-      en: "Fecha desde no puede ser luego de Fecha hasta."
+      en: "Fecha desde no puede ser despues de Fecha hasta."
     }
   });
   
