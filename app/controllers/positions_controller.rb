@@ -1,10 +1,11 @@
 class PositionsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
   skip_load_and_authorize_resource :only => [:search]
+  before_filter :set_position, only: [:show, :edit, :update, :destroy]
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Position, params[:id])
   end
-
+  
   # GET /positions
   # GET /positions.json
   def index
@@ -19,8 +20,6 @@ class PositionsController < ApplicationController
   # GET /positions/1
   # GET /positions/1.json
   def show
-    @position = Position.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @position }
@@ -40,7 +39,6 @@ class PositionsController < ApplicationController
 
   # GET /positions/1/edit
   def edit
-    @position = Position.find(params[:id])
   end
 
   # POST /positions
@@ -62,8 +60,6 @@ class PositionsController < ApplicationController
   # PUT /positions/1
   # PUT /positions/1.json
   def update
-    @position = Position.find(params[:id])
-
     respond_to do |format|
       if @position.update_attributes(params[:position])
         format.html { redirect_to @position, notice: 'Puesto actualizado exitosamente.' }
@@ -78,7 +74,7 @@ class PositionsController < ApplicationController
   # DELETE /positions/1
   # DELETE /positions/1.json
   def destroy
-    @position = Position.find(params[:id])
+    byebug
     @total = Employee.check_if_exist_records(params[:id], 'position')
 
     if @total > 0
@@ -100,4 +96,13 @@ class PositionsController < ApplicationController
       format.json { render json: @positions }
     end
   end
+  
+  private
+  
+    def set_position
+      @position = Position.find params[:id]
+    rescue ActiveRecord::RecordNotFound
+      redirect_to positions_path, notice: "El puesto que busca no existe."
+    end
+  
 end
