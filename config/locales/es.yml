@@ -358,7 +358,7 @@ es:
             attributes:
               name:
                 blank: no puede quedar en blanco
-                taken: debe ser único
+                taken: ese nombre ya existe
               start_date:
                 blank: no puede quedar en blanco
               end_date:

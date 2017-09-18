@@ -6,7 +6,7 @@ class IrTable < ActiveRecord::Base
   accepts_nested_attributes_for :ir_table_values, allow_destroy: true
   
   validates :name, :start_date, :end_date, presence: true
-  validates :name, uniqueness: true
+  validates_uniqueness_of :name, case_sensitive: false
   
   validate :validate_start_date_end_date
   validate :validate_ir_table_values
