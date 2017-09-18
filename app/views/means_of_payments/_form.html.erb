@@ -4,7 +4,7 @@
     <% if @means_of_payment.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@means_of_payment.errors.count, "error") %> prohibited this means_of_payment from being saved:</h3>
+        <h3><%= pluralize(@means_of_payment.errors.count, "error") %> no permitieron guardar este medio de pago:</h3>
         <% @means_of_payment.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -17,12 +17,13 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @means_of_payment, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for@means_of_payment, :html => { :class => 'form-horizontal row-border',
+          :data => { :toggle => "validator" }} do |f| %>
 
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :name, :class => 'form-control' %>
+              <%= f.text_field :name, :class => 'form-control', :required => true %>
             </div>
           </div>
 

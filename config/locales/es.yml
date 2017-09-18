@@ -363,6 +363,11 @@ es:
                 blank: no puede quedar en blanco
               end_date:
                 blank: no puede quedar en blanco
+          means_of_payment:
+            attributes:
+              name: 
+                blank: no puede quedar en blanco
+                taken: ese nombre ya existe
       models:
         currency:
           one: Moneda
