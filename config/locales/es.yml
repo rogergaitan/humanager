@@ -368,6 +368,11 @@ es:
               name: 
                 blank: no puede quedar en blanco
                 taken: ese nombre ya existe
+          payment_frequency:
+            attributes:
+              name:
+                blank: no puede quedar en blanco
+                taken: ese nombre ya existe
       models:
         currency:
           one: Moneda
