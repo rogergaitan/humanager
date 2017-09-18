@@ -50,8 +50,12 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks = Task.search(params[:search_activity], params[:search_code], params[:search_desc], params[:currency], params[:page])
-     respond_with @tasks
+    @tasks = Task.search(params[:search_activity], params[:search_code], 
+               params[:search_desc], params[:currency], params[:page])
+    
+    respond_to do |format|
+      format.js { render :index }
+    end
   end
   
   def update_costs
