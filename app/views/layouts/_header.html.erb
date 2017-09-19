@@ -74,6 +74,11 @@
                                         <% if can? :read, PaymentFrequency %>
                                             <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
                                         <% end %>
+                                         <% if can? :read, PaymentFrequency %>
+                                            <li><%= link_to "Unidades de pago", payment_units_path  %></li>
+                                        <% end %>
+                                        
+                                        
                                     </ul>
                                 </div>
                             </div>

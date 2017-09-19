@@ -233,6 +233,8 @@ Reasapp::Application.routes.draw do
   resources :ir_tables
   
   resources :supports, only: [:index]
+  
+  resources :payment_units, except: [:show]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

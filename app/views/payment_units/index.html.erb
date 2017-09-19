@@ -1,0 +1,65 @@
+<div class="page-heading">
+  <h1> Unidades de pago </h1>
+  <div class="options">
+    <div class="btn-toolbar">
+      <% if can? :create, PaymentFrequency %>
+        <%= link_to new_payment_unit_path, :class => 'btn btn-primary pull-right' do %>
+          <i class="fa fa-plus"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  
+  <%= render "/layouts/message" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading"></div>
+
+        <div class="panel-body panel-no-padding">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= PaymentUnit.human_attribute_name(:name) %></th>
+                <th><%= PaymentUnit.human_attribute_name(:description) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @payment_units.each do |payment_unit| %>
+                <tr>
+                  <td><%= link_to payment_unit.name, payment_unit_path(payment_unit) %></td>
+                  <td><%= payment_unit.description %></td>
+                  <td>
+                    <% if can? :update, PaymentFrequency %>
+                      <%= link_to edit_payment_unit_path(payment_unit), :class => 'btn btn-xs btn-success-alt' do %>
+                        <i class="fa fa-pencil"></i>
+                      <% end %>
+                    <% end %>
+
+                    <% if can? :destroy, PaymentFrequency %>
+                      <%= link_to payment_unit_path(payment_unit), :method => :delete,
+                        :confirm => "Esta seguro(a)?",
+                        :class => 'btn btn-xs btn-danger-alt' do %>
+                        <i class="fa fa-trash-o"></i>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          
+          <div class="text-right">
+            <%= will_paginate @payment_units %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

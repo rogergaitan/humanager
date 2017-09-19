@@ -373,6 +373,11 @@ es:
               name:
                 blank: no puede quedar en blanco
                 taken: ese nombre ya existe
+          payment_unit:
+            attributes:
+              name:
+                blank: no puede quedar en blanco
+                taken: ese nombre ya existe
       models:
         currency:
           one: Moneda
@@ -446,6 +451,7 @@ es:
           one: Planilla
           other: Registro de planillas
         other_payment: Otros Pagos
+        payment_unit: Unidad de pago
       attributes:
         payroll_employee:
           employee_id: Empleado
@@ -720,6 +726,9 @@ es:
           percent: Porcentaje
           base: Base
           excess: Exceso
+        payment_unit:
+          name: Nombre
+          description: Descripción
        
   date:
       abbr_day_names:
