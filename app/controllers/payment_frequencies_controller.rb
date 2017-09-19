@@ -40,7 +40,7 @@ class PaymentFrequenciesController < ApplicationController
 
     respond_to do |format|
       if @payment_frequency.save
-        format.html { redirect_to @payment_frequency, notice: 'Payment frequency was successfully created.' }
+        format.html { redirect_to @payment_frequency, notice: 'Frecuencia de pago creada correctamente.' }
         format.json { render json: @payment_frequency, status: :created, location: @payment_frequency }
       else
         format.html { render action: "new" }
@@ -56,7 +56,7 @@ class PaymentFrequenciesController < ApplicationController
 
     respond_to do |format|
       if @payment_frequency.update_attributes(params[:payment_frequency])
-        format.html { redirect_to @payment_frequency, notice: 'Payment frequency was successfully updated.' }
+        format.html { redirect_to @payment_frequency, notice: 'Frecuencia de pago actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
