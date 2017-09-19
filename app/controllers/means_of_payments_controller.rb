@@ -40,7 +40,7 @@ class MeansOfPaymentsController < ApplicationController
 
     respond_to do |format|
       if @means_of_payment.save
-        format.html { redirect_to @means_of_payment, notice: 'Means of payment was successfully created.' }
+        format.html { redirect_to @means_of_payment, notice: 'Medio de pago creado correctamente.' }
         format.json { render json: @means_of_payment, status: :created, location: @means_of_payment }
       else
         format.html { render action: "new" }
@@ -56,7 +56,7 @@ class MeansOfPaymentsController < ApplicationController
 
     respond_to do |format|
       if @means_of_payment.update_attributes(params[:means_of_payment])
-        format.html { redirect_to @means_of_payment, notice: 'Means of payment was successfully updated.' }
+        format.html { redirect_to @means_of_payment, notice: 'Medio de pago actualizado correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
