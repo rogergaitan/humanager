@@ -5,9 +5,9 @@ $('form').submit(function(e) {
 });
 
 $("#ir_table_start_date, #ir_table_end_date").datepicker({
-    format: 'dd/mm/yyyy',
-    autoclose: true,
-    language: "es"
+  format: 'dd/mm/yyyy',
+  autoclose: true,
+  language: "es"
 });
 
 $(".mark_for_destruction").hide();
@@ -54,13 +54,13 @@ window.Parsley
       var fromValue = value;
       var untilValue =instance.$element.parent().next().children().val();
       
-      if(fromValue >  untilValue) {
+      if(fromValue >= untilValue) {
         return false;
       }
     },
     
     messages: {
-      en: "valor de este campo no puede ser mayor al del campo Hasta."
+      es: "valor de este campo no puede ser igual o mayor al del campo Hasta."
     }
   });
  
@@ -71,13 +71,13 @@ window.Parsley
       var startDate = $("#ir_table_start_date").datepicker("getDate");
       var endDate = $("#ir_table_end_date").datepicker("getDate");
       
-      if(startDate > endDate) {
+      if(startDate >= endDate) {
         return false;
       }
     },
     
     messages: {
-      en: "Fecha desde no puede ser despues de Fecha hasta."
+      es: "Fecha Desde no puede ser la misma o despues de fecha Hasta."
     }
   });
   
