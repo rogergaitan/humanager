@@ -570,6 +570,28 @@ class Ability
             can :destroy, Currency
         end
     end
+    
+    ######################################################################################
+    # PAYMENT UNITS | CONFIGURACION
+    ######################################################################################
+    payment_unit = user.permissions_user.find_by_permissions_subcategory_id(list['Unidades de Pago'])
+    unless payment_unit.nil?
+      if payment_unit.p_create
+        can :create, PaymentUnit
+      end
 
+      if payment_unit.p_view
+        can :read, PaymentUnit
+      end
+
+      if payment_unit.p_modify
+        can :update, PaymentUnit
+      end
+
+      if payment_unit.p_delete
+        can :destroy, PaymentUnit
+      end
+    end
+    
   end
 end
