@@ -28,7 +28,4 @@ $(document).ready(function($) {
         es: "Fecha de ingreso no puede ser despues de la fecha actual."
       }
     });
-    
-  
-
 });

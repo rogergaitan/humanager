@@ -252,6 +252,7 @@ $(document).ready(function() {
             text: 'Por favor revisar errores en pestaña laboral.',
             type: 'error',
             icon: 'fa fa-warning',
+            styling: 'fontawesome',
             buttons: {
               closer: true,
               sticker: false
