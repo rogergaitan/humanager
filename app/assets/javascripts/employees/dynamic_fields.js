@@ -242,9 +242,22 @@ $(document).ready(function() {
     });
     
 
-	$('form').submit(function(e) {
-		if(!$(this).parsley().validate()) {
-			e.preventDefault();
-		}
-	});
+    $('form').submit(function(e) {
+      if(!$(this).parsley().validate()) {
+        e.preventDefault();
+        //show notification only when tab3 is not active
+        if (!$("#tab3").hasClass("active") && $("#tab3 div.form-group ul.parsley-errors-list").length >= 1) {
+          new PNotify({
+            title: 'Atención!',
+            text: 'Por favor revisar errores en pestaña laboral.',
+            type: 'error',
+            icon: 'fa fa-warning',
+            buttons: {
+              closer: true,
+              sticker: false
+            }
+          });
+        }
+      }
+  });
 })

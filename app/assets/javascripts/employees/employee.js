@@ -12,8 +12,9 @@ $(document).ready(function($) {
   $("#employee_social_insurance").mask("00000000000000000000");
   $("#employee_account_bncr").mask("00000000000000000000");
   
-  window.ParsleyValidator
-    .addValidator("joinDate", function () {
+  window.Parsley
+    .addValidator("joinDate", {
+      validateString: function () {
        var currentDate = new Date();
        var selectedDate = $("#employee_join_date").datepicker("getDate");
   
@@ -21,7 +22,13 @@ $(document).ready(function($) {
          return false;                  
        } else {
          return true;
+       }
+      },
+      messages: {
+        es: "Fecha de ingreso no puede ser despues de la fecha actual."
       }
-      }).addMessage("es", "joinDate",  "Fecha de ingreso no puede ser despues de la fecha actual.");
-      
+    });
+    
+  
+
 });
