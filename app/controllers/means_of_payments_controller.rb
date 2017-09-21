@@ -1,10 +1,12 @@
 class MeansOfPaymentsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(MeansOfPayment, params[:id])
   end
 
+  before_filter :set_means_of_payment, :only => [:edit, :update, :delete, :show]
+  
   respond_to :html, :json
 
   # GET /means_of_payments
@@ -30,7 +32,6 @@ class MeansOfPaymentsController < ApplicationController
 
   # GET /means_of_payments/1/edit
   def edit
-    @means_of_payment = MeansOfPayment.find(params[:id])
   end
 
   # POST /means_of_payments
@@ -52,8 +53,6 @@ class MeansOfPaymentsController < ApplicationController
   # PUT /means_of_payments/1
   # PUT /means_of_payments/1.json
   def update
-    @means_of_payment = MeansOfPayment.find(params[:id])
-
     respond_to do |format|
       if @means_of_payment.update_attributes(params[:means_of_payment])
         format.html { redirect_to @means_of_payment, notice: 'Medio de pago actualizado correctamente.' }
@@ -68,7 +67,6 @@ class MeansOfPaymentsController < ApplicationController
   # DELETE /means_of_payments/1
   # DELETE /means_of_payments/1.json
   def destroy
-    @means_of_payment = MeansOfPayment.find(params[:id])
     @total = Employee.check_if_exist_records(params[:id], 'means_of_payment')
 
     if @total > 0
@@ -83,4 +81,13 @@ class MeansOfPaymentsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  private
+  
+    def set_means_of_payment
+      @means_of_payment = MeansOfPayment.find params[:id]
+    rescue ActiveRecord::RecordNotFound
+      redirect_to means_of_payments_path, notice: "El medio de pago que busca no existe."
+    end
+  
 end
