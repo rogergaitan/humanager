@@ -1,7 +1,7 @@
 class PositionsController < ApplicationController
-  authorize_resource
-  skip_load_and_authorize_resource :only => [:search]
   before_filter :set_position, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
+  skip_load_and_authorize_resource :only => [:search]
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Position, params[:id])
   end
