@@ -5,7 +5,7 @@ class PaymentFrequenciesController < ApplicationController
     session_edit_validation(PaymentFrequency, params[:id])
   end
   
-  before_filter :set_payment_frequency, :only => [:edit, :show, :update, :delete]
+  before_filter :set_payment_frequency, :only => [:edit, :show, :update, :destroy]
 
   respond_to :html, :json
   

@@ -5,7 +5,7 @@ class MeansOfPaymentsController < ApplicationController
     session_edit_validation(MeansOfPayment, params[:id])
   end
 
-  before_filter :set_means_of_payment, :only => [:edit, :update, :delete, :show]
+  before_filter :set_means_of_payment, :only => [:edit, :update, :destroy, :show]
   
   respond_to :html, :json
 
