@@ -331,6 +331,8 @@ es:
                 blank: Este campo no puede quedar en blanco
               creditor_id:
                 blank: Este campo no puede quedar en blanco
+              payroll_type:
+                invalid: invalida
           other_payment:
             attributes:
               payrolls:
@@ -679,6 +681,7 @@ es:
           payroll_types: Tipos de planillas
           individual: ¿Aplica individualmente?
           state: Activa
+          payroll_type: Cuenta a creditar
         payroll:
           payroll_type_id: Tipo de planilla
           start_date: Desde
