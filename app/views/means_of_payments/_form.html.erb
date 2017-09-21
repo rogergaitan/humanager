@@ -18,7 +18,7 @@
 
       <div class="panel-body panel-no-padding">
         <%= form_for @means_of_payment, :html => { :class => 'form-horizontal row-border',
-          :data => { :toggle => "validator" }} do |f| %>
+          :data => {:parsley_validate => ""} } do |f| %>
 
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
