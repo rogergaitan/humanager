@@ -7,7 +7,7 @@ class PayrollType < ActiveRecord::Base
   validates_length_of :description, :maximum => 30, :message => "maximo 30 caracteres"
   
   validates :cod_doc_accounting_support_mov, :cod_doc_payroll_support, :mask_doc_payroll_support, 
-    :mask_doc_accounting_support_mov, :payroll_type, :calendar_color, presence: true
+    :mask_doc_accounting_support_mov, :payroll_type, :calendar_color, :ledger_account_id, presence: true
 
   belongs_to :company
   has_many :companies

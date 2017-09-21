@@ -147,6 +147,8 @@ es:
                 blank: Este campo no puede quedar en blanco
               calendar_color:
                 blank: Este campo no puede quedar en blanco
+              ledger_account_id:
+                blank: Este campo no puede quedar en blanco
           entity:
             attributes:
               name:

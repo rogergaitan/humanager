@@ -27,7 +27,7 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @payroll_type, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator'} } do |f| %>
+        <%= form_for @payroll_type, :html => { :class => 'form-horizontal row-border' } do |f| %>
         
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>
@@ -50,11 +50,14 @@
             <div class="col-sm-3">
               <div class="input-group form-group_">
                 <%= f.hidden_field :cod_doc_payroll_support %>
-                <%= text_field_tag :load_payroll_supports, "", :required => true, :class => "form-control" %>
+                <%= text_field_tag :load_payroll_supports, "", :required => true, 
+                :class => "form-control", 
+                :data => { :parsley_errors_container => "#load_payroll_supports_errors" } %>
                 <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                   </span>
               </div>
+              <div id="load_payroll_supports_errors"></div>
             </div>
               <div class="col-sm-1">
                 <a data-toggle="modal" href="#payroll_supports_modal" class="btn btn-default-alt" >
@@ -75,11 +78,14 @@
             <div class="col-sm-3">
               <div class="input-group form-group_">
                 <%= f.hidden_field :cod_doc_accounting_support_mov %>
-                <%= text_field_tag :load_payroll_accounting_supports, "", :required => true, :class => "form-control" %>
+                <%= text_field_tag :load_payroll_accounting_supports, "", :required => true, 
+                  :class => "form-control",
+                  :data => {:parsley_errors_container => "#load_payroll_accounting_supports_errors"} %>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
               </div>
+              <div id="load_payroll_accounting_supports_errors"></div>
             </div>
               <div class="col-sm-1">
                 <a data-toggle="modal" data-target="#payroll_accounting_supports_modal" class="btn btn-default-alt" >
@@ -100,11 +106,14 @@
             <div class="col-sm-3">
               <div class="input-group form-group_">
                 <%= f.hidden_field :ledger_account_id %>
-                <%= text_field_tag 'payroll_type_ledger_account',nil, :class => 'form-control', :required => true, :for => :ledger_account_id %>
+                <%= text_field_tag 'payroll_type_ledger_account',nil, :class => 'form-control', 
+                  :required => true, :for => :ledger_account_id, 
+                  :data => {:parsley_errors_container => "#payroll_type_ledger_account_errors"}%>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
               </div>
+              <div id="payroll_type_ledger_account_errors"></div>
             </div>
             <div class="col-sm-1">
               <a data-toggle="modal" href="#myModalLabel" class="btn btn-default-alt" title="Ver lista de cuentas contables">
