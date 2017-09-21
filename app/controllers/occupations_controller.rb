@@ -93,7 +93,7 @@ class OccupationsController < ApplicationController
     def set_occupation
       @occupation = Occupation.find params[:id]
     rescue ActiveRecord::RecordNotFound
-      redirect_to occupations_path, notice: "El registro de ocupación no existe."
+      redirect_to occupations_path, notice: "La ocupación que busca no existe."
     end
   
 end
