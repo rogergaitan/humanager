@@ -29,7 +29,7 @@
 
       <div class="panel-body panel-no-padding">
         <%= form_for @deduction, :html => { :class => 'form-horizontal row-border',  
-          :data => {:model_name => Deduction.model_name, :toggle => "validator",
+          :data => {:model_name => Deduction.model_name,
           :reference_id => @deduction.id, :company => true} } do |f| %>
 
           <div class="form-group">
@@ -53,12 +53,14 @@
               <div class="input-group form-group_">
                 <%= f.hidden_field :ledger_account_id, :required => true %>
                 <%= text_field_tag 'deduction_ledger_account', nil, :class => 'form-control', 
-                    :for => :ledger_account_id, :required => true %>
+                  :for => :ledger_account_id, :required => true, 
+                  :data => {:parsley_errors_container => "#deduction_ledger_account_error"} %>
                 <div class="help-block with-errors"></div>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
               </div>
+              <div id="deduction_ledger_account_error"></div>
             </div>
             <div class="col-sm-1">
               <a data-toggle="modal" href="#myModal" class="btn btn-default-alt" title="Ver lista de cuentas contables">
@@ -177,15 +179,19 @@
             <div class="col-sm-6 pull-right" id="maximum_deduction">
               <%= f.label :maximum_deduction, "Deducción Máxima", :class => "col-sm-2 control-label" %>
               <div class="col-sm-6 form-group_">
-                <%= f.text_field :maximum_deduction, :value => number_to_currency(f.object.maximum_deduction, unit: "", delimiter: ""), 
-                  :class => "form-control" %>
+                <%= f.text_field :maximum_deduction, 
+                  :value => number_to_currency(f.object.maximum_deduction, unit: "", delimiter: ""),
+                  :class => "form-control",
+                  :data => {:parsley_errors_container => "#maximum_deduction_errors"} %>
               </div><span id="maximum_deduction_currency_symbol"></span>
-              <br><br><br>
-             
+              <div id="maximum_deduction_errors"></div>
+            </div>
+            
+            <div class="col-sm-6 pull-right">
               <%= f.label :maximum_deduction_currency_id, "Moneda", :class => "col-sm-2  control-label" %>
-              <div class="col-sm-6 form-group_">
+              <div class="col-sm-6">
                 <%= f.collection_select :maximum_deduction_currency_id, @currencies, :id, :name,
-                    options = {:prompt => false}, html_options = {:class => "form-control"  } %>
+                options = {:prompt => false}, html_options = {:class => "form-control"  } %>
               </div>
             </div>
 
