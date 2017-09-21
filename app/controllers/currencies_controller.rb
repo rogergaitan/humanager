@@ -1,4 +1,5 @@
 class CurrenciesController < ApplicationController
+  authorize_resource
   before_filter :set_currency, only: [:edit, :update]
   
   def index
@@ -21,7 +22,7 @@ class CurrenciesController < ApplicationController
     def set_currency
       @currency = Currency.find params[:id]    
     rescue ActiveRecord::RecordNotFound
-      redirect_to currencies_path
+      redirect_to currencies_path, notice: "El registro de moneda que busca no existe."
     end
   
 end
