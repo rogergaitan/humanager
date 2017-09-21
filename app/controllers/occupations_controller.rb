@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 class OccupationsController < ApplicationController
+  before_filter :set_occupation, :only => [:edit, :show, :update, :destroy]
   load_and_authorize_resource
   skip_load_and_authorize_resource :only => [:search]
   before_filter :only => [:edit, :update] do |controller|
@@ -18,7 +19,6 @@ class OccupationsController < ApplicationController
   # GET /occupations/1
   # GET /occupations/1.json
   def show
-    @occupation = Occupation.find(params[:id])
     respond_with(@occupation)
   end
 
@@ -31,7 +31,6 @@ class OccupationsController < ApplicationController
 
   # GET /occupations/1/edit
   def edit
-    @occupation = Occupation.find(params[:id])
   end
 
   # POST /occupations
@@ -53,8 +52,6 @@ class OccupationsController < ApplicationController
   # PUT /occupations/1
   # PUT /occupations/1.json
   def update
-    @occupation = Occupation.find(params[:id])
-
     respond_to do |format|
       if @occupation.update_attributes(params[:occupation])
         format.html { redirect_to @occupation, notice: 'Ocupación actualizada exitosamente.' }
@@ -69,7 +66,6 @@ class OccupationsController < ApplicationController
   # DELETE /occupations/1
   # DELETE /occupations/1.json
   def destroy
-    @occupation = Occupation.find(params[:id])
     @total = Employee.check_if_exist_records(params[:id], 'occupation')
 
     if @total > 0
@@ -91,4 +87,13 @@ class OccupationsController < ApplicationController
       format.json { render json: @occupations }
     end
   end
+  
+  private
+  
+    def set_occupation
+      @occupation = Occupation.find params[:id]
+    rescue ActiveRecord::RecordNotFound
+      redirect_to occupations_path, notice: "El registro de ocupación no existe."
+    end
+  
 end
