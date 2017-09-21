@@ -1,4 +1,5 @@
 class DepartmentsController < ApplicationController
+  before_filter :set_department, :only => [:edit, :show, :update, :destroy]
   load_and_authorize_resource
   skip_load_and_authorize_resource :only => [:search]
   before_filter :resources, :only => [:new, :edit, :create, :update]
@@ -18,7 +19,6 @@ class DepartmentsController < ApplicationController
   # GET /departments/1
   # GET /departments/1.json
   def show
-    @department = Department.find(params[:id])
     respond_with(@department)
   end
 
@@ -31,7 +31,6 @@ class DepartmentsController < ApplicationController
 
   # GET /departments/1/edit
   def edit
-    @department = Department.find(params[:id])
   end
 
   # POST /departments
@@ -53,8 +52,6 @@ class DepartmentsController < ApplicationController
   # PUT /departments/1
   # PUT /departments/1.json
   def update
-    @department = Department.find(params[:id])
-
     respond_to do |format|
       if @department.update_attributes(params[:department])
         format.html { redirect_to @department, notice: 'Departamento actualizado exitosamente.' }
@@ -69,7 +66,6 @@ class DepartmentsController < ApplicationController
   # DELETE /departments/1
   # DELETE /departments/1.json
   def destroy
-    @department = Department.find(params[:id])
     @total = Employee.check_if_exist_records(params[:id], 'department')
 
     if @total > 0
@@ -95,4 +91,13 @@ class DepartmentsController < ApplicationController
       format.json { render json: @departments }
     end
   end
+  
+  private
+  
+    def set_department
+      @department = Department.find params[:id]
+    rescue ActiveRecord::RecordNotFound
+      redirect_to departments_path, notice: "El departamento que busca no existe."
+    end
+  
 end
