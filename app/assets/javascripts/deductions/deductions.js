@@ -383,6 +383,7 @@ function typeDeduction(selected) {
       $('#deduction_amount_exhaust').prop('required', '');
       $('#deduction_amount_exhaust').val('');
       $("#deduction_deduction_currency_id").prop("disabled", false);
+      $("#deduction_employee_ids").prop('required', '');
       disablePayrollTypes();
       getPayrolls();
     break;
@@ -558,11 +559,13 @@ function clearPayrolls(){
 function isBeneficiary(value) {
   if( value ) {
     $("#load_creditor").prop("disabled", true);
+    $("#load_creditor").prop("required", "");
     $("#load_creditor").val('');
     $("#deduction_creditor_id").val("");
     $("a[href=#creditors_modal]").prop("disabled", true);
   } else {
     $("#load_creditor").prop("disabled", false);
+    $("#load_creditor").prop("required", "required")
     $("a[href=#creditors_modal]").prop("disabled", false);
   }
 }

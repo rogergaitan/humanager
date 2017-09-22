@@ -156,10 +156,9 @@
             <%= f.label :creditor_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <div class="input-group form-group_">
-                <%= f.hidden_field :creditor_id, :required => true, 
-                  :data => {:parsley_errors_container => "#creditor_errors"} %>
+                <%= f.hidden_field :creditor_id %>
                 <%= text_field_tag :load_creditor, nil,  :class => 'form-control',
-                  :for => :creditor_id %>
+                  :for => :creditor_id, :data => {:parsley_errors_container => "#creditor_errors"} %>
                 <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                 </span>
