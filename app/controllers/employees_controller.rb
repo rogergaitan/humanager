@@ -1,4 +1,5 @@
 class EmployeesController < ApplicationController
+  before_filter :set_employee, :only => [:edit, :show, :update]
   load_and_authorize_resource
   before_filter :get_address_info, :only => [:new, :edit, :update]
   before_filter :get_employee_info, :only => [:new, :edit, :update]
@@ -24,8 +25,6 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
-    @employee = Employee.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @employee }
@@ -50,14 +49,12 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
-    @employee = Employee.find(params[:id])
     @employee.entity.build_address unless @employee.entity.address
   end
 
   # PUT /employees/1
   # PUT /employees/1.json
   def update
-    @employee = Employee.find(params[:id])
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
         format.html { redirect_to employees_path, notice: 'Empleado actualizado correctamente.' }
@@ -193,6 +190,12 @@ class EmployeesController < ApplicationController
     def set_employee_superior_and_departments
       @employees_s = Employee.superior
       @all_departments = Employee.all_departments    
+    end
+    
+    def set_employee
+      @employee = Employee.find params[:id]
+    rescue ActiveRecord::RecordNotFound
+      redirect_to employees_path, notice: "El empleado que busca no existe."
     end
 
 end
