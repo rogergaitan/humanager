@@ -16,6 +16,7 @@
 //= require jquery-ui
 //= require autocomplete-rails
 //= require rails.validations
+//= require resources
 
 //= require ../template/js/jquery-1.10.2.min
 //= require ../template/js/jqueryui-1.9.2.min

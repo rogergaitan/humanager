@@ -246,7 +246,7 @@ $(document).ready(function() {
       if(!$(this).parsley().validate()) {
         e.preventDefault();
         //show notification only when tab3 is not active
-        if (!$("#tab3").hasClass("active") && $("#tab3 div.form-group ul.parsley-errors-list").length >= 1) {
+        if (!$("#tab3").hasClass("active") && $("#tab3 div.has-error").length >= 1) {
           new PNotify({
             title: 'Atención!',
             text: 'Por favor revisar errores en pestaña laboral.',
