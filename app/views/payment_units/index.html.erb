@@ -33,7 +33,7 @@
             <tbody>
               <% @payment_units.each do |payment_unit| %>
                 <tr>
-                  <td><%= link_to payment_unit.name, payment_unit_path(payment_unit) %></td>
+                  <td><%= payment_unit.name %></td>
                   <td><%= payment_unit.description %></td>
                   <td>
                     <% if can? :update, PaymentFrequency %>
