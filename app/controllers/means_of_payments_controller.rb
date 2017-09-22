@@ -1,11 +1,10 @@
 class MeansOfPaymentsController < ApplicationController
-  authorize_resource
+  before_filter :set_means_of_payment, :only => [:edit, :update, :destroy, :show]
+  load_and_authorize_resource
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(MeansOfPayment, params[:id])
   end
-
-  before_filter :set_means_of_payment, :only => [:edit, :update, :destroy, :show]
   
   respond_to :html, :json
 
@@ -19,7 +18,6 @@ class MeansOfPaymentsController < ApplicationController
   # GET /means_of_payments/1
   # GET /means_of_payments/1.json
   def show
-    @means_of_payment = MeansOfPayment.find(params[:id])
     respond_with(@means_of_payment)
   end
 
