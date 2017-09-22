@@ -264,9 +264,10 @@
                 </div>
               </div>
             
-              <%= select("deduction", "employee_ids",   options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
+              <%= select("deduction", "employee_ids",   
+                options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
                 { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
-                { include_blank: false }, {:multiple => true, :selected => @employee_ids}) %>
+                { include_blank: false }, {:multiple => true, :selected => @employee_ids, :required => true}) %>
             </div>
           </div>
 
