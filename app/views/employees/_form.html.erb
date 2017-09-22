@@ -34,7 +34,7 @@
         <li><a href="#tab3" data-toggle="tab">Laboral</a></li>
       </ul>
       <%= form_for @employee, :validate => true, :html => { :class => 'form-horizontal', :multipart => true, 
-        :data => {:toggle => 'validator', :model_name => Employee.model_name, :reference_id => @employee.id} } do |f| %>
+        :data => { :model_name => Employee.model_name, :reference_id => @employee.id} } do |f| %>
         
         <div class="tab-content">
           <div class="tab-pane" id="tab2">
