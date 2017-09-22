@@ -156,12 +156,15 @@
             <%= f.label :creditor_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <div class="input-group form-group_">
-                <%= f.hidden_field :creditor_id %>
-                <%= text_field_tag :load_creditor, nil,  :class => 'form-control',:for => :creditor_id %>
+                <%= f.hidden_field :creditor_id, :required => true, 
+                  :data => {:parsley_errors_container => "#creditor_errors"} %>
+                <%= text_field_tag :load_creditor, nil,  :class => 'form-control',
+                  :for => :creditor_id %>
                 <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                 </span>
               </div>
+              <div id="creditor_errors"></div>
             
               <div class="beneficiary-check">
                 <%= f.label :pay_to_employee, :class => 'control-label col-sm-5' %>
@@ -183,8 +186,8 @@
                   :value => number_to_currency(f.object.maximum_deduction, unit: "", delimiter: ""),
                   :class => "form-control",
                   :data => {:parsley_errors_container => "#maximum_deduction_errors"} %>
-              </div><span id="maximum_deduction_currency_symbol"></span>
-              <div id="maximum_deduction_errors"></div>
+                </div><span id="maximum_deduction_currency_symbol"></span>
+                <div id="maximum_deduction_errors"></div>
             </div>
             
             <div class="col-sm-6 pull-right">
