@@ -2,7 +2,7 @@
   <h1> Unidades de pago </h1>
   <div class="options">
     <div class="btn-toolbar">
-      <% if can? :create, PaymentFrequency %>
+      <% if can? :create, PaymentUnit %>
         <%= link_to new_payment_unit_path, :class => 'btn btn-primary pull-right' do %>
           <i class="fa fa-plus"></i>
         <% end %>
@@ -36,13 +36,13 @@
                   <td><%= payment_unit.name %></td>
                   <td><%= payment_unit.description %></td>
                   <td>
-                    <% if can? :update, PaymentFrequency %>
+                    <% if can? :update, PaymentUnit %>
                       <%= link_to edit_payment_unit_path(payment_unit), :class => 'btn btn-xs btn-success-alt' do %>
                         <i class="fa fa-pencil"></i>
                       <% end %>
                     <% end %>
 
-                    <% if can? :destroy, PaymentFrequency %>
+                    <% if can? :destroy, PaymentUnit %>
                       <%= link_to payment_unit_path(payment_unit), :method => :delete,
                         :confirm => "Esta seguro(a)?",
                         :class => 'btn btn-xs btn-danger-alt' do %>
