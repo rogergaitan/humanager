@@ -1,5 +1,6 @@
 class PaymentUnitsController < ApplicationController
   before_filter :set_payment_unit, only: [:edit, :update, :destroy]
+  load_and_authorize_resource
   
   def index
     @payment_units = PaymentUnit.paginate page: params[:page], per_page: 15
