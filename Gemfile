@@ -8,7 +8,7 @@ gem 'rails', '3.2.11'
 gem 'mysql2', '~> 0.3.13'
 gem 'jquery-rails'
 gem 'devise'
-gem 'rmagick', '~> 2.13.2'
+gem 'mini_magick'
 gem 'carrierwave'
 gem 'client_side_validations'
 # gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
@@ -57,3 +57,4 @@ group :development, :test do
   #gem 'capistrano-rails'
   gem "rspec-rails"
 end
+
