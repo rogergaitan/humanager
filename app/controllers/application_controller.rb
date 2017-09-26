@@ -86,6 +86,7 @@ class ApplicationController < ActionController::Base
     @sync[:payment_type] = PaymentType.sync_fb
     @sync[:creditors] = Creditor.sync_fb
     @sync[:supports] = Support.sync_fb
+    @sync[:cost_centers] = CostsCenter.sync_fb
 
 		log_sync
 

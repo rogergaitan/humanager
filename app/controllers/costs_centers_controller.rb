@@ -9,48 +9,6 @@ class CostsCentersController < ApplicationController
     respond_with(@costs_centers)
   end
 
-  def sync_cc
-    empmaest = Empmaestcc.select('iemp, icc, ncc, iccpadre, iactividad').order('iemp')
-    @syn_data = {}
-    c = 0; ca = 0
-    
-    empmaest.each do |costsCenters|
-      cc = CostsCenter.where("icost_center = ? and icc_father = ? and company_id = ?", 
-        costsCenters.icc, costsCenters.iccpadre.to_s, costsCenters.iemp).first
-
-      if cc.nil?
-        new_cc = CostsCenter.create(
-          :company_id => costsCenters.iemp, 
-          :icost_center => firebird_encoding(costsCenters.icc.to_s), 
-          :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
-          :icc_father => firebird_encoding(costsCenters.iccpadre.to_s),
-          :iactivity => firebird_encoding(costsCenters.iactividad.to_s)
-        )
-
-        if new_cc.save
-          c += 1
-        else
-          new_cc.errors.each do |error|
-            Rails.logger.error "Error creando centro de costos: #{costsCenters.icc}"
-          end
-        end
-      else
-        # UPDATE
-        params[:costsCenter] = { :company_id => costsCenters.iemp, 
-                                :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
-                                :icc_father => firebird_encoding(costsCenters.iccpadre.to_s)}
-        if cc.update_attributes(params[:costsCenter])
-          ca += 1
-        end
-      end
-    end
-
-    @syn_data[:notice] = ["#{t('helpers.titles.sync').capitalize}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
-    respond_to do |format|
-      format.json { render json: @syn_data}
-    end
-  end
-
   def load_cc
     @namesIds = CostsCenter.where("company_id = ? and icost_center != '' ", current_user.company_id)
     respond_to do |format|
