@@ -1,6 +1,7 @@
 class WorkBenefit < ActiveRecord::Base
   attr_accessible :credit_account, :debit_account, :description, :percentage, :employee_ids,
-  			:payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id, :company_id
+    :payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id, :company_id, :name, :state, 
+    :calculation_type, :work_benefits_value, :work_benefits_type
 
   belongs_to :company
   has_many :companies
