@@ -74,7 +74,6 @@ class PositionsController < ApplicationController
   # DELETE /positions/1
   # DELETE /positions/1.json
   def destroy
-    byebug
     @total = Employee.check_if_exist_records(params[:id], 'position')
 
     if @total > 0
