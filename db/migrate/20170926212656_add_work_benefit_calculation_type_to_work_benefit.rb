@@ -1,4 +1,4 @@
-class AddWorkBenefitTypeToWorkBenefit < ActiveRecord::Migration
+class AddWorkBenefitCalculationTypeToWorkBenefit < ActiveRecord::Migration
   def up
     change_table :work_benefits do |t|
       t.column :calculation_type, :enum, limit: [:percentage, :fixed]
