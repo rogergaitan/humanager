@@ -25,20 +25,21 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th><%= model_class.human_attribute_name(:description) %></th>
-                <th><%= model_class.human_attribute_name(:percentage) %></th>
-                <th><%= model_class.human_attribute_name(:debit_account) %></th>
-                <th><%= model_class.human_attribute_name(:credit_account) %></th>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:work_benefit_type) %></th>
+                <th><%= model_class.human_attribute_name(:calculation_type) %></th>
+                <th><%= model_class.human_attribute_name(:work_benefit_value) %></th>
+                <th>Activa</th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
             <tbody>
               <% @work_benefits.each do |work_benefit| %>
                 <tr>
-                  <td><%= work_benefit.description %></td>
-                  <td><%= work_benefit.percentage %></td>
-                  <td><%= work_benefit.debit.naccount if work_benefit.debit %></td>
-                  <td><%= work_benefit.credit.naccount if work_benefit.debit %></td>
+                  <td><%= work_benefit.name %></td>
+                  <td><%= work_benefit.work_benefit_type %></td>
+                  <td><%=  work_benefit.calculation_type %></td>
+                  <td><%= work_benefit.work_benefit_value %></td>
                   <td>
                     <% if can? :update, WorkBenefit %>
                       <%= link_to edit_work_benefit_path(work_benefit), :class => 'btn btn-xs btn-success-alt' do %>
