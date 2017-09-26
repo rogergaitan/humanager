@@ -37,9 +37,9 @@
               <% @work_benefits.each do |work_benefit| %>
                 <tr>
                   <td><%= work_benefit.name %></td>
-                  <td><%= work_benefit.work_benefit_type %></td>
+                  <td><%= work_benefit.work_benefits_type %></td>
                   <td><%=  work_benefit.calculation_type %></td>
-                  <td><%= work_benefit.work_benefit_value %></td>
+                  <td><%= work_benefit.work_benefits_value %></td>
                   <td>
                     <% if can? :update, WorkBenefit %>
                       <%= link_to edit_work_benefit_path(work_benefit), :class => 'btn btn-xs btn-success-alt' do %>
