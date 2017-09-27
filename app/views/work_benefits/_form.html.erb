@@ -185,6 +185,22 @@
             </div>
           </div>
           
+          <!-- PAYROLL TYPES -->
+
+          <div class="form-group" >
+            <%= f.label :payroll_types, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-8">
+              <div class="checkbox icheck">
+                <label>
+                  <input type="checkbox" id="payroll_type_select_all"> Seleccionar/Deseleccionar
+                </label>
+              </div>
+              <%= select("work_benefit", "payroll_type_ids", options_for_select( @payroll_types.map {|p| ["#{p.description}", p.id]}, 
+                  @work_benefit.payroll_type_ids.map {|j|j} ), { include_blank: false }, 
+                  {:multiple => true, :required => true, :selected => @work_benefit.payroll_type_ids}) %>
+            </div>
+          </div>
+          
           <!-- E M P L O Y E E S -->
           <div class="form-group" >
             <%= f.label :Empleados, :class => 'col-sm-2 control-label' %>
@@ -231,20 +247,6 @@
                   { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
                 { include_blank: false }, 
                 {:multiple => true, :selected => @employee_ids}) %>
-            </div>
-          </div>
-          <!-- E M P L O Y E E S -->
-
-          <div class="form-group" >
-            <%= f.label :payroll_types, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-8">
-              <div class="checkbox icheck">
-                <label>
-                  <input type="checkbox" id="payroll_type_select_all"> Seleccionar/Deseleccionar
-                </label>
-              </div>
-              <%= select("work_benefit", "payroll_type_ids", options_for_select( @payroll_types.map {|p| ["#{p.description}", p.id]}, 
-                  @work_benefit.payroll_type_ids.map {|j|j} ), { include_blank: false }, {:multiple => true, :selected => @work_benefit.payroll_type_ids}) %>
             </div>
           </div>
 
