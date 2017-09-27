@@ -479,6 +479,7 @@ es:
           costs_center_id: Centro de Costos
           payroll_types: Tipos de planillas
           state: Activa
+          work_benefits_value: Valor Prestación
         payment_method: 
           name: Nombre
           description: Descripción

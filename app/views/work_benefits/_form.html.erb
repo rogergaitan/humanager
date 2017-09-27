@@ -161,6 +161,14 @@
             <div class="col-sm-3">
               <%= f.select(:calculation_type, translate_enum(:calculation_type), {:include_blank => false},{ :class => "form-control"}) %>
             </div>
+            
+            <%= f.label :work_benefits_value, :class => "col-sm-2 control-label" %>
+            <div class="col-sm-3">
+              <%= f.text_field :work_benefits_value, :value =>  number_to_currency(f.object.work_benefits_value, unit: "", delimeter: ""),
+                :class => "form-control", :required => true %>
+            </div>
+          
+            
           </div>
           
           <!-- E M P L O Y E E S -->
