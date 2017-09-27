@@ -166,9 +166,23 @@
             <div class="col-sm-3">
               <%= f.text_field :work_benefits_value, :value =>  number_to_currency(f.object.work_benefits_value, unit: "", delimeter: ""),
                 :class => "form-control", :required => true %>
+                <div class="individual-check">
+                  <%= f.label :individual, :class => "col-sm-5 control-label" %>
+                  <div class="col-sm-3">
+                    <label class="checkbox icheck">
+                      <%= f.check_box :individual, :class => "form-control" %>
+                    </label>
+                  </div>
+                </div>
             </div>
           
-            
+            <div class="col-sm-6 pull-right" id="currency">
+              <%= f.label :currency, :class => "col-sm-2 control-label" %>
+              <div class="col-sm-6 form-group_">
+                <%= f.collection_select :currency, @currencies, :id, :name, options = {:prompt => false},
+                  html_options = { :class => "form-control" }%>
+              </div>
+            </div>
           </div>
           
           <!-- E M P L O Y E E S -->
