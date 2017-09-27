@@ -72,7 +72,7 @@
           <div class="form-group">
             <%= f.label :deduction_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.select(:deduction_type, translate_enum(:deduction_type), {:include_blank => false}, { :class => 'form-control' }) %>
+              <%= f.select(:deduction_type, translate_enum(:types), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
             <div id="deduction_payrolls">
               <%= label_tag 'Planilla a Aplicar', nil, class: 'col-sm-2 control-label' %>
