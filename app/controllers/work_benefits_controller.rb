@@ -211,6 +211,15 @@ class WorkBenefitsController < ApplicationController
     @cost_center = WorkBenefit.search_cost_center(params[:search_cost_center_name], current_user.company_id, params[:page], params[:per_page])
     respond_with @cost_center
   end
+
+  def search
+    @work_benefits = WorkBenefit.search params[:work_benefits_type], params[:calculation_type], params[:state], 
+                                          current_user.company_id, params[:page]
+    
+    respond_to do |format|
+      format.js { render :index }
+    end
+  end
   
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
