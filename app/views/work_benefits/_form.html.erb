@@ -43,7 +43,7 @@
     <% if @work_benefit.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@work_benefit.errors.count, "error") %> prohibited this work_benefit from being saved:</h3>
+        <h3><%= pluralize(@work_benefit.errors.count, "error") %> no permitieron guardar esta prestación:</h3>
         <% @work_benefit.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -60,20 +60,35 @@
         <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator',
           :model_name => WorkBenefit.model_name, :reference_id => @work_benefit.id, :company => true} } do |f| %>
 
-          <div class="form-group">
-            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+         <div class="form-group">
+          <%= f.label :name, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :description, :class => 'form-control', :required => true %>
+              <%= f.text_field :name, :class => 'form-control', :required => true %>
               <div class="help-block with-errors"></div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>
+              
+              <div class="row">
+                <div class="col-sm-4">
+                  <%= f.label :active, "Activa", :class => "control-label col-sm-8" %>
+                  <div class="col-sm-3">
+                    <label class="checkbox icheck">
+                      <%= check_box_tag "work_benefit[active]", 1, f.object.active? %>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-sm-8">
+                  <%= f.label :provisioning, "¿Provisionar?", :class => "control-label col-sm-7" %>
+                  <div class="col-sm-3">
+                    <label class="checkbox icheck">
+                      <%= f.check_box :provisioning %>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
-            <%= f.label :percentage, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3 form-group_">
-              <%= f.text_field :percentage, :class => 'form-control', :required => true %>
-              <div class="help-block with-errors"></div>
-            </div>            
           </div>
-
+      
           <div class="form-group">
             <%= f.label :debit_account, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
