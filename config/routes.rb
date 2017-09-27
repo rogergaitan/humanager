@@ -100,6 +100,7 @@ Reasapp::Application.routes.draw do
       get 'fetch_payroll_type'
       get 'fetch_cost_center'
       get 'search_cost_center'
+      get 'search'
     end
   end
 
