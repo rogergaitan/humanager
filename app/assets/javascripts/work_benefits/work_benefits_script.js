@@ -188,6 +188,12 @@ $(jQuery(document).ready(function($) {
 	$('#superiors_employees').change(function() {
     	filterEmployees("superior", $(this).val());
   	});
+  
+  calculationType( $("#work_benefit_calculation_type"));
+  
+  $("#work_benefit_calculation_type").on("change", function () { 
+    calculationType(this);
+  });
 
 }));
 
@@ -417,3 +423,34 @@ function searchCostCenter(name, url, type) {
 		data: { search_cost_center_name: name }
 	});
 }
+
+function currencyMask(selector) {
+   $(selector).mask("FNNNNNNNNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true},
+       "F": {pattern: /[1-9]/}
+      }
+  });    
+}
+
+function percentMask(selector) {
+   $(selector).mask("FNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true},
+       "F": {pattern: /[1-9]/}
+      }
+  });    
+}
+
+function calculationType(selector) {
+    switch($(selector).val()) {
+      case "percentage":
+      $("#currency").hide();
+      currencyMask($("#work_benefit_work_benefits_value"));
+      break;
+      case "fixed":
+      $("#currency").show();
+      percentMask($("#work_benefit_work_benefits_value"));
+      break;
+    }  
+};
