@@ -3,6 +3,8 @@ class WorkBenefit < ActiveRecord::Base
     :payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id, :company_id, :name, :state, 
     :calculation_type, :work_benefits_value, :work_benefits_type, :currency_id
 
+  attr_accessor :active
+  
   belongs_to :company
   has_many :companies
   
@@ -30,6 +32,10 @@ class WorkBenefit < ActiveRecord::Base
     query = query.where state: state unless  state.empty?
     
     query.paginate page: page, per_page: 15
+  end
+  
+  def active?
+      
   end
 
 end
