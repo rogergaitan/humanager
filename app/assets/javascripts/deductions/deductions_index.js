@@ -21,6 +21,8 @@ function search () {
 }
 
 function cleanSearch() {
+  $("#deduction_type, #calculation_type, #state").val("");
+  
   $.ajax({
     url: "deductions/",
     dataType: "script"

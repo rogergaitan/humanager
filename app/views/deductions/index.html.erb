@@ -40,16 +40,19 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:description) %></th>
                 <th>
-                  <%= select_tag(:deduction_type, options_for_select(translate_enum(:deduction_type)), :class => "form-control") %>
+		  <%= select_tag(:deduction_type, options_for_select(translate_enum(:types)), 
+                    :class => "form-control", :prompt => "Filtro tipo de deducción") %>
                   <%= model_class.human_attribute_name(:deduction_type) %>
                 </th>
                 <th>
-                  <%= select_tag(:calculation_type, options_for_select(translate_enum(:calculation_type)), :class => "form-control") %>
+		  <%= select_tag(:calculation_type, options_for_select(translate_enum(:calculation_type)), 
+		    :class => "form-control", :prompt => "Filtro tipo de calculo") %>
                   <%= model_class.human_attribute_name(:calculation_type) %>
                 </th>
                 <th><%= model_class.human_attribute_name(:deduction_value) %></th>
                 <th>
-                  <%= select_tag(:state, options_for_select([["Si", :active], ["No", :completed]]), :class => "form-control") %>
+		  <%= select_tag(:state, options_for_select([["Si", :active], ["No", :completed]]), 
+		    :class => "form-control", :prompt => "Filtro activa") %>
                   <%= model_class.human_attribute_name(:state) %>
                 </th>
                 <th>
