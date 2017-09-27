@@ -57,7 +57,7 @@
 
       <div class="panel-body panel-no-padding">
 
-        <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator',
+        <%= form_for @work_benefit, :html => { :class => 'form-horizontal row-border', :data => {:parsley_validate => "",
           :model_name => WorkBenefit.model_name, :reference_id => @work_benefit.id, :company => true} } do |f| %>
 
          <div class="form-group">
@@ -137,7 +137,6 @@
                 </div>              
               </div>
             </div>
-            
 
             <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
@@ -154,6 +153,13 @@
               <a id="cost-centrt-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
                 <i class="fa fa-bars"></i>
               </a>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :calculation_type, :class => "col-sm-2 control-label" %>  
+            <div class="col-sm-3">
+              <%= f.select(:calculation_type, translate_enum(:calculation_type), {:include_blank => false},{ :class => "form-control"}) %>
             </div>
           </div>
           
