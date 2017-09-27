@@ -1,0 +1,25 @@
+ <% @work_benefits.each do |work_benefit| %>
+    <tr>
+      <td><%= work_benefit.name %></td>
+      <td><%=t "types.#{work_benefit.work_benefits_type}" %></td>
+      <td><%=  t "calculation_type.#{work_benefit.calculation_type}" %></td>
+      <td><%= work_benefit.work_benefits_value %></td>
+      <td><%= state_helper work_benefit.state %></td>
+      <td>
+        <% if can? :update, WorkBenefit %>
+          <%= link_to edit_work_benefit_path(work_benefit), :class => 'btn btn-xs btn-success-alt' do %>
+            <i class="fa fa-pencil"></i>
+          <% end %>
+        <% end %>
+
+        <% if can? :destroy, WorkBenefit %>
+          <%= link_to work_benefit_path(work_benefit),
+              :method => :delete,
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-xs btn-danger-alt' do %>
+            <i class="fa fa-trash-o"></i>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+<% end %> 
