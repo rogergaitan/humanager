@@ -1,8 +1,8 @@
 $(jQuery(document).ready(function($) {
 	
 	$('#work_benefit_employee_ids').multiSelect({
-	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
+	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
 	    afterInit: function(ms){
 	      var that = this,
 	      $selectableSearch = that.$selectableUl.prev(),
@@ -27,7 +27,7 @@ $(jQuery(document).ready(function($) {
 	      });
 	    },
 	    afterSelect: function(){
-	      // this.qs1.cache();
+        this.qs1.cache();
 	      this.qs2.cache();
 	    },
 	    afterDeselect: function(){
@@ -37,8 +37,7 @@ $(jQuery(document).ready(function($) {
 	  });
 	
 	$('#work_benefit_payroll_type_ids').multiSelect({
-	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+	    
 	    afterInit: function(ms){
 	      var that = this,
 	      $selectableSearch = that.$selectableUl.prev(),
