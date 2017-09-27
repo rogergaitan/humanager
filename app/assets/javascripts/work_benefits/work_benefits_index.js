@@ -10,7 +10,7 @@ $("#work_benefits_type, #calculation_type, #state").on("change", function () {
 
 function search () {
   $.ajax({
-    url: "/work_benefits/search",
+    url: "work_benefits/search",
     dataType: "script",
     data: {
       work_benefits_type: $("#work_benefits_type").val(),
@@ -21,6 +21,8 @@ function search () {
 }
 
 function cleanSearch() {
+  $("#work_benefits_type, #calculation_type, #state").val("");
+  
   $.ajax({
     url: "work_benefits/",
     dataType: "script"
