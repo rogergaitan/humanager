@@ -218,7 +218,7 @@
                 </label>
                 <label>
                   <%= radio_button_tag 'select_method', 'boss', false, class: 'align-checkbox' %>
-                  Jefe Inmediatos
+                  Jefe Inmediato
                 </label>
                 <label>
                   <%= radio_button_tag 'select_method', 'department', false, class: 'align-checkbox' %>
@@ -246,10 +246,44 @@
                 options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
                   { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
                 { include_blank: false }, 
-                {:multiple => true, :selected => @employee_ids}) %>
+                {:multiple => true, :required => true,  :selected => @employee_ids}) %>
             </div>
           </div>
+          
+             <!-- E M P L O Y E E S   L I S T   D E T A I L -->
+          <div class="form-group" id="div-message" style="display:none;">
+            <div class="col-sm-12">
 
+              <div class="alert alert-dismissable">
+                <i class="fa fa-fw"></i>
+                <label id="message"></label>
+                <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group" id="employee_items_two">
+            <label class="col-sm-2 control-label">Detalle de Aplicación Individual</label>
+            <div class="col-sm-8">
+              <table id="employee_items" class="table table-responsive">
+                <thead>
+                  <tr class="header_items">
+                    <td class="header_employee" width='80%'>Empleado</td>
+                    <td class="header_calculation">Valor</td>
+                     <td class="">
+                      <%= link_to_add_fields("", f, :employee_benefits, "") %>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody class="table-bordered">
+                  <%= f.fields_for :employee_benefits do |de| %>
+                    <%= render 'forms/employee_benefit_form', :f => de %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
           <div class="panel-footer">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2">
