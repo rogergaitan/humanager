@@ -229,5 +229,6 @@ class WorkBenefitsController < ApplicationController
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
+    @currencies = Currency.all
   end
 end
