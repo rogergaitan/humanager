@@ -177,9 +177,9 @@
             </div>
           
             <div class="col-sm-6 pull-right" id="currency">
-              <%= f.label :currency, :class => "col-sm-2 control-label" %>
+              <%= f.label :currency_id, :class => "col-sm-2 control-label" %>
               <div class="col-sm-6 form-group_">
-                <%= f.collection_select :currency, @currencies, :id, :name, options = {:prompt => false},
+                <%= f.collection_select :currency_id, @currencies, :id, :name, options = {:prompt => false},
                   html_options = { :class => "form-control" }%>
               </div>
             </div>
