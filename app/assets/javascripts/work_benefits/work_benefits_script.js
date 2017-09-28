@@ -1,5 +1,13 @@
 $(jQuery(document).ready(function($) {
-	
+	 types = {
+    add: 'add',
+    remove: 'remove',
+    show: 'show'
+  };
+  
+  $(".add_fields").hide();
+  $('form').on('click', '.add_fields', addFields);
+  
 	$('#work_benefit_employee_ids').multiSelect({
 	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
 	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
@@ -26,12 +34,14 @@ $(jQuery(document).ready(function($) {
 	        }
 	      });
 	    },
-	    afterSelect: function(){
+	    afterSelect: function(values){
+        searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
         this.qs1.cache();
 	      this.qs2.cache();
 	    },
-	    afterDeselect: function(){
-	      this.qs1.cache();
+	    afterDeselect: function(values){
+	      searchEmployeeByAttr(values[0], 'id', 'multi', types.remove);
+        this.qs1.cache();
 	      this.qs2.cache();
 	    }
 	  });
@@ -193,6 +203,16 @@ $(jQuery(document).ready(function($) {
   
   $("#work_benefit_calculation_type").on("change", function () { 
     calculationType(this);
+  });
+  
+  showHideEmployees(); 
+  
+   $("label[for=work_benefit_individual]").click(function() {
+    showHideEmployees();
+  });
+
+  $('#work_benefit_individual').next().click(function() {
+    showHideEmployees();
   });
 
 }));
@@ -446,11 +466,230 @@ function calculationType(selector) {
     switch($(selector).val()) {
       case "percentage":
       $("#currency").hide();
-      currencyMask($("#work_benefit_work_benefits_value"));
+      percentMask($("#work_benefit_work_benefits_value"));
       break;
       case "fixed":
       $("#currency").show();
-      percentMask($("#work_benefit_work_benefits_value"));
+      currencyMask($("#work_benefit_work_benefits_value"));
       break;
-    }  
+    }
+    $("#work_benefit_work_benefits_value").val("");
 };
+
+function enableWorkBenefitValueValidations () {
+  if($("#work_benefit_calculation_type").val() == "percentage" ) {
+    workBenefitValuePercentValidation();
+  } else {
+    workBenefitValueCurrencyValidation();
+  }
+}
+
+function disableWorkBenefitValueValidations () {
+  $("#work_benefit_work_benefits_value").removeAttr("data-parsley-range");
+  $("#work_benefit_work_benefits_value").removeAttr("required");
+}
+
+function workBenefitValuePercentValidation() {
+  if(!$("#work_benefit_individual").is(":checked")) {
+    $("#work_benefit_work_benefits_value").attr("data-parsley-range", "[1, 100]");
+    $("#work_benefit_work_benefits_value").attr("required", true);  
+  }
+}
+
+function workBenefitValueCurrencyValidation () {
+  if(!$("#work_benefit_individual").is(":checked")) {
+    $("#work_benefit_work_benefits_value").removeAttr("data-parsley-range");
+    $("#work_benefit_work_benefits_value").attr("required", true);
+  }
+}
+
+function showHideEmployees() {
+  if( $('#work_benefit_individual').is(':checked') ) {
+    $('#work_benefit_work_benefits_value').val('');
+    $("#work_benefit_work_benefits_value").prop("disabled", true);
+    disableWorkBenefitValueValidations();
+    $('#employee_items_two').show();
+    $("#employee_items_two input").prop("disabled", false);
+  } else {
+    $("#work_benefit_work_benefits_value").prop('disabled', false);
+    enableWorkBenefitValueValidations();
+    
+    $("#employee_items_two input").prop("disabled", true);
+    $('#employee_items_two').hide();
+  }
+}
+
+function addFields(e) {
+  e.preventDefault();
+  var time = new Date().getTime(),
+      regexp = new RegExp($(this).data('id'), 'g');
+  $('.header_items').after($(this).data('fields').replace(regexp, time));
+
+  populateAutocompleteEmployees( $('#employee_items tr:eq(1)').find("input[id='search_name_employee']") );
+  $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
+  
+  changeEmployeeValueCurrencySymbol();
+  employeeValueValidation();
+}  
+
+function fromMulti(employee, type) {
+
+  var data = findParentByAttr(employee.id, 'id');
+
+  switch(type) {
+
+    case types.add:
+      // No existe
+      if(typeof data.parent == 'undefined') {
+        $('.add_fields ').trigger('click'); // Add new row
+        var selector = $('#employee_items tr.items_work_benefits_form:eq(0)');
+        $(selector).find("input:hidden[id*='_destroy']").val("false");
+        $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
+        $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
+        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+        $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+        $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+        $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+        } else { // Existe
+          $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+          $(data.parent).show();
+        }
+      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
+    break;
+    
+    case types.remove: // Ocutar
+      $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
+      $(data.parent).hide();
+      // resources.PNotify('Empleado', 'Eliminado con exito', 'success');
+    break;
+  }
+}
+
+/******************************************************************************************/
+// Search a employee by attr (id, code, name)
+function searchEmployeeByAttr(searchValue, searchType, from, typeFrom) {
+  
+  var url, customData;
+
+  switch(searchType) {
+    case "id":
+      url = "/employees/search_employee_by_id",
+      customData = { search_id: searchValue };
+    break;
+    
+    case "code":
+      url = deduction.search_employee_by_code_path,
+      customData = { search_code: searchValue };
+    break;
+
+    case "name":
+      url = deduction.search_employee_by_name_path,
+      customData = { search_name: searchValue };
+    break;
+  }
+
+  $.ajax({
+    type: "GET",
+    url: url,
+    dataType: "json",
+    data: customData,
+    success: function(data) {
+      if( data != null ) {
+        if( from == "table" ) {
+          fromTable(data, typeFrom);
+        }
+        if( from == "multi" ) {
+          fromMulti(data, typeFrom);
+        }
+        if( from == "show" ) {
+          showEmployees(data);
+        }
+        // populateListEmployees(data, type, exist);
+      }
+    },
+    error: function(response, textStatus, errorThrown) {
+      resources.PNotify('Empleado', 'Error al buscar', 'danger');
+    }
+  });
+}
+
+// Solo para la tabla de abajo visual
+function findParentByAttr(value, type) {
+  var parent, destroy;
+
+  $('#employee_items tr').each(function() {
+    if(type === "id") {
+      if( parseInt($(this).find("input:hidden[id*='employee_id']").val()) === parseInt(value) ) {
+        parent = $(this);
+        destroy = parseBool( $(this).find("input:hidden[id*='_destroy']").val());
+        return false;
+      }
+    }
+  });
+
+  return {
+    parent: parent,
+    destroy: destroy
+  };
+}
+
+function populateAutocompleteEmployees(idField) {
+  $.getJSON("/employees/load_em", function(accounts) {
+    $(idField).autocomplete({
+      source: $.map(accounts, function(item) {
+        $.data(document.body, 'e_' + item.id + "", item.nombre_cc);
+        return {
+          label: item.surname + ' ' + item.name,
+          id: item.id
+        }
+      }),
+      select: function( event, ui ) {
+        searchEmployeeByAttr(ui.item.label, "name", 'table', types.add);
+      },
+      focus: function(event, ui) {
+      }
+    });
+  });  
+}
+
+function changeEmployeeValueCurrencySymbol() {
+  if($("#deduction_calculation_type").val() == "fixed" ) {
+    var currency = $("#deduction_deduction_currency_id :selected").text();
+        
+    var symbol = $("input[name=" + currency + "]").val();
+    
+    $(".employee_calculation_currency_symbol").text(symbol);
+  }  else {
+    $(".employee_calculation_currency_symbol").text("%");
+  }
+}
+
+function employeeValueValidation () {
+  var calculation_type = $("#deduction_calculation_type").val()
+  
+  if($('#deduction_individual').is(':checked')) {
+    $("#employee_items input:text[id*='_calculation']").attr("required", true); 
+    
+    if(calculation_type == "fixed") {
+      currencyMask($("#employee_items input:text[id*='_calculation']"));
+      $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
+    } else {
+      percentMask($("#employee_items input:text[id*='_calculation']"));
+      $("#employee_items input:text[id*='_calculation']").attr("data-parsley-range", "[1, 100]");
+    }
+    
+  } else {
+    $("#employee_items input:text[id*='_calculation']").removeAttr("required");
+    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
+  }
+}
+
+function parseBool(str) {
+  if(str==null) return false;
+  if(str=="false") return false;
+  if(str=="0") return false;
+  if(str=="true") return true;
+  if(str=="1") return true;
+
+  return false;
+}
