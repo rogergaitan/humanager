@@ -473,7 +473,6 @@ function calculationType(selector) {
       currencyMask($("#work_benefit_work_benefits_value"));
       break;
     }
-    $("#work_benefit_work_benefits_value").val("");
 };
 
 function enableWorkBenefitValueValidations () {
