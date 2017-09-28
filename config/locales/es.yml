@@ -480,6 +480,8 @@ es:
           payroll_types: Tipos de planillas
           state: Activa
           work_benefits_value: Valor Prestación
+          currency: Moneda para Prestación
+          individual: ¿Aplica Individualmente?
         payment_method: 
           name: Nombre
           description: Descripción
