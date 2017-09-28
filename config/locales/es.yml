@@ -469,8 +469,7 @@ es:
           payment_unit: Unid. Pago
         work_benefit:
           name: Nombre
-          work_benefit_value: Valor de la Prestación
-          work_benefit_type: Tipo de Prestación
+          work_benefits_type: Tipo de Prestación
           calculation_type: Tipo de Calculo
           debit_account: Cuenta a Debitar
           credit_account: Cuenta a Acreditar
