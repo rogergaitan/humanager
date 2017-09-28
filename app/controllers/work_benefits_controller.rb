@@ -1,6 +1,6 @@
 class WorkBenefitsController < ApplicationController
   load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit]
+  before_filter :resources, :only => [:new, :edit, :create]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(WorkBenefit, params[:id])
@@ -20,11 +20,6 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits/new.json
   def new
     @work_benefit = WorkBenefit.new
-    @employee_ids = []
-
-    @work_benefit.employee_benefits.where('completed = ?', true).select('employee_id').each do |e|
-      @employee_ids << e['employee_id']
-    end
 
     respond_with(@work_benefit)
   end
@@ -33,10 +28,6 @@ class WorkBenefitsController < ApplicationController
   def edit
     begin
       @work_benefit = WorkBenefit.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE']).find(params[:id])
-      @employee_ids = []
-      @work_benefit.employee_benefits.where('completed = ?', false).select('employee_id').each do |e|
-        @employee_ids << e['employee_id']
-      end
     rescue
       respond_to do |format|
         format.html { redirect_to( work_benefits_path, notice: t('.notice.no_results')) }
@@ -48,7 +39,6 @@ class WorkBenefitsController < ApplicationController
   # POST /work_benefits.json
   def create
     @work_benefit = WorkBenefit.new(params[:work_benefit]) 
-
     respond_to do |format|
       if @work_benefit.save
         format.html { redirect_to action: :index }
@@ -119,14 +109,18 @@ class WorkBenefitsController < ApplicationController
       end # End if add_employees
     end # End if delete_employee.length
 
-    @work_benefit.description = params[:work_benefit][:description]
-    @work_benefit.percentage = params[:work_benefit][:percentage]
+    @work_benefit.name = params[:work_benefit][:name]
+    @work_benefit.individual = params[:work_benefit][:individual]
+    @work_benefit.work_benefits_value = params[:work_benefit][:work_benefits_value]
+    @work_benefit.currency_id = params[:work_benefit][:currency_id]
     @work_benefit.debit_account = params[:work_benefit][:debit_account]
     @work_benefit.credit_account = params[:work_benefit][:credit_account]
     @work_benefit.costs_center_id = params[:work_benefit][:costs_center_id]
     @work_benefit.is_beneficiary = params[:work_benefit][:is_beneficiary]
     @work_benefit.beneficiary_id = params[:work_benefit][:beneficiary_id]
     @work_benefit.payroll_type_ids = params[:work_benefit][:payroll_type_ids]
+    @work_benefit.active = params[:work_benefit][:active]
+    @work_benefit.provisioning = params[:work_benefit][:provisioning]
 
     respond_to do |format|
       if @work_benefit.save
@@ -230,5 +224,11 @@ class WorkBenefitsController < ApplicationController
     @department = Department.all
     @superior = Employee.superior
     @currencies = Currency.all
+    @employee_ids = []
+
+    @work_benefit.employee_benefits.where('completed = ?', true).select('employee_id').each do |e|
+      @employee_ids << e['employee_id']
+    end
   end
+  
 end
