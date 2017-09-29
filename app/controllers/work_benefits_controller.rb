@@ -10,7 +10,7 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits
   # GET /work_benefits.json
   def index
-    @work_benefits = WorkBenefit.where('state = ? and company_id = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'], current_user.company_id)
+    @work_benefits = WorkBenefit.where('company_id = ?', current_user.company_id)
         .paginate(:page => params[:page], :per_page => 15)
         .includes(:credit, :debit)
     respond_with(@work_benefits)
@@ -27,7 +27,7 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits/1/edit
   def edit
     begin
-      @work_benefit = WorkBenefit.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE']).find(params[:id])
+      @work_benefit = WorkBenefit.find params[:id]
     rescue
       respond_to do |format|
         format.html { redirect_to( work_benefits_path, notice: t('.notice.no_results')) }
