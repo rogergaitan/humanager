@@ -1,7 +1,8 @@
 class WorkBenefit < ActiveRecord::Base
   attr_accessible :credit_account, :debit_account, :name, :percentage, :employee_ids,
     :payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id, :company_id, :name, :state, 
-    :calculation_type, :work_benefits_value, :work_benefits_type, :currency_id
+    :calculation_type, :work_benefits_value, :work_benefits_type, :currency_id, :active, :provisioning, 
+    :individual, :currency, :employee_benefits_attributes, :creditor_id, :pay_to_employee
 
   attr_accessor :active
   
@@ -9,9 +10,9 @@ class WorkBenefit < ActiveRecord::Base
   has_many :companies
   
   has_many :payroll_type_benefits, :dependent => :destroy
-  has_many :payroll_type, :through => :payroll_type_benefits
+  has_many :payroll_type, :through => :payroll_type_benefits, validate: false
   has_many :employee_benefits, :dependent => :destroy
-  has_many :employees, :through => :employee_benefits
+  has_many :employees, :through => :employee_benefits, validate: false
   has_many :work_benefits_payments
   
   belongs_to :costs_center , class_name: 'CostsCenter', foreign_key: "costs_center_id"
@@ -43,5 +44,15 @@ class WorkBenefit < ActiveRecord::Base
        self.state = :completed
      end
   end
+  
+  private
+  
+    def save_state
+      if active
+        self.state = :active
+      else
+        self.state = :completed
+      end
+    end
 
 end

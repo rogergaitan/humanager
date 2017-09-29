@@ -121,6 +121,8 @@ class WorkBenefitsController < ApplicationController
     @work_benefit.payroll_type_ids = params[:work_benefit][:payroll_type_ids]
     @work_benefit.active = params[:work_benefit][:active]
     @work_benefit.provisioning = params[:work_benefit][:provisioning]
+    @work_benefit.creditor_id = params[:work_benefit][:creditor_id]
+    @work_benefit.pay_to_employee = params[:work_benefit][:pay_to_employee]
 
     respond_to do |format|
       if @work_benefit.save
