@@ -30,14 +30,14 @@
                 <th>
                   <%= select_tag(:work_benefits_type, options_for_select(translate_enum(:types)), 
                    :prompt => "Filtro tipo de prestación", :class => "form-control") %>
-                  <%= model_class.human_attribute_name(:work_benefit_type) %>
+                  <%= model_class.human_attribute_name(:work_benefits_type) %>
                 </th>
                 <th>
                   <%= select_tag(:calculation_type, options_for_select(translate_enum(:calculation_type)), 
                    :prompt => "Filtro tipo de calculo", :class => "form-control") %>
                   <%= model_class.human_attribute_name(:calculation_type) %>
                 </th>
-                <th><%= model_class.human_attribute_name(:work_benefit_value) %></th>
+                <th><%= model_class.human_attribute_name(:work_benefits_value) %></th>
                 <th>
                   <%= select_tag(:state, options_for_select([["Si", :active], ["No", :completed]]),  
                     :prompt => "Filtro activa",  :class => "form-control") %>
