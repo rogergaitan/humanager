@@ -21,6 +21,8 @@ class WorkBenefit < ActiveRecord::Base
   belongs_to :currency
   
   accepts_nested_attributes_for :employee_benefits, :allow_destroy => true
+  
+  before_save :save_state
 
   def self.search_cost_center(search_cost_center_name, company_id, page, per_page = nil)
     @cost_center = CostsCenter.where("costs_centers.name_cc like '%#{search_cost_center_name}%' and company_id = '#{company_id}'")
@@ -37,12 +39,14 @@ class WorkBenefit < ActiveRecord::Base
     query.paginate page: page, per_page: 15
   end
   
+  
+  
   def active?
-     if active
-       self.state = :active
-     else
-       self.state = :completed
-     end
+    if self.state == :active
+      true
+    else
+      false
+    end
   end
   
   private
