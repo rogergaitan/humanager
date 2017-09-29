@@ -220,6 +220,16 @@ $(jQuery(document).ready(function($) {
   $("#creditors_modal .modal-body").on("click", "p", function() {
     addCreditor($(this));
   });
+  
+  payToEmployee($("#work_benefit_pay_to_employee").prop("checked"));
+  
+  $('label[for=work_benefit_pay_to_employee]').click(function() {
+    payToEmployee($('#work_benefit_pay_to_employee').is(':checked'));
+  });
+
+  $('#work_benefit_pay_to_employee').next().click(function() {
+    payToEmployee($('#work_benefit_pay_to_employee').is(':checked'));
+  });
 
 }));
 
@@ -699,8 +709,18 @@ function parseBool(str) {
   return false;
 }
 
-function payToEmployee() {
-  $("")
+function payToEmployee(value) {
+  if( value ) {
+    $("#load_creditor").prop("disabled", true);
+    $("#load_creditor").prop("required", "");
+    $("#load_creditor").val('');
+    $("#work_benefit_creditor_id").val("");
+    $("a[href=#creditors_modal]").prop("disabled", true);
+  } else {
+    $("#load_creditor").prop("disabled", false);
+    $("#load_creditor").prop("required", "required")
+    $("a[href=#creditors_modal]").prop("disabled", false);
+  }
 }
 
 function addCreditor (selector) {
