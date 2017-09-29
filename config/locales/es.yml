@@ -481,6 +481,8 @@ es:
           work_benefits_value: Valor Prestación
           currency_id: Moneda para Prestación
           individual: ¿Aplica Individualmente?
+          creditor_id : Pagar a
+          pay_to_employee: ¿Se paga al Empleado?
         payment_method: 
           name: Nombre
           description: Descripción
