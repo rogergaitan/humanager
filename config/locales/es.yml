@@ -88,7 +88,10 @@ es:
     ordinary: Ordinario
     extra: Extra
     double: Doble
-
+  work_benefits_type:
+    constant: Constante
+    unique: Único
+  
   content:
     titles: 
       tools: Herramientas

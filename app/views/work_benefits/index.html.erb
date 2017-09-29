@@ -28,7 +28,7 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:name) %></th>
                 <th>
-                  <%= select_tag(:work_benefits_type, options_for_select(translate_enum(:types)), 
+                  <%= select_tag(:work_benefits_type, options_for_select(translate_enum(:work_benefits_type)),
                    :prompt => "Filtro tipo de prestación", :class => "form-control") %>
                   <%= model_class.human_attribute_name(:work_benefits_type) %>
                 </th>
