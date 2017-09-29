@@ -39,8 +39,6 @@ class WorkBenefit < ActiveRecord::Base
     query.paginate page: page, per_page: 15
   end
   
-  
-  
   def active?
     if self.state == :active
       true
