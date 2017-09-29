@@ -214,6 +214,12 @@ $(jQuery(document).ready(function($) {
   $('#work_benefit_individual').next().click(function() {
     showHideEmployees();
   });
+  
+  getCreditors();
+  
+  $("#creditors_modal .modal-body").on("click", "p", function() {
+    addCreditor($(this));
+  });
 
 }));
 
@@ -691,4 +697,51 @@ function parseBool(str) {
   if(str=="1") return true;
 
   return false;
+}
+
+function payToEmployee() {
+  $("")
+}
+
+function addCreditor (selector) {
+  var creditor = selector;
+  var load_creditor = $("#load_creditor");
+  if(!load_creditor.prop("disabled")) {
+    $("#load_creditor").val(creditor.text());
+    $("#work_benefit_creditor_id").val(creditor.attr("id"));
+  }
+  $("#creditors_modal").modal("hide");
+}
+
+function getCreditors () {
+  $.getJSON("/creditors", function(data) {
+    $('#load_creditor').autocomplete({
+      minLength: 3,
+      
+      source: $.map(data, function(item) {
+        $.data(document.body, 'creditor_' + item.id + "", item.name);
+          return { label: item.name, id: item.id }
+      }),
+      
+      select: function(event, ui) {
+        if(ui.item.id) {
+          $('#work_benefit_creditor_id').val(ui.item.id);
+        }
+      },
+      
+      focus: function(event, ui) {
+        $('#load_creditor').val(ui.item.label);  
+      }
+    });
+    
+    if($('#work_benefit_creditor_id').val()) {
+      var load_creditor_name = $.data(document.body, 'creditor_' + $('#work_benefit_creditor_id').val());
+      $('#load_creditor').val(load_creditor_name);
+    }
+    
+  }).done(function(data) {
+    $.each(data, function(i, item) {
+      $("#creditors_modal .modal-body").append("<p id="+ item.id + ">" + item.name + "</p>");
+    });
+  });
 }
