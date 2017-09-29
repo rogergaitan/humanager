@@ -11,9 +11,9 @@ module WorkBenefitsHelper
     if work_benefit.individual
       "Individual"
     elsif work_benefit.calculation_type == :percentage
-      "#{work_benefit.deduction_value}%"
+      "#{work_benefit.work_benefits_value}%"
     elsif work_benefit.calculation_type == :fixed
-      "#{work_benefit.deduction_currency.try :symbol}#{work_benefit.deduction_value}"
+      "#{work_benefit.currency.try :symbol}#{work_benefit.work_benefits_value}"
     end 
   end
   
