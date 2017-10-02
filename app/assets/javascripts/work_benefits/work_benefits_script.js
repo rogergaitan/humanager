@@ -239,6 +239,7 @@ $(jQuery(document).ready(function($) {
   
   $('#activas').on("click", "td.payroll-type a", setPayroll);
   
+  enableDisableCreditAccount();
   $("#work_benefit_provisioning").next().on("click", enableDisableCreditAccount);
   $("label[for=work_benefit_provisioning]").on("click", enableDisableCreditAccount);
   

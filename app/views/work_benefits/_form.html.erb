@@ -113,11 +113,12 @@
                 <div class="input-group">
                   <%= f.hidden_field :credit_account %>
                   <%= text_field_tag 'load_credit_account_name', nil, :class => 'form-control', 
-                      :for => :credit_account %>
+                      :for => :credit_account, :data => {:parsley_errors_container => "#credit_accounts_errors"} %>
                   <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                   </span>
                 </div>
+                <div id="credit_accounts_errors"></div>
               </div>
               <div class="col-sm-1">
                 <a id="credit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
