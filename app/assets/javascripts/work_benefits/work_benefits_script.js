@@ -238,7 +238,10 @@ $(jQuery(document).ready(function($) {
   });
   
   $('#activas').on("click", "td.payroll-type a", setPayroll);
-
+  
+  $("#work_benefit_provisioning").next().on("click", enableDisableCreditAccount);
+  $("label[for=work_benefit_provisioning]").on("click", enableDisableCreditAccount);
+  
 }));
 
 var empSelected = [];
@@ -827,4 +830,12 @@ function setPayroll(e) {
   $("#work_benefit_payrolls").val(payrollId);
   $('#work_benefits_payrolls_name').val(payrollName);
   $('#work_benefits_payroll_name').focusout();
+}
+
+function enableDisableCreditAccount() {
+  if($("#work_benefit_provisioning").prop("checked")) {
+    $("#credit_accounts input").prop("disabled", false).attr("required", true);
+  } else {
+    $("#credit_accounts input").prop("disabled", true).attr("required", false);
+  }
 }

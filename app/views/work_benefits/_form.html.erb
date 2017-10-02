@@ -106,23 +106,26 @@
                 <i class="fa fa-bars"></i>
               </a>
             </div>
-            <%= f.label :credit_account, :class => 'col-sm-1 control-label' %>
-            <div class="col-sm-3">
-              <div class="input-group">
-                <%= f.hidden_field :credit_account %>
-                <%= text_field_tag 'load_credit_account_name', nil, :class => 'form-control', 
-                    :for => :credit_account %>
-                <span class="input-group-addon">
-                  <i class="fa fa-search"></i>
-                </span>
+            
+            <div id="credit_accounts">
+              <%= f.label :credit_account, :class => 'col-sm-1 control-label' %>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <%= f.hidden_field :credit_account %>
+                  <%= text_field_tag 'load_credit_account_name', nil, :class => 'form-control', 
+                      :for => :credit_account %>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="col-sm-1">
-              <a id="credit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
-                <i class="fa fa-bars"></i>
-              </a>
-            </div>            
-          </div>
+              <div class="col-sm-1">
+                <a id="credit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
+                  <i class="fa fa-bars"></i>
+                </a>
+              </div>   
+             </div>
+           </div>
           
           <div class="form-group">
             <%= f.label :work_benefits_type, :class => 'col-sm-2 control-label' %>
