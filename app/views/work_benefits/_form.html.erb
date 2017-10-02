@@ -129,6 +129,28 @@
             <div class="col-sm-3">
               <%= f.select(:work_benefits_type, translate_enum(:work_benefits_type), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
+            
+            <div id="work_benefits_payrolls">
+              <%= label_tag "work_benefits_payroll_name", "Planilla a aplicar", :class => "col-sm-2 control-label" %>
+              <div class="col-sm-3">
+                <div class="input-group form-group_">
+                  <%= text_field_tag "work_benefits_payrolls_name", f.object.payrolls.first.try(:payroll_type).try(:description), 
+                    :class => "form-control", :data => {:parsley_errors_container => "#work_benefits_payroll_name_errors"}, 
+                    :required => true %>
+                  <div class="help-block with-errors"></div>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                <div id="work_benefits_payroll_name_errors"></div>
+              </div>
+              <div class="col-sm-1">
+                <a class="btn btn-default-alt" href="#myModalPayroll" data-toggle="modal">
+                  <i class="fa fa-bars"></i>
+                </a>
+              <%= f.hidden_field :payrolls %>
+              </div>
+            </div>
           </div>
           
           <div class="form-group">
@@ -376,3 +398,4 @@
 </div>
 
 <%= render "shared/creditors_modal" %>
+<%= render "shared/payrolls_modal" %>

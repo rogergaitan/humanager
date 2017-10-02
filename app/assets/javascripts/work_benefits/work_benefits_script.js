@@ -230,6 +230,14 @@ $(jQuery(document).ready(function($) {
   $('#work_benefit_pay_to_employee').next().click(function() {
     payToEmployee($('#work_benefit_pay_to_employee').is(':checked'));
   });
+  
+  
+  WorkBenefitType($("#work_benefit_work_benefits_type"));
+  $("#work_benefit_work_benefits_type").on("change", function () {
+    WorkBenefitType($(this));
+  });
+  
+  $('#activas').on("click", "td.payroll-type a", setPayroll);
 
 }));
 
@@ -764,4 +772,59 @@ function getCreditors () {
       $("#creditors_modal .modal-body").append("<p id="+ item.id + ">" + item.name + "</p>");
     });
   });
+}
+
+function getPayrolls() {
+  $.ajax('/payrolls/get_activas', {
+    type: 'GET',
+    timeout: 8000,
+    beforeSend: function() {
+      $('#error').hide();
+      $('#loading').show();
+    },
+    complete: function() {
+      $('#loading').hide();
+    },
+    success: function(result) {
+      $('table#activas > tbody').empty();
+        $(result.activa).each(function() { addActives(this, 'table#activas')});
+      },
+    error: function(result) {
+      $('#error').show();
+    }
+  });
+}
+
+function WorkBenefitType (selector) {
+  switch($(selector).val()) {
+    case "unique":
+      getPayrolls();
+      $("#work_benefits_payrolls").show();
+      $("#work_benefits_payrolls input").attr("required", true);
+      break;
+    case "constant":
+      $("#work_benefits_payrolls").hide();
+      $("#work_benefits_payrolls input").attr("required", false);
+  }
+}
+
+// Carga las planillas activas en una tabla
+function addActives(payroll, target_table) {
+  var row = $(target_table + '> tbody:last').append('<tr>' + 
+      '<td class="payroll-id">' + payroll.id +'</td>' +
+      '<td class="payroll-type"><a data-dismiss="modal" href="#">' + payroll.payroll_type.description +'</a></td>' +
+      '<td>' +  payroll.start_date + '</td>' +
+      '<td>' +  payroll.end_date + '</td>' +
+      '<td>' +  payroll.payment_date + '</td>' +
+    '</tr>');
+  return row;
+}
+
+function setPayroll(e) {
+  e.preventDefault();
+  var payrollId = $(e.target).parent().prev().text();
+  var payrollName = $(e.target).text();
+  $("#work_benefit_payrolls").val(payrollId);
+  $('#work_benefits_payrolls_name').val(payrollName);
+  $('#work_benefits_payroll_name').focusout();
 }
