@@ -1,0 +1,46 @@
+<!-- Payroll logs Modal -->
+<div class="modal fade" id="myModalPayroll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 id="myModalLabel" class="modal-title">Seleccione la planilla</h2>
+      </div>
+      
+      <div id="loading"> 
+        <h5>
+          <p align="center">
+            <i class="fa fa-spinner fa-spin"></i>
+            Espere un momento mientras se cargan las planillas disponibles.
+          </p>
+        </h5>
+      </div>
+
+      <div id="error">
+        <h5>
+          <p align="center">Imposible cargar las planillas</p>
+        </h5>
+          <p align="center"><a href='#'>Click Aqui</a> para volver a intentarlo<p>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-striped" id="activas">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>Tipo de planilla</th>
+              <th>Desde</th>
+              <th>Hasta</th>
+              <th>Fecha de pago</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div> 
