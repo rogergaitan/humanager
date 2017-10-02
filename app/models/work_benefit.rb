@@ -14,6 +14,8 @@ class WorkBenefit < ActiveRecord::Base
   has_many :employee_benefits, :dependent => :destroy
   has_many :employees, :through => :employee_benefits, validate: false
   has_many :work_benefits_payments
+  has_many :work_benefits_payrolls, :dependent => :destroy
+  has_many :payrolls, :through => :work_benefits_payrolls
   
   belongs_to :costs_center , class_name: 'CostsCenter', foreign_key: "costs_center_id"
   belongs_to :debit, class_name: 'LedgerAccount', foreign_key: "debit_account"
