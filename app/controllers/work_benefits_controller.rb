@@ -38,7 +38,7 @@ class WorkBenefitsController < ApplicationController
   # POST /work_benefits
   # POST /work_benefits.json
   def create
-    @work_benefit = WorkBenefit.new(params[:work_benefit]) 
+    @work_benefit = WorkBenefit.new(params[:work_benefit].except(:employee_ids))
     respond_to do |format|
       if @work_benefit.save
         format.html { redirect_to action: :index }
@@ -53,86 +53,16 @@ class WorkBenefitsController < ApplicationController
   # PUT /work_benefits/1
   # PUT /work_benefits/1.json
   def update
-
-    @work_benefit = WorkBenefit.find(params[:id])
-
-    current_employees = []
-    delete_employees = []
-    add_employees = []
-    list_employees = params[:work_benefit][:employee_ids].to_a
-    
-    EmployeeBenefit.where('work_benefit_id = ?', params[:id]).select('employee_id').each do |id|
-      employee_id = id['employee_id']
-      current_employees << "#{employee_id}"
-    end
-
-    delete_employees = current_employees - list_employees
-
-    if delete_employees.length > 0
-      # Here delete or update state work benefits
-      delete_employees.each do |id_employee|
-
-        eb = EmployeeBenefit.find_by_work_benefit_id_and_employee_id(params[:id], id_employee)   
-      
-        if eb.work_benefits_payments.empty?
-          # No there are records.
-          eb.delete
-        else
-          # if there are records.
-          eb.completed = true
-          eb.save
-        end
-      end # End each delete_employees
-    else
-      # Here add new work benefits what not exist into the DB
-      add_employees = list_employees - current_employees
-      add_employees.delete("")
-      list_employees.delete("")
-
-      if add_employees.length > 0
-        add_employees.each do |new_id|
-          unless new_id.empty?
-            new_employee_benefit = EmployeeBenefit.new
-            new_employee_benefit.work_benefit_id = params[:id]
-            new_employee_benefit.employee_id = new_id
-            new_employee_benefit.completed = false
-            new_employee_benefit.save
-          end
-        end # End eacg add_employee
-      else
-        # Here update state for all employees
-        list_employees.each do |id_list_employee|
-          benenfit = EmployeeBenefit.find_by_work_benefit_id_and_employee_id(params[:id], id_list_employee)
-          benenfit.completed = true
-          benenfit.save
-        end # End each list_employee
-      end # End if add_employees
-    end # End if delete_employee.length
-
-    @work_benefit.name = params[:work_benefit][:name]
-    @work_benefit.individual = params[:work_benefit][:individual]
-    @work_benefit.work_benefits_value = params[:work_benefit][:work_benefits_value]
-    @work_benefit.currency_id = params[:work_benefit][:currency_id]
-    @work_benefit.debit_account = params[:work_benefit][:debit_account]
-    @work_benefit.credit_account = params[:work_benefit][:credit_account]
-    @work_benefit.costs_center_id = params[:work_benefit][:costs_center_id]
-    @work_benefit.is_beneficiary = params[:work_benefit][:is_beneficiary]
-    @work_benefit.beneficiary_id = params[:work_benefit][:beneficiary_id]
-    @work_benefit.payroll_type_ids = params[:work_benefit][:payroll_type_ids]
-    @work_benefit.active = params[:work_benefit][:active]
-    @work_benefit.provisioning = params[:work_benefit][:provisioning]
-    @work_benefit.creditor_id = params[:work_benefit][:creditor_id]
-    @work_benefit.pay_to_employee = params[:work_benefit][:pay_to_employee]
-
+    @work_benefit = WorkBenefit.find params[:id]
     respond_to do |format|
-      if @work_benefit.save
+      if @work_benefit.update_attributes params[:work_benefit].except(:employee_ids)
         format.html { redirect_to action: :index }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
         format.json { render json: @work_benefit.errors, status: :unprocessable_entity }
       end
-    end # End respond_to
+    end 
   end
 
   # DELETE /work_benefits/1
@@ -169,7 +99,8 @@ class WorkBenefitsController < ApplicationController
   end
   
   def fetch_debit_accounts
-    @debit_accounts = LedgerAccount.debit_accounts
+    @debit_accounts = LedgerAccount.debit_accounts.limit 0
+    
     respond_to do |format|
       format.json { render json: @debit_accounts }
     end
