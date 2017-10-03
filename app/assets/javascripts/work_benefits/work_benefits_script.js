@@ -243,6 +243,15 @@ $(jQuery(document).ready(function($) {
   $("#work_benefit_provisioning").next().on("click", enableDisableCreditAccount);
   $("label[for=work_benefit_provisioning]").on("click", enableDisableCreditAccount);
   
+  $('#employee_items tr.items_work_benefits_form').each(function() {
+    var id = $(this).find("input[id*='_employee_id']").val();
+    if(id != "" ) {
+      searchEmployeeByAttr( id, 'id', 'show', '');
+    } else {
+      $(this).remove();
+    }
+  });
+  
 }));
 
 var empSelected = [];
@@ -805,10 +814,13 @@ function WorkBenefitType (selector) {
       getPayrolls();
       $("#work_benefits_payrolls").show();
       $("#work_benefits_payrolls input").attr("required", true);
+      disablePayrollTypes();
       break;
     case "constant":
       $("#work_benefits_payrolls").hide();
       $("#work_benefits_payrolls input").attr("required", false);
+      enablePayrollTypes();
+      break;
   }
 }
 
@@ -828,7 +840,7 @@ function setPayroll(e) {
   e.preventDefault();
   var payrollId = $(e.target).parent().prev().text();
   var payrollName = $(e.target).text();
-  $("#work_benefit_payrolls").val(payrollId);
+  $("#work_benefit_payroll").val(payrollId);
   $('#work_benefits_payrolls_name').val(payrollName);
   $('#work_benefits_payroll_name').focusout();
 }
@@ -839,4 +851,29 @@ function enableDisableCreditAccount() {
   } else {
     $("#credit_accounts input").prop("disabled", true).attr("required", false);
   }
+}
+
+function disablePayrollTypes() {
+  $("#work_benefit_payroll_type_ids").prop("disabled", true);
+  $("#work_benefit_payroll_type_ids").prop("required", false);
+  $("#work_benefit_payroll_type_ids").multiSelect("refresh");
+  $("#payroll_select_all").iCheck("disable");
+}
+
+function enablePayrollTypes() {
+  $("#work_benefit_payroll_type_ids").prop("disabled", false);
+  $("#work_benefit_payroll_type_ids").prop("required", true);
+  $("#work_benefit_payroll_type_ids").multiSelect("refresh");
+  $("#payroll_select_all").iCheck("enable");
+}
+
+function showEmployees(employee) {
+  var data = findParentByAttr(employee.id, 'id');
+  // $(data.parent).find("input:hidden[id*='_destroy']").val("false");
+  $(data.parent).find("input:hidden[id*='_employee_id']").val(employee.id);
+  $(data.parent).find("input[id='search_code_employee']").val(employee.number_employee);
+  $(data.parent).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+  $(data.parent).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+  $(data.parent).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+  $(data.parent).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
 }
