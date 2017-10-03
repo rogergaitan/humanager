@@ -96,11 +96,12 @@
               <div class="input-group">
                 <%= f.hidden_field :debit_account %>
                 <%= text_field_tag 'load_debit_accounts', nil, :class => 'form-control', 
-                    :for => :debit_account %>
+                    :for => :debit_account, :required => true, :data => {:parsley_errors_container => "#debit_account_errors"}%>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
               </div>
+              <div id="debit_account_errors"></div>
             </div>
             <div class="col-sm-1">
               <a id="debit-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">
@@ -192,11 +193,12 @@
               <div class="input-group">
                 <%= f.hidden_field :costs_center_id %>
                 <%= text_field_tag 'load_costs_center_name', nil, :class => 'form-control', 
-                    :for => :costs_center_id %>
+                    :for => :costs_center_id, :required => true, :data => {:parsley_errors_container => "#costs_center_errors"} %>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
               </div>
+              <div id="costs_center_errors"></div>
             </div>
             <div class="col-sm-1">
               <a id="cost-centrt-button" href="#accountsModal" class="btn btn-default-alt" data-toggle="modal">

@@ -503,10 +503,12 @@ function calculationType(selector) {
     switch($(selector).val()) {
       case "percentage":
       $("#currency").hide();
+      workBenefitValuePercentValidation()
       percentMask($("#work_benefit_work_benefits_value"));
       break;
       case "fixed":
       $("#currency").show();
+      workBenefitValueCurrencyValidation();
       currencyMask($("#work_benefit_work_benefits_value"));
       break;
     }
@@ -526,14 +528,14 @@ function disableWorkBenefitValueValidations () {
 }
 
 function workBenefitValuePercentValidation() {
-  if(!$("#work_benefit_individual").is(":checked")) {
+  if(!$("#work_benefit_individual").prop("checked")) {
     $("#work_benefit_work_benefits_value").attr("data-parsley-range", "[1, 100]");
     $("#work_benefit_work_benefits_value").attr("required", true);  
   }
 }
 
 function workBenefitValueCurrencyValidation () {
-  if(!$("#work_benefit_individual").is(":checked")) {
+  if(!$("#work_benefit_individual").prop("checked")) {
     $("#work_benefit_work_benefits_value").removeAttr("data-parsley-range");
     $("#work_benefit_work_benefits_value").attr("required", true);
   }
