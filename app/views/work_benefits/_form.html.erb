@@ -139,7 +139,7 @@
               <%= label_tag "work_benefits_payroll_name", "Planilla a aplicar", :class => "col-sm-2 control-label" %>
               <div class="col-sm-3">
                 <div class="input-group form-group_">
-                  <%= text_field_tag "work_benefits_payrolls_name", f.object.payrolls.first.try(:payroll_type).try(:description), 
+                  <%= text_field_tag "work_benefits_payrolls_name", f.object.payroll.try(:payroll_type).try(:description),
                     :class => "form-control", :data => {:parsley_errors_container => "#work_benefits_payroll_name_errors"}, 
                     :required => true %>
                   <div class="help-block with-errors"></div>
@@ -153,7 +153,7 @@
                 <a class="btn btn-default-alt" href="#myModalPayroll" data-toggle="modal">
                   <i class="fa fa-bars"></i>
                 </a>
-              <%= f.hidden_field :payrolls %>
+              <%= f.hidden_field :payroll_id %>
               </div>
             </div>
           </div>
@@ -292,7 +292,7 @@
                 </div>
               </div>
 
-              <%= select("work_benefit", "employee_ids", 
+              <%= select("work_benefit", "employee_ids",
                 options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
                   { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
                 { include_blank: false }, 
