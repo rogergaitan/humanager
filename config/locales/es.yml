@@ -711,9 +711,9 @@ es:
           payroll_date: Fecha
         other_payment:
           name: Nombre
-          deduction_type: Tipo de deducción
-          calculation_type: Tipo de calculo
-          amount: Monto a agotar
+          other_payment_type: Tipo de Pago
+          calculation_type: Tipo de Calculo
+          amount: Valor del Pago
           constitutes_salary: Constituye Salario
           individual: Individual
           ledger_account_id: Cuenta Debito
