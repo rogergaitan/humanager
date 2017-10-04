@@ -51,8 +51,17 @@
 
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :name, :class => 'form-control' %>
+            <div class="col-sm-3 form-group_">
+              <%= f.text_field :name, :class => 'form-control', :required => true, 
+                :data => {:parsley_maxlength => 30} %>
+              
+              <div>
+                <%= f.label :active, "Activo", :class => "control-label col-sm-3" %>
+                <label class="checkbox icheck">
+                  <%= check_box_tag "other_payment[:active]", 1, f.object.state %>
+                </label>
+              </div>
+              <%= f.hidden_field :company_id, :value => current_user.company_id %>
             </div>
           </div>
 
