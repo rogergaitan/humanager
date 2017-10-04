@@ -50,16 +50,16 @@
           :reference_id => @other_payment.id, :company => true}} do |f| %>
 
           <div class="form-group">
-            <%= f.label :description, :class => 'col-sm-2 control-label' %>
+            <%= f.label :name, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :description, :class => 'form-control' %>
+              <%= f.text_field :name, :class => 'form-control' %>
             </div>
           </div>
 
           <div class="form-group">
-            <%= f.label :deduction_type, :class => 'col-sm-2 control-label' %>
+            <%= f.label :other_payment_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.select(:deduction_type, translate_enum(:deduction_type), {:include_blank => false}, { :class => 'form-control' }) %>
+              <%= f.select(:other_payment_type, translate_enum(:types), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
             <div class="col-sm-1">
               <a  id="unicPayroll" data-toggle="modal" href="#payrollModal" class="btn btn-default-alt">
