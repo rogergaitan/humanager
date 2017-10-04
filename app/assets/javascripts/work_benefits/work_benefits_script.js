@@ -95,8 +95,10 @@ $(jQuery(document).ready(function($) {
 	});
 
 	$('#credit-button').click(function(){
-		$('#myModalLabel').html('Seleccione la cuenta contable');
-		treeviewhr.cc_tree(credit_account, true, 'load_credit_account_name', 'work_benefit_credit_account');
+    if($("#credit-button").attr("data-toggle")) {
+		  $('#myModalLabel').html('Seleccione la cuenta contable');
+		  treeviewhr.cc_tree(credit_account, true, 'load_credit_account_name', 'work_benefit_credit_account');
+    }
 	});
 
 	$('#cost-centrt-button').click(function(){
@@ -505,11 +507,13 @@ function calculationType(selector) {
       $("#currency").hide();
       workBenefitValuePercentValidation()
       percentMask($("#work_benefit_work_benefits_value"));
+      employeeValueValidation();
       break;
       case "fixed":
       $("#currency").show();
       workBenefitValueCurrencyValidation();
       currencyMask($("#work_benefit_work_benefits_value"));
+      employeeValueValidation();
       break;
     }
 };
@@ -703,9 +707,9 @@ function changeEmployeeValueCurrencySymbol() {
 }
 
 function employeeValueValidation () {
-  var calculation_type = $("#deduction_calculation_type").val()
+  var calculation_type = $("#work_benefit_calculation_type").val()
   
-  if($('#deduction_individual').is(':checked')) {
+  if($('#work_benefit_individual').is(':checked')) {
     $("#employee_items input:text[id*='_calculation']").attr("required", true); 
     
     if(calculation_type == "fixed") {
@@ -715,7 +719,6 @@ function employeeValueValidation () {
       percentMask($("#employee_items input:text[id*='_calculation']"));
       $("#employee_items input:text[id*='_calculation']").attr("data-parsley-range", "[1, 100]");
     }
-    
   } else {
     $("#employee_items input:text[id*='_calculation']").removeAttr("required");
     $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
@@ -850,8 +853,10 @@ function setPayroll(e) {
 function enableDisableCreditAccount() {
   if($("#work_benefit_provisioning").prop("checked")) {
     $("#credit_accounts input").prop("disabled", false).attr("required", true);
+    $("#credit-button").attr("data-toggle", "modal");
   } else {
     $("#credit_accounts input").prop("disabled", true).attr("required", false);
+    $("#credit-button").removeAttr("data-toggle");
   }
 }
 
