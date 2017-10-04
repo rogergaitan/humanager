@@ -25,6 +25,7 @@ class OtherPayment < ActiveRecord::Base
   has_many :employees, :through => :other_payment_employees
   accepts_nested_attributes_for :other_payment_employees, :allow_destroy => true
   accepts_nested_attributes_for :employees, :allow_destroy => true
+  belongs_to :currency
 
   def self.get_list_to_general_payment(payroll_ids, limit)
 
