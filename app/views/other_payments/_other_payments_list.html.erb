@@ -1,0 +1,25 @@
+<% @other_payments.each do |other_payment| %>
+  <tr>
+    <td><%= other_payment.name %></td>
+    <td><%= t"types.#{other_payment.other_payment_type}"  %></td>
+    <td><%= t"calculation_type.#{other_payment.calculation_type}" %></td>
+    <td><%= value_helper other_payment, :amount %></td>
+    <td><%= state_helper other_payment.state %></td>
+    <td>
+      <% if can? :update, OtherPayment %>
+        <%= link_to edit_other_payment_path(other_payment), :class => 'btn btn-xs btn-success-alt' do %>
+          <i class="fa fa-pencil"></i>
+        <% end %>
+      <% end %>
+      
+      <% if can? :destroy, OtherPayment %>
+        <%= link_to other_payment_path(other_payment),
+          :method => :delete,
+          :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+          :class => 'btn btn-xs btn-danger-alt' do %>
+          <i class="fa fa-trash-o"></i>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+<% end %> 
