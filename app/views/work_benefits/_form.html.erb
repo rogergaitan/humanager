@@ -237,6 +237,10 @@
             </div>
           </div>
           
+          <% @currencies.each do |currency| %>
+            <%= hidden_field_tag currency.name, currency.symbol, :disabled => "true" %>
+          <% end %>
+          
           <!-- PAYROLL TYPES -->
 
           <div class="form-group" >

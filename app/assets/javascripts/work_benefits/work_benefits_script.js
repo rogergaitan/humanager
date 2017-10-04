@@ -254,6 +254,11 @@ $(jQuery(document).ready(function($) {
     }
   });
   
+  $("#work_benefit_currency_id").on("change", function () {
+    changeEmployeeValueCurrencySymbol();    
+  });
+  
+  
 }));
 
 var empSelected = [];
@@ -508,12 +513,14 @@ function calculationType(selector) {
       workBenefitValuePercentValidation()
       percentMask($("#work_benefit_work_benefits_value"));
       employeeValueValidation();
+      changeEmployeeValueCurrencySymbol();
       break;
       case "fixed":
       $("#currency").show();
       workBenefitValueCurrencyValidation();
       currencyMask($("#work_benefit_work_benefits_value"));
       employeeValueValidation();
+      changeEmployeeValueCurrencySymbol();
       break;
     }
 };
@@ -695,9 +702,9 @@ function populateAutocompleteEmployees(idField) {
 }
 
 function changeEmployeeValueCurrencySymbol() {
-  if($("#deduction_calculation_type").val() == "fixed" ) {
-    var currency = $("#deduction_deduction_currency_id :selected").text();
-        
+  
+  if($("#work_benefit_calculation_type").val() == "fixed" ) {
+    var currency = $("#work_benefit_currency_id :selected").text();
     var symbol = $("input[name=" + currency + "]").val();
     
     $(".employee_calculation_currency_symbol").text(symbol);
