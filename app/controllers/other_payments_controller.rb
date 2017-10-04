@@ -107,6 +107,7 @@ class OtherPaymentsController < ApplicationController
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
+    @currencies = Currency.all
   end
 
   # Get a other payment object and search all ids' employees and

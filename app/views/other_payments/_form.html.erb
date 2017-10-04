@@ -102,7 +102,15 @@
             <%= f.label :amount, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <%= f.text_field :amount, :class => 'form-control', :include_blank =>false,
-                :value => number_with_precision(f.object.amount, delimiter: ',', separator: '.', precision: 2) %>
+                :value => number_to_currency(f.object.amount, delimiter: '', unit: "") %>
+            </div>
+            
+            <div class="col-sm-6" id="currency">
+              <%= f.label :currency_id, "Moneda", :class => "control-label col-sm-2" %>
+              <div class="col-sm-6 form-group_">
+                <%= f.collection_select :currency_id, @currencies, :id, :name, options = {:prompt => false},
+                  html_options = { :class => "form-control" }  %>
+              </div>
             </div>
           </div>
 
@@ -231,7 +239,7 @@
           <!-- E M P L O Y E E S   L I S T   D E T A I L -->
 
           <div class="form-group" id="employee_items_two">
-            <label class="col-sm-2 control-label">Agregar Empleados</label>
+            <label class="col-sm-2 control-label">Detalle de Aplicación Individual</label>
             <div class="col-sm-8">
               <table id="employee_items" class="table table-responsive">
                 <thead>
@@ -239,7 +247,7 @@
                     <td class="header_employee" width='80%'>Empleado</td>
                     <td class="header_calculation">Valor</td>
                     <td class="">
-                      Agregar <%= link_to_add_fields("", f, :other_payment_employees, "") %>
+                      <%= link_to_add_fields("", f, :other_payment_employees, "") %>
                     </td>
                   </tr>
                 </thead>
