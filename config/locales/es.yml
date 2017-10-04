@@ -710,7 +710,7 @@ es:
           payroll_id: Planilla
           payroll_date: Fecha
         other_payment:
-          description: Descripción
+          name: Nombre
           deduction_type: Tipo de deducción
           calculation_type: Tipo de calculo
           amount: Monto a agotar
