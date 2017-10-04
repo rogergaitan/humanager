@@ -63,5 +63,26 @@ module ApplicationHelper
 		end
 		query
 	end
+  
+  #used by models with state to show if active
+  def state_helper(state)
+    if state == :active
+      "Si"
+    else
+      "No"
+    end
+  end
+  
+  #used by models with calculation and individual attributes
+  #to show individual, percent or currency value
+  def value_helper(model, value_method)
+    if model.individual
+      "Individual"
+    elsif model.calculation_type == :percentage
+      "#{model.send(value_method)}%"
+    elsif model.calculation_type == :fixed
+      "#{model.currency.try :symbol}#{model.send(value_method)}"
+    end 
+  end
 
 end
