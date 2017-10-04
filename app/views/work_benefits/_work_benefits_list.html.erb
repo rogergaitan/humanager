@@ -3,7 +3,7 @@
       <td><%= work_benefit.name %></td>
       <td><%=t "types.#{work_benefit.work_benefits_type}" %></td>
       <td><%=  t "calculation_type.#{work_benefit.calculation_type}" %></td>
-      <td><%=  work_benefits_value_helper work_benefit %></td>
+      <td><%=  value_helper work_benefit, :work_benefit_work_benefits_value %></td>
       <td><%= state_helper work_benefit.state %></td>
       <td>
         <% if can? :update, WorkBenefit %>
