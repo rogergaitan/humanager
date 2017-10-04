@@ -5,7 +5,11 @@ Reasapp::Application.routes.draw do
 
   post "session_validation/update_time"
 
-  resources :other_payments
+  resources :other_payments do
+    collection do
+      get :search
+    end
+  end
 
   resources :permissions_users
   

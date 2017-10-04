@@ -26,6 +26,7 @@ class OtherPayment < ActiveRecord::Base
   accepts_nested_attributes_for :other_payment_employees, :allow_destroy => true
   accepts_nested_attributes_for :employees, :allow_destroy => true
   belongs_to :currency
+  belongs_to :company
 
   def self.get_list_to_general_payment(payroll_ids, limit)
 
@@ -47,6 +48,16 @@ class OtherPayment < ActiveRecord::Base
         .where('other_payment_employees.other_payment_id = ?', self.id).first
       self.constitutes_salary = a.total == 0 ? self.constitutes_salary : self.constitutes_salary_was
     end  
+  end
+  
+  def self.search(other_payment_type, calculation_type, state, company, page)
+    query = OtherPayment.includes :currency
+    query = query.where company_id: company
+    query = query.where other_payment_type: other_payment_type unless other_payment_type.empty?
+    query = query.where calculation_type: calculation_type unless calculation_type.empty?
+    query = query.where state: state unless state.empty?
+    
+    query.paginate page: page, per_page: 15
   end
 
 end

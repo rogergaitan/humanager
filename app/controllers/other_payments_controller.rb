@@ -17,6 +17,7 @@ class OtherPaymentsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @other_payments }
+      format.js { render :index }
     end
   end
 
@@ -89,6 +90,14 @@ class OtherPaymentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to other_payments_url }
       format.json { head :no_content }
+    end
+  end
+  
+  def search
+    @other_payments = OtherPayment.search params[:other_payment_type], params[:calculation_type], params[:state],
+                                              current_user.company_id, params[:page]
+    respond_to do |format|
+      format.js { render :index }
     end
   end
 
