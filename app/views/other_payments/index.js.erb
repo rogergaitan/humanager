@@ -1,0 +1,3 @@
+$("tbody").html("<%= escape_javascript(render(partial: 'other_payments_list')) %>");
+$("#other_payments_pagination").html("<%= escape_javascript(render(partial: 'pagination')) %>");
+$(".pagination a[href]").attr("data-remote", true);

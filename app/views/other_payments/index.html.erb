@@ -54,11 +54,13 @@
               <%= render "other_payments_list" %>
             </tbody>
           </table>
-          <div class="text-right">    
-            <%= will_paginate @other_payments %>
+          <div id="other_payments_pagination" class="text-right">    
+            <%= render "pagination" %>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<%= javascript_include_tag "other_payment/other_payments_index" %>
