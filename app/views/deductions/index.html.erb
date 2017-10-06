@@ -40,7 +40,7 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:description) %></th>
                 <th>
-                  <%= select_tag(:deduction_type, options_for_select(translate_enum(:types)), 
+                  <%= select_tag(:deduction_type, options_for_select(translate_enum(:deduction_types)), 
                     :class => "form-control", :prompt => "Filtro tipo de deducción") %>
                   <%= model_class.human_attribute_name(:deduction_type) %>
                 </th>

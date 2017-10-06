@@ -45,8 +45,8 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @other_payment, :validate => true, :html => { :class => 'form-horizontal row-border', 
-          :data => {:toggle => 'validator', :model_name => OtherPayment.model_name, 
+        <%= form_for @other_payment, :html => { :class => 'form-horizontal row-border', 
+          :data => { :model_name => OtherPayment.model_name, :parsley_validate => "",
           :reference_id => @other_payment.id, :company => true}} do |f| %>
 
           <div class="form-group">
@@ -58,7 +58,7 @@
               <div>
                 <%= f.label :active, "Activo", :class => "control-label col-sm-3" %>
                 <label class="checkbox icheck">
-                  <%= check_box_tag "other_payment[:active]", 1, f.object.state %>
+                  <%= check_box_tag "other_payment[active]", 1, f.object.active? %>
                 </label>
               </div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>

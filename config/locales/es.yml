@@ -73,7 +73,7 @@ es:
     change_status: "¿Desea cambiar el estado?"
     can_not_edit: "El registro que trata de modificar está en uso. Por favor intente más tarde"
   
-  types:
+  deduction_types:
     constant: Constante
     unique: Único
     amount_to_exhaust: Monto a Agotar
@@ -88,7 +88,7 @@ es:
     ordinary: Ordinario
     extra: Extra
     double: Doble
-  work_benefits_type:
+  types:
     constant: Constante
     unique: Único
   
