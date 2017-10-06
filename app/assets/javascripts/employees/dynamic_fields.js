@@ -141,7 +141,7 @@ $(document).ready(function() {
 	}
 
 	//Gets all data from employees
-    $.getJSON('/employees/load_employees', function(employee_data) {
+    $.getJSON('/employees/load_employees', {id: $("form").attr("data-reference-id")},  function(employee_data) {
         $('#load_employee').autocomplete({
             source: $.map(employee_data, function(item){
                 $.data(document.body, 'employee_'+ item.id+"", item.entity.name + ' ' + item.entity.surname);

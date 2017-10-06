@@ -130,7 +130,7 @@ class EmployeesController < ApplicationController
   end
   
   def load_employees
-    @employees = Employee.all
+    @employees = Employee.where "id NOT IN (?)", params[:id]
     respond_to do |format|
       format.json { render json: @employees, :include => :entity }
     end
