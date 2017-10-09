@@ -717,7 +717,7 @@ es:
           constitutes_salary: ¿Es parte integral del Salario?
           individual: Individual
           ledger_account_id: Cuenta a Debitar
-          costs_center_id: Centro de Costo
+          costs_center_id: Centro de Costos
           payroll_types: Tipos de planillas
           custom_calculation: Valor
         currency:
