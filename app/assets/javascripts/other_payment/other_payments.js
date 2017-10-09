@@ -112,10 +112,10 @@ $(document).ready(function() {
     op.updateValidation();
   });
 	
-	op.typeDeduction($('#other_payment_deduction_type'));
+	op.typeDeduction($('#other_payment_other_payment_type'));
 
   // When change the value called the function typeDeduction
-  $('#other_payment_deduction_type').change(function() {
+  $('#other_payment_other_payment_type').change(function() {
     op.typeDeduction(this);
   });
 
@@ -467,8 +467,9 @@ op.typeDeduction = function(selected) {
       $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty();
       $('#unicPayroll').show();
-      $('#other_payment_payrolls').show();
+      $('#other_payments_payroll').show();
       op.getPayrolls();
+      disablePayrollTypes();
     break;
     case 'amount_to_exhaust':
       $('#amount_exhaust_controls').show();
@@ -480,7 +481,8 @@ op.typeDeduction = function(selected) {
       $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty();
       $('#unicPayroll').hide();
-      $('#other_payment_payrolls').hide();
+      $('#other_payments_payroll').hide();
+      enablePayrollTypes();
     break;
   }
 }
@@ -805,4 +807,18 @@ function changeEmployeeValueCurrencySymbol() {
   }  else {
     $(".employee_calculation_currency_symbol").text("%");
   }
+}
+
+function disablePayrollTypes() {
+  $("#other_payment_payroll_type_ids").prop("disabled", true);
+  $("#other_payment_payroll_type_ids").prop("required", false);
+  $("#other_payment_payroll_type_ids").multiSelect("refresh");
+  $("#payroll_select_all").iCheck("disable");
+}
+
+function enablePayrollTypes() {
+  $("#other_payment_payroll_type_ids").prop("disabled", false);
+  $("#other_payment_payroll_type_ids").prop("required", true);
+  $("#other_payment_payroll_type_ids").multiSelect("refresh");
+  $("#payroll_select_all").iCheck("enable");
 }
