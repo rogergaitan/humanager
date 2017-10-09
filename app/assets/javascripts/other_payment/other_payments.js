@@ -547,11 +547,11 @@ op.showHideEmployees = function(isIndividual) {
     $('#employee_items_two').show();
     $('#other_payment_amount').prop("disabled", true);
     $('#other_payment_amount').val("");
-    enableValueValidations();
+    disableValueValidations();
   } else {
     $('#employee_items_two').hide();
     $('#other_payment_amount').prop("disabled", false);
-    disableValueValidations();
+    enableValueValidations();
   }
 }
 
