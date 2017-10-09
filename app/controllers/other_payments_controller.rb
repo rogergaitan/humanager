@@ -38,8 +38,7 @@ class OtherPaymentsController < ApplicationController
   # GET /other_payments/1/edit
   def edit
     begin
-      @other_payment = OtherPayment.where(:state => CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
-          .find(params[:id])
+      @other_payment = OtherPayment.find params[:id]
       objects_employees(@other_payment)
     rescue
       respond_to do |format|
