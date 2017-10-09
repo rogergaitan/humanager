@@ -176,7 +176,7 @@ $(document).ready(function() {
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
 
   // Carga el arbol de cuentas de credito
-  cc_tree(debit_account, true);
+  treeviewhr.cc_tree(debit_account, true);
   $('.expand_tree').click(treeviewhr.expand);
 
   $('#list').on({
@@ -546,6 +546,7 @@ op.showHideEmployees = function(isIndividual) {
   if( $('#other_payment_individual').is(':checked') ) {
     $('#employee_items_two').show();
     $('#other_payment_amount').prop("disabled", true);
+    $('#other_payment_amount').val("");
     enableValueValidations();
   } else {
     $('#employee_items_two').hide();
