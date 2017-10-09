@@ -1,7 +1,7 @@
 <% @deductions.each do |deduction| %>
     <tr>
       <td><%= deduction.description %></td>
-      <td><%= t "types.#{deduction.deduction_type}" %></td>
+      <td><%= t "deduction_types.#{deduction.deduction_type}" %></td>
       <td><%=t "calculation_type.#{deduction.calculation_type}" %></td>
       <td><%= value_helper deduction, :deduction_value %></td>
       <td><%= state_helper deduction.state %></td>
