@@ -9,7 +9,7 @@ class OtherPayment < ActiveRecord::Base
 
   before_update :check_is_salary
 
-  attr_accessor :custom_calculation, :employee_ids
+  attr_accessor :custom_calculation, :employee_ids, :active
 
   # association other_payments with payrolls
   has_many :other_payment_payrolls, :dependent => :destroy
@@ -27,6 +27,8 @@ class OtherPayment < ActiveRecord::Base
   accepts_nested_attributes_for :employees, :allow_destroy => true
   belongs_to :currency
   belongs_to :company
+  
+  before_save :save_state
 
   def self.get_list_to_general_payment(payroll_ids, limit)
 
@@ -61,6 +63,21 @@ class OtherPayment < ActiveRecord::Base
   end
   
   def active?
+    if self.state == :active
+      true
+    else
+      false
+    end
   end
+  
+  private
+  
+    def save_state
+      if active
+        self.state = :active
+      else
+        self.state = :completed
+      end
+    end
 
 end
