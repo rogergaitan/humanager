@@ -70,36 +70,42 @@
             <div class="col-sm-3">
               <%= f.select(:other_payment_type, translate_enum(:types), {:include_blank => false}, { :class => 'form-control' }) %>
             </div>
+            
+            <div id="other_payments_payroll">
+              <%= label_tag "other_payment_payroll", "Planilla a aplicar", :class => "control-label col-sm-2" %>
+              <div class="col-sm-3">
+                <div class="input-group form-group_">
+                  <%= text_field_tag 'other_payment_payroll', f.object.payrolls.try(:first).try(:description), :class => 'form-control'%>
+                  <span class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                </div>
+               <div class="col-sm-1">
+                <a  id="unicPayroll" data-toggle="modal" href="#payrollModal" class="btn btn-default-alt">
+                  <i class="fa fa-bars"></i>
+                </a>
+              </div>
+               <div class="payrolls-all">
+                  <%= hidden_field_tag 'other_payment[payroll_ids][]', nil %>
+                  <div class="payrolls-margin" id="payrolls-to-save"></div>
+              </div>
+            </div>
+          </div>  
+          
+          <div class="form-group">
+            <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.hidden_field :ledger_account_id %>
+              <%= text_field_tag 'other_payment_ledger_account_name',nil, :class => 'form-control', :for => :ledger_account_id %>
+            </div>
             <div class="col-sm-1">
-              <a  id="unicPayroll" data-toggle="modal" href="#payrollModal" class="btn btn-default-alt">
+              <a data-toggle="modal" href="#ledgerAccountModal" class="btn btn-default-alt">
                 <i class="fa fa-bars"></i>
               </a>
             </div>
-            <div class="payrolls-all">
-              <%= hidden_field_tag 'other_payment[payroll_ids][]', nil %>
-              <div class="payrolls-margin" id="payrolls-to-save"></div>
-            </div>
           </div>
           
-          <!-- Para que muestre la descripcion de la planilla UNICA seleccionada -->
-          <div class="form-group" id="other_payment_payrolls">
-            <%= label_tag '', nil, class: 'col-sm-2 control-label' %>
-
-            <div class="col-sm-3">
-              <div class="input-group">
-                <% if params[:action] == "edit" %>
-                  <%= text_field_tag 'other_payment_payroll', nil, :class => 'form-control', 
-                    :value => @other_payment.payrolls[0] ? @other_payment.payrolls[0].payroll_type.description.to_s : "" %>
-                <% else %>
-                  <%= text_field_tag 'other_payment_payroll', nil, :class => 'form-control'%>
-                <% end %>
-                <span class="input-group-addon">
-                  <i class="fa fa-search"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div class="form-group">
             <%= f.label :calculation_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
@@ -142,27 +148,6 @@
                   <%= f.check_box :individual %>
                 </label>
               </div>
-            </div>
-          </div>
-
-          <div class="form-group" id="custom_calculation">
-            <%= f.label :custom_calculation, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.text_field :custom_calculation, :class => 'form-control',
-              :value => number_with_precision(f.object.custom_calculation, delimiter: ',', separator: '.', precision: 2) %>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.hidden_field :ledger_account_id %>
-              <%= text_field_tag 'other_payment_ledger_account_name',nil, :class => 'form-control', :for => :ledger_account_id %>
-            </div>
-            <div class="col-sm-1">
-              <a data-toggle="modal" href="#ledgerAccountModal" class="btn btn-default-alt">
-                <i class="fa fa-bars"></i>
-              </a>
             </div>
           </div>
 

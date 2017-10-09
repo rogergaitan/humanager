@@ -176,7 +176,7 @@ $(document).ready(function() {
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
 
   // Carga el arbol de cuentas de credito
-  treeviewhr.cc_tree(debit_account, true);
+//   cc_tree(debit_account, true);
   $('.expand_tree').click(treeviewhr.expand);
 
   $('#list').on({
@@ -188,6 +188,8 @@ $(document).ready(function() {
       $(this).css("text-decoration", "none");
   }}, ".node_link");
 
+  op.getPayrolls();
+  
   $("#error a").click(function (e) {
     e.preventDefault();
     op.getPayrolls();
