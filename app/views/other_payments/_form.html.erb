@@ -75,11 +75,13 @@
               <%= label_tag "other_payment_payroll", "Planilla a aplicar", :class => "control-label col-sm-2" %>
               <div class="col-sm-3">
                 <div class="input-group form-group_">
-                  <%= text_field_tag 'other_payment_payroll', f.object.payrolls.try(:first).try(:description), :class => 'form-control'%>
+                  <%= text_field_tag 'other_payment_payroll', f.object.payrolls.first.try(:payroll_type).try(:description), :class => 'form-control',
+                    :required => true, :data => {:parsley_errors_container => "#payroll_errors"}  %>
                   <span class="input-group-addon">
                     <i class="fa fa-search"></i>
                   </span>
                 </div>
+                <div id="payroll_errors"></div>
                 </div>
                <div class="col-sm-1">
                 <a  id="unicPayroll" data-toggle="modal" href="#payrollModal" class="btn btn-default-alt">
@@ -87,7 +89,7 @@
                 </a>
               </div>
                <div class="payrolls-all">
-                  <%= hidden_field_tag 'other_payment[payroll_ids][]', nil %>
+                  <%= hidden_field_tag 'other_payment[payroll_ids][]', nil, :required => true %>
                   <div class="payrolls-margin" id="payrolls-to-save"></div>
               </div>
             </div>
@@ -97,10 +99,25 @@
             <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
               <%= f.hidden_field :ledger_account_id %>
-              <%= text_field_tag 'other_payment_ledger_account_name',nil, :class => 'form-control', :for => :ledger_account_id %>
+              <%= text_field_tag 'other_payment_ledger_account_name',nil, :class => 'form-control', :for => :ledger_account_id,
+                :required => true  %>
             </div>
             <div class="col-sm-1">
               <a data-toggle="modal" href="#ledgerAccountModal" class="btn btn-default-alt">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <%= f.hidden_field :costs_center_id %>
+              <%= text_field_tag 'other_payment_costs_center_name',nil, :class => 'form-control', :for => :costs_center_id,
+               :required => true %>
+            </div>
+            <div class="col-sm-1">
+              <a id="centroCostoButton" data-toggle="modal" href="#centroCostoModal" class="btn btn-default-alt">
                 <i class="fa fa-bars"></i>
               </a>
             </div>
@@ -116,18 +133,31 @@
           <div class="form-group" id="amount_exhaust_controls">
             <%= f.label :amount, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :amount, :class => 'form-control', :include_blank =>false,
+              <%= f.text_field :amount, :class => 'form-control', :include_blank =>false, :required => true,
                 :value => number_to_currency(f.object.amount, delimiter: '', unit: "") %>
+                
+              <div class="individual-check">
+              <%= f.label :individual, "¿Aplica Individualmente?", :class => 'col-sm-5 control-label' %>
+              <div class="col-sm-3">
+                <label class="checkbox icheck">
+                  <%= f.check_box :individual %>
+                </label>
+              </div>
+              </div>
             </div>
             
             <div class="col-sm-6" id="currency">
-              <%= f.label :currency_id, "Moneda", :class => "control-label col-sm-2" %>
+              <%= f.label :currency_id, "Moneda para Pago", :class => "control-label col-sm-3" %>
               <div class="col-sm-6 form-group_">
                 <%= f.collection_select :currency_id, @currencies, :id, :name, options = {:prompt => false},
                   html_options = { :class => "form-control" }  %>
               </div>
             </div>
           </div>
+          
+          <% @currencies.each do |currency| %>
+            <%= hidden_field_tag currency.name, currency.symbol, :disabled => "true" %>
+          <% end %>
 
           <div class="form-group">
             <%= f.label :constitutes_salary, :class => 'col-sm-2 control-label' %>
@@ -137,30 +167,6 @@
                   <%= f.check_box :constitutes_salary %>
                 </label>
               </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :individual, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <div class="checkbox icheck">
-                <label class="checkbox icheck">
-                  <%= f.check_box :individual %>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :costs_center_id, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <%= f.hidden_field :costs_center_id %>
-              <%= text_field_tag 'other_payment_costs_center_name',nil, :class => 'form-control', :for => :costs_center_id %>
-            </div>
-            <div class="col-sm-1">
-              <a id="centroCostoButton" data-toggle="modal" href="#centroCostoModal" class="btn btn-default-alt">
-                <i class="fa fa-bars"></i>
-              </a>
             </div>
           </div>
 
@@ -226,7 +232,7 @@
                 options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
                   { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
                 { include_blank: false }, 
-                {:multiple => true, :selected => @employee_ids}) %>
+                {:multiple => true, :selected => @employee_ids, :required => true}) %>
             </div>
           </div>
 

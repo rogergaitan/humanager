@@ -4,8 +4,8 @@ class OtherPayment < ActiveRecord::Base
   belongs_to :costs_center
 
   attr_accessible :description, :deduction_type, :calculation_type, :amount, :state, :constitutes_salary, 
-      :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
-      :custom_calculation, :payroll_ids, :employee_ids
+    :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
+    :custom_calculation, :payroll_ids, :employee_ids, :name, :active, :company_id, :other_payment_type, :currency_id
 
   before_update :check_is_salary
 
@@ -58,6 +58,9 @@ class OtherPayment < ActiveRecord::Base
     query = query.where state: state unless state.empty?
     
     query.paginate page: page, per_page: 15
+  end
+  
+  def active?
   end
 
 end

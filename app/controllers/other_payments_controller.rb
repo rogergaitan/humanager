@@ -56,7 +56,7 @@ class OtherPaymentsController < ApplicationController
 
     respond_to do |format|
       if @other_payment.save
-        format.html { redirect_to other_payments_path, notice: 'Other payment was successfully created.' }
+        format.html { redirect_to other_payments_path, notice: 'Otro pago creado correctamente.' }
         format.json { render json: @other_payment, status: :created, location: @other_payment }
       else
         objects_employees(@other_payment)
@@ -72,7 +72,7 @@ class OtherPaymentsController < ApplicationController
     @other_payment = OtherPayment.find(params[:id])
     respond_to do |format|
       if @other_payment.update_attributes(params[:other_payment])
-        format.html { redirect_to other_payments_path, notice: 'Other Payment was successfully updated.' }
+        format.html { redirect_to other_payments_path, notice: 'Otro pago actualizado correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

@@ -146,7 +146,7 @@ $(document).ready(function() {
   op.showHideEmployees(true); // Call the function to show/hide the div about employees
 
   // Deduction Individual
-  $('#other_payment_individual').parents('label').click(function() {
+  $("label[for=other_payment_individual]").click(function() {
     op.showHideEmployees($('#other_payment_individual').is(':checked'));
   });
 
@@ -176,7 +176,7 @@ $(document).ready(function() {
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
 
   // Carga el arbol de cuentas de credito
-//   cc_tree(debit_account, true);
+  cc_tree(debit_account, true);
   $('.expand_tree').click(treeviewhr.expand);
 
   $('#list').on({
@@ -285,6 +285,10 @@ $(document).ready(function() {
   calculationType($("#other_payment_calculation_type"));
   $("#other_payment_calculation_type").on("change", function () { 
     calculationType($(this));
+  });
+  
+  $("#other_payment_currency_id").on("change", function () {
+    changeEmployeeValueCurrencySymbol();
   });
   
 });
@@ -464,24 +468,23 @@ op.removeEmployeeMulti = function(id_employee) {
 op.typeDeduction = function(selected) {
   switch($(selected).val()) {
     case 'unique':
-      $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty();
       $('#unicPayroll').show();
       $('#other_payments_payroll').show();
+      $('#other_payment_payroll').attr('required', true);
       op.getPayrolls();
       disablePayrollTypes();
     break;
     case 'amount_to_exhaust':
-      $('#amount_exhaust_controls').show();
       $('#payrolls-to-save').empty();
       $('#unicPayroll').hide();
       $('#other_payment_payrolls').hide();
     break;
     case 'constant':
-      $('#amount_exhaust_controls').hide();
       $('#payrolls-to-save').empty();
-      $('#unicPayroll').hide();
+      $('#other_payment_payroll').removeAttr('required');
       $('#other_payments_payroll').hide();
+      $('#unicPayroll').hide();
       enablePayrollTypes();
     break;
   }
@@ -542,13 +545,12 @@ op.searchAll = function(name) {
 op.showHideEmployees = function(isIndividual) {
   if( $('#other_payment_individual').is(':checked') ) {
     $('#employee_items_two').show();
-    $('#custom_calculation').hide();
+    $('#other_payment_amount').prop("disabled", true);
+    enableValueValidations();
   } else {
     $('#employee_items_two').hide();
-    $('#custom_calculation').show();
-  }
-  if(isIndividual) {
-    $('#other_payment_custom_calculation').val( $('#employee_items tr:eq(1)').find("input:text[id*='_calculation']").val() );
+    $('#other_payment_amount').prop("disabled", false);
+    disableValueValidations();
   }
 }
 
@@ -654,6 +656,8 @@ op.addFields = function(e) {
 
   // populateAutocompleteEmployees( $('#employee_items tr:eq(1)').find("input[id='search_name_employee']") );
   op.fetchPopulateAutocomplete(op.load_em_employees_path, $('#employee_items tr:eq(1)').find("input[id='search_name_employee']"), 'custom_employee');
+  changeEmployeeValueCurrencySymbol();
+  employeeValueValidation();
   // $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
 }
 
@@ -735,6 +739,7 @@ function calculationType(selector) {
     percentMask($("#other_payment_amount"));
     employeeValueValidation();
     changeEmployeeValueCurrencySymbol();
+    enableValueValidations();
     break;
     case "fixed":
     $("#currency").show();
@@ -742,6 +747,7 @@ function calculationType(selector) {
     currencyMask($("#other_payment_amount"));
     employeeValueValidation();
     changeEmployeeValueCurrencySymbol();
+    enableValueValidations();
     break;
   }
 };
@@ -779,9 +785,9 @@ function amountCurrencyValidation () {
 }
 
 function employeeValueValidation () {
-  var calculation_type = $("#work_benefit_calculation_type").val()
+  var calculation_type = $("#other_payment_calculation_type").val()
   
-  if($('#work_benefit_individual').is(':checked')) {
+  if($('#other_payment_individual').is(':checked')) {
     $("#employee_items input:text[id*='_calculation']").attr("required", true); 
     
     if(calculation_type == "fixed") {
@@ -799,8 +805,8 @@ function employeeValueValidation () {
 
 function changeEmployeeValueCurrencySymbol() {
   
-  if($("#work_benefit_calculation_type").val() == "fixed" ) {
-    var currency = $("#work_benefit_currency_id :selected").text();
+  if($("#other_payment_calculation_type").val() == "fixed" ) {
+    var currency = $("#other_payment_currency_id :selected").text();
     var symbol = $("input[name=" + currency + "]").val();
     
     $(".employee_calculation_currency_symbol").text(symbol);
@@ -821,4 +827,31 @@ function enablePayrollTypes() {
   $("#other_payment_payroll_type_ids").prop("required", true);
   $("#other_payment_payroll_type_ids").multiSelect("refresh");
   $("#payroll_select_all").iCheck("enable");
+}
+
+function enableValueValidations() {
+  if($("#other_payment_calculation_type").val() == "percentage" ) {
+    otherPaymentValuePercentValidation();
+  } else {
+    otherPaymentValueCurrencyValidation();
+  }
+}    
+
+function disableValueValidations() {
+  $("#other_payment_amount").removeAttr("data-parsley-range");
+  $("#other_payment_amount").removeAttr("required");
+}
+
+function otherPaymentValuePercentValidation() {
+  if(!$("#other_payment_individual").prop("checked")) {
+    $("#other_payment_amount").attr("data-parsley-range", "[1, 100]");
+    $("#other_payment_amount").attr("required", true);  
+  }
+}
+
+function otherPaymentValueCurrencyValidation () {
+  if(!$("#other_payment_individual").prop("checked")) {
+    $("#other_payment_amount").removeAttr("data-parsley-range");
+    $("#other_payment_amount").attr("required", true);
+  }
 }
