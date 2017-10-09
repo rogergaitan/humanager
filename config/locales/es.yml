@@ -713,7 +713,7 @@ es:
           name: Nombre
           other_payment_type: Tipo de Pago
           calculation_type: Tipo de Calculo
-          amount: Valor del Pago
+          amount: Valor Pago
           constitutes_salary: ¿Es parte integral del Salario?
           individual: Individual
           ledger_account_id: Cuenta a Debitar
