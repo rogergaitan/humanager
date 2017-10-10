@@ -100,7 +100,7 @@ class OtherPaymentsController < ApplicationController
 
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
-    @payroll_types = PayrollType.all
+    @payroll_types = PayrollType.where company_id: current_user.company_id
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
