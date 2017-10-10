@@ -1,6 +1,7 @@
 class OtherPaymentsController < ApplicationController
-  #load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit, :create]
+  before_filter :set_other_payment, only: [:edit, :update, :destroy]
+  load_and_authorize_resource
+  before_filter :resources, :only => [:new, :edit, :create, :update]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(OtherPayment, params[:id])
@@ -11,8 +12,8 @@ class OtherPaymentsController < ApplicationController
   # GET /other_payments
   # GET /other_payments.json
   def index
-    @other_payments = OtherPayment.where('state = ?', CONSTANTS[:PAYROLLS_STATES]['ACTIVE'])
-        .paginate(:page => params[:page], :per_page => 15)
+    @other_payments = OtherPayment.where(:company_id => current_user.company_id)
+      .paginate(:page => params[:page], :per_page => 15)
 
     respond_to do |format|
       format.html
@@ -38,7 +39,6 @@ class OtherPaymentsController < ApplicationController
   # GET /other_payments/1/edit
   def edit
     begin
-      @other_payment = OtherPayment.find params[:id]
       objects_employees(@other_payment)
     rescue
       respond_to do |format|
@@ -68,7 +68,6 @@ class OtherPaymentsController < ApplicationController
   # PUT /other_payments/1
   # PUT /other_payments/1.json
   def update
-    @other_payment = OtherPayment.find(params[:id])
     respond_to do |format|
       if @other_payment.update_attributes(params[:other_payment])
         format.html { redirect_to other_payments_path, notice: 'Otro pago actualizado correctamente.' }
@@ -83,7 +82,6 @@ class OtherPaymentsController < ApplicationController
   # DELETE /other_payments/1
   # DELETE /other_payments/1.json
   def destroy
-    @other_payment = OtherPayment.find(params[:id])
     @other_payment.destroy
 
     respond_to do |format|
@@ -129,4 +127,12 @@ class OtherPaymentsController < ApplicationController
       end
     end
   end
+  
+  private
+  
+    def set_other_payment
+      @other_payment = OtherPayment.find_by_id_and_company_id params[:id], current_user.company_id
+    rescue ActiveRecord::RecordNotFound
+      redirect_to other_payments_path, notice: "El registro de otro pago no existe."
+    end
 end
