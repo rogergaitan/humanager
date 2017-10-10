@@ -101,7 +101,7 @@
               <%= f.label :amount_exhaust, :class => 'col-sm-1 control-label' %>
               <div class="col-sm-3 form-group_">
                 <%= f.text_field :amount_exhaust, :class => 'form-control', 
-                  :value => number_to_currency(f.object.amount_exhaust, unit: "", delimeter: "") %>
+                 :value => number_to_currency(f.object.amount_exhaust, unit: "", delimeter: "") %>
                  <div class="help-block with-errors"></div>
               </div>
               
@@ -181,7 +181,7 @@
               </a>
             </div>
             
-            <div class="col-sm-6 pull-right" id="maximum_deduction">
+            <div class="col-sm-6 pull-right maximum_deduction">
               <%= f.label :maximum_deduction, "Deducción Máxima", :class => "col-sm-2 control-label" %>
               <div class="col-sm-6 form-group_">
                 <%= f.text_field :maximum_deduction, 
@@ -192,7 +192,7 @@
                 <div id="maximum_deduction_errors"></div>
             </div>
             
-            <div class="col-sm-6 pull-right">
+            <div class="col-sm-6 pull-right maximum_deduction">
               <%= f.label :maximum_deduction_currency_id, "Moneda", :class => "col-sm-2  control-label" %>
               <div class="col-sm-6">
                 <%= f.collection_select :maximum_deduction_currency_id, @currencies, :id, :name,

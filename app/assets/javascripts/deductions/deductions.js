@@ -418,7 +418,7 @@ function typeCalculation(selected) {
     case 'percentage':
       $('.percentage').html('%');
       $("#deduction_currency").hide();
-      $("#maximum_deduction").show();
+      $(".maximum_deduction").show();
       $("#deduction_maximum_deduction").prop("required", true);
       changeEmployeeValueCurrencySymbol();
       percentMask("#deduction_deduction_value");
@@ -428,8 +428,8 @@ function typeCalculation(selected) {
     case 'fixed':
       $('.percentage').html('');
       $("#deduction_currency").show();
-      $("#maximum_deduction").hide();
-      $("#maximum_deduction").val("");      
+      $(".maximum_deduction").hide();
+      $("#deduction_maximum_deduction").val("");
       $("#deduction_maximum_deduction").prop("required", false);
       changeEmployeeValueCurrencySymbol();
       currencyMask("#deduction_deduction_value");
