@@ -81,7 +81,7 @@ module ApplicationHelper
     elsif model.calculation_type == :percentage
       "#{model.send(value_method)}%"
     elsif model.calculation_type == :fixed
-      "#{model.send(currency).try :symbol}#{model.send(value_method)}"
+     number_to_currency model.send(value_method), unit: model.send(currency).try(:symbol), delimeter: ""
     end 
   end
 
