@@ -3,7 +3,7 @@
     <td><%= other_payment.name %></td>
     <td><%= t"types.#{other_payment.other_payment_type}"  %></td>
     <td><%= t"calculation_type.#{other_payment.calculation_type}" %></td>
-    <td><%= value_helper other_payment, :amount %></td>
+    <td><%= value_helper other_payment, :amount, :currency %></td>
     <td><%= state_helper other_payment.state %></td>
     <td>
       <% if can? :update, OtherPayment %>
