@@ -1,7 +1,6 @@
  <% @work_benefits.each do |work_benefit| %>
     <tr>
       <td><%= work_benefit.name %></td>
-      <td><%=t "types.#{work_benefit.work_benefits_type}" %></td>
       <td><%=  t "calculation_type.#{work_benefit.calculation_type}" %></td>
       <td><%=  value_helper work_benefit, :work_benefits_value, :currency %></td>
       <td><%= state_helper work_benefit.state %></td>

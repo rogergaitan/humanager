@@ -233,12 +233,6 @@ $(jQuery(document).ready(function($) {
     payToEmployee($('#work_benefit_pay_to_employee').is(':checked'));
   });
   
-  
-  WorkBenefitType($("#work_benefit_work_benefits_type"));
-  $("#work_benefit_work_benefits_type").on("change", function () {
-    WorkBenefitType($(this));
-  });
-  
   $('#activas').on("click", "td.payroll-type a", setPayroll);
   
   enableDisableCreditAccount();
@@ -258,6 +252,7 @@ $(jQuery(document).ready(function($) {
     changeEmployeeValueCurrencySymbol();    
   });
   
+  getPayrolls();
   
 }));
 
@@ -325,10 +320,33 @@ function filterEmployees(type, id) {
 
 function employeesSelectAll() {
 	if( $('#emplotee_select_all').is(':checked') ) {
-		$('#work_benefit_employee_ids').multiSelect('select_all');
+    selectUnselectEmployees(true);
 	} else {
-		$('#work_benefit_employee_ids').multiSelect('deselect_all');
+    selectUnselectEmployees(false);
 	}
+}
+
+function selectUnselectEmployees(isSelect) {
+  
+  var theClass = 'ms-selection';
+  if(isSelect) {
+    theClass = 'ms-selectable';
+  }
+  
+  $('#ms-work_benefits_employee_ids div.'+theClass).find('li:visible').each( function() {
+    var id = $(this).attr('id').replace('-selectable','');
+    if(isSelect) {
+      searchEmployeeByAttr(id, 'id', 'multi', types.add);
+    } else {
+      searchEmployeeByAttr(id, 'id', 'multi', types.remove);
+    }
+  });
+
+  if(isSelect) {
+    $('#work_benefit_employee_ids').multiSelect('select_all');
+  } else {
+    $('#work_benefit_employee_ids').multiSelect('deselect_all');
+  }
 }
 
 function payrollSelectAll() {
@@ -820,22 +838,6 @@ function getPayrolls() {
   });
 }
 
-function WorkBenefitType (selector) {
-  switch($(selector).val()) {
-    case "unique":
-      getPayrolls();
-      $("#work_benefits_payrolls").show();
-      $("#work_benefits_payrolls input").attr("required", true);
-      disablePayrollTypes();
-      break;
-    case "constant":
-      $("#work_benefits_payrolls").hide();
-      $("#work_benefits_payrolls input").attr("required", false);
-      enablePayrollTypes();
-      break;
-  }
-}
-
 // Carga las planillas activas en una tabla
 function addActives(payroll, target_table) {
   var row = $(target_table + '> tbody:last').append('<tr>' + 
@@ -852,7 +854,7 @@ function setPayroll(e) {
   e.preventDefault();
   var payrollId = $(e.target).parent().prev().text();
   var payrollName = $(e.target).text();
-  $("#work_benefit_payroll").val(payrollId);
+  $("#work_benefit_payroll_id").val(payrollId);
   $('#work_benefits_payrolls_name').val(payrollName);
   $('#work_benefits_payroll_name').focusout();
 }

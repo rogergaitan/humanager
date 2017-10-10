@@ -140,8 +140,7 @@ class WorkBenefitsController < ApplicationController
   end
 
   def search
-    @work_benefits = WorkBenefit.search params[:work_benefits_type], params[:calculation_type], params[:state], 
-                                          current_user.company_id, params[:page]
+    @work_benefits = WorkBenefit.search params[:calculation_type], params[:state], current_user.company_id, params[:page]
     
     respond_to do |format|
       format.js { render :index }
