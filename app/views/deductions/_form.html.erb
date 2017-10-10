@@ -100,7 +100,8 @@
             <div id="amount_exhaust_controls">
               <%= f.label :amount_exhaust, :class => 'col-sm-1 control-label' %>
               <div class="col-sm-3 form-group_">
-                <%= f.text_field :amount_exhaust, :class => 'form-control' %>              
+                <%= f.text_field :amount_exhaust, :class => 'form-control', 
+                  :value => number_to_currency(f.object.amount_exhaust, unit: "", delimeter: "") %>
                  <div class="help-block with-errors"></div>
               </div>
               
