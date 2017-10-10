@@ -261,9 +261,13 @@ $(document).ready(function() {
     }
    
   }).done(function(data) {
+    var elements = "";
+    
     $.each(data, function(i, item) {
-      $("#creditors_modal .modal-body").append("<p id="+ item.id + ">" + item.name + "</p>");
+      elements += "<p id="+ item.id + ">" + item.name + "</p>";
     });
+    
+    $("#creditors_modal .modal-body").append(elements);
   });
     
   $("#creditors_modal .modal-body").on("click", "p", function() {
@@ -453,7 +457,7 @@ function getPayrolls() {
     },
     success: function(result) {
       $('table#activas > tbody').empty();
-        $(result.activa).each(function() { addActives(this, 'table#activas')});
+        addActives(result.activa, 'table#activas');
       },
     error: function(result) {
       $('#error').show();
@@ -463,14 +467,19 @@ function getPayrolls() {
 
 // Carga las planillas activas en una tabla
 function addActives(payroll, target_table) {
-  var row = $(target_table + '> tbody:last').append('<tr>' + 
-      '<td class="payroll-id">' + payroll.id +'</td>' +
-      '<td class="payroll-type"><a data-dismiss="modal" href="#">' + payroll.payroll_type.description +'</a></td>' +
-      '<td>' +  payroll.start_date + '</td>' +
-      '<td>' +  payroll.end_date + '</td>' +
-      '<td>' +  payroll.payment_date + '</td>' +
-    '</tr>');
-  return row;
+  var children = "";
+  
+  payroll.forEach(function (item, index) {
+    children +=  '<tr>' + 
+      '<td class="payroll-id">' + item.id +'</td>' +
+      '<td class="payroll-type"><a data-dismiss="modal" href="#">' + item.payroll_type.description +'</a></td>' +
+      '<td>' +  item.start_date + '</td>' +
+      '<td>' +  item.end_date + '</td>' +
+      '<td>' +  item.payment_date + '</td>' +
+    '</tr>';  
+  }); 
+  
+  $(target_table + '> tbody:last').append(children);
 }
 
 // Establece el campo oculto de con el id de la planilla unica seleccionada
