@@ -13,6 +13,7 @@ $("#ir_table_start_date, #ir_table_end_date").datepicker({
 $(".mark_for_destruction").hide();
 
 currencyMask();
+percentMask();
 
 $("#add_stratus").on("click", function (e) {
   var timestamp = new Date().getTime();
@@ -22,7 +23,8 @@ $("#add_stratus").on("click", function (e) {
     "data-parsley-from-until-validation required type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_until name=ir_table[ir_table_values_attributes]["+timestamp+"][until] required  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_base name=ir_table[ir_table_values_attributes]["+timestamp+"][base]  required type=text></td>" +
-    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent] required  type=text></td>" +
+    "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent]" + 
+    "required data-parsley-range=[0,100]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_excess name=ir_table[ir_table_values_attributes]["+timestamp+"][excess] required  type=text></td>" +
     "<td><a class='btn btn-xs btn-danger-alt delete_stratus'><i class='fa fa-trash-o'></i></a></td>" +
     "</tr>"
@@ -43,6 +45,15 @@ function currencyMask() {
       translation: {
        'N': {pattern: /\d/, optional: true},
        'F': {pattern: /\d/}
+      }
+  });    
+}
+
+function percentMask() {
+   $("tbody input[id*=percent]").mask("FNN.NN", {
+      translation: {
+       'N': {pattern: /\d/, optional: true},
+       "F": {pattern: /[1-9]/}
       }
   });    
 }

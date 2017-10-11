@@ -81,7 +81,7 @@
                   value: number_to_currency(ir_table_value_fields.object.until, unit: "", delimiter: "") %></td>
                 <td><%= ir_table_value_fields.text_field :base, required: true,
                   value: number_to_currency(ir_table_value_fields.object.base, unit: "", delimiter: "") %></td>
-                <td><%= ir_table_value_fields.text_field :percent, required: true,
+                <td><%= ir_table_value_fields.text_field :percent, required: true, data: { parsley_range: [0,100]},
                   value: number_to_currency(ir_table_value_fields.object.percent, unit: "", delimiter: "") %></td>
                 <td><%= ir_table_value_fields.text_field :excess, required: true,
                   value: number_to_currency(ir_table_value_fields.object.excess, unit: "", delimiter: "") %></td>
