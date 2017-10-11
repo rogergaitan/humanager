@@ -131,30 +131,6 @@
            </div>
           
           <div class="form-group">
-            <div id="work_benefits_payrolls">
-              <%= label_tag "work_benefits_payroll_name", "Planilla a aplicar", :class => "col-sm-2 control-label" %>
-              <div class="col-sm-3">
-                <div class="input-group form-group_">
-                  <%= text_field_tag "work_benefits_payrolls_name", f.object.payroll.try(:payroll_type).try(:description),
-                    :class => "form-control", :data => {:parsley_errors_container => "#work_benefits_payroll_name_errors"}, 
-                    :required => true %>
-                  <div class="help-block with-errors"></div>
-                  <span class="input-group-addon">
-                    <i class="fa fa-search"></i>
-                  </span>
-                </div>
-                <div id="work_benefits_payroll_name_errors"></div>
-              </div>
-              <div class="col-sm-1">
-                <a class="btn btn-default-alt" href="#myModalPayroll" data-toggle="modal">
-                  <i class="fa fa-bars"></i>
-                </a>
-              <%= f.hidden_field :payroll_id %>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-group">
             <%= f.label :creditor_id, :class => "col-sm-2  control-label"  %>
             <div class="col-sm-3">
             <div class="input-group form-group_">
