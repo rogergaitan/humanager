@@ -24,7 +24,7 @@ $("#add_stratus").on("click", function (e) {
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_until name=ir_table[ir_table_values_attributes]["+timestamp+"][until] required  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_base name=ir_table[ir_table_values_attributes]["+timestamp+"][base]  required type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_percent name=ir_table[ir_table_values_attributes]["+timestamp+"][percent]" + 
-    "required data-parsley-range=[0,100]  type=text></td>" +
+    " required data-parsley-range=[0,100]  type=text></td>" +
     "<td><input id=ir_table_ir_table_values_attributes_"+timestamp+"_excess name=ir_table[ir_table_values_attributes]["+timestamp+"][excess] required  type=text></td>" +
     "<td><a class='btn btn-xs btn-danger-alt delete_stratus'><i class='fa fa-trash-o'></i></a></td>" +
     "</tr>"
@@ -32,8 +32,10 @@ $("#add_stratus").on("click", function (e) {
 });
 
 $("tbody").on("click", ".delete_stratus", function () {
-  $(this).parent().parent().remove();
-  $(this).next().val(1);
+  if($("tbody tr").length >= 2) {
+    $(this).parent().parent().remove();
+    $(this).next().val(1);
+  }
 });
 
 $("#is_last").on("click", function () {
