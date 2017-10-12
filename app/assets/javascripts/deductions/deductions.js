@@ -529,18 +529,12 @@ function showHideEmployees() {
 // Consulta las cuentas contables para hacer el autocomplete
 function CContables() {
   $.getJSON('/ledger_accounts/fetch', function(category_data) {
-    $.map(category_data, function(item){
-        $.data(document.body, 'category_' + item.id+"", item.naccount);
+    console.log(category_data)
+    $("#deduction_ledger_account").autocomplete({
+      source: $.map(category_data, function(item) {
+        $.data(document.body, 'category_' + item.id+"", item.iaccount + " - " + item.naccount);
         return{
-            label: item.naccount,                        
-            id: item.id
-        }
-    });
-    /*$("#deduction_ledger_account").autocomplete({
-      source: $.map(category_data, function(item){
-        $.data(document.body, 'category_' + item.id+"", item.naccount);
-        return{
-            label: item.naccount,                        
+            label:  item.iaccount + " - " + item.naccount, 
             id: item.id
         }
       }),
@@ -550,7 +544,7 @@ function CContables() {
       focus: function(event, ui){
         $( "#deduction_ledger_account" ).val(ui.item.label);
       }
-    })*/
+    })
     if($("#deduction_ledger_account_id").val()){
       var deducciones_cuentas = $.data(document.body, 'category_' + $("#deduction_ledger_account_id").val()+'');
       $("#deduction_ledger_account").val(deducciones_cuentas);
