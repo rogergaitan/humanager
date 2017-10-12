@@ -1,7 +1,9 @@
 var op = {};
 
+
 $(document).ready(function() {
-	
+
+  var debit_account = []
 	/*********************************************************************************************************************************************************/
 	/* E V E N T S */
 	/*********************************************************************************************************************************************************/
@@ -26,7 +28,7 @@ $(document).ready(function() {
 	};
   
   $(".add_fields").hide();
-
+  
   // Payroll types
 	$('#other_payment_payroll_type_ids').multiSelect({
 		selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
@@ -176,7 +178,6 @@ $(document).ready(function() {
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
 
   // Carga el arbol de cuentas de credito
-  treeviewhr.cc_tree(debit_account, true);
   $('.expand_tree').click(treeviewhr.expand);
 
   $('#list').on({
@@ -290,6 +291,9 @@ $(document).ready(function() {
   $("#other_payment_currency_id").on("change", function () {
     changeEmployeeValueCurrencySymbol();
   });
+  
+  
+  
   
 });
 

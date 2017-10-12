@@ -99,7 +99,7 @@ class WorkBenefitsController < ApplicationController
   end
   
   def fetch_debit_accounts
-    @debit_accounts = LedgerAccount.debit_accounts.limit 0
+    @debit_accounts = LedgerAccount.debit_accounts
     
     respond_to do |format|
       format.json { render json: @debit_accounts }

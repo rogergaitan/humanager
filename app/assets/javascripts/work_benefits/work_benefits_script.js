@@ -107,8 +107,10 @@ $(jQuery(document).ready(function($) {
 	});
 	
 	// Populates the autocompletes for the accounts
-  	fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "load_debit_accounts", "work_benefit_debit_account");
-  	fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "load_credit_account_name", "work_benefit_credit_account");
+  	fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "#load_debit_accounts", 
+                                                             "#work_benefit_debit_account", "debit_account_");
+    fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "#load_credit_account_name", 
+                                                            "#work_benefit_credit_account", "credit_accounts_");
   	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "load_costs_center_name", "work_benefit_costs_center_id");
 	// Populates the filter for employees
 	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
@@ -366,36 +368,31 @@ function is_beneficiary(value) {
 	}
 }
 
-function fetchPopulateAutocomplete(url, textField, idField) {
-  $.getJSON(url, function(accounts) {
-      	$.map(accounts, function(item) {
-            $.data(document.body, 'account_' + item.id+"", item.naccount);
-            return{
-                label: item.naccount,                        
-                id: item.id
-            }
-        });
-      /*$(document.getElementById(textField)).autocomplete({
-          source: $.map(accounts, function(item) {
-              $.data(document.body, 'account_' + item.id+"", item.naccount);
-              return{
-                  label: item.naccount,                        
-                  id: item.id
-              }
-          }),
-          select: function( event, ui ) {
-              $(document.getElementById(idField)).val(ui.item.id);
-          },
-          focus: function(event, ui) {
-              $(document.getElementById(textField)).val(ui.item.label);
-          }
-      });*/
+function fetchPopulateAutocomplete(url, textField, idField, dataField) {
+  $.getJSON(url, function(data) {
+    $(textField).autocomplete({
 
-      if($(document.getElementById(idField)).val()) {
-          var account = $.data(document.body, 'account_' + $('#'+idField).val()+'');
-          $(document.getElementById(textField)).val(account);
-      }        
-  }); 
+      source: $.map(data, function(item) {
+        $.data(document.body, dataField + item.id + "", item.iaccount + " - " + item.naccount);
+          return { label: item.iaccount + " - " + item.naccount, id: item.id }
+      }),
+      
+      select: function(event, ui) {
+        if(ui.item.id) {
+          $(idField).val(ui.item.id);
+        }
+      },
+      
+      focus: function(event, ui) {
+        $(textField).val(ui.item.label);  
+      }
+    }); 
+    
+    if($(idField).val()) {
+      var account = $.data(document.body, dataField + $(idField).val() +"");
+      $(textField).val(account);
+    }
+  })
 }
 
 function populateEmployeesFilter(url, textField, idField) {
