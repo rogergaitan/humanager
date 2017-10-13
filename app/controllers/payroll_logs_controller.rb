@@ -100,7 +100,7 @@ class PayrollLogsController < ApplicationController
 
   def resources
     # New
-    @payment_types = PaymentType.all_payment_types
+    @payment_types = PaymentType.find_by_company_id current_user.company_id
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
