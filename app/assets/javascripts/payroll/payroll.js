@@ -88,14 +88,13 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
   var url_payrolls = $('#payrolls_path').val();
   var row2 = '';
   var pay_total = parseFloat(payrolld.payroll_log.payroll_total)
-
+  var currency_symbol = payrolld.currency ? payrolld.currency.symbol : ""
   var data = '<tr>' + 
       '<td>' + payrolld.payroll_type.description + '</td>' +
-      '<td>' + (payrolld.company != null ? payrolld.company.name : '--' ) + '</td>' +
       '<td>' + date_format(payrolld.start_date) + '</td>' +
       '<td>' + date_format(payrolld.end_date) + '</td>' +
       '<td>' + date_format(payrolld.payment_date) + '</td>' +
-      '<td>' + ( payrolld.payroll_log.payroll_total != null ? (pay_total).toFixed(2) : 0.00)  + '</td>' +
+      '<td>' + currency_symbol + ( payrolld.payroll_log.payroll_total != null ? (pay_total).toFixed(2) : 0.00)  + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payrolld.id + '" value="' + payrolld.id + '" />' +
       '</td><td>';

@@ -1,6 +1,7 @@
 class PayrollsController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_payroll_types, :only => [:new, :edit]
+  before_filter :get_payroll_types, :only => [:new, :edit, :update]
+  before_filter :get_currencies, :only => [:new, :edit, :update]
   skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird, :get_main_calendar]
   
   respond_to :html, :json, :js
@@ -8,7 +9,6 @@ class PayrollsController < ApplicationController
   # GET /payrolls
   # GET /payrolls.json
   def index
-    logger.debug current_user.to_yaml
     #@payrolls = Payroll.all
   end
 
@@ -84,7 +84,7 @@ class PayrollsController < ApplicationController
     @activas[:activa] = Payroll.activas(current_user.company_id)
 
     respond_to do |format|
-      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log, :company])}
+      format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log, :company, :currency])}
     end
   end
 
@@ -99,9 +99,8 @@ class PayrollsController < ApplicationController
   def get_inactivas
     @inactivas = {}
     @inactivas[:inactiva] = Payroll.inactivas(current_user.company_id)
-
     respond_to do |format|
-      format.json { render json: @inactivas.to_json(include: [:payroll_type, :payroll_log, :company])}
+      format.json { render json: @inactivas.to_json(include: [:payroll_type, :payroll_log, :company, :currency])}
     end
   end
 
@@ -151,5 +150,11 @@ class PayrollsController < ApplicationController
     calendar = Payroll.get_main_calendar(params[:start], params[:end], current_user.company_id)
     responses(calendar, :ok)
   end
-
+  
+  private
+  
+  def get_currencies
+    @currencies = Currency.all
+  end
+  
 end
