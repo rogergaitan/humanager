@@ -143,13 +143,14 @@ payroll.add_inactivas = function (payroll, target_table) {
     }
   }
   
+  var currency_symbol = payroll.currency ? payroll.currency.symbol : ""
+  
   var row = $(target_table + '> tbody:last').append('<tr>' + 
       '<td>' + payroll.payroll_type.description + '</td>' +
-      '<td>' + (payroll.company != null ? payroll.company.name : '--' ) + '</td>' +
       '<td>' +  date_format(payroll.start_date) + '</td>' +
       '<td>' +  date_format(payroll.end_date) + '</td>' +
       '<td>' +  date_format(payroll.payment_date) + '</td>' +
-      '<td>' + ( payroll.payroll_log.payroll_total != null ? parseFloat(payroll.payroll_log.payroll_total).toFixed(2) : 0.00)  + '</td>' +
+      '<td>' + currency_symbol + ( payroll.payroll_log.payroll_total != null ? parseFloat(payroll.payroll_log.payroll_total).toFixed(2) : 0.00)  + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '" '+checked+'/>' +
       '</td>' +
