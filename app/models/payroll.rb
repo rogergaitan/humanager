@@ -1,6 +1,6 @@
 class Payroll < ActiveRecord::Base
 
-  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper, :num_oper_2, :company_id
+  attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper, :num_oper_2, :company_id, :currency_id
   belongs_to :payroll_type
   belongs_to :deduction_payment
   belongs_to :company

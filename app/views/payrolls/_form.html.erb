@@ -6,7 +6,7 @@
     <% if @payroll.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@payroll.errors.count, "error") %> prohibited this payroll from being saved:</h3>
+        <h3><%= pluralize(@payroll.errors.count, "error") %> no permitieron guardar esta planilla:</h3>
         <% @payroll.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -20,7 +20,7 @@
 
       <div class="panel-body panel-no-padding">
         <%= form_for @payroll, :html => { :class => 'form-horizontal row-border', 
-          :data => {:toggle => 'validator', :company => true} } do |f| %>
+          :data => {:company => true, :parsley_validate => ""} } do |f| %>
           <div class="form-group">
             <%= f.label :payroll_type_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
@@ -31,12 +31,22 @@
           </div>
           
           <div class="form-group">
+            <%= f.label :currency_id, :class => "col-sm-2 control-label" %>
+            <div class="col-sm-3">
+              <%= f.collection_select(:currency_id, @currencies, :id, :name, 
+                options = {:prompt => false}, html_options = {:class => 'form-control', :required => true }) %>
+            </div>
+          </div>
+          
+          <div class="form-group">
             <%= f.label :start_date, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
               <div class="input-group">
-                <%= f.text_field :start_date, :class => 'form-control', :required => true %>
+                <%= f.text_field :start_date, :class => 'form-control', :required => true, 
+                  :data => {:parsley_start_date_validation => "",  :parsley_errors_container => "#start_date_errors"} %>
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
               </div>
+              <div id="start_date_errors"></div>
             </div>
           </div>
 
@@ -44,9 +54,11 @@
             <%= f.label :end_date, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
               <div class="input-group">
-                <%= f.text_field :end_date, :class => 'form-control', :required => true %>
+                <%= f.text_field :end_date, :class => 'form-control', :required => true,
+                 :data => {:parsley_errors_container => "#end_date_errors"}   %>
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
               </div>
+              <div id="end_date_errors"></div>
             </div>
           </div>
 
@@ -54,9 +66,11 @@
             <%= f.label :payment_date, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
               <div class="input-group">
-                <%= f.text_field :payment_date, :class => 'form-control', :required => true %>
+                <%= f.text_field :payment_date, :class => 'form-control', :required => true,
+                 :data => {:parsley_payment_date_validation => "",  :parsley_errors_container => "#payment_date_errors" } %>
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
               </div>
+              <div id="payment_date_errors"></div>
             </div>
           </div>
 
