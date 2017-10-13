@@ -86,7 +86,6 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
 
   var url = $('#tab1').data('url');
   var url_payrolls = $('#payrolls_path').val();
-  var row2 = '';
   var pay_total = parseFloat(payrolld.payroll_log.payroll_total)
   var currency_symbol = payrolld.currency ? payrolld.currency.symbol : ""
   var data = '<tr>' + 
@@ -111,17 +110,8 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
 
   data = data + '</td></tr>';
   var row = $(target_table + '> tbody:last').append(data);
-  
-  if(count == totalCount) {
-    row2 = $(target_table + '> tbody:last').append(
-      '<tr>' + 
-        '<td colspan="4" style="text-align: right;">Total: </td>' +
-        '<td colspan="3">' + (payroll.total).toFixed(2) + '</td>' +
-      '</tr>'
-    );
-  }
 
-  return row + row2;
+  return row;
 }
 
 // Carga las planillas inactivas en una tabla
