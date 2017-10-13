@@ -4,6 +4,7 @@ class Payroll < ActiveRecord::Base
   belongs_to :payroll_type
   belongs_to :deduction_payment
   belongs_to :company
+  belongs_to :currency
   has_many :deduction_payrolls, :dependent => :destroy
   has_many :deductions, :through => :deduction_payrolls
 
