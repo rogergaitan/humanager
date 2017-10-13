@@ -702,6 +702,7 @@ es:
           state: Cerrar
           num_oper: Numero de Operación
           company_id: Compañia
+          currency_id: Moneda
         payroll_log:
           date: Fecha
           time_worked: Tiempo trabajado
