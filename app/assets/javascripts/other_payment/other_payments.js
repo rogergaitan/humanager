@@ -2,8 +2,6 @@ var op = {};
 
 
 $(document).ready(function() {
-
-  var debit_account = []
 	/*********************************************************************************************************************************************************/
 	/* E V E N T S */
 	/*********************************************************************************************************************************************************/
@@ -178,6 +176,7 @@ $(document).ready(function() {
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
 
   // Carga el arbol de cuentas de credito
+  treeviewhr.cc_tree(debit_account, true);
   $('.expand_tree').click(treeviewhr.expand);
 
   $('#list').on({
