@@ -125,8 +125,9 @@ class PayrollsController < ApplicationController
   # Closes a payroll and performs the necessary calculations
   def close_payroll
     payroll_id = params[:payroll_id]
+    exchange_rate = params[:exchange_rate]
 
-    @result = Payroll.close_payroll(payroll_id)
+    @result = Payroll.close_payroll(payroll_id, exchange_rate)
 
     respond_to do |format|
       format.json { render json: @result }

@@ -37,7 +37,7 @@ class Payroll < ActiveRecord::Base
   # Close the payroll
   def self.close_payroll(payroll_id)
 
-    payroll_log = PayrollLog.find_by_payroll_id(payroll_id)
+    payroll_log = PayrollLog.find_by_payroll_id(payroll_id, exchange_rate)
     list_employees_salary = get_salary_empoyees(payroll_log)
     list_other_payment = get_other_payment(list_employees_salary, payroll_log)
     list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment)
@@ -62,6 +62,8 @@ class Payroll < ActiveRecord::Base
         # Other Payments
         save_other_payment_payments(date, payroll_id, list_other_payment)
 
+        payroll_log.update_attributes :exchange_rate => exchange_rate
+        
         p = payroll_log.payroll
         p.update_attributes(:state => false)
 
