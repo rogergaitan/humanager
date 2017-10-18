@@ -255,7 +255,7 @@ $(jQuery(document).ready(function($) {
     e.preventDefault();
     
     //validate at least one row is filled
-    if($(".items_purchase_orders_form").length == 0 ) {
+    if($("#accordion").find("tr[id^=tr_]").length == 0 ) {
       resources.PNotify('Planilla', "Debe llenar al menos una fila", 'info');
       return false;
     }
