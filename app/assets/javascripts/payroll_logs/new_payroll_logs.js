@@ -30,7 +30,7 @@ $(jQuery(document).ready(function($) {
     performance_wrong_format: 'Rendimiento formato incorrecto',
     date_not_found: 'Fecha no seleccionada',
     employees_duplicated: 'Empleados con datos duplicados: ',
-    last_line: 'Por favor elimine o save su última línea',
+    last_line: 'Por favor elimine o guarde su última línea',
     incomplete_data: 'Datos incompletos.',
     perf_not_found: 'La labor indicada para el rendimiento no ha sido registrada, no se puede agregar el dato.',
     success_update: 'Actualización con Éxito.',

@@ -427,7 +427,7 @@ pl.getTemporalData = function() {
 }
 
 pl.setSubTotalByRow = function(tmpData) {
-	var cost = parseFloat(tmpData.task.mlaborcost);
+	var cost = parseFloat(tmpData.task.cost);
 	var hours = parseFloat(tmpData.time_worked);
 	var payment = parseFloat(tmpData.type_payment_factor);
 	return cost*hours*payment;
@@ -535,13 +535,13 @@ pl.addNewColumn = function(employee_id, data) {
 	filterData.push(data.date); // Date
 	filterData.push(data.task.itask); // Task - Code
 	filterData.push(data.task.ntask); // Task
-	filterData.push(data.task.mlaborcost); // Task - Cost
+	filterData.push(data.task.cost); // Task - Cost
 	filterData.push(data.task.nunidad); // Task - Unit
 	filterData.push(data.time_worked); // Quantity
 	filterData.push(data.cc.icost_center); // CC - Code
 	filterData.push(data.cc.name_cc); // CC
 	filterData.push(data.performance); // Performance
-	filterData.push(data.task.unit_performance); // Performance - Unit
+	filterData.push(data.task.nunidad); // Performance - Unit
 	filterData.push(data.type_payment); // Payment Type
 	filterData.push(resources.prettyNumber(data.subtotal)); // Total per row
 
@@ -781,7 +781,7 @@ pl.getLastFingering = function() {
 	}
 
 	$('html,body').animate({
-        scrollTop: $(that).offset().top
+        scrollTop: $(that).offset.top
     }, 1000);
 
 	$(that).pulsate({

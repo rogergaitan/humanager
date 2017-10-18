@@ -2,7 +2,7 @@
 /* Seach Employee By Code */
 /**************************************************************************************/
 pl.searchEmployeeByCode = function() {	
-
+  
 	$(pl.current_employee).find('#search_code_employee').select2({
 		placeholder: "#",
 		minimumInputLength: 1,
@@ -410,7 +410,7 @@ pl.setValuesFromSearch = function(type, object) {
 			$(that).removeClass('select2-default');
 			// Set ID, Costs, Unidad, Unit performance
 			$(pl.current_task).find('input:hidden[id*=_task_id]').val(object.id);
-			$(pl.current_task).find('input:hidden[id*=_task_total]').val(object.mlaborcost);
+			$(pl.current_task).find('input:hidden[id*=_task_total]').val(object.cost);
 			$(pl.current_task).find('input:hidden[id*=_task_unidad]').val(object.nunidad);
 		break;
 	}
