@@ -1,6 +1,6 @@
 class PayrollLogsController < ApplicationController
   load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit]
+  before_filter :resources, :only => [:new, :edit, :update]
   skip_before_filter :verify_authenticity_token, :only => [:set_custom_update]
 
   before_filter :only => [:edit, :update] do |controller|
@@ -46,7 +46,7 @@ class PayrollLogsController < ApplicationController
 
     respond_to do |format|
       if @payroll_log.save
-        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully created.' }
+        format.html { redirect_to payrolls_path, notice: 'Planilla creada correctamente.' }
         format.json { render json: @payroll_log, status: :created, location: @payroll_log }
       else
         format.html { render action: "new" }
@@ -59,6 +59,7 @@ class PayrollLogsController < ApplicationController
   # PUT /payroll_logs/1.json
   def update
     @payroll_log = PayrollLog.find(params[:id])
+    @result = PayrollLog.history(@payroll_log.id)
 
     respond_to do |format|
       if @payroll_log.update_attributes(params[:payroll_log])
@@ -69,7 +70,7 @@ class PayrollLogsController < ApplicationController
           format.html { redirect_to :action => "edit", :id => @payroll_log.id }
         end
 
-        format.html { redirect_to payrolls_path, notice: 'Payroll log was successfully updated.' }
+        format.html { redirect_to payrolls_path, notice: 'Planilla actualizada correctamente.' }
         format.json { head :no_content }
 
       else
