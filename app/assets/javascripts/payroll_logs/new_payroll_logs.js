@@ -254,6 +254,12 @@ $(jQuery(document).ready(function($) {
   $("input[name='commit']").click(function(e) {
     e.preventDefault();
     
+    //validate at least one row is filled
+    if($(".items_purchase_orders_form").length == 0 ) {
+      resources.PNotify('Planilla', "Debe llenar al menos una fila", 'info');
+      return false;
+    }
+    
     var currentEmployees = $(pl.current_save_employees).length;
     var rowIsDisabled = $(pl.current_payments_type+' select[id*=_payment_type_id]').parent('div').hasClass('a-not-active');
 
@@ -261,7 +267,8 @@ $(jQuery(document).ready(function($) {
       resources.PNotify('Planilla', pl.messages.last_line, 'info');
     } else {
       pl.ajaxUpdatePerformance();
-    }    
+    } 
+    
   });
 
   // Click to apply general performance by Task
