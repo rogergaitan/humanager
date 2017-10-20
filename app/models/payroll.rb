@@ -35,12 +35,12 @@ class Payroll < ActiveRecord::Base
   #	select(['payroll_type', 'description']) }
 
   # Close the payroll
-  def self.close_payroll(payroll_id)
-
-    payroll_log = PayrollLog.find_by_payroll_id(payroll_id, exchange_rate)
-    list_employees_salary = get_salary_empoyees(payroll_log)
+  def self.close_payroll(payroll_id, exchange_rate)
+    payroll_log = PayrollLog.includes(payroll: [:currency]).find_by_payroll_id(payroll_id)
+    payroll_currency = payroll_log.payroll.currency.currency_type
+    list_employees_salary = get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
     list_other_payment = get_other_payment(list_employees_salary, payroll_log)
-    list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment)
+    list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment, payroll_currency, exchange_rate)
     list_employees_deductions = get_deductions_employees(list_employees_salary, payroll_log)
     list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
@@ -78,15 +78,17 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get the salary of each employee
-  def self.get_salary_empoyees(payroll_log)
+  def self.get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
     list_employees_salary = {}
-
-    payroll_log.payroll_histories.each do |h|
+    
+    payroll_log.payroll_histories.includes(task: [:currency]).each do |h|
       h.payroll_employees.each do |e|
+        task_currency = h.task.currency.currency_type
+  
         if list_employees_salary.has_key?(e.employee_id)
-          list_employees_salary[e.employee_id] += h.total.to_f
+          list_employees_salary[e.employee_id] += check_currency payroll_currency, task_currency, h.total.to_f, exchange_rate
         else
-          list_employees_salary[e.employee_id] = h.total.to_f
+          list_employees_salary[e.employee_id] = check_currency payroll_currency, task_currency, h.total.to_f, exchange_rate
         end
       end # end each h.payroll_employees
     end # end each list_histories
@@ -101,24 +103,21 @@ class Payroll < ActiveRecord::Base
     list_employee_other_payments = {}
     
     list_employees.each do |id, salary|
-
-      OtherPaymentEmployee.where(:employee_id => id).each do |ope|
-        
+      OtherPaymentEmployee.where(:employee_id => id).each do |ope|    
         if ope.other_payment.state === CONSTANTS[:PAYROLLS_STATES]['ACTIVE'].to_sym and !ope.completed
-
+                    
           other_payment_details['other_payment_employee_id'] = ope.id
           other_payment_details['other_payment_id'] = ope.other_payment.id
-          other_payment_details['other_payment_name'] = ope.other_payment.description
+          other_payment_details['other_payment_name'] = ope.other_payment.name
           other_payment_details['payment'] = 0
           other_payment_details['constitutes_salary'] = ope.other_payment.constitutes_salary
           other_payment_details['state'] = true
           other_payment_details['state_other_payment_employee'] = true
           add = true
 
-          case ope.other_payment.deduction_type.to_s
+          case ope.other_payment.other_payment_type.to_s
             # Constante
             when CONSTANTS[:DEDUCTION]["CONSTANTE"].to_s
-
               if ope.other_payment.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
                 # porcentual
                 if ope.other_payment.calculation_type.to_s == CONSTANTS[:CALCULATION_TYPE]['PORCENTUAL'].to_s
@@ -168,20 +167,19 @@ class Payroll < ActiveRecord::Base
   end
 
   # Sum other payments to the salary only if ("is_salary") 
-  def self.sum_other_payments_salary(list_employees, list_other_payments)
+  def self.sum_other_payments_salary(list_employees, list_other_payments, payroll_currency, exchange_rate)
 
     new_list_employee_salary = {}
     
     list_employees.each do |employee_id, salary|
-      
       new_list_employee_salary[employee_id] = salary.to_f
-      
-      if list_other_payments.key?(employee_id)
+
+      if list_other_payments.key?(employee_id)   
         list_other_payments[employee_id].each do |other_payment|
           if other_payment['constitutes_salary']
             if new_list_employee_salary.has_key?(employee_id)
               new_list_employee_salary[employee_id] += other_payment['payment'].to_f
-            else
+            else              
               new_list_employee_salary[employee_id] = other_payment['payment'].to_f
             end
           end
@@ -334,15 +332,15 @@ class Payroll < ActiveRecord::Base
     list_employees_work_benefits
   end
 
-  # Cheack salaries between deductions
-  def self.check_salaries_deductions(list_saliaries, list_deductions)
+  # Check salaries between deductions
+  def self.check_salaries_deductions(list_salaries, list_deductions)
     
     detail_report = {}
     total_salary = 0
     
     list_deductions.each do |id, details|
 
-      total_salary = list_saliaries[id]
+      total_salary = list_salaries[id]
       total_deductions = 0
       detail_employee = {}
 
@@ -403,6 +401,8 @@ class Payroll < ActiveRecord::Base
         work_benefits_payments.percentage = benefits['percentage']
         work_benefits_payments.payment = benefits['payment']
         work_benefits_payments.save
+        byebug
+        payroll_log.payroll_total += deduction['payment']
       end # End each work_benefits
     end # End each list_employees_work_benefits
   end
@@ -818,6 +818,23 @@ class Payroll < ActiveRecord::Base
     #.where("payrolls.start_date BETWEEN ? and ? or payrolls.end_date BETWEEN ? and ? and payrolls.company_id = '?' and payrolls.state = ?",
       #DateTime.parse(d_start), DateTime.parse(d_end), DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
     # .where(where)
+  end
+  
+  #checks if is necesary to convert currency based on the payroll currency type
+  def self.check_currency(payroll_currency, other_currency, amount, exchange_rate)
+    if payroll_currency != other_currency
+      convert_currency(other_currency, amount, exchange_rate)
+    else
+      amount
+    end
+  end
+  
+  def self.convert_currency(currency, amount, exchange_rate)
+    if currency == :local
+      amount * exchange_rate
+    elsif currency == :foreign
+      amount / exchange_rate  
+    end
   end
 
 end
