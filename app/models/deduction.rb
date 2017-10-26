@@ -28,6 +28,8 @@ class Deduction < ActiveRecord::Base
   belongs_to :ledger_account
   
   belongs_to :deduction_currency, :class_name => "Currency"
+  belongs_to :maximum_deduction_currency, :class_name => "Currency"
+  belongs_to :amount_exhaust_currency, :class_name => "Currency"
 
   validates :description, presence: true,  length: { maximum: 30 }
   
