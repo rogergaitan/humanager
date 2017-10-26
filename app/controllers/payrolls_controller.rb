@@ -112,7 +112,7 @@ class PayrollsController < ApplicationController
 
   # Reabre una o un conjunto de planillas cerradas
   def reabrir
-    @payroll = JSON.parse(params[:reabrir_planilla])
+    @payroll = params[:reabrir_planilla]
 
     @payroll.each do |planilla|
       p = Payroll.find(planilla)
