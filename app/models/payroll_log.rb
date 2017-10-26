@@ -5,7 +5,7 @@ class PayrollLog < ActiveRecord::Base
   has_many :payroll_histories, :dependent => :destroy
   
   accepts_nested_attributes_for :payroll_histories, :allow_destroy => true, :reject_if => :histories_rejectable?
-  attr_accessible :id, :payroll_id, :payroll_histories_attributes, :payroll_date, :payroll_total, :continue_editing, :performance
+  attr_accessible :id, :payroll_id, :payroll_histories_attributes, :payroll_date, :payroll_total, :continue_editing, :performance, :exchange_rate
   attr_accessor :continue_editing, :performance
 
   def self.history(id)
