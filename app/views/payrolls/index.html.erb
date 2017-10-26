@@ -52,13 +52,16 @@
           
           <div id="payroll_total"></div>
           <input type="hidden" id="close_payroll_payrolls_path" value="<%= close_payroll_payrolls_path %>">
-
+          
+           <% if can? :close_payroll, Payroll %>
+              <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
+            <% end %>
         </div>
 
         <div class="tab-pane" id="tab2">
           <h2>Planillas Cerradas</h2>
           <hr>
-          <table class="table table-striped" id="inactivas">
+          <table class="table table-bordered" id="inactivas">
             <thead>
               <tr>
                 <th><%= model_class.human_attribute_name(:payroll_type_id) %></th>
@@ -78,17 +81,7 @@
           <% end %>
         </div>
       </div>
-
-      <div class="panel-footer">
-        <div class="row">
-          <div class="col-sm-8 ">
-            <% if can? :close_payroll, Payroll %>
-              <button id="cerrar" class="btn"> Cerrar Seleccionadas</button>
-            <% end %>
-          </div>
-        </div>
-      </div>        
-
+      
     </div>
   </div>
 </div>
@@ -123,5 +116,32 @@
   </div>
   <div class="modal-footer">
     <button class="btn delete-accounts" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+  </div>
+</div>
+
+<div id="close_payroll_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+        <h4 class="modal-title">Introduzca la tasa de cambio</h4>
+      </div>
+      
+      <div class="modal-body">
+        <%= form_tag "#", :data => {:parsley_validate => true} do %>
+          
+          <div class="form-group">
+            <%= label_tag :exchange_rate, "Tasa de cambio", :class=> "control-label" %>
+            <%= text_field_tag :exchange_rate, '', :class =>  "form-control", :required => true %>
+          </div>
+          
+          <%= button_tag "Cancelar", :class => "btn btn-default", :type => :button, data: {dismiss: "modal"} %>
+          <%= button_tag "Cerrar planilla", :class => "btn btn-primary" %>
+          
+        <% end %>
+      </div>
+      
+    </div>
   </div>
 </div>

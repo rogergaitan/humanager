@@ -8,11 +8,18 @@ $(document).ready(function() {
 
   $('#seleccion').click(Reactivar);
 
-  // Event click the button to close the payroll
   $('#cerrar').click(function() {
-
+    $("#close_payroll_modal").modal("show");
+  });
+  
+  $('#close_payroll_modal button[type=submit]').click(function (e) {
+    
     var id = $('#activas .ckActive:checked').val();
-    payroll.closePayrollSelected(id);
+    var exchangeRate = $('#exchange_rate').val();
+    
+    currencyMask('#exchange_rate');
+    
+    payroll.closePayrollSelected(id, exchangeRate);
   });
 	
   // Enable and Disabled the checkbox
@@ -41,7 +48,12 @@ $(document).ready(function() {
       location.reload();
     }
   });
-
+  
+  //do not submit close payroll modal form
+  window.Parsley.on('form:submit', function() {
+    return false;
+  });
+  
 });
 
 
@@ -160,17 +172,19 @@ date_format = function(date) {
 };
 
 // Process to close a payroll Selected
-payroll.closePayrollSelected = function(payroll_id) {
+payroll.closePayrollSelected = function(payrollId, exchangeRate) {
 
   var url_close_payroll = $('#close_payroll_payrolls_path').val();
-
-  if( payroll.confirm() ) {
+  
+  if(payrollId != null && exchangeRate != "") {
+    $('#close_payroll_modal').modal('hide');
     
     $.ajax({
       type: "POST",
       url: url_close_payroll,
       data: {
-        payroll_id: payroll_id
+        payroll_id: payrollId,
+        exchange_rate: exchangeRate
       },
       success: function(data) {
         
@@ -182,7 +196,6 @@ payroll.closePayrollSelected = function(payroll_id) {
         } else {
           payroll.show_details_erros(data['data']);
         }
-
       }
     });
 
@@ -243,25 +256,30 @@ payroll.send_to_firebird = function(payroll_id) {
 // Reabre planillas cerradas
 function Reactivar() {
 
-  if (Confirmar() == true ) {
-    var planillas = new Array();
+  var planillas = new Array();
     $('#inactivas tbody tr td:nth-child(6) .ck').each(function () {
       if( $(this).is(":checked") ) {
         planillas.push($(this).val());
-      };
-    });
-
-    $.ajax({
-      type: "POST",
-      url: "/payrolls/reabrir",
-      data: { 
-        reabrir_planilla: JSON.stringify(planillas) 
-      },
-      success: function() { 
-        index(); 
       }
     });
-  };
+  
+  if(planillas.length >= 1) {
+    if (payroll.confirm()) {
+   
+      $.ajax({
+        type: "POST",
+        url: "/payrolls/reabrir",
+        beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+        data: { 
+          reabrir_planilla: planillas
+        },
+        success: function() { 
+          resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
+          setTimeout('location.reload()', 5000);
+        }
+      });
+    }  
+  }
 }
 
 // Confirm the action to rum the user
@@ -269,4 +287,13 @@ payroll.confirm = function () {
 
   var resp = confirm("Realmente desea ejecutar esta acción ?");
   return resp;
+}
+
+function currencyMask(selector) {
+  $(selector).mask("FNNNNNNNNN.NN", {
+    translation: {
+      'N': {pattern: /\d/, optional: true},
+      'F': {pattern: /\d/}
+    }
+  });    
 }
