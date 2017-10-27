@@ -919,5 +919,27 @@ class Payroll < ActiveRecord::Base
       amount
     end
   end
-
+  
+  def self.reopen_payroll(id)
+    payroll = Payroll.includes(:payroll_log, :deduction_payment, :other_payment_payment, :work_benefits_payments).find id
+    
+    transaction do
+    
+      payroll.deduction_payment.each do |deduction_payment| 
+        deduction_payment.deduction_employee.deduction.update_attribute :state, true
+        deduction_payment.deduction_employee.update_attribute :completed, true
+        deduction_payment.destroy
+      end
+      
+      payroll.other_payment_payment.each do |other_payment|
+        other_payment.other_payment_employee.other_payment.update_attribute :state, false
+        other_payment.other_payment_employee.update_attribute :completed,  false
+        other_payment.destroy
+      end
+      
+      payroll.work_benefits_payments.clear
+      
+      payroll.payroll_log.update_attributes :exchange_rate => nil,  :payroll_total => nil
+    end
+  end
 end
