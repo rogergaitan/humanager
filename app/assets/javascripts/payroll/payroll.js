@@ -9,7 +9,9 @@ $(document).ready(function() {
   $('#seleccion').click(Reactivar);
 
   $('#cerrar').click(function() {
-    $("#close_payroll_modal").modal("show");
+    if($('#activas .ckActive:checked').length >= 1) {
+      $("#close_payroll_modal").modal("show");
+    }
   });
   
   $('#close_payroll_modal button[type=submit]').click(function (e) {
