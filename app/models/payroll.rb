@@ -36,6 +36,7 @@ class Payroll < ActiveRecord::Base
 
   # Close the payroll
   def self.close_payroll(payroll_id, exchange_rate)
+    exchange_rate = exchange_rate.to_f
     payroll_log = PayrollLog.includes(payroll: [:currency]).find_by_payroll_id(payroll_id)
     payroll_currency = payroll_log.payroll.currency.currency_type
     list_employees_salary = get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
