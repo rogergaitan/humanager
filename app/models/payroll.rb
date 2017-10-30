@@ -941,7 +941,8 @@ class Payroll < ActiveRecord::Base
         work_benefits_payment.destroy
       end
       
-      payroll.payroll_log.update_attributes :exchange_rate => nil,  :payroll_total => nil
+      payroll.payroll_log.update_attributes :exchange_rate => nil
+      payroll.update_column :state, true
     end
   end
 end
