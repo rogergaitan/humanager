@@ -10,8 +10,8 @@ class PayrollLog < ActiveRecord::Base
 
   def self.history(id)
   	
-  	@employees = Entity.joins(:employee => {:payroll_employees => :payroll_history})
-  	.where('payroll_histories.payroll_log_id = ?', id)
+    @employees = Entity.joins(:employee => {:payroll_employees => :payroll_history})
+    .where('payroll_histories.payroll_log_id = ?', id)
     .select('DISTINCT employees.id, entities.name, entities.surname').order('entities.surname')
 
     result = {}
