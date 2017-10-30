@@ -924,7 +924,10 @@ class Payroll < ActiveRecord::Base
   end
   
   def self.reopen_payroll(id)
-    payroll = Payroll.includes(:payroll_log, :deduction_payment, :other_payment_payment, :work_benefits_payments).find id
+    payroll = Payroll.includes(:payroll_log, :work_benefits_payments, :work_benefits_payments,
+                        :deduction_payment => {:deduction_employee => :deduction}, 
+                        :other_payment_payment => {:other_payment_employee => :other_payment})
+                        .find id
     
     transaction do
     
