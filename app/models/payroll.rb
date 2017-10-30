@@ -37,7 +37,7 @@ class Payroll < ActiveRecord::Base
   # Close the payroll
   def self.close_payroll(payroll_id, exchange_rate)
     exchange_rate = exchange_rate.to_f
-    payroll_log = PayrollLog.includes(payroll: [:currency]).find_by_payroll_id(payroll_id)
+    payroll_log = PayrollLog.includes(payroll: :currency).find_by_payroll_id(payroll_id)
     payroll_currency = payroll_log.payroll.currency.currency_type
     list_employees_salary = get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
     list_other_payment = get_other_payment(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
@@ -57,13 +57,13 @@ class Payroll < ActiveRecord::Base
         date = payroll_log.payroll.payment_date
 
         # Deductions
-        deduction_payments = save_deduction_payments(date, payroll_id, list_employees_deductions)
+        deduction_payments = save_deduction_payments(date, payroll_log.payroll, list_employees_deductions)
         
         # Work Benefits
-        work_benefit_payments = save_work_benefits_payments(date, payroll_id, list_employees_work_benefits)
+        work_benefit_payments = save_work_benefits_payments(date, payroll_log.payroll, list_employees_work_benefits)
         
         # Other Payments
-        other_payments = save_other_payment_payments(date, payroll_id, list_other_payment)
+        other_payments = save_other_payment_payments(date, payroll_log.payroll, list_other_payment)
         
         total = (salaries + work_benefit_payments + other_payments) - deduction_payments
     
@@ -427,7 +427,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save the deductions information
-  def self.save_deduction_payments(date, payroll_id, list_employees_deductions)
+  def self.save_deduction_payments(date, payroll, list_employees_deductions)
     payments = 0
     list_employees_deductions.each do |id, deductions|
 
@@ -439,7 +439,8 @@ class Payroll < ActiveRecord::Base
         deduction_payment.previous_balance = deduction['previous_balance']
         deduction_payment.payment = deduction['payment']
         deduction_payment.current_balance = deduction['current_balance']
-        deduction_payment.payroll_id = payroll_id.to_i
+        deduction_payment.payroll = payroll
+        deduction_payment.currency = payroll.currency
         deduction_payment.save
         payments += deduction['payment']
 
@@ -458,7 +459,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save the work benefits
-  def self.save_work_benefits_payments(date, payroll_id, list_employees_work_benefits)
+  def self.save_work_benefits_payments(date, payroll, list_employees_work_benefits)
     payments = 0
     
     list_employees_work_benefits.each do |id, work_benefits|
@@ -467,7 +468,8 @@ class Payroll < ActiveRecord::Base
 
         work_benefits_payments = WorkBenefitsPayment.new
         work_benefits_payments.employee_benefits_id = benefits['employee_benefits_id'].to_i
-        work_benefits_payments.payroll_id = payroll_id.to_i
+        work_benefits_payments.payroll = payroll
+        work_benefits_payments.currency = payroll.currency
         work_benefits_payments.payment_date = date
         work_benefits_payments.payment = benefits['payment']
         work_benefits_payments.save
@@ -478,7 +480,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save the other payments
-  def self.save_other_payment_payments(date, payroll_id, list_other_payments)
+  def self.save_other_payment_payments(date, payroll, list_other_payments)
     payments = 0
     
     list_other_payments.each do |id, other_payments|
@@ -487,7 +489,8 @@ class Payroll < ActiveRecord::Base
 
         other_payment_payments = OtherPaymentPayment.new
         other_payment_payments.other_payment_employee_id = other_payment['other_payment_employee_id']
-        other_payment_payments.payroll_id = payroll_id
+        other_payment_payments.payroll = payroll
+        other_payment_payments.currency = payroll.currency
         other_payment_payments.payment_date = date
         other_payment_payments.payment = other_payment['payment']
         other_payment_payments.is_salary = other_payment['constitutes_salary']
