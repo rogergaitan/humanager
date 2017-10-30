@@ -445,7 +445,7 @@ class Payroll < ActiveRecord::Base
 
         if deduction['state'] == false
           d = Deduction.find(deduction['deduction_id'])
-          d.update_attributes(:state => CONSTANTS[:PAYROLLS_STATES]['COMPLETED'])
+          d.update_column(:state => CONSTANTS[:PAYROLLS_STATES]['COMPLETED'])
         end
 
         if deduction['state_deduction_employee'] == false
@@ -496,7 +496,7 @@ class Payroll < ActiveRecord::Base
 
         if other_payment['state'] == false
           op = OtherPayment.find(other_payment['other_payment_id'])
-          op.update_attributes(:state => CONSTANTS[:PAYROLLS_STATES]['COMPLETED'])
+          op.update_column(:state => CONSTANTS[:PAYROLLS_STATES]['COMPLETED'])
         end
 
         if other_payment['state_other_payment_employee'] == false
@@ -896,7 +896,7 @@ class Payroll < ActiveRecord::Base
   #checks if is necesary to convert currency based on the payroll currency type
   def self.check_currency(payroll_currency, other_currency, amount, exchange_rate)
     if payroll_currency != other_currency
-      convert_currency(other_currency, amount, exchange_rate)
+      convert_currency other_currency, amount, exchange_rate
     else
       amount
     end
@@ -926,18 +926,20 @@ class Payroll < ActiveRecord::Base
     transaction do
     
       payroll.deduction_payment.each do |deduction_payment| 
-        deduction_payment.deduction_employee.deduction.update_attribute :state, true
-        deduction_payment.deduction_employee.update_attribute :completed, true
+        deduction_payment.deduction_employee.deduction.update_column :state, :active
+        deduction_payment.deduction_employee.update_attribute :completed, false
         deduction_payment.destroy
       end
       
       payroll.other_payment_payment.each do |other_payment|
-        other_payment.other_payment_employee.other_payment.update_attribute :state, false
+        other_payment.other_payment_employee.other_payment.update_column :state, :active
         other_payment.other_payment_employee.update_attribute :completed,  false
         other_payment.destroy
       end
       
-      payroll.work_benefits_payments.clear
+      payroll.work_benefits_payments.each do |work_benefits_payment|
+        work_benefits_payment.destroy
+      end
       
       payroll.payroll_log.update_attributes :exchange_rate => nil,  :payroll_total => nil
     end
