@@ -7,4 +7,5 @@ class WorkBenefitsPayment < ActiveRecord::Base
   
   belongs_to :employee_benefit, foreign_key: 'employee_benefits_id'
   belongs_to :payroll
+  belongs_to :currency
 end
