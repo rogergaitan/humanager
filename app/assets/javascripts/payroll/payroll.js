@@ -56,6 +56,11 @@ $(document).ready(function() {
     return false;
   });
   
+  //only allow one closed payroll selection at the same time
+  $('#inactivas').on("click", "input", function() {
+    $('#inactivas input[type=checkbox]').not($(this)).prop('checked', false);
+  })
+  
 });
 
 
@@ -257,15 +262,10 @@ payroll.send_to_firebird = function(payroll_id) {
 
 // Reabre planillas cerradas
 function Reactivar() {
-
-  var planillas = new Array();
-    $('#inactivas tbody tr td:nth-child(6) .ck').each(function () {
-      if( $(this).is(":checked") ) {
-        planillas.push($(this).val());
-      }
-    });
   
-  if(planillas.length >= 1) {
+  payrollId = $("#inactivas input[type=checkbox]:checked");
+  
+  if(payrollId.length === 1) {
     if (payroll.confirm()) {
    
       $.ajax({
@@ -273,7 +273,7 @@ function Reactivar() {
         url: "/payrolls/reabrir",
         beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
         data: { 
-          reabrir_planilla: planillas
+          payroll_id: payrollId.val()
         },
         success: function() { 
           resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
