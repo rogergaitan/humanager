@@ -184,7 +184,6 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.datetime "created_at",                                                                                                                            :null => false
     t.datetime "updated_at",                                                                                                                            :null => false
     t.decimal  "deduction_value",                                                                   :precision => 10, :scale => 2
-    t.enum     "state",                         :limit => [:completed, :active],                                                   :default => :active
     t.integer  "amount_exhaust_currency_id"
     t.integer  "deduction_currency_id"
     t.integer  "creditor_id"
