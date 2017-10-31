@@ -139,7 +139,7 @@ es:
             attributes:
               description:
                 blank: Este campo no puede quedar en blanco
-                taken: La descripción especificada ya existe
+                taken: especificado ya existe
               cod_doc_payroll_support:
                 blank: Este campo no puede quedar en blanco
               cod_doc_accounting_support_mov:

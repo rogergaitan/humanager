@@ -1,6 +1,7 @@
 class PayrollTypesController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :update, :create]
+  skip_load_and_authorize_resource :only => [:validate_description_uniqueness]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(PayrollType, params[:id])
@@ -76,6 +77,27 @@ class PayrollTypesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to payroll_types_url, notice: message }
       format.json { head :no_content }
+    end
+  end
+  
+  def validate_description_uniqueness
+    if params[:id].empty?
+      payroll = PayrollType.new :description => params[:payroll_type][:description]
+    else
+      payroll = PayrollType.find params[:id]
+      payroll.description = params[:payroll_type][:description]
+    end
+    
+    payroll.valid?
+    
+    if payroll.errors[:description].any?
+      status = 404
+    else
+      status = 200
+    end
+    
+    respond_to do |format|
+      format.json { render nothing: true,  status: status }
     end
   end
 

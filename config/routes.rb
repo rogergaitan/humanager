@@ -110,7 +110,11 @@ Reasapp::Application.routes.draw do
 
   resources :work_benefits
 
-  resources :payroll_types
+  resources :payroll_types do
+    collection do
+      get :validate_description_uniqueness  
+    end
+  end
 
   resources :costs_centers do
     collection do

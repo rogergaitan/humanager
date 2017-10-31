@@ -32,7 +32,10 @@
           <div class="form-group">
             <%= f.label :description, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :description, :class => 'form-control', :required => true, :maxlength => 30 %>
+              <%= f.text_field :description, :class => 'form-control', :required => true, :maxlength => 30, 
+              :data => { :parsley_remote => validate_description_uniqueness_payroll_types_url, 
+              :parsley_remote_options => {:data => { :id => @payroll_type.id }},
+              :parsley_remote_message => "Nombre especificado ya existe." }  %>
               <div class="help-block with-errors"></div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>
             </div>
@@ -41,7 +44,8 @@
           <div class="form-group">
             <%= f.label :payroll_type, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.select(:payroll_type, translate_enum(:payroll_type), {:include_blank => false}, html_options = {:class => 'form-control'}) %>
+              <%= f.select(:payroll_type, translate_enum(:payroll_type), {:include_blank => false}, 
+                html_options = {:class => 'form-control', :required => true}) %>
             </div>
           </div>
           
