@@ -25,7 +25,8 @@ $(document).ready( function() {
         200: function(e, xhr, settings) {
           resources.PNotify('Compañia', 'Actualizada con exito', 'success');
           
-          if ($("a:contains(Cancelar)").attr("href")  == "/payment_types") { //redirect to index of payment types
+          //redirect to index of payment types when user is located on payment types form according to requisites
+          if ($("a:contains(Cancelar)").attr("href")  == "/payment_types") {
             location.assign($("a:contains(Cancelar)").attr("href"));
           }
       

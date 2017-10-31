@@ -9,7 +9,9 @@ class IrTableValue < ActiveRecord::Base
   validate :from_until_values
   
   def  from_until_values
-    errors.add :from, "valor no puede ser mayor o igual al del campo Hasta." if self.from >= self.until
+    if self.from.present? && self.until.present?
+      errors.add :from, "valor no puede ser mayor o igual al del campo Hasta." if self.from >= self.until
+    end
   end
   
 end

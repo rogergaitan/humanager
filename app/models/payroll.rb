@@ -932,14 +932,26 @@ class Payroll < ActiveRecord::Base
     transaction do
     
       payroll.deduction_payment.each do |deduction_payment| 
-        deduction_payment.deduction_employee.deduction.update_column :state, :active
-        deduction_payment.deduction_employee.update_attribute :completed, false
+        if deduction_payment.deduction_employee.deduction.state == :completed
+          deduction_payment.deduction_employee.deduction.update_column :state, :active
+        end
+        
+        if deduction_payment.deduction_employee.completed == true
+          deduction_payment.deduction_employee.update_column :completed, false
+        end
+        
         deduction_payment.destroy
       end
       
       payroll.other_payment_payment.each do |other_payment|
-        other_payment.other_payment_employee.other_payment.update_column :state, :active
-        other_payment.other_payment_employee.update_attribute :completed,  false
+        if other_payment.other_payment_employee.other_payment.state == :completed
+          other_payment.other_payment_employee.other_payment.update_column :state, :active
+        end
+        
+        if other_payment.other_payment_employee.completed == true
+          other_payment.other_payment_employee.update_column :completed,  false
+        end
+        
         other_payment.destroy
       end
       

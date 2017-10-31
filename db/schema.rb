@@ -13,6 +13,11 @@
 
 ActiveRecord::Schema.define(:version => 20171030173412) do
 
+  create_table "abamtdsops", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "addresses", :force => true do |t|
     t.integer  "entity_id"
     t.string   "address"
@@ -24,6 +29,12 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
   end
 
   add_index "addresses", ["entity_id"], :name => "index_addresses_on_entity_id"
+
+  create_table "avatars", :force => true do |t|
+    t.binary   "photo"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "bank_accounts", :force => true do |t|
     t.integer  "entity_id"
@@ -166,13 +177,20 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.decimal  "decimal",                                                                           :precision => 10, :scale => 2
     t.enum     "calculation_type",              :limit => [:percentage, :fixed]
     t.integer  "ledger_account_id"
+<<<<<<< Updated upstream
     t.enum     "state",                         :limit => [:completed, :active],                                                   :default => :active
+=======
+>>>>>>> Stashed changes
     t.string   "beneficiary_id"
     t.boolean  "pay_to_employee",                                                                                                  :default => true
     t.boolean  "individual",                                                                                                       :default => false
     t.datetime "created_at",                                                                                                                            :null => false
     t.datetime "updated_at",                                                                                                                            :null => false
     t.decimal  "deduction_value",                                                                   :precision => 10, :scale => 2
+<<<<<<< Updated upstream
+=======
+    t.enum     "state",                         :limit => [:completed, :active],                                                   :default => :active
+>>>>>>> Stashed changes
     t.integer  "amount_exhaust_currency_id"
     t.integer  "deduction_currency_id"
     t.integer  "creditor_id"
@@ -260,7 +278,7 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.boolean  "is_superior",                                                                                                                    :default => false
     t.boolean  "price_defined_work"
     t.integer  "number_employee"
-    t.string   "account_bncr",         :limit => 12
+    t.string   "account_bncr"
     t.decimal  "wage_payment",                                                                                    :precision => 10, :scale => 2
     t.datetime "created_at",                                                                                                                                        :null => false
     t.datetime "updated_at",                                                                                                                                        :null => false
@@ -657,6 +675,10 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "pruebas", :force => true do |t|
+    t.binary "photo"
+  end
+
   create_table "session_validations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "model_name_id"
@@ -699,6 +721,10 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.string   "nunidad"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+<<<<<<< Updated upstream
+=======
+    t.string   "name"
+>>>>>>> Stashed changes
     t.integer  "currency_id"
     t.decimal  "cost",        :precision => 10, :scale => 2
     t.string   "nactivity"

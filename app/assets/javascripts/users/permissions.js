@@ -28,8 +28,9 @@ $(document).ready(function() {
 		permissions.getPermissions(url, id);
 	});
 
-	$('#btn_save').on('click', function() {
-		permissions.savePermissions();
+	$('#btn_save').on('click', function(e) {
+    e.preventDefault();
+    permissions.savePermissions();
 	});
 
 	$("table[id^='category_'] thead input").change(function() {
@@ -175,8 +176,9 @@ permissions.sendInformation = function() {
 		error: function(data) {
 			console.log(data);
 		}
-	});
-	$(location).attr('href',urlRedirect);
+	})
+  
+  
 }
 
 permissions.getPermissions = function(url, id) {

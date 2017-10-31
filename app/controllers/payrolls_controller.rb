@@ -112,12 +112,8 @@ class PayrollsController < ApplicationController
 
   # Reabre una o un conjunto de planillas cerradas
   def reabrir
-    @payroll = params[:reabrir_planilla]
+    Payroll.reopen_payroll params[:payroll_id]
 
-    @payroll.each do |planilla|
-      p = Payroll.find(planilla)
-      p.update_attributes(:state => true)
-    end
     render :index
   end
 
