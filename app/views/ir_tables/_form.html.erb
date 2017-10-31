@@ -22,7 +22,10 @@
         <div class="form-group">
           <%= f.label :name, "Nombre", class: "col-sm-2 control-label" %>
           <div class="col-sm-3 form-group_">
-            <%= f.text_field :name, class: "form-control", required: true  %>
+            <%= f.text_field :name, class: "form-control", required: true, 
+              data: {parsley_remote: validate_name_uniqueness_ir_tables_path,
+              parsley_remote_options: {data: {id: @ir_table.id} },
+              parsley_remote_message: "Nombre especificado ya existe."}  %>
           </div>
         </div>
       

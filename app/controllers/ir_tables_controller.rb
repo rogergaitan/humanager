@@ -36,6 +36,27 @@ class IrTablesController < ApplicationController
     redirect_to ir_tables_path, notice: "Tabla IR eliminada correctamente."
   end
   
+  def validate_name_uniqueness
+    if params[:id].empty?
+      ir_table = IrTable.new name: params[:ir_table][:name]
+    else
+      ir_table = IrTable.find params[:id]
+      ir_table.name = params[:ir_table][:name]
+    end
+    
+    ir_table.valid?
+    
+    if ir_table.errors[:name].any?
+      status = 404
+    else
+      status = 200
+    end
+    
+    respond_to do |format|
+      format.json {render nothing: true, status: status}  
+    end
+  end
+  
   private 
   
     def set_ir_table

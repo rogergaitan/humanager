@@ -239,7 +239,11 @@ Reasapp::Application.routes.draw do
   
   resources :creditors, only: [:index]
   
-  resources :ir_tables
+  resources :ir_tables do
+    collection do
+      get :validate_name_uniqueness  
+    end
+  end
   
   resources :supports, only: [:index]
   
