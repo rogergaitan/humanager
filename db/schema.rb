@@ -177,20 +177,14 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.decimal  "decimal",                                                                           :precision => 10, :scale => 2
     t.enum     "calculation_type",              :limit => [:percentage, :fixed]
     t.integer  "ledger_account_id"
-<<<<<<< Updated upstream
     t.enum     "state",                         :limit => [:completed, :active],                                                   :default => :active
-=======
->>>>>>> Stashed changes
     t.string   "beneficiary_id"
     t.boolean  "pay_to_employee",                                                                                                  :default => true
     t.boolean  "individual",                                                                                                       :default => false
     t.datetime "created_at",                                                                                                                            :null => false
     t.datetime "updated_at",                                                                                                                            :null => false
     t.decimal  "deduction_value",                                                                   :precision => 10, :scale => 2
-<<<<<<< Updated upstream
-=======
     t.enum     "state",                         :limit => [:completed, :active],                                                   :default => :active
->>>>>>> Stashed changes
     t.integer  "amount_exhaust_currency_id"
     t.integer  "deduction_currency_id"
     t.integer  "creditor_id"
@@ -721,10 +715,7 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.string   "nunidad"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
-<<<<<<< Updated upstream
-=======
     t.string   "name"
->>>>>>> Stashed changes
     t.integer  "currency_id"
     t.decimal  "cost",        :precision => 10, :scale => 2
     t.string   "nactivity"
