@@ -39,8 +39,6 @@ $(document).ready(function() {
 
   // Autocomplete to Bank Account
   payrollType.autocompleteBackAccounts();
-  
-  $("form").parsley();
 });
 
 // Set the hidden field with the Id and show the text (Bank Account)
