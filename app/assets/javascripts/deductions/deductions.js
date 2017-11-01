@@ -317,6 +317,8 @@ $(document).ready(function() {
     	filterEmployees("superior", $(this).val());
   });
   
+  resources.alphaNumericMask('#deduction_description');
+  
 });
 
 /* F U N C T I O N S */

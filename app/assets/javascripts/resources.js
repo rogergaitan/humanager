@@ -171,5 +171,15 @@ $(document).ready(function() {
 	    }
 	  });
 	}
+	
+  resources.alphaNumericMask = function(selector) {
+    $(selector).mask('A'+ 'B'.repeat(30), {
+      translation: {
+        'A': {pattern: /[a-zA-Z]/},
+        'B': {pattern: /[a-zA-Z0-9 ]/}
+      }
+    })
+  }
+
 
 });
