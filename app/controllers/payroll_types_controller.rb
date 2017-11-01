@@ -82,15 +82,15 @@ class PayrollTypesController < ApplicationController
   
   def validate_description_uniqueness
     if params[:id].empty?
-      payroll = PayrollType.new :description => params[:payroll_type][:description]
+      payroll_type = PayrollType.new :description => params[:payroll_type][:description], company_id: current_user.company_id
     else
-      payroll = PayrollType.find params[:id]
-      payroll.description = params[:payroll_type][:description]
+      payroll_type = PayrollType.find params[:id]
+      payroll_type.description = params[:payroll_type][:description]
     end
     
-    payroll.valid?
+    payroll_type.valid?
     
-    if payroll.errors[:description].any?
+    if payroll_type.errors[:description].any?
       status = 404
     else
       status = 200
