@@ -10,7 +10,7 @@ class PayrollType < ActiveRecord::Base
   validates :cod_doc_accounting_support_mov, :cod_doc_payroll_support, :mask_doc_payroll_support, 
     :mask_doc_accounting_support_mov, :payroll_type, :calendar_color, :ledger_account_id, presence: true
 
-  belongs_to :company
+  belongs_to :company, :primary_key => "code"
   has_many :companies
 
   has_many :employees
@@ -22,4 +22,23 @@ class PayrollType < ActiveRecord::Base
   scope :tipo_planilla,->(company_id){select(['id','description','payroll_type']).where(:state => 1, company_id: company_id ).order('payroll_type')}
   #scope :tipo_planilla, lambda {|type_payroll| where("payroll_type = ?", type_payroll).
   #select(['id', 'payroll_type', 'description']) }
+  
+  def self.validate_description_uniqueness(id, description, company_id)
+    if id.empty?
+      payroll_type = PayrollType.new :description => description, :company_id => company_id
+    else
+      payroll_type = PayrollType.find id
+      payroll_type.description = description
+    end
+    
+    payroll_type.valid?
+    
+    if payroll_type.errors[:description].any?
+      status = 404
+    else
+      status = 200
+    end      
+    status
+  end
+  
 end
