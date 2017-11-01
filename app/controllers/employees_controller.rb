@@ -130,7 +130,14 @@ class EmployeesController < ApplicationController
   end
   
   def load_employees
-    @employees = Employee.where "id NOT IN (?)", params[:id]
+    #do not load current employee when request is made from employee form
+    #so customer can't select herself as inmediate boss
+    if params[:id].nil?
+      @employees = Employee.all
+    else
+      @employees = Employee.where "id NOT IN (?)", params[:id]
+    end
+    
     respond_to do |format|
       format.json { render json: @employees, :include => :entity }
     end
