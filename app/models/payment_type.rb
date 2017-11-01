@@ -4,6 +4,12 @@ class PaymentType < ActiveRecord::Base
   include Encodable
   
   attr_accessible :factor, :name, :contract_code, :payment_type, :payment_unit, :company_id
+
+  # Constants
+  STATE_ACTIVE = 'active'.freeze
+  STATE_COMPLETED = 'completed'.freeze
+
+  scope :all_payment_types, where('state = ?', STATE_ACTIVE)
   
   def self.find_by_company_id(company_id)
     where(company_id: company_id)

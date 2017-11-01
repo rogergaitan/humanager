@@ -99,7 +99,7 @@ class DeductionsController < ApplicationController
         @deduction.destroy
         message = t('.notice.successfully_deleted')
       else
-        @deduction.state = CONSTANTS[:PAYROLLS_STATES]['COMPLETED']
+        @deduction.state = Deduction::STATE_COMPLETED
         @deduction.save
         message = t('.notice.can_be_deleted')
       end

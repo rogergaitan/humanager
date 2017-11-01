@@ -86,7 +86,7 @@ class WorkBenefitsController < ApplicationController
         @work_benefit.destroy
         message = t('.notice.successfully_deleted')
       else
-        @work_benefit.state = CONSTANTS[:PAYROLLS_STATES]['COMPLETED']
+        @work_benefit.state = WorkBenefit::STATE_COMPLETED
         @work_benefit.save
         message = t('.notice.can_be_deleted')
       end

@@ -5,6 +5,12 @@ class WorkBenefit < ActiveRecord::Base
     :employee_benefits_attributes, :creditor_id, :pay_to_employee, :payroll_id
 
   attr_accessor :active
+
+  # Constants
+  STATE_ACTIVE = 'active'.freeze
+  STATE_COMPLETED = 'completed'.freeze
+  CALCULATION_TYPE_FIXED = 'fixed'.freeze
+  CALCULATION_TYPE_PERCENTAGE = 'percentage'.freeze
   
   belongs_to :company
   has_many :companies

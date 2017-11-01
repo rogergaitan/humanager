@@ -9,16 +9,24 @@ class Deduction < ActiveRecord::Base
 
   attr_accessor :employee_ids, :active
 
-  belongs_to :creditor
-  
-  belongs_to :company
-  has_many :companies
+  # Constants
+  DEDUCTION_TYPE_CONSTANT = 'constant'.freeze
+  DEDUCTION_TYPE_UNIQUE = 'unique'.freeze
+  DEDUCTION_TYPE_EXHAUST = 'amount_to_exhaust'.freeze
+  CALCULATION_TYPE_FIXED = 'fixed'.freeze
+  CALCULATION_TYPE_PERCENTAGE = 'percentage'.freeze
+  STATE_ACTIVE = 'active'.freeze
+  STATE_COMPLETED = 'completed'.freeze
 
+  belongs_to :creditor
+  belongs_to :company
+
+  has_many :companies
   has_many :payroll_type_deductions, :dependent => :destroy
   has_many :payroll_type, :through => :payroll_type_deductions
-  
   has_many :deduction_employees, :dependent => :destroy
   has_many :employees, :through => :deduction_employees
+
   accepts_nested_attributes_for :deduction_employees, :allow_destroy => true
   accepts_nested_attributes_for :employees, :allow_destroy => true
 
@@ -26,7 +34,6 @@ class Deduction < ActiveRecord::Base
   has_many :payrolls, :through => :deduction_payrolls
 
   belongs_to :ledger_account
-  
   belongs_to :deduction_currency, :class_name => "Currency"
   belongs_to :maximum_deduction_currency, :class_name => "Currency"
   belongs_to :amount_exhaust_currency, :class_name => "Currency"
@@ -34,7 +41,7 @@ class Deduction < ActiveRecord::Base
   validates :description, presence: true,  length: { maximum: 30 }
   
   validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
-    message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false} 
+      message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false} 
   
   validates_numericality_of :deduction_value, greater_than: 0, 
       message: "debe ser mayor que cero",  if: Proc.new {|d| d.calculation_type == :fixed && d.individual == false }
@@ -60,11 +67,7 @@ class Deduction < ActiveRecord::Base
   end
   
   def active?
-    if self.state == :active
-      true
-    else
-      false
-    end
+    self.state == :active ? true : false
   end
   
   def self.search(deduction_type, calculation_type, state, company, page)
@@ -73,25 +76,21 @@ class Deduction < ActiveRecord::Base
     query = query.where deduction_type: deduction_type unless deduction_type.empty?
     query = query.where calculation_type: calculation_type unless calculation_type.empty?
     query = query.where state: state unless state.empty?
-    
     query.paginate page: page, per_page: 15
   end
   
   private
   
-    #deduction_currency_id must be same as amount_exhaust_currency_id
-    def add_deduction_currency_id
-      if self.calculation_type == :fixed && self.deduction_type == :amount_to_exhaust
-        self.deduction_currency_id = self.amount_exhaust_currency_id
-      end
+  # deduction_currency_id must be same as amount_exhaust_currency_id
+  def add_deduction_currency_id
+    if self.calculation_type == :fixed && self.deduction_type == :amount_to_exhaust
+      self.deduction_currency_id = self.amount_exhaust_currency_id
     end
+  end
     
-    def save_state
-      if active
-        self.state = :active
-      else
-        self.state = :completed
-      end
-    end
+  def save_state
+    self.state = :active if active
+    self.state = :completed unless active
+  end
   
 end

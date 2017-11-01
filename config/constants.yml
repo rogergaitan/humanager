@@ -16,15 +16,15 @@ development:
     { name: "extra", type: "1.5" },
   	{ name: "double", type: "2" }
   ]
-  DEDUCTION: {
-  	CONSTANTE: "constant",
-  	UNICA: "unique",
-  	MONTO_AGOTAR: "amount_to_exhaust"
-  }
-  CALCULATION_TYPE: {
-    PORCENTUAL: "percentage",
-    FIJA: "fixed"
-  }
+  # DEDUCTION: {
+  # 	CONSTANTE: "constant",
+  # 	UNICA: "unique",
+  # 	MONTO_AGOTAR: "amount_to_exhaust"
+  # }
+  # CALCULATION_TYPE: {
+  #   PORCENTUAL: "percentage",
+  #   FIJA: "fixed"
+  # }
   REPORTS: {
     PAYMENT_PROOF: "1",
   	GENERAL_PAYROLL: "2",
@@ -169,15 +169,15 @@ production:
     { name: "extra", type: "1.5" },
   	{ name: "double", type: "2" }
   ]
-  DEDUCTION: {
-  	CONSTANTE: "constant",
-  	UNICA: "unique",
-  	MONTO_AGOTAR: "amount_to_exhaust"
-  }
-  CALCULATION_TYPE: {
-    PORCENTUAL: "percentage",
-    FIJA: "fixed"
-  }
+  # DEDUCTION: {
+  # 	CONSTANTE: "constant",
+  # 	UNICA: "unique",
+  # 	MONTO_AGOTAR: "amount_to_exhaust"
+  # }
+  # CALCULATION_TYPE: {
+  #   PORCENTUAL: "percentage",
+  #   FIJA: "fixed"
+  # }
   REPORTS: {
     PAYMENT_PROOF: "1",
   	GENERAL_PAYROLL: "2",
