@@ -139,7 +139,7 @@ es:
             attributes:
               description:
                 blank: Este campo no puede quedar en blanco
-                taken: especificado ya existe
+                taken: Especificado ya existe
               cod_doc_payroll_support:
                 blank: Este campo no puede quedar en blanco
               cod_doc_accounting_support_mov:
@@ -151,6 +151,8 @@ es:
               calendar_color:
                 blank: Este campo no puede quedar en blanco
               ledger_account_id:
+                blank: Este campo no puede quedar en blanco
+              payroll_type:
                 blank: Este campo no puede quedar en blanco
           entity:
             attributes:
