@@ -55,5 +55,7 @@ end
 group :development, :test do
   #gem 'capistrano'
   #gem 'capistrano-rails'
+  gem "rspec-rails"
+  gem "test-unit", '3.2.6'
 end
 

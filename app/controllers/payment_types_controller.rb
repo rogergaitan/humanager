@@ -63,9 +63,9 @@ class PaymentTypesController < ApplicationController
     payment_type = PaymentType.find(params[:id])
 
     if to_bool(params[:state])
-      payment_type.state = CONSTANTS[:PAYROLLS_STATES]['ACTIVE']
+      payment_type.state = PaymentType::STATE_ACTIVE
     else
-      payment_type.state = CONSTANTS[:PAYROLLS_STATES]['COMPLETED']
+      payment_type.state = PaymentType::STATE_COMPLETED
     end   
 
     respond_to do |format|

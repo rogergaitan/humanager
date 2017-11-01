@@ -11,6 +11,14 @@ class OtherPayment < ActiveRecord::Base
 
   attr_accessor :custom_calculation, :employee_ids, :active
 
+  # Constants
+  STATE_COMPLETED = 'completed'.freeze
+  STATE_ACTIVE = 'active'.freeze
+  DEDUCTION_TYPE_CONSTANT = 'constant'.freeze
+  DEDUCTION_TYPE_UNIQUE = 'unique'.freeze
+  CALCULATION_TYPE_FIXED = 'fixed'.freeze
+  CALCULATION_TYPE_PERCENTAGE = 'percentage'.freeze
+
   # association other_payments with payrolls
   has_many :other_payment_payrolls, :dependent => :destroy
   has_many :payrolls, :through => :other_payment_payrolls
@@ -58,26 +66,18 @@ class OtherPayment < ActiveRecord::Base
     query = query.where other_payment_type: other_payment_type unless other_payment_type.empty?
     query = query.where calculation_type: calculation_type unless calculation_type.empty?
     query = query.where state: state unless state.empty?
-    
     query.paginate page: page, per_page: 15
   end
   
   def active?
-    if self.state == :active
-      true
-    else
-      false
-    end
+    self.state == :active ? true : false
   end
   
   private
   
-    def save_state
-      if active
-        self.state = :active
-      else
-        self.state = :completed
-      end
-    end
+  def save_state
+    self.state = :active if active
+    self.state = :completed unless active
+  end
 
 end
