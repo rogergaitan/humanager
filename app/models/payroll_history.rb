@@ -5,7 +5,7 @@ class PayrollHistory < ActiveRecord::Base
   belongs_to :payment_type
   
   has_many :payroll_employees, :dependent => :destroy
-  has_many :employees, :through => :payroll_employees
+  has_many :employees, :through => :payroll_employees, validate: false
   attr_accessible :time_worked, :task_id, :costs_center_id, :payment_type_id, 
   		:payroll_log_id, :employee_ids, :total, :task_total, :task_unidad, :payroll_date, 
   		:performance
