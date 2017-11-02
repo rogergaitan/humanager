@@ -64,7 +64,11 @@
           <%= f.label :name, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
               <%= f.text_field :name, :class => 'form-control', 
-                :required => true, :data => {:parsley_maxlength => 30} %>
+                :required => true, 
+                :data => {:parsley_maxlength => 30, 
+                :parsley_pattern => "/^[A-Za-z0-9\s]+$/",
+                :parsley_pattern_message => "Solo se permiten caracteres alphanumericos." } %> 
+              
               <div class="help-block with-errors"></div>
               <%= f.hidden_field :company_id, :value => current_user.company_id %>
               
