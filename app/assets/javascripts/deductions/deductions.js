@@ -512,14 +512,12 @@ function showHideEmployees() {
     disableDeductionValueValidations();
     employeeValueValidation();
     $('#employee_items_two').show();
-    $("#employee_items_two input").prop("disabled", false);
     /*$('#employee_items_one').hide()
     $('.custom_calculation').hide();*/
   } else {
     $('#deduction_deduction_value').prop('disabled', false);
     enableDeductionValueValidations();
     employeeValueValidation();
-    $("#employee_items_two input").prop("disabled", true);
     $('#employee_items_two').hide();
     /*$('#employee_items_one').show();
     $('.custom_calculation').show();*/
