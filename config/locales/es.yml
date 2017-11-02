@@ -334,12 +334,13 @@ es:
             attributes:
               description:
                 too_long: maximo 30 caracteres
+                invalid: solo se permiten caracteres alfanumericos
               calculation:
                 blank: Este campo no puede quedar en blanco
               creditor_id:
                 blank: Este campo no puede quedar en blanco
               payroll_type:
-                invalid: invalida
+                invalid: Eliga un tipo de planilla valida
           other_payment:
             attributes:
               payrolls:
