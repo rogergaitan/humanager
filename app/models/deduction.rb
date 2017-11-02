@@ -39,6 +39,7 @@ class Deduction < ActiveRecord::Base
   belongs_to :amount_exhaust_currency, :class_name => "Currency"
 
   validates :description, presence: true,  length: { maximum: 30 }
+  validates_format_of :description, :with => /^[A-Za-z0-9\s]+$/
   
   validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
       message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false} 
