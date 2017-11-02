@@ -316,9 +316,7 @@ $(document).ready(function() {
 	$('#superiors_employees').change(function() {
     	filterEmployees("superior", $(this).val());
   });
-  
-  resources.alphaNumericMask('#deduction_description');
-  
+    
 });
 
 /* F U N C T I O N S */
