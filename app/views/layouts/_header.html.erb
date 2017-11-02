@@ -63,7 +63,7 @@
                                             <li><a href=<%= other_payments_path%>>Otros Pagos</a></li>
                                         <% end %>
                                         <% if can? :read, PayrollType %>
-                                            <li><a href=<%= payroll_types_path%>> Tipos de planillas</a></li>
+                                            <li><a href=<%= payroll_types_path%>> Tipos de Planillas</a></li>
                                         <% end %>
                                         <% if can? :read, PaymentType %>
                                             <li><a href=<%= payment_types_path%>> Tipos de Pago</a></li>
@@ -75,7 +75,7 @@
                                             <li><a href=<%= payment_frequencies_path%>> Frecuencias de Pago</a></li>
                                         <% end %>
                                          <% if can? :read, PaymentUnit %>
-                                            <li><%= link_to "Unidades de pago", payment_units_path  %></li>
+                                            <li><%= link_to "Unidades de Pago", payment_units_path  %></li>
                                         <% end %>
                                         
                                         
