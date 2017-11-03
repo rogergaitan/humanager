@@ -6,14 +6,20 @@ $(jQuery(document).ready(function($) {
   $.getJSON('/costs_centers/load_cc', function(category_data) {
     $('#load_costs_centers').autocomplete({
       source: $.map(category_data, function(item) {
-        $.data(document.body, 'category_' + item.id + "", item.name_cc);
+        $.data(document.body, 'category_' + item.id + "", item.icost_center + " - " + item.name_cc);
         return {
-          label: item.name_cc,
+          label: item.icost_center + " - " + item.name_cc,
           id: item.id
         }
       }),
       select: function( event, ui ) {
         $('#department_costs_center_id').val(ui.item.id);
+      },
+      change: function(event, ui) {
+        if(!ui.item) {
+          $('#load_costs_centers').val('');
+          $('#department_costs_center_id').val('');
+        }
       }
     });
     if($('#department_costs_center_id').val()) {
@@ -55,8 +61,7 @@ $(jQuery(document).ready(function($) {
       },
       change: function(event, ui){
         if(!ui.item){
-          alert('Ningún resultado contiene ' + $( "#load_employee" ).val());
-          $( "#load_employee" ).val("");
+          $("#load_employee").val("");
           $("#load_employee_id").val("");    
         }
       }
