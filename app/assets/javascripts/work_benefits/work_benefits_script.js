@@ -383,6 +383,13 @@ function fetchPopulateAutocomplete(url, textField, idField, dataField) {
         }
       },
       
+      change: function(event, ui) {
+        if(!ui.item) {
+          $(idField).val('');
+          $(textField).val('');
+        }
+      },
+      
       focus: function(event, ui) {
         $(textField).val(ui.item.label);  
       }
@@ -477,7 +484,13 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
             $(idField).val(ui.item.id);
           },
           focus: function(event, ui) {
-              $(textField).val(ui.item.name_cc);
+            $(textField).val(ui.item.name_cc);
+          },
+          change: function(event, ui) {
+            if(!ui.item) {
+              $(idField).val('');
+              $(textField).val('');
+            }
           }
       });
       if($(idField).val()) {
@@ -792,6 +805,13 @@ function getCreditors () {
       
       focus: function(event, ui) {
         $('#load_creditor').val(ui.item.label);  
+      }, 
+      
+      change: function(event, ui) {
+        if(!ui.item) {
+          $('#work_benefit_creditor_id').val('');
+          $('#load_creditor').val('');
+        }
       }
     });
     
