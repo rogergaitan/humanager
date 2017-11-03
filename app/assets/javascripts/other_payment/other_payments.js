@@ -601,6 +601,7 @@ op.setAccount = function(e) {
 // Auto complete function to the different fields
 op.fetchPopulateAutocomplete = function(url, textField, idField) {
   var name = "";
+  var codeLabel = "";
   $.getJSON(url, function(accounts) {
     $(textField).autocomplete({
       source: $.map(accounts, function(item) {
@@ -617,10 +618,16 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
         if(item.description) {
           name = item.description;
         }
-
-        $.data(document.body, 'account_' + item.id + "", name);
+        if(item.icost_center) {
+          codeLabel = item.icost_center;
+        }
+        if(item.iaccount) {
+          codeLabel = item.iaccount;
+        }
+ 
+        $.data(document.body, 'account_' + item.id + "", codeLabel + " - " + name);
         return {
-          label: name,
+          label: codeLabel + " - " + name,
           id: item.id
         }
       }),
@@ -642,6 +649,13 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
       focus: function(event, ui) {
         if( idField != "custom_employee" && idField != "other_payment_costs_center_id" ) {
           $(textField).val(ui.item.label);
+        }
+      },
+      
+      change: function(event, ui) {
+        if(!ui.item) {
+          $(idField).val('');
+          $(textField).val('');
         }
       }
     });
