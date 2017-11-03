@@ -66,6 +66,12 @@ payrollType.autocompleteBackAccounts = function() {
       },
       focus: function(event, ui) {
         $( "#payroll_type_ledger_account" ).val(ui.item.label);
+      },
+      change: function(event, ui) {
+        if(!ui.item) {
+          $('#payroll_type_ledger_account_id').val('');
+          $('#payroll_type_ledger_account').val('');
+        }
       }
     });
     
@@ -94,6 +100,14 @@ payrollSupports = function () {
       
       focus: function(event, ui) {
         $('#load_payroll_supports').val(ui.item.label); 
+      },
+      
+      change: function(event, ui) {
+        if(!ui.event) {
+          $('#load_payroll_supports').val('');
+          $('#payroll_type_cod_doc_payroll_support').val('');
+          $("#payroll_type_mask_doc_payroll_support").val('');
+        }
       }
     });
       
@@ -117,6 +131,14 @@ payrollSupports = function () {
       
       focus: function(event, ui) {
         $('#load_payroll_accounting_supports').val(ui.item.label); 
+      },
+      
+      change: function(event, ui) {
+        if(!ui.item) {
+          $('#payroll_type_cod_doc_accounting_support_mov').val('');
+          $('#payroll_type_mask_doc_accounting_support_mov').val('');
+          $('#load_payroll_accounting_supports').val('');
+        }
       }
     })
     
