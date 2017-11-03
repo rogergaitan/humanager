@@ -250,6 +250,13 @@ $(document).ready(function() {
         }
       },
       
+      change: function(event, ui) {
+        if(!ui.item) {
+          $('#load_creditor').val('');
+          $('#deduction_creditor_id').val('');
+        }
+      },
+      
       focus: function(event, ui) {
         $('#load_creditor').val(ui.item.label);  
       }
@@ -535,9 +542,18 @@ function CContables() {
             id: item.id
         }
       }),
+      
       select: function( event, ui ) {
-        $("#deduction_ledger_account_id").val(ui.item.id);
+        $('#deduction_ledger_account_id').val(ui.item.id);
       },
+      
+      change: function(event, ui) {
+        if(!ui.item) {
+          $('#deduction_ledger_account').val('');
+          $('#deduction_ledger_account_id').val('');
+        }
+      },
+      
       focus: function(event, ui){
         $( "#deduction_ledger_account" ).val(ui.item.label);
       }
@@ -962,7 +978,6 @@ function enableDeductionValueValidations () {
   } else {
     deductionValueCurrencyValidation();
   }
-  $("form[id*='_deduction']").parsley().destroy();
 }
 
 function disableDeductionValueValidations () {
