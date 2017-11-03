@@ -55,9 +55,9 @@ payrollType.autocompleteBackAccounts = function() {
   $.getJSON(payrollType.bank_accounts_path, function(category_data) {
     $('#payroll_type_ledger_account').autocomplete({
       source: $.map(category_data, function(item) {
-        $.data(document.body, 'category_' + item.id+"", item.naccount);
+        $.data(document.body, 'category_' + item.id +"", item.iaccount + " - " + item.naccount);
         return {
-          label: item.naccount,
+          label: item.iaccount + " - " + item.naccount,
           id: item.id
         }
       }),
@@ -103,7 +103,7 @@ payrollSupports = function () {
       },
       
       change: function(event, ui) {
-        if(!ui.event) {
+        if(!ui.item) {
           $('#load_payroll_supports').val('');
           $('#payroll_type_cod_doc_payroll_support').val('');
           $("#payroll_type_mask_doc_payroll_support").val('');
