@@ -127,9 +127,9 @@ include ActionView::Helpers::NumberHelper
   def get_payments_types
 
     task_payment_type = [
-      CONSTANTS[:PAYMENT][0]['name'].to_s, # Ordinario
-      CONSTANTS[:PAYMENT][1]['name'].to_s, # Extra
-      CONSTANTS[:PAYMENT][2]['name'].to_s  # Doble
+      PaymentType::PAYMENT_ORDINARY
+      PaymentType::PAYMENT_EXTRA
+      PaymentType::PAYMENT_DOBLE      
     ]
 
     task_payment_type.uniq

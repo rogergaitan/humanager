@@ -83,4 +83,11 @@ class Oprpla5Detalle < ActiveRecord::Base
 	self.set_table_name "OPRPLA5_DETALLE"
 	# set_table_name "OPRPLA5_DETALLE"
 
+	# Constants
+	IACTIVIDADLUNES = 1.freeze
+	QCANTLUNES = 0.freeze
+	BCANTDESCLUNES = 'T'.freeze
+	QFACTOR = 1.freeze
+	ILINEAMOV = 0.freeze
+
 end

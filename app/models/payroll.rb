@@ -83,7 +83,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get the salary of each employee
-  def self.get_salary_empoyees(payroll_log, payroll_currency, exchange_rate) #DONE
+  def self.get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
     list_employees_salary = {}
     
     payroll_log.payroll_histories.includes(task: [:currency]).each do |h|
@@ -101,7 +101,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get Other Payments of each employee
-  def self.get_other_payment(list_employees, payroll_log, payroll_currency, exchange_rate) #DONE
+  def self.get_other_payment(list_employees, payroll_log, payroll_currency, exchange_rate)
 
     other_payment_details = {}
     list_other_payments = []
@@ -120,6 +120,7 @@ class Payroll < ActiveRecord::Base
           other_payment_details['state_other_payment_employee'] = true
           add = true
           calculation = ope.other_payment.individual? ? ope.calculation : ope.other_payment.amount
+          other_currency = ope.other_payment.currency.currency_type
 
           case ope.other_payment.other_payment_type.to_s
             # Constante
@@ -133,8 +134,10 @@ class Payroll < ActiveRecord::Base
 
                 # fija
                 if ope.other_payment.calculation_type.to_s == OtherPayment::CALCULATION_TYPE_FIXED
-                  other_payment_details['payment'] = check_currency payroll_currency, ope.other_payment.currency.currency_type, 
-                                                                                                                        calculation.to_f, exchange_rate
+                  other_payment_details['payment'] = check_currency(payroll_currency, 
+                                                                    other_currency, 
+                                                                    calculation.to_f, 
+                                                                    exchange_rate)
                 end
               else
                 add = false
@@ -152,8 +155,10 @@ class Payroll < ActiveRecord::Base
 
                 # fija
                 if ope.other_payment.calculation_type.to_s == OtherPayment::CALCULATION_TYPE_FIXED
-                  other_payment_details['payment'] = check_currency payroll_currency, ope.other_payment.currency.currency_type, 
-                                                                                                                        calculation.to_f, exchange_rate
+                  other_payment_details['payment'] = check_currency(payroll_currency, 
+                                                                    other_currency, 
+                                                                    calculation.to_f, 
+                                                                    exchange_rate)
                 end
                 other_payment_details['state'] = false
                 other_payment_details['state_other_payment_employee'] = false
@@ -176,7 +181,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Sum other payments to the salary only if ("is_salary") 
-  def self.sum_other_payments_salary(list_employees, list_other_payments) #DONE
+  def self.sum_other_payments_salary(list_employees, list_other_payments)
 
     new_list_employee_salary = {}
     
@@ -199,7 +204,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get the deduction of each employee (Calculations)
-  def self.get_deductions_employees(list_employees, payroll_log, payroll_currency, exchange_rate) #DONE
+  def self.get_deductions_employees(list_employees, payroll_log, payroll_currency, exchange_rate)
     
     deduction_details = {}
     list_deductions = []
@@ -222,7 +227,8 @@ class Payroll < ActiveRecord::Base
           deduction_details['state_deduction_employee'] = true
           add = true
           calculation = de.deduction.individual? ? de.calculation : de.deduction.deduction_value
-          
+          currency_type = de.deduction.maximum_deduction_currency.currency_type
+
           case de.deduction.deduction_type.to_s
             
             # Constante
@@ -232,20 +238,21 @@ class Payroll < ActiveRecord::Base
 
                 # porcentual
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                  deduction_value = check_currency payroll_currency, de.deduction.maximum_deduction_currency.currency_type, 
-                                                                   (salary.to_f*calculation/100), exchange_rate
+                  percentage = (salary.to_f*calculation/100)
+                  deduction_value = check_currency(payroll_currency, currency_type, 
+                                                    percentage, exchange_rate)
                   
-                  maximum_deduction = check_currency payroll_currency, de.deduction.maximum_deduction_currency.currency_type,
-                                                                                              de.deduction.maximum_deduction, exchange_rate
+                  maximum_deduction = check_currency(payroll_currency, currency_type, 
+                                                    de.deduction.maximum_deduction, exchange_rate)
                   
-                  deduction_amount = check_maximum_deduction deduction_value, de.deduction.maximum_deduction.to_f
+                  deduction_amount = check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
                 end
 
                 # fija
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
-                  deduction_details['payment'] = check_currency payroll_currency, de.deduction.deduction_currency.currency_type, 
-                                                                                                             de.calculation.to_f, exchange_rate
+                  deduction_details['payment'] = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type, 
+                                                                de.calculation.to_f, exchange_rate)
                 end
               else
                 add = false
@@ -258,20 +265,22 @@ class Payroll < ActiveRecord::Base
 
                 # porcentual
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                  deduction_value = check_currency payroll_currency, de.deduction.maximum_deduction_currency.currency_type, 
-                                                                   (salary.to_f*calculation.to_f/100), exchange_rate
+                  percentage = (salary.to_f*calculation.to_f/100)
+                  deduction_value = check_currency(payroll_currency,currency_type, 
+                                                    percentage, exchange_rate)
                   
-                  maximum_deduction = check_currency payroll_currency, de.deduction.maximum_deduction_currency.currency_type,
-                                                                                              de.deduction.maximum_deduction, exchange_rate
+                  maximum_deduction = check_currency(payroll_currency, currency_type,
+                                                    de.deduction.maximum_deduction, exchange_rate)
                   
-                  deduction_amount =  check_maximum_deduction deduction_value, de.deduction.maximum_deduction.to_f
+                  deduction_amount =  check_maximum_deduction(deduction_value, 
+                                                              de.deduction.maximum_deduction.to_f)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
                 end
 
                 # fija
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
-                  deduction_details['payment'] = check_currency payroll_currency, de.deduction.deduction_currency.currency_type,
-                                                                                                             de.calculation.to_f, exchange_rate
+                  deduction_details['payment'] = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type,
+                                                                  de.calculation.to_f, exchange_rate)
                 end
 
                 deduction_details['state'] = false
@@ -290,15 +299,16 @@ class Payroll < ActiveRecord::Base
                 
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
                   payment = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type,  
-                                                                          de.calculation.to_f, exchange_rate)
+                                            de.calculation.to_f, exchange_rate)
                 end
                 
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                  deduction_value = check_currency(payroll_currency, de.deduction.maximum_deduction_currency.currency_type, 
-                                                                   (salary.to_f*calculation.to_f/100), exchange_rate)
+                  percentage = (salary.to_f*calculation.to_f/100)
+                  deduction_value = check_currency(payroll_currency, currency_type,
+                                                    percentage , exchange_rate)
                   
-                  maximum_deduction = check_currency(payroll_currency, de.deduction.maximum_deduction_currency.currency_type,
-                                                                                              de.deduction.maximum_deduction, exchange_rate)
+                  maximum_deduction = check_currency(payroll_currency, currency_type,
+                                                      de.deduction.maximum_deduction, exchange_rate)
                   
                   deduction_amount = check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
                   payment = (salary.to_f*deduction_amount/100)
@@ -313,7 +323,7 @@ class Payroll < ActiveRecord::Base
                   
                   if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
                     current_balance = check_currency(payroll_type, de.deduction.currency.currency_type, 
-                                                                                      de.deduction_payments.last.current_balance.to_f, exchange_rate)
+                                                    de.deduction_payments.last.current_balance.to_f, exchange_rate)
                   end
                               
                   if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
@@ -364,7 +374,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get the work benefits (Calculations)
-  def self.get_work_benefits(list_employees, payroll_log, payroll_currency, exchange_rate) #DONE
+  def self.get_work_benefits(list_employees, payroll_log, payroll_currency, exchange_rate)
 
     work_benefits_details = {}
     list_work_benefits = []
@@ -379,8 +389,9 @@ class Payroll < ActiveRecord::Base
             calculation = eb.work_benefit.individual? ? eb.calculation : eb.work_benefit.work_benefits_value
             
             if eb.work_benefit.calculation_type.to_s == WorkBenefit::CALCULATION_TYPE_FIXED
-              work_benefits_details['payment'] = check_currency payroll_currency, eb.work_benefit.currency.currency_type, 
-                                                                                                                 calculation.to_f, exchange_rate
+              work_benefits_details['payment'] = check_currency(payroll_currency,
+                                                                eb.work_benefit.currency.currency_type, 
+                                                                calculation.to_f, exchange_rate)
             end
                   
             if eb.work_benefit.calculation_type.to_s == WorkBenefit::CALCULATION_TYPE_PERCENTAGE
@@ -402,7 +413,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Check salaries between deductions
-  def self.check_salaries_deductions(list_salaries, list_deductions) #DONE
+  def self.check_salaries_deductions(list_salaries, list_deductions)
     
     detail_report = {}
     total_salary = 0
@@ -426,7 +437,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save the deductions information
-  def self.save_deduction_payments(date, payroll, list_employees_deductions) #DONE
+  def self.save_deduction_payments(date, payroll, list_employees_deductions)
     payments = 0
     list_employees_deductions.each do |id, deductions|
 
@@ -458,13 +469,12 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save the work benefits
-  def self.save_work_benefits_payments(date, payroll, list_employees_work_benefits) #DONE
+  def self.save_work_benefits_payments(date, payroll, list_employees_work_benefits)
     payments = 0
     
     list_employees_work_benefits.each do |id, work_benefits|
       
       work_benefits.each do |benefits|
-
         work_benefits_payments = WorkBenefitsPayment.new
         work_benefits_payments.employee_benefits_id = benefits['employee_benefits_id'].to_i
         work_benefits_payments.payroll = payroll
@@ -479,7 +489,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save the other payments
-  def self.save_other_payment_payments(date, payroll, list_other_payments) #DONE
+  def self.save_other_payment_payments(date, payroll, list_other_payments)
     payments = 0
     
     list_other_payments.each do |id, other_payments|
@@ -514,10 +524,10 @@ class Payroll < ActiveRecord::Base
   ##################################################################################################
   
   # Send the information to Firebird.
-  def self.send_to_firebird(payroll_id, username) #DONE
+  def self.send_to_firebird(payroll_id, username)
 
     ############### E M P E Z A M O S ###############
-    result = true
+    result = false
     num_oper = get_number_operation
     num_oper_2 = get_number_operation
 
@@ -555,14 +565,13 @@ class Payroll < ActiveRecord::Base
       payroll.num_oper_2 = num_oper_2
       payroll.save
       result = true
-    else 
-      result = false
     end
+
     result
   end
 
   # Get the number operation to save information into the database Firebird
-  def self.get_number_operation #DONE
+  def self.get_number_operation
 
     # Get actual db
     current_database = ActiveRecord::Base.connection_config
@@ -589,43 +598,42 @@ class Payroll < ActiveRecord::Base
       oprm.iemp = payroll.company.code
       oprm.inumoper = num_oper
       oprm.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
-      oprm.itdoper = CONSTANTS[:FIREBIRD][0]['ITDOPER']
+      oprm.itdoper = Oprmaest::ITDOPER
       oprm.itdsop = payroll.payroll_type.cod_doc_payroll_support
       oprm.inumsop = payroll['id']
       oprm.snumsop = "#{payroll.payroll_type.mask_doc_payroll_support}-" + (sprintf '%04d', payroll['id'])
-      oprm.iclasifop = CONSTANTS[:FIREBIRD][0]['ICLASIFOP']
+      oprm.iclasifop = Oprmaest::ICLASIFOP
       oprm.fsemana = payroll['end_date'].cweek
       oprm.tdetalle = "Otros Calculos Planilla " + payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " hasta " + payroll['end_date'].to_s
-      oprm.imoneda = CONSTANTS[:FIREBIRD][0]['IMONEDA']
-      oprm.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
+      oprm.imoneda = Oprmaest::IMONEDA
+      oprm.isede = Oprmaest::ISEDE
       oprm.iusuarioult = username
-      oprm.iprocess = CONSTANTS[:FIREBIRD][0]['IPROCESS']
-      oprm.iestado = CONSTANTS[:FIREBIRD][0]['IESTADO']
-      oprm.banulada = CONSTANTS[:FIREBIRD][0]['BANULADA']
-      oprm.bimpresa = CONSTANTS[:FIREBIRD][0]['BIMPRESA']
-      oprm.mdebitos = CONSTANTS[:FIREBIRD][0]['MDEBITOS']
-      oprm.mcreditos = CONSTANTS[:FIREBIRD][0]['MCREDITOS']
-      oprm.qmovcnt = CONSTANTS[:FIREBIRD][0]['QMOVCNT']
-      oprm.qmovinv = CONSTANTS[:FIREBIRD][0]['QMOVINV']
-      oprm.qmovord = CONSTANTS[:FIREBIRD][0]['QMOVORD']
-      oprm.iimagen = CONSTANTS[:FIREBIRD][0]['IIMAGEN']
+      oprm.iprocess = Oprmaest::IPROCESS
+      oprm.iestado = Oprmaest::IESTADO
+      oprm.banulada = Oprmaest::BANULADA
+      oprm.bimpresa = Oprmaest::BIMPRESA
+      oprm.mdebitos = Oprmaest::MDEBITOS
+      oprm.mcreditos = Oprmaest::MCREDITOS
+      oprm.qmovcnt = Oprmaest::QMOVCNT
+      oprm.qmovinv = Oprmaest::QMOVINV
+      oprm.qmovord = Oprmaest::QMOVORD
+      oprm.iimagen = Oprmaest::IIMAGEN
       oprm.fcreacionusr = date
-      oprm.iws = CONSTANTS[:FIREBIRD][0]['IWS']
+      oprm.iws = Oprmaest::IWS
       oprm.fcreacion = date
       oprm.fultima = date
       oprm.iusuario = username
-      oprm.iejecucion = CONSTANTS[:FIREBIRD][0]['IEJECUCION']
-      oprm.bmovmanual = CONSTANTS[:FIREBIRD][0]['BMOVMANUAL']
+      oprm.iejecucion = Oprmaest::IEJECUCION
+      oprm.bmovmanual = Oprmaest::BMOVMANUAL
       oprm.save
     end
   end
 
   # Save into Firebird: Oprmov1_base
   def self.save_in_oprmov1_base(num_oper)
-
     transaction do
       oprmov1_base = Oprmov1Base.new
-      oprmov1_base.iemp = CONSTANTS[:FIREBIRD][0]['IEMP']
+      oprmov1_base.iemp = Oprmov1Base::IEMP
       oprmov1_base.inumoper = num_oper
       oprmov1_base.save
     end
@@ -649,10 +657,9 @@ class Payroll < ActiveRecord::Base
         od.init = dp.deduction_employee.employee.entity.entityid
         od.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
 
+        od.initcxx = dp.deduction_employee.deduction.beneficiary_id
         if dp.deduction_employee.deduction.is_beneficiary
           od.initcxx = dp.deduction_employee.employee.entity.entityid
-        else
-          od.initcxx = dp.deduction_employee.deduction.beneficiary_id
         end
 
         od.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
@@ -712,13 +719,13 @@ class Payroll < ActiveRecord::Base
         od_credit.icc = CostsCenter.find(wb.employee_benefit.work_benefit.costs_center_id).icost_center
         od_credit.icuenta = LedgerAccount.find(wb.employee_benefit.work_benefit.credit_account).iaccount
 
+        od_credit.init = wb.employee_benefit.work_benefit.beneficiary_id
+        od_credit.initcxx = wb.employee_benefit.work_benefit.beneficiary_id
         if wb.employee_benefit.work_benefit.is_beneficiary
           od_credit.init = wb.employee_benefit.employee.entity.entityid
           od_credit.initcxx = wb.employee_benefit.employee.entity.entityid
-        else
-          od_credit.init = wb.employee_benefit.work_benefit.beneficiary_id
-          od_credit.initcxx = wb.employee_benefit.work_benefit.beneficiary_id
         end
+
         od_credit.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
         od_credit.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
         od_credit.mcredito = wb.payment
@@ -734,7 +741,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save into Firebird: Oprmov1_detalle (Part 3)
-  def self.save_in_oprmov1_details_other_payments(num_oper, payroll, num_count) #DONE
+  def self.save_in_oprmov1_details_other_payments(num_oper, payroll, num_count)
     
     count = num_count
     total_other_payments = 0
@@ -777,54 +784,53 @@ class Payroll < ActiveRecord::Base
       oprm.iemp = payroll.company.code
       oprm.inumoper = num_oper
       oprm.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
-      oprm.itdoper = CONSTANTS[:FIREBIRD][0]['ITDOPER2']
+      oprm.itdoper = Oprmaest::ITDOPER2
       oprm.itdsop = payroll.payroll_type.cod_doc_accounting_support_mov
       oprm.inumsop = payroll['id']
       oprm.snumsop = "#{payroll.payroll_type.mask_doc_accounting_support_mov}-" + (sprintf '%04d', payroll['id'])
-      oprm.iclasifop = CONSTANTS[:FIREBIRD][0]['ICLASIFOP']
+      oprm.iclasifop = Oprmaest::ICLASIFOP
       oprm.fsemana = payroll['end_date'].cweek
       oprm.tdetalle = "Costos de MDO de la planilla " + payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " al " + payroll['end_date'].to_s
-      oprm.isede = CONSTANTS[:FIREBIRD][0]['ISEDE']
+      oprm.isede = Oprmaest::ISEDE
       oprm.iusuarioult = username
-      oprm.iprocess = CONSTANTS[:FIREBIRD][0]['IPROCESS']
-      oprm.iestado = CONSTANTS[:FIREBIRD][0]['IESTADO']
-      oprm.banulada = CONSTANTS[:FIREBIRD][0]['BANULADA']
-      oprm.bimpresa = CONSTANTS[:FIREBIRD][0]['BIMPRESA']
-      oprm.mdebitos = CONSTANTS[:FIREBIRD][0]['MDEBITOS']
-      oprm.mcreditos = CONSTANTS[:FIREBIRD][0]['MCREDITOS']
-      oprm.qmovcnt = CONSTANTS[:FIREBIRD][0]['QMOVCNT']
-      oprm.qmovinv = CONSTANTS[:FIREBIRD][0]['QMOVINV']
-      oprm.qmovord = CONSTANTS[:FIREBIRD][0]['QMOVORD']
+      oprm.iprocess = Oprmaest::IPROCESS
+      oprm.iestado = Oprmaest::IESTADO
+      oprm.banulada = Oprmaest::BANULADA
+      oprm.bimpresa = Oprmaest::BIMPRESA
+      oprm.mdebitos = Oprmaest::MDEBITOS
+      oprm.mcreditos = Oprmaest::MCREDITOS
+      oprm.qmovcnt = Oprmaest::QMOVCNT
+      oprm.qmovinv = Oprmaest::QMOVINV
+      oprm.qmovord = Oprmaest::QMOVORD
       oprm.fcreacionusr = date
       oprm.fcreacion = date
       oprm.fultima = date
       oprm.iusuario = username
-      oprm.iejecucion = CONSTANTS[:FIREBIRD][0]['IEJECUCION']
-      oprm.imoneda = CONSTANTS[:FIREBIRD][0]['IMONEDA']
-      oprm.bmovmanual = CONSTANTS[:FIREBIRD][0]['BMOVMANUAL']
+      oprm.iejecucion = Oprmaest::IEJECUCION
+      oprm.imoneda = Oprmaest::IMONEDA
+      oprm.bmovmanual = Oprmaest::BMOVMANUAL
       oprm.save
     end
   end
 
   # Save into Firebird: OPRPLA5_BASE (Process number 2)
   def self.save_in_oprpla5_base(num_oper, payroll)
-    
     transaction do
       oprpla5_base = Oprpla5Base.new
       oprpla5_base.iemp = payroll.company.code
       oprpla5_base.inumoper = num_oper
       oprpla5_base.icuentacaja = payroll.payroll_type.ledger_account.iaccount
-      oprpla5_base.bpagocxp = CONSTANTS[:FIREBIRD][0]['BPAGOCXP']
-      oprpla5_base.itipocosteo = CONSTANTS[:FIREBIRD][0]['ITIPOCOSTEO']
-      oprpla5_base.bprocesopordia = CONSTANTS[:FIREBIRD][0]['BPROCESOPORDIA']
-      oprpla5_base.brendimcmp = CONSTANTS[:FIREBIRD][0]['BRENDIMCMP']
-      oprpla5_base.qregctolabor = CONSTANTS[:FIREBIRD][0]['QREGCTOLABOR']
-      oprpla5_base.qregctos = CONSTANTS[:FIREBIRD][0]['QREGCTOS']
-      oprpla5_base.qregfpagodcto1 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO1']
-      oprpla5_base.qregfpagodcto2 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO2']
-      oprpla5_base.qregfpagodcto3 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO3']
-      oprpla5_base.qregfpagodcto4 = CONSTANTS[:FIREBIRD][0]['QREGFPAGODCTO4']
-      oprpla5_base.qregfpagopagador = CONSTANTS[:FIREBIRD][0]['QREGFPAGOPAGADOR']
+      oprpla5_base.bpagocxp = Oprpla5Base::BPAGOCXP
+      oprpla5_base.itipocosteo = Oprpla5Base::ITIPOCOSTEO
+      oprpla5_base.bprocesopordia = Oprpla5Base::BPROCESOPORDIA
+      oprpla5_base.brendimcmp = Oprpla5Base::BRENDIMCMP
+      oprpla5_base.qregctolabor = Oprpla5Base::QREGCTOLABOR
+      oprpla5_base.qregctos = Oprpla5Base::QREGCTOS
+      oprpla5_base.qregfpagodcto1 = Oprpla5Base::QREGFPAGODCTO1
+      oprpla5_base.qregfpagodcto2 = Oprpla5Base::QREGFPAGODCTO2
+      oprpla5_base.qregfpagodcto3 = Oprpla5Base::QREGFPAGODCTO3
+      oprpla5_base.qregfpagodcto4 =  Oprpla5Base::QREGFPAGODCTO4
+      oprpla5_base.qregfpagopagador = Oprpla5Base::QREGFPAGOPAGADOR
       oprpla5_base.save
     end # End transaction
   end
@@ -836,30 +842,29 @@ class Payroll < ActiveRecord::Base
     transaction do      
 
       PayrollHistory.list_to_oprpla5_detalle(payroll['id']).each do |a|
-
         od = Oprpla5Detalle.new
         od.iemp = payroll.company.code
         od.inumoper = num_oper
         od.ilinea = count
         od.itdcontrato = a['payment_type']
         od.icclunes = a['costs_center_id']
-        od.iactividadlunes = CONSTANTS[:FIREBIRD][0]['IACTIVIDADLUNES']
+        od.iactividadlunes = Oprpla5Detalle::IACTIVIDADLUNES
         od.ilaborlunes = a['itask']
         od.qjorslunes = a['time_worked']
-        od.qcantlunes = CONSTANTS[:FIREBIRD][0]['QCANTLUNES']
-        od.bcantdesclunes = CONSTANTS[:FIREBIRD][0]['BCANTDESCLUNES']
+        od.qcantlunes = Oprpla5Detalle::QCANTLUNES
+        od.bcantdesclunes =  Oprpla5Detalle::BCANTDESCLUNES
         od.qtotaljors = a['time_worked']
         od.mvrtotal = a['total']
         od.mtotalapagar = a['total']
-        od.qfactor = CONSTANTS[:FIREBIRD][0]['QFACTOR']
-        od.ilineamov = CONSTANTS[:FIREBIRD][0]['ILINEAMOV']
+        od.qfactor = Oprpla5Detalle::QFACTOR
+        od.ilineamov = Oprpla5Detalle::ILINEAMOV
         od.save
         count = count + 1
       end # End each PayrollHistory
     end # End transaction
   end
 
-  def self.search_payrolls_to_reports(start_date, end_date, company_id, page, per_page) #DONE
+  def self.search_payrolls_to_reports(start_date, end_date, company_id, page, per_page)
       query = ""
       params = []
       params.push(" start_date >= '#{start_date}' ") unless start_date.empty?
@@ -870,7 +875,7 @@ class Payroll < ActiveRecord::Base
       @payrolls = Payroll.where(query).paginate(:page => page, :per_page => per_page)
   end
 
-  def self.build_query(data) #DONE
+  def self.build_query(data)
     query = ""
       if data
         data.each_with_index do |q, i|
@@ -884,7 +889,7 @@ class Payroll < ActiveRecord::Base
       query
   end
 
-  def self.get_main_calendar(d_start, d_end, company_id) #DONE
+  def self.get_main_calendar(d_start, d_end, company_id)
     Payroll.joins(:payroll_type, :payroll_log)
     .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, payrolls.payment_date, payroll_types.description')
     .where("payrolls.start_date >= ? and payrolls.end_date <= ? and payrolls.company_id = '?' and payrolls.state = ?",
@@ -892,7 +897,7 @@ class Payroll < ActiveRecord::Base
   end
   
   #checks if is necesary to convert currency based on the payroll currency type
-  def self.check_currency(payroll_currency, other_currency, amount, exchange_rate) #DONE
+  def self.check_currency(payroll_currency, other_currency, amount, exchange_rate)
     if payroll_currency != other_currency
       convert_currency(other_currency, amount, exchange_rate)
     else
@@ -900,21 +905,18 @@ class Payroll < ActiveRecord::Base
     end
   end
   
-  def self.convert_currency(currency, amount, exchange_rate) #DONE
-    if currency == :local
-      amount / exchange_rate
-    elsif currency == :foreign
-      amount * exchange_rate 
-    end
+  def self.convert_currency(currency, amount, exchange_rate)
+    (amount / exchange_rate) if currency == :local
+    (amount * exchange_rate) if currency == :foreign
   end
   
   # verifies deduction value does not overexceed the maximum deduction restriction
   # when payment type is percentage
-  def self.check_maximum_deduction(amount, maximum_deduction) #DONE
+  def self.check_maximum_deduction(amount, maximum_deduction)
     amount > maximum_deduction ? maximum_deduction : amount
   end
   
-  def self.reopen_payroll(id) #DONE
+  def self.reopen_payroll(id)
     payroll = Payroll.includes(:payroll_log, :work_benefits_payments, :work_benefits_payments,
                         :deduction_payment => {:deduction_employee => :deduction}, 
                         :other_payment_payment => {:other_payment_employee => :other_payment})

@@ -8,6 +8,9 @@ class PaymentType < ActiveRecord::Base
   # Constants
   STATE_ACTIVE = 'active'.freeze
   STATE_COMPLETED = 'completed'.freeze
+  PAYMENT_ORDINARY = 'ordinary'.freeze
+  PAYMENT_EXTRA 'extra'.freeze
+  PAYMENT_DOBLE 'double'.freeze
 
   scope :all_payment_types, where('state = ?', STATE_ACTIVE)
   

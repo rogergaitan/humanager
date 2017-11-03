@@ -13,11 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20171030173412) do
 
-  create_table "abamtdsops", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "addresses", :force => true do |t|
     t.integer  "entity_id"
     t.string   "address"
@@ -29,12 +24,6 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
   end
 
   add_index "addresses", ["entity_id"], :name => "index_addresses_on_entity_id"
-
-  create_table "avatars", :force => true do |t|
-    t.binary   "photo"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "bank_accounts", :force => true do |t|
     t.integer  "entity_id"
@@ -271,7 +260,7 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.boolean  "is_superior",                                                                                                                    :default => false
     t.boolean  "price_defined_work"
     t.integer  "number_employee"
-    t.string   "account_bncr"
+    t.string   "account_bncr",         :limit => 12
     t.decimal  "wage_payment",                                                                                    :precision => 10, :scale => 2
     t.datetime "created_at",                                                                                                                                        :null => false
     t.datetime "updated_at",                                                                                                                                        :null => false
@@ -668,10 +657,6 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "pruebas", :force => true do |t|
-    t.binary "photo"
-  end
-
   create_table "session_validations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "model_name_id"
@@ -714,7 +699,6 @@ ActiveRecord::Schema.define(:version => 20171030173412) do
     t.string   "nunidad"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
-    t.string   "name"
     t.integer  "currency_id"
     t.decimal  "cost",        :precision => 10, :scale => 2
     t.string   "nactivity"

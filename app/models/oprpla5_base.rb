@@ -35,4 +35,17 @@ class Oprpla5Base < ActiveRecord::Base
 
 	set_table_name "OPRPLA5_BASE"
 
+	# Constants
+	BPAGOCXP = 'F'.freeze
+	ITIPOCOSTEO = 0.freeze
+	BPROCESOPORDIA = 'F'.freeze
+	BRENDIMCMP = 'F'.freeze
+	QREGCTOLABOR = 0.freeze
+	QREGCTOS = 0.freeze
+	QREGFPAGODCTO1 = 0.freeze
+	QREGFPAGODCTO2 = 0.freeze
+	QREGFPAGODCTO3 = 0.freeze
+	QREGFPAGODCTO4 = 0.freeze
+	QREGFPAGOPAGADOR = 0.freeze
+
 end

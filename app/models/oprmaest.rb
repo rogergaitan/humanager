@@ -77,4 +77,24 @@ class Oprmaest < ActiveRecord::Base
 	:isucursal
 	set_table_name "OPRMAEST"
 	
+	 # Constants
+	 ITDOPER = 'MOV1'.freeze
+	 ITDOPER2 = 'PLA5'.freeze
+	 ICLASIFOP = 1.freeze
+	 IMONEDA = '10'.freeze
+	 ISEDE = '01'.freeze
+	 IPROCESS = 0.freeze
+	 IESTADO = 1.freeze
+	 BANULADA = 'F'.freeze
+	 BIMPRESA = 'F'.freeze
+	 MDEBITOS = 0.freeze
+	 MCREDITOS = 0.freeze
+	 QMOVCNT = 0.freeze
+	 QMOVINV = 0.freeze
+	 QMOVORD = 0.freeze
+	 IIMAGEN = ''.freeze
+	 IWS = ''.freeze
+	 IEJECUCION = 0.freeze
+	 BMOVMANUAL = 'F'.freeze
+
 end

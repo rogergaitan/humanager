@@ -14,4 +14,7 @@ class Oprmov1Base < ActiveRecord::Base
 
 	set_table_name "OPRMOV1_BASE"
 
+	 # Constants
+	 IEMP = 1.freeze
+
 end
