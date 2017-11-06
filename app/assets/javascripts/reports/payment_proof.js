@@ -40,14 +40,14 @@ reports_payment_proof.validate_data = function(e) {
 
   // Validation
   if( $('#payrolls_results input:checked').length === 0 ) {
-    general_functions.showMessage("warning", "Por favor selecione una planilla");
+    resources.PNotify('Atención!', 'Por favor selecione una planilla.', 'error');
     return false;
   }
 
   var numberEmployees = $('#ms-deduction_employee_ids .ms-selection li.ms-selected').length;
 
   if( numberEmployees == 0) {
-    general_functions.showMessage("warning", "Por favor selecione los empleados");
+    resources.PNotify('Atención!', 'Por favor selecione los empleados.', 'error');
     return false;
   }
 
