@@ -4,12 +4,13 @@ include ActionView::Helpers::NumberHelper
   def initialize(payroll, employees, msg, id_company)
     super(top_margin: 15, :left_margin => 20, :right_margin => 20)
     @payroll = payroll
+    @currency_symbol = payroll.currency.symbol
     @employees = employees
     @total_accrued = 0 # Total Devengado
     @total_other_payments = 0 # Total Devengado
     @msg = msg
     @limitRecords = 4
-    @company = Company.find(id_company)
+    @company = Company.find_by_code(id_company)
     start
   end
 
@@ -40,11 +41,12 @@ include ActionView::Helpers::NumberHelper
         e = Employee.find(employee_id)
         co = @company
 
+        move_down 10
         employee =  "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
         text employee, character_spacing: 1
 
         unless @msg.blank?
-          text_box "Nota: " + @msg, :at => [200, 680], :size => 10
+          text_box "Nota: " + @msg, :at => [100, 680], :size => 10
         end
 
         define_grid(:columns => 3, :rows => 1, :gutter => 2)
@@ -127,8 +129,8 @@ include ActionView::Helpers::NumberHelper
   def get_payments_types
 
     task_payment_type = [
-      PaymentType::PAYMENT_ORDINARY
-      PaymentType::PAYMENT_EXTRA
+      PaymentType::PAYMENT_ORDINARY,
+      PaymentType::PAYMENT_EXTRA,
       PaymentType::PAYMENT_DOBLE      
     ]
 
@@ -155,7 +157,8 @@ include ActionView::Helpers::NumberHelper
       obj = {}
       obj['labor'] = p.task.ntask
       obj['fecha'] = p.payroll_date
-
+      
+      
       if data.include?(obj)
         index = data.index(obj)
 
@@ -322,7 +325,7 @@ include ActionView::Helpers::NumberHelper
     total_devengado += total_other_payments.to_f
     @total_accrued = total_devengado
     row << { :content => "Total Devengado", :colspan => 3, :align => :right, :font_style => :bold }  
-    row << { :content => "#{number_to_format(total_devengado)}", :colspan => 3, :align => :right}
+    row << { :content => "#{@currency_symbol}#{number_to_format(total_devengado)}", :colspan => 3, :align => :right}
     rows << row
     row = []
 
@@ -459,8 +462,10 @@ include ActionView::Helpers::NumberHelper
         { :content => "Monto", :font_style => :bold }
       ]] +
       data[0].map do |row| row end +
-      [[ {:content => "Total Deducciones:", :colspan => 2, :font_style => :bold }, {:content => "#{number_to_format(data[1])}"} ],
-      [ {:content => "Total a Recibir:", :colspan => 2, :font_style => :bold }, {:content => "#{number_to_format(receive)}"} ]],
+      [[ {:content => "Total Deducciones:", :colspan => 2, :font_style => :bold }, 
+      {:content => "#{@currency_symbol}#{number_to_format(data[1])}"} ],
+      [ {:content => "Total a Recibir:", :colspan => 2, :font_style => :bold }, 
+      {:content => "#{@currency_symbol}#{number_to_format(receive)}"} ]],
       :cell_style => { :align => :right, :size => 8, :height => 19, :border_color => "FFFFFF" },
       :position => :right
     ) do
@@ -480,7 +485,8 @@ include ActionView::Helpers::NumberHelper
         { :content => "Monto", :font_style => :bold }
       ]] +
       data[0].map do |row| row end +
-      [[ {:content => "Total Otros Pagos:", :colspan => 2, :font_style => :bold }, {:content => "#{number_to_format(data[1].to_f)}"} ]],
+      [[ {:content => "Total Otros Pagos:", :colspan => 2, :font_style => :bold }, 
+      {:content => "#{@currency_symbol}#{number_to_format(data[1].to_f)}"} ]],
       :cell_style => { :align => :right, :size => 8, :height => 19, :border_color => "FFFFFF" },
       :position => :right
     ) do

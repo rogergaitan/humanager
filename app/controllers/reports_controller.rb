@@ -1,14 +1,14 @@
 class ReportsController < ApplicationController
   before_filter :resources, :only => [:index, :general_payroll, :payment_type_report, :accrued_wages_between_dates_report]
-	respond_to :html, :json, :js
+  respond_to :html, :json, :js
 
-	def index
+  def index
     @payrolls = Payroll.where('state = ?', 0)
   end
 
-	def search_payrolls
+  def search_payrolls
     @payrolls = Payroll.search_payrolls_to_reports(params[:start_date], params[:end_date], 
-      current_user.company_id, params[:page], 5)
+    current_user.company_id, params[:page], 5)
     respond_with @payrolls
   end
 
@@ -21,7 +21,7 @@ class ReportsController < ApplicationController
       when CONSTANTS[:REPORTS]['PAYMENT_PROOF']
 
         employees = params[:employees].split(",")
-        payroll = Payroll.find(params[:payroll_id])
+        payroll = Payroll.includes(:currency).find(params[:payroll_id])
         
         respond_to do |format|
           format.pdf do
