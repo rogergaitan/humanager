@@ -71,7 +71,7 @@
     <div class="col-sm-3" id="dp3">
       <div class="input-group form-group_">
         <%= f.text_field :payroll_date, :class => 'form-control', 
-        :value => Time.now.to_date - 1.days, :required => true  %>
+        :value => Time.now.to_date - 1.days, :required => true, :data => { :error => 'Este valor es requerido.' } %>
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
       </div>
     </div>
