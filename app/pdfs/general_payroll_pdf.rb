@@ -1,5 +1,5 @@
 class GeneralPayrollPDF < Prawn::Document
-include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::NumberHelper
   
   # t_d = total deductions
   # t_o = total other payments
@@ -9,7 +9,7 @@ include ActionView::Helpers::NumberHelper
     @end_date = nil
     @start_date = nil
     @name_payrolls = nil
-    @company = Company.find(company_id)
+    @company = Company.find_by_code(company_id)
     @t_d = t_d
     @t_o = t_o
     get_dates(payroll_ids)
@@ -43,7 +43,7 @@ include ActionView::Helpers::NumberHelper
 
     header = get_header(data[0])
     rows = []
-
+    
     data.each_with_index do |d, i|
       row = []
 
@@ -51,14 +51,13 @@ include ActionView::Helpers::NumberHelper
       a = :bold if i == data.size-1
 
       d.each do |key, value|
-
-        if( key == 'Nombre Empleado')
+        if key == 'Nombre Empleado'
           row << {:content => "#{value}", :font_style => a}
         else
           if value == 0
             row << { :content => "N/A", :align => :right, :font_style => a, :width => 60 }
           else
-            row << { :content => "#{number_to_format(value)}", :align => :right, :font_style => a, :width => 60 }
+            row << { :content => "#{@currency_symbol}#{number_to_format(value)}", :align => :right, :font_style => a, :width => 60 }
           end
         end
       end
@@ -72,9 +71,10 @@ include ActionView::Helpers::NumberHelper
     ]
 
     table(
-      [main,header] +
+      [header] +
       rows.map do |row| row end,
-      :cell_style => { :size => 8 }
+      :cell_style => { :size => 8 },
+      :position => :center
     )
   end
 
@@ -92,9 +92,10 @@ include ActionView::Helpers::NumberHelper
 
   def get_dates(payroll_ids)
 
-    Payroll.where( :id => payroll_ids ).each do |p|
+    Payroll.includes(:currency).where( :id => payroll_ids ).each do |p|
 
       @name_payrolls = "#{p.payroll_type.description}"
+      @currency_symbol = p.currency.symbol
       
       if(@start_date.nil? and @end_date.nil?)
         @start_date = p.start_date
