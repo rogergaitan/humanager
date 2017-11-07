@@ -241,16 +241,16 @@ include ActionView::Helpers::NumberHelper
             row << { :content => "#{b}", :align => :left }
           end
         end
-
-        if a.capitalize == lpt[0].capitalize
+      
+        if a.capitalize == I18n.t("payment_type.#{lpt[0]}")
           tOrdinario += b.to_f
         end
 
-        if a.capitalize == lpt[1].capitalize
+        if a.capitalize == I18n.t("payment_type.#{lpt[1]}")
           tExtra += b.to_f
         end
 
-        if a.capitalize == lpt[2].capitalize
+        if a.capitalize == I18n.t("payment_type.#{lpt[2]}")
           tDoble += b.to_f
         end
       end
@@ -262,7 +262,6 @@ include ActionView::Helpers::NumberHelper
         rows = []
         cRows = 0
       end
-
     end # End each data
 
     # Cantidades Totales
@@ -287,11 +286,11 @@ include ActionView::Helpers::NumberHelper
     total_other_payments = 0
     sum_others = 0
     count = 0
-
+    
     data_other_payments_salary.each do |o|
       count += 1
       if count <= @limitRecords
-        row << { :content => "#{o.other_payment_employee.other_payment.description}", :colspan => 3, :align => :right }
+        row << { :content => "#{o.other_payment_employee.other_payment.name}", :colspan => 3, :align => :right }
         row << { :content => "#{number_to_format(o.payment.to_f)}", :colspan => 3, :align => :right}
         total_other_payments += o.payment.to_f
         rows << row
@@ -354,7 +353,7 @@ include ActionView::Helpers::NumberHelper
           total_others += o.payment.to_f
         else
           if o.payment > 0
-            row << "#{o.other_payment_employee.other_payment.description}"
+            row << "#{o.other_payment_employee.other_payment.name}"
             if o.other_payment_employee.other_payment.calculation_type.to_s == 'percentage'
               row << "#{o.other_payment_employee.calculation}"
             else
@@ -419,7 +418,11 @@ include ActionView::Helpers::NumberHelper
         else
           if a.payment > 0
             row << "#{a.deduction_employee.deduction.description}"
-            row << "#{a.deduction_employee.calculation}"
+            if a.deduction_employee.deduction.deduction_type.to_s == "percentage"
+              row << "#{a.deduction_employee.calculation}"
+            else
+              row << "0.00"
+            end
             row << "#{number_to_format(a.payment.to_f)}"
           end
           total += a.payment
@@ -452,9 +455,7 @@ include ActionView::Helpers::NumberHelper
   end
 
   def table_deductions(data)
-    receive = @total_accrued.to_f + @total_other_payments.to_f
-    receive = receive.to_f - data[1].to_f
-    
+    receive = @total_accrued.to_f - data[1].to_f
     table([
       [
         { :content => "Deduccion", :font_style => :bold }, 
@@ -477,7 +478,6 @@ include ActionView::Helpers::NumberHelper
   end
 
   def table_other_payments(data)
-
     table([
       [
         { :content => "Otros Pagos", :font_style => :bold },
