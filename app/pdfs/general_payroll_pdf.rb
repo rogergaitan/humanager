@@ -57,7 +57,7 @@ class GeneralPayrollPDF < Prawn::Document
           if value == 0
             row << { :content => "N/A", :align => :right, :font_style => a, :width => 60 }
           else
-            row << { :content => "#{@currency_symbol}#{number_to_format(value)}", :align => :right, :font_style => a, :width => 60 }
+            row << { :content => "#{number_to_format(value, @currency_symbol)}", :align => :right, :font_style => a, :width => 60 }
           end
         end
       end
@@ -86,8 +86,8 @@ class GeneralPayrollPDF < Prawn::Document
     header
   end
 
-  def number_to_format(number)
-    number_to_currency(number, :precision => 2, :format => "%u%n", :unit => "")
+  def number_to_format(number, currency_symbol = "")
+    number_to_currency(number, :precision => 2, :format => "%u%n", :unit => currency_symbol)
   end
 
   def get_dates(payroll_ids)
