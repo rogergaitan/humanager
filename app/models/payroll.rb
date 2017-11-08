@@ -1,4 +1,7 @@
+require 'concerns/currency_converter'
+
 class Payroll < ActiveRecord::Base
+  include CurrencyConverter
 
   attr_accessible :end_date, :payment_date, :payroll_type_id, :start_date, :state, :num_oper, :num_oper_2, :company_id, :currency_id
   belongs_to :payroll_type
@@ -46,7 +49,7 @@ class Payroll < ActiveRecord::Base
     list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
     result = {}
-
+    
     if detail_report.empty?
       salaries  = list_employees_salary.values.sum
       
@@ -57,17 +60,15 @@ class Payroll < ActiveRecord::Base
         date = payroll_log.payroll.payment_date
 
         # Deductions
-        deduction_payments = save_deduction_payments(date, payroll_log.payroll, list_employees_deductions)
+        save_deduction_payments(date, payroll_log.payroll, list_employees_deductions)
         
         # Work Benefits
-        work_benefit_payments = save_work_benefits_payments(date, payroll_log.payroll, list_employees_work_benefits)
+        save_work_benefits_payments(date, payroll_log.payroll, list_employees_work_benefits)
         
         # Other Payments
-        other_payments = save_other_payment_payments(date, payroll_log.payroll, list_other_payment)
-        
-        total = (salaries + work_benefit_payments + other_payments) - deduction_payments
+        save_other_payment_payments(date, payroll_log.payroll, list_other_payment)
     
-        payroll_log.update_attributes :exchange_rate => exchange_rate, :payroll_total => total
+        payroll_log.update_attributes :exchange_rate => exchange_rate
         
         p = payroll_log.payroll
         p.update_attributes(:state => false)
@@ -86,10 +87,10 @@ class Payroll < ActiveRecord::Base
   def self.get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
     list_employees_salary = {}
     
-    payroll_log.payroll_histories.includes(task: [:currency]).each do |h|
+    payroll_log.payroll_histories.includes(task: :currency).each do |h|
       h.payroll_employees.each do |e|
         task_currency = h.task.currency.currency_type
-  
+      
         if list_employees_salary.has_key?(e.employee_id)
           list_employees_salary[e.employee_id] += check_currency(payroll_currency, task_currency, h.total.to_f, exchange_rate)
         else
@@ -109,7 +110,7 @@ class Payroll < ActiveRecord::Base
     
     list_employees.each do |id, salary|
       OtherPaymentEmployee.includes(other_payment: [:currency]).where(:employee_id => id).each do |ope|
-        if ope.other_payment.state === OtherPayment::STATE_ACTIVE and !ope.completed
+        if ope.other_payment.state.to_s == OtherPayment::STATE_ACTIVE and !ope.completed
                     
           other_payment_details['other_payment_employee_id'] = ope.id
           other_payment_details['other_payment_id'] = ope.other_payment.id
@@ -134,10 +135,8 @@ class Payroll < ActiveRecord::Base
 
                 # fija
                 if ope.other_payment.calculation_type.to_s == OtherPayment::CALCULATION_TYPE_FIXED
-                  other_payment_details['payment'] = check_currency(payroll_currency, 
-                                                                    other_currency, 
-                                                                    calculation.to_f, 
-                                                                    exchange_rate)
+                  other_payment_details['payment'] = check_currency(payroll_currency, other_currency, 
+                                                                                                       calculation.to_f, exchange_rate)
                 end
               else
                 add = false
@@ -155,10 +154,9 @@ class Payroll < ActiveRecord::Base
 
                 # fija
                 if ope.other_payment.calculation_type.to_s == OtherPayment::CALCULATION_TYPE_FIXED
-                  other_payment_details['payment'] = check_currency(payroll_currency, 
-                                                                    other_currency, 
-                                                                    calculation.to_f, 
-                                                                    exchange_rate)
+                  other_payment_details['payment'] = check_currency(payroll_currency, other_currency,
+                                                                                                       calculation.to_f, exchange_rate)
+                                                                    
                 end
                 other_payment_details['state'] = false
                 other_payment_details['state_other_payment_employee'] = false
@@ -214,7 +212,7 @@ class Payroll < ActiveRecord::Base
 
       DeductionEmployee.includes(deduction: [:deduction_currency], employee: [:entity]).where(:employee_id => id).each do |de|
         
-        if de.deduction.state === Deduction::STATE_ACTIVE and !de.completed
+        if de.deduction.state.to_s == Deduction::STATE_ACTIVE and !de.completed
 
           deduction_details['deduction_employee_id'] = de.id
           deduction_details['deduction_id'] = de.deduction.id
@@ -228,7 +226,7 @@ class Payroll < ActiveRecord::Base
           add = true
           calculation = de.deduction.individual? ? de.calculation : de.deduction.deduction_value
           currency_type = de.deduction.maximum_deduction_currency.currency_type
-
+          
           case de.deduction.deduction_type.to_s
             
             # Constante
@@ -240,10 +238,10 @@ class Payroll < ActiveRecord::Base
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
                   percentage = (salary.to_f*calculation/100)
                   deduction_value = check_currency(payroll_currency, currency_type, 
-                                                    percentage, exchange_rate)
+                                                                           percentage, exchange_rate)
                   
-                  maximum_deduction = check_currency(payroll_currency, currency_type, 
-                                                    de.deduction.maximum_deduction, exchange_rate)
+                  maximum_deduction = check_currency(payroll_currency, currency_type,
+                                                                                 de.deduction.maximum_deduction, exchange_rate)
                   
                   deduction_amount = check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
@@ -252,7 +250,7 @@ class Payroll < ActiveRecord::Base
                 # fija
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
                   deduction_details['payment'] = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type, 
-                                                                de.calculation.to_f, exchange_rate)
+                                                                                              de.calculation.to_f, exchange_rate)
                 end
               else
                 add = false
@@ -270,10 +268,9 @@ class Payroll < ActiveRecord::Base
                                                     percentage, exchange_rate)
                   
                   maximum_deduction = check_currency(payroll_currency, currency_type,
-                                                    de.deduction.maximum_deduction, exchange_rate)
+                                                                                 de.deduction.maximum_deduction, exchange_rate)
                   
-                  deduction_amount =  check_maximum_deduction(deduction_value, 
-                                                              de.deduction.maximum_deduction.to_f)
+                  deduction_amount =  check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
                 end
 
@@ -426,7 +423,7 @@ class Payroll < ActiveRecord::Base
         total_deductions += detail['payment']
         detail_employee['employee_name'] = detail['employee_name']
       end # End details
-
+      
       if total_salary < total_deductions
         detail_employee['total_salary'] = total_salary 
         detail_employee['total_deductions'] = total_deductions
@@ -439,6 +436,7 @@ class Payroll < ActiveRecord::Base
   # Save the deductions information
   def self.save_deduction_payments(date, payroll, list_employees_deductions)
     payments = 0
+
     list_employees_deductions.each do |id, deductions|
 
       deductions.each do |deduction|
@@ -896,20 +894,6 @@ class Payroll < ActiveRecord::Base
       DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
   end
   
-  #checks if is necesary to convert currency based on the payroll currency type
-  def self.check_currency(payroll_currency, other_currency, amount, exchange_rate)
-    if payroll_currency != other_currency
-      convert_currency(other_currency, amount, exchange_rate)
-    else
-      amount
-    end
-  end
-  
-  def self.convert_currency(currency, amount, exchange_rate)
-    (amount / exchange_rate) if currency == :local
-    (amount * exchange_rate) if currency == :foreign
-  end
-  
   # verifies deduction value does not overexceed the maximum deduction restriction
   # when payment type is percentage
   def self.check_maximum_deduction(amount, maximum_deduction)
@@ -918,9 +902,9 @@ class Payroll < ActiveRecord::Base
   
   def self.reopen_payroll(id)
     payroll = Payroll.includes(:payroll_log, :work_benefits_payments, :work_benefits_payments,
-                        :deduction_payment => {:deduction_employee => :deduction}, 
-                        :other_payment_payment => {:other_payment_employee => :other_payment})
-                        .find id
+                     :deduction_payment => {:deduction_employee => :deduction}, 
+                     :other_payment_payment => {:other_payment_employee => :other_payment})
+                     .find id
     
     transaction do
     
