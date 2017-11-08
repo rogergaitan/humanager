@@ -16,15 +16,14 @@ reports_general_payroll.validate_data = function(format) {
 	
 	// Validation
   	if( $('#payrolls_results input:checked').length === 0 ) {
-    	$('div#message').html('<div class="alert alert-error">Por favor selecione una planilla</div>');
-    	$('div.alert.alert-error').delay(4000).fadeOut();
+      resources.PNotify('Atención!', 'Por favor selecione una planilla.', 'error');
     	return false;
 	}
 
 	var numberEmployees = $('#ms-deduction_employee_ids .ms-selection li.ms-selected').length;
     
 	if(numberEmployees == 0) {
-		general_functions.showMessage("warning", "Por favor selecione los empleados");
+		resources.PNotify('Atención!', 'Por favor selecione los empleados.', 'error');
 		return false;
 	}
 
