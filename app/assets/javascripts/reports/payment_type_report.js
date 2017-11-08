@@ -131,6 +131,7 @@ payment_type_reports.create_pdf_or_exel = function(format) {
 	    tasks = [],
       cc = [];
   var orderBy = $('#order_by').val();
+  var currency = $('#currency').val();
 
 	$('#payrolls_results input:checked').each(function() {
 		payroll_ids.push($(this).val());
@@ -162,6 +163,7 @@ payment_type_reports.create_pdf_or_exel = function(format) {
               + '&order=' + orderBy
               + '&tasks=' + tasks
               + '&cc=' + cc
+              + '&currency=' + currency
             );
 }
 
@@ -169,14 +171,14 @@ payment_type_reports.validate_data = function(format) {
 
 	// Validation
   	if( $('#payrolls_results input:checked').length === 0 ) {
-      general_functions.showMessage("warning", "Por favor selecione una planilla");
+      resources.PNotify('Atención!', 'Por favor selecione una planilla', 'alert');
     	return false;
 	}
 
 	var numberEmployees = $('#ms-deduction_employee_ids .ms-selection li.ms-selected').length;
     
 	if(numberEmployees == 0) {
-    general_functions.showMessage("warning", "Por favor selecione los empleados");
+    resources.PNotify("warning", "Por favor selecione los empleados");
 		return false;
 	}
 
