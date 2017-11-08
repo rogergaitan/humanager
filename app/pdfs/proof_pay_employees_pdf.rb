@@ -44,7 +44,7 @@ include ActionView::Helpers::NumberHelper
         move_down 10
         employee =  "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
         text employee, character_spacing: 1
-
+        
         unless @msg.blank?
           text_box "Nota: " + @msg, :at => [100, 680], :size => 10
         end
@@ -342,7 +342,7 @@ include ActionView::Helpers::NumberHelper
     total = 0
     total_others = 0
     count = 0
-
+    
     dta = get_other_payments_filter(employee_id, false)
 
     dta.each do |o|
@@ -355,7 +355,7 @@ include ActionView::Helpers::NumberHelper
           if o.payment > 0
             row << "#{o.other_payment_employee.other_payment.name}"
             if o.other_payment_employee.other_payment.calculation_type.to_s == 'percentage'
-              row << "#{o.other_payment_employee.calculation}"
+              row << "#{o.other_payment_value}"
             else
               row << "N/A"
             end
@@ -409,17 +409,18 @@ include ActionView::Helpers::NumberHelper
     total_others = 0
     count = 0
 
-    DeductionPayment.where('payroll_id = ?', @payroll.id).each do |a|
+    DeductionPayment.includes(:deduction_employee => :deduction).where('payroll_id = ?', @payroll.id).each do |a|
       if a.deduction_employee.employee_id.to_f == employee_id.to_f
         count += 1
+        
         if count >= @limitRecords
           total_others += a.payment.to_f
           total += a.payment
         else
           if a.payment > 0
             row << "#{a.deduction_employee.deduction.description}"
-            if a.deduction_employee.deduction.deduction_type.to_s == "percentage"
-              row << "#{a.deduction_employee.calculation}"
+            if a.deduction_employee.deduction.calculation_type.to_s == "percentage"
+              row << "#{number_to_format(a.deduction_value)}"
             else
               row << "0.00"
             end
