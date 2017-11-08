@@ -72,7 +72,7 @@ class ReportsController < ApplicationController
         end
 
         if cc.empty?
-          cc = CentroDeCosto.select(:id).collect(&:id)
+          cc = CostsCenter.select(:id).collect(&:id)
         end
         
         @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order, cc)
@@ -124,6 +124,7 @@ class ReportsController < ApplicationController
   def payment_type_report
     @tasks = Task.all
     @cc = CostsCenter.all
+    @currencies = Currency.all
   end
 
   def accrued_wages_between_dates_report
@@ -282,7 +283,7 @@ class ReportsController < ApplicationController
   def payment_type_report_xls(data, payroll_ids, order, company_id)
     @data = data
     @order = order
-    @company =  Company.find(company_id)
+    @company =  Company.find_by_code(company_id)
 
     get_dates(payroll_ids)
     
