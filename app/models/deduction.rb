@@ -1,11 +1,11 @@
 class Deduction < ActiveRecord::Base
 
   attr_accessible :payroll_ids, :amount_exhaust, :calculation_type, #:calculation
-        :ledger_account_id, :deduction_type, :description,
-        :payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id, :individual, 
-        :deduction_employees_attributes, :custom_calculation, :employee_ids, :company_id, :creditor_id,
-        :deduction_currency_id, :amount_exhaust_currency_id, :deduction_value, :pay_to_employee, :active,
-        :maximum_deduction, :maximum_deduction_currency_id
+    :ledger_account_id, :deduction_type, :description,
+    :payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id, :individual, 
+    :deduction_employees_attributes, :custom_calculation, :employee_ids, :company_id, :creditor_id,
+    :deduction_currency_id, :amount_exhaust_currency_id, :deduction_value, :pay_to_employee, :active,
+    :maximum_deduction, :maximum_deduction_currency_id
 
   attr_accessor :employee_ids, :active
 
@@ -23,7 +23,7 @@ class Deduction < ActiveRecord::Base
 
   has_many :companies
   has_many :payroll_type_deductions, :dependent => :destroy
-  has_many :payroll_type, :through => :payroll_type_deductions
+  has_many :payroll_type, :through => :payroll_type_deductions, :validate => false
   has_many :deduction_employees, :dependent => :destroy
   has_many :employees, :through => :deduction_employees
 
@@ -60,9 +60,9 @@ class Deduction < ActiveRecord::Base
 
     orderByDeductionType = "CASE deduction_type WHEN 'constant' THEN 1 WHEN 'unique' THEN 2 WHEN 'amount_to_exhaust' THEN 3 END";
     list_deductions = Deduction.where('id in (?)', listId)
-                      .order("state desc, #{orderByDeductionType}")
-                      .limit(limit)
-                      .map(&:id)
+                                                .order("state desc, #{orderByDeductionType}")
+                                                .limit(limit)
+                                                .map(&:id)
 
   end
   
