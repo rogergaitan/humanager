@@ -26,7 +26,7 @@ class OtherPayment < ActiveRecord::Base
   accepts_nested_attributes_for :payrolls
 
   has_many :payroll_type_other_payment, :dependent => :destroy
-  has_many :payroll_type, :through => :payroll_type_other_payment
+  has_many :payroll_type, :through => :payroll_type_other_payment, :validate => false
 
   # association with other_payments through other_payment_employees
   has_many :other_payment_employees, :dependent => :destroy
@@ -41,15 +41,15 @@ class OtherPayment < ActiveRecord::Base
   def self.get_list_to_general_payment(payroll_ids, limit)
 
     listId = OtherPaymentPayment.joins(:other_payment_employee)
-            .select('DISTINCT other_payment_employees.other_payment_id')
-            .where('other_payment_payments.payroll_id in (?)', payroll_ids)
-            .map(&:other_payment_id)
+      .select('DISTINCT other_payment_employees.other_payment_id')
+      .where('other_payment_payments.payroll_id in (?)', payroll_ids)
+      .map(&:other_payment_id)
               
-    orderByDeductionType = "CASE deduction_type WHEN 'constant' THEN 1 WHEN 'unique' THEN 2 WHEN 'amount_to_exhaust' THEN 3 END";
+    orderByDeductionType = "CASE other_payment_type WHEN 'constant' THEN 1 WHEN 'unique' THEN 2 WHEN 'amount_to_exhaust' THEN 3 END";
     list_other_payments = OtherPayment.where('id in (?) and constitutes_salary = ?', listId, false)
-                        .order("state desc, #{orderByDeductionType}")
-                        .limit(limit)
-                        .map(&:id)
+      .order("state desc, #{orderByDeductionType}")
+      .limit(limit)
+      .map(&:id)
   end
 
   def check_is_salary
