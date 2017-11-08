@@ -1,14 +1,15 @@
 class PaymentTypeReportPDF < Prawn::Document
 include ActionView::Helpers::NumberHelper
 
-  def initialize(data, order, payroll_ids, company_id)
+  def initialize(data, order, payroll_ids, company_id, currency_symbol)
     
     super(top_margin: 5, :page_size => "A4", :page_layout => :landscape)
     @data = data
     @end_date = nil
     @start_date = nil
     @name_payrolls = nil
-    @company = Company.find(company_id)
+    @company = Company.find_by_code(company_id)
+    @currency_symbol = currency_symbol
     get_dates(payroll_ids)
     big_total
     @order = order
@@ -153,8 +154,8 @@ include ActionView::Helpers::NumberHelper
     end
   end
 
-  def number_to_format(number)
-    number_to_currency(number, :precision => 2, :format => "%u%n", :unit => "")
+  def number_to_format(number, currency_symbol = "")
+    number_to_currency(number, :precision => 2, :format => "%u%n", :unit => currency_symbol)
   end
 
   def get_dates(payroll_ids)
@@ -216,12 +217,12 @@ include ActionView::Helpers::NumberHelper
       end
 
       row << { :content => "#{number_to_format(a['total_unid_ord'])}", :align => :right, :font_style => font_style }
-      row << { :content => "#{number_to_format(a['valor_total_ord'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['valor_total_ord'], @currency_symbol)}", :align => :right, :font_style => font_style }
       row << { :content => "#{number_to_format(a['total_unid_extra'])}", :align => :right, :font_style => font_style }
-      row << { :content => "#{number_to_format(a['valor_total_extra'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['valor_total_extra'], @currency_symbol)}", :align => :right, :font_style => font_style }
       row << { :content => "#{number_to_format(a['total_unid_doble'])}", :align => :right, :font_style => font_style }
-      row << { :content => "#{number_to_format(a['valor_total_doble'])}", :align => :right, :font_style => font_style }
-      row << { :content => "#{number_to_format(a['total'])}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['valor_total_doble'], @currency_symbol)}", :align => :right, :font_style => font_style }
+      row << { :content => "#{number_to_format(a['total'], @currency_symbol)}", :align => :right, :font_style => font_style }
       
       if info.count == count
         @total['total_unid_ord'] += a['total_unid_ord']
@@ -268,12 +269,12 @@ include ActionView::Helpers::NumberHelper
 
     row << @total['nombre']
     row << "#{number_to_format(@total['total_unid_ord'])}"
-    row << "#{number_to_format(@total['valor_total_ord'])}"
+    row << "#{number_to_format(@total['valor_total_ord'], @currency_symbol)}"
     row << "#{number_to_format(@total['total_unid_extra'])}"
-    row << "#{number_to_format(@total['valor_total_extra'])}"
+    row << "#{number_to_format(@total['valor_total_extra'], @currency_symbol)}"
     row << "#{number_to_format(@total['total_unid_doble'])}"
-    row << "#{number_to_format(@total['valor_total_doble'])}"
-    row << "#{number_to_format(@total['total'])}"
+    row << "#{number_to_format(@total['valor_total_doble'], @currency_symbol)}"
+    row << "#{number_to_format(@total['total'], @currency_symbol)}"
     rows << row
     row = []
 

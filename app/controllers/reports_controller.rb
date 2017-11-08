@@ -66,6 +66,7 @@ class ReportsController < ApplicationController
         tasks = params[:tasks].split(",")
         order = params[:order]
         cc = params[:cc].split(",")
+        report_currency = Currency.find params[:currency]
         
         if tasks.empty?
           tasks = Task.select(:id).collect(&:id)
@@ -75,13 +76,13 @@ class ReportsController < ApplicationController
           cc = CostsCenter.select(:id).collect(&:id)
         end
         
-        @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order, cc)
+        @data = Employee.payment_types_report_data(employees, payroll_ids, tasks, order, cc, report_currency.currency_type)
 
         if format.to_s == "pdf"
 
           respond_to do |format|
             format.pdf do
-              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids, company_id)
+              pdf = PaymentTypeReportPDF.new(@data, order, payroll_ids, company_id, report_currency.symbol)
               send_data pdf.render, filename: "payment_type_report.pdf",
                 type: "application/pdf", disposition: "inline"
             end

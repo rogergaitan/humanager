@@ -1,15 +1,17 @@
 require 'concerns/encodable'
+require 'concerns/currency_converter'
 
 class Employee < ActiveRecord::Base
   include Encodable
+  include CurrencyConverter
   
   attr_accessible :gender, :birthday, :marital_status, :join_date, 
-  					:number_of_dependents, :seller, :social_insurance, :spouse, 
-  					:wage_payment, :entity_attributes, :department_id, 
-  					:occupation_id, :payment_frequency_id, :means_of_payment_id, 
-            :photo_attributes, :position_id, :employee_id, :is_superior,
-            :payment_unit_id, :price_defined_work, :payroll_type_id,
-            :number_employee, :account_bncr, :currency_id
+    :number_of_dependents, :seller, :social_insurance, :spouse, 
+    :wage_payment, :entity_attributes, :department_id, 
+    :occupation_id, :payment_frequency_id, :means_of_payment_id, 
+    :photo_attributes, :position_id, :employee_id, :is_superior,
+    :payment_unit_id, :price_defined_work, :payroll_type_id,
+    :number_employee, :account_bncr, :currency_id
   
   validates_uniqueness_of :number_employee, :allow_nil => true
 
@@ -119,7 +121,7 @@ class Employee < ActiveRecord::Base
     query
   end
 
-  def self.payment_types_report_data(employees, payroll_ids, task_ids, order, cc_ids)
+  def self.payment_types_report_data(employees, payroll_ids, task_ids, order, cc_ids, report_currency)
   
     data = []; infoData = [];
     info = {}
@@ -137,7 +139,7 @@ class Employee < ActiveRecord::Base
         employees.each do |employee_id|
 
           totl += 1
-          info = get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, "no_order")
+          info = get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, "no_order", report_currency)
                     
           unless info.empty?
             data << info
@@ -159,7 +161,7 @@ class Employee < ActiveRecord::Base
 
           info['nombre'] = "#{employee.entity.name} #{employee.entity.surname}"
           set_total('cc')
-          info['info'] = get_info_by_employee_no_order(payroll_ids, task_ids, employee.id, cc_ids, "employee")
+          info['info'] = get_info_by_employee_no_order(payroll_ids, task_ids, employee.id, cc_ids, "employee", report_currency)
                     
           unless info['info'].empty?
             info['info'] << @total
@@ -177,7 +179,7 @@ class Employee < ActiveRecord::Base
           info['nombre'] = "#{task.ntask}"
           info['unidad'] = "#{task.nunidad}"
           set_total('cc')
-          info['info'] = get_info_by_task_cc(payroll_ids, task.id, employees, cc_ids, "task")
+          info['info'] = get_info_by_task_cc(payroll_ids, task.id, employees, cc_ids, "task", report_currency)
 
           unless info['info'].empty?
             info['info'] << @total
@@ -195,7 +197,7 @@ class Employee < ActiveRecord::Base
 
           info['nombre'] = "#{cc.name_cc}"
           set_total('task')
-          info['info'] = get_info_by_task_cc(payroll_ids, task_ids, employees, cc.id, "centro_costo")
+          info['info'] = get_info_by_task_cc(payroll_ids, task_ids, employees, cc.id, "centro_costo", report_currency)
 
           unless info['info'].empty?
             info['info'] << @total
@@ -208,7 +210,7 @@ class Employee < ActiveRecord::Base
     result
   end
 
-  def self.get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, type)
+  def self.get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, type, report_currency)
 
     data = []; infoData = [];
     info = {}
@@ -227,27 +229,27 @@ class Employee < ActiveRecord::Base
 
         if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_ORDINARY
           infoData[index]['total_unid_ord'] += ph.time_worked.to_f
-          infoData[index]['valor_total_ord'] += ph.total.to_f
+          infoData[index]['valor_total_ord'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           @total['total_unid_ord'] += ph.time_worked.to_f
-          @total['valor_total_ord'] += ph.total.to_f
+          @total['valor_total_ord'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         end
         
         if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_EXTRA
           infoData[index]['total_unid_extra'] += ph.time_worked.to_f
-          infoData[index]['valor_total_extra'] += ph.total.to_f
+          infoData[index]['valor_total_extra'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           @total['total_unid_extra'] += ph.time_worked.to_f
-          @total['valor_total_extra'] += ph.total.to_f
+          @total['valor_total_extra'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         end
 
         if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_DOBLE
           infoData[index]['total_unid_doble'] += ph.time_worked.to_f
-          infoData[index]['valor_total_doble'] += ph.total.to_f
+          infoData[index]['valor_total_doble'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           @total['total_unid_doble'] += ph.time_worked.to_f
-          @total['valor_total_doble'] += ph.total.to_f
+          @total['valor_total_doble'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         end
 
-        infoData[index]['total'] += ph.total.to_f
-        @total['total'] += ph.total.to_f
+        infoData[index]['total'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
+        @total['total'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
 
       else
         
@@ -271,27 +273,27 @@ class Employee < ActiveRecord::Base
 
         if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_ORDINARY
           info['total_unid_ord'] = ph.time_worked.to_f
-          info['valor_total_ord'] = ph.total.to_f
+          info['valor_total_ord'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           @total['total_unid_ord'] += ph.time_worked.to_f
-          @total['valor_total_ord'] += ph.total.to_f
+          @total['valor_total_ord'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         end
         
         if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_EXTRA
           info['total_unid_extra'] = ph.time_worked.to_f
-          info['valor_total_extra'] = ph.total.to_f
+          info['valor_total_extra'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           @total['total_unid_extra'] += ph.time_worked.to_f
-          @total['valor_total_extra'] += ph.total.to_f
+          @total['valor_total_extra'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         end
 
         if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_DOBLE
           info['total_unid_doble'] = ph.time_worked.to_f
-          info['valor_total_doble'] = ph.total.to_f
+          info['valor_total_doble'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           @total['total_unid_doble'] += ph.time_worked.to_f
-          @total['valor_total_doble'] += ph.total.to_f
+          @total['valor_total_doble'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         end
 
-        info['total'] = ph.total.to_f
-        @total['total'] += ph.total.to_f
+        info['total'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
+        @total['total'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
 
         data << obj
         infoData << info
@@ -301,7 +303,7 @@ class Employee < ActiveRecord::Base
     infoData
   end
 
-  def self.get_info_by_task_cc(payroll_ids, task_id, employee_ids, cc_ids, type)
+  def self.get_info_by_task_cc(payroll_ids, task_id, employee_ids, cc_ids, type, report_currency)
 
     data = []; infoData = [];
     info = {}
@@ -311,7 +313,7 @@ class Employee < ActiveRecord::Base
                   .each do |ph|
 
       ph.payroll_employees.each do |pe|
-
+       
         obj = {}
         obj['employee'] = pe.employee_id
         obj['cc'] = ph.costs_center.name_cc
@@ -330,26 +332,26 @@ class Employee < ActiveRecord::Base
           
           if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_ORDINARY
             infoData[index]['total_unid_ord'] += ph.time_worked.to_f
-            infoData[index]['valor_total_ord'] += ph.total.to_f
+            infoData[index]['valor_total_ord'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
             @total['total_unid_ord'] += ph.time_worked.to_f
-            @total['valor_total_ord'] += ph.total.to_f
+            @total['valor_total_ord'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           end
           
           if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_EXTRA
             infoData[index]['total_unid_extra'] += ph.time_worked.to_f
-            infoData[index]['valor_total_extra'] += ph.total.to_f
+            infoData[index]['valor_total_extra'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
             @total['total_unid_extra'] += ph.time_worked.to_f
-            @total['valor_total_extra'] += ph.total.to_f
+            @total['valor_total_extra'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           end
 
           if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_DOBLE
             infoData[index]['total_unid_doble'] += ph.time_worked.to_f
-            infoData[index]['valor_total_doble'] += ph.total.to_f
+            infoData[index]['valor_total_doble'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
             @total['total_unid_doble'] += ph.time_worked.to_f
-            @total['valor_total_doble'] += ph.total.to_f
+            @total['valor_total_doble'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           end
-          infoData[index]['total'] += ph.total.to_f
-          @total['total'] += ph.total.to_f
+          infoData[index]['total'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
+          @total['total'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
         else
 
           info['nombre'] = "#{pe.employee.entity.name} #{pe.employee.entity.surname}"
@@ -373,27 +375,27 @@ class Employee < ActiveRecord::Base
           
           if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_ORDINARY
             info['total_unid_ord'] = ph.time_worked.to_f
-            info['valor_total_ord'] = ph.total.to_f
+            info['valor_total_ord'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
             @total['total_unid_ord'] += ph.time_worked.to_f
-            @total['valor_total_ord'] += ph.total.to_f
+            @total['valor_total_ord'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           end
           
           if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_EXTRA
             info['total_unid_extra'] = ph.time_worked.to_f
-            info['valor_total_extra'] = ph.total.to_f
+            info['valor_total_extra'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
             @total['total_unid_extra'] += ph.time_worked.to_f
-            @total['valor_total_extra'] += ph.total.to_f
+            @total['valor_total_extra'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           end
 
           if ph.payment_type.payment_type.to_s == PaymentType::PAYMENT_DOBLE
             info['total_unid_doble'] = ph.time_worked.to_f
-            info['valor_total_doble'] = ph.total.to_f
+            info['valor_total_doble'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
             @total['total_unid_doble'] += ph.time_worked.to_f
-            @total['valor_total_doble'] += ph.total.to_f
+            @total['valor_total_doble'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
           end
 
-          info['total'] = ph.total.to_f
-          @total['total'] += ph.total.to_f
+          info['total'] = check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
+          @total['total'] += check_currency(ph.payroll_currency_type, report_currency, ph.total, ph.exchange_rate)
 
           data << obj
           infoData << info

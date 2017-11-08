@@ -49,5 +49,13 @@ class PayrollHistory < ActiveRecord::Base
 
     list_result
   end
+  
+  def payroll_currency_type
+    payroll_log.payroll.currency.currency_type
+  end
+  
+  def exchange_rate
+    payroll_log.exchange_rate
+  end
 
 end
