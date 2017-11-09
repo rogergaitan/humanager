@@ -24,6 +24,7 @@ gem 'thin'
 gem 'cancan'
 gem 'hirb', '~> 0.7.0'
 gem 'jquery_mask_rails', '~> 0.1.0'
+gem 'axlsx_rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -58,4 +59,3 @@ group :development, :test do
   gem "rspec-rails"
   gem "test-unit", '3.2.6'
 end
-
