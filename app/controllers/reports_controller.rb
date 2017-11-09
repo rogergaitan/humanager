@@ -274,9 +274,9 @@ class ReportsController < ApplicationController
     get_dates(payroll_ids)
     
     respond_to do |format|
-      format.xls {
+      format.xlsx {
         response.headers['Content-Disposition'] = 'attachment; filename="general_payroll.xls"'
-        render :template => 'xls/general_payroll_xls'
+        render 'general_payroll'
       }
     end
   end
@@ -298,8 +298,8 @@ class ReportsController < ApplicationController
 
   def get_dates(payroll_ids)
     @name_payrolls = nil
-    Payroll.where( :id => payroll_ids ).each do |p|
-
+    Payroll.includes(:currency).where( :id => payroll_ids ).each do |p|
+      @currency_symbol = p.currency.symbol
       @name_payrolls = "#{p.payroll_type.description}"
       
       if(@start_date.nil? and @end_date.nil?)

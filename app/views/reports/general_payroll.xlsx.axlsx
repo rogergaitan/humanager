@@ -1,0 +1,28 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Comprobante General de Pago") do |sheet|
+  sheet.add_row [@company.label_reports_1,"", "" ,"Reporte General de Planilla"], b: true
+  sheet.add_row ["Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"], b: true
+  sheet.add_row [@company.label_reports_2], b: true
+  sheet.add_row [@company.label_reports_3], b: true
+  sheet.add_row [""]
+  sheet.add_row [""]
+  
+  #add headers
+  sheet.add_row @data[0].keys, b: true
+  
+  @data.each do |array|
+    row = []
+    array.each do |key, value|
+      if key == "Nombre Empleado"
+        row << value
+      else
+        row << number_to_currency(value, unit: @currency_symbol)
+      end
+    end
+    sheet.add_row row
+  end
+   
+end
+ 
+ 
