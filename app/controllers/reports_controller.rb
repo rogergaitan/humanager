@@ -88,7 +88,7 @@ class ReportsController < ApplicationController
             end
           end
         else
-          payment_type_report_xls(@data, payroll_ids, order, company_id)
+          payment_type_report_xls(@data, payroll_ids, order, company_id, report_currency.symbol)
         end
 
       when CONSTANTS[:REPORTS]['ACCRUED_WAGES_DATES']
@@ -281,10 +281,11 @@ class ReportsController < ApplicationController
     end
   end
 
-  def payment_type_report_xls(data, payroll_ids, order, company_id)
+  def payment_type_report_xls(data, payroll_ids, order, company_id, report_currency)
     @data = data
     @order = order
     @company =  Company.find_by_code(company_id)
+    @currency_symbol = report_currency
 
     get_dates(payroll_ids)
     
@@ -299,7 +300,6 @@ class ReportsController < ApplicationController
   def get_dates(payroll_ids)
     @name_payrolls = nil
     Payroll.includes(:currency).where( :id => payroll_ids ).each do |p|
-      @currency_symbol = p.currency.symbol
       @name_payrolls = "#{p.payroll_type.description}"
       
       if(@start_date.nil? and @end_date.nil?)
