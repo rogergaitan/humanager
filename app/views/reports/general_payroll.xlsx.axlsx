@@ -1,6 +1,6 @@
 wb = xlsx_package.workbook
 
-wb.add_worksheet(name: "Comprobante General de Pago") do |sheet|
+wb.add_worksheet(name: "Reporte General de Planilla") do |sheet|
   sheet.add_row [@company.label_reports_1,"", "" ,"Reporte General de Planilla"], b: true
   sheet.add_row ["Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}"], b: true
   sheet.add_row [@company.label_reports_2], b: true
