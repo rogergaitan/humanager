@@ -152,7 +152,7 @@ payment_type_reports.create_pdf_or_exel = function(format) {
 	if( format === 'pdf' ) {
 		url = url + '/' + payroll_ids[0] + '.pdf'
 	} else {
-		url = url + '/' + payroll_ids[0] + '.xls'
+		url = url + '/' + payroll_ids[0] + '.xlsx'
 	}
 
   window.open( url
@@ -171,14 +171,14 @@ payment_type_reports.validate_data = function(format) {
 
 	// Validation
   	if( $('#payrolls_results input:checked').length === 0 ) {
-      resources.PNotify('Atención!', 'Por favor selecione una planilla', 'alert');
+      resources.PNotify('Atención!', 'Por favor selecione una planilla.', 'error');
     	return false;
 	}
 
 	var numberEmployees = $('#ms-deduction_employee_ids .ms-selection li.ms-selected').length;
     
 	if(numberEmployees == 0) {
-    resources.PNotify("warning", "Por favor selecione los empleados");
+    resources.PNotify('Atención!', 'Por favor selecione los empleados', 'error');
 		return false;
 	}
 
