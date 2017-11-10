@@ -1,6 +1,16 @@
 reports_general_payroll = { }
 
 $(document).ready(function() {
+  
+  $('#payrolls_results').on('click', 'input', function() {
+    if( $('#payrolls_results input:checked').length === 1 ) {
+      $('#payrolls_results input').attr('disabled','disabled');
+      $('#payrolls_results input:checked').removeAttr('disabled','disabled');
+    } else {
+      $('#payrolls_results input').removeAttr('disabled','disabled');
+    }
+  });
+  
 	
 	$('#btn_create_pdf').on('click', function() {
 		reports_general_payroll.validate_data('pdf');
