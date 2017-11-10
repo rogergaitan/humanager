@@ -1,5 +1,5 @@
 class PaymentTypeReportPDF < Prawn::Document
-include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::NumberHelper
 
   def initialize(data, order, payroll_ids, company_id, currency_symbol)
     
