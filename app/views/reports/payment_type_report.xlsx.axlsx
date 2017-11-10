@@ -1,0 +1,154 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Labores por Tipo de Pago") do |sheet|
+  
+  headers = []
+  count = 1
+  order_by = "Agrupado por "
+  totals = { 
+    "nombre" => 'Gran Total',
+    "total_unid_ord" => 0,
+    "valor_total_ord" => 0,
+    "total_unid_extra" => 0,
+    "valor_total_extra" => 0,
+    "total_unid_doble" => 0,
+    "valor_total_doble" => 0,
+    "total" => 0
+  }
+  
+  if @order == "employee"
+    order_by += "Empleados"
+    headers << "Labor"
+    headers << "Und"
+    headers << "Centro de Costo"
+  end
+  
+  if @order == "task"
+    order_by += "Tareas"
+    headers << "Nombre"
+    headers << "Centro de Costo"
+  end
+
+  if @order  == "centro_costo"
+    order_by += "Centro de Costo"
+    headers << "Nombre"
+    headers << "Labor"
+  end
+  
+  if @order == "no_order"
+    order_by = "Sin Agrupar"
+    headers << "Nombre"
+    headers << "Labor"
+    headers << "Und"
+    headers << "Centro de Costo"
+    count = 2
+  
+    dt = []
+    da = {}
+    
+    @data.each do |d|
+      d.each do |e|  
+        dt << e
+      end
+    end
+    da["nombre"] = ""
+    da["info"] = dt
+    @data = []
+    @data << da
+  end
+  
+  headers << "Tot Uni Ord"
+  headers << "Val tot Ord"
+  headers << "Tot Uni Ext"
+  headers << "Val tot Ext"
+  headers << "Tot Uni Dob"
+  headers << "Val tot Dob"
+  headers << "Gran Total"
+  
+  sheet.add_row [@company.label_reports_1, "", "", "Reporte de Labores por Tipo de Pago"], b: true
+  sheet.add_row ["Planilla #{@name_payrolls} del #{@start_date} al #{@end_date}", "", "", order_by], b: true
+  sheet.add_row [@company.label_reports_2], b: true
+  sheet.add_row [@company.label_reports_3], b: true
+  sheet.add_row [""]
+  sheet.add_row [""]
+  
+  @data.each do |data_row|
+    headers_row = []
+    count_row = 0
+    
+    headers.each do |header|
+      headers_row << header
+    end
+    
+    sheet.add_row [data_row["nombre"]], sz: 12
+    sheet.add_row [""]
+    
+    sheet.add_row headers_row, b: true
+    
+    data_row["info"].each do |value_row|
+      values_row = []
+      count_row += 1
+
+      if @order == "employee"
+        values_row << value_row["nombre"] 
+        values_row << value_row["unidad"]
+        values_row << value_row["cc"]
+      end
+      
+      if @order == "task"
+        values_row << value_row["nombre"]    
+        values_row << value_row["cc"]
+      end
+      
+      if @order == "centro_costo"
+        values_row << value_row["nombre"]
+        values_row << value_row["task"]
+      end
+      
+      if @order == "no_order" 
+        values_row << value_row["nombre"]
+        values_row << value_row["tarea"]
+        values_row << value_row["unidad"]
+        values_row << value_row["cc"]
+      end
+      
+      values_row << value_row["total_unid_ord"]
+      values_row << number_to_currency(value_row["valor_total_ord"], unit: @currency_symbol)
+      values_row << value_row["total_unid_extra"]
+      values_row << number_to_currency(value_row["valor_total_extra"], unit: @currency_symbol)
+      values_row << value_row["total_unid_doble"]
+      values_row << number_to_currency(value_row["valor_total_doble"], unit: @currency_symbol)
+      values_row << number_to_currency(value_row["total"], unit: @currency_symbol)
+      
+      if data_row["info"].count == count_row
+        totals["total_unid_ord"] += value_row["total_unid_ord"]  
+        totals["valor_total_ord"] +=  value_row["valor_total_ord"]
+        totals["total_unid_extra"] += value_row["total_unid_extra"]
+        totals["valor_total_extra"] += value_row["valor_total_extra"]
+        totals["total_unid_doble"] += value_row["total_unid_doble"]
+        totals["valor_total_doble"] += value_row["valor_total_doble"]
+        totals["total"] += value_row["total"]
+      end
+      
+      sheet.add_row values_row
+    end
+    
+  end
+  
+  count.times.each do
+    sheet.add_row [""]
+  end
+
+  sheet.add_row ["", "Tot Uni Ord","Val tot Ord","Tot Uni Ext","Val tot Ext","Tot Uni Dob","Val tot Dob", "Gran Total"], b: true
+  sheet.add_row [
+    totals["nombre"], 
+    totals["total_unid_ord"],
+    number_to_currency(totals["valor_total_ord"], unit: @currency_symbol),
+    totals["total_unid_extra"],
+    number_to_currency(totals["valor_total_extra"], unit: @currency_symbol),
+    totals["total_unid_doble"],
+    number_to_currency(totals["valor_total_doble"], unit: @currency_symbol),
+    number_to_currency(totals["total"], unit: @currency_symbol)
+  ]
+
+end

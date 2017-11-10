@@ -289,9 +289,9 @@ class ReportsController < ApplicationController
     get_dates(payroll_ids)
     
     respond_to do |format|
-      format.xls {
+      format.xlsx {
         response.headers['Content-Disposition'] = 'attachment; filename="payment_type_report.xls"'
-        render :template => 'xls/payment_type_report_xls'
+        render 'payment_type_report'
       }
     end
   end
