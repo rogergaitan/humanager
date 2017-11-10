@@ -7,7 +7,7 @@ $(document).ready(function() {
 	});
 
 	$('#btn_create_excel').on('click', function() {
-		reports_general_payroll.validate_data('xml');
+		reports_general_payroll.validate_data('xlsx');
 	});
 
 })
@@ -49,7 +49,7 @@ reports_general_payroll.create_pdf_or_exel = function(format) {
   	if( format === 'pdf' ) {
   		url = url + '/' + payroll_ids[0] + '.pdf'
   	} else {
-  		url = url + '/' + payroll_ids[0] + '.xls'
+  		url = url + '/' + payroll_ids[0] + '.xlsx'
   	}
 
 	window.open( url
