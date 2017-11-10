@@ -281,7 +281,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def payment_type_report_xls(data, payroll_ids, order, company_id, report_currency)
+  def payment_type_report_xls(data, payroll_ids, order, company_id, currency_symbol)
     @data = data
     @order = order
     @company =  Company.find_by_code(company_id)
@@ -301,6 +301,7 @@ class ReportsController < ApplicationController
     @name_payrolls = nil
     Payroll.includes(:currency).where( :id => payroll_ids ).each do |p|
       @name_payrolls = "#{p.payroll_type.description}"
+      @currency_symbol = p.currency.symbol
       
       if(@start_date.nil? and @end_date.nil?)
         @start_date = p.start_date
