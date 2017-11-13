@@ -202,6 +202,7 @@ payroll.closePayrollSelected = function(payrollId, exchangeRate) {
           resources.showMessage('info', 'La planilla fue cerrada con exito.');
           setTimeout('location.reload()', 5000);
         } else {
+          resources.showMessage('alert', 'Errores al cerrar planilla.');
           payroll.show_details_errors(data['data']);
           $('#cerrar').prop('disabled', false);
         }
@@ -213,8 +214,6 @@ payroll.closePayrollSelected = function(payrollId, exchangeRate) {
 }
 
 payroll.show_details_errors = function(data) {
-
-  $('#div-message').html('');
 
   $.each(data, function(index, array) {
 
