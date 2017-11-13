@@ -196,22 +196,24 @@ payroll.closePayrollSelected = function(payrollId, exchangeRate) {
       success: function(data) {
         
         if(data['status']) {
-          $('#table_results_close_payroll').hide();
-          $('#results_close_payroll').html('La Planilla fue cerrada con exito');
-          $('#myModalLabel').html('Mensaje');
-          $("#payrollModal").modal('show');
+          //$('#table_results_close_payroll').hide();
+          //$('#results_close_payroll').html('La Planilla fue cerrada con exito');
+          //$('#myModalLabel').html('Mensaje');
+          //$("#payrollModal").modal('show');
+          $('#cerrar').prop('disabled', true);
+          resources.showMessage('info', 'La planilla fue cerrada con exito.');
+          setTimeout('location.reload()', 5000);
         } else {
-          payroll.show_details_erros(data['data']);
+          payroll.show_details_errors(data['data']);
         }
       }
     });
 
     resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
-    setTimeout('location.reload()', 5000);
   }
 }
 
-payroll.show_details_erros = function(data) {
+payroll.show_details_errors = function(data) {
 
   $('#table_results_close_payroll > tbody').html('');
 
@@ -228,7 +230,6 @@ payroll.show_details_erros = function(data) {
 
   $('#myModalLabel').html('Mensaje: Error salario insuficiente');
   $('#table_results_close_payroll').show();
-  $("#payrollModal").modal('show');
 }
 
 // Process that sends information to firebird
@@ -276,6 +277,7 @@ function Reactivar() {
           payroll_id: payrollId.val()
         },
         success: function() { 
+          $('#seleccion').prop('disabled', true);
           resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
           setTimeout('location.reload()', 5000);
         }
