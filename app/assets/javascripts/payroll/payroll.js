@@ -219,10 +219,12 @@ payroll.show_details_errors = function(data) {
   $.each(data, function(index, array) {
 
     $('#div-message').append(
+      
         '<p>' + array['employee_name'] + '</p>' +
         '<p>' + array['total_salary'] + '</p>' +
-        '<p>' + array['total_deductions'] + '</p>' +
-  });
+        '<p>' + array['total_deductions'] + '</p>'
+    )
+});
 
   $('#myModalLabel').html('Mensaje: Error salario insuficiente');
   $('#table_results_close_payroll').show();
