@@ -56,7 +56,6 @@ pl.employeeCodeFormatResult = function(employee) {
 pl.employeeCodeFormatSelection = function(employee) {
 	pl.setValuesFromSearch(pl.search_types.employees, employee);
 	return employee.number_employee;xit
-	
 }
 /**************************************************************************************/
 /* Seach Employee By Name */
@@ -89,7 +88,6 @@ pl.searchEmployeeByName = function() {
 		},
 		formatResult: pl.employeeNameFormatResult,
 		formatSelection: pl.employeeNameFormatSelection,
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
 		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 	}).on("select2-close", function (e) {
 		if( pl.validationTabs() ) {
@@ -115,8 +113,7 @@ pl.employeeNameFormatResult = function(employee) {
 }
 
 pl.employeeNameFormatSelection = function(employee) {
-	pl.setValuesFromSearch(pl.search_types.employees, employee);
-	return employee.name + " " + employee.surname;
+	return pl.setValuesFromSearch(pl.search_types.employees, employee);
 }
 /**************************************************************************************/
 /* Seach Costs Center By Code */
@@ -173,8 +170,7 @@ pl.ccCodeFormatResult = function(cc) {
 }
 
 pl.ccCodeFormatSelection = function(cc) {
-	pl.setValuesFromSearch(pl.search_types.cc, cc);
-	return cc.icost_center;
+	return pl.setValuesFromSearch(pl.search_types.cc, cc);
 }
 /**************************************************************************************/
 /* Seach Costs Center By Name */
@@ -231,8 +227,7 @@ pl.ccNameFormatResult = function(cc) {
 }
 
 pl.ccNameFormatSelection = function(cc) {
-	pl.setValuesFromSearch(pl.search_types.cc, cc);
-	return cc.name_cc;
+	return pl.setValuesFromSearch(pl.search_types.cc, cc);
 }
 /**************************************************************************************/
 /* Seach Task By Code */
@@ -293,8 +288,7 @@ pl.taskCodeFormatResult = function(task) {
 }
 
 pl.taskCodeFormatSelection = function(task) {
-	pl.setValuesFromSearch(pl.search_types.tasks, task);
-	return task.itask;
+	return pl.setValuesFromSearch(pl.search_types.tasks, task);
 }
 /**************************************************************************************/
 /* Seach Task By name */
@@ -355,8 +349,7 @@ pl.taskNameFormatResult = function(task) {
 }
 
 pl.taskNameFormatSelection = function(task) {
-	pl.setValuesFromSearch(pl.search_types.tasks, task);
-	return task.ntask;
+	return pl.setValuesFromSearch(pl.search_types.tasks, task);
 }
 /**************************************************************************************/
 /* Set Values From the Seach result */
