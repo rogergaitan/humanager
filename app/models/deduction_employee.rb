@@ -19,5 +19,33 @@ class DeductionEmployee < ActiveRecord::Base
 			end
 		end
 	end
+  
+  def calculation_value
+    deduction.individual? ? calculation : deduction.deduction_value
+  end
+  
+  def maximum_deduction_currency
+    deduction.maximum_deduction_currency.currency_type
+  end
+  
+  def maximum_deduction_value
+    deduction.maximum_deduction  
+  end
+  
+  def deduction_currency
+    deduction.deduction_currency.currency_type
+  end
+  
+  def amount_exhaust_value
+    deduction.amount_exhaust
+  end
+  
+  def amount_exhaust_currency
+   deduction.amount_exhaust_currency.currency_type  
+  end
+  
+  def last_payment
+    deduction_payments.last.current_balance
+  end
 
 end
