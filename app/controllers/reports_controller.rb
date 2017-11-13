@@ -285,7 +285,7 @@ class ReportsController < ApplicationController
     @data = data
     @order = order
     @company =  Company.find_by_code(company_id)
-    @currency_symbol = report_currency
+    @currency_symbol = currency_symbol
 
     get_dates(payroll_ids)
     
