@@ -19,8 +19,6 @@ $(document).ready(function() {
     var id = $('#activas .ckActive:checked').val();
     var exchangeRate = $('#exchange_rate').val();
     
-    currencyMask('#exchange_rate');
-    
     payroll.closePayrollSelected(id, exchangeRate);
   });
 	
@@ -194,17 +192,18 @@ payroll.closePayrollSelected = function(payrollId, exchangeRate) {
         exchange_rate: exchangeRate
       },
       success: function(data) {
+        $('#cerrar').prop('disabled', true);  
         
         if(data['status']) {
           //$('#table_results_close_payroll').hide();
           //$('#results_close_payroll').html('La Planilla fue cerrada con exito');
           //$('#myModalLabel').html('Mensaje');
           //$("#payrollModal").modal('show');
-          $('#cerrar').prop('disabled', true);
           resources.showMessage('info', 'La planilla fue cerrada con exito.');
           setTimeout('location.reload()', 5000);
         } else {
           payroll.show_details_errors(data['data']);
+          $('#cerrar').prop('disabled', false);
         }
       }
     });
@@ -215,16 +214,16 @@ payroll.closePayrollSelected = function(payrollId, exchangeRate) {
 
 payroll.show_details_errors = function(data) {
 
-  $('#table_results_close_payroll > tbody').html('');
+  $('#div-message').html('');
 
   $.each(data, function(index, array) {
 
-    $('#table_results_close_payroll > tbody').append(
-      '<tr>' +
-        '<td>' + array['employee_name'] + '</td>' +
-        '<td>' + array['total_salary'] + '</td>' +
-        '<td>' + array['total_deductions'] + '</td>' +
-      '</tr>'
+    $('#div-message').append(
+      
+        '<p>' + array['employee_name'] + '</p>' +
+        '<p>' + array['total_salary'] + '</p>' +
+        '<p>' + array['total_deductions'] + '</p>' +
+      
     );
   });
 
@@ -293,11 +292,3 @@ payroll.confirm = function () {
   return resp;
 }
 
-function currencyMask(selector) {
-  $(selector).mask("FNNNNNNNNN.NN", {
-    translation: {
-      'N': {pattern: /\d/, optional: true},
-      'F': {pattern: /\d/}
-    }
-  });    
-}
