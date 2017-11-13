@@ -80,9 +80,13 @@ wb.add_worksheet(name: "Labores por Tipo de Pago") do |sheet|
       headers_row << header
     end
     
-    sheet.add_row [data_row["nombre"]], sz: 12
-    sheet.add_row [""]
+    if @order == "task"
+      sheet.add_row ["#{data_row["nombre"]} (#{data_row["unidad"]})"], sz: 12
+    else
+      sheet.add_row [data_row["nombre"]], sz: 12
+    end
     
+    sheet.add_row [""]
     sheet.add_row headers_row, b: true
     
     data_row["info"].each do |value_row|
