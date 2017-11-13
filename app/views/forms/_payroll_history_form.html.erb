@@ -43,7 +43,8 @@
 	<td class="controls_item" id="td_time_worked" style="width: 9%;">
 		<div class="row no-gutter">
 			<div class="col-md-12 form-group_">
-				<%= f.number_field :time_worked, :class => 'form-control input-table time-worked', :tabindex => '1', :value => 1, :required => true %>
+				<%= f.number_field :time_worked, :class => 'form-control input-table time-worked', :tabindex => '1', :value => 1, 
+          :required => true %>
 			</div>
 		</div>
 	</td>
@@ -51,7 +52,8 @@
 	<td class="controls_item" id="td_performance" style="width: 9%;">
 		<div class="row no-gutter">
 			<div class="col-md-12">
-				<%= f.text_field :performance, :class => "form-control", :tabindex => '2' %>
+				<%= f.text_field :performance, :class => "form-control", :tabindex => '2',
+				  :data => {:error => 'Este valor es requerido.'} %>
 			</div>
 		</div>
 	</td> 
