@@ -234,12 +234,13 @@ class Payroll < ActiveRecord::Base
 
                 # porcentual
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                  percentage = (salary.to_f*de.calculation/100)
+                  percentage = (salary.to_f*de.calculation_value/100)
+                  
                   deduction_value = check_currency(payroll_currency, de.maximum_deduction_currency,
-                                                   percentage, exchange_rate)
+                                                                          percentage, exchange_rate)
                   
                   maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
-                                                     de.maximum_deduction_value, exchange_rate)
+                                                                                 de.maximum_deduction_value, exchange_rate)
                   
                   deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
@@ -261,7 +262,7 @@ class Payroll < ActiveRecord::Base
 
                 # porcentual
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                  percentage = (salary.to_f*de.calculation.to_f/100)
+                  percentage = (salary.to_f*de.calculation_value/100)
                   deduction_value = check_currency(payroll_currency, de.maximum_deduction_currency,
                                                    percentage, exchange_rate)
                   
