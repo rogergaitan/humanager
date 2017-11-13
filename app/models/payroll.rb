@@ -136,7 +136,7 @@ class Payroll < ActiveRecord::Base
                 # fija
                 if ope.other_payment.calculation_type.to_s == OtherPayment::CALCULATION_TYPE_FIXED
                   other_payment_details['payment'] = check_currency(payroll_currency, other_currency, 
-                                                                                                       calculation.to_f, exchange_rate)
+                                                                    calculation.to_f, exchange_rate)
                 end
               else
                 add = false
@@ -210,7 +210,7 @@ class Payroll < ActiveRecord::Base
 
     list_employees.each do |id, salary|
 
-      DeductionEmployee.includes(deduction: [:deduction_currency], employee: [:entity]).where(:employee_id => id).each do |de|
+      DeductionEmployee.includes(deduction: :deduction_currency, employee: :entity).where(:employee_id => id).each do |de|
         
         if de.deduction.state.to_s == Deduction::STATE_ACTIVE and !de.completed
 
@@ -224,8 +224,6 @@ class Payroll < ActiveRecord::Base
           deduction_details['state'] = true
           deduction_details['state_deduction_employee'] = true
           add = true
-          calculation = de.deduction.individual? ? de.calculation : de.deduction.deduction_value
-          currency_type = de.deduction.maximum_deduction_currency.currency_type
           
           case de.deduction.deduction_type.to_s
             
@@ -237,20 +235,20 @@ class Payroll < ActiveRecord::Base
                 # porcentual
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
                   percentage = (salary.to_f*calculation/100)
-                  deduction_value = check_currency(payroll_currency, currency_type, 
-                                                                           percentage, exchange_rate)
+                  deduction_value = check_currency(payroll_currency, currency_type,
+                                                   percentage, exchange_rate)
                   
                   maximum_deduction = check_currency(payroll_currency, currency_type,
-                                                                                 de.deduction.maximum_deduction, exchange_rate)
+                                                     de.maximum_deduction_value, exchange_rate)
                   
-                  deduction_amount = check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
+                  deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
                 end
 
                 # fija
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
-                  deduction_details['payment'] = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type, 
-                                                                                              de.calculation.to_f, exchange_rate)
+                  deduction_details['payment'] = check_currency(payroll_currency, de.deduction_currency,
+                                                                de.calculation_value, exchange_rate)
                 end
               else
                 add = false
@@ -264,20 +262,20 @@ class Payroll < ActiveRecord::Base
                 # porcentual
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
                   percentage = (salary.to_f*calculation.to_f/100)
-                  deduction_value = check_currency(payroll_currency,currency_type, 
-                                                    percentage, exchange_rate)
+                  deduction_value = check_currency(payroll_currency, de.maximum_deduction_currency,
+                                                   percentage, exchange_rate)
                   
-                  maximum_deduction = check_currency(payroll_currency, currency_type,
-                                                                                 de.deduction.maximum_deduction, exchange_rate)
+                  maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
+                                                     de.maximum_deduction_value, exchange_rate)
                   
-                  deduction_amount =  check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
+                  deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
                   deduction_details['payment'] = (salary.to_f*deduction_amount/100)
                 end
 
                 # fija
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
-                  deduction_details['payment'] = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type,
-                                                                  de.calculation.to_f, exchange_rate)
+                  deduction_details['payment'] = check_currency(payroll_currency, de.deduction_currency,
+                                                                de.calculation_value, exchange_rate)
                 end
 
                 deduction_details['state'] = false
@@ -290,41 +288,43 @@ class Payroll < ActiveRecord::Base
             when Deduction::DEDUCTION_TYPE_EXHAUST
               if de.deduction.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
                 
-                amount_exhaust = check_currency(payroll_currency, de.deduction.amount_exhaust_currency.currency_type, 
-                                                                                    de.deduction.amount_exhaust.to_f, exchange_rate)
+                amount_exhaust = check_currency(payroll_currency, de.amount_exhaust_currency,
+                                                de.amount_exhaust_value, exchange_rate)
                 payment = 0
                 
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
-                  payment = check_currency(payroll_currency, de.deduction.deduction_currency.currency_type,  
-                                            de.calculation.to_f, exchange_rate)
+                  payment = check_currency(payroll_currency, de.deduction_currency,
+                                           de.calculation_value, exchange_rate)
                 end
                 
                 if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                  percentage = (salary.to_f*calculation.to_f/100)
-                  deduction_value = check_currency(payroll_currency, currency_type,
-                                                    percentage , exchange_rate)
+                  percentage = (salary.to_f*de.calculation_value/100)
                   
-                  maximum_deduction = check_currency(payroll_currency, currency_type,
-                                                      de.deduction.maximum_deduction, exchange_rate)
+                  deduction_value = check_currency(payroll_currency, de.maximum_deduction_currency,
+                                                                           percentage, exchange_rate)
                   
-                  deduction_amount = check_maximum_deduction(deduction_value, de.deduction.maximum_deduction.to_f)
+                  maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
+                                                     de.maximum_deduction_value, exchange_rate)
+                  
+                  deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
+                  
                   payment = (salary.to_f*deduction_amount/100)
                 end
                 
                 if de.deduction_payments.blank?
                   deduction_details['previous_balance'] = amount_exhaust
-                  deduction_details['current_balance'] = (amount_exhaust - calculation)
+                  deduction_details['current_balance'] = (amount_exhaust - de.calculation_value)
                   deduction_details['payment'] = payment
                 else
                   current_balance = 0
                   
                   if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_FIXED
-                    current_balance = check_currency(payroll_type, de.deduction.currency.currency_type, 
-                                                    de.deduction_payments.last.current_balance.to_f, exchange_rate)
+                    current_balance = check_currency(payroll_type, de.deduction_currency_type, 
+                                                     de.last_payment, exchange_rate)
                   end
                               
                   if de.deduction.calculation_type.to_s == Deduction::CALCULATION_TYPE_PERCENTAGE
-                    current_balance = (salary.to_f*de.deduction_payment.last.current_balance.to_f/100)
+                    current_balance = (salary.to_f*de.last_payment/100)
                   end
                   
                   deduction_details['current_balance'] = 0
