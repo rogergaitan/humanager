@@ -457,7 +457,7 @@ class Payroll < ActiveRecord::Base
 
         if deduction['state'] == false
           d = Deduction.find(deduction['deduction_id'])
-          d.update_column(:state => Deduction::STATE_COMPLETED)
+          d.update_column(:state, Deduction::STATE_COMPLETED)
         end
 
         if deduction['state_deduction_employee'] == false
@@ -491,7 +491,6 @@ class Payroll < ActiveRecord::Base
 
   # Save the other payments
   def self.save_other_payment_payments(date, payroll, list_other_payments)
-    payments = 0
     
     list_other_payments.each do |id, other_payments|
 
@@ -509,7 +508,7 @@ class Payroll < ActiveRecord::Base
 
         if other_payment['state'] == false
           op = OtherPayment.find(other_payment['other_payment_id'])
-          op.update_column(:state => OtherPayment::STATE_COMPLETED)
+          op.update_column(:state, OtherPayment::STATE_COMPLETED)
         end
 
         if other_payment['state_other_payment_employee'] == false
@@ -518,7 +517,6 @@ class Payroll < ActiveRecord::Base
         end
       end # End each other_payments
     end # End each list_other_payments
-    payments
   end
   
   ##################################################################################################
