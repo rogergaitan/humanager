@@ -15,8 +15,9 @@
     <div class="input-append">
       <div class="controls">
         <span class="employee_calculation_currency_symbol"></span>
-        <%= f.text_field :calculation, :size => "5x5", :class => 'form-control',
-        :value => number_with_precision(f.object.calculation, delimiter: ',', separator: '.', precision: 2) %>
+        <%= f.text_field :calculation, :size => "5x5", :class => 'form-control', :min => 1,
+        :data => { :parsley_type => "number", :parsley_required => true },
+        :value => number_to_currency(f.object.calculation, unit: "", delimiter: "") %>
       </div>
     </div>
   </td>
