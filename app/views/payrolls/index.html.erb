@@ -133,7 +133,8 @@
           
           <div class="form-group">
             <%= label_tag :exchange_rate, "Tasa de cambio", :class=> "control-label" %>
-            <%= text_field_tag :exchange_rate, '', :class =>  "form-control", :required => true %>
+            <%= text_field_tag :exchange_rate, '', :class =>  "form-control", :min => 1,
+              :data => { :parsley_type => "number", :parsley_required => true } %>
           </div>
           
           <%= button_tag "Cancelar", :class => "btn btn-default", :type => :button, data: {dismiss: "modal"} %>

@@ -14,14 +14,6 @@ $(document).ready(function() {
     }
   });
   
-  $('#close_payroll_modal button[type=submit]').click(function (e) {
-    
-    var id = $('#activas .ckActive:checked').val();
-    var exchangeRate = $('#exchange_rate').val();
-    
-    payroll.closePayrollSelected(id, exchangeRate);
-  });
-	
   // Enable and Disabled the checkbox
   $('#activas').on('change', '.ckActive', function() {
     
@@ -51,6 +43,11 @@ $(document).ready(function() {
   
   //do not submit close payroll modal form
   window.Parsley.on('form:submit', function() {
+    
+    var id = $('#activas .ckActive:checked').val();
+    var exchangeRate = $('#exchange_rate').val();
+    
+    payroll.closePayrollSelected(id, exchangeRate);
     return false;
   });
   
