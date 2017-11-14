@@ -504,7 +504,6 @@ class Payroll < ActiveRecord::Base
         other_payment_payments.payment = other_payment['payment']
         other_payment_payments.is_salary = other_payment['constitutes_salary']
         other_payment_payments.save
-        payments += other_payment['payment']
 
         if other_payment['state'] == false
           op = OtherPayment.find(other_payment['other_payment_id'])
