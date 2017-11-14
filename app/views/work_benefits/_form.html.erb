@@ -1,36 +1,35 @@
 <script type="text/javascript">
   var debit_account = [];
-	var credit_account = [];
+  var credit_account = [];
   var costs_center = []
  
   <% @debit_accounts.each do |cc| %>
-    debit_account.push(new Array(
-        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
-        '<%=h cc.naccount %>', 
-        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
-        <%= cc.id %>,
-        <%= cc.iaccount %>
-    ));
+    debit_account.push({
+      iaccount: <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      name: '<%=h cc.naccount %>', 
+      father: <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+      id: <%= cc.id %>
+    });
   <% end %>
 
   <% @credit_accounts.each do |cc| %>
-    credit_account.push(new Array(
-        <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
-        '<%=h cc.naccount %>', 
-        <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
-        <%= cc.id %>,
-        <%= cc.iaccount %>
-    ));
+    credit_account.push({
+      iaccount: <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      name: '<%=h cc.naccount %>', 
+      father: <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+      id: <%= cc.id %>
+    });
   <% end %>
 
   <% @cost_centers.each do |cc| %>
-    costs_center.push(new Array(
-      '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>',
-      '<%=h cc.name_cc %>',
-      '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>',
-      <%= cc.id %>
-    ));
+    costs_center.push({
+      iaccount: <%= cc.icost_center.blank? ? 0 : cc.icost_center %>,
+      name: '<%=h cc.name_cc %>',
+      father: <%= cc.icc_father.blank? ? 0 : cc.icc_father %>,
+      id: <%= cc.id %>
+    });
   <% end %>
+  
 </script>
 
 <%= javascript_include_tag 'resources' %>

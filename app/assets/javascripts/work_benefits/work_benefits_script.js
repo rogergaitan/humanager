@@ -1,87 +1,90 @@
 $(jQuery(document).ready(function($) {
-	 types = {
+   
+  var types = {
     add: 'add',
     remove: 'remove',
     show: 'show'
   };
   
   $(".add_fields").hide();
+  
   $('form').on('click', '.add_fields', addFields);
   
 	$('#work_benefit_employee_ids').multiSelect({
-	    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
-	    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
-	    afterInit: function(ms){
-	      var that = this,
-	      $selectableSearch = that.$selectableUl.prev(),
-	      $selectionSearch = that.$selectionUl.prev(),
-	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
+    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
+    afterInit: function(ms){
+      var that = this,
+      $selectableSearch = that.$selectableUl.prev(),
+      $selectionSearch = that.$selectionUl.prev(),
+      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
-	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-	      .on('keydown', function(e){
-	        if (e.which === 40){
-	          that.$selectableUl.focus();
-	          return false;
-	        }
-	      });
+      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+      .on('keydown', function(e){
+        if (e.which === 40){
+          that.$selectableUl.focus();
+          return false;
+        }
+      });
 
-	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-	      .on('keydown', function(e){
-	        if (e.which == 40){
-	          that.$selectionUl.focus();
-	          return false;
-	        }
-	      });
-	    },
-	    afterSelect: function(values){
-        searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
-        this.qs1.cache();
-	      this.qs2.cache();
-	    },
-	    afterDeselect: function(values){
-	      searchEmployeeByAttr(values[0], 'id', 'multi', types.remove);
-        this.qs1.cache();
-	      this.qs2.cache();
-	    }
-	  });
+      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+      .on('keydown', function(e){
+        if (e.which == 40){
+          that.$selectionUl.focus();
+          return false;
+        }
+      });
+    },
+    afterSelect: function(values){
+      searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
+      this.qs1.cache();
+      this.qs2.cache();
+    },
+    afterDeselect: function(values){
+      searchEmployeeByAttr(values[0], 'id', 'multi', types.remove);
+      this.qs1.cache();
+      this.qs2.cache();
+    }
+	});
 	
-	$('#work_benefit_payroll_type_ids').multiSelect({
-	    
-	    afterInit: function(ms){
-	      var that = this,
-	      $selectableSearch = that.$selectableUl.prev(),
-	      $selectionSearch = that.$selectionUl.prev(),
-	      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-	      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+  
+  $('#work_benefit_payroll_type_ids').multiSelect({
+    
+    afterInit: function(ms) {
+      var that = this,
+      $selectableSearch = that.$selectableUl.prev(),
+      $selectionSearch = that.$selectionUl.prev(),
+      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
-	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-	      .on('keydown', function(e){
-	        if (e.which === 40){
-	          that.$selectableUl.focus();
-	          return false;
-	        }
-	      });
+      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+      .on('keydown', function(e){
+        if (e.which === 40){
+          that.$selectableUl.focus();
+          return false;
+        }
+      });
 
-	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-	      .on('keydown', function(e){
-	        if (e.which == 40){
-	          that.$selectionUl.focus();
-	          return false;
-	        }
-	      });
-	    },
-	    afterSelect: function(){
-	      this.qs1.cache();
-	      this.qs2.cache();
-	    },
-	    afterDeselect: function(){
-	      this.qs1.cache();
-	      this.qs2.cache();
-	    }
-	  });
+      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+      .on('keydown', function(e){
+        if (e.which == 40){
+          that.$selectionUl.focus();
+          return false;
+        }
+      });
+    },
+    afterSelect: function(){
+      this.qs1.cache();
+      this.qs2.cache();
+    },
+    afterDeselect: function(){
+      this.qs1.cache();
+      this.qs2.cache();
+    }
+  });
 	
-	// Update validation
+  // Update validation
   $('#work_benefit_employee_ids, #work_benefit_payroll_type_ids').change(function() {
     var modelName = $('form:eq(0)').data('modelName');
     var referenceId = $('form:eq(0)').data('referenceId');
@@ -89,30 +92,34 @@ $(jQuery(document).ready(function($) {
   });
 	
 	// Generates the treeview with the different accounts
-	$('#debit-button').click(function(){
+	$('#debit-button').click(function() {
 		$('#myModalLabel').html('Seleccione la cuenta contable');
-		treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');
+    treeviewhr.cc_tree(debit_account, true, 'load_debit_accounts', 'work_benefit_debit_account');
 	});
 
-	$('#credit-button').click(function(){
+	$('#credit-button').click(function() {
     if($("#credit-button").attr("data-toggle")) {
 		  $('#myModalLabel').html('Seleccione la cuenta contable');
 		  treeviewhr.cc_tree(credit_account, true, 'load_credit_account_name', 'work_benefit_credit_account');
     }
 	});
 
-	$('#cost-centrt-button').click(function(){
+	$('#cost-centrt-button').click(function() {
 		$('#myModalLabel').html('Seleccione un Centro de costo');
 		treeviewhr.cc_tree(costs_center, true, 'load_costs_center_name', 'work_benefit_costs_center_id');
 	});
 	
 	// Populates the autocompletes for the accounts
-  	fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "#load_debit_accounts", 
-                                                             "#work_benefit_debit_account", "debit_account_");
-    fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "#load_credit_account_name", 
-                                                            "#work_benefit_credit_account", "credit_account_");
-  	fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "#load_costs_center_name", "#work_benefit_costs_center_id");
-	// Populates the filter for employees
+  fetchPopulateAutocomplete('/work_benefits/fetch_debit_accounts', "#load_debit_accounts", 
+                                          "#work_benefit_debit_account", "debit_account_");
+
+  fetchPopulateAutocomplete('/work_benefits/fetch_credit_accounts', "#load_credit_account_name", 
+                                          "#work_benefit_credit_account", "credit_account_");
+
+  fetchCostCenterAutocomplete('/work_benefits/fetch_cost_center', "#load_costs_center_name", 
+                                          "#work_benefit_costs_center_id");
+  
+  // Populates the filter for employees
 	populateEmployeesFilter('/work_benefits/fetch_employees', 'load_filter_employees_text', 'load_filter_employees_id');
 
 	populatePayrollTypesFilter('/work_benefits/fetch_payroll_type', 'load_filter_payroll_types_text', 'load_filter_payroll_types_id');
@@ -126,14 +133,14 @@ $(jQuery(document).ready(function($) {
 	});	
 	
 	// Allows add the selected account to the textfield	
-  	$('#list').on({
-		click: set_account,
-		mouseenter: function() {
-			$(this).css("text-decoration", "underline");
-		},
-		mouseleave: function() {
-			$(this).css("text-decoration", "none");
-		}}, ".node_link");
+  $('#list').on({
+    click: set_account,
+    mouseenter: function() {
+      $(this).css("text-decoration", "underline");
+    },
+    mouseleave: function() {
+      $(this).css("text-decoration", "none");
+  }}, ".node_link");
 
 	is_beneficiary( $('#work_benefit_is_beneficiary').is(':checked') );
 
@@ -143,32 +150,32 @@ $(jQuery(document).ready(function($) {
 	searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center");
 
 	$("#search_cost_center_results").on("click", ".pag a", function() {
-    	$.getScript(this.href);
-		return false;
-  	});
+    $.getScript(this.href);
+	  return false;
+  });
 
-  	$('#search_cost_center_form input').keyup(function() {
-    	return searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
-  	});
+  $('#search_cost_center_form input').keyup(function() {
+    return searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
+  });
 
-  	$('#clear_task').click(function() {
-		$('#cost_center_name').val('');
-		searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
+  $('#clear_task').click(function() {
+	  $('#cost_center_name').val('');
+	  searchCostCenter( $('#cost_center_name').val(), "/work_benefits/search_cost_center" );
 	});
 
   	// Seach Cost center
 	$("#search_cost_center_results").on("click", "table tr a", function(e) {
-  		$('#load_costs_center_name').val( $(this).html() );
-  		$('#work_benefit_costs_center_id').val( $(this).next().val() );
-    	$('#costCenterModal button:eq(2)').trigger('click');
-  		e.preventDefault();
-  	});
+    $('#load_costs_center_name').val( $(this).html() );
+    $('#work_benefit_costs_center_id').val( $(this).next().val() );
+    $('#costCenterModal button:eq(2)').trigger('click');
+    e.preventDefault();
+  });
   	
-  	$('#work_benefit_percentage').keyup(resources.twoDecimals);
+  $('#work_benefit_percentage').keyup(resources.twoDecimals);
 
-  	// Empleados
-  	$('#emplotee_select_all').parents('label').click(function() {
-		employeesSelectAll();
+  // Empleados
+  $('#emplotee_select_all').parents('label').click(function() {
+	  employeesSelectAll();
 	});
 
 	$('#emplotee_select_all').next().click(function() {
@@ -200,10 +207,10 @@ $(jQuery(document).ready(function($) {
 	});
 
 	$('#superiors_employees').change(function() {
-    	filterEmployees("superior", $(this).val());
-  	});
+    filterEmployees("superior", $(this).val());
+  });
   
-  calculationType( $("#work_benefit_calculation_type"));
+  calculationType($("#work_benefit_calculation_type"));
   
   $("#work_benefit_calculation_type").on("change", function () { 
     calculationType(this);
@@ -211,7 +218,7 @@ $(jQuery(document).ready(function($) {
   
   showHideEmployees(); 
   
-   $("label[for=work_benefit_individual]").click(function() {
+  $("label[for=work_benefit_individual]").click(function() {
     showHideEmployees();
   });
 
@@ -369,12 +376,16 @@ function is_beneficiary(value) {
 }
 
 function fetchPopulateAutocomplete(url, textField, idField, dataField) {
-  $.getJSON(url, function(data) {
-    $(textField).autocomplete({
 
+  $.getJSON(url, function(data) {
+
+    $(textField).autocomplete({
       source: $.map(data, function(item) {
         $.data(document.body, dataField + item.id + "", item.iaccount + " - " + item.naccount);
-          return { label: item.iaccount + " - " + item.naccount, id: item.id }
+        return {
+          label: item.iaccount + " - " + item.naccount,
+          id: item.id
+        }
       }),
       
       select: function(event, ui) {

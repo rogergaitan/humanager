@@ -1,7 +1,12 @@
 <script type="text/javascript">
   var cuenta_contable = [];
   <%  @cuenta_contable.each do |cc| %>
-    cuenta_contable.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>));
+    cuenta_contable.push({
+      iaccount: <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      name: '<%=h cc.naccount %>', 
+      father: <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+      id: <%= cc.id %>
+    });
   <% end %>
 </script>
 <%= javascript_include_tag 'other_salaries/salaries' %>

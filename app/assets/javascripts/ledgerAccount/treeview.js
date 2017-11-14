@@ -30,18 +30,18 @@ function appendChildren(tree_array) {
 }
 
 var treeviewhr = new function() {
+
 	this.cc_tree = function(tree_array, isPopup, textField, idField) {
 
     appendMainParent(tree_array);
     appendChildren(tree_array);
-    
 		
     if (isPopup == true) {
       $('span.linkclass span').addClass('node_link').attr("data-dismiss", "modal");
       $('#list').append("<input id='textFieldPopup' type='hidden' value='" + textField + "' />");
       $('#list').append("<input id='idFieldPopup' type='hidden' value='" + idField + "' />");
     }
-}
+  }
 	
 	this.expand = function(e) {
 		e.stopPropagation();

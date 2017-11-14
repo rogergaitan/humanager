@@ -3,12 +3,12 @@
 <script type="text/javascript">
   var costs_center = [];
   <% @costs_centers.each do |cc| %>
-    costs_center.push(new Array(
-      '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>',
-      '<%=h cc.name_cc %>',
-      '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>',
-      <%= cc.id %>
-    ));
+    costs_center.push({
+      iaccount: <%= cc.icost_center.blank? ? 0 : cc.icost_center %>,
+      name: '<%=h cc.name_cc %>',
+      father: <%= cc.icc_father.blank? ? 0 : cc.icc_father %>,
+      id: <%= cc.id %>
+    });
   <% end %>
 </script>
 

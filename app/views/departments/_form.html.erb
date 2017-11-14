@@ -1,12 +1,12 @@
 <script type="text/javascript">
   var costs_centers = [];
   <% @costs_centers.each do |cc| %>
-    costs_centers.push(new Array(
-          '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>', 
-          '<%= cc.name_cc %>', 
-          '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>', 
-          <%= cc.id %>)
-    );
+    costs_centers.push({
+      iaccount: <%= cc.icost_center.blank? ? 0 : cc.icost_center %>, 
+      name: '<%= cc.name_cc %>', 
+      father: <%= cc.icc_father.blank? ? 0 : cc.icc_father %>, 
+      id: <%= cc.id %>
+    });
   <% end %>
 </script>
 
