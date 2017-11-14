@@ -42,6 +42,7 @@ class Payroll < ActiveRecord::Base
     exchange_rate = exchange_rate.to_f
     payroll_log = PayrollLog.includes(payroll: :currency).find_by_payroll_id(payroll_id)
     payroll_currency = payroll_log.payroll.currency.currency_type
+    currency_symbol = payroll_log.payroll.currency.symbol
     list_employees_salary = get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
     list_other_payment = get_other_payment(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment)
@@ -78,6 +79,7 @@ class Payroll < ActiveRecord::Base
       end
     else
       result['status'] = false
+      result['currency_symbol'] = currency_symbol
       result['data'] = detail_report
     end
     result
@@ -217,7 +219,7 @@ class Payroll < ActiveRecord::Base
           deduction_details['deduction_employee_id'] = de.id
           deduction_details['deduction_id'] = de.deduction.id
           deduction_details['deduction_description'] = de.deduction.description
-          deduction_details['employee_name'] = de.employee.entity.name
+          deduction_details['employee_name'] = de.employee.entity.full_name
           deduction_details['previous_balance'] = 0
           deduction_details['payment'] = 0
           deduction_details['current_balance'] = 0
@@ -426,7 +428,7 @@ class Payroll < ActiveRecord::Base
       end # End details
       
       if total_salary < total_deductions
-        detail_employee['total_salary'] = total_salary 
+        detail_employee['total_salary'] = total_salary
         detail_employee['total_deductions'] = total_deductions
         detail_report[id] = detail_employee
       end

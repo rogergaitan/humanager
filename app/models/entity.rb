@@ -46,6 +46,10 @@ class Entity < ActiveRecord::Base
     end # End Each
     @total
   end
+  
+  def full_name
+    "#{name} #{surname}"
+  end
 
 end
 

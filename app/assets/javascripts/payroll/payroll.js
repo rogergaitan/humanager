@@ -10,7 +10,7 @@ $(document).ready(function() {
 
   $('#cerrar').click(function() {
     if($('#activas .ckActive:checked').length >= 1) {
-      $("#close_payroll_modal").modal("show");
+      $('#close_payroll_modal').modal('show');
     }
   });
   
@@ -23,7 +23,7 @@ $(document).ready(function() {
   });
 	
   // Enable and Disabled the checkbox
-  $("#activas").on("change", ".ckActive", function() {
+  $('#activas').on('change', '.ckActive', function() {
     
     if( $('#activas .ckActive:checked').length === 1 ) {
       $('#activas .ckActive').attr('disabled','disabled');
@@ -192,41 +192,42 @@ payroll.closePayrollSelected = function(payrollId, exchangeRate) {
         exchange_rate: exchangeRate
       },
       success: function(data) {
-        $('#cerrar').prop('disabled', true);  
+        $('#cerrar').prop('disabled', true);
+        resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
         
         if(data['status']) {
           //$('#table_results_close_payroll').hide();
           //$('#results_close_payroll').html('La Planilla fue cerrada con exito');
           //$('#myModalLabel').html('Mensaje');
           //$("#payrollModal").modal('show');
-          resources.showMessage('info', 'La planilla fue cerrada con exito.');
           setTimeout('location.reload()', 5000);
         } else {
-          resources.showMessage('alert', 'Errores al cerrar planilla.');
-          payroll.show_details_errors(data['data']);
+          payroll.show_details_errors(data['data'], data['currency_symbol']);
           $('#cerrar').prop('disabled', false);
         }
       }
     });
-
-    resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
   }
 }
 
-payroll.show_details_errors = function(data) {
+payroll.show_details_errors = function(data, currencySymbol) {
 
+  $('#close_payroll_errors_modal tbody').html('');
+  console.log(data);
+  
   $.each(data, function(index, array) {
 
-    $('#div-message').append(
-      
-        '<p>' + array['employee_name'] + '</p>' +
-        '<p>' + array['total_salary'] + '</p>' +
-        '<p>' + array['total_deductions'] + '</p>'
+    $('#close_payroll_errors_modal tbody').append(
+      '<tr>' +
+        '<td>' + array['employee_name'] + '</td>' +
+        '<td>' + currencySymbol + parseFloat(array['total_salary']).toFixed(2) + '</td>' +
+        '<td>' + currencySymbol + parseFloat(array['total_deductions']).toFixed(2) + '</td>' +
+      '</tr>'
     )
-});
+  });
 
+  $('#close_payroll_errors_modal').modal('show');
   $('#myModalLabel').html('Mensaje: Error salario insuficiente');
-  $('#table_results_close_payroll').show();
 }
 
 // Process that sends information to firebird
