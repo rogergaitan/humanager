@@ -58,4 +58,9 @@ group :development, :test do
   #gem 'capistrano-rails'
   gem "rspec-rails"
   gem "test-unit", '3.2.6'
+  
+  ##
+  # Call 'binding.pry' anywhere in the code to stop execution and get a console
+  gem 'pry-byebug', '3.5.0'
+  
 end

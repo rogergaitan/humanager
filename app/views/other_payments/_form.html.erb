@@ -132,7 +132,7 @@
           <div class="form-group" id="amount_exhaust_controls">
             <%= f.label :amount, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :amount, :class => 'form-control', :include_blank =>false, :required => true,
+              <%= f.text_field :amount, :class => 'form-control', :include_blank => false, :required => true,
                 :value => number_to_currency(f.object.amount, delimiter: '', unit: "") %>
                 
               <div class="individual-check">

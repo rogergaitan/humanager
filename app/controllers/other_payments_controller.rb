@@ -51,7 +51,7 @@ class OtherPaymentsController < ApplicationController
   # POST /other_payments.json
   def create
     params[:other_payment][:payroll_ids].reject!{|a| a==""}
-    @other_payment = OtherPayment.new(params[:other_payment])
+    @other_payment = OtherPayment.new( params[:other_payment] )
 
     respond_to do |format|
       if @other_payment.save
@@ -129,7 +129,7 @@ class OtherPaymentsController < ApplicationController
   end
   
   private
-  
+
     def set_other_payment
       @other_payment = OtherPayment.find_by_id_and_company_id params[:id], current_user.company_id
     rescue ActiveRecord::RecordNotFound

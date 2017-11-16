@@ -3,13 +3,15 @@ class OtherPayment < ActiveRecord::Base
   belongs_to :ledger_account
   belongs_to :costs_center
 
-  attr_accessible :description, :deduction_type, :calculation_type, :amount, :state, :constitutes_salary, 
+  attr_accessible :name, :description, :deduction_type, :calculation_type, :amount, :state, :constitutes_salary, 
     :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
-    :custom_calculation, :payroll_ids, :employee_ids, :name, :active, :company_id, :other_payment_type, :currency_id
+    :custom_calculation, :payroll_ids, :employee_ids, :active, :company_id, :other_payment_type, :currency_id
 
   before_update :check_is_salary
 
   attr_accessor :custom_calculation, :employee_ids, :active
+
+
 
   # Constants
   STATE_COMPLETED = 'completed'.freeze

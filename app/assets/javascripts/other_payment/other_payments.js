@@ -1,6 +1,5 @@
 var op = {};
 
-
 $(document).ready(function() {
 	/*********************************************************************************************************************************************************/
 	/* E V E N T S */
@@ -72,20 +71,20 @@ $(document).ready(function() {
       var that = this,
       $selectableSearch = that.$selectableUl.prev(),
       $selectionSearch = that.$selectionUl.prev(),
-      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+      selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+      selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
       that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-      .on('keydown', function(e){
-        if (e.which === 40){
+      .on('keydown', function(e) {
+        if (e.which === 40) {
           that.$selectableUl.focus();
           return false;
         }
       });
 
       that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-      .on('keydown', function(e){
-        if (e.which == 40){
+      .on('keydown', function(e) {
+        if (e.which == 40) {
           that.$selectionUl.focus();
           return false;
         }
@@ -200,6 +199,7 @@ $(document).ready(function() {
     $('#other_payment_ledger_account_name'), $('#other_payment_ledger_account_id'));
   
   // Add the auto complete to Centro de Costro
+  
   op.fetchPopulateAutocomplete(op.fetch_cc_costs_centers_path, 
     $('#other_payment_costs_center_name'), $('#other_payment_costs_center_id'));
 
@@ -217,7 +217,7 @@ $(document).ready(function() {
     $(element).parents('tr').remove();
   });
 
-  $('#other_payment_custom_calculation').on('change', function() {
+  $('#other_payment_amount').on('change', function() {
     var value = $(this).val();
     $('#employee_items tr').each(function() {
       if( !resources.parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
@@ -290,16 +290,13 @@ $(document).ready(function() {
   $("#other_payment_currency_id").on("change", function () {
     changeEmployeeValueCurrencySymbol();
   });
-  
-  
-  
-  
+
 });
 
 /*********************************************************************************************************************************************************/
 /* F U N C T I O N S */
 /*********************************************************************************************************************************************************/
-op.updateValidation = function(){
+op.updateValidation = function() {
   var modelName = $('form:eq(0)').data('modelName');
   var referenceId = $('form:eq(0)').data('referenceId');
   resources.updateValidation(modelName, referenceId);
@@ -333,7 +330,7 @@ op.searchEmployeeByAttr = function(searchValue, searchType, from, typeFrom) {
 		dataType: "json",
 		data: customData,
 		success: function(data) {
-			if( data != null ) {
+      if( data != null ) {
         if( from == "table" ) {
           op.fromTable(data, typeFrom);
         }
@@ -408,12 +405,12 @@ op.fromMulti = function(employee, type) {
         $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
         $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
         if( !$('#other_payment_individual').is(':checked') ) {
-          $(selector).find("input[id*='_calculation']").val($('#other_payment_custom_calculation').val());
+          $(selector).find("input[id*='_calculation']").val($('#other_payment_amount').val());
         }
       } else { // Existe
         $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
         if( !$('#other_payment_individual').is(':checked') ) {
-          $(data.parent).find("input[id*='_calculation']").val($('#other_payment_custom_calculation').val());
+          $(data.parent).find("input[id*='_calculation']").val($('#other_payment_amount').val());
         }
         $(data.parent).show();
       }
