@@ -49,6 +49,7 @@ class Payroll < ActiveRecord::Base
     list_employees_deductions = get_deductions_employees(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
+    
     result = {}
     
     if detail_report.empty?
@@ -157,7 +158,7 @@ class Payroll < ActiveRecord::Base
                 # fija
                 if ope.other_payment.calculation_type.to_s == OtherPayment::CALCULATION_TYPE_FIXED
                   other_payment_details['payment'] = check_currency(payroll_currency, other_currency,
-                                                                                                       calculation.to_f, exchange_rate)
+                                                                    calculation.to_f, exchange_rate)
                                                                     
                 end
                 other_payment_details['state'] = false
@@ -239,13 +240,13 @@ class Payroll < ActiveRecord::Base
                   percentage = (salary.to_f*de.calculation_value/100)
                   
                   deduction_value = check_currency(payroll_currency, de.maximum_deduction_currency,
-                                                                          percentage, exchange_rate)
+                                                   percentage, exchange_rate)
                   
                   maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
-                                                                                 de.maximum_deduction_value, exchange_rate)
+                                                     de.maximum_deduction_value, exchange_rate)
                   
                   deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
-                  deduction_details['payment'] = (salary.to_f*deduction_amount/100)
+                  deduction_details['payment'] = deduction_amount
                 end
 
                 # fija
@@ -271,8 +272,7 @@ class Payroll < ActiveRecord::Base
                   maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
                                                      de.maximum_deduction_value, exchange_rate)
                   
-                  deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
-                  deduction_details['payment'] = (salary.to_f*deduction_amount/100)
+                  deduction_details['payment'] = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
                 end
 
                 # fija
@@ -309,9 +309,7 @@ class Payroll < ActiveRecord::Base
                   maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
                                                      de.maximum_deduction_value, exchange_rate)
                   
-                  deduction_amount = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
-                  
-                  payment = (salary.to_f*deduction_amount/100)
+                  payment = check_maximum_deduction(deduction_value, de.maximum_deduction_value)
                 end
                 
                 if de.deduction_payments.blank?
@@ -350,12 +348,9 @@ class Payroll < ActiveRecord::Base
           end # end case
           
           unless deduction_details['payment'] <= salary.to_f
-            deduction_details['payment']  == 0
             
             if Deduction::DEDUCTION_TYPE_EXHAUST == de.deduction.deduction_type.to_s
               deduction_details['current_balance'] = current_balance
-            else
-              salary = salary - deduction_details['payment']
             end
           end
           

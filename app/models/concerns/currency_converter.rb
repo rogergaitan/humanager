@@ -8,7 +8,7 @@ module CurrencyConverter
     #otherwise just return the current amount
     def check_currency(payroll_currency, other_currency, amount, exchange_rate)
       if payroll_currency != other_currency
-        convert_currency(other_currency, amount, exchange_rate)
+        convert_currency(payroll_currency, amount, exchange_rate)
       else
         amount
       end
