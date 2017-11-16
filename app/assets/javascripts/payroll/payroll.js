@@ -10,18 +10,7 @@ $(document).ready(function() {
 
   $('#cerrar').click(function() {
     if($('#activas .ckActive:checked').length >= 1) {
-      
-      var currencySymbol = $('#activas .ckActive:checked').next().val();
-      
-      //only ask for exchange rate when currency is foreign
-      if(currencySymbol == "foreign" ) {
-        $('#close_payroll_modal').modal('show');
-      } else {
-        if(payroll.confirm()) {
-          var id = $('#activas .ckActive:checked').val();
-          payroll.closePayrollSelected(id);
-        }
-      }
+      $('#close_payroll_modal').modal('show');
     }
   });
   
@@ -36,11 +25,11 @@ $(document).ready(function() {
     }
   });
 
-  $('#inactivas').on('click', '[id^=send_firebird_]', function(e) { 
+  $("#inactivas").on("click", "[id^='send_firebird_']", function(e) { 
 
     e.stopPropagation();
 
-    if(payroll.confirm()) {
+    if( payroll.confirm() ) {
       var payroll_id = $(this).next().val();
       payroll.send_to_firebird(payroll_id);
     }
@@ -52,6 +41,7 @@ $(document).ready(function() {
     }
   });
   
+  //do not submit close payroll modal form
   window.Parsley.on('form:submit', function() {
     
     var id = $('#activas .ckActive:checked').val();
@@ -62,7 +52,7 @@ $(document).ready(function() {
   });
   
   //only allow one closed payroll selection at the same time
-  $('#inactivas').on('click', 'input', function() {
+  $('#inactivas').on("click", "input", function() {
     $('#inactivas input[type=checkbox]').not($(this)).prop('checked', false);
   })
   
@@ -120,7 +110,6 @@ payroll.add_activas = function (payrolld, target_table, count, totalCount) {
       '<td>' + currency_symbol + ( payrolld.payroll_log.payroll_total != null ? (pay_total).toFixed(2) : 0.00)  + '</td>' +
       '<td>' +
         '<input type="checkbox" class="ckActive" id="' + payrolld.id + '" value="' + payrolld.id + '" />' +
-        '<input type="hidden" value=' + payrolld.currency.currency_type +  ' />' +
       '</td><td>';
 
   if( payroll_update == 1 ) {
@@ -161,16 +150,16 @@ payroll.add_inactivas = function (payroll, target_table) {
   var currency_symbol = payroll.currency ? payroll.currency.symbol : ""
   
   var row = $(target_table + '> tbody:last').append('<tr>' + 
-   '<td>' + payroll.payroll_type.description + '</td>' +
-   '<td>' +  date_format(payroll.start_date) + '</td>' +
-   '<td>' +  date_format(payroll.end_date) + '</td>' +
-   '<td>' +  date_format(payroll.payment_date) + '</td>' +
-   '<td>' + currency_symbol + ( payroll.payroll_log.payroll_total != null ? parseFloat(payroll.payroll_log.payroll_total).toFixed(2) : 0.00)  + '</td>' +
-   '<td>' +
-     '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '" '+checked+'/>' +
-   '</td>' +
-   '<td>' + num_oper +'</td>' +
-  '</tr>');
+      '<td>' + payroll.payroll_type.description + '</td>' +
+      '<td>' +  date_format(payroll.start_date) + '</td>' +
+      '<td>' +  date_format(payroll.end_date) + '</td>' +
+      '<td>' +  date_format(payroll.payment_date) + '</td>' +
+      '<td>' + currency_symbol + ( payroll.payroll_log.payroll_total != null ? parseFloat(payroll.payroll_log.payroll_total).toFixed(2) : 0.00)  + '</td>' +
+      '<td>' +
+        '<input type="checkbox" class="ck" id="' + payroll.id + '" value="' + payroll.id + '" '+checked+'/>' +
+      '</td>' +
+      '<td>' + num_oper +'</td>' +
+    '</tr>');
   return row;
 }
 
@@ -185,36 +174,43 @@ date_format = function(date) {
 };
 
 // Process to close a payroll Selected
-payroll.closePayrollSelected = function(payrollId, exchangeRate = "") {
+payroll.closePayrollSelected = function(payrollId, exchangeRate) {
 
   var url_close_payroll = $('#close_payroll_payrolls_path').val();
   
-  $('#close_payroll_modal').modal('hide');
-  
-  $.ajax({
-    type: 'POST',
-    url: url_close_payroll,
-    data: {
-      payroll_id: payrollId,
-      exchange_rate: exchangeRate
-    },
-    success: function(data) {
-      $('#cerrar').prop('disabled', true);
-      resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
-      
-      if(data['status']) {
-        setTimeout('location.reload()', 5000);
-      } else {
-        payroll.show_details_errors(data['data'], data['currency_symbol']);
-        $('#cerrar').prop('disabled', false);
+  if(payrollId != null && exchangeRate != "") {
+    $('#close_payroll_modal').modal('hide');
+    
+    $.ajax({
+      type: "POST",
+      url: url_close_payroll,
+      data: {
+        payroll_id: payrollId,
+        exchange_rate: exchangeRate
+      },
+      success: function(data) {
+        $('#cerrar').prop('disabled', true);
+        resources.showMessage('info', 'Por favor espere mientras finaliza el proceso...');
+        
+        if(data['status']) {
+          //$('#table_results_close_payroll').hide();
+          //$('#results_close_payroll').html('La Planilla fue cerrada con exito');
+          //$('#myModalLabel').html('Mensaje');
+          //$("#payrollModal").modal('show');
+          setTimeout('location.reload()', 5000);
+        } else {
+          payroll.show_details_errors(data['data'], data['currency_symbol']);
+          $('#cerrar').prop('disabled', false);
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 payroll.show_details_errors = function(data, currencySymbol) {
 
   $('#close_payroll_errors_modal tbody').html('');
+  console.log(data);
   
   $.each(data, function(index, array) {
 
@@ -235,8 +231,8 @@ payroll.show_details_errors = function(data, currencySymbol) {
 payroll.send_to_firebird = function(payroll_id) {
 
   $.ajax({
-    type: 'POST',
-    url: '/payrolls/send_to_firebird',
+    type: "POST",
+    url: "/payrolls/send_to_firebird",
     data: {
       payroll_id: payroll_id
     },
@@ -263,14 +259,14 @@ payroll.send_to_firebird = function(payroll_id) {
 // Reabre planillas cerradas
 function Reactivar() {
   
-  payrollId = $('#inactivas input[type=checkbox]:checked');
+  payrollId = $("#inactivas input[type=checkbox]:checked");
   
   if(payrollId.length === 1) {
     if (payroll.confirm()) {
    
       $.ajax({
-        type: 'POST',
-        url: '/payrolls/reabrir',
+        type: "POST",
+        url: "/payrolls/reabrir",
         beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
         data: { 
           payroll_id: payrollId.val()
@@ -288,7 +284,7 @@ function Reactivar() {
 // Confirm the action to rum the user
 payroll.confirm = function () {
 
-  var resp = confirm('Realmente desea ejecutar esta acción?');
+  var resp = confirm("Realmente desea ejecutar esta acción ?");
   return resp;
 }
 
