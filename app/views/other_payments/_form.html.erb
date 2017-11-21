@@ -11,13 +11,17 @@
 
   var detailPayments = []; // Are the ids that can not be eliminate
   var detailPaymentsHidden = []; // They are the ids that are hidden from view
-
-  <% @object.each do |id| %>
-    detailPayments.push(<%= id %>);
+  
+  <% if @detail_payments %>
+    <% @detail_payments.each do |id| %>
+      detailPayments.push(<%= id %>);
+    <% end %>
   <% end %>
-
-  <% @object_hidden.each do |id| %>
-    detailPaymentsHidden.push(<%= id %>);
+  
+  <% if @employees_hidden %>
+    <% @employees_hidden.each do |id| %>
+      detailPaymentsHidden.push(<%= id %>);
+    <% end %>
   <% end %>
 </script>
 
@@ -232,6 +236,7 @@
                   { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
                 { include_blank: false }, 
                 {:multiple => true, :selected => @employee_ids, :required => true}) %>
+                
             </div>
           </div>
 

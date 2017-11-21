@@ -73,6 +73,7 @@ class OtherPaymentsController < ApplicationController
         format.html { redirect_to other_payments_path, notice: 'Otro pago actualizado correctamente.' }
         format.json { head :no_content }
       else
+        objects_employees(@other_payment)
         format.html { render action: "edit" }
         format.json { render json: @other_payment.errors, status: :unprocessable_entity }
       end
@@ -111,28 +112,29 @@ class OtherPaymentsController < ApplicationController
   # check if is possible deleted
   def objects_employees(other_payment)
     @employee_ids = []
-    @object_hidden = [] # They are the ids that are hidden from view
-    @object = [] # Are the ids that can't be deleted
+    @employees_hidden = [] # They are the ids that are hidden from view
+    @detail_payments = [] # Are the ids that can't be deleted
 
     other_payment.other_payment_employees.each do |pe|
       unless pe.completed
         @employee_ids << pe.employee_id
       else
-        @object_hidden << "#{pe.employee_id}"
+        @employees_hidden << "#{pe.employee_id}"
       end
 
       unless pe.other_payment_payments.empty?
         # if there are records.
-        @object << "#{pe.employee_id}"
+        @detail_payments << "#{pe.employee_id}"
       end
     end
+    # binding.pry
   end
   
   private
 
-    def set_other_payment
-      @other_payment = OtherPayment.find_by_id_and_company_id params[:id], current_user.company_id
+  def set_other_payment
+    @other_payment = OtherPayment.find_by_id_and_company_id params[:id], current_user.company_id
     rescue ActiveRecord::RecordNotFound
-      redirect_to other_payments_path, notice: "El registro de otro pago no existe."
-    end
+    redirect_to other_payments_path, notice: "El registro de otro pago no existe."
+  end
 end

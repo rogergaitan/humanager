@@ -7,11 +7,7 @@ class OtherPayment < ActiveRecord::Base
     :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
     :custom_calculation, :payroll_ids, :employee_ids, :active, :company_id, :other_payment_type, :currency_id
 
-  before_update :check_is_salary
-
   attr_accessor :custom_calculation, :employee_ids, :active
-
-
 
   # Constants
   STATE_COMPLETED = 'completed'.freeze
@@ -52,14 +48,6 @@ class OtherPayment < ActiveRecord::Base
       .order("state desc, #{orderByDeductionType}")
       .limit(limit)
       .map(&:id)
-  end
-
-  def check_is_salary
-    if self.constitutes_salary_changed?      
-      a = OtherPaymentPayment.joins(:other_payment_employee).select('count(*) as total')
-        .where('other_payment_employees.other_payment_id = ?', self.id).first
-      self.constitutes_salary = a.total == 0 ? self.constitutes_salary : self.constitutes_salary_was
-    end  
   end
   
   def self.search(other_payment_type, calculation_type, state, company, page)
