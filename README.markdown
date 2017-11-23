@@ -22,6 +22,22 @@
 - Now you can start the app running `rails s`
 - You can see from your host the app by accessing [your localhost in port 8080](http://localhost:8080)
 
+### Windows deploy
+- Rails installer => railsinstaller.org/
+- Remove ruby racer and less-rails from assets group
+- Rubyfb issues
+  - install firebird first
+  - go to Program Files/Firebird/bin and copy fbclient.ddl to ruby/bin
+  - gem install rubyfb --platform=ruby 
+- cannot load such file -- bcrypt_ext when starting session
+  - gem uninstall bcrypt
+  - gem install bcrypt --platform=ruby
+- Rmagick issues
+  -install minimagick instead
+- mysql2 issues
+  - go to http://cdn.mysql.com/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.2-win32.zip
+  - gem install mysql2 --platform=ruby -- --with-mysql-dir="C:\connector-6.0.2"
+
 ### Running the Cucumber tests
 - `vagrant ssh`
 - `cd /vagrant`
