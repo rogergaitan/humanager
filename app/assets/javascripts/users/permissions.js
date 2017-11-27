@@ -1,4 +1,4 @@
-permissions = { 
+var permissions = { 
   'permissions_user' : []
 }
 
