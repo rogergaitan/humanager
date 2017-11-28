@@ -79,3 +79,15 @@ $ sudo adduser `id -un` firebird
 Test connection:
 $ isql-fb
 SQL> connect "localhost:/var/lib/firebird/2.5/data/employee.fdb" user 'SYSDBA' password 'SYSDBApassword'
+
+### Run Seed Data
+
+```
+$ rake db:seed
+```
+
+This will generate data and specific settings of the company with code `COMPANY_CODE`
+
+```
+$ rake db:seed COMPANY_CODE=<company code here>
+```

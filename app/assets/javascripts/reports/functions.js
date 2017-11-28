@@ -113,27 +113,31 @@ general_functions.datePicker = function() {
 // Find the information and calls the search function
 general_functions.searchInfoPayrolls = function() {
 
-  if( $('#company').val() === "" ) {
-    $('#payrolls_results').html("<div class='alert alert-info'>Por favor seleccione una compañia</div>");
+  if($('#company').val() === '' ) {
+    $('#payrolls_results').html('<div class=alert alert-info>Por favor seleccione una compañia</div>');
   } else {
-    var start_date = $('#start_date').val(),
-        end_date = $('#end_date').val(),
-        url = $("form[id=search_payrolls_form]").attr('action')
-        company_id = $('#company').val();
-
-    general_functions.searchPayrolls(start_date, end_date, url, company_id);
+    var startDate = $('#start_date').datepicker('getDate');
+    var endDate = $('#end_date').datepicker('getDate');
+    var url = $('form[id=search_payrolls_form]').attr('action');
+    var companyId = $('#company').val();
+    
+    if(startDate > endDate) {
+      resources.PNotify('Atención', 'Fechas hasta no puede ser luego de fecha desde.', 'error');
+    } else {
+      general_functions.searchPayrolls(startDate, endDate, url, companyId);
+    }
   }
 }
 
 // Search the payrolls
-general_functions.searchPayrolls = function(start_date, end_date, url, company_id) {
+general_functions.searchPayrolls = function(startDate, endDate, url, companyId) {
   return $.ajax({
     url: url,
     dataType: "script",
     data: {
-      start_date: start_date,
-      end_date: end_date,
-      company_id: company_id
+      start_date: startDate,
+      end_date: endDate,
+      company_id: companyId
     }
   });
 }

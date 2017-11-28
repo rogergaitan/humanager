@@ -133,6 +133,7 @@ Reasapp::Application.routes.draw do
       get 'accountfb'
       get 'fetch'
       get 'get_bank_account'
+      get 'credit_accounts'
     end
     collection do
       get 'accountfb'

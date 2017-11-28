@@ -143,9 +143,9 @@ include ActionView::Helpers::NumberHelper
     info_data = {}; info = {}
     
     totals = {
-        'ordinario' => 0,
-        'extra' => 0,
-        'doble' => 0
+      'ordinario' => 0,
+      'extra' => 0,
+      'doble' => 0
     }
     
     payroll_history_ids = PayrollEmployee.where('employee_id = ?', employee_id).map(&:payroll_history_id)
@@ -157,8 +157,7 @@ include ActionView::Helpers::NumberHelper
       obj = {}
       obj['labor'] = p.task.ntask
       obj['fecha'] = p.payroll_date
-      
-      
+
       if data.include?(obj)
         index = data.index(obj)
 
