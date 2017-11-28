@@ -1,9 +1,3 @@
-$('form').submit(function(e) {
-  if(!$(this).parsley().validate()) {
-    e.preventDefault();
-  }
-});
-
 $("#ir_table_start_date, #ir_table_end_date").datepicker({
   format: 'dd/mm/yyyy',
   autoclose: true,
@@ -67,7 +61,7 @@ window.Parsley
       var fromValue = value;
       var untilValue =instance.$element.parent().next().children().val();
       
-      if(fromValue >= untilValue) {
+      if(fromValue >= untilValue && untilValue != "" ) {
         return false;
       }
     },
