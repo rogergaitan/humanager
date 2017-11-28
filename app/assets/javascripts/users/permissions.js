@@ -38,7 +38,6 @@ $(document).ready(function() {
     
     var element = $(this).val().split('-');
     $('#' + element[0] + ' tbody tr').each(function(){
-
       var id = $(this).attr('id');
       $('#' + id + ' td:eq(' + element[1] + ') input').prop('checked', checked);
     });
