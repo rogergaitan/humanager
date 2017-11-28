@@ -5,11 +5,11 @@ var permissions = {
 $(document).ready(function() {
   
   //hide and show search form and results
-  $("#copy_permissions").on("change", function() {
-    if($(this).prop("checked")) {
-      $("#users_results , #user_permissions_search").removeClass("hidden");
+  $('#copy_permissions').on('change', function() {
+    if($(this).prop('checked')) {
+      $('#users_results , #user_permissions_search').removeClass('hidden');
     } else {
-      $("#users_results , #user_permissions_search").addClass("hidden");
+      $('#users_results , #user_permissions_search').addClass('hidden');
     }
   });
 
@@ -17,7 +17,7 @@ $(document).ready(function() {
     permissions.searchInfoUsers();
   });
 	
-  $("#users_results").on("click", ".pag a", function() {
+  $('#users_results').on('click', '.pag a', function() {
     $.getScript(this.href);
     return false;
   });
@@ -33,7 +33,7 @@ $(document).ready(function() {
     permissions.savePermissions();
   });
 
-  $("table[id^='category_'] thead input").change(function() {
+  $('table[id^=category_] thead input').change(function() {
     var checked = $(this).is(':checked')
 
     var element = $(this).val().split('-');
@@ -50,7 +50,7 @@ permissions.searchUsers = function(username, name, url, actualuser) {
 
   return $.ajax({
     url: url,
-    dataType: "script",
+    dataType: 'script',
     data: {
       username: username,
       name: name,
@@ -64,7 +64,7 @@ permissions.searchInfoUsers = function() {
 
   var username = $('#username').val();
   var name = $('#name').val();
-  var url = $("form[id=search_users_form]").attr('action');
+  var url = $('form[id=search_users_form]').attr('action');
   var actualuser = $('#userId').val();
 
   permissions.searchUsers(username, name, url, actualuser);
@@ -72,12 +72,12 @@ permissions.searchInfoUsers = function() {
 
 permissions.savePermissions = function() {
 
-  var tr_id = "", t = 0, id = "", str = "", opction = "";
+  var tr_id = '', t = 0, id = '', str = '', opction = '';
 
   $('#accordion .panel-body table tbody tr').each(function() {
 		
     tr_id = $(this).attr('id');
-    t = tr_id.length - tr_id.indexOf("_");
+    t = tr_id.length - tr_id.indexOf('_');
     t = t - 1;
     id = tr_id.substring(tr_id.length-t, tr_id.length);
     var data = {
@@ -98,7 +98,7 @@ permissions.savePermissions = function() {
       var checked = $(this).is(':checked');
 
       if(checked) {
-        t = str.length - str.indexOf("_");
+        t = str.length - str.indexOf('_');
         opction = str.substring(0,str.length - t);
         data = permissions.saveInformation(opction, checked, data);
       }
@@ -154,8 +154,8 @@ permissions.sendInformation = function() {
 
   $.ajax({
     url: $('#save_permissions_users_path').val(),
-    type: "POST",
-    dataType: "json",
+    type: 'POST',
+    dataType: 'json',
     data: {
       permissions_user: permissions.permissions_user,
       user_id: user_id
@@ -187,7 +187,6 @@ permissions.loadPermissions = function(data) {
     id_subcategory = obj['permissions_subcategory_id']
 
     $.each(obj, function(index, value) {
-    console.log(index, id_subcategory);
       permissions.setValue(index, value, id_subcategory);
     });
   });
