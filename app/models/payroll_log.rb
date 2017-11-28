@@ -73,7 +73,6 @@ class PayrollLog < ActiveRecord::Base
       .where("employees.id in (?)", employees_list)
   end
 
-  # NEW
   def self.search_employee(employee_name, employee_code, page, per_page)
     entities = Entity.joins(:employee)
       .select("employees.id, employees.number_employee, entities.name, entities.surname")
@@ -82,7 +81,6 @@ class PayrollLog < ActiveRecord::Base
     entities = entities.paginate(:page => page, :per_page => per_page)
   end
 
-  # NEW 
   def self.search_cost(cc_name, cc_code, company_id, page, per_page)
     cc = CostsCenter.select("*")
     cc = cc.where("icost_center like ?", "%#{cc_code}%") if cc_code.present?
@@ -90,7 +88,6 @@ class PayrollLog < ActiveRecord::Base
     cc = cc.paginate(:page => page, :per_page => per_page)
   end
 
-  # NEW
   def self.search_task(task_name, task_code, task_iactivity, page, per_page)
     tasks = Task.select("*")
     tasks = tasks.where("ntask like ?", "%#{task_name}%") if task_name.present?

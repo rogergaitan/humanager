@@ -152,88 +152,88 @@ class ReportsController < ApplicationController
         detail = {}
 
         # G E T   E M P L O Y E   N A M E
-          e = Employee.find(employee_id)
-          name = {}
-          index = nil
-          name['Nombre Empleado'] = "#{e.entity.surname} #{e.entity.name}"
+        e = Employee.find(employee_id)
+        name = {}
+        index = nil
+        name['Nombre Empleado'] = "#{e.entity.surname} #{e.entity.name}"
           
-          if( employees_names.include? name )
-            index = employees_names.index(name)
-          else
-            detail['Nombre Empleado'] = "#{e.entity.surname} #{e.entity.name}"
-            employees_names << name
-          end
-          totals['Nombre Empleado'] = "Total"
+        if( employees_names.include? name )
+          index = employees_names.index(name)
+        else
+          detail['Nombre Empleado'] = "#{e.entity.surname} #{e.entity.name}"
+          employees_names << name
+        end
+        totals['Nombre Empleado'] = "Total"
         # G E T   E M P L O Y E   N A M E
           
         # G E T   T O T A L   E A R N
-          total_earn = 0
-          total_earn = PayrollHistory.joins(:payroll_employees).select('sum(total) as total')
-            .where('payroll_histories.payroll_log_id = ? and payroll_employees.employee_id = ?', payroll_id, employee_id)[0]
-            .total.to_f
-            
-#           unless a.total.nil?
-#             total_earn = total_earn + a.total
-#           end
+        total_earn = 0
+        total_earn = PayrollHistory.joins(:payroll_employees).select('sum(total) as total')
+          .where('payroll_histories.payroll_log_id = ? and payroll_employees.employee_id = ?', payroll_id, employee_id)[0]
+          .total.to_f
+          
+        # unless a.total.nil?
+        #   total_earn = total_earn + a.total
+        # end
 
-          detail['Total Devengado'] = total_earn
-          totals['Total Devengado'].blank? ? (totals['Total Devengado'] = total_earn) : (totals['Total Devengado'] += total_earn)
+        detail['Total Devengado'] = total_earn
+        totals['Total Devengado'].blank? ? (totals['Total Devengado'] = total_earn) : (totals['Total Devengado'] += total_earn)
         # G E T   T O T A L   E A R N
           
-          detail["Otros Pagos Constituye Salario"] = 0
-          totals["Otros Pagos Constituye Salario"].blank? ? (totals["Otros Pagos Constituye Salario"] = 0) : nil
+        detail["Otros Pagos Constituye Salario"] = 0
+        totals["Otros Pagos Constituye Salario"].blank? ? (totals["Otros Pagos Constituye Salario"] = 0) : nil
+        
+        total_other_payments_constitutes_salary = 0
+        
+        # Other Payments when Constitutes Salary
+        OtherPaymentPayment.joins(:other_payment_employee)
+        .where('other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?',
+                payroll_id, employee_id, true)
+        .each do |other_payment|
+          detail["Otros Pagos Constituye Salario"] += other_payment.payment.to_f
+          totals["Otros Pagos Constituye Salario"] += other_payment.payment.to_f
+          total_other_payments_constitutes_salary += other_payment.payment.to_f
+        end
           
-          total_other_payments_constitutes_salary = 0
-          
-          # Other Payments when Constitutes Salary
-          OtherPaymentPayment.joins(:other_payment_employee)
-          .where('other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?',
-                 payroll_id, employee_id, true)
-          .each do |other_payment|
-            detail["Otros Pagos Constituye Salario"] += other_payment.payment.to_f
-            totals["Otros Pagos Constituye Salario"] += other_payment.payment.to_f
-            total_other_payments_constitutes_salary += other_payment.payment.to_f
-          end
-          
-          # G E T   O T H E R  P A Y M E N T S
-          #           OtherPayment.where('id in (?)', list_other_payments).each do |d|
-          #             list_desc_deductions["#{d.name[0...10]}.."] = "#{d.name[0...10]}.."
-          #             detail["#{d.name[0...10]}.."] = 0
-          #             totals["#{d.name[0...10]}.."].blank? ? (totals["#{d.name[0...10]}.."] = 0) : (totals["#{d.name[0...10]}.."] += 0)
-          #           end
-          detail["Otros Pagos"] = 0
-          totals["Otros Pagos"].blank? ? (totals["Otros Pagos"] = 0) : nil
-          
-          total_other_payments = 0
-          OtherPaymentPayment.joins(:other_payment_employee)
-          .where('other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?', 
-                 payroll_id, employee_id, false)
-          .each do |a|
-            detail["Otros Pagos"] += a.payment.to_f
-            totals["Otros Pagos"] += a.payment.to_f
-            total_other_payments += a.payment.to_f
-          end
+        # G E T   O T H E R  P A Y M E N T S
+        # OtherPayment.where('id in (?)', list_other_payments).each do |d|
+        #   list_desc_deductions["#{d.name[0...10]}.."] = "#{d.name[0...10]}.."
+        #   detail["#{d.name[0...10]}.."] = 0
+        #   totals["#{d.name[0...10]}.."].blank? ? (totals["#{d.name[0...10]}.."] = 0) : (totals["#{d.name[0...10]}.."] += 0)
+        # end
+        detail["Otros Pagos"] = 0
+        totals["Otros Pagos"].blank? ? (totals["Otros Pagos"] = 0) : nil
+        
+        total_other_payments = 0
+        OtherPaymentPayment.joins(:other_payment_employee)
+        .where('other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?', 
+                payroll_id, employee_id, false)
+        .each do |a|
+          detail["Otros Pagos"] += a.payment.to_f
+          totals["Otros Pagos"] += a.payment.to_f
+          total_other_payments += a.payment.to_f
+        end
           
         # G E T   D E D U C T I O N S
-          # Set default values
-#           Deduction.where('id in (?)', list_deductions).each do |d|
-#             list_desc_deductions["#{d.description[0...10]}.."] = "#{d.description[0...10]}.."
-#             detail["#{d.description[0...10]}.."] = 0
-#             totals["#{d.description[0...10]}.."].blank? ? (totals["#{d.description[0...10]}.."] = 0) : (totals["#{d.description[0...10]}.."] += 0)
-#           end
+        # Set default values
+        # Deduction.where('id in (?)', list_deductions).each do |d|
+        #   list_desc_deductions["#{d.description[0...10]}.."] = "#{d.description[0...10]}.."
+        #   detail["#{d.description[0...10]}.."] = 0
+        #   totals["#{d.description[0...10]}.."].blank? ? (totals["#{d.description[0...10]}.."] = 0) : (totals["#{d.description[0...10]}.."] += 0)
+        # end
 
-          detail["Otras Deducciones"] = 0
-          totals["Otras Deducciones"].blank? ? (totals["Otras Deducciones"] = 0) : nil
+        detail["Otras Deducciones"] = 0
+        totals["Otras Deducciones"].blank? ? (totals["Otras Deducciones"] = 0) : nil
 
-          total_deductions = 0
-          DeductionPayment.joins(:deduction_employee)
-            .where('deduction_payments.payroll_id = ? and deduction_employees.employee_id = ?',payroll_id, employee_id).each do |a|
-              detail["Otras Deducciones"] += a.payment.to_f
-              totals["Otras Deducciones"] += a.payment.to_f
-              total_deductions += a.payment.to_f
-          end
+        total_deductions = 0
+        DeductionPayment.joins(:deduction_employee)
+          .where('deduction_payments.payroll_id = ? and deduction_employees.employee_id = ?',payroll_id, employee_id).each do |a|
+            detail["Otras Deducciones"] += a.payment.to_f
+            totals["Otras Deducciones"] += a.payment.to_f
+            total_deductions += a.payment.to_f
+        end
 
-          list_desc_deductions["Otras Deducciones"] = "Otras Deducciones"
+        list_desc_deductions["Otras Deducciones"] = "Otras Deducciones"
         # G E T   D E D U C T I O N S
 
    
