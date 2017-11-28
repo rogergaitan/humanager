@@ -533,7 +533,7 @@ function showHideEmployees() {
 
 // Consulta las cuentas contables para hacer el autocomplete
 function CContables() {
-  $.getJSON('/ledger_accounts/fetch', function(category_data) {
+  $.getJSON('/ledger_accounts/credit_accounts', function(category_data) {
     $("#deduction_ledger_account").autocomplete({
       source: $.map(category_data, function(item) {
         $.data(document.body, 'category_' + item.id+"", item.iaccount + " - " + item.naccount);

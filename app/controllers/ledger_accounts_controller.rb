@@ -60,6 +60,11 @@ class LedgerAccountsController < ApplicationController
     @names_ids = LedgerAccount.find(:all, :select =>['id','naccount', 'iaccount'])
     respond_with(@names_ids)
   end
+  
+  def credit_accounts
+    @credit_accounts = LedgerAccount.credit_accounts
+    respond_with(@credit_accounts)
+  end
 
   def get_parent_info
     @cc_child ||= LedgerAccount.find(:all, :select =>['iaccount', 'ifather', 'naccount'])
