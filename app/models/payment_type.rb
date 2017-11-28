@@ -4,6 +4,10 @@ class PaymentType < ActiveRecord::Base
   include Encodable
   
   attr_accessible :factor, :name, :contract_code, :payment_type, :payment_unit, :company_id
+  
+  validate :factor, :presence => true, :on => :update
+  validates_numericality_of :factor, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 100,
+    :message => "Este valor debe estar entre 1 y 10", :on => :update
 
   # Constants
   STATE_ACTIVE = 'active'.freeze
@@ -30,8 +34,8 @@ class PaymentType < ActiveRecord::Base
       if PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).empty?
         
         payment_type = PaymentType.new(company_id:  labtdcto.iemp, contract_code: labtdcto.itdcontrato,
-                                          name: labtdcto.ntdcontrato, payment_unit: firebird_encoding(labtdcto.nunidadrec),
-                                          factor: labtdcto.itdcalculo)
+                                       name: labtdcto.ntdcontrato, payment_unit: firebird_encoding(labtdcto.nunidadrec)
+                                      )
         
         if payment_type.save
           created_records += 1  
@@ -42,15 +46,14 @@ class PaymentType < ActiveRecord::Base
         end
       else
         payment_type = PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).first
-        payment_type_params = {name: labtdcto.ntdcontrato, payment_unit: firebird_encoding(labtdcto.nunidadrec),
-                                                           factor: labtdcto.itdcalculo}
+        payment_type_params = {name: labtdcto.ntdcontrato, payment_unit: firebird_encoding(labtdcto.nunidadrec)}
     
         if payment_type.update_attributes(payment_type_params)
           updated_records +=1
         end
       end
     end
-      sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
-                                                #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+      sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records}
+                            #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
   end
 end

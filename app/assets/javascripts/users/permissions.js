@@ -1,4 +1,4 @@
-permissions = { 
+var permissions = { 
   'permissions_user' : []
 }
 
@@ -34,20 +34,12 @@ $(document).ready(function() {
   });
 
   $("table[id^='category_'] thead input").change(function() {
-    var checked = false;
-    if( $(this).is(':checked') ) {
-      checked = true;
-    }
+    var checked = $(this).is(':checked')
 
     var element = $(this).val().split('-');
     $('#' + element[0] + ' tbody tr').each(function(){
-
       var id = $(this).attr('id');
-      if( checked ) {
-        $('#' + id + ' td:eq(' + element[1] + ') input').prop('checked', true);
-      } else {
-        $('#' + id + ' td:eq(' + element[1] + ') input').prop('checked', false);
-      }
+      $('#' + id + ' td:eq(' + element[1] + ') input').prop('checked', checked);
     });
   });
 
@@ -104,7 +96,8 @@ permissions.savePermissions = function() {
 			
       str = $(this).attr('id');
       var checked = $(this).is(':checked');
-      if( checked == true ) {
+
+      if(checked) {
         t = str.length - str.indexOf("_");
         opction = str.substring(0,str.length - t);
         data = permissions.saveInformation(opction, checked, data);
