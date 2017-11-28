@@ -133,7 +133,7 @@ class UsersController < ApplicationController
       if User.save_permissions_user(data, user_id)
         format.json { redirect_to users_path, :status => 200, :message => "Success!", :notice => 'Actualizado exitosamente' }
       else
-        format.json {  redirect_to users_path, status: 500, notice: 'Ocurrio un error Actualizado', head: ok, url: users_path }
+        format.json {  redirect_to users_path, :status => 500, notice: 'Ocurrio un error al actualizar los permisos', head: ok, url: users_path }
       end
 
     end

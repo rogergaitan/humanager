@@ -1,3 +1,6 @@
-$(document).ready(function() {
-	$('#payment_type_factor').keyup(resources.twoDecimals);
-});
+$('#payment_type_factor').mask("FN.NN", {
+  translation: {
+    'N': {pattern: /\d/, optional: true},
+    "F": {pattern: /[1-9]/}
+  }
+});    

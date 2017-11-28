@@ -7,7 +7,7 @@
     <% if @payment_type.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@payment_type.errors.count, "error") %> prohibited this payment_type from being saved:</h3>
+        <h3><%= pluralize(@payment_type.errors.count, "error") %> no permitieron guardar este tipo de pago:</h3>
         <% @payment_type.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -20,7 +20,8 @@
       <div class="panel-heading"></div>
       
       <div class="panel-body panel-no-padding">
-        <%= form_for @payment_type, :html => { :class => 'form-horizontal row-border', :data => {:toggle => 'validator'} } do |f| %>
+        <%= form_for @payment_type, :html => { :class => 'form-horizontal row-border', 
+          :data => {:parsley_validate => ""} } do |f| %>
           
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
@@ -33,7 +34,7 @@
           <div class="form-group">
             <%= f.label :payment_unit, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :payment_unit, :class => 'form-control', :disabled => true %>
+              <%= f.text_field :payment_unit, :class => 'form-control', :disabled => true, :required => true %>
             </div>
           </div>
 
@@ -47,7 +48,8 @@
           <div class="form-group">
             <%= f.label :factor, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :factor, :class => 'form-control', :required => true, :disabled => true %>
+              <%= f.text_field :factor, :class => 'form-control', :required => true,
+                :data => {:parsley_range => [1, 10]}  %>
               <div class="help-block with-errors"></div>
             </div>
           </div>
