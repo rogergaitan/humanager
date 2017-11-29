@@ -1,6 +1,6 @@
 $(jQuery(document).ready(function($) {
    
-  var types = {
+  types = {
     add: 'add',
     remove: 'remove',
     show: 'show'
