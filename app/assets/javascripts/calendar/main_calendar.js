@@ -1,8 +1,8 @@
 $(document).ready( function() {
 
-	// ********************************************************************************************* //
-	// Start
-	$('#check_start').parents('label').click(function() {
+  // ********************************************************************************************* //
+  // Start
+  $('#check_start').parents('label').click(function() {
     show_hidde_events($('#check_start').is(':checked'), $('#check_start').val());
   });
 
@@ -11,8 +11,8 @@ $(document).ready( function() {
   });
 
   // ********************************************************************************************* //
-	// End
-	$('#check_end').parents('label').click(function() {
+  // End
+  $('#check_end').parents('label').click(function() {
     show_hidde_events($('#check_end').is(':checked'), $('#check_end').val());
   });
 
@@ -21,13 +21,13 @@ $(document).ready( function() {
   });
 
   // ********************************************************************************************* //
-	// Patment
-	$('#check_payment').parents('label').click(function() {
+  // Patment
+  $('#check_payment').parents('label').click(function() {
     show_hidde_events($('#check_payment').is(':checked'), $('#check_payment').val());
   });
 
   $('#check_payment').next().click(function() {
-  	show_hidde_events($('#check_payment').is(':checked'),  $('#check_payment').val());
+    show_hidde_events($('#check_payment').is(':checked'),  $('#check_payment').val());
   });
 
   if($('#get_main_calendar_payrolls_path').length != 0) {
@@ -36,83 +36,67 @@ $(document).ready( function() {
 
   // Next Button
   $('.fc-button-next').click(function() {
-  	$('#calendar-drag').fullCalendar('removeEvents');
-	});
+    $('#calendar-drag').fullCalendar('removeEvents');
+  });
 
-	// Prev Button
+  // Prev Button
   $('.fc-button-prev').click(function() {
-		$('#calendar-drag').fullCalendar('removeEvents');
-	});
+    $('#calendar-drag').fullCalendar('removeEvents');
+  });
 
   function show_hidde_events(checked, type) {
-  	if(checked) {
-  		$.each( JSON.parse(sessionStorage.getItem('events')), function (key, value) {
-  			if( value['id'] === type ) {
-  				$('#calendar-drag').fullCalendar('addEventSource', [value]);
-  			}
-  		});
-  	} else {
-  		$('#calendar-drag').fullCalendar('removeEvents', type);
+    if(checked) {
+      $.each( JSON.parse(sessionStorage.getItem('events')), function (key, value) {
+        if( value['id'] === type ) {
+  	  $('#calendar-drag').fullCalendar('addEventSource', [value]);
   	}
+     });
+     } else {
+       $('#calendar-drag').fullCalendar('removeEvents', type);
+     }
   }
 
   function set_calendar() {
     var calendar = $('#calendar-drag').fullCalendar({
       header: {
-          left: 'title',
-          right: 'prev,next month,agendaWeek,agendaDay'
+        left: 'title',
+        right: 'prev,next month,agendaWeek,agendaDay'
       },
       monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       monthNamesShort: ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'],
       dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
       dayNamesShort: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
       titleFormat: {
-          day: "ddd, MMM d, yy"
+        day: "ddd, MMM d, yy"
       },
       selectable: true,
       selectHelper: true,
-      select: function(start, end, allDay) {
-          var title = prompt('Event Title:');
-          if (title) {
-              calendar.fullCalendar('renderEvent',
-                  {
-                      title: title,
-                      start: start,
-                      end: end,
-                      allDay: allDay
-                  },
-                  true // make the event "stick"
-              );
-          }
-          calendar.fullCalendar('unselect');
-      },
       editable: false,
       events: function(start, end, callback) {
         $.ajax({
-            type: "GET",
-            url: $('#get_main_calendar_payrolls_path').val(),
-            dataType: 'json',
-            cache: true,
-            data: {
-                // Format: DD/MM/YYYY
-                start: start,
-                end: end,
-            },
-            success: function(doc) {
-              var events = set_events(doc);
-              callback(events);
-            }
+          type: "GET",
+          url: $('#get_main_calendar_payrolls_path').val(),
+          dataType: 'json',
+          cache: true,
+          data: {
+            start: start,
+            end: end,
+          },
+          success: function(doc) {
+            var events = set_events(doc);
+            callback(events);
+          }
         });
       },
       buttonText: {
-          prev: '<i class="fa fa-angle-left"></i>',
-          next: '<i class="fa fa-angle-right"></i>',
-          prevYear: '<i class="fa fa-angle-double-left"></i>',  // <<
-          nextYear: '<i class="fa fa-angle-double-right"></i>',  // >>
-          today:    '<span class="hidden-xs">Hoy</span><span class="visible-xs">T</span>',
-          month:    '<span class="hidden-xs">Mes</span><span class="visible-xs">M</span>',
-          week:     '<span class="hidden-xs">Semana</span><span class="visible-xs">W</span>',
-          day:      '<span class="hidden-xs">Día</span><span class="visible-xs">D</span>'
+        prev: '<i class="fa fa-angle-left"></i>',
+        next: '<i class="fa fa-angle-right"></i>',
+        prevYear: '<i class="fa fa-angle-double-left"></i>',  // <<
+        nextYear: '<i class="fa fa-angle-double-right"></i>',  // >>
+        today:    '<span class="hidden-xs">Hoy</span><span class="visible-xs">T</span>',
+        month:    '<span class="hidden-xs">Mes</span><span class="visible-xs">M</span>',
+        week:     '<span class="hidden-xs">Semana</span><span class="visible-xs">W</span>',
+        day:      '<span class="hidden-xs">Día</span><span class="visible-xs">D</span>'
       }
     });
   }
@@ -122,7 +106,7 @@ $(document).ready( function() {
     var allEvents = [];
 
     $.each(data, function(key, d) {
-    	var obj;
+      var obj;
 
       // Start Date
       obj = {
@@ -161,13 +145,13 @@ $(document).ready( function() {
         backgroundColor: Utility.getBrandColor('success')
       };
 
-			if( $('#check_payment').is(':checked') ) {
-				myEvents.push(obj);
-			}
-			allEvents.push(obj);
+      if( $('#check_payment').is(':checked') ) {
+        myEvents.push(obj);
+      }
+	allEvents.push(obj);
     });
 
-		sessionStorage.setItem('events', JSON.stringify(allEvents));
+    sessionStorage.setItem('events', JSON.stringify(allEvents));
 
     return myEvents;
   }

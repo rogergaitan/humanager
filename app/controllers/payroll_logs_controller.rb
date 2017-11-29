@@ -108,7 +108,8 @@ class PayrollLogsController < ApplicationController
   end
 
   def search_task # new
-    tasks = PayrollLog.search_task(params[:task_name], params[:task_code], params[:task_iactivity], params[:page], params[:per_page])
+    tasks = PayrollLog.search_task(params[:task_name], params[:task_code], params[:task_iactivity], 
+                                   params[:currency], params[:page], params[:per_page])
     responses(process_response(tasks), :ok)
   end
 

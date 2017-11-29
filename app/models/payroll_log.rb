@@ -88,11 +88,12 @@ class PayrollLog < ActiveRecord::Base
     cc = cc.paginate(:page => page, :per_page => per_page)
   end
 
-  def self.search_task(task_name, task_code, task_iactivity, page, per_page)
+  def self.search_task(task_name, task_code, task_iactivity, currency, page, per_page)
     tasks = Task.select("*")
     tasks = tasks.where("ntask like ?", "%#{task_name}%") if task_name.present?
     tasks = tasks.where("itask like ?", "%#{task_code}%") if task_code.present?
     tasks = tasks.where("iactivity = ?", task_iactivity) if task_iactivity.present?
+    tasks = tasks.where("currency_id = ?", currency) if currency.present?
     tasks = tasks.paginate(:page => page, :per_page => per_page)
   end
 
