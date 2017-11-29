@@ -127,7 +127,6 @@ class OtherPaymentsController < ApplicationController
         @detail_payments << "#{pe.employee_id}"
       end
     end
-    # binding.pry
   end
   
   private

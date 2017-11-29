@@ -1,8 +1,24 @@
 <script type="text/javascript">
   var cuenta_credito = [];
   <%  @credit_account.each do |cc| %>
-    cuenta_credito.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>, <%= cc.iaccount %>));
+    cuenta_credito.push(new Array(
+      <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      '<%=h cc.naccount %>', 
+      <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+      <%= cc.id %>, 
+      <%= cc.iaccount %>
+    ));
   <% end %>
+
+  var employees = [];
+  <% @employees.each do |e| %>
+    employees.push({
+      id: <%= e.id %>,
+      number_employee: <%= e.number_employee ? e.number_employee : 'null' %>,
+      full_name: '<%= "#{e.entity.surname} #{e.entity.name}" %>'
+    });
+  <% end %>
+
 </script>
 
 <%= javascript_include_tag 'resources' %>
@@ -325,9 +341,6 @@
 </div>
 
 <input type="hidden" id="search_employee_payroll_logs_path" value="<%= search_employee_payroll_logs_path %>">
-<input type="hidden" id="search_employee_by_id_path" value="<%= search_employee_by_id_employees_path %>">
-<input type="hidden" id="search_employee_by_code_path" value="<%= search_employee_by_code_employees_path %>">
-<input type="hidden" id="search_employee_by_name_path" value="<%= search_employee_by_name_employees_path %>">
 <input type="hidden" id="load_em_employees_path" value="<%= load_em_employees_path %>">
 
 <!--Employee Modal-->

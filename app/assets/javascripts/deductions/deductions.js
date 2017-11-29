@@ -4,9 +4,6 @@ $(document).ready(function() {
   
   deduction = {
     search_employee_payroll_logs_path: $('#search_employee_payroll_logs_path').val(),
-    search_employee_by_id_path: $('#search_employee_by_id_path').val(),
-    search_employee_by_code_path: $('#search_employee_by_code_path').val(),
-    search_employee_by_name_path: $('#search_employee_by_name_path').val(),
     load_em_employees_path: $('#load_em_employees_path').val()
   };
 
@@ -25,26 +22,26 @@ $(document).ready(function() {
       selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
       that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-      .on('keydown', function(e){
-        if (e.which === 40){
+      .on('keydown', function(e) {
+        if (e.which === 40) {
           that.$selectableUl.focus();
           return false;
         }
       });
 
       that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-      .on('keydown', function(e){
-        if (e.which == 40){
+      .on('keydown', function(e) {
+        if (e.which == 40) {
           that.$selectionUl.focus();
           return false;
         }
       });
     },
-    afterSelect: function(){
+    afterSelect: function() {
       this.qs1.cache();
       this.qs2.cache();
     },
-    afterDeselect: function(){
+    afterDeselect: function() {
       this.qs1.cache();
       this.qs2.cache();
     }
@@ -53,7 +50,7 @@ $(document).ready(function() {
   $('#deduction_employee_ids').multiSelect({
     selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
     selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
-    afterInit: function(ms){
+    afterInit: function(ms) {
       var that = this,
       $selectableSearch = that.$selectableUl.prev(),
       $selectionSearch = that.$selectionUl.prev(),
@@ -61,29 +58,29 @@ $(document).ready(function() {
       selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
       that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-      .on('keydown', function(e){
-        if (e.which === 40){
+      .on('keydown', function(e) {
+        if (e.which === 40) {
           that.$selectableUl.focus();
           return false;
         }
       });
 
       that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-      .on('keydown', function(e){
-        if (e.which == 40){
+      .on('keydown', function(e) {
+        if (e.which == 40) {
           that.$selectionUl.focus();
           return false;
         }
       });
     },
     afterSelect: function(values) { // selected
-      searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
-//       this.qs1.cache();
+      searchEmployeeByAttr(values, 'id', 'multi', types.add);
+      // this.qs1.cache();
       this.qs2.cache();
     },
     afterDeselect: function(values) { // deselected
-      searchEmployeeByAttr(values[0], 'id', 'multi', types.remove);
-      this.qs1.cache();
+      searchEmployeeByAttr(values, 'id', 'multi', types.remove);
+      // this.qs1.cache();
       this.qs2.cache();
     }
   });
@@ -117,10 +114,9 @@ $(document).ready(function() {
 
   $("#search_employee_results").on("click", "table tr a", function(e) {
     
-    var employeeId = $(this).parents('td').find('input:hidden').val(),
-        selector = $("#employee_items input:hidden[id='in_searching'][value='1']").parents('tr');
+    var employeeId = $(this).parents('td').find('input:hidden').val();
 
-    searchEmployeeByAttr(employeeId, 'id', 'table', types.add);
+    searchEmployeeByAttr([employeeId], 'id', 'table', types.add);
     $('#employeeModal').modal('hide'); // Close modal
     $("#employee_items input:hidden[id='in_searching'][value='1']").val('0'); // Change input status
     e.preventDefault();
@@ -148,12 +144,19 @@ $(document).ready(function() {
   });
 
   $('#emplotee_select_all').parents('label').click(function() {
-    emploteeSelectAll();
+    selectAll();
   });
 
   $('#emplotee_select_all').next().click(function() {
-    emploteeSelectAll();
+    selectAll();
   });
+
+  function selectAll() {
+    HoldOn.open({theme: 'sk-rect', message: 'Cargando... Por favor espera!'});
+    setTimeout(function() {
+      employeesSelectAll();
+    }, 2000);
+  }
 
   $('#payroll_select_all').parents('label').click(function() {
     payrollSelectAll();
@@ -214,7 +217,7 @@ $(document).ready(function() {
     
     var id = $(this).parents('tr').find("input:hidden[id*='_employee_id']").val();
     if(id != "") {
-      searchEmployeeByAttr( id, 'id', 'table', types.remove);
+      searchEmployeeByAttr([id], 'id', 'table', types.remove);
       return; 
     }
     $(element).parents('tr').remove();
@@ -223,7 +226,7 @@ $(document).ready(function() {
   $('#employee_items tr.items_deductions_form').each(function() {
     var id = $(this).find("input[id*='_employee_id']").val();
     if(id != "" ) {
-      searchEmployeeByAttr( id, 'id', 'show', '');
+      searchEmployeeByAttr([id], 'id', 'show', '');
     } else {
       $(this).remove();
     }
@@ -231,10 +234,10 @@ $(document).ready(function() {
 
   // Search Employee by code
   $('form').on('focusout', '.search_code_employee', function() {
-    searchEmployeeByAttr($(this).val(), 'code', 'table', types.add);
+    searchEmployeeByAttr([$(this).val()], 'code', 'table', types.add);
   });
   
-   //creditors list
+   // Creditors list
   $.getJSON("/creditors", function(data) {
     $('#load_creditor').autocomplete({
       minLength: 3,
@@ -321,7 +324,16 @@ $(document).ready(function() {
 	});
 
 	$('#superiors_employees').change(function() {
-    	filterEmployees("superior", $(this).val());
+    filterEmployees("superior", $(this).val());
+  });
+  
+  $('#deduction_deduction_value').on('change', function() {
+    var value = $(this).val();
+    $('#employee_items tr').each(function() {
+      if( !resources.parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
+        $(this).find("input:text[id*='_calculation']").val(value);
+      }
+    });
   });
     
 });
@@ -345,43 +357,26 @@ function percentMask(selector) {
   });    
 }
 
-function selectUnselectEmployees(isSelect) {
-  
-  var theClass = 'ms-selection';
-  if(isSelect) {
-    theClass = 'ms-selectable';
-  }
-  
-  $('#ms-deduction_employee_ids div.'+theClass).find('li:visible').each( function() {
-    var id = $(this).attr('id').replace('-selectable','');
-    if(isSelect) {
-      searchEmployeeByAttr(id, 'id', 'multi', types.add);
-    } else {
-      searchEmployeeByAttr(id, 'id', 'multi', types.remove);
-    }
+function employeesSelectAll() {
+  var checked = $('#emplotee_select_all').is(':checked');
+  var that = $('#deduction_employee_ids');
+  var select = Array();
+  var deselect = Array();
+
+  $('#ms-deduction_employee_ids div.ms-selectable li:visible').each(function () {
+    select.push( $(this).attr("id").split('-', 1)[0] );
   });
 
-  if(isSelect) {
-    $('#deduction_employee_ids').multiSelect('select_all');
-  } else {
-    $('#deduction_employee_ids').multiSelect('deselect_all');
-  }
-}
-
-function emploteeSelectAll() {
-  if( $('#emplotee_select_all').is(':checked') ) {
-    selectUnselectEmployees(true);
-  } else {
-    selectUnselectEmployees(false);
-  }
+  $('#ms-deduction_employee_ids div.ms-selection li:visible').each(function () {
+    deselect.push( $(this).attr('id').split('-', 1)[0] );
+  });
+  checked ? that.multiSelect('select', select) : that.multiSelect('deselect', deselect);
 }
 
 function payrollSelectAll() {
-  if( $('#payroll_select_all').is(':checked') ){
-    $('#deduction_payroll_type_ids').multiSelect('select_all');
-  } else {
-    $('#deduction_payroll_type_ids').multiSelect('deselect_all');  
-  }
+  var checked = $('#payroll_select_all').is(':checked');
+  var selector = $('#deduction_payroll_type_ids');
+  checked ? selector.multiSelect('select_all'):selector.multiSelect('deselect_all');
 }
 
 function typeDeduction(selected) {
@@ -519,15 +514,11 @@ function showHideEmployees() {
     disableDeductionValueValidations();
     employeeValueValidation();
     $('#employee_items_two').show();
-    /*$('#employee_items_one').hide()
-    $('.custom_calculation').hide();*/
   } else {
     $('#deduction_deduction_value').prop('disabled', false);
     enableDeductionValueValidations();
     employeeValueValidation();
     $('#employee_items_two').hide();
-    /*$('#employee_items_one').show();
-    $('.custom_calculation').show();*/
   }
 }
 
@@ -588,13 +579,9 @@ function isBeneficiary(value) {
 
 function addFields(e) {
   e.preventDefault();
-  var time = new Date().getTime(),
-      regexp = new RegExp($(this).data('id'), 'g');
-  $('.header_items').after($(this).data('fields').replace(regexp, time));
-
-  populateAutocompleteEmployees( $('#employee_items tr:eq(1)').find("input[id='search_name_employee']") );
-  $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
-  
+  var time = new Date().getTime();
+  var regexp = new RegExp($(this).data('id'), 'g');
+  $('.header_items').after($(this).data('fields').replace(regexp, time));  
   changeEmployeeValueCurrencySymbol();
   employeeValueValidation();
 }  
@@ -611,14 +598,11 @@ function hiddenEmployees(id_employee) {
 // Only chech if the employee are in the list
 function checkIfEmployeeExist(employee) {
 
-  if(employee == null)
-    return false;
+  if(employee == null) return false;
 
   var data = findParentByAttr(employee.id, "id");
 
-  if(typeof data.destroy == 'undefined') {
-    return false;
-  }
+  if(typeof data.destroy == 'undefined') return false;
   
   $(data.parent).show();
   $(data.parent).find("input:hidden[id*='_destroy']").val("false");
@@ -654,7 +638,7 @@ function populateAutocompleteEmployees(idField) {
         }
       }),
       select: function( event, ui ) {
-        searchEmployeeByAttr(ui.item.label, "name", 'table', types.add);
+        searchEmployeeByAttr([ui.item.label], "name", 'table', types.add);
       },
       focus: function(event, ui) {
       }
@@ -688,7 +672,7 @@ function fromMulti(employee, type) {
           $(selector).find("input:hidden[id*='_destroy']").val("false");
           $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
           $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
-          $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+          $(selector).find("input[id='search_name_employee']").val(employee.full_name);
           $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
           $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
           $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
@@ -696,13 +680,11 @@ function fromMulti(employee, type) {
           $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
           $(data.parent).show();
         }
-      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
     break;
     
     case types.remove: // Ocutar
       $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
       $(data.parent).hide();
-      // resources.PNotify('Empleado', 'Eliminado con exito', 'success');
     break;
   }
 }
@@ -722,7 +704,7 @@ function fromTable(employee, type) {
         $(selector).find("input:hidden[id*='_destroy']").val("false");
         $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
         $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
-        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+        $(selector).find("input[id='search_name_employee']").val(employee.full_name);
         $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
         $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
         $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
@@ -732,7 +714,6 @@ function fromTable(employee, type) {
         $(data.parent).show();
         $('#employee_items tr.items_deductions_form:eq(0)').remove();
       }
-      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
       addEmployeeMulti(employee.id);
     break;
     
@@ -749,10 +730,9 @@ function fromTable(employee, type) {
 /* SHOW IN TABLA LOAD */
 function showEmployees(employee) {
   var data = findParentByAttr(employee.id, 'id');
-  // $(data.parent).find("input:hidden[id*='_destroy']").val("false");
   $(data.parent).find("input:hidden[id*='_employee_id']").val(employee.id);
   $(data.parent).find("input[id='search_code_employee']").val(employee.number_employee);
-  $(data.parent).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+  $(data.parent).find("input[id='search_name_employee']").val(employee.full_name);
   $(data.parent).find("input[id='search_code_employee']").attr('disabled', 'disabled');
   $(data.parent).find("input[id='search_name_employee']").attr('disabled', 'disabled');
   $(data.parent).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
@@ -770,50 +750,31 @@ function removeEmployeeMulti(id_employee) {
 
 /******************************************************************************************/
 // Search a employee by attr (id, code, name)
-function searchEmployeeByAttr(searchValue, searchType, from, typeFrom) {
+function searchEmployeeByAttr(values, searchType, from, typeFrom) {
   
-  var url, customData;
+  var options = {
+    keys: ['id', 'number_employee', 'full_name']
+  };
 
-  switch(searchType) {
-    case "id":
-      url = deduction.search_employee_by_id_path,
-      customData = { search_id: searchValue };
-    break;
-    
-    case "code":
-      url = deduction.search_employee_by_code_path,
-      customData = { search_code: searchValue };
-    break;
+  var fuse = new Fuse(employees, options)
 
-    case "name":
-      url = deduction.search_employee_by_name_path,
-      customData = { search_name: searchValue };
-    break;
-  }
+  $.each(values, function (key, value) {
+    var results = fuse.search(value);
+    var data = results[0];
 
-  $.ajax({
-    type: "GET",
-    url: url,
-    dataType: "json",
-    data: customData,
-    success: function(data) {
-      if( data != null ) {
-        if( from == "table" ) {
-          fromTable(data, typeFrom);
-        }
-        if( from == "multi" ) {
-          fromMulti(data, typeFrom);
-        }
-        if( from == "show" ) {
-          showEmployees(data);
-        }
-        // populateListEmployees(data, type, exist);
-      }
-    },
-    error: function(response, textStatus, errorThrown) {
+    if(data == null) {
       resources.PNotify('Empleado', 'Error al buscar', 'danger');
+      return false;
     }
+
+    if(from == 'table') fromTable(data, typeFrom);
+    
+    if(from == 'multi') fromMulti(data, typeFrom);
+
+    if( from == 'show') showEmployees(data);
   });
+  
+  HoldOn.close();
 }
 
 // Solo para la tabla de abajo visual
@@ -845,10 +806,10 @@ function disablePayrollTypes() {
 }
 
 function enablePayrollTypes() {
-    $("#deduction_payroll_type_ids").prop("disabled", false);
-    $("#deduction_payroll_type_ids").prop("required", true);
-    $("#deduction_payroll_type_ids").multiSelect("refresh");
-    $("#payroll_select_all").iCheck("enable");
+  $("#deduction_payroll_type_ids").prop("disabled", false);
+  $("#deduction_payroll_type_ids").prop("required", true);
+  $("#deduction_payroll_type_ids").multiSelect("refresh");
+  $("#payroll_select_all").iCheck("enable");
 }
 
 // Disable/Enable Deduction Employee ids
@@ -871,12 +832,9 @@ function enableDeductionEmployeeIds() {
 //add currency symbol to maximum deduction and individual employee value field
 function changeMaximumDeductionCurrencySymbol() {
   var currency = $("#deduction_maximum_deduction_currency_id :selected").text();
-      
   var symbol = $("input[name=" + currency + "]").val();
-  
   $("#maximum_deduction_currency_symbol").text(symbol);
 }
-
 
 function showHideOptions(selected) {
   switch($(selected).val()) {
@@ -911,8 +869,7 @@ function filterEmployees(type, id) {
   $('#ms-deduction_employee_ids .ms-selectable').find('li').each(function() {
     
     if(type === "all") {
-      if(!$(this).hasClass('ms-selected'))
-        $(this).show();
+      if(!$(this).hasClass('ms-selected')) $(this).show();
     }
 
     var searchType = 0;
@@ -939,34 +896,36 @@ function filterEmployees(type, id) {
 }
 
 function changeEmployeeValueCurrencySymbol() {
+
+  var symbol = '%';
   if($("#deduction_calculation_type").val() == "fixed" ) {
     var currency = $("#deduction_deduction_currency_id :selected").text();
-        
-    var symbol = $("input[name=" + currency + "]").val();
-    
-    $(".employee_calculation_currency_symbol").text(symbol);
-  }  else {
-    $(".employee_calculation_currency_symbol").text("%");
+    symbol = $("input[name=" + currency + "]").val();
   }
+
+  $(".employee_calculation_currency_symbol").text(symbol);
 }
 
 function employeeValueValidation () {
-  var calculation_type = $("#deduction_calculation_type").val()
   
+  var calculation_type = $("#deduction_calculation_type").val();
+  var selector = $("#employee_items input:text[id*='_calculation']");
+
   if($('#deduction_individual').is(':checked')) {
-    $("#employee_items input:text[id*='_calculation']").attr("required", true); 
+    selector.attr("required", true); 
     
     if(calculation_type == "fixed") {
-      currencyMask($("#employee_items input:text[id*='_calculation']"));
-      $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
-    } else {
-      percentMask($("#employee_items input:text[id*='_calculation']"));
-      $("#employee_items input:text[id*='_calculation']").attr("data-parsley-range", "[1, 100]");
+      currencyMask(selector);
+      selector.removeAttr("data-parsley-range");
+      return false;
     }
     
+    percentMask(selector);
+    selector.attr("data-parsley-range", "[1, 100]");
+    
   } else {
-    $("#employee_items input:text[id*='_calculation']").removeAttr("required");
-    $("#employee_items input:text[id*='_calculation']").removeAttr("data-parsley-range");
+    selector.removeAttr("required");
+    selector.removeAttr("data-parsley-range");
   }
   
   $("form[id*='_deduction']").parsley().destroy();
@@ -981,20 +940,23 @@ function enableDeductionValueValidations () {
 }
 
 function disableDeductionValueValidations () {
-  $("#deduction_deduction_value").removeAttr("data-parsley-range");
-  $("#deduction_deduction_value").removeAttr("required");
+  var selector = $("#deduction_deduction_value");
+  selector.removeAttr("data-parsley-range");
+  selector.removeAttr("required");
 }
 
 function deductionValuePercentValidation() {
+  var selector = $("#deduction_deduction_value");
   if(!$("#deduction_individual").is(":checked")) {
-    $("#deduction_deduction_value").attr("data-parsley-range", "[1, 100]");
-    $("#deduction_deduction_value").attr("required", true);  
+    selector.attr("data-parsley-range", "[1, 100]");
+    selector.attr("required", true);  
   }
 }
 
 function deductionValueCurrencyValidation () {
+  var selector = $("#deduction_deduction_value");
   if(!$("#deduction_individual").is(":checked")) {
-    $("#deduction_deduction_value").removeAttr("data-parsley-range");
-    $("#deduction_deduction_value").attr("required", true);
+    selector.removeAttr("data-parsley-range");
+    selector.attr("required", true);
   }
 }

@@ -10,40 +10,40 @@ $(jQuery(document).ready(function($) {
   
   $('form').on('click', '.add_fields', addFields);
   
-    $('#work_benefit_employee_ids').multiSelect({
-      selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
-      selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
-      afterInit: function(ms){
-        var that = this,
-        $selectableSearch = that.$selectableUl.prev(),
-        $selectionSearch = that.$selectionUl.prev(),
-        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+	$('#work_benefit_employee_ids').multiSelect({
+    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
+    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
+    afterInit: function(ms) {
+      var that = this,
+      $selectableSearch = that.$selectableUl.prev(),
+      $selectionSearch = that.$selectionUl.prev(),
+      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
       that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-      .on('keydown', function(e){
-        if (e.which === 40){
+      .on('keydown', function(e) {
+        if (e.which === 40) {
           that.$selectableUl.focus();
           return false;
         }
       });
 
       that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-      .on('keydown', function(e){
-        if (e.which == 40){
+      .on('keydown', function(e) {
+        if (e.which == 40) {
           that.$selectionUl.focus();
           return false;
         }
       });
     },
-    afterSelect: function(values){
-      searchEmployeeByAttr(values[0], 'id', 'multi', types.add);
-      this.qs1.cache();
+    afterSelect: function(values) {
+      searchEmployeeByAttr(values, 'id', 'multi', types.add);
+      // this.qs1.cache();
       this.qs2.cache();
     },
-    afterDeselect: function(values){
-      searchEmployeeByAttr(values[0], 'id', 'multi', types.remove);
-      this.qs1.cache();
+    afterDeselect: function(values) {
+      searchEmployeeByAttr(values, 'id', 'multi', types.remove);
+      // this.qs1.cache();
       this.qs2.cache();
     }
   });
@@ -174,12 +174,12 @@ $(jQuery(document).ready(function($) {
 
   // Empleados
   $('#emplotee_select_all').parents('label').click(function() {
-    employeesSelectAll();
-  });
+    selectAll();
+	});
 
-  $('#emplotee_select_all').next().click(function() {
-    employeesSelectAll();
-  });
+	$('#emplotee_select_all').next().click(function() {
+    selectAll();
+	});
 
   // Tipos de Planillas
   $('#payroll_type_select_all').parents('label').click(function() {
@@ -250,7 +250,7 @@ $(jQuery(document).ready(function($) {
   $('#employee_items tr.items_work_benefits_form').each(function() {
     var id = $(this).find("input[id*='_employee_id']").val();
     if(id != "" ) {
-      searchEmployeeByAttr( id, 'id', 'show', '');
+      searchEmployeeByAttr([id], 'id', 'show', '');
     } else {
       $(this).remove();
     }
@@ -258,6 +258,15 @@ $(jQuery(document).ready(function($) {
   
   $("#work_benefit_currency_id").on("change", function () {
     changeEmployeeValueCurrencySymbol();    
+  });
+
+  $('#work_benefit_work_benefits_value').on('change', function() {
+    var value = $(this).val();
+    $('#employee_items tr').each(function() {
+      if( !resources.parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
+        $(this).find("input:text[id*='_calculation']").val(value);
+      }
+    });
   });
   
   getPayrolls();
@@ -326,32 +335,30 @@ function filterEmployees(type, id) {
   });
 }
 
-function employeesSelectAll() {
-  var checked = $('#emplotee_select_all').is(':checked');
-  selectUnselectEmployees(checked);
+function selectAll() {
+  HoldOn.open({theme: 'sk-rect', message: 'Cargando... Por favor espera!'});
+  setTimeout(function() {
+    employeesSelectAll();
+  }, 2000);
 }
 
-function selectUnselectEmployees(isSelect) {
+function employeesSelectAll() {
+  var checked = $('#emplotee_select_all').is(':checked');
+  var that = $('#work_benefit_employee_ids');
+  var select = Array();
+  var deselect = Array();
   
-  var theClass = 'ms-selection';
-  if(isSelect) {
-    theClass = 'ms-selectable';
-  }
-  
-  $('#ms-work_benefits_employee_ids div.'+theClass).find('li:visible').each( function() {
-    var id = $(this).attr('id').replace('-selectable','');
-    if(isSelect) {
-      searchEmployeeByAttr(id, 'id', 'multi', types.add);
-    } else {
-      searchEmployeeByAttr(id, 'id', 'multi', types.remove);
-    }
+  // ms-work_benefit_employee_ids
+
+  $('#ms-work_benefit_employee_ids div.ms-selectable li:visible').each(function () {
+    select.push( $(this).attr("id").split('-', 1)[0] );
   });
 
-  if(isSelect) {
-    $('#work_benefit_employee_ids').multiSelect('select_all');
-  } else {
-    $('#work_benefit_employee_ids').multiSelect('deselect_all');
-  }
+  $('#ms-work_benefit_employee_ids div.ms-selection li:visible').each(function () {
+    deselect.push( $(this).attr('id').split('-', 1)[0] );
+  });
+
+  checked ? that.multiSelect('select', select) : that.multiSelect('deselect', deselect);
 }
 
 function payrollSelectAll() {
@@ -580,27 +587,25 @@ function showHideEmployees() {
   } else {
     $("#work_benefit_work_benefits_value").prop('disabled', false);
     enableWorkBenefitValueValidations();
-    employeeValueValidation();
+    $("#employee_items_two input").prop("disabled", true);
     $('#employee_items_two').hide();
   }
 }
 
 function addFields(e) {
   e.preventDefault();
-  var time = new Date().getTime(),
-      regexp = new RegExp($(this).data('id'), 'g');
+  var time = new Date().getTime();
+  var regexp = new RegExp($(this).data('id'), 'g');
   $('.header_items').after($(this).data('fields').replace(regexp, time));
-
-  populateAutocompleteEmployees( $('#employee_items tr:eq(1)').find("input[id='search_name_employee']") );
-  $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
-  
   changeEmployeeValueCurrencySymbol();
   employeeValueValidation();
-}  
+}
 
 function fromMulti(employee, type) {
 
   var data = findParentByAttr(employee.id, 'id');
+  var individual = $('#work_benefit_individual').is(':checked');
+  var value = $('#work_benefit_work_benefits_value').val();
 
   switch(type) {
 
@@ -612,69 +617,97 @@ function fromMulti(employee, type) {
         $(selector).find("input:hidden[id*='_destroy']").val("false");
         $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
         $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
-        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+        $(selector).find("input[id='search_name_employee']").val(employee.full_name);
+        $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+        $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
         $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
-        } else { // Existe
-          $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
-          $(data.parent).show();
-        }
-      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
+
+        if(!individual) $(selector).find("input[id*='_calculation']").val(value);
+      } else { // Existe
+        $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+        if(!individual) $(data.parent).find("input[id*='_calculation']").val(value);
+        $(data.parent).show();
+      }
     break;
     
     case types.remove: // Ocutar
       $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
       $(data.parent).hide();
-      // resources.PNotify('Empleado', 'Eliminado con exito', 'success');
     break;
   }
 }
 
-/******************************************************************************************/
-// Search a employee by attr (id, code, name)
-function searchEmployeeByAttr(searchValue, searchType, from, typeFrom) {
+function fromTable(employee, type) {
   
-  var url, customData;
-
-  switch(searchType) {
-    case "id":
-      url = "/employees/search_employee_by_id",
-      customData = { search_id: searchValue };
-    break;
-    
-    case "code":
-      url = deduction.search_employee_by_code_path,
-      customData = { search_code: searchValue };
-    break;
-
-    case "name":
-      url = deduction.search_employee_by_name_path,
-      customData = { search_name: searchValue };
-    break;
+    var data = findParentByAttr(employee.id, 'id');
+  
+    switch(type) {
+  
+      case types.add:
+        // No existe
+        if(typeof data.parent == 'undefined') {
+          var selector = $('#employee_items tr.items_deductions_form:eq(0)');
+          $(selector).find("input:hidden[id*='_destroy']").val("false");
+          $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
+          $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
+          $(selector).find("input[id='search_name_employee']").val(employee.full_name);
+          $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
+          $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
+          $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
+        } else { // Existe
+          // Lo muestra
+          $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
+          $(data.parent).show();
+          $('#employee_items tr.items_deductions_form:eq(0)').remove();
+        }
+        addEmployeeMulti(employee.id);
+      break;
+      
+      case types.remove: // Ocutar
+        $(data.parent).find("input[type=hidden][id*='_destroy']").val(1);
+        $(data.parent).hide();
+        resources.PNotify('Empleado', 'Eliminado con exito', 'success');
+        removeEmployeeMulti(employee.id);
+      break;
+    }
   }
 
-  $.ajax({
-    type: "GET",
-    url: url,
-    dataType: "json",
-    data: customData,
-    success: function(data) {
-      if( data != null ) {
-        if( from == "table" ) {
-          fromTable(data, typeFrom);
-        }
-        if( from == "multi" ) {
-          fromMulti(data, typeFrom);
-        }
-        if( from == "show" ) {
-          showEmployees(data);
-        }
-        // populateListEmployees(data, type, exist);
-      }
-    },
-    error: function(response, textStatus, errorThrown) {
+  /* TABLA - MULTISELECT */
+  function addEmployeeMulti(id_employee) {
+    $('#employee_items_one .ms-selectable').find("li[id^='"+id_employee+"']").trigger('click');
+  }
+
+  function removeEmployeeMulti(id_employee) {
+    $('#employee_items_one .ms-selection').find("li[id^='"+id_employee+"']").trigger('click');
+  }
+
+/******************************************************************************************/
+// Search a employee by attr (id, code, name)
+function searchEmployeeByAttr(values, searchType, from, typeFrom) {
+
+  var options = {
+    keys: ['id', 'number_employee', 'full_name']
+  };
+
+  var fuse = new Fuse(employees, options)
+
+  $.each(values, function (key, value) {
+    var results = fuse.search(value);
+    var data = results[0];
+
+    if(data == null) {
       resources.PNotify('Empleado', 'Error al buscar', 'danger');
+      return false;
     }
+
+    if(from == 'table') fromTable(data, typeFrom);
+    
+    if(from == 'multi') fromMulti(data, typeFrom);
+
+    if( from == 'show') showEmployees(data);
   });
+  
+  HoldOn.close();
 }
 
 // Solo para la tabla de abajo visual
@@ -708,7 +741,7 @@ function populateAutocompleteEmployees(idField) {
         }
       }),
       select: function( event, ui ) {
-        searchEmployeeByAttr(ui.item.label, "name", 'table', types.add);
+        searchEmployeeByAttr([ui.item.label], "name", 'table', types.add);
       },
       focus: function(event, ui) {
       }

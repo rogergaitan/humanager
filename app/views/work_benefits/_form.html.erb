@@ -29,6 +29,15 @@
       id: <%= cc.id %>
     });
   <% end %>
+
+  var employees = [];
+  <% @employees.each do |e| %>
+    employees.push({
+      id: <%= e.id %>,
+      number_employee: <%= e.number_employee ? e.number_employee : 'null' %>,
+      full_name: '<%= "#{e.entity.surname} #{e.entity.name}" %>'
+    });
+  <% end %>
   
 </script>
 

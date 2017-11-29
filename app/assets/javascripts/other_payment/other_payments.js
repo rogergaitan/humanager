@@ -4,16 +4,11 @@ $(document).ready(function() {
 	/*********************************************************************************************************************************************************/
 	/* E V E N T S */
 	/*********************************************************************************************************************************************************/
-
 	// List of the routes
 	op.fetch_ledger_accounts_path = $('#fetch_ledger_accounts_path').val();
 	op.fetch_cc_costs_centers_path = $('#fetch_cc_costs_centers_path').val();
 	op.search_cost_center_work_benefits_path = $('#search_cost_center_work_benefits_path').val();
 	op.fetch_employees_deductions_path = $('#fetch_employees_deductions_path').val();
-	op.search_employee_by_id_path = $('#search_employee_by_id_path').val();
-	op.search_employee_by_code_path = $('#search_employee_by_code_path').val();
-	op.search_employee_by_name_path = $('#search_employee_by_name_path').val();
-	op.load_em_employees_path = $('#load_em_employees_path').val();
 	op.search_employee_payroll_logs_path = $('#search_employee_payroll_logs_path').val();
 	op.fetch_payroll_type_deductions_path = $('#fetch_payroll_type_deductions_path').val();
 	op.get_activas_payrolls_path = $('#get_activas_payrolls_path').val();
@@ -91,16 +86,12 @@ $(document).ready(function() {
       });
     },
     afterSelect: function(values) { // selected
-      $.each(values, function (key, value) {
-        op.searchEmployeeByAttr(value, 'id', 'multi', op.types.add);  
-      });
+      op.searchEmployeeByAttr(values, 'id', 'multi', op.types.add);
       // this.qs1.cache();
       this.qs2.cache();
     },
     afterDeselect: function(values) { // deselected
-      $.each(values, function (key, value) {
-        op.searchEmployeeByAttr(value, 'id', 'multi', op.types.remove);
-      });
+      op.searchEmployeeByAttr(values, 'id', 'multi', op.types.remove);
       // this.qs1.cache();
       this.qs2.cache();
     }
@@ -108,7 +99,7 @@ $(document).ready(function() {
 
   // Update validation
   $('#other_payment_payroll_type_ids, #other_payment_employee_ids').change(function() {
-    op.updateValidation();
+    // op.updateValidation();
   });
 	
 	op.typeDeduction($('#other_payment_other_payment_type'));
@@ -126,7 +117,7 @@ $(document).ready(function() {
 
   $("#search_employee_results").on("click", "table tr a", function(e) {
     var employeeId = $(this).parents('td').find('input:hidden').val();
-    op.searchEmployeeByAttr(employeeId, 'id', 'table', op.types.add);
+    op.searchEmployeeByAttr([employeeId], 'id', 'table', op.types.add);
     $('#employeeModal').modal('hide'); // Close modal
     $("#employee_items input:hidden[id='in_searching'][value='1']").val('0'); // Change input status
     e.preventDefault();
@@ -164,12 +155,19 @@ $(document).ready(function() {
 
   // Employees
   $('#emplotee_select_all').parents('label').click(function() {
-    op.employeeSelectAll();
+    selectAll();
   });
   
   $('#emplotee_select_all').next().click(function() {
-    op.employeeSelectAll();
+    selectAll();
   });
+
+  function selectAll() {
+    HoldOn.open({theme: 'sk-rect', message: 'Cargando... Por favor espera!'});
+    setTimeout(function() {
+      op.employeeSelectAll();
+    }, 2000);
+  }
 
   // Al precionar click sobre una planilla se establece el id de la planilla
   $('#activas').on("click", "td.payroll-type a", op.setPayroll);
@@ -199,7 +197,6 @@ $(document).ready(function() {
     $('#other_payment_ledger_account_name'), $('#other_payment_ledger_account_id'));
   
   // Add the auto complete to Centro de Costro
-  
   op.fetchPopulateAutocomplete(op.fetch_cc_costs_centers_path, 
     $('#other_payment_costs_center_name'), $('#other_payment_costs_center_id'));
 
@@ -211,7 +208,7 @@ $(document).ready(function() {
     event.preventDefault();
     var id = $(this).parents('tr').find("input:hidden[id*='_employee_id']").val();
     if(id != "") {
-      op.searchEmployeeByAttr( id, 'id', 'table', op.types.remove);
+      op.searchEmployeeByAttr([id], 'id', 'table', op.types.remove);
       return; 
     }
     $(element).parents('tr').remove();
@@ -228,7 +225,7 @@ $(document).ready(function() {
 
   // Search Employee by code
   $('form').on('focusout', '.search_code_employee', function() {
-    op.searchEmployeeByAttr($(this).val(), 'code', 'table', op.types.add);
+    op.searchEmployeeByAttr([$(this).val()], 'code', 'table', op.types.add);
   });
 
   op.showHideOptions($('#select_method_all')); // Set default
@@ -252,7 +249,7 @@ $(document).ready(function() {
   $('#employee_items tr.items_other_payment_form').each(function() {
     var id = $(this).find("input[id*='_employee_id']").val();
     if(id != "" ) {
-      op.searchEmployeeByAttr( id, 'id', 'show', '');
+      op.searchEmployeeByAttr([id], 'id', 'show', '');
     } else {
       $(this).remove();
     }
@@ -302,50 +299,32 @@ op.updateValidation = function() {
   resources.updateValidation(modelName, referenceId);
 }
 
-op.searchEmployeeByAttr = function(searchValue, searchType, from, typeFrom) {
+op.searchEmployeeByAttr = function(values, searchType, from, typeFrom) {
   
-	var url;
-  var customData;
+  var options = {
+    keys: ['id', 'number_employee', 'full_name']
+  };
 
-	switch(searchType) {
-		case "id":
-			url = op.search_employee_by_id_path,
-			customData = { search_id: searchValue };
-		break;
+  var fuse = new Fuse(employees, options)
 
-		case "code":
-			url = op.search_employee_by_code_path,
-			customData = { search_code: searchValue };
-		break;
+  $.each(values, function (key, value) {
+    var results = fuse.search(value);
+    var data = results[0];
 
-		case "name":
-			url = op.search_employee_by_name_path,
-			customData = { search_name: searchValue };
-		break;
-	}
+    if(data == null) {
+      resources.PNotify('Empleado', 'Error al buscar', 'danger');
+      return false;
+    }
 
-	$.ajax({
-		type: "GET",
-		url: url,
-		dataType: "json",
-		data: customData,
-		success: function(data) {
-      if( data != null ) {
-        if( from == "table" ) {
-          op.fromTable(data, typeFrom);
-        }
-        if( from == "multi" ) {
-          op.fromMulti(data, typeFrom);
-        }
-        if( from == "show" ) {
-          op.showEmployees(data);
-        }
-      }
-		},
-		error: function(response, textStatus, errorThrown) {
-			resources.PNotify('Empleado', 'Error al buscar', 'danger');
-		}
-	});
+    if(from == 'table') op.fromTable(data, typeFrom);
+    
+    if(from == 'multi') op.fromMulti(data, typeFrom);
+
+    if( from == 'show') op.showEmployees(data);
+  });
+  
+  // op.updateValidation(); // kalfaro    
+  HoldOn.close();
 }
 
 // TABLA - MULTISELECT
@@ -358,7 +337,7 @@ op.fromTable = function(employee, type) {
     case op.types.add:
       // No existe
       if(typeof data.parent == 'undefined') {
-        var selector = $('#employee_items tr.items_other_payment_form:eq(0)');
+        var selector = $('#employee_items tr.items_work_benefits_form:eq(0)');
         $(selector).find("input:hidden[id*='_destroy']").val("false");
         $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
         $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
@@ -370,9 +349,8 @@ op.fromTable = function(employee, type) {
         // Lo muestra
         $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
         $(data.parent).show();
-        $('#employee_items tr.items_other_payment_form:eq(0)').remove();
+        $('#employee_items tr.items_work_benefits_form:eq(0)').remove();
       }
-      // resources.PNotify('Empleado', 'Agregado con exito', 'success');
       op.addEmployeeMulti(employee.id);
     break;
     
@@ -389,7 +367,9 @@ op.fromTable = function(employee, type) {
 op.fromMulti = function(employee, type) {
 
   var data = op.findParentByAttr(employee.id, 'id');
-
+  var individual = $('#other_payment_individual').is(':checked');
+  var value = $('#other_payment_amount').val();
+  
   switch(type) {
 
     case op.types.add:
@@ -400,18 +380,14 @@ op.fromMulti = function(employee, type) {
         $(selector).find("input:hidden[id*='_destroy']").val("false");
         $(selector).find("input:hidden[id*='_employee_id']").val(employee.id);
         $(selector).find("input[id='search_code_employee']").val(employee.number_employee);
-        $(selector).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+        $(selector).find("input[id='search_name_employee']").val(employee.full_name);
         $(selector).find("input[id='search_code_employee']").attr('disabled', 'disabled');
         $(selector).find("input[id='search_name_employee']").attr('disabled', 'disabled');
         $(selector).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
-        if( !$('#other_payment_individual').is(':checked') ) {
-          $(selector).find("input[id*='_calculation']").val($('#other_payment_amount').val());
-        }
+        if(!individual) $(selector).find("input[id*='_calculation']").val(value);
       } else { // Existe
         $(data.parent).find("input[type=hidden][id*='_destroy']").val(0);
-        if( !$('#other_payment_individual').is(':checked') ) {
-          $(data.parent).find("input[id*='_calculation']").val($('#other_payment_amount').val());
-        }
+        if(!individual) $(data.parent).find("input[id*='_calculation']").val(value);
         $(data.parent).show();
       }
     break;
@@ -429,7 +405,7 @@ op.showEmployees = function(employee) {
   // $(data.parent).find("input:hidden[id*='_destroy']").val("false");
   $(data.parent).find("input:hidden[id*='_employee_id']").val(employee.id);
   $(data.parent).find("input[id='search_code_employee']").val(employee.number_employee);
-  $(data.parent).find("input[id='search_name_employee']").val(employee.name + " " + employee.surname);
+  $(data.parent).find("input[id='search_name_employee']").val(employee.full_name);
   $(data.parent).find("input[id='search_code_employee']").attr('disabled', 'disabled');
   $(data.parent).find("input[id='search_name_employee']").attr('disabled', 'disabled');
   $(data.parent).find("a[id='openEmployeeModal']").attr('disabled', 'disabled');
@@ -599,6 +575,7 @@ op.setAccount = function(e) {
 op.fetchPopulateAutocomplete = function(url, textField, idField) {
   var name = "";
   var codeLabel = "";
+
   $.getJSON(url, function(accounts) {
     $(textField).autocomplete({
       source: $.map(accounts, function(item) {
@@ -628,9 +605,10 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
           id: item.id
         }
       }),
+
       select: function(event, ui) {
         if( idField == "custom_employee" ) {
-          op.searchEmployeeByAttr(ui.item.label, "name", $(event.target).parents('tr'), true);
+          op.searchEmployeeByAttr([ui.item.label], "name", $(event.target).parents('tr'), true);
         } else if( idField == "other_payment_costs_center_id") {
           $('.payroll-types-list.left-list input:checkbox').each(function() {
             if(ui.item.id === parseInt($(this).val()) ) {
@@ -643,6 +621,7 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
           $(idField).val(ui.item.id);
         }       
       },
+      
       focus: function(event, ui) {
         if( idField != "custom_employee" && idField != "other_payment_costs_center_id" ) {
           $(textField).val(ui.item.label);
@@ -660,20 +639,16 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
       $(textField).val( $.data(document.body, 'account_' + $(idField).val() + '') );
     }
   });
+
 }
 
 op.addFields = function(e) {
-  op.updateValidation();
   e.preventDefault();
   var time = new Date().getTime();
   var regexp = new RegExp($(this).data('id'), 'g');
   $('.header_items').after($(this).data('fields').replace(regexp, time));
-
-  // populateAutocompleteEmployees( $('#employee_items tr:eq(1)').find("input[id='search_name_employee']") );
-  op.fetchPopulateAutocomplete(op.load_em_employees_path, $('#employee_items tr:eq(1)').find("input[id='search_name_employee']"), 'custom_employee');
   changeEmployeeValueCurrencySymbol();
   employeeValueValidation();
-  // $('#employee_items tr:eq(1)').find("input[id='search_name_employee']").removeClass("ui-autocomplete-input");
 }
 
 op.showHideOptions = function(selected) {
@@ -709,7 +684,7 @@ op.filterEmployees = function(type, id) {
   $('#ms-other_payment_employee_ids .ms-selectable').find('li').each(function() {
     
     if(type === "all") {
-      if(!$(this).hasClass('ms-selected')){
+      if(!$(this).hasClass('ms-selected')) {
         $(this).show();
       }
     }
@@ -731,8 +706,7 @@ op.filterEmployees = function(type, id) {
         $(this).hide();
       }
     } else {
-      if(!$(this).hasClass('ms-selected'))
-        $(this).show();
+      if(!$(this).hasClass('ms-selected')) $(this).show();
     }
   });
 }
