@@ -12,23 +12,20 @@ $(document).ready(function() {
     return search_task();
   });
   
-  $("#list_tasks").on("change", "#currency", function(event) {
+  $('#list_tasks').on('change', '#currency', function(event) {
      search_task();
   });
 
-  $('#clear').click(function(e){
+  $('#clear').click(function(e) {
     search_all();
-    $('#search_code').val('');
-    $('#search_desc').val('');
-    $('#search_activity').val('');
-    $("#currency").val("");
+    $('#search_code, #search_desc, #search_activity, #currency').val('');
   });
 
   function search_task() {
-    var code = $('#search_code').val(),
-        description = $('#search_desc').val(),
-        activity = $('#search_activity').val(),
-        currency = $("#currency").val();
+    var code = $('#search_code').val();
+    var description = $('#search_desc').val();
+    var activity = $('#search_activity').val();
+    var currency = $("#currency").val();
 
     if( code.length >= 1 || description.length >= task.search_length || activity.length >= task.search_length || 
          code != "" || description != "" || activity != "" ||  currency != "")
@@ -36,7 +33,7 @@ $(document).ready(function() {
 
       return $.ajax({
         url: $('#search_form').attr('action'),
-        dataType: "script",
+        dataType: 'script',
         data: {
           search_code: code,
           search_desc: description,
@@ -50,12 +47,12 @@ $(document).ready(function() {
   function search_all() {
     return $.ajax({
       url: $('#search_form').attr('action'),
-      dataType: "script",
+      dataType: 'script',
       data: {
-          search_code: "",
-          search_desc: "",
-          search_activity: "",
-          currency: ""
+          search_code: '',
+          search_desc: '',
+          search_activity: '',
+          currency: ''
         }
     });
   }
@@ -91,19 +88,11 @@ $(document).ready(function() {
   
   //enable update costs button
   $("#list_tasks").on("click", "input[name='update_cost']" , function() {
-    var elem = $( this );
+    var checked = $(this).prop("checked");
     var checkboxes = $("#list_tasks input[name=update_cost]:checked")
-    
-    if(elem.prop("checked")) {
-      $("#update_costs").prop("disabled", false);
-    } else  {
-        $("#select_all").prop("checked", false);
-    }
-    
-    if (checkboxes.length == 0 ) {
-      $("#update_costs").prop("disabled", true);
-    }
-  } );
+    $("#update_costs").prop("disabled", checked);
+    if (checkboxes.length == 0 ) $("#update_costs").prop("disabled", true);
+  });
   
   //launch modal when checkbox is selected
   $("#list_tasks").on("click", "#select_all", function() {
@@ -193,28 +182,28 @@ $(document).ready(function() {
   
   //select all checkbox on listing
   $("button[data-list=true], button[data-all=true]").on("click", function() {
-      $("input[name=update_cost]").prop("checked", true);
+    $("input[name=update_cost]").prop("checked", true);
       
-      //only enable update costs button if there are results when customer chooses visible on list
-      if($(this).attr("data-list") &&  $("input[name=update_cost]:checked").length  >= 1) {
-        $("#update_costs").prop("disabled", false);
-        $("#update_all").attr("value", false);
-      }
+    //only enable update costs button if there are results when customer chooses visible on list
+    if($(this).attr("data-list") &&  $("input[name=update_cost]:checked").length  >= 1) {
+      $("#update_costs").prop("disabled", false);
+      $("#update_all").attr("value", false);
+    }
       
-      if($(this).attr("data-all")) {
-        $("#update_costs").prop("disabled", false);
-        //add value true to hidden field to select all checkboxes on each page
-        $("#update_all").attr("value", true);
-      }
+    if($(this).attr("data-all")) {
+      $("#update_costs").prop("disabled", false);
+      //add value true to hidden field to select all checkboxes on each page
+      $("#update_all").attr("value", true);
+    }
       
-      //add update all records attribute to update costs button when customer selects update all records
-      if($(this).attr("data-all")  ) {
-        $("#update_costs").attr("data-update-all", true); 
-      } else {
-        $("#update_costs").attr("data-update-all", false);
-      }
-      
-      $("#tasks_selection").modal("hide");
+    //add update all records attribute to update costs button when customer selects update all records
+    if($(this).attr("data-all")  ) {
+      $("#update_costs").attr("data-update-all", true); 
+    } else {
+      $("#update_costs").attr("data-update-all", false);
+    }
+    
+    $("#tasks_selection").modal("hide");
   });
   
   //add ajax to pagination
@@ -222,7 +211,6 @@ $(document).ready(function() {
   
   //uncheck select all checkbox when closing modal when not all checkboxes are checked
   $("#tasks_selection").on("hidden.bs.modal", function () {
-    
     if($("#list_tasks input[name=update_cost]:not(:checked)").length >= 1) {
       $("#select_all").prop("checked", false);
     }
