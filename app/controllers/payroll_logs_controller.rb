@@ -9,25 +9,19 @@ class PayrollLogsController < ApplicationController
 
   respond_to :html, :json, :js
 
-  # GET /payroll_logs
-  # GET /payroll_logs.json
+  # GET /payroll_logs and /payroll_logs.json
   def index
     # redirect to root path and sending any flash messages
     redirect_to root_path, flash: flash
-
-    # @payroll_logs = PayrollLog.paginate(:page => params[:page], :per_page => 15)
-    # respond_with(@payroll_logs)
   end
 
-  # GET /payroll_logs/1
-  # GET /payroll_logs/1.json
+  # GET /payroll_logs/1 and /payroll_logs/1.json
   def show
     @payroll_log = PayrollLog.find(params[:id])
     respond_with(@payroll_log)
   end
 
-  # GET /payroll_logs/new
-  # GET /payroll_logs/new.json
+  # GET /payroll_logs/new and /payroll_logs/new.json
   def new
     @payroll_log = PayrollLog.new
     respond_with(@payroll_log)
@@ -39,8 +33,7 @@ class PayrollLogsController < ApplicationController
     respond_with @result = PayrollLog.history(@payroll_log.id)
   end
 
-  # POST /payroll_logs
-  # POST /payroll_logs.json
+  # POST /payroll_logs and /payroll_logs.json
   def create
     @payroll_log = PayrollLog.new(params[:payroll_log])
 
@@ -55,8 +48,7 @@ class PayrollLogsController < ApplicationController
     end
   end
 
-  # PUT /payroll_logs/1
-  # PUT /payroll_logs/1.json
+  # PUT /payroll_logs/1 and /payroll_logs/1.json
   def update
     @payroll_log = PayrollLog.find(params[:id])
     @result = PayrollLog.history(@payroll_log.id)
@@ -80,8 +72,7 @@ class PayrollLogsController < ApplicationController
     end
   end
 
-  # DELETE /payroll_logs/1
-  # DELETE /payroll_logs/1.json
+  # DELETE /payroll_logs/1 and /payroll_logs/1.json
   def destroy
     @payroll_log = PayrollLog.find(params[:id])
     @payroll_log.destroy
@@ -100,25 +91,24 @@ class PayrollLogsController < ApplicationController
   end
 
   def resources
-    # New
     @payment_types = PaymentType.find_by_company_id current_user.company_id
     @employees = Employee.order_employees
     @department = Department.all
     @superior = Employee.superior
   end
 
-  def search_task # new
+  def search_task
     tasks = PayrollLog.search_task(params[:task_name], params[:task_code], params[:task_iactivity], 
-                                   params[:currency], params[:page], params[:per_page])
+                                   params[:page], params[:per_page])
     responses(process_response(tasks), :ok)
   end
 
-  def search_cost # new
+  def search_cost
     costs = PayrollLog.search_cost(params[:cc_name], params[:cc_code], current_user.company_id, params[:page], params[:per_page])
     responses(process_response(costs), :ok)
   end
 
-  def search_employee # new
+  def search_employee
     entities = PayrollLog.search_employee(params[:employee_name], params[:employee_code], 
       params[:page], params[:per_page])
     responses(process_response(entities), :ok)

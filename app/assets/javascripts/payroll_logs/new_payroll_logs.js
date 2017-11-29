@@ -35,6 +35,8 @@ $(jQuery(document).ready(function($) {
     perf_not_found: 'La labor indicada para el rendimiento no ha sido registrada, no se puede agregar el dato.',
     success_update: 'Actualización con Éxito.',
     changes_applied: 'Cambios aplicados a: ',
+    bad_currency: 'No se puede seleccionar una labor con moneda distinta a la de la planilla',
+    bad_cost: 'No se puede seleccionar una labor sin costo'
   };
 
 	/**************************************************************************************/

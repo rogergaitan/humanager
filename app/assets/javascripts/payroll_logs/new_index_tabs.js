@@ -47,62 +47,62 @@ pl.searchEmployeeByCode = function() {
 }
 
 pl.employeeCodeFormatResult = function(employee) {
-  var markup = "<table><tr>";
-  markup += "<td><div>" + employee.number_employee + "</div>";
-  markup += "</td></tr></table>";
-  return markup;
+	var markup = "<table><tr>";
+	markup += "<td><div>" + employee.number_employee + "</div>";
+	markup += "</td></tr></table>";
+	return markup;
 }
 
 pl.employeeCodeFormatSelection = function(employee) {
-  pl.setValuesFromSearch(pl.search_types.employees, employee);
-  return employee.number_employee;xit
+	pl.setValuesFromSearch(pl.search_types.employees, employee);
+	return employee.number_employee;xit
 }
 /**************************************************************************************/
 /* Seach Employee By Name */
 /**************************************************************************************/
 pl.searchEmployeeByName = function() {
 
-  $(pl.current_employee).find('#search_name_employee').select2({
-    placeholder: "Nombre",
-    minimumInputLength: 1,
-    width: '100%',
-    cache: true,
-    ajax: {
-      url: $('#search_employee_payroll_logs_path').val(),
-      dataType: 'json',
-      quietMillis: 100,
-      // Page is the one-based page number tracked by Select2
-      data: function (term, page) { 
-        return {
-	  employee_name: term, // Search Term
-	  per_page: pl.per_page, // Page Size
-	  page: page // Page Number
-	};
-      },
-	results: function (data, page) {
-	  // Whether or not there are more results available
-	  var more = (page * pl.per_page) < data.total;
-	  // Notice we return the value of more so Select2 knows if more results can be loaded
-	   return {results: data.entries, more: more};
+	$(pl.current_employee).find('#search_name_employee').select2({
+		placeholder: "Nombre",
+		minimumInputLength: 1,
+		width: '100%',
+		cache: true,
+		ajax: {
+			url: $('#search_employee_payroll_logs_path').val(),
+			dataType: 'json',
+			quietMillis: 100,
+			// Page is the one-based page number tracked by Select2
+			data: function (term, page) {
+				return {
+					employee_name: term, // Search Term
+					per_page: pl.per_page, // Page Size
+					page: page // Page Number
+				};
+			},
+			results: function (data, page) {
+				// Whether or not there are more results available
+				var more = (page * pl.per_page) < data.total;
+				// Notice we return the value of more so Select2 knows if more results can be loaded
+				return {results: data.entries, more: more};
+			}
+		},
+		formatResult: pl.employeeNameFormatResult,
+		formatSelection: pl.employeeNameFormatSelection,
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	}).on("select2-close", function (e) {
+	if( pl.validationTabs() ) {
+		if( $(pl.current_employee).find('#employee_code').val() == '') {
+			$(pl.current_employee).find('#search_code_employee').select2('open');
+			var thatCode = $(pl.current_employee).find('a:eq(0)');
+			$(thatCode).find('span:eq(0)').html('#');
+		} else {
+			$(pl.current_cc).find('#search_code_cc').select2('open');
+		}
 	}
-     },
-	formatResult: pl.employeeNameFormatResult,
-	formatSelection: pl.employeeNameFormatSelection,
-	escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-}).on("select2-close", function (e) {
-  if( pl.validationTabs() ) {
-    if( $(pl.current_employee).find('#employee_code').val() == '') {
-      $(pl.current_employee).find('#search_code_employee').select2('open');
-        var thatCode = $(pl.current_employee).find('a:eq(0)');
-	$(thatCode).find('span:eq(0)').html('#');
-	} else {
-	  $(pl.current_cc).find('#search_code_cc').select2('open');
-	}
-  }
-}).on("select2-highlight", function (e) {
-  var thatCode = $(pl.current_employee).find('a:eq(0)');
-  $(thatCode).find('span:eq(0)').html(e.choice.number_employee);
-  });
+	}).on("select2-highlight", function (e) {
+		var thatCode = $(pl.current_employee).find('a:eq(0)');
+		$(thatCode).find('span:eq(0)').html(e.choice.number_employee);
+	});
 }
 
 pl.employeeNameFormatResult = function(employee) {
@@ -233,52 +233,51 @@ pl.ccNameFormatSelection = function(cc) {
 /* Seach Task By Code */
 /**************************************************************************************/
 pl.searchTaskByCode = function() {
-  $(pl.current_task).find('#search_code_task').select2({
-    placeholder: '#',
-    minimumInputLength: 1,
-    width: '100%',
-    ajax: {
-      url: $('#search_task_payroll_logs_path').val(),
-      cache: 'true',
-      dataType: 'json',
-      quietMillis: 100,
-      // Page is the one-based page number tracked by Select2
-      data: function (term, page) { 
-        return {
-	  task_code: term, // Search Term
-	  task_iactivity: $(pl.current_cc).find('#iactivity_cc').val(),
-	  per_page: pl.per_page, // Page Size
-	  page: page, // Page Number
-          currency: $('#currency').val()
-	};
-       },
-       results: function (data, page) {
-         // Whether or not there are more results available
-	var more = (page * pl.per_page) < data.total;
-	// Notice we return the value of more so Select2 knows if more results can be loaded
-	return {results: data.entries, more: more};
-       }
-     },
-       formatResult: pl.taskCodeFormatResult,
-       formatSelection: pl.taskCodeFormatSelection,
-       dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
-       escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-}).on('select2-close', function (e) {
-  if( pl.validationTabs() ) {
-    if( $(pl.current_task).find('input:hidden[id*=_task_id]').val() == '' ) {
-      $(pl.current_task).find('#search_name_task').select2('open');
-      var thatName = $(pl.current_task).find('a:eq(1)');
-      $(thatName).find('span:eq(0)').html("Nombre");
-    } else {
-      setTimeout(function() {
-        $(pl.current_cant_working).find('input[id*=_time_worked]').focus();
-      }, 1);
-    }
-  }
-}).on("select2-highlight", function (e) {
-    var thatName = $(pl.current_task).find('a:eq(1)');
-    $(thatName).find('span:eq(0)').html(e.choice.ntask);
-  });
+	$(pl.current_task).find('#search_code_task').select2({
+		placeholder: '#',
+		minimumInputLength: 1,
+		width: '100%',
+		ajax: {
+			url: $('#search_task_payroll_logs_path').val(),
+			cache: 'true',
+			dataType: 'json',
+			quietMillis: 100,
+			// Page is the one-based page number tracked by Select2
+			data: function (term, page) {
+				return {
+					task_code: term, // Search Term
+					task_iactivity: $(pl.current_cc).find('#iactivity_cc').val(),
+					per_page: pl.per_page, // Page Size
+					page: page // Page Number
+				};
+			},
+			results: function (data, page) {
+				// Whether or not there are more results available
+				var more = (page * pl.per_page) < data.total;
+				// Notice we return the value of more so Select2 knows if more results can be loaded
+				return {results: data.entries, more: more};
+			}
+		},
+		formatResult: pl.taskCodeFormatResult,
+		formatSelection: pl.taskCodeFormatSelection,
+		dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	}).on('select2-close', function (e) {
+		if( pl.validationTabs() ) {
+			if( $(pl.current_task).find('input:hidden[id*=_task_id]').val() == '' ) {
+				$(pl.current_task).find('#search_name_task').select2('open');
+				var thatName = $(pl.current_task).find('a:eq(1)');
+				$(thatName).find('span:eq(0)').html("Nombre");
+			} else {
+				setTimeout(function() {
+					$(pl.current_cant_working).find('input[id*=_time_worked]').focus();
+				}, 1);
+			}
+		}
+	}).on("select2-highlight", function (e) {
+		var thatName = $(pl.current_task).find('a:eq(1)');
+		$(thatName).find('span:eq(0)').html(e.choice.ntask);
+	});
 }
 
 pl.taskCodeFormatResult = function(task) {
@@ -295,52 +294,51 @@ pl.taskCodeFormatSelection = function(task) {
 /* Seach Task By name */
 /**************************************************************************************/
 pl.searchTaskByName = function() {
-  $(pl.current_task).find('#search_name_task').select2({
-    placeholder: 'Nombre',
-    minimumInputLength: 1,
-    width: '100%',
-    ajax: {
-      url: $('#search_task_payroll_logs_path').val(),
-      cache: 'true',
-      dataType: 'json',
-      quietMillis: 100,
-      // Page is the one-based page number tracked by Select2
-      data: function (term, page) { 
-      return {
-        task_name: term, // Search Term
-	task_iactivity: $(pl.current_cc).find('#iactivity_cc').val(),
-	per_page: pl.per_page, // Page Size
-	page: page, // Page Number
-        currency: $('#currency').val()
-      };
-     },
-     results: function (data, page) {
-      // Whether or not there are more results available
-      var more = (page * pl.per_page) < data.total;
-      // Notice we return the value of more so Select2 knows if more results can be loaded
-      return {results: data.entries, more: more};
-     }
-    },
-      formatResult: pl.taskNameFormatResult,
-      formatSelection: pl.taskNameFormatSelection,
-      dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
-      escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-}).on('select2-close', function (e) {
-  if( pl.validationTabs() ) {
-    if( $(pl.current_task).find('input:hidden[id*=_task_id]').val() == '' ) {
-      $(pl.current_task).find('#search_code_task').select2('open');
-      var thatCode = $(pl.current_task).find('a:eq(0)');
-      $(thatCode).find('span:eq(0)').html('#');
-       } else {
-         setTimeout(function() {
-	   $(pl.current_cant_working).find('input[id*=_time_worked]').focus();
-    	}, 1);
-       }
-   }
-}).on("select2-highlight", function (e) {
-  var thatCode = $(pl.current_task).find('a:eq(0)');
-  $(thatCode).find('span:eq(0)').html(e.choice.itask);
- });
+	$(pl.current_task).find('#search_name_task').select2({
+		placeholder: 'Nombre',
+		minimumInputLength: 1,
+		width: '100%',
+		ajax: {
+			url: $('#search_task_payroll_logs_path').val(),
+			cache: 'true',
+			dataType: 'json',
+			quietMillis: 100,
+			// Page is the one-based page number tracked by Select2
+			data: function (term, page) {
+				return {
+					task_name: term, // Search Term
+					task_iactivity: $(pl.current_cc).find('#iactivity_cc').val(),
+					per_page: pl.per_page, // Page Size
+					page: page // Page Number
+				};
+			},
+			results: function (data, page) {
+				// Whether or not there are more results available
+				var more = (page * pl.per_page) < data.total;
+				// Notice we return the value of more so Select2 knows if more results can be loaded
+				return {results: data.entries, more: more};
+			}
+		},
+		formatResult: pl.taskNameFormatResult,
+		formatSelection: pl.taskNameFormatSelection,
+		dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	}).on('select2-close', function (e) {
+		if( pl.validationTabs() ) {
+			if( $(pl.current_task).find('input:hidden[id*=_task_id]').val() == '' ) {
+				$(pl.current_task).find('#search_code_task').select2('open');
+				var thatCode = $(pl.current_task).find('a:eq(0)');
+				$(thatCode).find('span:eq(0)').html('#');
+			} else {
+				setTimeout(function() {
+					$(pl.current_cant_working).find('input[id*=_time_worked]').focus();
+				}, 1);
+			}
+		}
+	}).on("select2-highlight", function (e) {
+		var thatCode = $(pl.current_task).find('a:eq(0)');
+		$(thatCode).find('span:eq(0)').html(e.choice.itask);
+	});
 }
 
 pl.taskNameFormatResult = function(task) {
@@ -361,54 +359,54 @@ pl.setValuesFromSearch = function(type, object) {
   pl.tabs_function = true;
   pl.saveSearchSessionStorage(type, object);
 
-  switch(type) {
+	switch(type) {
+		case pl.search_types.employees:
+			// Set Code
+			var that = $(pl.current_employee).find('a:eq(0)');
+			$(that).find('span:eq(0)').html(object.number_employee);
+			$(that).removeClass('select2-default');
+			// Set Name
+			that = $(pl.current_employee).find('a:eq(1)');
+			$(that).find('span:eq(0)').html(object.name + ' ' + object.surname);
+			$(that).removeClass('select2-default');
+			// Set ID
+			$(pl.current_employee).find('#employee_code').val(object.id);
+			break;
 
-    case pl.search_types.employees:
-      // Set Code
-      var that = $(pl.current_employee).find('a:eq(0)');
-      $(that).find('span:eq(0)').html(object.number_employee);
-      $(that).removeClass('select2-default');
-      // Set Name
-      that = $(pl.current_employee).find('a:eq(1)');
-      $(that).find('span:eq(0)').html(object.name + ' ' + object.surname);
-      $(that).removeClass('select2-default');
-      // Set ID
-      $(pl.current_employee).find('#employee_code').val(object.id);
-      break;
+		case pl.search_types.cc:
+			// Set Code
+			var that =  $(pl.current_cc).find('a:eq(0)');
+			$(that).find('span:eq(0)').html(object.icost_center);
+			$(that).removeClass('select2-default');
+			// Set Name
+			that = $(pl.current_cc).find('a:eq(1)');
+			$(that).find('span:eq(0)').html(object.name_cc);
+			$(that).removeClass('select2-default');
+			// Set ID
+			$(pl.current_cc).find('input:hidden[id*=_costs_center_id]').val(object.id);
+			// Set Activity
+			$(pl.current_cc).find('#iactivity_cc').val(object.iactivity);
+			// Enable Tasks inputs
+			$(pl.current_task).find('#s2id_search_code_task').removeClass('a-not-active');
+			$(pl.current_task).find('#s2id_search_name_task').removeClass('a-not-active');
+			break;
 
-   case pl.search_types.cc:
-     // Set Code
-     var that =  $(pl.current_cc).find('a:eq(0)');
-     $(that).find('span:eq(0)').html(object.icost_center);
-     $(that).removeClass('select2-default');
-     // Set Name
-     that = $(pl.current_cc).find('a:eq(1)');
-     $(that).find('span:eq(0)').html(object.name_cc);
-     $(that).removeClass('select2-default');
-     // Set ID
-     $(pl.current_cc).find('input:hidden[id*=_costs_center_id]').val(object.id);
-     // Set Activity
-     $(pl.current_cc).find('#iactivity_cc').val(object.iactivity);
-     // Enable Tasks inputs
-     $(pl.current_task).find('#s2id_search_code_task').removeClass('a-not-active');
-     $(pl.current_task).find('#s2id_search_name_task').removeClass('a-not-active');
-     break;
-
-    case pl.search_types.tasks:
-      // Set Code
-      var that = $(pl.current_task).find('a:eq(0)');
-      $(that).find('span:eq(0)').html(object.itask);
-      $(that).removeClass('select2-default');
-      // Set Name
-      that = $(pl.current_task).find('a:eq(1)');
-      $(that).find('span:eq(0)').html(object.ntask);
-      $(that).removeClass('select2-default');
-      // Set ID, Costs, Unidad, Unit performance
-      $(pl.current_task).find('input:hidden[id*=_task_id]').val(object.id);
-      $(pl.current_task).find('input:hidden[id*=_task_total]').val(object.cost);
-      $(pl.current_task).find('input:hidden[id*=_task_unidad]').val(object.nunidad);
-      break;
-  }
+		case pl.search_types.tasks:
+			// Set Code
+			var that = $(pl.current_task).find('a:eq(0)');
+			$(that).find('span:eq(0)').html(object.itask);
+			$(that).removeClass('select2-default');
+			// Set Name
+			that = $(pl.current_task).find('a:eq(1)');
+			$(that).find('span:eq(0)').html(object.ntask);
+			$(that).removeClass('select2-default');
+			// Set ID, Costs, Unidad, Unit performance
+			$(pl.current_task).find('input:hidden[id*=_task_id]').val(object.id);
+			$(pl.current_task).find('input:hidden[id*=_task_total]').val(object.cost);
+			$(pl.current_task).find('input:hidden[id*=_task_unidad]').val(object.nunidad);
+			$(pl.current_task).find('input:hidden[id*=currency_id]').val(object.currency_id);
+			break;
+	}
 }
 /**************************************************************************************/
 /* Validation Tabs */

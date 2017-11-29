@@ -63,37 +63,30 @@ pl.filterEmployees = function(type, id) {
   
 	id = id ? id : 0;
 
-  $('#ms-payroll_logs_employee_ids .ms-selectable').find('li').each(function() {
+  	$('#ms-payroll_logs_employee_ids .ms-selectable').find('li').each(function() {
     
-    if(type === "all") {
-      if(!$(this).hasClass('ms-selected')) {
-        $(this).show();
-      }
-    }
+		if(type === "all") {
+			if(!$(this).hasClass('ms-selected')) $(this).show();
+		}
 
-    var searchType = 0;
-    if(type === "superior") {
-      searchType = $(this).data('sup') ? $(this).data('sup') : 0;
-    }
-	    
-    if(type === "department") {
-      searchType = $(this).data('dep') ? $(this).data('dep') : 0;
-    }
+		var searchType = 0;
+		if(type === "superior") {
+			searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+		}
+			
+		if(type === "department") {
+			searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+		}
 
-    if(id != 0) {
-      if( id == searchType ) {
-        if(!$(this).hasClass('ms-selected')) {
-          $(this).show();
-        }
-      } else {
-        $(this).hide();
-      }
-    } else {
-      if(!$(this).hasClass('ms-selected')) {
-        $(this).show();
-      }
-    }
-
+		if(id != 0) {
+			if( id == searchType ) {
+				if(!$(this).hasClass('ms-selected')) $(this).show();
+			} else {
+				$(this).hide();
+			}
+		} else {
+			if(!$(this).hasClass('ms-selected')) $(this).show();
+		}
 	});
 }
 
@@ -195,6 +188,21 @@ pl.addFields = function(e) {
 		var date = $('#payroll_log_payroll_date').val();
 		if( date == "" ) {
 			resources.PNotify('Planilla', pl.messages.date_not_found , 'info');
+			return false;
+		}
+
+		// Validate Task Currency
+		var task_currency = $(pl.current_task).find('input[id*=currency_id]').val();
+		var payroll_currency = $('#currency').val();
+		if(task_currency != payroll_currency) {
+			resources.PNotify('Planilla', pl.messages.bad_currency , 'info');
+			return false;
+		}
+
+		// Validate Task Cost
+		var task_total = $(pl.current_task).find('input[id*=_task_total]').val();
+		if(task_total == '') {
+			resources.PNotify('Planilla', pl.messages.bad_cost , 'info');
 			return false;
 		}
 
