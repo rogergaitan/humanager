@@ -897,13 +897,9 @@ function setPayroll(e) {
 }
 
 function enableDisableCreditAccount() {
-  if($("#work_benefit_provisioning").prop("checked")) {
-    $("#credit_accounts input").prop("disabled", false).attr("required", true);
-    $("#credit-button").attr("data-toggle", "modal");
-  } else {
-    $("#credit_accounts input").prop("disabled", true).attr("required", false);
-    $("#credit-button").removeAttr("data-toggle");
-  }
+  var checked = $("#work_benefit_provisioning").prop("checked");
+  $("#credit_accounts input").prop("disabled", !checked).attr("required", checked);
+  $("#credit-button").attr("data-toggle", "modal").attr("disabled", !checked);
 }
 
 function disablePayrollTypes() {
