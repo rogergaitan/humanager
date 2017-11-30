@@ -181,10 +181,10 @@
             
             <ul class="dropdown-menu userinfo">
                 <li>
-                    <a href="#">
-                        <span class="pull-left">Editar Perfil</span> 
-                        <i class="pull-right fa fa-pencil"></i>
-                    </a>
+                  <%= link_to edit_user_path(current_user) do %>
+                    <span class="pull-left">Editar Perfil</span> 
+                    <i class="pull-right fa fa-pencil"></i>
+                  <% end %>
                 </li>
                 <li class="divider"></li>
                 <li>

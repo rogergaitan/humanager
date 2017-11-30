@@ -4,7 +4,7 @@
     <% if @user.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h3><%= pluralize(@user.errors.count, "error") %></h3>
+        <h3><%= pluralize(@user.errors.count, "error") %> no permitieron actualizar el perfil:</h3>
         <% @user.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>
@@ -17,7 +17,8 @@
       <div class="panel-heading"></div>
 
       <div class="panel-body panel-no-padding">
-        <%= form_for @user, :url => {:action => "update"}, :html => { :class => 'form-horizontal row-border' } do |f| %>
+        <%= form_for @user, :url => {:action => "update"}, :html => { :class => 'form-horizontal row-border', 
+          :data => {:parsley_validate => ""}} do |f| %>
           
           <div class="form-group">
             <%= f.label :username, :class => 'col-sm-2 control-label' %>
@@ -47,14 +48,17 @@
           <div class="form-group">
             <%= f.label :password, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.password_field :password, :class => 'form-control' %>
+              <%= f.password_field :password, :required => true, :class => 'form-control',
+               :data => {:parsley_minlength => "6"} %>
             </div>
           </div>
 
           <div class="form-group">
             <%= f.label :password_confirmation, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
-              <%= f.password_field :password_confirmation, :class => 'form-control' %>
+              <%= f.password_field :password_confirmation, :required => true, :class => 'form-control', 
+               :data => {:parsley_equalto => "#user_password", 
+               :parsley_error_message => "Las contraseñas no coinciden."} %>
             </div>
           </div>
             
