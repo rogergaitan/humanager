@@ -3,9 +3,9 @@
 
   <% @debit_accounts.each do |cc| %>
     debit_account.push({
-      iaccount: <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      iaccount: '<%= cc.iaccount.blank? ? 0 : cc.iaccount %>', 
       name: '<%=h cc.naccount %>', 
-      father: <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+      father: '<%= cc.ifather.blank? ? 0 : cc.ifather %>', 
       id: <%= cc.id %>
     });
   <% end %>

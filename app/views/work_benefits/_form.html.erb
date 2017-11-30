@@ -5,28 +5,28 @@
  
   <% @debit_accounts.each do |cc| %>
     debit_account.push({
-      iaccount: <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      iaccount: '<%= cc.iaccount.blank? ? 0 : cc.iaccount %>', 
       name: '<%=h cc.naccount %>', 
-      father: <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
-      id: <%= cc.id %>
+      father: '<%= cc.ifather.blank? ? 0 : cc.ifather %>', 
+      id: '<%= cc.id %>'
     });
   <% end %>
 
   <% @credit_accounts.each do |cc| %>
     credit_account.push({
-      iaccount: <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      iaccount: '<%= cc.iaccount.blank? ? 0 : cc.iaccount %>', 
       name: '<%=h cc.naccount %>', 
-      father: <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
-      id: <%= cc.id %>
+      father: '<%= cc.ifather.blank? ? 0 : cc.ifather %>', 
+      id: '<%= cc.id %>'
     });
   <% end %>
 
   <% @cost_centers.each do |cc| %>
     costs_center.push({
-      iaccount: <%= cc.icost_center.blank? ? 0 : cc.icost_center %>,
+      iaccount: '<%= cc.icost_center.blank? ? 0 : cc.icost_center %>',
       name: '<%=h cc.name_cc %>',
-      father: <%= cc.icc_father.blank? ? 0 : cc.icc_father %>,
-      id: <%= cc.id %>
+      father: '<%= cc.icc_father.blank? ? 0 : cc.icc_father %>',
+      id: '<%= cc.id %>'
     });
   <% end %>
 
