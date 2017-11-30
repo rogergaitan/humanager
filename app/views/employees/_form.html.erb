@@ -1,11 +1,11 @@
 <script type="text/javascript">
-	var cantons = [];
-	var district = [];
+  var cantons = [];
+  var district = [];
   <% @canton.each do |canton| %>
-		cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
+    cantons.push(new Array(<%= canton.province_id %>, '<%=h canton.name %>', <%= canton.id %>));
   <% end %>
   <% @district.each do |district| %>
-		district.push(new Array(<%= district.canton_id %>, '<%=h district.name %>', <%= district.id %>));
+    district.push(new Array(<%= district.canton_id %>, '<%=h district.name %>', <%= district.id %>));
   <% end %>
 </script>
 
@@ -18,7 +18,7 @@
 
     <% if @employee.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         <h3><%= pluralize(@employee.errors.count, "error") %> no permitieron guardar este empleado </h3>
         <% @employee.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
@@ -38,14 +38,14 @@
         
         <div class="tab-content">
           <div class="tab-pane" id="tab2">
-            <h2>TelÃ©fonos</h2>
+            <h2>Teléfonos</h2>
             <hr>
             <%= f.fields_for :entity do |builder| %>
               <%= builder.fields_for :telephones do |phone| %>
                 <%= render 'forms/telephone_form', :f => phone %>
               <% end %>
               
-              <%= link_to_add_fields("Agregar otro telÃ©fono", builder, :telephones, 'add-fields-telephone') %>           
+              <%= link_to_add_fields("Agregar otro teléfono", builder, :telephones, 'add-fields-telephone') %>           
               <%= hidden_field 'count_phones', 'employees', :value => "1", :class => "hidden_fields"  %>
 
               <h2>Emails</h2>
@@ -56,7 +56,7 @@
               <%= link_to_add_fields("Agregar otro email", builder, :emails, 'add-fields-email') %>
               <%= hidden_field 'count_emails', 'employees', :value => "1", :class => "hidden_fields" %>
 
-              <h2>DirecciÃ³n</h2>
+              <h2>Dirección</h2>
               <hr>
               <%= builder.fields_for :address do |address| %>
                 <%= render 'forms/address_form', :f => address %>
@@ -104,8 +104,10 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">D</span>
-                  <%= f.number_field :number_of_dependents, :class => 'form-control', :min => '0' %>
-                </div>
+		          <%= f.text_field :number_of_dependents, :class => 'form-control', :min => 0, 
+                    :data => {:parsley_type => 'integer', :parsley_errors_container => '#number_of_dependents_errors'} %>
+	            </div>
+                <div id="number_of_dependents_errors"></div>
               </div>
             </div>
 
@@ -114,8 +116,11 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <span class="input-group-addon">C</span>
-                  <%= f.text_field :spouse, :class => 'form-control' %>
-                </div>
+		          <%= f.text_field :spouse, :class => 'form-control',  
+	                :data => {:parsley_pattern => '\D+',:parsley_errors_container => '#spouse_errors', 
+	                :parsley_pattern_message => 'Nombre invalido.' } %>
+	            </div>
+	            <div id="spouse_errors"></div>
               </div>
             </div>
             <% if @employee.photo.photo_url %>

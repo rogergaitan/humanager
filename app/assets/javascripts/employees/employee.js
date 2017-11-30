@@ -2,15 +2,22 @@ $(document).ready(function($) {
   
   $('.telephone-field').mask('0000-0000');
   
-  $('#employee_wage_payment').mask("FNNNNNNNNN.NN", {
+  $('#employee_social_insurance').mask('00000000000000000000');
+  $('#employee_account_bncr').mask('00000000000000000000');
+  
+  $('#employee_wage_payment').mask('FNNNNNNNNN.NN', {
     translation: {
       'N': {pattern: /\d/, optional: true},
-      "F": {pattern: /[1-9]/}
+      'F': {pattern: /[1-9]/}
     }
   });
   
-  $("#employee_social_insurance").mask("00000000000000000000");
-  $("#employee_account_bncr").mask("00000000000000000000");
+  $('#employee_number_of_dependents').mask('FN', {
+    translation: {
+      'N': {pattern: /\d/, optional: true},
+      'F': {pattern: /[1-9]/}
+    }
+  });
   
   window.Parsley
     .addValidator("joinDate", {

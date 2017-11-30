@@ -4,8 +4,10 @@
 		<div class="col-sm-3">
 			<div class="input-group">
 				<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-				<%= f.email_field :email, :class => 'form-control email-field' %>
+				<%= f.email_field :email, :class => 'form-control email-field', 
+				  :data => {:parsley_errors_container => '.email_errors'} %>
 			</div>
+			<div class="email_errors"></div>
 		</div>
 		<div class="col-sm-1">
 			<%= f.hidden_field :_destroy, :class => 'emails' %>
