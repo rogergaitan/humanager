@@ -1,6 +1,7 @@
 class PayrollTypesController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :update, :create]
+  before_filter :set_payroll_type => [:edit, :update, :destroy]
   skip_load_and_authorize_resource :only => [:validate_description_uniqueness]
 
   before_filter :only => [:edit, :update] do |controller|
@@ -25,7 +26,7 @@ class PayrollTypesController < ApplicationController
 
   # GET /payroll_types/1/edit
   def edit
-    @payroll_type = PayrollType.find(params[:id])
+    @payroll_type
   end
 
   # POST /payroll_types
@@ -47,8 +48,6 @@ class PayrollTypesController < ApplicationController
   # PUT /payroll_types/1
   # PUT /payroll_types/1.json
   def update
-    @payroll_type = PayrollType.find(params[:id])
-
     respond_to do |format|
       if @payroll_type.update_attributes(params[:payroll_type])
         format.html { redirect_to action: :index }
@@ -63,17 +62,12 @@ class PayrollTypesController < ApplicationController
   # DELETE /payroll_types/1
   # DELETE /payroll_types/1.json
   def destroy
-    @payroll_type = PayrollType.find(params[:id])
-
-    if Payroll.find_by_payroll_type_id(params[:id]).nil?
-      @payroll_type.destroy
-      message = t('.notice.successfully_deleted')
-    else
-      #@payroll_type.state = 0
-      #@payroll_type.save
+    @payroll_type.destroy
+    
+    message = t('.notice.successfully_deleted')
+    rescue ActiveRecord::DeleteRestrictionError
       message = t('.notice.can_be_deleted')
-    end
-
+    ensure
     respond_to do |format|
       format.html { redirect_to payroll_types_url, notice: message }
       format.json { head :no_content }
@@ -88,8 +82,14 @@ class PayrollTypesController < ApplicationController
     end
   end
 
+  private
+
   def resources
     @bank_accounts = LedgerAccount.bank_account
+  end
+
+  def set_payroll_type
+    @payroll_type = PayrollType.find params[:id]
   end
 
 end

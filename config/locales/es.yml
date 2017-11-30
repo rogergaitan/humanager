@@ -69,7 +69,7 @@ es:
     a_successfully_updated: ' actualizada correctamente'
     a_unsuccessfully_updated: ' actualizada incorrectamente'
     no_results: 'No se encontraron resultados'
-    can_be_deleted: "El Registro no es puede eliminar pues ya ha sido utilizado en la base de datos"
+    can_be_deleted: "El Registro no se puede eliminar pues ya ha sido utilizado en la base de datos"
     change_status: "¿Desea cambiar el estado?"
     can_not_edit: "El registro que trata de modificar está en uso. Por favor intente más tarde"
   
