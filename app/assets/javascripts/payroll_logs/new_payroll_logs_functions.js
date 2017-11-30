@@ -781,15 +781,14 @@ pl.getLastFingering = function() {
 			});
 		});
 	}
-
-	var that = $('#tr_'+lastId+'_'+employeeId);
+	var that = $('#tr_' + lastId + '_' + employeeId);
 
 	if( !$(that).is(':visible') ) {
 		$(that).parents('.panel .accordion-item').find('a').trigger('click');
 	}
 
 	$('html,body').animate({
-        scrollTop: $(that).offset.top
+        scrollTop: $(that).offset().top
     }, 1000);
 
 	$(that).pulsate({
