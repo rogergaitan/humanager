@@ -18,7 +18,7 @@
 
     <% if @employee.errors.any? %>
       <div class="alert alert-dismissable alert-danger">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
         <h3><%= pluralize(@employee.errors.count, "error") %> no permitieron guardar este empleado </h3>
         <% @employee.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
@@ -38,14 +38,14 @@
         
         <div class="tab-content">
           <div class="tab-pane" id="tab2">
-            <h2>Teléfonos</h2>
+            <h2>Tel&eacute;fonos</h2>
             <hr>
             <%= f.fields_for :entity do |builder| %>
               <%= builder.fields_for :telephones do |phone| %>
                 <%= render 'forms/telephone_form', :f => phone %>
               <% end %>
               
-              <%= link_to_add_fields("Agregar otro teléfono", builder, :telephones, 'add-fields-telephone') %>           
+              <%= link_to_add_fields("Agregar otro tel&eacute;fono", builder, :telephones, 'add-fields-telephone') %>           
               <%= hidden_field 'count_phones', 'employees', :value => "1", :class => "hidden_fields"  %>
 
               <h2>Emails</h2>
@@ -56,7 +56,7 @@
               <%= link_to_add_fields("Agregar otro email", builder, :emails, 'add-fields-email') %>
               <%= hidden_field 'count_emails', 'employees', :value => "1", :class => "hidden_fields" %>
 
-              <h2>Dirección</h2>
+              <h2>Direcci&Aacute;n</h2>
               <hr>
               <%= builder.fields_for :address do |address| %>
                 <%= render 'forms/address_form', :f => address %>
