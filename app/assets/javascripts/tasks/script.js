@@ -13,7 +13,7 @@ $(document).ready(function() {
   });
   
   $('#list_tasks').on('change', '#currency', function(event) {
-     search_task();
+    search_task();
   });
 
   $('#clear').click(function(e) {
@@ -49,10 +49,10 @@ $(document).ready(function() {
       url: $('#search_form').attr('action'),
       dataType: 'script',
       data: {
-          search_code: '',
-          search_desc: '',
-          search_activity: '',
-          currency: ''
+        search_code: '',
+        search_desc: '',
+        search_activity: '',
+        currency: ''
         }
     });
   }
@@ -86,16 +86,16 @@ $(document).ready(function() {
     });
   }
   
-  //enable update costs button
-  $("#list_tasks").on("click", "input[name='update_cost']" , function() {
+  // Enable update costs button
+  $('#list_tasks').on('click', "input[name='update_cost']" , function() {
     var checked = $(this).prop("checked");
     var checkboxes = $("#list_tasks input[name=update_cost]:checked")
     $("#update_costs").prop("disabled", checked);
     if (checkboxes.length == 0 ) $("#update_costs").prop("disabled", true);
   });
   
-  //launch modal when checkbox is selected
-  $("#list_tasks").on("click", "#select_all", function() {
+  // Launch modal when checkbox is selected
+  $('#list_tasks').on('click', '#select_all', function() {
     if($(this).prop("checked")) {
       $("#tasks_selection").modal();
     } else {
@@ -103,9 +103,16 @@ $(document).ready(function() {
       $("#update_costs").prop("disabled", true)
       $("#update_all").attr("value", false);
     }
-  }); 
+  });
+
+  // Check checbox from list
+  $('#list_tasks').on('click', "input[id^='update_cost']", function() {
+    var totalChecked = $("input[id^='update_cost']:checked").length;
+    var selector = $('#update_costs');
+    (totalChecked > 0)? selector.prop('disabled', false) : selector.prop('disabled', true);
+  });
   
-  //open updates costs modal and add hidden field values to pass as parameters
+  // Open updates costs modal and add hidden field values to pass as parameters
   $("#list_tasks").on("click", "#update_costs" ,function() {
     $("#update_costs_modal").modal();
     
@@ -119,7 +126,7 @@ $(document).ready(function() {
       update_costs_form.find("#tasks_ids").attr("value", tasks_ids);
     }
     
-    //apply mask to cost field to only allow decimal numbers
+    // Apply mask to cost field to only allow decimal numbers
     $("#update_costs_form input[name=cost]").mask("0NNNNNNNNN.NN", {
       translation: {
        'N': {pattern: /\d/, optional: true}
@@ -127,92 +134,85 @@ $(document).ready(function() {
     });
   });
   
-  //form validations
-  $("#update_costs_form").validate({
-      rules: {
-        cost: {
-          required: true,
-          min: 0
-        },
-        currency: "required"
+  // Form validations
+  $('#update_costs_form').validate({
+    rules: {
+      cost: {
+        required: true,
+        min: 0
       },
-      messages: {
-        cost: {
-          required:  "Campo costo es requerido",
-          min: "Campo costo no puede ser menor que 0"
-        },
-        currency: "Campo moneda es requerido"
+      currency: "required"
+    },
+    messages: {
+      cost: {
+        required:  "Campo costo es requerido",
+        min: "Campo costo no puede ser menor que 0"
       },
+      currency: "Campo moneda es requerido"
+    },
+    // Handle form submit
+    submitHandler:  function(form) {
+      var form = $(form);
       
-      //handle form submit
-      submitHandler:  function(form) {
-        var form = $(form);
-        
-        if(confirm("¿Está Seguro? (Esta acción no se puede deshacer)")) {
-          $.ajax({
-            url: form.attr("action"),
-            beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-            dataType: "json",
-            method: "PUT",
-            data: {
-              cost: form.find("#cost").val(),
-              currency: form.find("#currency").val(),
-              tasks_ids: form.find("#tasks_ids").val(),
-              update_all: form.find("#update_all").val(),
-              unchecked_tasks_ids: $("#list_tasks input[name=update_cost]:not(:checked)").map(function() { return this.value}).get().join()
-            }     
-          }).done(function (data) {
-  
-            var selector = $("#list_tasks input[name=update_cost]:checked");
-            var cost = new Number(data.cost).toFixed(2);
-            
-            $(selector).each(function (index) {
-               $(this).parent().prev().text(data.currency_symbol + cost);
-               $(this).parent().prev().prev().text(data.currency);
-            });
-          });
+      if(confirm("¿Está Seguro? (Esta acción no se puede deshacer)")) {
+        $.ajax({
+          url: form.attr("action"),
+          beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+          dataType: "json",
+          method: "PUT",
+          data: {
+            cost: form.find("#cost").val(),
+            currency: form.find("#currency").val(),
+            tasks_ids: form.find("#tasks_ids").val(),
+            update_all: form.find("#update_all").val(),
+            unchecked_tasks_ids: $("#list_tasks input[name=update_cost]:not(:checked)").map(function() { return this.value}).get().join()
+          }     
+        }).done(function (data) {
+
+          var selector = $("#list_tasks input[name=update_cost]:checked");
+          var cost = new Number(data.cost).toFixed(2);
           
-          $("#update_costs_modal").modal("hide");
-        
-        } else {
-          $("#update_costs_modal").modal("hide");
-      }  
+          $(selector).each(function (index) {
+            $(this).parent().prev().text(data.currency_symbol + cost);
+            $(this).parent().prev().prev().text(data.currency);
+          });
+        });
+        $("#update_costs_modal").modal("hide");
+      } else {
+        $("#update_costs_modal").modal("hide");
+      }
     }
   });
   
-  //select all checkbox on listing
-  $("button[data-list=true], button[data-all=true]").on("click", function() {
+  // Select all checkbox on listing
+  $('button[data-list=true], button[data-all=true]').on('click', function() {
     $("input[name=update_cost]").prop("checked", true);
       
-    //only enable update costs button if there are results when customer chooses visible on list
-    if($(this).attr("data-list") &&  $("input[name=update_cost]:checked").length  >= 1) {
-      $("#update_costs").prop("disabled", false);
-      $("#update_all").attr("value", false);
+    // Only enable update costs button if there are results when customer chooses visible on list
+    if($(this).attr('data-list') &&  $('input[name=update_cost]:checked').length  >= 1) {
+      $('#update_costs').prop('disabled', false);
+      $('#update_all').attr('value', false);
     }
       
-    if($(this).attr("data-all")) {
-      $("#update_costs").prop("disabled", false);
-      //add value true to hidden field to select all checkboxes on each page
-      $("#update_all").attr("value", true);
+    if($(this).attr('data-all')) {
+      $('#update_costs').prop('disabled', false);
+      // Add value true to hidden field to select all checkboxes on each page
+      $('#update_all').attr('value', true);
     }
       
-    //add update all records attribute to update costs button when customer selects update all records
-    if($(this).attr("data-all")  ) {
-      $("#update_costs").attr("data-update-all", true); 
-    } else {
-      $("#update_costs").attr("data-update-all", false);
-    }
-    
-    $("#tasks_selection").modal("hide");
+    // Add update all records attribute to update costs button when customer selects update all records
+    var selector = $('#update_costs');
+    ($(this).attr("data-all"))?selector.attr("data-update-all", true):selector.attr("data-update-all", false);
+    $('#tasks_selection').modal('hide');
   });
   
-  //add ajax to pagination
-  $(".pagination a[href]").attr("data-remote", true);
+  // Add ajax to pagination
+  $('.pagination a[href]').attr('data-remote', true);
   
-  //uncheck select all checkbox when closing modal when not all checkboxes are checked
-  $("#tasks_selection").on("hidden.bs.modal", function () {
-    if($("#list_tasks input[name=update_cost]:not(:checked)").length >= 1) {
-      $("#select_all").prop("checked", false);
+  // Uncheck select all checkbox when closing modal when not all checkboxes are checked
+  $('#tasks_selection').on('hidden.bs.modal', function () {
+    if($('#list_tasks input[name=update_cost]:not(:checked)').length >= 1) {
+      $('#select_all').prop('checked', false);
     }
   });
 
