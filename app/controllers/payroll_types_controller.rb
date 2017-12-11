@@ -86,6 +86,7 @@ class PayrollTypesController < ApplicationController
 
   def resources
     @bank_accounts = LedgerAccount.bank_account
+    gon.employees = Employee.custom_employees
   end
 
   def set_payroll_type

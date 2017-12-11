@@ -4,7 +4,7 @@ class AddMaximumDeductionCurrencyRefToDeduction < ActiveRecord::Migration
   end
   
   def down
-     remove_column :deductions, :maximum_deduction_currency_id
+    remove_column :deductions, :maximum_deduction_currency_id
   end
   
 end

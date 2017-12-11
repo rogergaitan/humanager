@@ -10,7 +10,8 @@
  *
  *= require_self
  *= require_tree .
- 
+
+ *= require jquery.simplecolorpicker
  *= require ../template/fonts/font-awesome/css/font-awesome.min
  *= require ../template/css/styles
  *= require ../template/css/custom-styles

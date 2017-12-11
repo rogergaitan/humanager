@@ -19,6 +19,7 @@
 //= require resources
 //= require fuse.min
 //= require HoldOn.min
+//= require jquery.simplecolorpicker
 
 //= require ../template/js/jquery-1.10.2.min
 //= require ../template/js/jqueryui-1.9.2.min

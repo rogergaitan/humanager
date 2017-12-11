@@ -1,12 +1,21 @@
+<%= include_gon %>
+
 <script type="text/javascript">
+
   var bank_account = [];
   <%  @bank_accounts.each do |cc| %>
-    bank_account.push(new Array(<%= cc.iaccount.blank? ? 0 : cc.iaccount %>, '<%=h cc.naccount %>', <%= cc.ifather.blank? ? 0 : cc.ifather %>, <%= cc.id %>, <%= cc.iaccount %>));
+    bank_account.push(new Array(
+      <%= cc.iaccount.blank? ? 0 : cc.iaccount %>, 
+      '<%=h cc.naccount %>', 
+      <%= cc.ifather.blank? ? 0 : cc.ifather %>, 
+      <%= cc.id %>, <%= cc.iaccount %>
+    ));
   <% end %>
 </script>
 
 <%= javascript_include_tag 'ledgerAccount/treeview' %>
 <%= javascript_include_tag 'payroll_type/payroll_type' %>
+<%= javascript_include_tag 'jquery.simplecolorpicker.js' %>
 
 <div class="container-fluid">
   <div data-widget-group="group1" class="ui-sortable">
@@ -106,6 +115,22 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <%= f.label :payer_employee_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group form-group_">
+                <%= f.hidden_field :payer_employee_id %>
+                <%= text_field_tag 'payroll_type_payer_employee',nil, :class => 'form-control', 
+                  :required => true, :for => :payer_employee_id, 
+                  :data => {:parsley_errors_container => "#payroll_type_ledger_account_errors"}%>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+              <div id="payroll_type_ledger_account_errors"></div>
+            </div>
+          </div>
+
           <div class="form-group" id="deduction_payrolls">
             <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
@@ -130,7 +155,8 @@
           <div class="form-group">
             <%= f.label :calendar_color, :class => "col-sm-2 control-label" %>
             <div class="col-sm-3">
-              <%= f.text_field :calendar_color, :required => true, :class => "form-control" %>
+              <%= f.select :calendar_color, options_for_select(['#7bd148','#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#e1e1e1'], f.object.calendar_color), 
+                  :required => true, :class => 'form-control' %>
             </div>
           </div>
           

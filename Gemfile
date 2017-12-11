@@ -26,6 +26,10 @@ gem 'hirb', '0.7.3'
 gem 'jquery_mask_rails', '0.1.0'
 gem 'axlsx_rails', '0.5.1'
 
+# Very simple jQuery color picker
+# @see https://github.com/tkrotoff/jquery-simplecolorpicker
+gem 'jquery-simplecolorpicker-rails', '0.5.0'
+
 ##
 # Get your Rails variables in your js
 # @see https://github.com/gazay/gon
@@ -55,7 +59,7 @@ end
 # gem 'jbuilder'
 
 # Use unicorn as the app server
-#gem 'unicorn'
+# gem 'unicorn'
 
 # Deploy with Capistrano
 group :development, :test do

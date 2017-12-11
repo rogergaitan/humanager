@@ -508,6 +508,7 @@ es:
           ledger_account_id: Cuenta Banco o CXP
           calendar_color: Color Para Calendario
           allow_register_from_app: Permite Registro desde App Móvil
+          payer_employee_id: Empleado Pagador
         costs_center:
           company_id: Empresa
           icost_center: Id Centro de Costos

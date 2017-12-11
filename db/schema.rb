@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20171128195200) do
+ActiveRecord::Schema.define(:version => 20171208161357) do
 
   create_table "abamtdsops", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -546,6 +546,7 @@ ActiveRecord::Schema.define(:version => 20171128195200) do
     t.datetime "updated_at",                                                                                          :null => false
     t.string   "calendar_color"
     t.boolean  "allow_register_from_app",                                                          :default => false
+    t.integer  "payer_employee_id"
   end
 
   add_index "payroll_types", ["company_id"], :name => "index_payroll_types_on_company_id"
