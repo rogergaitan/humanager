@@ -26,6 +26,11 @@ gem 'hirb', '0.7.3'
 gem 'jquery_mask_rails', '0.1.0'
 gem 'axlsx_rails', '0.5.1'
 
+##
+# Get your Rails variables in your js
+# @see https://github.com/gazay/gon
+gem 'gon', '6.2.0'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

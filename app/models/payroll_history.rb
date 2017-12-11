@@ -10,7 +10,6 @@ class PayrollHistory < ActiveRecord::Base
     :payroll_log_id, :employee_ids, :total, :task_total, :task_unidad, :payroll_date, 
     :performance
 
-  # KALFARO
   def self.list_to_oprpla5_detalle(payroll_log_id)
 
     list_objects = []

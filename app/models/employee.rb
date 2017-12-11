@@ -531,4 +531,19 @@ class Employee < ActiveRecord::Base
       sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
                                                  #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
   end
+
+  def self.custom_employees
+    employees = {}
+    Employee.order_employees.each do |e|
+      employees[e.id] = {
+        id: e.id,
+        number_employee: e.number_employee,
+        full_name: "#{e.entity.surname} #{e.entity.name}",
+        department_id: e.department_id,
+        employee_id: e.employee_id
+      }
+    end
+    employees
+  end
+
 end

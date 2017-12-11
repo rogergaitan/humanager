@@ -3,6 +3,7 @@
 class DeductionsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create, :update]
+  before_filter :set_deduction, :only => [:edit, :update, :destroy]
   
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Deduction, params[:id])
@@ -41,7 +42,6 @@ class DeductionsController < ApplicationController
   # GET /deductions/1/edit
   def edit
     begin
-      @deduction = Deduction.find(params[:id])
     rescue
       respond_to do |format|
         format.html { redirect_to( deductions_path, notice: t('.notice.no_results')) }
@@ -67,7 +67,6 @@ class DeductionsController < ApplicationController
   # PUT /deductions/1
   # PUT /deductions/1.json
   def update
-    @deduction = Deduction.find(params[:id])
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
         format.html { redirect_to deductions_path, notice: 'Deducción actualizada correctamente.' }
@@ -82,8 +81,6 @@ class DeductionsController < ApplicationController
   # DELETE /deductions/1
   # DELETE /deductions/1.json
   def destroy
-    @deduction = Deduction.find(params[:id])
-
     if @deduction.deduction_employees.empty?
       @deduction.destroy
       message = t('.notice.successfully_deleted')
@@ -139,7 +136,8 @@ class DeductionsController < ApplicationController
 
   def resources
     @credit_account = LedgerAccount.credit_accounts
-    @employees = Employee.order_employees
+    @employees = Employee.custom_employees
+    gon.employees = @employees
     @department = Department.all
     @superior = Employee.superior
     @payroll_types = PayrollType.where(company_id: current_user.company_id)
@@ -148,14 +146,9 @@ class DeductionsController < ApplicationController
     @object_hidden = []
 
     @deduction.deduction_employees.each do |de|
-      unless de.deduction_payments.empty?
-        # if there are records.
-        @object << "#{de.employee_id}"
-      end
-
-      if de.completed
-        @object_hidden << "#{de.employee_id}"
-      end
+      # if there are records.
+      @object << "#{de.employee_id}" unless de.deduction_payments.empty?
+      @object_hidden << "#{de.employee_id}" if de.completed
     end
 
     @employee_ids = []
@@ -167,8 +160,12 @@ class DeductionsController < ApplicationController
   
   private
   
-    def set_currencies
-      @currencies = Currency.all
-    end
+  def set_currencies
+    @currencies = Currency.all
+  end
+
+  def set_deduction
+    @deduction = Deduction.find(params[:id])
+  end
   
 end

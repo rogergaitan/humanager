@@ -102,7 +102,8 @@ class OtherPaymentsController < ApplicationController
   def resources
     @debit_accounts = LedgerAccount.debit_accounts
     @payroll_types = PayrollType.where company_id: current_user.company_id
-    @employees = Employee.order_employees
+    @employees = Employee.custom_employees
+    gon.employees = @employees
     @department = Department.all
     @superior = Employee.superior
     @currencies = Currency.all
@@ -132,7 +133,7 @@ class OtherPaymentsController < ApplicationController
   private
 
   def set_other_payment
-    @other_payment = OtherPayment.find_by_id_and_company_id params[:id], current_user.company_id
+    @other_payment = OtherPayment.find_by_id_and_company_id(params[:id], current_user.company_id)
     rescue ActiveRecord::RecordNotFound
     redirect_to other_payments_path, notice: "El registro de otro pago no existe."
   end

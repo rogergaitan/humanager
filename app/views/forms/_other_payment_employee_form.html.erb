@@ -1,12 +1,12 @@
-<tr class="items_other_payment_form">
+<tr class="items_other_payment_form" id="tr_employee_id_<%= f.object.employee_id %>">
 
   <td class="controls_item">
     <div class="input-append">
       <div class="col-md-12">
         <%= f.hidden_field :employee_id %>
         <%= hidden_field_tag 'in_searching', '0' %>
-        <%= text_field_tag 'search_name_employee', '', :class => 'form-control', 
-          :placeholder => 'Nombre Empleado' %>
+        <%= text_field_tag 'search_name_employee', '', :disabled => true, :class => 'form-control', 
+          :placeholder => 'Nombre Empleado', :value => @employees[f.object.employee_id][:full_name] if f.object.employee_id %>
       </div>
     </div>
   </td>
@@ -16,8 +16,8 @@
       <div class="controls">
         <span class="employee_calculation_currency_symbol"></span>
         <%= f.text_field :calculation, :size => "5x5", :class => 'form-control', :min => 1,
-        :data => { :parsley_type => "number", :parsley_required => true },
-        :value => number_to_currency(f.object.calculation, unit: "", delimiter: "") %>
+          :data => { :parsley_type => "number", :parsley_required => true, :parsley_range => "[1, 100]" },
+          :value => number_to_currency(f.object.calculation, unit: "", delimiter: "") %>
       </div>
     </div>
   </td>

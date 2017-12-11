@@ -1,3 +1,5 @@
+<%= include_gon %>
+
 <script type="text/javascript">
   var debit_account = [];
   var credit_account = [];
@@ -29,16 +31,6 @@
       id: '<%= cc.id %>'
     });
   <% end %>
-
-  var employees = [];
-  <% @employees.each do |e| %>
-    employees.push({
-      id: <%= e.id %>,
-      number_employee: <%= e.number_employee ? e.number_employee : 'null' %>,
-      full_name: '<%= "#{e.entity.surname} #{e.entity.name}" %>'
-    });
-  <% end %>
-  
 </script>
 
 <%= javascript_include_tag 'resources' %>
@@ -277,11 +269,11 @@
                 </div>
               </div>
 
-              <%= select("work_benefit", "employee_ids",
-                options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
-                  { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
-                { include_blank: false }, 
-                {:multiple => true, :required => true,  :selected => @employee_ids}) %>
+              <%= select("work_benefit", "employee_ids", 
+                options_for_select( @employees.map {|key, p| [p[:full_name], p[:id], 
+                { 'data-id' => dom_id(Employee.find(p[:id])), 'data-sup' => p[:employee_id], 'data-dep' => p[:department_id] } ]}, @employee_ids.map {|j|j} ), 
+                { include_blank: false }, {:multiple => true, :selected => @employee_ids, :required => true}) %>
+                
             </div>
           </div>
           
@@ -292,7 +284,6 @@
               <div class="alert alert-dismissable">
                 <i class="fa fa-fw"></i>
                 <label id="message"></label>
-                <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
               </div>
             </div>
           </div>
@@ -305,9 +296,6 @@
                   <tr class="header_items">
                     <td class="header_employee" width='80%'>Empleado</td>
                     <td class="header_calculation">Valor</td>
-                     <td class="">
-                      <%= link_to_add_fields("", f, :employee_benefits, "") %>
-                    </td>
                   </tr>
                 </thead>
                 <tbody class="table-bordered">

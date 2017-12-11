@@ -1,12 +1,14 @@
 class WorkBenefitsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create]
+  before_filter :set_work_benefits, :only => [:edit, :update, :destroy]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(WorkBenefit, params[:id])
   end
 
   respond_to :html, :json, :js
+
   # GET /work_benefits
   # GET /work_benefits.json
   def index
@@ -20,14 +22,12 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits/new.json
   def new
     @work_benefit = WorkBenefit.new
-
     respond_with(@work_benefit)
   end
 
   # GET /work_benefits/1/edit
   def edit
     begin
-      @work_benefit = WorkBenefit.find params[:id]
     rescue
       respond_to do |format|
         format.html { redirect_to( work_benefits_path, notice: t('.notice.no_results')) }
@@ -53,9 +53,8 @@ class WorkBenefitsController < ApplicationController
   # PUT /work_benefits/1
   # PUT /work_benefits/1.json
   def update
-    @work_benefit = WorkBenefit.find params[:id]
     respond_to do |format|
-      if @work_benefit.update_attributes params[:work_benefit].except(:employee_ids)
+      if @work_benefit.update_attributes(params[:work_benefit])
         format.html { redirect_to action: :index }
         format.json { head :no_content }
       else
@@ -68,8 +67,6 @@ class WorkBenefitsController < ApplicationController
   # DELETE /work_benefits/1
   # DELETE /work_benefits/1.json
   def destroy
-    @work_benefit = WorkBenefit.find(params[:id])
-
     if @work_benefit.employee_benefits.empty?
       # There are no records.
       @work_benefit.destroy
@@ -100,7 +97,6 @@ class WorkBenefitsController < ApplicationController
   
   def fetch_debit_accounts
     @debit_accounts = LedgerAccount.debit_accounts
-    
     respond_to do |format|
       format.json { render json: @debit_accounts }
     end
@@ -141,7 +137,6 @@ class WorkBenefitsController < ApplicationController
 
   def search
     @work_benefits = WorkBenefit.search params[:calculation_type], params[:state], current_user.company_id, params[:page]
-    
     respond_to do |format|
       format.js { render :index }
     end
@@ -152,15 +147,20 @@ class WorkBenefitsController < ApplicationController
     @credit_accounts = LedgerAccount.credit_accounts
     @cost_centers = CostsCenter.where(company_id: current_user.company_id)
     @payroll_types = PayrollType.where(company_id: current_user.company_id)
-    @employees = Employee.order_employees
+    @employees = Employee.custom_employees
+    gon.employees = @employees
     @department = Department.all
     @superior = Employee.superior
     @currencies = Currency.all
     @employee_ids = []
 
-    @work_benefit.employee_benefits.where('completed = ?', true).select('employee_id').each do |e|
+    @work_benefit.employee_benefits.where('completed = ?', false ).select('employee_id').each do |e|
       @employee_ids << e['employee_id']
     end
   end
-  
+
+  def set_work_benefits
+    @work_benefit = WorkBenefit.find(params[:id])
+  end
+
 end

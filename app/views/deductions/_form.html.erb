@@ -1,3 +1,5 @@
+<%= include_gon %>
+
 <script type="text/javascript">
   var cuenta_credito = [];
   <%  @credit_account.each do |cc| %>
@@ -8,15 +10,6 @@
       <%= cc.id %>, 
       <%= cc.iaccount %>
     ));
-  <% end %>
-
-  var employees = [];
-  <% @employees.each do |e| %>
-    employees.push({
-      id: <%= e.id %>,
-      number_employee: <%= e.number_employee ? e.number_employee : 'null' %>,
-      full_name: '<%= "#{e.entity.surname} #{e.entity.name}" %>'
-    });
   <% end %>
 
 </script>
@@ -281,24 +274,22 @@
                       {:prompt => p}, {:class => 'form-control'}) %>
                 </div>
               </div>
-            
-              <%= select("deduction", "employee_ids",   
-                options_for_select( @employees.map {|p| ["#{p.entity.surname} #{p.entity.name}", p.id, 
-                { 'data-id' => dom_id(p), 'data-sup' => p.employee_id, 'data-dep' => p.department_id } ]}, @employee_ids.map {|j|j} ), 
+
+              <%= select("deduction", "employee_ids", 
+                options_for_select( @employees.map {|key, p| [p[:full_name], p[:id], 
+                { 'data-id' => dom_id(Employee.find(p[:id])), 'data-sup' => p[:employee_id], 'data-dep' => p[:department_id] } ]}, @employee_ids.map {|j|j} ), 
                 { include_blank: false }, {:multiple => true, :selected => @employee_ids, :required => true}) %>
+
             </div>
           </div>
 
           <!-- E M P L O Y E E S   L I S T   D E T A I L -->
           <div class="form-group" id="div-message" style="display:none;">
             <div class="col-sm-12">
-
               <div class="alert alert-dismissable">
                 <i class="fa fa-fw"></i>
                 <label id="message"></label>
-                <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
               </div>
-
             </div>
           </div>
           
@@ -310,9 +301,6 @@
                   <tr class="header_items">
                     <td class="header_employee" width='80%'>Empleado</td>
                     <td class="header_calculation">Valor</td>
-                    <td class="">
-                      <%= link_to_add_fields("", f, :deduction_employees, "") %>
-                    </td>
                   </tr>
                 </thead>
                 <tbody class="table-bordered">
@@ -342,40 +330,6 @@
 
 <input type="hidden" id="search_employee_payroll_logs_path" value="<%= search_employee_payroll_logs_path %>">
 <input type="hidden" id="load_em_employees_path" value="<%= load_em_employees_path %>">
-
-<!--Employee Modal-->
-<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h2 id="myModalLabel" class="modal-title">Seleccione un Empleado</h2>
-      </div>
-      <div class="modal-body">
-        <!-- search -->
-        <div class="panel-body">
-          <%= form_tag :search_employee_payroll_logs, :id => "search_employee_form", :class => "form-inline", :method => "get" do %>
-            <div class="row control-group search">
-
-              <div class="col-md-12">
-                <div class="form-group">
-                  <%= text_field_tag :search_name_employee_modal, params[:search_name_employee], :class => "form-control",
-                  :placeholder => 'Nombre' %>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </div>
-        <!-- search -->
-        <div id="search_employee_results"></div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Ledger account Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
