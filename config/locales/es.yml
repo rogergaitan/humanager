@@ -125,6 +125,8 @@ es:
                 taken: 'Este número ya existe'
               join_date:
                 blank: Este campo no puede quedar en blanco
+              wage_payment:
+                blank: Este campo no puede quedar en blanco
           payroll:
             attributes:
               start_date:

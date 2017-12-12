@@ -3,11 +3,14 @@
 	<td class="controls_item" id="td_employees" style="width: 22%;">
 		<div class="row no-gutter">
 			<div class="col-md-4">
-				<%= hidden_field_tag 'search_code_employee', '' %>
+				<%= hidden_field_tag 'search_code_employee' %>
 			</div>
 			<div class="col-md-8">
-				<%= hidden_field_tag 'employee_code', ''%>
-				<%= hidden_field_tag 'search_name_employee', '' %>
+				<%= hidden_field_tag 'employee_code' %>
+				<%= hidden_field_tag 'search_name_employee' %>
+				<%= hidden_field_tag 'wage_payment' %>
+				<%= hidden_field_tag 'payment_unit' %>
+				<%= hidden_field_tag 'employee_payment_currency' %>
 			</div>
 		</div>
 	</td>
@@ -15,12 +18,12 @@
 	<td class="controls_item" id="td_cc" style="width: 22%;">
 		<div class="row no-gutter">
 			<div class="col-md-4">
-				<%= hidden_field_tag 'search_code_cc', '' %>
+				<%= hidden_field_tag 'search_code_cc' %>
 				<%= f.hidden_field :costs_center_id, class: "cc-filter-id centro-costo" %>
-				<%= hidden_field_tag 'iactivity_cc', '' %>
+				<%= hidden_field_tag 'iactivity_cc' %>
 			</div>
 			<div class="col-md-8">
-				<%= hidden_field_tag 'search_name_cc', '' %>
+				<%= hidden_field_tag 'search_name_cc' %>
 			</div>
 		</div>
 	</td>

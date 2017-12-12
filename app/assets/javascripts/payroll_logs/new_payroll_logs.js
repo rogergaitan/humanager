@@ -36,7 +36,8 @@ $(jQuery(document).ready(function($) {
     success_update: 'Actualización con Éxito.',
     changes_applied: 'Cambios aplicados a: ',
     bad_currency: 'No se puede seleccionar una labor con moneda distinta a la de la planilla',
-    bad_cost: 'No se puede seleccionar una labor sin costo'
+    bad_cost: 'No se puede seleccionar una labor sin costo',
+    employee_bad_currency: 'Moneda de pago a empleado es distinta a la de la planilla'
   };
 
 	/**************************************************************************************/

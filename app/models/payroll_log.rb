@@ -74,8 +74,10 @@ class PayrollLog < ActiveRecord::Base
   end
 
   def self.search_employee(employee_name, employee_code, page, per_page)
-    entities = Entity.joins(:employee)
-      .select("employees.id, employees.number_employee, entities.name, entities.surname")
+    entities = Entity.joins("LEFT OUTER JOIN employees ON employees.entity_id = entities.id
+                            LEFT OUTER JOIN payment_units ON payment_units.id = employees.payment_unit_id")
+      .select("employees.id, employees.number_employee, entities.name, entities.surname, 
+                  employees.wage_payment, payment_units.name as payment_unit, employees.currency_id")
     entities = entities.where("entities.name like ?", "%#{employee_name}%") if employee_name.present?
     entities = entities.where("employees.number_employee like ?", "%#{employee_code}%") if employee_code.present?
     entities = entities.paginate(:page => page, :per_page => per_page)
