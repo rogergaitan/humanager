@@ -68,7 +68,7 @@
 		<div class="row no-gutter">
 			<div class="col-md-8">
 				<%= f.select :payment_type_id, options_for_select(@payment_types.map{ |c| [c.name, c.id, 
-					{'data-factor' => c.factor}] }), {include_blank: false}, {:class => "form-control", :tabindex => '3'} %>
+					{'data-factor' => c.factor, 'data-payment-type' => c.payment_type}] }), {include_blank: false}, {:class => "form-control", :tabindex => '3'} %>
 			</div>
 			<div class="col-md-3">
 				&nbsp;

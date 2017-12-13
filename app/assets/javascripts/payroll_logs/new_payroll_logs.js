@@ -37,7 +37,8 @@ $(jQuery(document).ready(function($) {
     changes_applied: 'Cambios aplicados a: ',
     bad_currency: 'No se puede seleccionar una labor con moneda distinta a la de la planilla',
     bad_cost: 'No se puede seleccionar una labor sin costo',
-    employee_bad_currency: 'Moneda de pago a empleado es distinta a la de la planilla'
+    employee_bad_currency: 'Moneda de pago a empleado es distinta a la de la planilla',
+    bat_payment_type: 'Revise la configuración del tipo de pago e intente de nuevo'
   };
 
 	/**************************************************************************************/
