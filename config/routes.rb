@@ -72,7 +72,7 @@ Reasapp::Application.routes.draw do
       get :get_main_calendar
     end
     collection do
-      post :reabrir
+      post :reopen
       post :close_payroll
       post :send_to_firebird
     end

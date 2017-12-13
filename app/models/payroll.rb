@@ -33,8 +33,8 @@ class Payroll < ActiveRecord::Base
   scope :activas, ->(company_id){ where(state: true, company_id: company_id) }
   scope :inactivas, ->(company_id){ where(state: false, company_id: company_id)}
   
-  #consulta todas las planillas para un tipo de planilla especifico especifico
-  #scope :tipo_planilla, lambda {|type_payroll| joins(:payroll_type).where("payroll_type = ?", type_payroll).
+  # consulta todas las planillas para un tipo de planilla especifico especifico
+  # scope :tipo_planilla, lambda {|type_payroll| joins(:payroll_type).where("payroll_type = ?", type_payroll).
   #	select(['payroll_type', 'description']) }
 
   # Close the payroll
@@ -207,13 +207,24 @@ class Payroll < ActiveRecord::Base
   # Get the deduction of each employee (Calculations)
   def self.get_deductions_employees(list_employees, payroll_log, payroll_currency, exchange_rate)
     
+    keys = [
+      Deduction::DEDUCTION_TYPE_CONSTANT,
+      Deduction::DEDUCTION_TYPE_UNIQUE,
+      Deduction::DEDUCTION_TYPE_EXHAUST
+    ]
+    
+    keys = "'#{keys.join("','")}'"
+
     deduction_details = {}
     list_deductions = []
     list_employees_deductions = {}
 
     list_employees.each do |id, salary|
 
-      DeductionEmployee.includes(deduction: :deduction_currency, employee: :entity).where(:employee_id => id).each do |de|
+      DeductionEmployee.includes(deduction: :deduction_currency, employee: :entity)
+                       .where(:employee_id => id)
+                       .order("field(deductions.deduction_type, #{keys})")
+                       .each do |de|
         
         if de.deduction.state.to_s == Deduction::STATE_ACTIVE and !de.completed
 
@@ -229,7 +240,6 @@ class Payroll < ActiveRecord::Base
           add = true
           
           case de.deduction.deduction_type.to_s
-            
             # Constante
             when Deduction::DEDUCTION_TYPE_CONSTANT
               
@@ -345,26 +355,24 @@ class Payroll < ActiveRecord::Base
               else
                 add = false
               end
-          end # end case
+          end
           
           unless deduction_details['payment'] <= salary.to_f
-            
             if Deduction::DEDUCTION_TYPE_EXHAUST == de.deduction.deduction_type.to_s
               deduction_details['current_balance'] = current_balance
             end
           end
           
-          if add
-            list_deductions << deduction_details
-            list_employees_deductions[id] = list_deductions
-          end
-        end # end if states
+          list_deductions << deduction_details if add
+          list_employees_deductions[id] = list_deductions if add
+        end
 
         deduction_details = {}
-      end # end DeductionEmployee
+      end
 
       list_deductions = []
-    end # end each list_employees
+    end
+    
     list_employees_deductions
   end
 
@@ -417,10 +425,11 @@ class Payroll < ActiveRecord::Base
       total_salary = list_salaries[id]
       total_deductions = 0
       detail_employee = {}
+
       details.each do |detail|
         total_deductions += detail['payment']
         detail_employee['employee_name'] = detail['employee_name']
-      end # End details
+      end
       
       if total_salary < total_deductions
         detail_employee['total_salary'] = total_salary
@@ -513,13 +522,9 @@ class Payroll < ActiveRecord::Base
     end # End each list_other_payments
   end
   
-  ##################################################################################################
-  ##################################################################################################
-  
   # Send the information to Firebird.
   def self.send_to_firebird(payroll_id, username)
 
-    ############### E M P E Z A M O S ###############
     result = false
     num_oper = get_number_operation
     num_oper_2 = get_number_operation
@@ -635,11 +640,11 @@ class Payroll < ActiveRecord::Base
   # Save into Firebird: Oprmov1_detalle (Part 1)
   def self.save_in_oprmov1_details_deductions(num_oper, payroll)
 
-    # DEDUCTIONS
     transaction do
       count = 1
       total_deductions = 0
 
+      # End each DeductionPayment
       DeductionPayment.where('payroll_id = ?', payroll.id).each do |dp|
 
         od = Oprmov1Detalle.new
@@ -662,7 +667,7 @@ class Payroll < ActiveRecord::Base
         od.save
 
         count = count + 1
-      end # End each DeductionPayment
+      end
 
       od_last = Oprmov1Detalle.new
       od_last.iemp = payroll.company.code
@@ -676,13 +681,11 @@ class Payroll < ActiveRecord::Base
       od_last.save
 
     end # End transaction
-    # DEDUCTIONS
   end
 
   # Save into Firebird: Oprmov1_detalle (Part 2)
   def self.save_in_oprmov1_details_work_benefits(num_oper, payroll, num_count)
     
-    # WORK BENEFITS
     count = num_count
 
     transaction do
@@ -703,7 +706,6 @@ class Payroll < ActiveRecord::Base
         od_debit.mdebito = wb.payment
         od_debit.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
         od_debit.save
-        # D E B I T
         
         # C R E D I T
         od_credit.iemp = payroll.company.code
@@ -714,6 +716,7 @@ class Payroll < ActiveRecord::Base
 
         od_credit.init = wb.employee_benefit.work_benefit.beneficiary_id
         od_credit.initcxx = wb.employee_benefit.work_benefit.beneficiary_id
+
         if wb.employee_benefit.work_benefit.is_beneficiary
           od_credit.init = wb.employee_benefit.employee.entity.entityid
           od_credit.initcxx = wb.employee_benefit.employee.entity.entityid
@@ -724,11 +727,10 @@ class Payroll < ActiveRecord::Base
         od_credit.mcredito = wb.payment
         od_credit.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
         od_credit.save
-        # C R E D I T
         
         count = count + 2
-      end # End each WorkBenefitsPayments
-    end # End transaction
+      end
+    end
 
     # WORK BENEFITS
   end
@@ -754,7 +756,7 @@ class Payroll < ActiveRecord::Base
         od.mdebito = opp.payment
         total_other_payments += opp.payment
         count += 1
-      end # End each OtherPaymentPayment
+      end
 
       od_last = Oprmov1Detalle.new
       od_last.iemp = payroll.company.code
@@ -764,7 +766,7 @@ class Payroll < ActiveRecord::Base
       od_last.fsoport = payroll.end_date.strftime("%d.%m.%Y")
       od_last.fpagocxx = payroll.payment_date.strftime("%d.%m.%Y")
       od_last.mdebito = total_other_payments
-    end # End transaction
+    end
   end
 
   # Save into Firebird: Oprmaest (Process number 2)
@@ -825,7 +827,7 @@ class Payroll < ActiveRecord::Base
       oprpla5_base.qregfpagodcto4 =  Oprpla5Base::QREGFPAGODCTO4
       oprpla5_base.qregfpagopagador = Oprpla5Base::QREGFPAGOPAGADOR
       oprpla5_base.save
-    end # End transaction
+    end
   end
 
   # Save into Firebird: OPRPLA5_DETALLE (Process number 2)
@@ -853,19 +855,19 @@ class Payroll < ActiveRecord::Base
         od.ilineamov = Oprpla5Detalle::ILINEAMOV
         od.save
         count = count + 1
-      end # End each PayrollHistory
-    end # End transaction
+      end
+    end
   end
 
   def self.search_payrolls_to_reports(start_date, end_date, company_id, page, per_page)
-      query = ""
-      params = []
-      params.push(" start_date >= '#{start_date.to_date.strftime("%Y-%m-%d")}' ") unless start_date.empty?
-      params.push(" end_date <= '#{end_date.to_date.strftime("%Y-%m-%d")}' ") unless end_date.empty?
-      params.push(" state = 0 ")
-      params.push(" company_id = '#{company_id}' ")
-      query = build_query(params)
-      @payrolls = Payroll.where(query).paginate(:page => page, :per_page => per_page)
+    query = ""
+    params = []
+    params.push(" start_date >= '#{start_date.to_date.strftime("%Y-%m-%d")}' ") unless start_date.empty?
+    params.push(" end_date <= '#{end_date.to_date.strftime("%Y-%m-%d")}' ") unless end_date.empty?
+    params.push(" state = 0 ")
+    params.push(" company_id = '#{company_id}' ")
+    query = build_query(params)
+    @payrolls = Payroll.where(query).paginate(:page => page, :per_page => per_page)
   end
 
   def self.build_query(data)
@@ -884,9 +886,9 @@ class Payroll < ActiveRecord::Base
 
   def self.get_main_calendar(d_start, d_end, company_id)
     Payroll.joins(:payroll_type, :payroll_log)
-    .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, payrolls.payment_date, payroll_types.description')
-    .where("payrolls.start_date >= ? and payrolls.end_date <= ? and payrolls.company_id = '?' and payrolls.state = ?",
-      DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
+           .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, payrolls.payment_date, payroll_types.description')
+           .where("payrolls.start_date >= ? and payrolls.end_date <= ? and payrolls.company_id = '?' and payrolls.state = ?",
+                  DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
   end
   
   # verifies deduction value does not overexceed the maximum deduction restriction
@@ -897,9 +899,9 @@ class Payroll < ActiveRecord::Base
   
   def self.reopen_payroll(id)
     payroll = Payroll.includes(:payroll_log, :work_benefits_payments, :work_benefits_payments,
-                     :deduction_payment => {:deduction_employee => :deduction}, 
-                     :other_payment_payment => {:other_payment_employee => :other_payment})
-                     .find id
+                              :deduction_payment => {:deduction_employee => :deduction}, 
+                              :other_payment_payment => {:other_payment_employee => :other_payment})
+                     .find(id)
     
     transaction do
     

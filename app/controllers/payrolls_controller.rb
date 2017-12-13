@@ -111,9 +111,8 @@ class PayrollsController < ApplicationController
   end
 
   # Reabre una o un conjunto de planillas cerradas
-  def reabrir
+  def reopen
     Payroll.reopen_payroll params[:payroll_id]
-
     render :index
   end
 

@@ -270,7 +270,7 @@ function Reactivar() {
    
       $.ajax({
         type: 'POST',
-        url: '/payrolls/reabrir',
+        url: '/payrolls/reopen',
         beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
         data: { 
           payroll_id: payrollId.val()
