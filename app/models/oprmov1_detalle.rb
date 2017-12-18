@@ -31,11 +31,13 @@
 
 # -*- encoding : utf-8 -*-
 class Oprmov1Detalle < ActiveRecord::Base
+
 	establish_connection :firebird
+
 	attr_accessible :iemp, :inumoper, :ilinea, :icc, :icuenta, :tdetalle, :mvrbase, 
-	:ibanco, :icheque, :init, :fsoport, :initcxx, :fpagocxx, :fvencimcxx, :mdebito, 
-	:mcredito, :iactivo, :inumsopcxx, :iflujoefec, :mvrotramoneda, :scomandos, :ilineamov, 
-	:valor1, :valor2, :clase1, :clase2
+					        :ibanco, :icheque, :init, :fsoport, :initcxx, :fpagocxx, :fvencimcxx,
+					        :mdebito, :mcredito, :iactivo, :inumsopcxx, :iflujoefec, :mvrotramoneda,
+					        :scomandos, :ilineamov, :valor1, :valor2, :clase1, :clase2
 
 	set_table_name "OPRMOV1_DETALLE"
 

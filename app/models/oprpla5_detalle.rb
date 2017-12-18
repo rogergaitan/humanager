@@ -66,28 +66,27 @@
 
 # -*- encoding : utf-8 -*-
 class Oprpla5Detalle < ActiveRecord::Base
-	establish_connection :firebird
-	attr_accessible :iemp, :inumoper, :ilinea, :itdcontrato, :icontrato, :icedula, 
-	:ntrabajador, :icclunes, :iactividadlunes, :ilaborlunes, :qjorslunes, :qcantlunes, 
-	:bcantdesclunes, :iccmartes, :iactividadmartes, :ilabormartes, :qjorsmartes, 
-	:qcantmartes, :bcantdescmartes, :iccmiercoles, :iactividadmiercoles, :ilabormiercoles, 
-	:qjorsmiercoles, :qcantmiercoles, :bcantdescmiercoles, :iccjueves, :iactividadjueves, 
-	:ilaborjueves, :qjorsjueves, :qcantjueves, :bcantdescjueves, :iccviernes, 
-	:iactividadviernes, :ilaborviernes, :qjorsviernes, :qcantviernes, :bcantdescviernes, 
-	:iccsabado, :iactividadsabado, :ilaborsabado, :qjorssabado, :qcantsabado, 
-	:bcantdescsabado, :iccdomingo, :iactividaddomingo, :ilabordomingo, :qjorsdomingo, 
-	:qcantdomingo, :bcantdescdomingo, :qtotaljors, :qtotalcant, :mvrtotal, :mvrdcto1, 
-	:mvrdcto2, :mvrdcto3, :mvrdcto4, :mtotalapagar, :icheque, :sobserv, :qfactor, 
-	:ilineamov
+  establish_connection :firebird
+  
+  attr_accessible :iemp, :inumoper, :ilinea, :itdcontrato, :icontrato, :icedula, 
+                  :ntrabajador, :icclunes, :iactividadlunes, :ilaborlunes, :qjorslunes,
+                  :qcantlunes, :bcantdesclunes, :iccmartes, :iactividadmartes, :ilabormartes,
+                  :qjorsmartes, :qcantmartes, :bcantdescmartes, :iccmiercoles,
+                  :iactividadmiercoles, :ilabormiercoles, :qjorsmiercoles, :qcantmiercoles,
+                  :bcantdescmiercoles, :iccjueves, :iactividadjueves, :ilaborjueves,
+                  :qjorsjueves, :qcantjueves, :bcantdescjueves, :iccviernes,
+                  :iactividadviernes, :ilaborviernes, :qjorsviernes, :qcantviernes,
+                  :bcantdescviernes, :iccsabado, :iactividadsabado, :ilaborsabado, 
+                  :qjorssabado, :qcantsabado, :bcantdescsabado, :iccdomingo, 
+                  :iactividaddomingo, :ilabordomingo, :qjorsdomingo, :qcantdomingo,
+                  :bcantdescdomingo, :qtotaljors, :qtotalcant, :mvrtotal, :mvrdcto1,
+                  :mvrdcto2, :mvrdcto3, :mvrdcto4, :mtotalapagar, :icheque, :sobserv,
+                  :qfactor, :ilineamov
 
-	self.set_table_name "OPRPLA5_DETALLE"
-	# set_table_name "OPRPLA5_DETALLE"
-
+  self.set_table_name "OPRPLA5_DETALLE"
+  
 	# Constants
-	IACTIVIDADLUNES = 1.freeze
-	QCANTLUNES = 0.freeze
 	BCANTDESCLUNES = 'T'.freeze
-	QFACTOR = 1.freeze
 	ILINEAMOV = 0.freeze
 
 end

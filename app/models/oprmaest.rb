@@ -59,42 +59,43 @@
 # -*- encoding : utf-8 -*-
 class Oprmaest < ActiveRecord::Base
 	establish_connection :firebird
-	# attr_accessible :IEMP, :INUMOPER, :FSOPORT, :ITDOPER, :ITDSOP, :INUMSOP, :SNUMSOP, 
-	# :ICLASIFOP, :FANIO, :FMES, :FDIA, :FSEMANA, :TDETALLE, :ICCBASE, :IMONEDA, :ISEDE, 
-	# :IUSUARIOULT, :INIT, :IPROCESS, :IESTADO, :INUMOPERULTIMP, :FPROCESAM, :QERROR, 
-	# :QWARNING, :BUSRDETAIL, :BNODESPROCESO, :BANULADA, :BIMPRESA, :QIMPRESIONES, :MINGRESOS, 
-	# :MEGRESOS, :MDEBITOS, :MCREDITOS, :QMOVCNT, :QMOVINV, :QMOVORD, :ZLOG, :ZCOMENTAR, 
-	# :IDRVVERSION, :IIMAGEN, :IRELEASE, :SGRUPOUSR, :ITDFORMATOPRINTED, :FCREACIONUSR, 
-	# :INUMOPERV3, :IWS, :FCREACION, :IWSULT, :FULTIMA, :IUSUARIO, :IEJECUCION, :BMOVMANUAL, 
-	# :ISUCURSAL
-	attr_accessible :iemp, :inumoper, :fsoport, :itdoper, :itdsop, :inumsop, :snumsop, 
-	:iclasifop, :fanio, :fmes, :fdia, :fsemana, :tdetalle, :iccbase, :imoneda, :isede, 
-	:iusuarioult, :init, :iprocess, :iestado, :inumoperultimp, :fprocesam, :qerror, 
-	:qwarning, :busrdetail, :bnodesproceso, :banulada, :bimpresa, :qimpresiones, :mingresos, 
-	:megresos, :mdebitos, :mcreditos, :qmovcnt, :qmovinv, :qmovord, :zlog, :zcomentar, 
-	:idrvversion, :iimagen, :irelease, :sgrupousr, :itdformatoprinted, :fcreacionusr, 
-	:inumoperv3, :iws, :fcreacion, :iwsult, :fultima, :iusuario, :iejecucion, :bmovmanual,
-	:isucursal
-	set_table_name "OPRMAEST"
+  
+	attr_accessible :iemp, :inumoper, :fsoport, :itdoper, :itdsop, :inumsop, :snumsop,
+                  :iclasifop, :fanio, :fmes, :fdia, :fsemana, :tdetalle, :iccbase, :imoneda,
+                  :isede, :iusuarioult, :init, :iprocess, :iestado, :inumoperultimp, :fprocesam,
+                  :qerror, :qwarning, :busrdetail, :bnodesproceso, :banulada, :bimpresa, :qimpresiones,
+                  :mingresos, :megresos, :mdebitos, :mcreditos, :qmovcnt, :qmovinv, :qmovord, :zlog,
+                  :zcomentar, :idrvversion, :iimagen, :irelease, :sgrupousr, :itdformatoprinted,
+                  :fcreacionusr, :inumoperv3, :iws, :fcreacion, :iwsult, :fultima, :iusuario,
+                  :iejecucion, :bmovmanual, :isucursal
+  
+  set_table_name "OPRMAEST"
 	
-	 # Constants
-	 ITDOPER = 'MOV1'.freeze
-	 ITDOPER2 = 'PLA5'.freeze
-	 ICLASIFOP = 1.freeze
-	 IMONEDA = '10'.freeze
-	 ISEDE = '01'.freeze
-	 IPROCESS = 0.freeze
-	 IESTADO = 1.freeze
-	 BANULADA = 'F'.freeze
-	 BIMPRESA = 'F'.freeze
-	 MDEBITOS = 0.freeze
-	 MCREDITOS = 0.freeze
-	 QMOVCNT = 0.freeze
-	 QMOVINV = 0.freeze
-	 QMOVORD = 0.freeze
-	 IIMAGEN = ''.freeze
-	 IWS = ''.freeze
-	 IEJECUCION = 0.freeze
-	 BMOVMANUAL = 'F'.freeze
+  # Constants
+  ITDOPER = 'ORPLA5'.freeze
+  ITDOPER2 = 'PLA5'.freeze
+  ICLASIFOP = 1.freeze
+  IMONEDA = '1'.freeze
+  ISEDE = '1'.freeze
+  IPROCESS = 0.freeze
+  IESTADO = 1.freeze
+  BANULADA = 'F'.freeze
+  BIMPRESA = 'F'.freeze
+  MDEBITOS = 0.freeze
+  MCREDITOS = 0.freeze
+  QMOVCNT = 0.freeze
+  QMOVINV = 0.freeze
+  QMOVORD = 0.freeze
+  IIMAGEN = ''.freeze
+  IWS = ''.freeze
+  IEJECUCION = 0.freeze
+  BMOVMANUAL = 'F'.freeze
+  ISUCURSAL = ''.freeze
+
+  def self.get_inumsop(date, inum)
+    # Year, Month and Consecutive number by company
+    date.strftime("%g") + date.strftime("%m") + (sprintf '%02d', inum)
+  end
+	
 
 end

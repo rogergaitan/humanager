@@ -527,40 +527,46 @@ class Payroll < ActiveRecord::Base
 
     result = false
     num_oper = get_number_operation
-    num_oper_2 = get_number_operation
+    # num_oper_2 = get_number_operation
 
     payroll = Payroll.find(payroll_id)
     num_count = DeductionPayment.where('payroll_id = ?', payroll.id).count
     num_count = num_count + 2
 
+    ######################################################################################
     # Save into OPRMAEST
     r1 = save_in_oprmaest(num_oper, payroll, username)
 
+    # Save into OPRPLA5_BASE
+    r2 = save_in_oprpla5_base(num_oper, payroll)
+
+    # Save into OPRPLA5_DETALLE
+    r3 = save_in_oprpla5_detalle(num_oper, payroll)
+
+    # Save into OPRFPAGO
+    r4 = save_in_oprfpago(num_oper, payroll)
+    ######################################################################################
+
     # Save into Oprmov1Base
-    r2 = save_in_oprmov1_base(num_oper)
+    # r2 = save_in_oprmov1_base(num_oper)
 
     # Save into Oprmov1Detalle - Deductions
-    r3 = save_in_oprmov1_details_deductions(num_oper, payroll)
+    # r3 = save_in_oprmov1_details_deductions(num_oper, payroll)
 
     # Save into Oprmov1Detalle - Work Benefits
-    r4 = save_in_oprmov1_details_work_benefits(num_oper, payroll, num_count)
+    # r4 = save_in_oprmov1_details_work_benefits(num_oper, payroll, num_count)
 
     # Save into Oprmov1Detalle - Other Payments
-    r5 = save_in_oprmov1_details_other_payments(num_oper, payroll, num_count)
+    # r5 = save_in_oprmov1_details_other_payments(num_oper, payroll, num_count)
 
     # Save into OPRMAEST (Process number 2)
-    r6 = save_in_oprmaest_2(num_oper_2, payroll, username)
+    # r6 = save_in_oprmaest_2(num_oper_2, payroll, username)
 
-    # Save into OPRPLA5_BASE (Process number 2)
-    r7 = save_in_oprpla5_base(num_oper_2, payroll)
-
-    # Save into OPRPLA5_DETALLE (Process number 2)
-    r8 = save_in_oprpla5_detalle(num_oper_2, payroll)
 
     # Save into the payroll table the num_oper and num_oper_2
-    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8
+    if r1 and r2 and r3 and r4 # and r5 and r6 and r7 and r8
       payroll.num_oper = num_oper
-      payroll.num_oper_2 = num_oper_2
+      # payroll.num_oper_2 = num_oper_2
       payroll.save
       result = true
     end
@@ -588,8 +594,7 @@ class Payroll < ActiveRecord::Base
   # Save into Firebird: Oprmaest
   def self.save_in_oprmaest(num_oper, payroll, username)
 
-    t = Time.new
-    date = t.strftime("%d.%m.%Y, %T.%L")
+    date = DateTime.now
 
     transaction do
       oprm = Oprmaest.new
@@ -597,14 +602,18 @@ class Payroll < ActiveRecord::Base
       oprm.inumoper = num_oper
       oprm.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
       oprm.itdoper = Oprmaest::ITDOPER
-      oprm.itdsop = payroll.payroll_type.cod_doc_payroll_support
-      oprm.inumsop = payroll['id']
-      oprm.snumsop = "#{payroll.payroll_type.mask_doc_payroll_support}-" + (sprintf '%04d', payroll['id'])
+      support_id = payroll.payroll_type.cod_doc_payroll_support
+      oprm.itdsop = Support.find(support_id).itdsop
+      inumsop = Oprmaest.get_inumsop(payroll.end_date, payroll.company.inum)
+      oprm.inumsop = inumsop
+      oprm.snumsop = payroll.payroll_type.mask_doc_payroll_support.split('-')[0] + "-" + inumsop
       oprm.iclasifop = Oprmaest::ICLASIFOP
+      oprm.fanio = payroll.end_date.year
+      oprm.fmes = payroll.end_date.strftime("%m")
+      oprm.fdia = payroll.end_date.strftime("%d")
       oprm.fsemana = payroll['end_date'].cweek
-      oprm.tdetalle = "Otros Calculos Planilla " + payroll.payroll_type.description + " del " + payroll['start_date'].to_s + " hasta " + payroll['end_date'].to_s
-      oprm.imoneda = Oprmaest::IMONEDA
-      oprm.isede = Oprmaest::ISEDE
+      oprm.tdetalle = "Costos de MDO de la planilla #{payroll.payroll_type.description} " + 
+                      "del #{payroll.start_date} al #{payroll.end_date}"
       oprm.iusuarioult = username
       oprm.iprocess = Oprmaest::IPROCESS
       oprm.iestado = Oprmaest::IESTADO
@@ -615,15 +624,89 @@ class Payroll < ActiveRecord::Base
       oprm.qmovcnt = Oprmaest::QMOVCNT
       oprm.qmovinv = Oprmaest::QMOVINV
       oprm.qmovord = Oprmaest::QMOVORD
-      oprm.iimagen = Oprmaest::IIMAGEN
       oprm.fcreacionusr = date
-      oprm.iws = Oprmaest::IWS
       oprm.fcreacion = date
       oprm.fultima = date
       oprm.iusuario = username
       oprm.iejecucion = Oprmaest::IEJECUCION
+      oprm.imoneda = Oprmaest::IMONEDA
       oprm.bmovmanual = Oprmaest::BMOVMANUAL
+      oprm.isucursal = Oprmaest::ISUCURSAL
+      oprm.isede = Oprmaest::ISEDE
+      oprm.iimagen = Oprmaest::IIMAGEN
+      oprm.iws = Oprmaest::IWS
       oprm.save
+
+      # Update autoincrement number by company
+      company = payroll.company
+      company.inum += 1
+      company.save
+    end
+  end
+
+  # Save into Firebird: OPRPLA5_BASE
+  def self.save_in_oprpla5_base(num_oper, payroll)
+    transaction do
+      oprpla5_base = Oprpla5Base.new
+      oprpla5_base.iemp = payroll.company.code
+      oprpla5_base.inumoper = num_oper
+      oprpla5_base.bpagocxp = Oprpla5Base::BPAGOCXP
+      oprpla5_base.itipocosteo = Oprpla5Base::ITIPOCOSTEO
+      oprpla5_base.bprocesopordia = Oprpla5Base::BPROCESOPORDIA
+      oprpla5_base.brendimcmp = Oprpla5Base::BRENDIMCMP
+      oprpla5_base.qregctolabor = Oprpla5Base::QREGCTOLABOR
+      oprpla5_base.qregctos = Oprpla5Base::QREGCTOS
+      oprpla5_base.qregfpagodcto1 = Oprpla5Base::QREGFPAGODCTO1
+      oprpla5_base.qregfpagodcto2 = Oprpla5Base::QREGFPAGODCTO2
+      oprpla5_base.qregfpagodcto3 = Oprpla5Base::QREGFPAGODCTO3
+      oprpla5_base.qregfpagodcto4 = Oprpla5Base::QREGFPAGODCTO4
+      oprpla5_base.qregfpagopagador = Oprpla5Base::QREGFPAGOPAGADOR
+      oprpla5_base.save
+    end
+  end
+
+  # Save into Firebird: OPRPLA5_DETALLE
+  def self.save_in_oprpla5_detalle(num_oper, payroll)
+    count = 0
+    transaction do      
+
+      PayrollHistory.list_to_oprpla5_detalle(payroll.id).each do |a|
+        od = Oprpla5Detalle.new
+        od.iemp = payroll.company.code
+        od.inumoper = num_oper
+        od.ilinea = count
+        od.itdcontrato = a[:payment_type]
+        od.icclunes = a[:costs_center_id]
+        od.iactividadlunes = a[:iactivity]
+        od.ilaborlunes = a[:itask]
+        od.qjorslunes = a[:time_worked]
+        od.qcantlunes = [:performance]
+        od.bcantdesclunes =  Oprpla5Detalle::BCANTDESCLUNES
+        od.qtotaljors = a[:time_worked]
+        od.qtotalcant = a[:performance]
+        od.mvrtotal = a[:total]
+        od.mtotalapagar = a[:total]
+        od.qfactor =  a[:factor]
+        od.ilineamov = Oprpla5Detalle::ILINEAMOV
+        od.save
+        count = count + 1
+      end
+    end
+  end
+
+  # Save into Firebird: OPRFPAGO
+  def save_in_oprfpago(num_oper, payroll)
+    transaction do
+      oprfpago = Oprfpago.new
+      oprfpago.iemp = payroll.company.code
+      oprfpago.inumoper = num_oper
+      oprfpago.itipofpago = Oprfpago::ITIPOFPAGO
+      oprfpago.idfpago = Oprfpago::IDFPAGO
+      oprfpago.id = Oprfpago::ID
+      oprfpago.init = payroll.payroll_type.payer_employee.entity.entityid
+      oprfpago.icuenta = payroll.payroll_type.ledger_account.iaccount
+      oprfpago.mvalor = p.payroll_log.payroll_total
+      oprfpago.save
     end
   end
 
@@ -805,57 +888,6 @@ class Payroll < ActiveRecord::Base
       oprm.imoneda = Oprmaest::IMONEDA
       oprm.bmovmanual = Oprmaest::BMOVMANUAL
       oprm.save
-    end
-  end
-
-  # Save into Firebird: OPRPLA5_BASE (Process number 2)
-  def self.save_in_oprpla5_base(num_oper, payroll)
-    transaction do
-      oprpla5_base = Oprpla5Base.new
-      oprpla5_base.iemp = payroll.company.code
-      oprpla5_base.inumoper = num_oper
-      oprpla5_base.icuentacaja = payroll.payroll_type.ledger_account.iaccount
-      oprpla5_base.bpagocxp = Oprpla5Base::BPAGOCXP
-      oprpla5_base.itipocosteo = Oprpla5Base::ITIPOCOSTEO
-      oprpla5_base.bprocesopordia = Oprpla5Base::BPROCESOPORDIA
-      oprpla5_base.brendimcmp = Oprpla5Base::BRENDIMCMP
-      oprpla5_base.qregctolabor = Oprpla5Base::QREGCTOLABOR
-      oprpla5_base.qregctos = Oprpla5Base::QREGCTOS
-      oprpla5_base.qregfpagodcto1 = Oprpla5Base::QREGFPAGODCTO1
-      oprpla5_base.qregfpagodcto2 = Oprpla5Base::QREGFPAGODCTO2
-      oprpla5_base.qregfpagodcto3 = Oprpla5Base::QREGFPAGODCTO3
-      oprpla5_base.qregfpagodcto4 =  Oprpla5Base::QREGFPAGODCTO4
-      oprpla5_base.qregfpagopagador = Oprpla5Base::QREGFPAGOPAGADOR
-      oprpla5_base.save
-    end
-  end
-
-  # Save into Firebird: OPRPLA5_DETALLE (Process number 2)
-  def self.save_in_oprpla5_detalle(num_oper, payroll)
-
-    count = 0
-    transaction do      
-
-      PayrollHistory.list_to_oprpla5_detalle(payroll['id']).each do |a|
-        od = Oprpla5Detalle.new
-        od.iemp = payroll.company.code
-        od.inumoper = num_oper
-        od.ilinea = count
-        od.itdcontrato = a['payment_type']
-        od.icclunes = a['costs_center_id']
-        od.iactividadlunes = Oprpla5Detalle::IACTIVIDADLUNES
-        od.ilaborlunes = a['itask']
-        od.qjorslunes = a['time_worked']
-        od.qcantlunes = Oprpla5Detalle::QCANTLUNES
-        od.bcantdesclunes =  Oprpla5Detalle::BCANTDESCLUNES
-        od.qtotaljors = a['time_worked']
-        od.mvrtotal = a['total']
-        od.mtotalapagar = a['total']
-        od.qfactor = Oprpla5Detalle::QFACTOR
-        od.ilineamov = Oprpla5Detalle::ILINEAMOV
-        od.save
-        count = count + 1
-      end
     end
   end
 

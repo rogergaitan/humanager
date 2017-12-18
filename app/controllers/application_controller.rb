@@ -6,10 +6,11 @@ class ApplicationController < ActionController::Base
   respond_to :json, :html
 
   protect_from_forgery
-    rescue_from CanCan::AccessDenied do |exception|
-      flash[:error] = "Acceso Denegado."
-      redirect_to root_url
-    end
+  
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:error] = "Acceso Denegado."
+    redirect_to root_url
+  end
 
   def firebird_encoding(element)
     element.encode('UTF-8', 'iso-8859-1')
@@ -49,10 +50,8 @@ class ApplicationController < ActionController::Base
     } unless @object
   end
 	
-  def after_sign_in_path_for(resource)		
-
+  def after_sign_in_path_for(resource)
     @sync_status = firebird_sync_from_sign
-    #require 'pry'; binding.pry
     super    
   end
 
@@ -61,6 +60,7 @@ class ApplicationController < ActionController::Base
     today = Time.now
     users = User.all
     first_sign = true
+
     users.each do |user|
       last_sign_in_at = user[:last_sign_in_at] ? user[:last_sign_in_at].to_date : 0
       if last_sign_in_at === today.to_date
@@ -69,11 +69,8 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    if first_sign === true
-      firebird_sync = firebird_sync_process
-      return firebird_sync
-    end
-   end
+    return firebird_sync_process if first_sign
+  end
 
 	# Sync all tables
   def firebird_sync_process
@@ -93,12 +90,10 @@ class ApplicationController < ActionController::Base
     return @sync
   end
 
-  #save sync log
+  # Save sync log
   def log_sync
     new_log = SyncLog.new( :user_id => current_user.id, :last_sync => Time.now )
-
     new_log.save
-
   end
 
   # Sync companies
@@ -162,11 +157,10 @@ class ApplicationController < ActionController::Base
                             :nunidad => firebird_encoding(task.nunidad),
                             :nactivity=> firebird_encoding(task.actividad.try(:nactividad))
                            )
-
         if new_task.save
-	  c +=  1
-	else
-	  new_task.er.each do |error|
+	        c +=  1
+	      else
+          new_task.er.each do |error|
             Rails.logger.error "Error Creating task: #{task.ilabor}, Description: #{error}"
           end
         end
@@ -174,11 +168,10 @@ class ApplicationController < ActionController::Base
         params[:task] = { :iactivity => task.iactividad, :ntask => firebird_encoding(task.nlabor),
                           :nunidad => firebird_encoding(task.nunidad), :nactivity => firebird_encoding(task.actividad.try(:nactividad)) }
 
-        if theTask.update_attributes(params[:task])
-          ca += 1
-        end
+        ca += 1 if theTask.update_attributes(params[:task])
       end
     end
+
     @tasks_fb[:notice] =  ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
 
     return @tasks_fb
@@ -202,45 +195,42 @@ class ApplicationController < ActionController::Base
 	                     :password_confirmation => numer )
 
         if new_user.save
-	  # Create default Permissions
-	  PermissionsSubcategory.all.each do |sub|
-	    a = PermissionsUser.new(  :permissions_subcategory_id => sub.id,
-	                              :user_id => new_user.id,
-	                              :p_create => false,
-	                              :p_view => false,
-	                              :p_modify => false,
-	                              :p_delete => false,
-	                              :p_close => false,
-	                              :p_accounts => false,
-	                              :p_pdf => false,
-	                              :p_exel => false )
-	    a.save
+	        # Create default Permissions
+	        PermissionsSubcategory.all.each do |sub|
+            a = PermissionsUser.new(:permissions_subcategory_id => sub.id,
+                                    :user_id => new_user.id,
+                                    :p_create => false,
+                                    :p_view => false,
+                                    :p_modify => false,
+                                    :p_delete => false,
+                                    :p_close => false,
+                                    :p_accounts => false,
+                                    :p_pdf => false,
+                                    :p_exel => false )
+            a.save
           end
-
-	 c += 1
+	        c += 1
         else
           new_user.errors.each do |error|
             Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}"
           end
         end
-      else
 
+      else
         update_user = User.find_by_username(ufb.nusr)
         params[:user] = { :name => "#{ufb.snombre} #{ufb.sapellido}", :email => "#{ufb.semail}" }
 
-        if update_user.update_attributes(params[:user])
-          ca += 1
-        end
-	        
-      end # End if
-    end # End each usersfb
-    @users_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
+        ca += 1 if update_user.update_attributes(params[:user])
+      end
+    end
 
+    @users_fb[:notice] = ["#{t('helpers.titles.tasksfb')}: #{c} #{t('helpers.titles.tasksfb_update')}: #{ca}"]
     return @users_fb
   end
 
   def randow_string
-    value = ""; 8.times{ value << (65 + rand(25)).chr }
+    value = ''
+    8.times { value << (65 + rand(25)).chr }
     return value
   end
 
@@ -274,6 +264,6 @@ class ApplicationController < ActionController::Base
     end 
 
     return @accounts_fb
-  end 
+  end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20171208161357) do
+ActiveRecord::Schema.define(:version => 20171213222633) do
 
   create_table "abamtdsops", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -71,9 +71,10 @@ ActiveRecord::Schema.define(:version => 20171208161357) do
     t.text     "label_reports_1"
     t.text     "label_reports_2"
     t.text     "label_reports_3"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "page_footer"
+    t.integer  "inum",            :default => 1
   end
 
   create_table "contacts", :force => true do |t|

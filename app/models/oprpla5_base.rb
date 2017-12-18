@@ -27,16 +27,18 @@
 
 # -*- encoding : utf-8 -*-
 class Oprpla5Base < ActiveRecord::Base
-	establish_connection :firebird
+  establish_connection :firebird
+  
 	attr_accessible :iemp, :inumoper, :icuentacaja, :icuentabanco, :ibanco, :bpagocxp, 
-	:iflujoefeccaja, :iflujoefecbanco, :initdcto1, :initdcto2, :initdcto3, :initdcto4, 
-	:itipocosteo, :bprocesopordia, :brendimcmp, :qregctolabor, :qregctos, :qregfpagodcto1,
-	:qregfpagodcto2, :qregfpagodcto3, :qregfpagodcto4, :qregfpagopagador
+                  :iflujoefeccaja, :iflujoefecbanco, :initdcto1, :initdcto2, :initdcto3,
+                  :initdcto4, :itipocosteo, :bprocesopordia, :brendimcmp, :qregctolabor,
+                  :qregctos, :qregfpagodcto1, :qregfpagodcto2, :qregfpagodcto3,
+                  :qregfpagodcto4, :qregfpagopagador
 
 	set_table_name "OPRPLA5_BASE"
 
 	# Constants
-	BPAGOCXP = 'F'.freeze
+	BPAGOCXP = 'T'.freeze
 	ITIPOCOSTEO = 0.freeze
 	BPROCESOPORDIA = 'F'.freeze
 	BRENDIMCMP = 'F'.freeze

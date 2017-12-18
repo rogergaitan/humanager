@@ -2,6 +2,7 @@ class PayrollsController < ApplicationController
   load_and_authorize_resource
   before_filter :get_payroll_types, :only => [:new, :edit, :update]
   before_filter :get_currencies, :only => [:new, :edit, :update]
+  before_filter :set_company, :only => [:create, :get_activas, :get_inactivas]
   skip_before_filter :verify_authenticity_token, :only => [:close_payroll, :send_to_firebird, :get_main_calendar]
   
   respond_to :html, :json, :js
@@ -34,6 +35,7 @@ class PayrollsController < ApplicationController
   # POST /payrolls
   # POST /payrolls.json
   def create
+    params[:payroll][:company_id] = @company.id
     @payroll = Payroll.new(params[:payroll])
     @payroll_log = @payroll.build_payroll_log
     @payroll.payroll_log.payroll_total = 0
@@ -81,8 +83,7 @@ class PayrollsController < ApplicationController
   # Obtiene las planillas activas
   def get_activas
     @activas = {}
-    @activas[:activa] = Payroll.activas(current_user.company_id)
-
+    @activas[:activa] = Payroll.activas(@company.id)
     respond_to do |format|
       format.json { render json: @activas.to_json(include: [:payroll_type, :payroll_log, :company, :currency])}
     end
@@ -98,7 +99,7 @@ class PayrollsController < ApplicationController
   # Obtiene las planillas inactivas
   def get_inactivas
     @inactivas = {}
-    @inactivas[:inactiva] = Payroll.inactivas(current_user.company_id)
+    @inactivas[:inactiva] = Payroll.inactivas(@company.id)
     respond_to do |format|
       format.json { render json: @inactivas.to_json(include: [:payroll_type, :payroll_log, :company, :currency])}
     end
@@ -151,6 +152,12 @@ class PayrollsController < ApplicationController
   
   def get_currencies
     @currencies = Currency.all
+  end
+
+  def set_company
+    code = current_user.company_id if current_user.company_id
+    code = params[:payroll][:company_id] if params[:payroll] && params[:payroll][:company_id]
+    @company = Company.find_by_code(code)
   end
   
 end
