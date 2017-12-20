@@ -9,12 +9,10 @@
 
 # -*- encoding : utf-8 -*-
 class Oprmov1Base < ActiveRecord::Base
-	establish_connection :firebird
+  establish_connection :firebird
 	attr_accessible :iemp, :inumoper, :bcomandosimpresion
 
 	set_table_name "OPRMOV1_BASE"
 
-	 # Constants
-	 IEMP = 1.freeze
 
 end

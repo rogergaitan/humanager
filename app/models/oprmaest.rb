@@ -73,7 +73,7 @@ class Oprmaest < ActiveRecord::Base
 	
   # Constants
   ITDOPER = 'ORPLA5'.freeze
-  ITDOPER2 = 'PLA5'.freeze
+  ITDOPER2 = 'MOV1'.freeze
   ICLASIFOP = 1.freeze
   IMONEDA = '1'.freeze
   ISEDE = '1'.freeze

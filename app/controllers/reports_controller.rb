@@ -1,5 +1,6 @@
 class ReportsController < ApplicationController
   before_filter :resources, :only => [:index, :general_payroll, :payment_type_report, :accrued_wages_between_dates_report]
+  before_filter :set_company, :only => [:search_payrolls]
   respond_to :html, :json, :js
 
   def index
@@ -8,7 +9,7 @@ class ReportsController < ApplicationController
 
   def search_payrolls
     @payrolls = Payroll.search_payrolls_to_reports(params[:start_date], params[:end_date], 
-      current_user.company_id, params[:page], 5)
+                                                   @company.id, params[:page], 5)
 
     respond_with @payrolls
   end
@@ -367,6 +368,10 @@ class ReportsController < ApplicationController
         render :template => 'xls/accrued_wages_dates_date_xls'
       }
     end
+  end
+
+  def set_company
+    @company = Company.find_by_code(current_user.company_id)
   end
 
 end
