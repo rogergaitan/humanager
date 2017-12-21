@@ -14,4 +14,8 @@ class DeductionPayment < ActiveRecord::Base
     end  
   end
   
+  def deduction_description
+    deduction_employee.deduction.description  
+  end
+  
 end

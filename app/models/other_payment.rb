@@ -37,7 +37,6 @@ class OtherPayment < ActiveRecord::Base
   before_save :save_state
 
   def self.get_list_to_general_payment(payroll_ids, limit)
-
     listId = OtherPaymentPayment.joins(:other_payment_employee)
       .select('DISTINCT other_payment_employees.other_payment_id')
       .where('other_payment_payments.payroll_id in (?)', payroll_ids)

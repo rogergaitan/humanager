@@ -12,4 +12,8 @@ class OtherPaymentPayment < ActiveRecord::Base
     end
   end
   
+  def other_payment_name
+    other_payment_employee.other_payment.name  
+  end
+  
 end

@@ -1,4 +1,4 @@
-general_functions = { }
+general_functions = {}
 
 $(document).ready(function() {
 
@@ -47,7 +47,7 @@ $(document).ready(function() {
     general_functions.selectUnselectEmployees();
   });
 
-	general_functions.datePicker();
+  general_functions.datePicker();
   general_functions.searchInfoPayrolls();
   general_functions.showHideOptions($('#select_method_all')); // Set default
 
@@ -71,8 +71,8 @@ $(document).ready(function() {
     general_functions.filterEmployees('superior', $(this).val());
   });
 
-	$('#payrolls_results').on('click', '.pag a', function() {
- 	  $.getScript(this.href);
+  $('#payrolls_results').on('click', '.pag a', function() {
+    $.getScript(this.href);
     return false;
   });
 
@@ -117,8 +117,8 @@ general_functions.searchInfoPayrolls = function() {
   if($('#company').val() === '') {
     $('#payrolls_results').html('<div class=alert alert-info>Por favor seleccione una compañia</div>');
     return false;
-  }
-  
+  } 
+    
   var startDate = $('#start_date').datepicker('getDate');
   var endDate = $('#end_date').datepicker('getDate');
   var url = $('form[id=search_payrolls_form]').attr('action');

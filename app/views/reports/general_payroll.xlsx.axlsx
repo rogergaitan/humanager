@@ -1,3 +1,16 @@
+def nested_rows(items, row)
+  items.each do |key, value|
+    row << number_to_currency(value, unit: @currency_symbol)
+  end
+  
+end
+
+def header_key(value)
+  not_applicable = "N/A"
+  return not_applicable if value.starts_with? "N/A"
+  value
+end
+
 wb = xlsx_package.workbook
 
 wb.add_worksheet(name: "Reporte General de Planilla") do |sheet|
@@ -9,20 +22,29 @@ wb.add_worksheet(name: "Reporte General de Planilla") do |sheet|
   sheet.add_row [""]
   
   #add headers
-  sheet.add_row @data[0].keys, b: true
+  main_header = @data[0].keys
+  other_payments = @data[0]["Otros Pagos"].keys
+  deductions = @data[0]["Deducciones"].keys
   
-  @data.each do |array|
+  sheet.add_row [main_header[0], main_header[1], main_header[2], "", main_header[3], "", "", main_header[4]], b: true
+  
+  sheet.add_row ["", "", header_key(other_payments[0]), header_key(other_payments[1]), 
+                          header_key(deductions[0]), header_key(deductions[1]), 
+                          header_key(deductions[2])], b: true
+  
+  @data.each do |items|
     row = []
-    array.each do |key, value|
+    items.each do |key, value|
       if key == "Nombre Empleado"
         row << value
-      else
+      elsif key == "Total Devengado" or key == "Total a Recibir" or key == "Total"
         row << number_to_currency(value, unit: @currency_symbol)
+      else
+        nested_rows value, row
       end
     end
     sheet.add_row row
   end
-   
+  sheet.add_row [""]
+  sheet.add_row [DateTime.now.strftime("Impreso el %d/%m/%Y a las %I:%M %p")]
 end
- 
- 
