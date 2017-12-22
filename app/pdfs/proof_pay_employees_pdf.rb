@@ -324,7 +324,6 @@ class ProofPayEmployeesPDF < Prawn::Document
     total_work_benefits_count = 0
     
     data_work_benefits.each do |work_benefit|
-      byebug
       if total_work_benefits_count < 3
         row << { :content => work_benefit.work_benefit_name, :colspan => 3, :align => :right }
         row << { :content => "#{number_to_format(work_benefit.payment.to_f)}", :colspan => 3, :align => :right}
