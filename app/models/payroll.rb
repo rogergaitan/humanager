@@ -319,7 +319,7 @@ class Payroll < ActiveRecord::Base
                   percentage = (salary.to_f*de.calculation_value/100)
                   
                   deduction_value = check_currency(payroll_currency, de.maximum_deduction_currency,
-                                                                           percentage, exchange_rate)
+                                                   percentage, exchange_rate)
                   
                   maximum_deduction = check_currency(payroll_currency, de.maximum_deduction_currency,
                                                      de.maximum_deduction_value, exchange_rate)
@@ -391,7 +391,7 @@ class Payroll < ActiveRecord::Base
     list_employees.each do |id, salary|
 
       EmployeeBenefit.includes(work_benefit: [:currency]).where(:employee_id => id).each do |eb|
-        if eb.work_benefit.state === WorkBenefit::STATE_ACTIVE and !eb.completed
+        if eb.work_benefit.state.to_s == WorkBenefit::STATE_ACTIVE and !eb.completed
           if eb.work_benefit.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
             
             calculation = eb.work_benefit.individual? ? eb.calculation : eb.work_benefit.work_benefits_value
@@ -983,7 +983,7 @@ class Payroll < ActiveRecord::Base
         other_payment.destroy
       end
       
-      payroll.work_benefits_payments.destroy
+      payroll.work_benefits_payments.destroy_all
       
       payroll.payroll_log.update_attributes :exchange_rate => nil
       payroll.update_column :state, true

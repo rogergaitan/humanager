@@ -1,5 +1,5 @@
 class ProofPayEmployeesPDF < Prawn::Document
-include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::NumberHelper
 
   def initialize(payroll, employees, msg, id_company)
     super(top_margin: 15, :left_margin => 20, :right_margin => 20)
@@ -46,7 +46,7 @@ include ActionView::Helpers::NumberHelper
         text employee, character_spacing: 1
         
         unless @msg.blank?
-          text_box "Nota: " + @msg, :at => [100, 680], :size => 10
+          text_box "Nota: " + @msg, :at => [0, 680], :size => 10, :style => :italic
         end
 
         define_grid(:columns => 3, :rows => 1, :gutter => 2)
@@ -54,13 +54,14 @@ include ActionView::Helpers::NumberHelper
         
         data_salary = get_data_salary(list_payments_types, employee_id)
         data_deductions = get_data_deductions(employee_id)
+        data_work_benefits = get_data_work_benefits(employee_id)
         data_other_payments_no_salary = get_data_other_payments(employee_id)
         total_other_payments = get_total_other_payments(employee_id)
 
-
         data_other_payments_salary = get_other_payments_filter(employee_id, true)
 
-        tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types, data_other_payments_salary)
+        tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types, 
+                                                       data_other_payments_salary, data_work_benefits)
 
         # Left
         grid([0,0],[0,1]).bounding_box do
@@ -90,6 +91,8 @@ include ActionView::Helpers::NumberHelper
 
       end # End each employees
     end
+    
+    print_date
   end
 
   def no_info
@@ -107,7 +110,7 @@ include ActionView::Helpers::NumberHelper
         row(0).borders = [:bottom]
         row(0).border_width = 2
         row(0).font_style = :bold
-        row(0).border_color = "#000000"
+        row(0).border_color = "000000"
       end
     end
   end
@@ -221,7 +224,7 @@ include ActionView::Helpers::NumberHelper
     ]]
   end
 
-  def table_salary_earned(data, totals, header, lpt, data_other_payments_salary)
+  def table_salary_earned(data, totals, header, lpt, data_other_payments_salary, data_work_benefits)
     
     tRows = []; rows = []; row = []
     total = 0; tOrdinario = 0; tExtra = 0; tDoble = 0; cRows = 0
@@ -276,7 +279,6 @@ include ActionView::Helpers::NumberHelper
     row << { :content => "#{number_to_format(totals['ordinario'])}", :align => :right }
     row << { :content => "#{number_to_format(totals['extra'])}", :align => :right }
     row << { :content => "#{number_to_format(totals['doble'])}", :align => :right }
-    #row << { :content => "#{number_to_format(12720)}", :align => :right }
     rows << row
     row = []
 
@@ -317,10 +319,26 @@ include ActionView::Helpers::NumberHelper
     row << { :content => "#{number_to_format(total_other_payments)}", :colspan => 3, :align => :right}
     rows << row
     row = []
+    
+    total_work_benefits = 0
+    total_work_benefits_count = 0
+    
+    data_work_benefits.each do |work_benefit|
+      byebug
+      if total_work_benefits_count < 3
+        row << { :content => work_benefit.work_benefit_name, :colspan => 3, :align => :right }
+        row << { :content => "#{number_to_format(work_benefit.payment.to_f)}", :colspan => 3, :align => :right}
+        
+        rows << row
+        row = []
+      end
+      total_work_benefits += work_benefit.payment.to_f
+      total_work_benefits_count += 1
+    end
 
     # Total Devengado
     total_devengado = totals['ordinario'].to_f + totals['extra'].to_f + totals['doble'].to_f
-    total_devengado += total_other_payments.to_f
+    total_devengado += total_other_payments.to_f + total_work_benefits
     @total_accrued = total_devengado
     row << { :content => "Total Devengado", :colspan => 3, :align => :right, :font_style => :bold }  
     row << { :content => "#{@currency_symbol}#{number_to_format(total_devengado)}", :colspan => 3, :align => :right}
@@ -389,13 +407,15 @@ include ActionView::Helpers::NumberHelper
 
   def get_other_payments_filter(employee_id, is_salary)
     OtherPaymentPayment.joins(:other_payment_employee)
-      .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?", @payroll.id, employee_id, is_salary)
+      .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?", 
+             @payroll.id, employee_id, is_salary)
   end
 
   def get_total_other_payments(employee_id)
     a = OtherPaymentPayment.joins(:other_payment_employee)
       .select('sum(other_payment_payments.payment) as total')
-      .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?", @payroll.id, employee_id, true)
+      .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?",
+              @payroll.id, employee_id, true)
     a[0]['total']
   end
 
@@ -473,7 +493,7 @@ include ActionView::Helpers::NumberHelper
       row(0).borders = [:bottom]
       row(0).border_width = 2
       row(0).font_style = :bold
-      row(0).border_color = "#000000"
+      row(0).border_color = "000000"  
     end
   end
 
@@ -493,7 +513,7 @@ include ActionView::Helpers::NumberHelper
       row(0).borders = [:bottom]
       row(0).border_width = 2
       row(0).font_style = :bold
-      row(0).border_color = "#000000"
+      row(0).border_color = "000000"
     end    
   end
 
@@ -507,6 +527,18 @@ include ActionView::Helpers::NumberHelper
     else
       false
     end    
+  end
+  
+  def print_date
+    bounding_box([0, 15], :width => 150) do
+      text "#{DateTime.now.strftime("Impreso el %d/%m/%Y a las %I:%M %p")}", :size => 7
+    end
+  end
+  
+  def get_data_work_benefits(employee_id)
+    WorkBenefitsPayment.joins(:employee_benefit => :work_benefit)
+                                       .where('work_benefits_payments.payroll_id = ? and employee_benefits.employee_id = ?
+                                                    and work_benefits.provisioning = ?', @payroll.id, employee_id, false)
   end
 
 end

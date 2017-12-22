@@ -1,6 +1,6 @@
 class WorkBenefitsPayment < ActiveRecord::Base
   attr_accessible :employee_benefits_id, :payroll_id, :payment_date, :percentage, :payment, 
-  :state
+                  :state
 
   # has_many :employee_benefits
   # has_many :payrolls
@@ -8,4 +8,9 @@ class WorkBenefitsPayment < ActiveRecord::Base
   belongs_to :employee_benefit, foreign_key: 'employee_benefits_id'
   belongs_to :payroll
   belongs_to :currency
+  
+  def work_benefit_name
+    employee_benefit.work_benefit.name    
+  end
+  
 end
