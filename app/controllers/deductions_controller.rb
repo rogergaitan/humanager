@@ -108,7 +108,7 @@ class DeductionsController < ApplicationController
     end
   end
 
-  #Search for employees
+  # Search for employees
   def fetch_employees
     @employees = Employee.includes(:entity).order_employees
     respond_with(@employees, :only => [:id, :employee_id, :department_id], :include => {:entity => {:only => [:name, :surname]} })
@@ -155,6 +155,13 @@ class DeductionsController < ApplicationController
 
     @deduction.deduction_employees.where('completed = ?', false ).select('employee_id').each do |e|
       @employee_ids << e['employee_id']
+    end
+  end
+
+  def validate_description_uniqueness
+    status = Deduction.validate_description_uniqueness(params[:id], params[:deduction][:description], current_user.company_id)
+    respond_to do |format|
+      format.json { render nothing: true, status: status }
     end
   end
   

@@ -3,9 +3,11 @@ class OtherPayment < ActiveRecord::Base
   belongs_to :ledger_account
   belongs_to :costs_center
 
-  attr_accessible :name, :description, :deduction_type, :calculation_type, :amount, :state, :constitutes_salary, 
-    :individual, :ledger_account_id, :payroll_type_ids, :costs_center_id, :other_payment_employees_attributes, 
-    :custom_calculation, :payroll_ids, :employee_ids, :active, :company_id, :other_payment_type, :currency_id
+  attr_accessible :name, :description, :deduction_type, :calculation_type, :amount, :state,
+                  :constitutes_salary, :individual, :ledger_account_id, :payroll_type_ids,
+                  :costs_center_id, :other_payment_employees_attributes, :custom_calculation,
+                  :payroll_ids, :employee_ids, :active, :company_id, :other_payment_type,
+                  :currency_id
 
   attr_accessor :custom_calculation, :employee_ids, :active
 
@@ -33,6 +35,10 @@ class OtherPayment < ActiveRecord::Base
   accepts_nested_attributes_for :employees, :allow_destroy => true
   belongs_to :currency
   belongs_to :company
+
+  # Validations
+  validates_uniqueness_of :name, :case_sensitive => false,
+      message: "El nombre ya existe"
   
   before_save :save_state
 
@@ -60,6 +66,18 @@ class OtherPayment < ActiveRecord::Base
   
   def active?
     self.state == :active ? true : false
+  end
+
+  def self.validate_name_uniqueness(id, name, company_id)
+    
+    other_payment = OtherPayment.new() if id.empty?
+    other_payment = OtherPayment.find(id) unless id.empty?
+
+    other_payment.name = name
+    other_payment.company_id = company_id
+    
+    other_payment.valid?
+    status = (other_payment.errors[:name].any?)? 404:200
   end
   
   private

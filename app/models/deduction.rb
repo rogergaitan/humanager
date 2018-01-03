@@ -1,11 +1,12 @@
 class Deduction < ActiveRecord::Base
 
   attr_accessible :payroll_ids, :amount_exhaust, :calculation_type, #:calculation
-    :ledger_account_id, :deduction_type, :description,
-    :payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id, :individual, 
-    :deduction_employees_attributes, :custom_calculation, :employee_ids, :company_id, :creditor_id,
-    :deduction_currency_id, :amount_exhaust_currency_id, :deduction_value, :pay_to_employee, :active,
-    :maximum_deduction, :maximum_deduction_currency_id
+                  :ledger_account_id, :deduction_type, :description,
+                  :payroll_type_ids, :current_balance, :state, :is_beneficiary, :beneficiary_id,
+                  :individual, :deduction_employees_attributes, :custom_calculation,
+                  :employee_ids, :company_id, :creditor_id, :deduction_currency_id, 
+                  :amount_exhaust_currency_id, :deduction_value, :pay_to_employee, :active,
+                  :maximum_deduction, :maximum_deduction_currency_id
 
   attr_accessor :employee_ids, :active
 
@@ -39,15 +40,17 @@ class Deduction < ActiveRecord::Base
   belongs_to :amount_exhaust_currency, :class_name => "Currency"
 
   validates :description, presence: true,  length: { maximum: 30 }
+  validates_uniqueness_of :description, :case_sensitive => false,
+      message: "El nombre ya existe"
   
   validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
-      message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false} 
+      message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false } 
   
   validates_numericality_of :deduction_value, greater_than: 0, 
-      message: "debe ser mayor que cero",  if: Proc.new {|d| d.calculation_type == :fixed && d.individual == false }
+      message: "debe ser mayor que cero", if: Proc.new { |d| d.calculation_type == :fixed && d.individual == false }
   
   validates_numericality_of :amount_exhaust, greater_than: 0,
-      message: "debe ser mayor que cero", if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false}
+      message: "debe ser mayor que cero", if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false }
   
   before_save :save_state
   before_save :add_deduction_currency_id
@@ -79,6 +82,18 @@ class Deduction < ActiveRecord::Base
     query.paginate page: page, per_page: 15
   end
   
+  def self.validate_description_uniqueness(id, description, company_id)
+
+    deduction = Deduction.new() if id.empty?
+    deduction = Deduction.find(id) unless id.empty?
+
+    deduction.description = description
+    deduction.company_id = company_id
+    
+    deduction.valid?
+    status = (deduction.errors[:description].any?)? 404:200
+  end
+
   private
   
   # deduction_currency_id must be same as amount_exhaust_currency_id

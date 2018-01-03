@@ -297,20 +297,20 @@ $(document).ready(function() {
 
 /* F U N C T I O N S */
 function currencyMask(selector) {
-   $(selector).mask("FNNNNNNNNN.NN", {
-      translation: {
-       'N': {pattern: /\d/, optional: true},
-       "F": {pattern: /[1-9]/}
-      }
-  });    
+  $(selector).mask("FNNNNNNNNN.NN", {
+    translation: {
+      'N': { pattern: /\d/, optional: true },
+      'F': { pattern: /[1-9]/ }
+    }
+  });
 }
 
 function percentMask(selector) {
-   $(selector).mask("FNN.NN", {
-      translation: {
-       'N': {pattern: /\d/, optional: true},
-       "F": {pattern: /[1-9]/}
-      }
+  $(selector).mask("FNN.NN", {
+    translation: {
+      'N': { pattern: /\d/, optional: true },
+      'F': { pattern: /[1-9]/ }
+    }
   });    
 }
 
@@ -480,14 +480,14 @@ function CContables() {
   $.getJSON('/ledger_accounts/credit_accounts', function(category_data) {
     $("#deduction_ledger_account").autocomplete({
       source: $.map(category_data, function(item) {
-        $.data(document.body, 'category_' + item.id+"", item.iaccount + " - " + item.naccount);
-        return{
-            label:  item.iaccount + " - " + item.naccount, 
-            id: item.id
+        $.data(document.body, 'category_' + item.id + "", item.iaccount + " - " + item.naccount);
+        return {
+          label:  item.iaccount + " - " + item.naccount,
+          id: item.id
         }
       }),
       
-      select: function( event, ui ) {
+      select: function(event, ui) {
         $('#deduction_ledger_account_id').val(ui.item.id);
       },
       
@@ -499,12 +499,12 @@ function CContables() {
       },
       
       focus: function(event, ui){
-        $( "#deduction_ledger_account" ).val(ui.item.label);
+        $('#deduction_ledger_account').val(ui.item.label);
       }
     })
-    if($("#deduction_ledger_account_id").val()){
-      var deducciones_cuentas = $.data(document.body, 'category_' + $("#deduction_ledger_account_id").val()+'');
-      $("#deduction_ledger_account").val(deducciones_cuentas);
+    if($('#deduction_ledger_account_id').val()){
+      var deducciones_cuentas = $.data(document.body, 'category_' + $('#deduction_ledger_account_id').val() + '');
+      $('#deduction_ledger_account').val(deducciones_cuentas);
     }
   }); 
 }
@@ -517,16 +517,16 @@ function clearPayrolls() {
 }
 
 function isBeneficiary(value) {
-  if( value ) {
-    $("#load_creditor").prop("disabled", true);
-    $("#load_creditor").prop("required", "");
-    $("#load_creditor").val('');
-    $("#deduction_creditor_id").val("");
-    $("a[href=#creditors_modal]").prop("disabled", true);
+  if(value) {
+    $('#load_creditor').prop('disabled', true);
+    $('#load_creditor').prop('required', '');
+    $('#load_creditor').val('');
+    $('#deduction_creditor_id').val('');
+    $('a[href=#creditors_modal]').prop('disabled', true);
   } else {
-    $("#load_creditor").prop("disabled", false);
-    $("#load_creditor").prop("required", "required")
-    $("a[href=#creditors_modal]").prop("disabled", false);
+    $('#load_creditor').prop('disabled', false);
+    $('#load_creditor').prop('required', 'required')
+    $('a[href=#creditors_modal]').prop('disabled', false);
   }
 }
 

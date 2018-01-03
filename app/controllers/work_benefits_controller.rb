@@ -163,4 +163,11 @@ class WorkBenefitsController < ApplicationController
     @work_benefit = WorkBenefit.find(params[:id])
   end
 
+  def validate_name_uniqueness
+    status = WorkBenefit.validate_name_uniqueness(params[:id], params[:other_payment][:name], current_user.company_id)
+    respond_to do |format|
+      format.json { render nothing: true, status: status }
+    end
+  end
+
 end

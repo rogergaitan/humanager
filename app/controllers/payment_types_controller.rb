@@ -78,8 +78,9 @@ class PaymentTypesController < ApplicationController
   end
 
   private
-    def set_payment_type
-      @payment_type = PaymentType.find(params[:id])
-    end
+  
+  def set_payment_type
+    @payment_type = PaymentType.find(params[:id])
+  end
 
 end

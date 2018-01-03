@@ -75,7 +75,7 @@ class PayrollTypesController < ApplicationController
   end
   
   def validate_description_uniqueness
-    status = PayrollType.validate_description_uniqueness params[:id], params[:payroll_type][:description], current_user.company_id
+    status = PayrollType.validate_description_uniqueness(params[:id], params[:payroll_type][:description], current_user.company_id)
     
     respond_to do |format|
       format.json { render nothing: true,  status: status }

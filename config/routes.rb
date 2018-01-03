@@ -8,6 +8,7 @@ Reasapp::Application.routes.draw do
   resources :other_payments do
     collection do
       get :search
+      get :validate_name_uniqueness
     end
   end
 
@@ -85,6 +86,7 @@ Reasapp::Application.routes.draw do
       get :search_employee
       get 'fetch_payroll_type'
       get :search
+      get :validate_description_uniqueness
     end
   end
 
@@ -105,6 +107,7 @@ Reasapp::Application.routes.draw do
       get 'fetch_cost_center'
       get 'search_cost_center'
       get 'search'
+      get :validate_name_uniqueness
     end
   end
 
@@ -112,7 +115,7 @@ Reasapp::Application.routes.draw do
 
   resources :payroll_types do
     collection do
-      get :validate_description_uniqueness  
+      get :validate_description_uniqueness
     end
   end
 

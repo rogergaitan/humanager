@@ -129,6 +129,13 @@ class OtherPaymentsController < ApplicationController
       end
     end
   end
+
+  def validate_name_uniqueness
+    status = OtherPayment.validate_name_uniqueness(params[:id], params[:other_payment][:name], current_user.company_id)
+    respond_to do |format|
+      format.json { render nothing: true, status: status }
+    end
+  end
   
   private
 

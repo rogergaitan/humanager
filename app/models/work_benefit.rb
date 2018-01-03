@@ -1,8 +1,9 @@
 class WorkBenefit < ActiveRecord::Base
   attr_accessible :credit_account, :debit_account, :name, :percentage, :employee_ids,
-    :payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id, :company_id, :name, :state, 
-    :calculation_type, :work_benefits_value, :currency_id, :active, :provisioning,:individual, :currency, 
-    :employee_benefits_attributes, :creditor_id, :pay_to_employee, :payroll_id
+                  :payroll_type_ids, :is_beneficiary, :beneficiary_id, :costs_center_id,
+                  :company_id, :name, :state, :calculation_type, :work_benefits_value,
+                  :currency_id, :active, :provisioning,:individual, :currency, 
+                  :employee_benefits_attributes, :creditor_id, :pay_to_employee, :payroll_id
 
   attr_accessor :active
 
@@ -25,6 +26,10 @@ class WorkBenefit < ActiveRecord::Base
   belongs_to :debit, class_name: 'LedgerAccount', foreign_key: "debit_account"
   belongs_to :credit, class_name: 'LedgerAccount', foreign_key: "credit_account"
   belongs_to :currency
+
+  # Validations
+  validates_uniqueness_of :name, :case_sensitive => false,
+      message: "El nombre ya existe"
   
   accepts_nested_attributes_for :employee_benefits, :allow_destroy => true
   
@@ -32,7 +37,7 @@ class WorkBenefit < ActiveRecord::Base
 
   def self.search_cost_center(search_cost_center_name, company_id, page, per_page = nil)
     @cost_center = CostsCenter.where("costs_centers.name_cc like '%#{search_cost_center_name}%' and company_id = '#{company_id}'")
-    .paginate(:page => page, :per_page => 5)
+                              .paginate(:page => page, :per_page => 5)
   end
   
   def self.search(calculation_type, state, company, page)
@@ -45,21 +50,26 @@ class WorkBenefit < ActiveRecord::Base
   end
   
   def active?
-    if self.state == :active
-      true
-    else
-      false
-    end
+    self.state == :active
+  end
+
+  def self.validate_name_uniqueness(id, name, company_id)
+    
+    work_benefit = WorkBenefit.new() if id.empty?
+    work_benefit = WorkBenefit.find(id) unless id.empty?
+
+    work_benefit.name = name
+    work_benefit.company_id = company_id
+    
+    work_benefit.valid?
+    status = (work_benefit.errors[:name].any?)? 404:200
   end
   
   private
   
-    def save_state
-      if active
-        self.state = :active
-      else
-        self.state = :completed
-      end
-    end
+  def save_state
+    self.state = :active if active
+    self.state = :completed unless active
+  end
 
 end

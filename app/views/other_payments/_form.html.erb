@@ -59,8 +59,11 @@
           <div class="form-group">
             <%= f.label :name, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
-              <%= f.text_field :name, :class => 'form-control', :required => true, 
-                :data => {:parsley_maxlength => 30} %>
+
+              <%= f.text_field :name, :class => 'form-control', :required => true, :maxlength => 30, 
+                :data => { :parsley_maxlength => 30, :parsley_remote => validate_name_uniqueness_other_payments_url, 
+                :parsley_remote_options => {:data => { :id => @other_payment.id }},
+                :parsley_remote_message => "Nombre especificado ya existe." } %>
               
               <div>
                 <%= f.label :active, "Activo", :class => "control-label col-sm-3" %>
