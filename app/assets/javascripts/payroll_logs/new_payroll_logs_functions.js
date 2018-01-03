@@ -573,7 +573,7 @@ pl.addNewSection = function(employee_id, name) {
 
 pl.addNewColumn = function(employee_id, wage_payment, payment_unit, data) {
   var filterData = Array();
-  var nunidad = payment_unit || data.task.nunidad;
+  var nunidad = payment_unit || $(pl.current_payments_type).find('select[id*=_payment_type_id] :selected').attr('data-payment-unit');
   var cost = wage_payment || data.task.cost;
   
   filterData.push(data.date); // Date
