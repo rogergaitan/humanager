@@ -245,8 +245,7 @@ pl.searchTaskByCode = function() {
       // Page is the one-based page number tracked by Select2
       data: function (term, page) {
        return {
-         task_code: term, // Search Term
-	 task_iactivity: $(pl.current_cc).find('#iactivity_cc').val(),
+         task_code: term, // Search Term 
 	 per_page: pl.per_page, // Page Size
 	 page: page // Page Number
        };
