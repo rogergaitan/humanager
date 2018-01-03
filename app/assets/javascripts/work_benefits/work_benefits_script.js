@@ -663,12 +663,12 @@ function parseBool(str) {
 
 function payToEmployee(value) {
   if( value ) {
-    $("#load_creditor").prop("disabled", true).prop("required", "").val('');
-    $("#work_benefit_creditor_id").val("");
-    $("a[href=#creditors_modal]").prop("disabled", true);
+    $('#load_creditor').prop('disabled', true).prop('required', '').val('');
+    $('#work_benefit_creditor_id').val('');
+    $('a[href=#creditors_modal]').attr('disabled', true);
   } else {
-    $("#load_creditor").prop("disabled", false).prop("required", "required");
-    $("a[href=#creditors_modal]").prop("disabled", false);
+    $('#load_creditor').prop('disabled', false).prop('required', 'required');
+    $("a[href=#creditors_modal]").attr('disabled', false);
   }
 }
 
