@@ -22,15 +22,15 @@ class ProofPayEmployeesPDF < Prawn::Document
     employee_ids = []
 
     @payroll_history_ids = PayrollHistory.select('id')
-      .where('payroll_log_id = ?', @payroll.payroll_log.id).collect(&:id)
+                                         .where('payroll_log_id = ?', @payroll.payroll_log.id).collect(&:id)
 
     if @payroll_history_ids.length == 0
       no_info
     else
       
       employee_ids = PayrollEmployee.select('DISTINCT(employee_id)')
-        .where('payroll_history_id in (?) and employee_id in (?)', @payroll_history_ids, @employees.map(&:to_i))
-        .collect(&:employee_id)
+                                    .where('payroll_history_id in (?) and employee_id in (?)', @payroll_history_ids, @employees.map(&:to_i))
+                                    .collect(&:employee_id)
 
       employee_ids.each do |employee_id|
         
@@ -86,10 +86,11 @@ class ProofPayEmployeesPDF < Prawn::Document
         end
 
         if count != employee_ids.count
+          print_date
           start_new_page()
         end
 
-      end # End each employees
+      end
     end
     
     print_date
@@ -208,7 +209,7 @@ class ProofPayEmployeesPDF < Prawn::Document
         info_data = {}
         info = {}
       end
-    end # End each PayrollHistory
+    end
     
     [result, totals]
   end
@@ -243,19 +244,14 @@ class ProofPayEmployeesPDF < Prawn::Document
             row << { :content => "#{b}", :align => :left }
           end
         end
-      
-        if a.capitalize == I18n.t("payment_type.#{lpt[0]}")
-          tOrdinario += b.to_f
-        end
+              
+        tOrdinario += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[0]}")
+        
+        tExtra += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[1]}")
 
-        if a.capitalize == I18n.t("payment_type.#{lpt[1]}")
-          tExtra += b.to_f
-        end
-
-        if a.capitalize == I18n.t("payment_type.#{lpt[2]}")
-          tDoble += b.to_f
-        end
+        tDoble += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[2]}")
       end
+
       rows << row
       row = []      
 
@@ -264,7 +260,7 @@ class ProofPayEmployeesPDF < Prawn::Document
         rows = []
         cRows = 0
       end
-    end # End each data
+    end
 
     # Cantidades Totales
     row << { :content => "Cantidades Totales", :colspan => 3, :align => :right, :font_style => :bold }
@@ -406,15 +402,15 @@ class ProofPayEmployeesPDF < Prawn::Document
 
   def get_other_payments_filter(employee_id, is_salary)
     OtherPaymentPayment.joins(:other_payment_employee)
-      .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?", 
-             @payroll.id, employee_id, is_salary)
+                       .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?", 
+                              @payroll.id, employee_id, is_salary)
   end
 
   def get_total_other_payments(employee_id)
     a = OtherPaymentPayment.joins(:other_payment_employee)
-      .select('sum(other_payment_payments.payment) as total')
-      .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?",
-              @payroll.id, employee_id, true)
+                           .select('sum(other_payment_payments.payment) as total')
+                           .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?",
+                                  @payroll.id, employee_id, true)
     a[0]['total']
   end
 
@@ -521,11 +517,7 @@ class ProofPayEmployeesPDF < Prawn::Document
   end
 
   def is_numeric(string)
-    if /^[\d]+(\.[\d]+){0,1}$/ === string
-      true
-    else
-      false
-    end    
+    /^[\d]+(\.[\d]+){0,1}$/ === string
   end
   
   def print_date
@@ -536,8 +528,8 @@ class ProofPayEmployeesPDF < Prawn::Document
   
   def get_data_work_benefits(employee_id)
     WorkBenefitsPayment.joins(:employee_benefit => :work_benefit)
-                                       .where('work_benefits_payments.payroll_id = ? and employee_benefits.employee_id = ?
-                                                    and work_benefits.provisioning = ?', @payroll.id, employee_id, false)
+                       .where('work_benefits_payments.payroll_id = ? and employee_benefits.employee_id = ?
+                              and work_benefits.provisioning = ?', @payroll.id, employee_id, false)
   end
 
 end
