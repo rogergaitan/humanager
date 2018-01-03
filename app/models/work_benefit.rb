@@ -7,7 +7,7 @@ class WorkBenefit < ActiveRecord::Base
   attr_accessor :active
 
   # Constants
-  STATE_ACTIVE = 'active'.freeze
+  STATE_ACTIVE = :active.freeze
   STATE_COMPLETED = 'completed'.freeze
   CALCULATION_TYPE_FIXED = 'fixed'.freeze
   CALCULATION_TYPE_PERCENTAGE = 'percentage'.freeze

@@ -33,10 +33,11 @@ class Payroll < ActiveRecord::Base
   scope :activas, ->(company_id){ where(state: true, company_id: company_id) }
   scope :inactivas, ->(company_id){ where(state: false, company_id: company_id) }
 
-   # Constants
-   PROCESS_ONE = 'ONE'.freeze
-   PROCESS_TWO = 'TWO'.freeze
-   PROCESS_THREE = 'THREE'.freeze
+  # Constants
+  PROCESS_ONE = 'ONE'.freeze
+  PROCESS_TWO = 'TWO'.freeze
+  PROCESS_THREE = 'THREE'.freeze
+  PROCESS_FOUR = 'FOUR'.freeze
   
   # consulta todas las planillas para un tipo de planilla especifico especifico
   # scope :tipo_planilla, lambda {|type_payroll| joins(:payroll_type).where("payroll_type = ?", type_payroll).
@@ -389,7 +390,6 @@ class Payroll < ActiveRecord::Base
     list_employees_work_benefits = {}
 
     list_employees.each do |id, salary|
-
       EmployeeBenefit.includes(work_benefit: [:currency]).where(:employee_id => id).each do |eb|
         if eb.work_benefit.state.to_s == WorkBenefit::STATE_ACTIVE and !eb.completed
           if eb.work_benefit.payroll_type_ids.include? payroll_log.payroll.payroll_type_id
@@ -534,10 +534,10 @@ class Payroll < ActiveRecord::Base
     num_oper = get_number_operation
     num_oper_2 = get_number_operation
     num_oper_3 = get_number_operation
+    num_oper_4 = get_number_operation
 
     payroll = Payroll.find(payroll_id)
 
-    ######################################################################################
     # Part 1
 
     # Save into OPRMAEST
@@ -572,30 +572,35 @@ class Payroll < ActiveRecord::Base
     r9 = save_in_oprmov1_base(num_oper_3, payroll)
 
     # Save into OPRMOV1_DETALLE - Deductions
-    r10 = save_in_oprmov1_details_deductions(num_oper_3, payroll) # KALFARO
+    r10 = save_in_oprmov1_details_deductions(num_oper_3, payroll)
 
-    # Update autoincrement number by company
-    company = payroll.company
-    company.inum += 1
-    company.save
+    # Part 4
 
-    ######################################################################################
+    # Save into OPRMAEST
+    r11 = save_in_oprmaest(num_oper_4, payroll, username, PROCESS_FOUR)
 
-    # Save into Oprmov1Detalle - Work Benefits
-    # r4 = save_in_oprmov1_details_work_benefits(num_oper, payroll, num_count)
+    # Save into OPRMOV1_BASE
+    r12 = save_in_oprmov1_base(num_oper_4, payroll)
 
-    # Save into the payroll table the num_oper and num_oper_2
-    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9 and r10
+    # Save into OPRMOV1_DETALLE - Work Benefits
+    r13 = save_in_oprmov1_details_work_benefits(num_oper_4, payroll)
+
+    # Save into the payroll table the num_oper..
+    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9 and r10 and r11 and r12 and r13
+      # Update Number Operation
       payroll.num_oper = num_oper
-      # payroll.num_oper_2 = num_oper_2
+      payroll.num_oper_2 = num_oper_2
+      payroll.num_oper_3 = num_oper_3
+      payroll.num_oper_4 = num_oper_4
       payroll.save
+      # Update autoincrement number by company
+      company = payroll.company
+      company.inum += 1
+      company.save
       result = true
     end
-
     result
   end
-
-  ######################################################################################
 
   # Get the number operation to save information into the database Firebird
   def self.get_number_operation
@@ -614,7 +619,7 @@ class Payroll < ActiveRecord::Base
     result[0][0]
   end
 
-  # Save into Firebird: OPRMAEST (Part 1, Part 2 and Part 3)
+  # Save into Firebird: OPRMAEST (Part 1, Part 2, Part 3 and Part 4)
   def self.save_in_oprmaest(num_oper, payroll, username, process)
 
     date = DateTime.now
@@ -629,7 +634,7 @@ class Payroll < ActiveRecord::Base
 
       if process == PROCESS_ONE
         oprm.itdoper = Oprmaest::ITDOPER
-        # To do: Improve using relations and remove support_id and search attr
+        # To do: Improve using relations and remove support_id and search
         support_id = payroll.payroll_type.cod_doc_payroll_support
         oprm.itdsop = Support.find(support_id).itdsop
         oprm.snumsop = payroll.payroll_type.mask_doc_payroll_support.split('-')[0] + "-#{inumsop}"
@@ -643,7 +648,7 @@ class Payroll < ActiveRecord::Base
 
       if process == PROCESS_TWO
         oprm.itdoper = Oprmaest::ITDOPER2
-        # To do: Improve using relations and remove support_id and search attr
+        # To do: Improve using relations and remove support_id and search
         support_id = payroll.payroll_type.cod_doc_accounting_support_mov
         oprm.itdsop = Support.find(support_id).itdsop
         oprm.snumsop = payroll.payroll_type.mask_doc_accounting_support_mov.split('-')[0] + "-#{inumsop}"
@@ -653,11 +658,21 @@ class Payroll < ActiveRecord::Base
 
       if process == PROCESS_THREE
         oprm.itdoper = Oprmaest::ITDOPER2
-        # To do: Improve using relations and remove support_id and search attr
+        # To do: Improve using relations and remove support_id and search
         support_id = payroll.payroll_type.cod_doc_accounting_support_mov
         oprm.itdsop = Support.find(support_id).itdsop
         oprm.snumsop = payroll.payroll_type.mask_doc_accounting_support_mov.split('-')[0] + "-#{inumsop}"
         oprm.tdetalle = "Deducciones de la planilla #{payroll.payroll_type.description} " + 
+                        "del #{payroll.start_date} al #{payroll.end_date}"
+      end
+
+      if process == PROCESS_FOUR
+        oprm.itdoper = Oprmaest::ITDOPER2
+        # To do: Improve using relations and remove support_id and search
+        support_id = payroll.payroll_type.cod_doc_accounting_support_mov
+        oprm.itdsop = Support.find(support_id).itdsop
+        oprm.snumsop = payroll.payroll_type.mask_doc_accounting_support_mov.split('-')[0] + "-#{inumsop}"
+        oprm.tdetalle = "Prestaciones de la planilla #{payroll.payroll_type.description} " + 
                         "del #{payroll.start_date} al #{payroll.end_date}"
       end
 
@@ -753,7 +768,7 @@ class Payroll < ActiveRecord::Base
     end
   end
 
-  # Save into Firebird: OPRMOV1_BASE (Part 2, Part 3)
+  # Save into Firebird: OPRMOV1_BASE (Part 2, Part 3 and Part 4)
   def self.save_in_oprmov1_base(num_oper, payroll)
     transaction do
       oprmov1_base = Oprmov1Base.new
@@ -859,58 +874,65 @@ class Payroll < ActiveRecord::Base
     end
   end
 
-  ######################################################################################
-
-  # Save into Firebird: Oprmov1_detalle (Part 2)
-  def self.save_in_oprmov1_details_work_benefits(num_oper, payroll, num_count)
+  # Save into Firebird: Oprmov1_detalle (Part 4)
+  def self.save_in_oprmov1_details_work_benefits(num_oper, payroll)
     
-    count = num_count
+    count = 0
+
+    inumsop = Oprmaest.get_inumsop(payroll.end_date, payroll.company.inum)
+    inumsopcxx = payroll.payroll_type.mask_doc_accounting_support_mov.split('-')[0] + "-#{inumsop}"
 
     transaction do
       WorkBenefitsPayment.where('payroll_id = ?', payroll.id).each do |wb|
 
         od_debit = Oprmov1Detalle.new
         od_credit = Oprmov1Detalle.new
-
+        work_benefit = wb.employee_benefit.work_benefit.costs_center
+        
         # D E B I T
+        count += 1
         od_debit.iemp = payroll.company.code
         od_debit.inumoper = num_oper
         od_debit.ilinea = count
-        od_debit.icc = CostsCenter.find(wb.employee_benefit.work_benefit.costs_center_id).icost_center
-        od_debit.icuenta =  LedgerAccount.find(wb.employee_benefit.work_benefit.debit_account).iaccount
+        od_debit.icc = work_benefit.costs_center.icost_center
+        # To do: Improve using relations and remove search
+        od_debit.icuenta = LedgerAccount.find(work_benefit.debit_account).iaccount
+        od_debit.tdetalle = work_benefit.name
         od_debit.init = wb.employee_benefit.employee.entity.entityid
-        od_debit.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
-        od_debit.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
+        od_debit.fsoport = payroll.end_date.strftime("%d.%m.%Y")
+        od_debit.fpagocxx = payroll.payment_date.strftime("%d.%m.%Y")
+        # To do: Improve using relations and remove search
+        od_credit.initcxx = Creditor.find(work_benefit.creditor_id).creditor_id if work_benefit.creditor_id
         od_debit.mdebito = wb.payment
-        od_debit.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
+        od_debit.inumsopcxx = inumsopcxx
         od_debit.save
         
         # C R E D I T
+        count += 1
         od_credit.iemp = payroll.company.code
         od_credit.inumoper = num_oper
-        od_credit.ilinea = (count + 1)
-        od_credit.icc = CostsCenter.find(wb.employee_benefit.work_benefit.costs_center_id).icost_center
-        od_credit.icuenta = LedgerAccount.find(wb.employee_benefit.work_benefit.credit_account).iaccount
+        od_credit.ilinea = count
+        od_credit.icc = work_benefit.costs_center.icost_center
+        # To do: Improve using relations and remove search
+        od_credit.icuenta = LedgerAccount.find(work_benefit.credit_account).iaccount
+        od_credit.tdetalle = work_benefit.name
 
-        od_credit.init = wb.employee_benefit.work_benefit.beneficiary_id
-        od_credit.initcxx = wb.employee_benefit.work_benefit.beneficiary_id
-
-        if wb.employee_benefit.work_benefit.is_beneficiary
+        if work_benefit.pay_to_employee
           od_credit.init = wb.employee_benefit.employee.entity.entityid
-          od_credit.initcxx = wb.employee_benefit.employee.entity.entityid
+        else
+          # To do: Improve using relations and remove search
+          od_credit.init = Creditor.find(work_benefit.creditor_id).creditor_id
         end
 
-        od_credit.fsoport = payroll['end_date'].strftime("%d.%m.%Y")
-        od_credit.fpagocxx = payroll['payment_date'].strftime("%d.%m.%Y")
+        od_credit.fsoport = payroll.end_date.strftime("%d.%m.%Y")
+        od_credit.fpagocxx = payroll.payment_date.strftime("%d.%m.%Y")
+        # To do: Improve using relations and remove search
+        od_credit.initcxx = Creditor.find(work_benefit.creditor_id).creditor_id if work_benefit.creditor_id
         od_credit.mcredito = wb.payment
-        od_credit.inumsopcxx = "MRH-" + (sprintf '%04d', payroll['id'])
+        od_credit.inumsopcxx = inumsopcxx
         od_credit.save
-        
-        count = count + 2
       end
     end
-
-    # WORK BENEFITS
   end
 
   def self.search_payrolls_to_reports(start_date, end_date, company_id, page, per_page)
@@ -928,14 +950,14 @@ class Payroll < ActiveRecord::Base
     query = ""
       if data
         data.each_with_index do |q, i|
-            if i < data.length - 1
-              query += q + " AND "
-            else
-          query += q
-            end
+          if i < data.length - 1
+            query += q + " AND "
+          else
+            query += q
           end
+        end
       end
-      query
+    query
   end
 
   def self.get_main_calendar(d_start, d_end, company_id)
@@ -964,7 +986,7 @@ class Payroll < ActiveRecord::Base
           deduction_payment.deduction_employee.deduction.update_column :state, :active
         end
         
-        if deduction_payment.deduction_employee.completed == true
+        if deduction_payment.deduction_employee.completed
           deduction_payment.deduction_employee.update_column :completed, false
         end
         
@@ -976,8 +998,8 @@ class Payroll < ActiveRecord::Base
           other_payment.other_payment_employee.other_payment.update_column :state, :active
         end
         
-        if other_payment.other_payment_employee.completed == true
-          other_payment.other_payment_employee.update_column :completed,  false
+        if other_payment.other_payment_employee.completed
+          other_payment.other_payment_employee.update_column :completed, false
         end
         
         other_payment.destroy

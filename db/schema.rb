@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20171213222633) do
+ActiveRecord::Schema.define(:version => 20171222210319) do
 
   create_table "abamtdsops", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -565,6 +565,8 @@ ActiveRecord::Schema.define(:version => 20171213222633) do
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
     t.integer  "currency_id"
+    t.string   "num_oper_3"
+    t.string   "num_oper_4"
   end
 
   add_index "payrolls", ["company_id"], :name => "index_payrolls_on_company_id"
