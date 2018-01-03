@@ -41,7 +41,9 @@ class ProofPayEmployeesPDF < Prawn::Document
         e = Employee.find(employee_id)
         co = @company
 
-        move_down 10
+        move_down 20
+        move_down 10 unless @msg.blank?
+
         employee =  "Empleado: #{e.entity.entityid} #{e.entity.surname} #{e.entity.name}"
         text employee, character_spacing: 1
         
@@ -66,6 +68,7 @@ class ProofPayEmployeesPDF < Prawn::Document
         # Left
         grid([0,0],[0,1]).bounding_box do
           move_down 100
+          move_down 10 unless @msg.blank?
           text "Salarios Devengados", character_spacing: 1, :align => :left
           tables_salary(tRows, header)
         end
@@ -73,10 +76,12 @@ class ProofPayEmployeesPDF < Prawn::Document
         # Center
         grid(0,2).bounding_box do
           move_down 100
+          move_down 10 unless @msg.blank?
           text "Otros Pagos Aplicados", character_spacing: 1, :align => :right
           table_other_payments(data_other_payments_no_salary)
           
           move_down 100
+          move_down 10 unless @msg.blank?
           text "Deducciones Aplicadas", character_spacing: 1, :align => :right
           table_deductions(data_deductions)
         end
