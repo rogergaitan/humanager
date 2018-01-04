@@ -2,6 +2,7 @@ class OtherPaymentsController < ApplicationController
   before_filter :set_other_payment, only: [:edit, :update, :destroy]
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create, :update]
+  skip_load_and_authorize_resource :only => [:validate_name_uniqueness]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(OtherPayment, params[:id])

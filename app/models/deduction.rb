@@ -83,7 +83,6 @@ class Deduction < ActiveRecord::Base
   end
   
   def self.validate_description_uniqueness(id, description, company_id)
-
     deduction = Deduction.new() if id.empty?
     deduction = Deduction.find(id) unless id.empty?
 

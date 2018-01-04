@@ -4,6 +4,7 @@ class DeductionsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create, :update]
   before_filter :set_deduction, :only => [:edit, :update, :destroy]
+  skip_load_and_authorize_resource :only => [:validate_description_uniqueness]
   
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(Deduction, params[:id])

@@ -2,6 +2,7 @@ class WorkBenefitsController < ApplicationController
   load_and_authorize_resource
   before_filter :resources, :only => [:new, :edit, :create]
   before_filter :set_work_benefits, :only => [:edit, :update, :destroy]
+  skip_load_and_authorize_resource :only => [:validate_name_uniqueness]
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(WorkBenefit, params[:id])
@@ -164,7 +165,7 @@ class WorkBenefitsController < ApplicationController
   end
 
   def validate_name_uniqueness
-    status = WorkBenefit.validate_name_uniqueness(params[:id], params[:other_payment][:name], current_user.company_id)
+    status = WorkBenefit.validate_name_uniqueness(params[:id], params[:work_benefit][:name], current_user.company_id)
     respond_to do |format|
       format.json { render nothing: true, status: status }
     end
