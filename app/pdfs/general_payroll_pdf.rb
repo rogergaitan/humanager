@@ -9,15 +9,15 @@ class GeneralPayrollPDF < Prawn::Document
     @name_payrolls = nil
     @company = Company.find_by_code(company_id)
     get_dates(payroll_ids)
-    start
+    start()
   end
 
   private
   
   def start
-    header_page
+    header_page()
     create_table(@data)
-    print_date
+    print_date()
   end
   
   def header_page
@@ -56,14 +56,14 @@ class GeneralPayrollPDF < Prawn::Document
         if key == "Nombre Empleado"
           row << {:content => "#{value}", :font_style => style, :width => 160, :size => 8, :align => align}
         elsif key == "Otros Pagos"
-          nested_rows value, header[2], row, 2
+          nested_rows(value, header[2], row, 2)
         elsif key == "Deducciones"
-          nested_rows value, header[3], row, 2
+          nested_rows(value, header[3], row, 2)
         elsif key == "Total Otros Pagos" or key == "Total Deducciones"
-          nested_totals value, row
+          nested_totals(value, row)
         else
           if value == 0
-            row << na_value
+            row << na_value()
           else
             row << amount_value(value)
           end
@@ -75,26 +75,33 @@ class GeneralPayrollPDF < Prawn::Document
     page_count = 0
     total_pages = rows.each_slice(20).count
     
-    rows.each_slice(20) do |rows|
-      page_count += 1
-      start_new_page if page_count > 1
-      
-      if page_count == total_pages
-        employee_signature rows.count - 1
-      else
-        employee_signature rows.count
+   #show table only when employees exists on rows
+    if rows.count - 1 > 0
+      rows.each_slice(20) do |rows|
+        page_count += 1
+        start_new_page if page_count > 1
+        
+        print_date()
+    
+        if page_count == total_pages
+          employee_signature(rows.count - 1)
+        else
+          employee_signature(rows.count)
+        end
+        
+        bounding_box([0, 440], :width => 600) do
+          table(
+            [header] + rows.each do |row|
+              row
+            end,
+              :header => true,
+              :cell_style => {:valign => :center},
+              :position => :left
+            )
+        end
       end
-      
-      bounding_box([0, 440], :width => 600) do
-        table(
-          [header] + rows.each do |row|
-            row
-          end,
-            :header => true,
-            :cell_style => {:valign => :center},
-            :position => :left
-          )
-      end
+    else
+      print_date()
     end
   end
   
@@ -126,11 +133,11 @@ class GeneralPayrollPDF < Prawn::Document
   def employee_signature(rows)
     bounding_box([635, 420], :width => 120) do
       text "Firma del Empleado", :align => :center, :size => 8, :style => :bold
-      move_down 28
+      move_down(28)
       
       rows.times do
         stroke_horizontal_rule
-        move_down 20
+        move_down(20)
       end
     end
   end
@@ -168,15 +175,20 @@ class GeneralPayrollPDF < Prawn::Document
   
   def nested_totals(items, row)
     subvalues_row = []
-    items.each do |key, value|
-      subvalues_row << amount_value(value)
-    end
     
+    if items.count > 0
+      items.each do |key, value|
+        subvalues_row << amount_value(value)
+      end
+    else
+      subvalues_row << amount_value(0)
+    end
+
     row << [subvalues_row]
   end
   
   def get_dates(payroll_ids)
-    Payroll.includes(:currency, :payroll_log).where( :id => payroll_ids ).each do |p|
+    Payroll.includes(:currency, :payroll_log).where(:id => payroll_ids).each do |p|
       
       @name_payrolls = "#{p.payroll_type.description}"
       @currency_symbol = p.currency.symbol

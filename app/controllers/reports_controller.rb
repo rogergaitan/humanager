@@ -206,6 +206,8 @@ class ReportsController < ApplicationController
         if other_payments.count == 0
           detail["Otros Pagos"]["N/A"] = 0
           detail["Otros Pagos"]["N/A 2"] = 0
+          totals["Total Otros Pagos"]["N/A"] = 0
+          totals["Total Otros Pagos"]["N/A 2"] = 0
         end
     
         other_payments.each do |other_payment|
@@ -238,12 +240,12 @@ class ReportsController < ApplicationController
               detail["Otros Pagos"]["Otros Pagos"] = 0 unless detail["Otros Pagos"].has_key?("Otros Pagos")
               detail["Otros Pagos"]["Otros Pagos"] += other_payment.payment.to_f
              
-	    if totals["Total Otros Pagos"].count == 2 && totals["Total Otros Pagos"].has_key?("Total Otros Pagos") 
-              totals["Total Otros Pagos"]["Total Otros Pagos"] += other_payment.payment.to_f
-	    elsif totals["Total Otros Pagos"].count < 2
-              totals["Total Otros Pagos"]["Total Otros Pagos"] = 0
-	      totals["Total Otros Pagos"]["Total Otros Pagos"] += other_payment.payment.to_f
-	    end
+              if totals["Total Otros Pagos"].count == 2 && totals["Total Otros Pagos"].has_key?("Total Otros Pagos") 
+                totals["Total Otros Pagos"]["Total Otros Pagos"] += other_payment.payment.to_f
+              elsif totals["Total Otros Pagos"].count < 2
+                totals["Total Otros Pagos"]["Total Otros Pagos"] = 0
+                totals["Total Otros Pagos"]["Total Otros Pagos"] += other_payment.payment.to_f
+              end
 
             else
               detail["Otros Pagos"][other_payment.other_payment_name] = other_payment.payment.to_f
@@ -264,11 +266,14 @@ class ReportsController < ApplicationController
         deductions = DeductionPayment.joins(:deduction_employee)
                                      .where('deduction_payments.payroll_id = ? and deduction_employees.employee_id = ?',
 	                                     payroll_id, employee_id)
-          
+	                                              
         if deductions.count == 0
           detail["Deducciones"]["N/A"] = 0
           detail["Deducciones"]["N/A 2"] = 0
           detail["Deducciones"]["N/A 3"] = 0
+          totals["Total Deducciones"]["N/A"] = 0
+          totals["Total Deducciones"]["N/A 2"] = 0
+          totals["Total Deducciones"]["N/A 3"] = 0
         end
           
         deductions.each do |deduction|
@@ -320,12 +325,13 @@ class ReportsController < ApplicationController
               detail["Deducciones"]["Otras Deducciones"] = 0 unless detail["Deducciones"].has_key? "Otras Deducciones"
               detail["Deducciones"]["Otras Deducciones"] += deduction.payment.to_f
               
-	      if totals["Total Deducciones"].count == 3 && totals["Total Deducciones"].has_key?("Total Otras Deducciones")
-                totals["Total Deducciones"]["Total Otras Deducciones"] += deduction.payment.to_f
-	      elsif totals["Total Deducciones"].count < 3
-		totals["Total Deducciones"]["Total Otras Deducciones"] = 0
-		totals["Total Deducciones"]["Total Otras Deducciones"] += deduction.payment.to_f
-              end
+             if totals["Total Deducciones"].count == 3 && totals["Total Deducciones"].has_key?("Total Otras Deducciones")
+               totals["Total Deducciones"]["Total Otras Deducciones"] += deduction.payment.to_f
+             elsif totals["Total Deducciones"].count < 3
+               totals["Total Deducciones"]["Total Otras Deducciones"] = 0
+               totals["Total Deducciones"]["Total Otras Deducciones"] += deduction.payment.to_f
+             end
+
             else
               detail["Deducciones"][deduction.deduction_description] = deduction.payment.to_f
               
