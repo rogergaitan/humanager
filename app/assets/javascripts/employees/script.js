@@ -22,8 +22,8 @@ $(document).ready(function() {
     $('#search_id').val('');
     $('#search_name').val('');
     $('#search_surname').val('');
-    $('#search_department option:eq(0)').attr('selected', 'selected');
-    $('#search_entities option:eq(0)').attr('selected', 'selected');
+    $('#search_department').val('');
+    $('#search_entities').val('');
   });
 
 });
