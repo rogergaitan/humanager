@@ -532,9 +532,7 @@ class ProofPayEmployeesPDF < Prawn::Document
   end
   
   def get_data_work_benefits(employee_id)
-    WorkBenefitsPayment.joins(:employee_benefit => :work_benefit)
-                       .where('work_benefits_payments.payroll_id = ? and employee_benefits.employee_id = ?
-                              and work_benefits.provisioning = ?', @payroll.id, employee_id, false)
+    WorkBenefitsPayment.non_provisioned(@payroll.id, employee_id)
   end
 
 end
