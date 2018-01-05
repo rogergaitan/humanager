@@ -46,7 +46,7 @@
             <div class="col-sm-3 form-group_">
 
               <%= f.text_field :description, :class => 'form-control', :required => true, :maxlength => 30, 
-                :data => { :parsley_maxlength => 30, :parsley_remote => validate_description_uniqueness_deductions_url, 
+                :data => { :parsley_no_special_characters => "^[A-Za-z0-9- ]+$", :parsley_maxlength => 30, :parsley_remote => validate_description_uniqueness_deductions_url, 
                 :parsley_remote_options => {:data => { :id => @deduction.id }},
                 :parsley_remote_message => "Nombre especificado ya existe." } %>
 

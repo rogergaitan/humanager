@@ -1,10 +1,10 @@
 // To show properly the error messages
 window.ParsleyConfig = {
-	successClass: 'has-success', 
-	errorClass: 'has-error', 
-	errorElem: '<span></span>', 
-	errorsWrapper: '<span class="help-block"></span>', 
-	errorTemplate: "<div></div>", 
+	successClass: 'has-success',
+	errorClass: 'has-error',
+	errorElem: '<span></span>',
+	errorsWrapper: '<span class="help-block"></span>',
+	errorTemplate: "<div></div>",
 	classHandler: function(el) {
 		return el.$element.closest(".form-group");
 	}
@@ -21,12 +21,12 @@ $(document).ready(function() {
 		var regexPattern = /^\d+(\.{0,1}\d{0,2})?$/; 
 
 		if(!(/^\d+(\.{0,1}\d{0,2})?$/.test(this.value))) {
-	        this.value = this.value.substring(0, this.value.length - 1);
-      	}
+			this.value = this.value.substring(0, this.value.length - 1);
+		}
 
-      	if(regexPattern.test(this.value)) {
-      		this.value.substring(0, this.value.length - 1);
-      	}
+		if(regexPattern.test(this.value)) {
+			this.value.substring(0, this.value.length - 1);
+		}
 	}
 
 	// Custom Checkboxes 
@@ -173,13 +173,28 @@ $(document).ready(function() {
 	}
 	
   resources.alphaNumericMask = function(selector) {
-    $(selector).mask('A'+ 'B'.repeat(30), {
+    $(selector).mask('A' + 'B'.repeat(30), {
       translation: {
-        'A': {pattern: /[a-zA-Z]/},
-        'B': {pattern: /[a-zA-Z0-9 ]/}
+        'A': { pattern: /[a-zA-Z]/ },
+        'B': { pattern: /[a-zA-Z0-9 ]/ }
       }
     })
-  }
+	}
+	
+	/**
+	 * Custom Validations Using Parsley
+	 */
+
+	// Validate Special Characters
+	window.Parsley.addValidator('noSpecialCharacters', {
+		requirementType: 'regexp',
+		validateString: function(value, requirement) {
+			return requirement.test(value);
+		},
+		messages: {
+			es: 'Valor inválido, no se permiten caracteres especiales.'
+		}
+	});
 
 
 });

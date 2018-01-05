@@ -3,9 +3,11 @@ class PayrollType < ActiveRecord::Base
     :mask_doc_payroll_support, :cod_doc_accounting_support_mov, :mask_doc_accounting_support_mov,
     :ledger_account_id, :company_id, :calendar_color, :payer_employee_id, :allow_register_from_app
   
+  # Validations
   validates :description, :presence => true
   validates_uniqueness_of :description, :case_sensitive => false, :scope => :company_id
   validates_length_of :description, :maximum => 30, :message => "maximo 30 caracteres"
+  validates :description, :format => { :with => /^[A-Za-z0-9- ]+$/i }
   
   validates :cod_doc_accounting_support_mov, :cod_doc_payroll_support, :mask_doc_payroll_support, 
             :mask_doc_accounting_support_mov, :payroll_type, :calendar_color, :ledger_account_id, presence: true

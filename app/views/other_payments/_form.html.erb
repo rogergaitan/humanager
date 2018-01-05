@@ -61,7 +61,7 @@
             <div class="col-sm-3 form-group_">
 
               <%= f.text_field :name, :class => 'form-control', :required => true, :maxlength => 30, 
-                :data => { :parsley_maxlength => 30, :parsley_remote => validate_name_uniqueness_other_payments_url, 
+                :data => { :parsley_no_special_characters => "^[A-Za-z0-9- ]+$", :parsley_maxlength => 30, :parsley_remote => validate_name_uniqueness_other_payments_url, 
                 :parsley_remote_options => {:data => { :id => @other_payment.id }},
                 :parsley_remote_message => "Nombre especificado ya existe." } %>
               

@@ -37,6 +37,9 @@ class OtherPayment < ActiveRecord::Base
   belongs_to :company
 
   # Validations
+  
+  validates :name, :format => { :with => /^[A-Za-z0-9- ]+$/i }
+
   validates_uniqueness_of :name, :case_sensitive => false,
       message: "El nombre ya existe"
   

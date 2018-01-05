@@ -31,6 +31,8 @@ class WorkBenefit < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive => false,
       message: "El nombre ya existe"
   
+  validates :name, :format => { :with => /^[A-Za-z0-9- ]+$/i }
+  
   accepts_nested_attributes_for :employee_benefits, :allow_destroy => true
   
   before_save :save_state
@@ -54,7 +56,6 @@ class WorkBenefit < ActiveRecord::Base
   end
 
   def self.validate_name_uniqueness(id, name, company_id)
-    
     work_benefit = WorkBenefit.new() if id.empty?
     work_benefit = WorkBenefit.find(id) unless id.empty?
 

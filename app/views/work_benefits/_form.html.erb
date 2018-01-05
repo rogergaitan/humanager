@@ -65,8 +65,8 @@
             <div class="col-sm-3 form-group_">
             
               <%= f.text_field :name, :class => 'form-control', :required => true, :maxlength => 30, 
-                :data => { :parsley_maxlength => 30, :parsley_remote => validate_name_uniqueness_work_benefits_url, 
-                :parsley_remote_options => {:data => { :id => @work_benefit.id }},
+                :data => { :parsley_no_special_characters => "^[A-Za-z0-9- ]+$", :parsley_maxlength => 30, :parsley_remote => validate_name_uniqueness_work_benefits_url, 
+                :parsley_remote_options => { :data => { :id => @work_benefit.id }},
                 :parsley_remote_message => "Nombre especificado ya existe." } %>
 
               <div class="help-block with-errors"></div>
@@ -99,8 +99,8 @@
             <div class="col-sm-3">
               <div class="input-group">
                 <%= f.hidden_field :debit_account %>
-                <%= text_field_tag 'load_debit_accounts', nil, :class => 'form-control', 
-                    :for => :debit_account, :required => true, :data => {:parsley_errors_container => "#debit_account_errors"} %>
+                <%= text_field_tag :load_debit_accounts, nil, :class => 'form-control', 
+                    :for => :debit_account, :data => { :parsley_required => true, :parsley_errors_container => "#debit_account_errors"} %>
                 <span class="input-group-addon">
                   <i class="fa fa-search"></i>
                 </span>
@@ -139,7 +139,7 @@
             <div class="col-sm-3">
             <div class="input-group form-group_">
               <%= f.hidden_field :creditor_id %>
-              <%= text_field_tag :load_creditor, nil,  :class => 'form-control',
+              <%= text_field_tag :load_creditor, nil, :class => 'form-control',
                 :for => :creditor_id, :data => {:parsley_errors_container => "#creditor_errors"} %>
               <span class="input-group-addon">
                   <i class="fa fa-search"></i>

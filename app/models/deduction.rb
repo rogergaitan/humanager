@@ -39,7 +39,10 @@ class Deduction < ActiveRecord::Base
   belongs_to :maximum_deduction_currency, :class_name => "Currency"
   belongs_to :amount_exhaust_currency, :class_name => "Currency"
 
+  # Validations
   validates :description, presence: true,  length: { maximum: 30 }
+  validates :description, :format => { :with => /^[A-Za-z0-9- ]+$/i }
+
   validates_uniqueness_of :description, :case_sensitive => false,
       message: "El nombre ya existe"
   

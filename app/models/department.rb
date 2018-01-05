@@ -2,11 +2,11 @@
 #
 # Table name: departments
 #
-#  id          :integer          not null, primary key
-#  name        :string(255)
-#  employee_id :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id          			:integer	not null, primary key
+#  name        			:string(255)
+#  employee_id 			:integer
+#  created_at  			:datetime	not null
+#  updated_at  			:datetime	not null
 #  costs_center_id
 #
 
@@ -17,6 +17,8 @@ class Department < ActiveRecord::Base
 	has_many :employees
 	attr_accessible :name, :employee_id, :costs_center_id
 
+	# Validations
+	validates :name, :format => { :with => /^[A-Za-z0-9- ]+$/i }
 	validates :name, :presence => true, :length => { maximum: 30 }
   validates_uniqueness_of :name, case_sensitive: false
   

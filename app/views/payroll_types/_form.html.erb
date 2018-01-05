@@ -43,7 +43,7 @@
             <%= f.label :description, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3 form-group_">
               <%= f.text_field :description, :class => 'form-control', :required => true, :maxlength => 30, 
-              :data => { :parsley_remote => validate_description_uniqueness_payroll_types_url, 
+              :data => { :parsley_no_special_characters => "^[A-Za-z0-9- ]+$", :parsley_remote => validate_description_uniqueness_payroll_types_url, 
               :parsley_remote_options => {:data => { :id => @payroll_type.id }},
               :parsley_remote_message => "Nombre especificado ya existe." }  %>
               <div class="help-block with-errors"></div>
