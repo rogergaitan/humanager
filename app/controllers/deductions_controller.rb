@@ -1,9 +1,9 @@
 # encoding: UTF-8
 
 class DeductionsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit, :create, :update]
   before_filter :set_deduction, :only => [:edit, :update, :destroy]
+  authorize_resource
+  before_filter :resources, :only => [:new, :edit, :create, :update]
   skip_load_and_authorize_resource :only => [:validate_description_uniqueness]
   
   before_filter :only => [:edit, :update] do |controller|
@@ -18,7 +18,7 @@ class DeductionsController < ApplicationController
   # GET /deductions.json
   def index
     @deductions = Deduction.where('company_id = ?', current_user.company_id)
-        .paginate(:page => params[:page], :per_page => 15)
+                           .paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
   end
 
@@ -70,7 +70,7 @@ class DeductionsController < ApplicationController
   def update
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
-        format.html { redirect_to deductions_path, notice: 'DeducciÃ³n actualizada correctamente.' }
+        format.html { redirect_to deductions_path, notice: 'Deducción actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -174,6 +174,8 @@ class DeductionsController < ApplicationController
 
   def set_deduction
     @deduction = Deduction.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to deductions_path, notice: "El registro de deducción no existe"
   end
   
 end

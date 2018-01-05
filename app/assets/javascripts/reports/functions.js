@@ -3,8 +3,8 @@ general_functions = {}
 $(document).ready(function() {
 
   $('#deduction_employee_ids').multiSelect({
-    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filter entries...'>",
-    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filter entries...'>",
+    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
+    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
     afterInit: function(ms) {
       var that = this,
       $selectableSearch = that.$selectableUl.prev(),

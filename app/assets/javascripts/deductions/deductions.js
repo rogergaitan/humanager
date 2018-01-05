@@ -260,36 +260,36 @@ $(document).ready(function() {
   })
   
   $('#deduction_amount_exhaust_currency_id').on('change', function () {
-    $('#deduction_deduction_currency_id') .val($(this).val());
+    $('#deduction_deduction_currency_id').val($(this).val());
     changeEmployeeValueCurrencySymbol();
   });
   
-  currencyMask('#deduction_maximum_deduction');
+  currencyMask($('#deduction_maximum_deduction'));
   
   //employee search fields
   showHideOptions( $('#select_method_all') );
   
   $('input[name=select_method]').parents('label').click(function() {
-		showHideOptions( $(this).find('input') );
-	});
+    showHideOptions( $(this).find('input') );
+  });
 
-	$('input[name=select_method]').next().click(function() {
-		showHideOptions( $(this).parents('label').find('input') );
-	});
+  $('input[name=select_method]').next().click(function() {
+    showHideOptions( $(this).parents('label').find('input') );
+  });
   
   $('#departments_employees').change(function() {
-		filterEmployees("department", $(this).val());
-	});
+    filterEmployees('department', $(this).val());
+  });
 
-	$('#superiors_employees').change(function() {
-    filterEmployees("superior", $(this).val());
+  $('#superiors_employees').change(function() {
+    filterEmployees('superior', $(this).val());
   });
   
   $('#deduction_deduction_value').on('change', function() {
     var value = $(this).val();
     $('#employee_items tr').each(function() {
-      if( !resources.parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
-        $(this).find("input:text[id*='_calculation']").val(value);
+      if( !resources.parseBool( $(this).find('input:hidden[id*=_destroy]').val()) ) {
+        $(this).find('input:text[id*=_calculation]').val(value);
       }
     });
   });
@@ -297,21 +297,21 @@ $(document).ready(function() {
 
 /* F U N C T I O N S */
 function currencyMask(selector) {
-  $(selector).mask("FNNNNNNNNN.NN", {
+  selector.mask('FNNNNNNNNN.NN', {
     translation: {
-      'N': { pattern: /\d/, optional: true },
-      'F': { pattern: /[1-9]/ }
+      'N': {pattern: /\d/, optional: true},
+      'F': {pattern: /[1-9]/}
     }
   });
 }
 
 function percentMask(selector) {
-  $(selector).mask("FNN.NN", {
+  selector.mask('FNN.NN', {
     translation: {
       'N': { pattern: /\d/, optional: true },
       'F': { pattern: /[1-9]/ }
     }
-  });    
+  });
 }
 
 function employeesSelectAll() {
@@ -337,64 +337,76 @@ function payrollSelectAll() {
 }
 
 function typeDeduction(selected) {
+  var amountExhaustControls = $('#amount_exhaust_controls');
+  var unicPayroll = $('#unicPayroll');
+  var deductionPayrolls = $('#deduction_payrolls');
+  var deductionPayroll = $('#deduction_payroll');
+  var deductionAmountExhaust = $('#deduction_amount_exhaust');
+  var deductionCurrencyId = $('#deduction_deduction_currency_id');
+
   switch($(selected).val()) {
     case 'unique':
-      $('#amount_exhaust_controls').hide();
-      $('#unicPayroll').show();
-      $('#deduction_payrolls').show();
-      $('#deduction_payroll').prop('required', 'required');
-      $('#deduction_amount_exhaust').prop('required', '');
-      $('#deduction_amount_exhaust').val('');
-      $("#deduction_deduction_currency_id").prop("disabled", false);
+      amountExhaustControls.hide();
+      unicPayroll.show();
+      deductionPayrolls.show();
+      deductionPayroll.prop('required', 'required');
+      deductionAmountExhaust.prop('required', '');
+      deductionAmountExhaust.val('');
+      deductionCurrencyId.prop("disabled", false);
       $("#deduction_employee_ids").prop('required', '');
       disablePayrollTypes();
       getPayrolls();
     break;
     case 'amount_to_exhaust':
-      $('#amount_exhaust_controls').show();
+      amountExhaustControls.show();
       $('#payrolls-to-save').empty();
-      $('#unicPayroll').hide();
-      $('#deduction_payrolls').hide();
-      $('#deduction_payroll').val('');
-      $('#deduction_payroll').prop('required', '');
-      $('#deduction_amount_exhaust').prop('required', 'required');  
-      $("#deduction_deduction_currency_id").prop("disabled", true);
+      unicPayroll.hide();
+      deductionPayrolls.hide();
+      deductionPayroll.val('');
+      deductionPayroll.prop('required', '');
+      deductionAmountExhaust.prop('required', 'required');  
+      deductionCurrencyId.prop("disabled", true);
       enablePayrollTypes();
     break;
     case 'constant':
-      $('#amount_exhaust_controls').hide();
+      amountExhaustControls.hide();
       $('#payrolls-to-save').empty();
-      $('#unicPayroll').hide();
-      $('#deduction_payrolls').hide();
-      $('#deduction_payroll').val('');
-      $('#deduction_payroll').prop('required', ''); 
-      $('#deduction_amount_exhaust').prop('required', '');
-      $('#deduction_amount_exhaust').val('');
-      $("#deduction_deduction_currency_id").prop("disabled", false);
+      unicPayroll.hide();
+      deductionPayrolls.hide();
+      deductionPayroll.val('');
+      deductionPayroll.prop('required', ''); 
+      deductionAmountExhaust.prop('required', '');
+      deductionAmountExhaust.val('');
+      deductionCurrencyId.prop("disabled", false);
       enablePayrollTypes();
     break;
   }
 }
 
 function typeCalculation(selected) {
+  var maximumDeduction = $('#deduction_maximum_deduction');
+  var deductionValue = $('#deduction_deduction_value');
+
   switch($(selected).val()) {
     case 'percentage':
       $('.percentage').html('%');
       $("#deduction_currency").hide();
       $(".maximum_deduction").show();
-      $("#deduction_maximum_deduction").prop("required", true);
+      maximumDeduction.prop("required", true);
       changeEmployeeValueCurrencySymbol();
-      percentMask("#deduction_deduction_value");
+      percentMask(deductionValue);
+      employeeValueValidation();
       deductionValuePercentValidation();
       break;
     case 'fixed':
       $('.percentage').html('');
-      $("#deduction_currency").show();
-      $(".maximum_deduction").hide();
-      $("#deduction_maximum_deduction").val("");
-      $("#deduction_maximum_deduction").prop("required", false);
+      $('#deduction_currency').show();
+      $('.maximum_deduction').hide();
+      maximumDeduction.val('');
+      maximumDeduction.prop('required', false);
       changeEmployeeValueCurrencySymbol();
-      currencyMask("#deduction_deduction_value");
+      currencyMask(deductionValue);
+      employeeValueValidation();
       deductionValueCurrencyValidation();
       break;
   }
@@ -424,7 +436,7 @@ function getPayrolls() {
 
 // Carga las planillas activas en una tabla
 function addActives(payroll, target_table) {
-  var children = "";
+  var children = '';
   
   payroll.forEach(function (item, index) {
     children +=  '<tr>' + 
@@ -463,14 +475,18 @@ function setAccount(e) {
 
 // Show/Hide The differents view based in the checkbox "individual"
 function showHideEmployees() {
-  if( $('#deduction_individual').is(':checked') ) {
-    $('#deduction_deduction_value').val('');
-    $('#deduction_deduction_value').prop('disabled', true);
+  var deductionValue = $('#deduction_deduction_value');
+
+  if($('#deduction_individual').is(':checked') ) {
+    deductionValue.val('');
+    deductionValue.prop('disabled', true);
     disableDeductionValueValidations();
+    employeeValueValidation();
     $('#employee_items_two').show();
   } else {
-    $('#deduction_deduction_value').prop('disabled', false);
+    deductionValue.prop('disabled', false);
     enableDeductionValueValidations();
+    employeeValueValidation();
     $('#employee_items_two').hide();
   }
 }
@@ -478,11 +494,11 @@ function showHideEmployees() {
 // Consulta las cuentas contables para hacer el autocomplete
 function CContables() {
   $.getJSON('/ledger_accounts/credit_accounts', function(category_data) {
-    $("#deduction_ledger_account").autocomplete({
+    $('#deduction_ledger_account').autocomplete({
       source: $.map(category_data, function(item) {
-        $.data(document.body, 'category_' + item.id + "", item.iaccount + " - " + item.naccount);
+        $.data(document.body, 'category_' + item.id+'', item.iaccount + ' - ' + item.naccount);
         return {
-          label:  item.iaccount + " - " + item.naccount,
+          label: item.iaccount + ' - ' + item.naccount, 
           id: item.id
         }
       }),
@@ -503,7 +519,7 @@ function CContables() {
       }
     })
     if($('#deduction_ledger_account_id').val()){
-      var deducciones_cuentas = $.data(document.body, 'category_' + $('#deduction_ledger_account_id').val() + '');
+      var deducciones_cuentas = $.data(document.body, 'category_' + $('#deduction_ledger_account_id').val()+'');
       $('#deduction_ledger_account').val(deducciones_cuentas);
     }
   }); 
@@ -513,14 +529,16 @@ function CContables() {
 // para que no se vayan varioss ids de planillas solo se tiene que guardar un unico id
 function clearPayrolls() {
   $('#payrolls-to-save').empty(); // Elimina el id de la planilla que ya no se quiere guardar
-  $('#deduction_payroll').val('');  
+  $('#deduction_payroll').val('');
 }
 
 function isBeneficiary(value) {
+  var creditor = $('#load_creditor');
+
   if(value) {
-    $('#load_creditor').prop('disabled', true);
-    $('#load_creditor').prop('required', '');
-    $('#load_creditor').val('');
+    creditor.prop('disabled', true);
+    creditor.prop('required', '');
+    creditor.val('');
     $('#deduction_creditor_id').val('');
     $('a[href=#creditors_modal]').prop('disabled', true);
   } else {
@@ -531,11 +549,11 @@ function isBeneficiary(value) {
 }
 
 function parseBool(str) {
-  if(str==null) return false;
-  if(str=="false") return false;
-  if(str=="0") return false;
-  if(str=="true") return true;
-  if(str=="1") return true;
+  if(str== null) return false;
+  if(str== 'false') return false;
+  if(str== '0') return false;
+  if(str== 'true') return true;
+  if(str== '1') return true;
 
   return false;
 }
@@ -543,7 +561,7 @@ function parseBool(str) {
 function searchAll(name) {
   return $.ajax({
     url: deduction.search_employee_payroll_logs_path,
-    dataType: "script",
+    dataType: 'script',
     data: {
       search_employee_name: name
     }
@@ -569,13 +587,18 @@ function searchEmployeeByAttr(values, type) {
 
     if(types.add == type) {
       if(selector.length) {
-        selector.find("input[type=hidden][id*='_destroy']").val(0).show();
+        selector.find('input[type=hidden][id*=_destroy]').val(0);
+        selector.show();
       } else {
-        $('.header_items').after( newRow(employee, symbol, deduction) );
+        $('.header_items').after(newRow(employee, symbol, deduction));
+        employeeValueValidation();
       }
     }
-
-    if(types.remove == type) selector.find("input[type=hidden][id*='_destroy']").val(1).hide();
+    
+    if(types.remove == type) {
+      selector.find("input[type=hidden][id*='_destroy']").val(1);
+      selector.hide()
+    }
   });
 
   HoldOn.close();
@@ -622,24 +645,28 @@ function newRow(employee, symbol, deduction) {
 
 // Disable/Enable payroll types
 function disablePayrollTypes() {
-  $("#deduction_payroll_type_ids").prop("disabled", true);
-  $("#deduction_payroll_type_ids").prop("required", false);
-  $("#deduction_payroll_type_ids").multiSelect("refresh");
+  var selector = $('#deduction_payroll_type_ids');
+
+  selector.prop('disabled', true);
+  selector.prop('required', false);
+  selector.multiSelect("refresh");
   $("#payroll_select_all").iCheck("disable");
 }
 
 function enablePayrollTypes() {
-  $("#deduction_payroll_type_ids").prop("disabled", false);
-  $("#deduction_payroll_type_ids").prop("required", true);
-  $("#deduction_payroll_type_ids").multiSelect("refresh");
+  var selector = $('#deduction_payroll_type_ids');
+  
+  selector.prop("disabled", false);
+  selector.prop("required", true);
+  selector.multiSelect("refresh");
   $("#payroll_select_all").iCheck("enable");
 }
 
 // Add currency symbol to maximum deduction and individual employee value field
 function changeMaximumDeductionCurrencySymbol() {
-  var currency = $("#deduction_maximum_deduction_currency_id :selected").text();
-  var symbol = $("input[name=" + currency + "]").val();
-  $("#maximum_deduction_currency_symbol").text(symbol);
+  var currency = $('#deduction_maximum_deduction_currency_id :selected').text();
+  var symbol = $('input[name=' + currency + ']').val();
+  $('#maximum_deduction_currency_symbol').text(symbol);
 }
 
 function showHideOptions(selected) {
@@ -674,13 +701,13 @@ function filterEmployees(type, id) {
 
   $('#ms-deduction_employee_ids .ms-selectable').find('li').each(function() {
     
-    if(type === "all") {
+    if(type === 'all') {
       if(!$(this).hasClass('ms-selected')) $(this).show();
     }
 
     var searchType = 0;
-    if(type === "superior") searchType = $(this).data('sup') ? $(this).data('sup') : 0;
-    if(type === "department") searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+    if(type === 'superior') searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+    if(type === 'department') searchType = $(this).data('dep') ? $(this).data('dep') : 0;
     
     if(id != 0) {
       if( id == searchType ) {
@@ -696,20 +723,20 @@ function filterEmployees(type, id) {
 
 function changeEmployeeValueCurrencySymbol() {
   var symbol = currencySymbol();
-  $(".employee_calculation_currency_symbol").text(symbol);
+  $('.employee_calculation_currency_symbol').text(symbol);
 }
 
 function currencySymbol() {
   var symbol = '%';
-  if($("#deduction_calculation_type").val() == "fixed" ) {
-    var currency = $("#deduction_deduction_currency_id :selected").text();
-    symbol = $("input[name=" + currency + "]").val();
+  if($('#deduction_calculation_type').val() == 'fixed') {
+    var currency = $('#deduction_deduction_currency_id :selected').text();
+    symbol = $('input[name=' + currency + ']').val();
   }
   return symbol;
 }
 
 function enableDeductionValueValidations() {
-  if($("#deduction_calculation_type").val() == "percentage" ) {
+  if($('#deduction_calculation_type').val() == 'percentage') {
     deductionValuePercentValidation();
   } else {
     deductionValueCurrencyValidation();
@@ -717,23 +744,41 @@ function enableDeductionValueValidations() {
 }
 
 function disableDeductionValueValidations() {
-  var selector = $("#deduction_deduction_value");
-  selector.removeAttr("data-parsley-range");
-  selector.removeAttr("required");
+  var selector = $('#deduction_deduction_value');
+  selector.removeAttr('data-parsley-range required');
 }
 
 function deductionValuePercentValidation() {
-  var selector = $("#deduction_deduction_value");
-  if(!$("#deduction_individual").is(":checked")) {
-    selector.attr("data-parsley-range", "[1, 100]");
-    selector.attr("required", true);  
+  var selector = $('#deduction_deduction_value');
+  if(!$('#deduction_individual').is(':checked')) {
+    selector.attr({'data-parsley-range': '[1, 100]', 'required': true});
   }
 }
 
 function deductionValueCurrencyValidation() {
-  var selector = $("#deduction_deduction_value");
-  if(!$("#deduction_individual").is(":checked")) {
-    selector.removeAttr("data-parsley-range");
-    selector.attr("required", true);
+  var selector = $('#deduction_deduction_value');
+  if(!$('#deduction_individual').is(':checked')) {
+    selector.removeAttr('data-parsley-range');
+    selector.attr('required', true);
+  }
+}
+
+function employeeValueValidation() {
+  var calculationType = $('#deduction_calculation_type').val()
+  var employeesValueField = $('#employee_items input:text[id*=_calculation]');
+  
+  if($('#deduction_individual').is(':checked')) {
+    employeesValueField.attr('required', true);
+    
+    if(calculationType == 'fixed') {
+      currencyMask(employeesValueField);
+      employeesValueField.removeAttr('data-parsley-range');
+    } else {
+      percentMask(employeesValueField);
+      employeesValueField.attr('data-parsley-range', '[1, 100]');
+    }
+    
+  } else {
+    employeesValueField.removeAttr('required data-parsley-range');
   }
 }

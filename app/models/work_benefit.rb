@@ -16,9 +16,9 @@ class WorkBenefit < ActiveRecord::Base
   belongs_to :company
   has_many :companies
   has_many :payroll_type_benefits, :dependent => :destroy
-  has_many :payroll_type, :through => :payroll_type_benefits, validate: false
+  has_many :payroll_type, :through => :payroll_type_benefits, :validate => false
   has_many :employee_benefits, :dependent => :destroy
-  has_many :employees, :through => :employee_benefits, validate: false
+  has_many :employees, :through => :employee_benefits, :validate => false
   has_many :work_benefits_payments
   
   belongs_to :payroll

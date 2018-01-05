@@ -1,8 +1,9 @@
 class WorkBenefitsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :resources, :only => [:new, :edit, :create]
-  before_filter :set_work_benefits, :only => [:edit, :update, :destroy]
+  before_filter :set_work_benefit, :only => [:edit, :update, :destroy]  
+  authorize_resource
+  before_filter :resources, :only => [:new, :edit, :create]  
   skip_load_and_authorize_resource :only => [:validate_name_uniqueness]
+
 
   before_filter :only => [:edit, :update] do |controller|
     session_edit_validation(WorkBenefit, params[:id])
@@ -14,8 +15,8 @@ class WorkBenefitsController < ApplicationController
   # GET /work_benefits.json
   def index
     @work_benefits = WorkBenefit.where('company_id = ?', current_user.company_id)
-        .paginate(:page => params[:page], :per_page => 15)
-        .includes(:credit, :debit)
+                                .paginate(:page => params[:page], :per_page => 15)
+                                .includes(:credit, :debit)
     respond_with(@work_benefits)
   end
 
@@ -28,12 +29,6 @@ class WorkBenefitsController < ApplicationController
 
   # GET /work_benefits/1/edit
   def edit
-    begin
-    rescue
-      respond_to do |format|
-        format.html { redirect_to( work_benefits_path, notice: t('.notice.no_results')) }
-      end
-    end
   end
 
   # POST /work_benefits
@@ -42,7 +37,7 @@ class WorkBenefitsController < ApplicationController
     @work_benefit = WorkBenefit.new(params[:work_benefit].except(:employee_ids))
     respond_to do |format|
       if @work_benefit.save
-        format.html { redirect_to action: :index }
+        format.html { redirect_to work_benefits_path, notice: 'Prestación actualizada correctamente.' }
         format.json { render json: @work_benefit, status: :created, location: @work_benefit }
       else
         format.html { render action: "new" }
@@ -56,7 +51,7 @@ class WorkBenefitsController < ApplicationController
   def update
     respond_to do |format|
       if @work_benefit.update_attributes(params[:work_benefit])
-        format.html { redirect_to action: :index }
+        format.html { redirect_to work_benefits_path, notice: 'Prestación actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -160,8 +155,10 @@ class WorkBenefitsController < ApplicationController
     end
   end
 
-  def set_work_benefits
+  def set_work_benefit
     @work_benefit = WorkBenefit.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to work_benefits_path, notice: "El registro de prestación no existe"
   end
 
   def validate_name_uniqueness

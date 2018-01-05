@@ -6,7 +6,7 @@ $(jQuery(document).ready(function($) {
     show: 'show'
   };
   
-	$('#work_benefit_employee_ids').multiSelect({
+  $('#work_benefit_employee_ids').multiSelect({
     selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Filtrar...'>",
     selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Filtrar...'>",
     afterInit: function(ms) {
@@ -259,8 +259,8 @@ $(jQuery(document).ready(function($) {
   $('#work_benefit_work_benefits_value').on('change', function() {
     var value = $(this).val();
     $('#employee_items tr').each(function() {
-      if( !resources.parseBool( $(this).find("input:hidden[id*='_destroy']").val()) ) {
-        $(this).find("input:text[id*='_calculation']").val(value);
+      if( !resources.parseBool( $(this).find('input:hidden[id*=_destroy]').val()) ) {
+        $(this).find('input:text[id*=_calculation]').val(value);
       }
     });
   });
@@ -303,13 +303,13 @@ function filterEmployees(type, id) {
 
   $('#ms-work_benefit_employee_ids .ms-selectable').find('li').each(function() {
     
-    if(type === "all") {
+    if(type === 'all') {
       if(!$(this).hasClass('ms-selected')) $(this).show();
     }
 
     var searchType = 0;
-    if(type === "superior") searchType = $(this).data('sup') ? $(this).data('sup') : 0;
-    if(type === "department") searchType = $(this).data('dep') ? $(this).data('dep') : 0;
+    if(type === 'superior') searchType = $(this).data('sup') ? $(this).data('sup') : 0;
+    if(type === 'department') searchType = $(this).data('dep') ? $(this).data('dep') : 0;
     
     if(id != 0) {
       if( id == searchType ) {
@@ -362,7 +362,7 @@ function fetchPopulateAutocomplete(url, textField, idField, dataField) {
 
     $(textField).autocomplete({
       source: $.map(data, function(item) {
-        $.data(document.body, dataField + item.id + "", item.iaccount + " - " + item.naccount);
+        $.data(document.body, dataField + item.id + '', item.iaccount + ' - ' + item.naccount);
         return {
           label: item.iaccount + " - " + item.naccount,
           id: item.id
@@ -386,7 +386,7 @@ function fetchPopulateAutocomplete(url, textField, idField, dataField) {
     }); 
     
     if($(idField).val()) {
-      var account = $.data(document.body, dataField + $(idField).val() +"");
+      var account = $.data(document.body, dataField + $(idField).val() +'');
       $(textField).val(account);
     }
   })
@@ -434,9 +434,10 @@ function populatePayrollTypesFilter(url, textField, idField) {
        }),
       select: function( event, ui ) {
         if (!$('#list-to-save input#'+ui.item.data_id).length) {
- 	  appendPayrollTypes = "<div class='checkbox-group'>" + "<div class='checkbox-margin'>" + "<input type='checkbox' data-sup='"+ ui.item.sup +"' data-dep='"+ ui.item.dep + 
-	    "' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +"' name='work_benefit[payroll_type_ids][]' value='"+ ui.item.id +"' />" +
-	    "<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" + "</div>" + "</div>";	
+ 	  appendPayrollTypes = "<div class='checkbox-group'>" + "<div class='checkbox-margin'>" + "<input type='checkbox' data-sup='"+
+	    ui.item.sup +"' data-dep='"+ ui.item.dep + "' checked='checked' class='align-checkbox right' id='"+ ui.item.data_id +
+	    "' name='work_benefit[payroll_type_ids][]' value='"+ ui.item.id +"' />" +
+	    "<label class='checkbox-label' for='"+ ui.item.data_id +"'>"+ ui.item.label +"</label>" + "</div>" + "</div>";
    	    $('#list-payroll-types-to-save').append(appendPayrollTypes);
     	    $('input#'+ ui.item.data_id + '_left').closest('.checkbox-group').remove();
     	    }
@@ -451,17 +452,17 @@ function set_account(e) {
   var accountName = $(this).text();
   $(document.getElementById($('#idFieldPopup').val())).val(accountId);
   $(document.getElementById($('#textFieldPopup').val())).val(accountName);
-	$('#list').empty();
-	$('#accountsModal .modal-content button:eq(1)').trigger('click');
+  $('#list').empty();
+  $('#accountsModal .modal-content button:eq(1)').trigger('click');
 }
 
 function fetchCostCenterAutocomplete(url, textField, idField) {
   $.getJSON(url, function(accounts) {
     $(textField).autocomplete({
       source: $.map(accounts, function(item) {
-        $.data(document.body, 'account_' + item.id + "", item.icost_center + " - "  + item.name_cc);
+        $.data(document.body, 'account_' + item.id + '', item.icost_center + ' - '  + item.name_cc);
         return {
-          label: item.icost_center + " - " + item.name_cc,
+          label: item.icost_center + ' - ' + item.name_cc,
           id: item.id
         }
       }),
@@ -488,48 +489,53 @@ function fetchCostCenterAutocomplete(url, textField, idField) {
 function searchCostCenter(name, url, type) {
   return $.ajax({
     url: url,
-    dataType: "script",
+    dataType: 'script',
     data: { search_cost_center_name: name }
   });
 }
 
 function currencyMask(selector) {
-  $(selector).mask("FNNNNNNNNN.NN", {
-      translation: {
-       'N': {pattern: /\d/, optional: true},
-       "F": {pattern: /[1-9]/}
-      }
+  selector.mask('FNNNNNNNNN.NN', {
+    translation: {
+      'N': {pattern: /\d/, optional: true},
+      'F': {pattern: /[1-9]/}
+    }
   });    
 }
 
 function percentMask(selector) {
-  $(selector).mask("FNN.NN", {
-      translation: {
-       'N': {pattern: /\d/, optional: true},
-       "F": {pattern: /[1-9]/}
-      }
+  selector.mask('FNN.NN', {
+    translation: {
+     'N': {pattern: /\d/, optional: true},
+     'F': {pattern: /[1-9]/}
+    }
   });    
 }
 
 function calculationType(selector) {
+  var currency = $('#currency');
+  var workBenefitsValue = $('#work_benefit_work_benefits_value');
+
   switch($(selector).val()) {
-    case "percentage":
-    $("#currency").hide();
-    workBenefitValuePercentValidation()
-    percentMask($("#work_benefit_work_benefits_value"));
-    changeEmployeeValueCurrencySymbol();
+    case 'percentage':
+      currency.hide();
+      workBenefitValuePercentValidation()
+      percentMask(workBenefitsValue);
+      changeEmployeeValueCurrencySymbol();
+      employeeValueValidation();
     break;
-    case "fixed":
-    $("#currency").show();
-    workBenefitValueCurrencyValidation();
-    currencyMask($("#work_benefit_work_benefits_value"));
-    changeEmployeeValueCurrencySymbol();
+    case 'fixed':
+      currency.show();
+      workBenefitValueCurrencyValidation();
+      currencyMask(workBenefitsValue);
+      changeEmployeeValueCurrencySymbol();
+      employeeValueValidation();
     break;
   }
 };
 
 function enableWorkBenefitValueValidations() {
-  if($("#work_benefit_calculation_type").val() == "percentage" ) {
+  if($('#work_benefit_calculation_type').val() == 'percentage' ) {
     workBenefitValuePercentValidation();
   } else {
     workBenefitValueCurrencyValidation();
@@ -537,35 +543,39 @@ function enableWorkBenefitValueValidations() {
 }
 
 function disableWorkBenefitValueValidations() {
-  $("#work_benefit_work_benefits_value").removeAttr("data-parsley-range");
-  $("#work_benefit_work_benefits_value").removeAttr("required");
+  $("#work_benefit_work_benefits_value").removeAttr('data-parsley-range required');
 }
 
 function workBenefitValuePercentValidation() {
-  if(!$("#work_benefit_individual").prop("checked")) {
-    $("#work_benefit_work_benefits_value").attr("data-parsley-range", "[1, 100]");
-    $("#work_benefit_work_benefits_value").attr("required", true);  
+  if(!$('#work_benefit_individual').prop('checked')) {
+    $('#work_benefit_work_benefits_value').attr({'data-parsley-range': '[1, 100]', 'required': true });
   }
 }
 
 function workBenefitValueCurrencyValidation() {
-  if(!$("#work_benefit_individual").prop("checked")) {
-    $("#work_benefit_work_benefits_value").removeAttr("data-parsley-range");
-    $("#work_benefit_work_benefits_value").attr("required", true);
+  var workBenefitsValue = $('#work_benefit_work_benefits_value');
+
+  if(!$('#work_benefit_individual').prop('checked')) {
+    workBenefitsValue.removeAttr('data-parsley-range');
+    workBenefitsValue.attr('required', true);
   }
 }
 
 function showHideEmployees() {
+  var workBenefitsValue = $('#work_benefit_work_benefits_value');
+  var employeeItems = $('#employee_items_two');
+
   if( $('#work_benefit_individual').is(':checked') ) {
-    $('#work_benefit_work_benefits_value').val('');
-    $('#work_benefit_work_benefits_value').prop('disabled', true);
+    workBenefitsValue.val('');
+    workBenefitsValue.prop('disabled', true);
     disableWorkBenefitValueValidations();
-    $('#employee_items_two').show();
+    employeeValueValidation();
+    employeeItems.show();
   } else {
-    $("#work_benefit_work_benefits_value").prop('disabled', false);
+    workBenefitsValue.prop('disabled', false);
     enableWorkBenefitValueValidations();
-    $("#employee_items_two input").prop("disabled", true);
-    $('#employee_items_two').hide();
+    employeeValueValidation();
+    employeeItems.hide();
   }
 }
 
@@ -586,13 +596,18 @@ function searchEmployeeByAttr(values, type) {
 
     if(types.add == type) {
       if(selector.length) {
-        selector.find("input[type=hidden][id*='_destroy']").val(0).show();
+        selector.find('input[type=hidden][id*=_destroy]').val(0);
+        selector.show();
       } else {
-        $('.header_items').after( newRow(employee, symbol, deduction) );
+        $('.header_items').after(newRow(employee, symbol, deduction));
+        employeeValueValidation();
       }
     }
     
-    if(types.remove == type) selector.find("input[type=hidden][id*='_destroy']").val(1).hide();
+    if(types.remove == type) {
+      selector.find('input[type=hidden][id*=_destroy]').val(1);
+      selector.hide();
+    }
   });
   
   HoldOn.close();
@@ -644,19 +659,19 @@ function changeEmployeeValueCurrencySymbol() {
 
 function currencySymbol() {
   var symbol = '%';
-  if($("#work_benefit_calculation_type").val() == "fixed" ) {
-    var currency = $("#work_benefit_currency_id :selected").text();
-    symbol = $("input[name=" + currency + "]").val();
+  if($('#work_benefit_calculation_type').val() == 'fixed' ) {
+    var currency = $('#work_benefit_currency_id :selected').text();
+    symbol = $('input[name=' + currency + ']').val();
   }
   return symbol;
 }
 
 function parseBool(str) {
   if(str==null) return false;
-  if(str=="false") return false;
-  if(str=="0") return false;
-  if(str=="true") return true;
-  if(str=="1") return true;
+  if(str=='false') return false;
+  if(str=='0') return false;
+  if(str=='true') return true;
+  if(str=='1') return true;
 
   return false;
 }
@@ -668,22 +683,22 @@ function payToEmployee(value) {
     $('a[href=#creditors_modal]').attr('disabled', true);
   } else {
     $('#load_creditor').prop('disabled', false).prop('required', 'required');
-    $("a[href=#creditors_modal]").attr('disabled', false);
+    $('a[href=#creditors_modal]').attr('disabled', false);
   }
 }
 
 function addCreditor(selector) {
   var creditor = selector;
-  var load_creditor = $("#load_creditor");
-  if(!load_creditor.prop("disabled")) {
-    $("#load_creditor").val(creditor.text());
-    $("#work_benefit_creditor_id").val(creditor.attr("id"));
+  var load_creditor = $('#load_creditor');
+  if(!load_creditor.prop('disabled')) {
+    $('#load_creditor').val(creditor.text());
+    $('#work_benefit_creditor_id').val(creditor.attr('id'));
   }
-  $("#creditors_modal").modal("hide");
+  $('#creditors_modal').modal('hide');
 }
 
 function getCreditors() {
-  $.getJSON("/creditors", function(data) {
+  $.getJSON('/creditors', function(data) {
     $('#load_creditor').autocomplete({
       minLength: 3,
       
@@ -717,7 +732,7 @@ function getCreditors() {
     
   }).done(function(data) {
     $.each(data, function(i, item) {
-      $("#creditors_modal .modal-body").append("<p id="+ item.id + ">" + item.name + "</p>");
+      $('#creditors_modal .modal-body').append('<p id='+ item.id + '>' + item.name + '</p>');
     });
   });
 }
@@ -767,7 +782,26 @@ function setPayroll(e) {
 }
 
 function enableDisableCreditAccount() {
-  var checked = $("#work_benefit_provisioning").prop("checked");
-  $("#credit_accounts input").prop("disabled", !checked).attr("required", checked);
-  $("#credit-button").attr("data-toggle", "modal").attr("disabled", !checked);
+  var checked = $('#work_benefit_provisioning').prop('checked');
+  $('#credit_accounts input').prop('disabled', !checked).attr('required', checked);
+  $('#credit-button').attr('data-toggle', 'modal').attr('disabled', !checked);
+}
+
+function employeeValueValidation() {
+  var calculationType = $('#work_benefit_calculation_type').val();
+  var employeesValueField = $('#employee_items input:text[id*=_calculation]'); 
+
+  if($('#work_benefit_individual').is(':checked')) {
+    employeesValueField.attr('required', true); 
+    
+    if(calculationType == 'fixed') {
+      currencyMask(employeesValueField);
+      employeesValueField.removeAttr('data-parsley-range');
+    } else {
+      percentMask($('#employee_items input:text[id*=_calculation]'));
+      employeesValueField.attr('data-parsley-range', '[1, 100]');
+    }
+  } else {
+    employeesValueField.removeAttr('required data-parsley-range');
+  }
 }
