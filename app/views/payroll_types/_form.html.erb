@@ -115,22 +115,6 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <%= f.label :payer_employee_id, :class => 'col-sm-2 control-label' %>
-            <div class="col-sm-3">
-              <div class="input-group form-group_">
-                <%= f.hidden_field :payer_employee_id %>
-                <%= text_field_tag 'payroll_type_payer_employee',nil, :class => 'form-control', 
-                  :required => true, :for => :payer_employee_id, 
-                  :data => {:parsley_errors_container => "#payroll_type_ledger_account_errors"}%>
-                <span class="input-group-addon">
-                  <i class="fa fa-search"></i>
-                </span>
-              </div>
-              <div id="payroll_type_ledger_account_errors"></div>
-            </div>
-          </div>
-
           <div class="form-group" id="deduction_payrolls">
             <%= f.label :ledger_account_id, :class => 'col-sm-2 control-label' %>
             <div class="col-sm-3">
@@ -149,6 +133,22 @@
               <a data-toggle="modal" href="#myModalLabel" class="btn btn-default-alt" title="Ver lista de cuentas contables">
                 <i class="fa fa-bars"></i>
               </a>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :payer_employee_id, :class => 'col-sm-2 control-label' %>
+            <div class="col-sm-3">
+              <div class="input-group form-group_">
+                <%= f.hidden_field :payer_employee_id %>
+                <%= text_field_tag 'payroll_type_payer_employee',nil, :class => 'form-control', 
+                  :required => true, :for => :payer_employee_id, 
+                  :data => {:parsley_errors_container => "#payroll_type_payer_employee_errors"} %>
+                <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+              <div id="payroll_type_payer_employee_errors"></div>
             </div>
           </div>
           
