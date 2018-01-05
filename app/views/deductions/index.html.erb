@@ -6,18 +6,18 @@
   <div class="options">
     <div class="btn-toolbar">
       <% if can? :create, Deduction %>
-        <%= link_to new_deduction_path, :class => 'btn btn-primary pu' do %>
+        <%= link_to new_deduction_path, :class => 'btn btn-primary pull-right', :onclick => "resources.checkCompany()" do %>
           <i class="fa fa-plus"></i>
         <% end %>
         
         <div class="dropdown pull-right">
-            <a  data-target="#"  data-toggle="dropdown" class="btn btn-primary">
-              <span class="caret"></span>
-            </a>
-            
-            <ul class="dropdown-menu">
-              <li><%= link_to  "Configurar Tabla IR", ir_tables_path %></li>
-            </ul>
+          <a data-target="#"  data-toggle="dropdown" class="btn btn-primary">
+            <span class="caret"></span>
+          </a>
+          
+          <ul class="dropdown-menu">
+            <li><%= link_to  "Configurar Tabla IR", ir_tables_path %></li>
+          </ul>
         </div>
       </div>
     <% end %>

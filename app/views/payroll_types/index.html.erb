@@ -4,7 +4,7 @@
   <div class="options">
     <div class="btn-toolbar">
       <% if can? :create, PayrollType %>
-        <%= link_to new_payroll_type_path, :class => 'btn btn-primary' do %>
+        <%= link_to new_payroll_type_path, :class => 'btn btn-primary', :onclick => "resources.checkCompany()" do %>
           <i class="fa fa-plus"></i>
         <% end %>
       <% end %>

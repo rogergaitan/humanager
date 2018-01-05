@@ -5,7 +5,7 @@
   <div class="options">
     <div class="btn-toolbar">
       <% if can? :create, OtherPayment %>
-        <%= link_to new_other_payment_path, :class => 'btn btn-primary pull-right' do %>
+        <%= link_to new_other_payment_path, :class => 'btn btn-primary pull-right', :onclick => "resources.checkCompany()" do %>
           <i class="fa fa-plus"></i>
         <% end %>
       <% end %>

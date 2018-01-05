@@ -7,7 +7,7 @@ $(document).ready( function() {
   }).datepicker('setDate', new Date());
 
   $('form[data-company="true"]').submit(function(event) {
-    if($('#user_company_id option:selected').val() == "" ){
+    if($('#user_company_id option:selected').val() == '' ) {
       event.preventDefault();
       var message = 'Seleccione una Compañia';
       resources.PNotify('Compañia', message, 'warning');
@@ -19,7 +19,7 @@ $(document).ready( function() {
       type: "POST",
       url: $(this).data('url'),
       data: {
-          company_id: $(this).val()
+        company_id: $(this).val()
       },
       statusCode: {
         200: function(e, xhr, settings) {

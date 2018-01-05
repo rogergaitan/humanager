@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20171222210319) do
+ActiveRecord::Schema.define(:version => 20180103195903) do
 
   create_table "abamtdsops", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -333,8 +333,9 @@ ActiveRecord::Schema.define(:version => 20171222210319) do
     t.string   "iaccount"
     t.string   "naccount"
     t.string   "ifather"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.integer  "children_count", :default => 0
   end
 
   create_table "lines", :force => true do |t|

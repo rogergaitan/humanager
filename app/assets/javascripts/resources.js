@@ -69,12 +69,6 @@ $(document).ready(function() {
 	}
 
 	// To use this, please include this view: render "/layouts/message"
-	/*
-		options {
-			icon: [icon-name],
-			dissipate: [true|false]
-		}
-	*/
 	resources.showMessage = function(type, message, options) {
 
 	  var json = [
@@ -179,6 +173,14 @@ $(document).ready(function() {
         'B': { pattern: /[a-zA-Z0-9 ]/ }
       }
     })
+	}
+
+	resources.checkCompany = function() {
+		if($('#user_company_id option:selected').val() == "" ) {
+      event.preventDefault();
+      var message = 'Seleccione una Compañia';
+      resources.PNotify('Compañia', message, 'warning');
+    }
 	}
 	
 	/**

@@ -70,7 +70,7 @@ class DeductionsController < ApplicationController
   def update
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
-        format.html { redirect_to deductions_path, notice: 'Deducción actualizada correctamente.' }
+        format.html { redirect_to deductions_path, notice: 'DeducciÃ³n actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -129,7 +129,7 @@ class DeductionsController < ApplicationController
   end
   
   def search
-    @deductions = Deduction.search params[:deduction_type], params[:calculation_type], params[:state], current_user.company_id, params[:page]
+    @deductions = Deduction.search(params[:deduction_type], params[:calculation_type], params[:state], current_user.company_id, params[:page])
     respond_to do |format|
       format.js { render :index }
     end
@@ -145,17 +145,18 @@ class DeductionsController < ApplicationController
     
     @object = []
     @object_hidden = []
-
-    @deduction.deduction_employees.each do |de|
-      # if there are records.
-      @object << "#{de.employee_id}" unless de.deduction_payments.empty?
-      @object_hidden << "#{de.employee_id}" if de.completed
-    end
-
     @employee_ids = []
 
-    @deduction.deduction_employees.where('completed = ?', false ).select('employee_id').each do |e|
-      @employee_ids << e['employee_id']
+    if @deduction
+      @deduction.deduction_employees.each do |de|
+        # if there are records.
+        @object << "#{de.employee_id}" unless de.deduction_payments.empty?
+        @object_hidden << "#{de.employee_id}" if de.completed
+      end
+      
+      @deduction.deduction_employees.where('completed = ?', false ).select('employee_id').each do |e|
+        @employee_ids << e['employee_id']
+      end
     end
   end
 
@@ -175,7 +176,7 @@ class DeductionsController < ApplicationController
   def set_deduction
     @deduction = Deduction.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to deductions_path, notice: "El registro de deducción no existe"
+    redirect_to deductions_path, notice: "El registro de deducciÃ³n no existe"
   end
   
 end
