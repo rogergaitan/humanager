@@ -97,14 +97,14 @@ class WorkBenefitsController < ApplicationController
   end
   
   def fetch_debit_accounts
-    @debit_accounts = LedgerAccount.debit_accounts
+    @debit_accounts = LedgerAccount.children_debit_accounts
     respond_to do |format|
       format.json { render json: @debit_accounts }
     end
   end
   
   def fetch_credit_accounts
-    @credit_accounts = LedgerAccount.credit_accounts
+    @credit_accounts = LedgerAccount.children_credit_accounts
     respond_to do |format|
       format.json { render json: @credit_accounts }
     end

@@ -57,12 +57,12 @@ class LedgerAccountsController < ApplicationController
   # Busca todas las cuentas contables pero solamente selecciona el id y ncuenta
   # Este metodo se utilza para crear o editar otros salarios
   def fetch
-    @names_ids = LedgerAccount.find(:all, :select =>['id','naccount', 'iaccount'])
+    @names_ids = LedgerAccount.children_debit_accounts
     respond_with(@names_ids)
   end
   
   def credit_accounts
-    @credit_accounts = LedgerAccount.credit_accounts
+    @credit_accounts = LedgerAccount.children_credit_accounts
     respond_with(@credit_accounts)
   end
 
