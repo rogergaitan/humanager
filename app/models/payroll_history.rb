@@ -10,6 +10,9 @@ class PayrollHistory < ActiveRecord::Base
   attr_accessible :time_worked, :task_id, :costs_center_id, :payment_type_id,
                   :payroll_log_id, :employee_ids, :total, :task_total, :task_unidad,
                   :payroll_date, :performance
+  
+  # Validations
+  validates_numericality_of :performance, :greater_than => 0, :less_than => 1000
 
   def self.list_to_oprpla5_detalle(payroll_log_id)
 

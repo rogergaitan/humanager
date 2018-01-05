@@ -260,6 +260,13 @@ pl.addFields = function(e) {
     var time = new Date().getTime();
     var regexp = new RegExp($(this).data('id'), 'g');
     $('#products_items > tbody').prepend($(this).data('fields').replace(regexp, time));
+
+    // Set Mask in Performance
+    $('#payroll_log_payroll_histories_attributes_' + time + '_performance').mask('ZZZ.ZZ', {
+      translation: {
+        'Z': { pattern: /[0-9]/, optional: true }
+      }
+    });
     
     // Seach Employees
     pl.searchEmployeeByCode();
@@ -273,7 +280,7 @@ pl.addFields = function(e) {
     pl.searchTaskByCode();
     pl.searchTaskByName();
     
-    if( $('#select_method_all').is('checked') ){
+    if($('#select_method_all').is('checked')) {
       $(pl.current_employee).find('#search_code_employee').select2('open');
     } else {
       $(pl.current_cc).find('#search_code_cc').select2('open');
