@@ -60,6 +60,7 @@ reports_payment_proof.create_pdf = function() {
   var payroll_id = $('#payrolls_results input:checked').val();
   var type = $('#type_report').val();
   var msg = $('#messages_to_employees').val();
+  msg = msg.replace(';', '');
   var employees = [];
 
   $('#ms-deduction_employee_ids .ms-selection li.ms-selected').each(function() {
