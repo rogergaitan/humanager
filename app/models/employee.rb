@@ -88,8 +88,7 @@ class Employee < ActiveRecord::Base
     end
 
     employee.valid?
-    status = 200
-    status = 404 if employee.errors[:social_insurance].any?
+    status = (employee.errors[:social_insurance].any?)? 404:200
   end
 
   def self.validate_account_bncr_uniqueness(id, account_bncr)
@@ -101,9 +100,8 @@ class Employee < ActiveRecord::Base
     end
     
     employee.valid?
-
-    status = 200
-    status = 404 if employee.errors[:account_bncr].any?
+    
+    status = (employee.errors[:account_bncr].any?)? 404:200
   end
 
   def full_name
