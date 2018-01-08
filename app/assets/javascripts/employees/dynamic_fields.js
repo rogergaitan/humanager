@@ -263,24 +263,18 @@ $(document).ready(function() {
     }
   });
     
-  $('form').submit(function(e) {
-    if(!$(this).parsley().validate()) {
-      e.preventDefault();
-      
-      // Show notification only when tab3 is not active
-      if(!$('#tab3').hasClass('active') && $('#tab3 div.has-error').length >= 1) {
-        new PNotify({
-          title: 'Atencion!',
-          text: 'Por favor revisar errores en pesta�a laboral.',
-          type: 'error',
-          icon: 'fa fa-warning',
-          styling: 'fontawesome',
-          buttons: {
-            closer: true,
-            sticker: false
-          }
-        });
-      }
+  window.Parsley.on('form:error', function() {
+    //show errors notifications for non visible fields 
+    if(!$('#tab1').hasClass('active') && $('#tab1 div.has-error').length >= 1) {
+      resources.PNotify('Atención', 'Por favor revisar errores en pestaña personal', 'error');
+    }
+    
+    if(!$('#tab2').hasClass('active') && $('#tab2 div.has-error').length >= 1) {
+      resources.PNotify('Atención', 'Por favor revisar errores en pestaña contacto.', 'error');
+    }
+    
+    if(!$('#tab3').hasClass('active') && $('#tab3 div.has-error').length >= 1) {
+      resources.PNotify('Atención', 'Por favor revisar errores en pestaña laboral', 'error');
     }
   });
 

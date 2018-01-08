@@ -192,17 +192,33 @@ class EmployeesController < ApplicationController
     respond_with Employee.search_employee_by_name(params[:search_name])
   end
   
+  def validate_social_insurance_uniqueness
+    status = Employee.validate_social_insurance_uniqueness(params[:id], params[:employee][:social_insurance])
+    
+    respond_to do |format|
+      format.json { render nothing: true, status: status }
+    end
+  end
+  
+  def validate_account_bncr_uniqueness
+    status = Employee.validate_account_bncr_uniqueness(params[:id], params[:employee][:account_bncr])
+    
+    respond_to do |format|
+      format.json { render nothing: true, status: status}
+    end
+  end
+  
   private
   
-    def set_employee_superior_and_departments
-      @employees_s = Employee.superior
-      @all_departments = Employee.all_departments    
-    end
-    
-    def set_employee
-      @employee = Employee.find params[:id]
-    rescue ActiveRecord::RecordNotFound
-      redirect_to employees_path, notice: "El empleado que busca no existe."
-    end
+  def set_employee_superior_and_departments
+    @employees_s = Employee.superior
+    @all_departments = Employee.all_departments    
+  end
+  
+  def set_employee
+    @employee = Employee.find params[:id]
+  rescue ActiveRecord::RecordNotFound
+    redirect_to employees_path, notice: "El empleado que busca no existe."
+  end
 
 end

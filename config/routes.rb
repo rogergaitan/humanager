@@ -172,6 +172,8 @@ Reasapp::Application.routes.draw do
       get 'sync'
       get :search
       get :search_all
+      get :validate_social_insurance_uniqueness
+      get :validate_account_bncr_uniqueness
     end
     collection do
       get 'load_employees'
