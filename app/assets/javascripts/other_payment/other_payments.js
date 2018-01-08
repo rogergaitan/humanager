@@ -518,23 +518,24 @@ op.fetchPopulateAutocomplete = function(url, textField, idField) {
 }
 
 op.showHideOptions = function(selected) {
+  var main_selector = $('#employee_items_one');
   switch($(selected).val()) {
     case 'all':
       $('#ms-other_payment_employee_ids').find('input:eq(0)').show();
       $('#list-departments').hide();
       $('#list-superior').hide(); 
-      $('.ms-selection').css('margin-top', '0px');
+      $(main_selector).find('.ms-selection').css('margin-top', '0px');
       op.filterEmployees("all");
       break;
     case 'boss':
-      $('.ms-selection').css('margin-top', '-3.7%');
+      $(main_selector).find('.ms-selection').css('margin-top', '-3.7%');
       $('#ms-other_payment_employee_ids').find('input:eq(0)').hide();
       $('#list-departments').hide();
       op.filterEmployees("superior", $('#superiors_employees').val());
       $('#list-superior').show(); 
       break;
     case 'department':
-      $('.ms-selection').css('margin-top', '-3.7%');
+      $(main_selector).find('.ms-selection').css('margin-top', '-3.7%');
       $('#ms-other_payment_employee_ids').find('input:eq(0)').hide();
       $('#list-superior').hide(); 
       op.filterEmployees('department', $('#departments_employees').val());
