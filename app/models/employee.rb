@@ -80,24 +80,20 @@ class Employee < ActiveRecord::Base
   end
   
   def self.validate_social_insurance_uniqueness(id, social_insurance)
-    if id.empty?
-      employee = Employee.new(social_insurance => social_insurance)
-    else 
-      employee = Employee.find(id)
-      employee.social_insurance = social_insurance
-    end
+    employee = Employee.new() if id.empty?
+    employee = Employee.find(id) unless id.empty?
+
+    employee.social_insurance = social_insurance
 
     employee.valid?
     status = (employee.errors[:social_insurance].any?)? 404:200
   end
 
   def self.validate_account_bncr_uniqueness(id, account_bncr)
-    if id.empty?
-      employee = Employee.new(account_bncr => account_bncr)
-    else
-      employee = Employee.find(id)
-      employee.account_bncr = account_bncr
-    end
+    employee = Employee.new() if id.empty?
+    employee = Employee.find(id) unless id.empty?
+
+    employee.account_bncr = account_bncr
     
     employee.valid?
     
