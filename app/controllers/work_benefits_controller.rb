@@ -1,7 +1,7 @@
 class WorkBenefitsController < ApplicationController
   before_filter :set_work_benefit, :only => [:edit, :update, :destroy]  
   authorize_resource
-  before_filter :resources, :only => [:new, :edit, :create]  
+  before_filter :resources, :only => [:new, :edit, :create, :update]  
   skip_load_and_authorize_resource :only => [:validate_name_uniqueness]
 
 
@@ -149,9 +149,11 @@ class WorkBenefitsController < ApplicationController
     @superior = Employee.superior
     @currencies = Currency.all
     @employee_ids = []
-
-    @work_benefit.employee_benefits.where('completed = ?', false ).select('employee_id').each do |e|
-      @employee_ids << e['employee_id']
+    
+    if @work_benefit
+      @work_benefit.employee_benefits.where('completed = ?', false ).select('employee_id').each do |e|
+        @employee_ids << e['employee_id']
+      end
     end
   end
 
