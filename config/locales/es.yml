@@ -122,11 +122,15 @@ es:
           employee:
             attributes:
               number_employee:
-                taken: 'Este número ya existe'
+                taken: Este número ya existe
               join_date:
                 blank: Este campo no puede quedar en blanco
               wage_payment:
                 blank: Este campo no puede quedar en blanco
+              account_bncr:
+                taken: Este número ya existe
+              social_insurance:
+                taken: Este número ya existe
           payroll:
             attributes:
               start_date:
