@@ -1,8 +1,9 @@
-$("#list_tasks").html("<%= escape_javascript(render(:partial => 'tasks_list')) %>");
+$('#task_data tbody').html('<%= escape_javascript(render(:partial => 'tasks_list')) %>');
+$('#tasks_pagination').html('<%= escape_javascript(render(:partial => 'pagination')) %>');
 
-$(".pagination a[href]").attr("data-remote", true);
+$('.pagination a[href]').attr('data-remote', true);
 
-if($("#update_all").val() == "true") {
-  $("input[type=checkbox]").prop("checked", true);
-  $("#update_costs").prop("disabled", false);
+if($('#update_all').val() == 'true') {
+  $('input[type=checkbox]').prop('checked', true);
+  $('#update_costs').prop('disabled', false);
 }
