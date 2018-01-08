@@ -270,7 +270,7 @@ $(document).ready(function() {
     }
     
     if(!$('#tab2').hasClass('active') && $('#tab2 div.has-error').length >= 1) {
-      resources.PNotify('Atención', 'Por favor revisar errores en pestaña contacto.', 'error');
+      resources.PNotify('Atención', 'Por favor revisar errores en pestaña contacto', 'error');
     }
     
     if(!$('#tab3').hasClass('active') && $('#tab3 div.has-error').length >= 1) {
