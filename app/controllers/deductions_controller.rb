@@ -4,6 +4,9 @@ class DeductionsController < ApplicationController
   before_filter :set_deduction, :only => [:edit, :update, :destroy]
   authorize_resource
   before_filter :resources, :only => [:new, :edit, :create, :update]
+  # TODO: Enable this before filter
+  # before_filter :set_company, :only => [:index]
+
   skip_load_and_authorize_resource :only => [:validate_description_uniqueness]
   
   before_filter :only => [:edit, :update] do |controller|
@@ -14,16 +17,13 @@ class DeductionsController < ApplicationController
 
   respond_to :html, :json, :js
 
-  # GET /deductions
-  # GET /deductions.json
   def index
+    # TODO: Use @company.id instead of current_user.company_id
     @deductions = Deduction.where('company_id = ?', current_user.company_id)
                            .paginate(:page => params[:page], :per_page => 15)
     respond_with(@deductions, :include => :ledger_account)
   end
 
-  # GET /deductions/new
-  # GET /deductions/new.json
   def new
     @deduction = Deduction.new
     @employee_ids = []
@@ -40,7 +40,6 @@ class DeductionsController < ApplicationController
     end
   end
 
-  # GET /deductions/1/edit
   def edit
     begin
     rescue
@@ -50,8 +49,6 @@ class DeductionsController < ApplicationController
     end
   end
 
-  # POST /deductions
-  # POST /deductions.json
   def create
     @deduction = Deduction.new(params[:deduction])
     respond_to do |format|
@@ -65,8 +62,6 @@ class DeductionsController < ApplicationController
     end
   end
 
-  # PUT /deductions/1
-  # PUT /deductions/1.json
   def update
     respond_to do |format|
       if @deduction.update_attributes(params[:deduction])
@@ -79,8 +74,6 @@ class DeductionsController < ApplicationController
     end
   end
 
-  # DELETE /deductions/1
-  # DELETE /deductions/1.json
   def destroy
     if @deduction.deduction_employees.empty?
       @deduction.destroy
@@ -174,9 +167,15 @@ class DeductionsController < ApplicationController
   end
 
   def set_deduction
-    @deduction = Deduction.find(params[:id])
+    # TODO: Use @company.id instead of current_user.company_id
+    @deduction = Deduction.find_by_id_and_company_id!(params[:id], current_user.company_id)
   rescue ActiveRecord::RecordNotFound
     redirect_to deductions_path, notice: "El registro de deducción no existe"
   end
+
+  # TODO: Enable this function
+  # def set_company
+  #   @company = Company.find_by_code(current_user.company_id)
+  # end
   
 end
