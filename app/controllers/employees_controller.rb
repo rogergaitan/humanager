@@ -216,9 +216,9 @@ class EmployeesController < ApplicationController
   end
   
   def set_employee
-    @employee = Employee.find params[:id]
+    @employee = Employee.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to employees_path, notice: "El empleado que busca no existe."
+    redirect_to employees_path, notice: "El empleado que busca no existe"
   end
 
 end
