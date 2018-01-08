@@ -59,6 +59,7 @@ class Employee < ActiveRecord::Base
     too_long: "Debe tener maximo 20 numeros", on: :update
   validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
     too_long: "Debe tener maximo 20 numeros", on: :update
+  validates_uniqueness_of :account_bncr, :social_insurance
   
   validates :join_date, presence: true, on: :update
   validate :join_date_cannot_be_in_future, on: :update
@@ -78,6 +79,33 @@ class Employee < ActiveRecord::Base
     end    
   end
   
+  def self.validate_social_insurance_uniqueness(id, social_insurance)
+    if id.empty?
+      employee = Employee.new(social_insurance => social_insurance)
+    else 
+      employee = Employee.find(id)
+      employee.social_insurance = social_insurance
+    end
+
+    employee.valid?
+    status = 200
+    status = 404 if employee.errors[:social_insurance].any?
+  end
+
+  def self.validate_account_bncr_uniqueness(id, account_bncr)
+    if id.empty?
+      employee = Employee.new(account_bncr => account_bncr)
+    else
+      employee = Employee.find(id)
+      employee.account_bncr = account_bncr
+    end
+    
+    employee.valid?
+
+    status = 200
+    status = 404 if employee.errors[:account_bncr].any?
+  end
+
   def full_name
     "#{entity.name} #{entity.surname}"
   end
@@ -483,13 +511,13 @@ class Employee < ActiveRecord::Base
 
         new_employee = Employee.new(:gender => gender, :birthday => birthday)
         entity = new_employee.build_entity(:name => full_name, 
-                                              :surname => last_name,
-                                              :entityid => employee.init)
+                                           :surname => last_name,
+                                           :entityid => employee.init)
         
         entity.telephones.build
         entity.emails.build
         entity.build_address(department: department, municipality: municipality,
-                                                  country: country, address: address)
+                             country: country, address: address)
 
         new_employee.build_photo
     
@@ -521,7 +549,7 @@ class Employee < ActiveRecord::Base
         entity.employee.gender = gender
         entity.employee.birthday = birthday
         entity.address_attributes = { address: address, department: department, 
-                                                                 municipality: municipality, country: country }
+                                     municipality: municipality, country: country }
         
         if entity.save
           updated_records += 1
@@ -529,7 +557,7 @@ class Employee < ActiveRecord::Base
       end
     end
       sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
-                                                 #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+                            #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
   end
 
   def self.custom_employees
