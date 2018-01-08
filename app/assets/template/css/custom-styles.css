@@ -53,3 +53,7 @@
 .percentage-col {
 	padding-left: 0;
 }
+
+.align-top {
+	vertical-align: text-top !important;
+}
