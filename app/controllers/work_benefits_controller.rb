@@ -37,7 +37,7 @@ class WorkBenefitsController < ApplicationController
     @work_benefit = WorkBenefit.new(params[:work_benefit].except(:employee_ids))
     respond_to do |format|
       if @work_benefit.save
-        format.html { redirect_to work_benefits_path, notice: 'PrestaciÃ³n actualizada correctamente.' }
+        format.html { redirect_to work_benefits_path, notice: 'Prestación actualizada correctamente.' }
         format.json { render json: @work_benefit, status: :created, location: @work_benefit }
       else
         format.html { render action: "new" }
@@ -50,8 +50,8 @@ class WorkBenefitsController < ApplicationController
   # PUT /work_benefits/1.json
   def update
     respond_to do |format|
-      if @work_benefit.update_attributes(params[:work_benefit])
-        format.html { redirect_to work_benefits_path, notice: 'PrestaciÃ³n actualizada correctamente.' }
+      if @work_benefit.update_attributes(params[:work_benefit].except(:employee_ids))
+        format.html { redirect_to work_benefits_path, notice: 'Prestación actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -160,7 +160,7 @@ class WorkBenefitsController < ApplicationController
   def set_work_benefit
     @work_benefit = WorkBenefit.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to work_benefits_path, notice: "El registro de prestaciÃ³n no existe"
+    redirect_to work_benefits_path, notice: "El registro de prestación no existe"
   end
 
   def validate_name_uniqueness
