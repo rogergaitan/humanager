@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class WorkBenefitsController < ApplicationController
   before_filter :set_work_benefit, :only => [:edit, :update, :destroy]  
   authorize_resource
@@ -160,7 +162,7 @@ class WorkBenefitsController < ApplicationController
   def set_work_benefit
     @work_benefit = WorkBenefit.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to work_benefits_path, notice: "El registro de prestación no existe"
+    redirect_to work_benefits_path, notice: 'El registro de prestación no existe'
   end
 
   def validate_name_uniqueness
