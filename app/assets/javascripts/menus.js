@@ -16,7 +16,7 @@ $(document).ready( function() {
 
   $('#user_company_id').on('change', function() {
     $.ajax({
-      type: "POST",
+      type: 'POST',
       url: $(this).data('url'),
       data: {
         company_id: $(this).val()
@@ -24,13 +24,12 @@ $(document).ready( function() {
       statusCode: {
         200: function(e, xhr, settings) {
           resources.PNotify('Compañia', 'Actualizada con exito', 'success');
-          
-          //redirect to index of payment types when user is located on payment types form according to requisites
-          if ($("a:contains(Cancelar)").attr("href")  == "/payment_types") {
-            location.assign($("a:contains(Cancelar)").attr("href"));
-          }
-      
-          setTimeout(function() { location.reload(); }, 3000);
+           
+          if($('form').attr('data-company')) { 
+            setTimeout(function() { location.assign($('a:contains(Cancelar)').attr('href')); }, 3000);
+          } else {
+            setTimeout(function() { location.reload(); }, 3000);
+	  }
         },
         409: function(e, xhr, settings) {
           var message = e.responseJSON.notice;

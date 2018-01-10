@@ -34,7 +34,8 @@
         <li><a href="#tab3" data-toggle="tab">Laboral</a></li>
       </ul>
       <%= form_for @employee, :validate => true, :html => { :class => 'form-horizontal', :multipart => true, 
-        :data => { :model_name => Employee.model_name, :reference_id => @employee.id} } do |f| %>
+        :data => { :model_name => Employee.model_name, :reference_id => @employee.id, 
+                   :parsley_validate => '' } } do |f| %>
         
         <div class="tab-content">
           <div class="tab-pane" id="tab2">
@@ -56,7 +57,7 @@
               <%= link_to_add_fields("Agregar otro email", builder, :emails, 'add-fields-email') %>
               <%= hidden_field 'count_emails', 'employees', :value => "1", :class => "hidden_fields" %>
 
-              <h2>Direcci&Aacute;n</h2>
+              <h2>Direcci&oacute;n</h2>
               <hr>
               <%= builder.fields_for :address do |address| %>
                 <%= render 'forms/address_form', :f => address %>
@@ -160,7 +161,10 @@
               <%= f.label :social_insurance, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <%= f.text_field :social_insurance, :class => 'form-control',  :required => true, :size => 20,
-                    :data => {:parsley_maxlength => 20, :parsley_minlength => 6} %>
+                    :data => {:parsley_maxlength => 20, :parsley_minlength => 6,
+                      :parsley_remote => validate_social_insurance_uniqueness_employees_url,
+                      :parsley_remote_options => { :data => { :id => @employee.id }},
+                      :parsley_remote_message => "Este numero ya existe"} %>
               </div>
             </div>
 
@@ -168,7 +172,10 @@
               <%= f.label :account_bncr, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <%= f.text_field :account_bncr, :class => 'form-control', :required => true, 
-                  :data => {:parsley_minlength => 6, :parsley_maxlength=> 20} %>
+                  :data => {:parsley_minlength => 6, :parsley_maxlength=> 20,
+                    :parsley_remote => validate_account_bncr_uniqueness_employees_url,
+                    :parsley_remote_options => { :data => { :id => @employee.id }},
+                    :parsley_remote_message => "Este numero ya existe"} %>
               </div>
             </div>
 

@@ -1,7 +1,7 @@
 class PayrollTypesController < ApplicationController
-  load_and_authorize_resource
+  before_filter :set_payroll_type, :only => [:edit, :update, :destroy]
+  authorize_resource
   before_filter :resources, :only => [:new, :edit, :update, :create]
-  before_filter :set_payroll_type => [:edit, :update, :destroy]
   skip_load_and_authorize_resource :only => [:validate_description_uniqueness]
 
   before_filter :only => [:edit, :update] do |controller|
@@ -26,7 +26,6 @@ class PayrollTypesController < ApplicationController
 
   # GET /payroll_types/1/edit
   def edit
-    @payroll_type
   end
 
   # POST /payroll_types
@@ -90,7 +89,9 @@ class PayrollTypesController < ApplicationController
   end
 
   def set_payroll_type
-    @payroll_type = PayrollType.find params[:id]
+    @payroll_type = PayrollType.find_by_id_and_company_id!(params[:id], current_user.company_id)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to payroll_types_path, notice: "El registro de tipo de planilla no existe"
   end
 
 end

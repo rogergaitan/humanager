@@ -9,7 +9,7 @@
 
       <div class="panel-body panel-no-padding">
         <%= form_for(@currency, :html => {:class => "form-horizontal row-border",
-            :data =>{:company => true, :parsley_validate => ""} }) do |f| %>
+          :data =>{:parsley_validate => ""} }) do |f| %>
           
           <div class="form-group">
             <label class="col-sm-2 control-label"><%= f.label :name %></label>

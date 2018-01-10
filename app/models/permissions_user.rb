@@ -17,19 +17,15 @@
 #  updated_at  :datetime         not null
 
 class PermissionsUser < ActiveRecord::Base
-  	
-	belongs_to :user
-  	belongs_to :permissions_subcategory
+  belongs_to :user
+  belongs_to :permissions_subcategory
 
-	attr_accessible :permissions_subcategory_id, :user_id, :p_create, :p_view,
-		:p_modify, :p_delete, :p_close, :p_accounts, :p_pdf, :p_exel
+  attr_accessible :permissions_subcategory_id, :user_id, :p_create, :p_view,
+                  :p_modify, :p_delete, :p_close, :p_accounts, :p_pdf, :p_exel
 
- 	# validates :permissions_subcategory_id, :user_id,
- 	# 				:presence => true
+  validates :permissions_subcategory_id, :user_id, :presence => true
  	
- 	# validates :p_create, :p_view, :p_modify, :p_delete, :p_close,
- 	# 			:p_accounts, :p_pdf, :p_exel,
- 	# 				:presence => true, :inclusion => {:in => [true, false]}
+  validates :p_create, :p_view, :p_modify, :p_delete, :p_close,
+            :p_accounts, :p_pdf, :p_exel, :inclusion => {:in => [true, false] }
 
-	
 end
