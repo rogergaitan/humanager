@@ -12,8 +12,6 @@ class Employee < ActiveRecord::Base
                   :photo_attributes, :position_id, :employee_id, :is_superior,
                   :payment_unit_id, :price_defined_work, :payroll_type_id,
                   :number_employee, :account_bncr, :currency_id
-  
-  validates_uniqueness_of :number_employee, :allow_nil => true
 
   has_one :department
   belongs_to :entity, :dependent => :destroy
@@ -59,7 +57,8 @@ class Employee < ActiveRecord::Base
     too_long: "Debe tener maximo 20 numeros", on: :update
   validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
     too_long: "Debe tener maximo 20 numeros", on: :update
-  validates_uniqueness_of :account_bncr, :social_insurance
+    
+  validates_uniqueness_of :number_employee, :account_bncr, :social_insurance, :allow_nil => true
   
   validates :join_date, presence: true, on: :update
   validate :join_date_cannot_be_in_future, on: :update
