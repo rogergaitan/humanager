@@ -51,10 +51,12 @@ class Employee < ActiveRecord::Base
   
   scope :superior, where("is_superior = ?", 1)
   
+  # Validations
   validates_numericality_of :account_bncr, :social_insurance, only_integer: true, on: :update, message: "solo permite numeros"
   
   validates_length_of :account_bncr, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
     too_long: "Debe tener maximo 20 numeros", on: :update
+
   validates_length_of :social_insurance, in: 6..20, too_short: "Debe tener minimo 6 numeros", 
     too_long: "Debe tener maximo 20 numeros", on: :update
     
@@ -62,6 +64,10 @@ class Employee < ActiveRecord::Base
   
   validates :join_date, presence: true, on: :update
   validate :join_date_cannot_be_in_future, on: :update
+
+  # Constants
+  GENDER_MALE = 'male'.freeze
+  GENDER_FEMALE = 'female'.freeze
   
   before_save :update_superior
   
@@ -233,7 +239,8 @@ class Employee < ActiveRecord::Base
 
   def self.get_info_by_employee_no_order(payroll_ids, task_ids, employee_id, cc_ids, type, report_currency)
 
-    data = []; infoData = [];
+    data = []
+    infoData = []
     info = {}
 
     PayrollHistory.joins(:payroll_employees)
@@ -319,14 +326,16 @@ class Employee < ActiveRecord::Base
         data << obj
         infoData << info
         info = {}
-      end # End data.include?(obj)
-    end # End PayrollHistory.joins
+      end
+    end
+
     infoData
   end
 
   def self.get_info_by_task_cc(payroll_ids, task_id, employee_ids, cc_ids, type, report_currency)
 
-    data = []; infoData = [];
+    data = []
+    infoData = []
     info = {}
 
     PayrollHistory.joins(:payroll_employees)
@@ -423,8 +432,8 @@ class Employee < ActiveRecord::Base
           info = {}
         end
 
-      end # End each ph.payroll_employees
-    end # End each PayrollHistory.joins
+      end
+    end
     infoData    
   end
 
@@ -479,53 +488,59 @@ class Employee < ActiveRecord::Base
   
   def self.sync_fb
     abanits = Abanit.includes(:abamunicipios, :abanitsddirecciones)
-                       .where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 'napellido', 
-                                                                              'fnacimiento', 'isexo', 'zfoto'])
+                    .where("bempleado = ?", 'T').find(:all, :select => ['init', 'ntercero', 
+                                                                        'napellido', 'fnacimiento', 
+                                                                        'isexo', 'zfoto'])
     created_records = 0
     updated_records = 0
-    sync_data = {}
     
     abanits.each do |employee|
-      full_name =firebird_encoding  employee.ntercero
-      last_name = firebird_encoding employee.napellido
-      gender = employee.isexo
-      birthday = employee.fnacimiento
+      full_name = firebird_encoding(employee.ntercero)
+      last_name = firebird_encoding(employee.napellido)
+      last_name = 'nr' if last_name.empty?
+      
+      gender = nil
+      birthday = nil
+
+      gender = Employee::GENDER_MALE if employee.isexo == 'M'
+      gender = Employee::GENDER_FEMALE if employee.isexo == 'F'
+      birthday = employee.fnacimiento if employee.fnacimiento
+
       country = employee.abamunicipios.try :nnombre
       department = employee.abamunicipios.try :idep
       municipality = employee.abamunicipios.try :imun
       address = employee.abanitsddirecciones.try :tdireccion
       photo = employee.zfoto
       
-      if last_name.empty?
-        last_name = 'nr'
-      end
-      
       if Entity.where("entityid = ?", employee.init).empty?
 
-        new_employee = Employee.new(:gender => gender, :birthday => birthday)
+        new_employee = Employee.new()
+        new_employee.gender = gender if gender
+        new_employee.birthday = birthday if birthday
+        new_employee.build_photo
+
         entity = new_employee.build_entity(:name => full_name, 
                                            :surname => last_name,
                                            :entityid => employee.init)
-        
         entity.telephones.build
         entity.emails.build
         entity.build_address(department: department, municipality: municipality,
                              country: country, address: address)
 
-        new_employee.build_photo
-    
-        if photo
-          #create temporary file from blob field and upload it
-          photo_file = Tempfile.new ["", ".jpg"]
-          begin
-            photo_file.write photo
-            photo_file.rewind
-            new_employee.photo.photo = photo_file 
-          ensure
-            photo_file.close
-            photo_file.unlink
-          end
-        end
+        # ToDo: Improve this
+        # if photo
+        #   # Create temporary file from blob field and upload it
+        #   binding.pry
+        #   photo_file = Tempfile.new ["", ".jpg"]
+        #   begin
+        #     photo_file.write photo
+        #     photo_file.rewind
+        #     new_employee.photo.photo = photo_file 
+        #   ensure
+        #     photo_file.close
+        #     photo_file.unlink
+        #   end
+        # end
         
         if new_employee.save
           created_records += 1
@@ -534,23 +549,25 @@ class Employee < ActiveRecord::Base
             Rails.logger.error "Error creando empleado: #{employee.init}, #{error}"
           end
         end
+
       else
         entity = Entity.find_by_entityid(employee.init)
-        
         entity.name = full_name 
         entity.surname = last_name
-        entity.employee.gender = gender
-        entity.employee.birthday = birthday
+        entity.employee.gender = gender if gender
+        entity.employee.birthday = birthday if birthday
         entity.address_attributes = { address: address, department: department, 
-                                     municipality: municipality, country: country }
+                                      municipality: municipality, country: country }
         
-        if entity.save
-          updated_records += 1
-        end
+        updated_records += 1 if entity.save
+
       end
     end
-      sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
-                            #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+
+    sync_data = {}
+    sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
+                          #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+    return sync_data
   end
 
   def self.custom_employees

@@ -23,18 +23,19 @@ class PaymentType < ActiveRecord::Base
   end
   
   def self.sync_fb
-    labtdctos = Labtdcto.select([:iemp, :itdcontrato, :ntdcontrato, :nunidadrec, :itdcalculo])
     
     created_records = 0
     updated_records = 0
-    sync_data = {}
+    labtdctos = Labtdcto.select([:iemp, :itdcontrato, :ntdcontrato, :nunidadrec, :itdcalculo])
     
     labtdctos.each do |labtdcto|
-      #seach for both fields to find unique payment type
+      # Seach for both fields to find unique payment type
       if PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).empty?
         
-        payment_type = PaymentType.new(company_id:  labtdcto.iemp, contract_code: labtdcto.itdcontrato,
-                                       name: labtdcto.ntdcontrato, payment_unit: firebird_encoding(labtdcto.nunidadrec)
+        payment_type = PaymentType.new( company_id: labtdcto.iemp,
+                                        contract_code: labtdcto.itdcontrato,
+                                        name: labtdcto.ntdcontrato,
+                                        payment_unit: firebird_encoding(labtdcto.nunidadrec)
                                       )
         
         if payment_type.save
@@ -46,14 +47,17 @@ class PaymentType < ActiveRecord::Base
         end
       else
         payment_type = PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).first
-        payment_type_params = {name: labtdcto.ntdcontrato, payment_unit: firebird_encoding(labtdcto.nunidadrec)}
-    
-        if payment_type.update_attributes(payment_type_params)
-          updated_records +=1
-        end
+        payment_type_params = {
+          name: labtdcto.ntdcontrato,
+          payment_unit: firebird_encoding(labtdcto.nunidadrec)
+        }
+        updated_records +=1 if payment_type.update_attributes(payment_type_params)
       end
     end
-      sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records}
-                            #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+    
+    sync_data = {}
+    sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records}
+                          #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+    return sync_data
   end
 end

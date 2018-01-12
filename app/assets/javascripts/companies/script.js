@@ -2,38 +2,43 @@ var company = {}
 
 $(document).ready(function() {
 
-  $('#companies-fb').on('click', function() {
-  	AllCompanies();
+  $('#sync_process').on('click', function() {
+  	syncProcess();
   });
 
-  function AllCompanies() {
-	  var cc_array = [];
-	  $('#companies-fb').attr("disabled", true); // Disable button
+  function syncProcess() {
+		var cc_array = [];
+		var url = $('#firebird_sync_process_path').val();
+	  $('#sync_process').attr("disabled", true); // Disable button
 
-	  $.ajax($('#companies_fb_companies_path').val(), {
+	  $.ajax(url, {
 	    type: 'GET',
 	    beforeSend: function() {
 	      resources.showMessage(
 	        'info',
 	        'Sincronización en Proceso, por favor espere...', 
-	        {'dissipate': false, 'icon': 'fa fa-fw fa-spinner fa-spin'}
+	        {
+						'dissipate': false, 
+						'icon': 'fa fa-fw fa-spinner fa-spin'
+					}
 	      );
 	    },
 	    complete: function() {
+				console.log('complete');
 	      setTimeout(function() {
 	        resources.showMessage('info', 'Resfrescando...');
 	        location.reload();
 	      },2000);
 	    },
 	    success: function(result) {
-	      var msj = jQuery.map( result.notice, function( value, index ) {
-	        return value + '';
-	      });
+				var msj = jQuery.map(result, function(value) {
+					return value.notice[0] + '';
+				});
 	      resources.showMessage('info', msj);
-	      $('#companies-fb').hide();
+	      $('#sync_process').hide();
 	    },
 	    error: function(result) {
-	      resources.showMessage('danger','Imposible cargar las Compañias');
+	      resources.showMessage('danger','Imposible cargar los Datos');
 	    }
 	  });
 	}

@@ -1,13 +1,13 @@
 <%- model_class = Company -%>
 <%= javascript_include_tag 'companies/script' %>
 
-<input type="hidden" id="companies_fb_companies_path" value="<%= companies_fb_companies_path %>">
+<input type="hidden" id="firebird_sync_process_path" value="<%= sync_process_companies_path %>">
 
 <div class="page-heading">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
   <div class="options">
     <div class="btn-toolbar">
-      <button id="companies-fb" class="btn btn-primary pull-right">
+      <button id="sync_process" class="btn btn-primary pull-right">
         <i class='fa fa-refresh'></i>
       </button>
     </div>

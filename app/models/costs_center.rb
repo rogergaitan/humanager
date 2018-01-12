@@ -17,9 +17,10 @@ class CostsCenter < ActiveRecord::Base
   before_update :confirm_is_not_parent
   
   def self.sync_fb
+    
+    created_records = 0
+    updated_records = 0
     empmaest = Empmaestcc.select('iemp, icc, ncc, iccpadre, iactividad').order('iemp')
-    @syn_data = {}
-    c = 0; ca = 0
     
     empmaest.each do |costsCenters|
       cc = CostsCenter.where("icost_center = ? and icc_father = ? and company_id = ?", 
@@ -35,7 +36,7 @@ class CostsCenter < ActiveRecord::Base
         )
 
         if new_cc.save
-          c += 1
+          created_records += 1
         else
           new_cc.errors.each do |error|
             Rails.logger.error "Error creando centro de costos: #{costsCenters.icc}"
@@ -43,18 +44,21 @@ class CostsCenter < ActiveRecord::Base
         end
       else
         # UPDATE
-        params = {:costs_center => 
-                             { :company_id => costsCenters.iemp, 
-                               :name_cc => firebird_encoding(costsCenters.ncc.to_s), 
-                               :icc_father => firebird_encoding(costsCenters.iccpadre.to_s)}
-                           }
-        
-        if cc.update_attributes params[:costs_center]
-          ca += 1
-        end
+        params = {
+          :costs_center => {
+            :company_id => costsCenters.iemp,
+            :name_cc => firebird_encoding(costsCenters.ncc.to_s),
+            :icc_father => firebird_encoding(costsCenters.iccpadre.to_s)
+          }
+        }
+        updated_records += 1 if cc.update_attributes(params[:costs_center])
       end
     end
-    @syn_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{c} #{I18n.t('helpers.titles.tasksfb_update')}: #{ca}"]
+    
+    syn_data = {}
+    syn_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records} 
+                          #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+    return syn_data
   end
   
   protected
