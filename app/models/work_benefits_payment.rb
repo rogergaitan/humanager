@@ -14,10 +14,9 @@ class WorkBenefitsPayment < ActiveRecord::Base
   end
   
   def self.non_provisioned(payroll_id, employee_id)
-    joins(:employee_benefit => :work_benefit)
+    joins(:employee_benefit)
     .where('work_benefits_payments.payroll_id = ? and employee_benefits.employee_id = ?
-           and work_benefits.provisioning = ?',
-           payroll_id, employee_id, false)
+           and provisioning = ?', payroll_id, employee_id, false)
   end
   
 end
