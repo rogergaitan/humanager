@@ -12,9 +12,9 @@
         <th class="align-top"><%= model_class.human_attribute_name(:ntask) %></th>
         <th class="align-top"><%= model_class.human_attribute_name(:nunidad) %></th>
         <th>
+          <%= model_class.human_attribute_name(:currency_id) %>
           <%= select_tag :currency, options_from_collection_for_select(@currencies, :id, :name), 
             prompt: "Filtrar por moneda",  class: "form-control"%>
-          <%= model_class.human_attribute_name(:currency_id) %>
         </th>
         <th class="align-top"><%= model_class.human_attribute_name(:cost) %></th>
         <% if can? :update, Task %>

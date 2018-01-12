@@ -99,10 +99,10 @@ class User < ActiveRecord::Base
 
         numer = randow_string()
         new_user = User.new( :username => "#{ufb.nusr}",
-                             :name => "#{ufb.snombre} #{ufb.sapellido}", 
-	                           :email => "#{ufb.semail}", 
-	                           :password => numer, 
-	                           :password_confirmation => numer )
+                             :name => "#{ufb.snombre} #{ufb.sapellido}",
+	                     :email => "#{ufb.semail}",
+	                     :password => numer,
+	                     :password_confirmation => numer )
 
         if new_user.save
 	        # Create default Permissions
@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
                                     :p_exel => false )
             a.save
           end
-	        created_records += 1
+           created_records += 1
         else
           new_user.errors.each do |error|
             Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}"

@@ -8,17 +8,19 @@ RSpec.describe Creditor, :type => :model do
     expect(Creditor.count).to be > 0
   end
   
-  it "update creditor data from firebird" do
+  it "updates creditor data from firebird" do
     Creditor.sync_fb
     
-    creditor = Creditor.first
-    creditor.name = "Test"
-    creditor.save
+    abanit = Abanit.where(bproveedor: "T").first
+    abanit.ntercero = "Test"
+    abanit.save
+
+    creditor = Creditor.find_by_creditor_id(abanit.init)
     
     Creditor.sync_fb
     
     creditor.reload
-    expect(creditor.name).not_to eq("Test")
+    expect(creditor.name).to eq("Test")
   end
   
 end

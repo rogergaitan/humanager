@@ -6,7 +6,7 @@ class Creditor < ActiveRecord::Base
   attr_accessible :name, :creditor_id
   
   def self.sync_fb
-
+    
     created_records = 0
     updated_records = 0
     abanits = Abanit.where(bproveedor: "T")
@@ -37,6 +37,6 @@ class Creditor < ActiveRecord::Base
     sync_data[:notice] = ["#{I18n.t('helpers.titles.sync').capitalize}: #{created_records}
                           #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
     return sync_data
-  end
+  end  
   
 end

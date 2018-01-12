@@ -7,7 +7,7 @@ class PaymentType < ActiveRecord::Base
   
   validate :factor, :presence => true, :on => :update
   validates_numericality_of :factor, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 100,
-    :message => "Este valor debe estar entre 1 y 10", :on => :update
+                            :message => "Este valor debe estar entre 1 y 10", :on => :update, :allow_nil => true
 
   # Constants
   STATE_ACTIVE = 'active'.freeze
@@ -31,7 +31,6 @@ class PaymentType < ActiveRecord::Base
     labtdctos.each do |labtdcto|
       # Seach for both fields to find unique payment type
       if PaymentType.where(company_id: labtdcto.iemp, contract_code: labtdcto.itdcontrato).empty?
-        
         payment_type = PaymentType.new( company_id: labtdcto.iemp,
                                         contract_code: labtdcto.itdcontrato,
                                         name: labtdcto.ntdcontrato,

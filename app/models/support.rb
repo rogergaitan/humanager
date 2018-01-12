@@ -5,7 +5,7 @@ class Support < ActiveRecord::Base
   attr_accessible :itdsop, :ntdsop, :smask
   
   def self.sync_fb
-
+    
     created_records = 0
     updated_records = 0
     abamtdsops = Abamtdsop.select("itdsop, ntdsop, smask").where(bvisible: "T")
@@ -26,8 +26,8 @@ class Support < ActiveRecord::Base
         end
       else
         support = Support.find_by_itdsop(itdsop)
-        params = {
-          ntdsop: ntdsop,
+        params = { 
+          ntdsop: ntdsop, 
           smask: smask
         }
         updated_records += 1 if support.update_attributes(params)
@@ -39,5 +39,4 @@ class Support < ActiveRecord::Base
                           #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
     return sync_data
   end
-  
 end

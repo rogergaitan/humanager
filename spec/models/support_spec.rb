@@ -9,20 +9,20 @@ RSpec.describe Support, :type => :model do
   end
   
   it "updates data from firebird" do
-   
     Support.sync_fb
     
-    support = Support.first
-    support.update_attributes({smask: "$##",  ntdsop: "test"} )
-    support.save
-    
-    total = Support.count
+    abamtdsop = Abamtdsop.first
+    abamtdsop.ntdsop = "N##"
+    abamtdsop.smask = "S##"
+    abamtdsop.save
+
+    support = Support.find_by_itdsop(abamtdsop.itdsop)
     
     Support.sync_fb
     
     support.reload
-    expect(Support.count).to eq(total)
-    expect(support.ntdsop).not_to eq("test")
-    expect(support.smask).not_to eq("$##")
+ 
+    expect(support.ntdsop).to eq("N##")
+    expect(support.smask).to eq("S##")
   end
 end
