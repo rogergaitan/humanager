@@ -1,8 +1,7 @@
 /**************************************************************************************/
 /* Seach Employee By Code */
 /**************************************************************************************/
-pl.searchEmployeeByCode = function() {	
-  
+pl.searchEmployeeByCode = function() {
   $(pl.current_employee).find('#search_code_employee').select2({
     placeholder: "#",
     minimumInputLength: 1,
@@ -12,37 +11,37 @@ pl.searchEmployeeByCode = function() {
       dataType: 'json',
       quietMillis: 100,
       // Page is the one-based page number tracked by Select2
-      data: function (term, page) { 
+      data: function(term, page) {
         return {
-	  employee_code: term, // Search Term
- 	  per_page: pl.per_page, // Page Size
-	  page: page // Page Number
-	};
+          employee_code: term, // Search Term
+          per_page: pl.per_page, // Page Size
+          page: page // Page Number
+        };
       },
-	results: function (data, page) {
-	  // Whether or not there are more results available
-	  var more = (page * pl.per_page) < data.total;
-	  // Notice we return the value of more so Select2 knows if more results can be loaded
-	  return {results: data.entries, more: more};
-	}
-      },
-        formatResult: pl.employeeCodeFormatResult,
-        formatSelection: pl.employeeCodeFormatSelection,
-	dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
-	escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-     }).on('select2-close', function (e) {
-       if( pl.validationTabs() ) {
-         if( $(pl.current_employee).find('#employee_code').val() == '') {
-	   $(pl.current_employee).find('#search_name_employee').select2('open');
-	   var thatName = $(pl.current_employee).find('a:eq(1)');
-	   $(thatName).find('span:eq(0)').html("Nombre");
-	} else {
-	  $(pl.current_cc).find('#search_code_cc').select2('open');
-	}
-       }
-     }).on('select2-highlight', function (e) {
-       var thatName = $(pl.current_employee).find('a:eq(1)');
-       $(thatName).find('span:eq(0)').html(e.choice.name + ' ' + e.choice.surname);
+      results: function (data, page) {
+      // Whether or not there are more results available
+      var more = (page * pl.per_page) < data.total;
+      // Notice we return the value of more so Select2 knows if more results can be loaded
+      return {results: data.entries, more: more};
+      }
+    },
+    formatResult: pl.employeeCodeFormatResult,
+    formatSelection: pl.employeeCodeFormatSelection,
+    dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  }).on('select2-close', function (e) {
+    if(pl.validationTabs()) {
+      if( $(pl.current_employee).find('#employee_code').val() == '') {
+        $(pl.current_employee).find('#search_name_employee').select2('open');
+        var thatName = $(pl.current_employee).find('a:eq(1)');
+        $(thatName).find('span:eq(0)').html("Nombre");
+      } else {
+        $(pl.current_cc).find('#search_code_cc').select2('open');
+      }
+    }
+  }).on('select2-highlight', function (e) {
+    var thatName = $(pl.current_employee).find('a:eq(1)');
+    $(thatName).find('span:eq(0)').html(e.choice.name + ' ' + e.choice.surname);
   });
 }
 
@@ -57,6 +56,7 @@ pl.employeeCodeFormatSelection = function(employee) {
   pl.setValuesFromSearch(pl.search_types.employees, employee);
   return employee.number_employee;xit
 }
+
 /**************************************************************************************/
 /* Seach Employee By Name */
 /**************************************************************************************/
@@ -115,6 +115,7 @@ pl.employeeNameFormatResult = function(employee) {
 pl.employeeNameFormatSelection = function(employee) {
   return pl.setValuesFromSearch(pl.search_types.employees, employee);
 }
+
 /**************************************************************************************/
 /* Seach Costs Center By Code */
 /**************************************************************************************/
@@ -172,6 +173,7 @@ pl.ccCodeFormatResult = function(cc) {
 pl.ccCodeFormatSelection = function(cc) {
   return pl.setValuesFromSearch(pl.search_types.cc, cc);
 }
+
 /**************************************************************************************/
 /* Seach Costs Center By Name */
 /**************************************************************************************/
@@ -229,6 +231,7 @@ pl.ccNameFormatResult = function(cc) {
 pl.ccNameFormatSelection = function(cc) {
   return pl.setValuesFromSearch(pl.search_types.cc, cc);
 }
+
 /**************************************************************************************/
 /* Seach Task By Code */
 /**************************************************************************************/
@@ -289,6 +292,7 @@ pl.taskCodeFormatResult = function(task) {
 pl.taskCodeFormatSelection = function(task) {
   return pl.setValuesFromSearch(pl.search_types.tasks, task);
 }
+
 /**************************************************************************************/
 /* Seach Task By name */
 /**************************************************************************************/
@@ -350,6 +354,7 @@ pl.taskNameFormatResult = function(task) {
 pl.taskNameFormatSelection = function(task) {
   return pl.setValuesFromSearch(pl.search_types.tasks, task);
 }
+
 /**************************************************************************************/
 /* Set Values From the Seach result */
 /**************************************************************************************/
@@ -416,6 +421,7 @@ pl.setValuesFromSearch = function(type, object) {
     break;
   }
 }
+
 /**************************************************************************************/
 /* Validation Tabs */
 /**************************************************************************************/
@@ -424,6 +430,7 @@ pl.validationTabs = function() {
   pl.tabs_function = false;
   return result;
 }
+
 /**************************************************************************************/
 /* Save in Session Storage the objects selected by search */
 /**************************************************************************************/
@@ -448,6 +455,7 @@ pl.saveSearchSessionStorage = function(key, object) {
     pl.setSessionStorage(key, array);
   }
 }
+
 /**************************************************************************************/
 /* Custom performance functionality | Search Task By Code */
 /**************************************************************************************/
@@ -503,6 +511,7 @@ pl.customTaskCodeFormatSelection = function(task) {
   $('#group_id_task').val(task.id);
   return task.itask;
 }
+
 /**************************************************************************************/
 /* Custom performance functionality | Search Task By Name */
 /**************************************************************************************/
