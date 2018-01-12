@@ -53,8 +53,9 @@ class Payroll < ActiveRecord::Base
     list_other_payment = get_other_payment(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment)
     list_employees_deductions = get_deductions_employees(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
-    list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
+    list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
+    sum_work_benefits_non_provisioned(list_employees_salary, list_employees_work_benefits)
     
     result = {}
     
@@ -107,7 +108,7 @@ class Payroll < ActiveRecord::Base
         end
       end # end each h.payroll_employees
     end # end each list_histories
-    list_employees_salary    
+    list_employees_salary
   end
 
   # Get Other Payments of each employee
@@ -208,6 +209,18 @@ class Payroll < ActiveRecord::Base
       end
     end
     new_list_employee_salary
+  end
+  
+  def self.sum_work_benefits_non_provisioned(list_employees, list_work_benefits)
+    list_employees.each do |employee_id, salary|
+      if list_work_benefits.has_key?(employee_id)
+        list_work_benefits[employee_id].each do |work_benefit|
+          unless work_benefit['provisioning']
+            list_employees[employee_id] += work_benefit['payment'].to_f
+          end
+        end
+      end
+    end
   end
 
   # Get the deduction of each employee (Calculations)
@@ -407,6 +420,7 @@ class Payroll < ActiveRecord::Base
             end
           
             work_benefits_details['employee_benefits_id'] = eb.id
+      	    work_benefits_details['provisioning'] = eb.work_benefit.provisioning
             list_work_benefits << work_benefits_details
           end
         end
@@ -490,6 +504,7 @@ class Payroll < ActiveRecord::Base
         work_benefits_payments.payroll = payroll
         work_benefits_payments.currency = payroll.currency
         work_benefits_payments.payment_date = date
+	work_benefits_payments.provisioning = benefits['provisioning']
         work_benefits_payments.payment = benefits['payment']
         work_benefits_payments.save
         payments += benefits['payment']

@@ -9,7 +9,7 @@ class ProofPayEmployeesPDF < Prawn::Document
     @total_accrued = 0 # Total Devengado
     @total_other_payments = 0 # Total Devengado
     @msg = msg
-    @limitRecords = 4
+    @limit_records = 4
     @company = Company.find_by_code(id_company)
     start
   end
@@ -29,7 +29,8 @@ class ProofPayEmployeesPDF < Prawn::Document
     else
       
       employee_ids = PayrollEmployee.select('DISTINCT(employee_id)')
-                                    .where('payroll_history_id in (?) and employee_id in (?)', @payroll_history_ids, @employees.map(&:to_i))
+                                    .where('payroll_history_id in (?) and employee_id in (?)', 
+                                           @payroll_history_ids, @employees.map(&:to_i))
                                     .collect(&:employee_id)
 
       employee_ids.each do |employee_id|
@@ -61,16 +62,15 @@ class ProofPayEmployeesPDF < Prawn::Document
         total_other_payments = get_total_other_payments(employee_id)
 
         data_other_payments_salary = get_other_payments_filter(employee_id, true)
-
-        tRows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types, 
-                                                       data_other_payments_salary, data_work_benefits)
+        t_rows = table_salary_earned(data_salary[0], data_salary[1], header, list_payments_types, 
+                                     data_other_payments_salary, data_work_benefits)
 
         # Left
         grid([0,0],[0,1]).bounding_box do
           move_down 100
           move_down 10 unless @msg.blank?
           text "Salarios Devengados", character_spacing: 1, :align => :left
-          tables_salary(tRows, header)
+          tables_salary(t_rows, header)
         end
 
         # Center
@@ -83,7 +83,7 @@ class ProofPayEmployeesPDF < Prawn::Document
           move_down 100
           move_down 10 unless @msg.blank?
           text "Deducciones Aplicadas", character_spacing: 1, :align => :right
-          table_deductions(data_deductions)
+          table_deductions(data_deductions, data_other_payments_no_salary)
         end
 
         # Rigth
@@ -105,8 +105,8 @@ class ProofPayEmployeesPDF < Prawn::Document
     text "No existen datos para mostrar"
   end
 
-  def tables_salary(tRows, header)
-    tRows.each do |rows|
+  def tables_salary(t_rows, header)
+    t_rows.each do |rows|
       table(
         header + 
         rows.map do |row| row end, 
@@ -159,7 +159,8 @@ class ProofPayEmployeesPDF < Prawn::Document
     
     payroll_history_ids = PayrollEmployee.where('employee_id = ?', employee_id).map(&:payroll_history_id)
 
-    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type_id, payroll_date, SUM(total) as total, task_unidad")
+    PayrollHistory.select("id, task_id, SUM(time_worked) as time_worked, payment_type_id, 
+                          payroll_date, SUM(total) as total, task_unidad")
                   .where(:payroll_log_id => @payroll.id, :id => payroll_history_ids)
                   .group("payment_type_id, payroll_date").order("payroll_date").each do |p|
 
@@ -232,12 +233,18 @@ class ProofPayEmployeesPDF < Prawn::Document
 
   def table_salary_earned(data, totals, header, lpt, data_other_payments_salary, data_work_benefits)
     
-    tRows = []; rows = []; row = []
-    total = 0; tOrdinario = 0; tExtra = 0; tDoble = 0; cRows = 0
+    t_rows = []
+    rows = []
+    row = []
+    total = 0 
+    t_ordinario = 0
+    t_extra = 0 
+    t_doble = 0 
+    c_rows = 0
 
     # Tasks
     data.each do |obj|
-      cRows += 1
+      c_rows += 1
 
       obj.each do |a,b|
         if a.capitalize == lpt[0] || a.capitalize == lpt[1] || a.capitalize == lpt[2]
@@ -250,28 +257,28 @@ class ProofPayEmployeesPDF < Prawn::Document
           end
         end
               
-        tOrdinario += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[0]}")
+        t_ordinario += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[0]}")
         
-        tExtra += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[1]}")
+        t_extra += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[1]}")
 
-        tDoble += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[2]}")
+        t_doble += b.to_f if a.capitalize == I18n.t("payment_type.#{lpt[2]}")
       end
 
       rows << row
       row = []      
 
-      if cRows == 30
-        tRows << rows
+      if c_rows == 30
+        t_rows << rows
         rows = []
-        cRows = 0
+        c_rows = 0
       end
     end
 
     # Cantidades Totales
     row << { :content => "Cantidades Totales", :colspan => 3, :align => :right, :font_style => :bold }
-    row << { :content => "#{number_to_format(tOrdinario)}", :align => :right }
-    row << { :content => "#{number_to_format(tExtra)}", :align => :right }
-    row << { :content => "#{number_to_format(tDoble)}", :align => :right }
+    row << { :content => "#{number_to_format(t_ordinario)}", :align => :right }
+    row << { :content => "#{number_to_format(t_extra)}", :align => :right }
+    row << { :content => "#{number_to_format(t_doble)}", :align => :right }
     rows << row
     row = []
 
@@ -291,7 +298,7 @@ class ProofPayEmployeesPDF < Prawn::Document
     
     data_other_payments_salary.each do |o|
       count += 1
-      if count <= @limitRecords
+      if count <= @limit_records
         row << { :content => "#{o.other_payment_employee.other_payment.name}", :colspan => 3, :align => :right }
         row << { :content => "#{number_to_format(o.payment.to_f)}", :colspan => 3, :align => :right}
         total_other_payments += o.payment.to_f
@@ -345,10 +352,10 @@ class ProofPayEmployeesPDF < Prawn::Document
     rows << row
     row = []
 
-    tRows << rows
+    t_rows << rows
     rows = []
     
-    tRows
+    t_rows
   end
 
   def get_data_other_payments(employee_id)
@@ -366,7 +373,7 @@ class ProofPayEmployeesPDF < Prawn::Document
         count += 1
         total += o.payment.to_f
 
-        if count >= @limitRecords
+        if count >= @limit_records
           total_others += o.payment.to_f
         else
           if o.payment > 0
@@ -381,7 +388,7 @@ class ProofPayEmployeesPDF < Prawn::Document
         end
 
         unless row.empty?
-          if count < @limitRecords
+          if count < @limit_records
             rows << row
             row = []
           end
@@ -407,14 +414,16 @@ class ProofPayEmployeesPDF < Prawn::Document
 
   def get_other_payments_filter(employee_id, is_salary)
     OtherPaymentPayment.joins(:other_payment_employee)
-                       .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?", 
+                       .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? 
+                              and other_payment_payments.is_salary = ?", 
                               @payroll.id, employee_id, is_salary)
   end
 
   def get_total_other_payments(employee_id)
     a = OtherPaymentPayment.joins(:other_payment_employee)
                            .select('sum(other_payment_payments.payment) as total')
-                           .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? and other_payment_payments.is_salary = ?",
+                           .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? 
+                                  and other_payment_payments.is_salary = ?",
                                   @payroll.id, employee_id, true)
     a[0]['total']
   end
@@ -432,7 +441,7 @@ class ProofPayEmployeesPDF < Prawn::Document
       if a.deduction_employee.employee_id.to_f == employee_id.to_f
         count += 1
         
-        if count >= @limitRecords
+        if count >= @limit_records
           total_others += a.payment.to_f
           total += a.payment
         else
@@ -450,7 +459,7 @@ class ProofPayEmployeesPDF < Prawn::Document
       end
 
       unless row.empty?
-        if count < @limitRecords
+        if count < @limit_records
           rows << row
           row = []
         end
@@ -474,13 +483,13 @@ class ProofPayEmployeesPDF < Prawn::Document
     result << "#{total}"
   end
 
-  def table_deductions(data)
-    receive = @total_accrued.to_f - data[1].to_f
+  def table_deductions(data, data_other_payments_no_salary)
+    receive = @total_accrued.to_f + data_other_payments_no_salary[1].to_f - data[1].to_f
     table([
       [
-        { :content => "Deduccion", :font_style => :bold }, 
-        { :content => "%", :font_style => :bold }, 
-        { :content => "Monto", :font_style => :bold }
+       { :content => "Deducción", :font_style => :bold },
+       { :content => "%", :font_style => :bold }, 
+       { :content => "Monto", :font_style => :bold }
       ]] +
       data[0].map do |row| row end +
       [[ {:content => "Total Deducciones:", :colspan => 2, :font_style => :bold }, 
