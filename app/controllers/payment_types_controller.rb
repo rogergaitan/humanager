@@ -11,7 +11,7 @@ class PaymentTypesController < ApplicationController
 
   def index
     @payment_types = PaymentType.find_by_company_id(current_user.company_id)
-                                      .paginate(:page => params[:page], :per_page => 15)
+                                .paginate(:page => params[:page], :per_page => 15)
                                           
     respond_with(@payment_types)
   end
@@ -80,7 +80,9 @@ class PaymentTypesController < ApplicationController
   private
   
   def set_payment_type
-    @payment_type = PaymentType.find(params[:id])
+    @payment_type = PaymentType.find_by_id_and_company_id!(params[:id], current_user.company_id)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to deductions_path, notice: "El registro de deducción no existe"
   end
 
 end
