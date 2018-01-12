@@ -141,8 +141,8 @@ class OtherPaymentsController < ApplicationController
   private
 
   def set_other_payment
-    @other_payment = OtherPayment.find_by_id_and_company_id(params[:id], current_user.company_id)
-    rescue ActiveRecord::RecordNotFound
+    @other_payment = OtherPayment.find_by_id_and_company_id!(params[:id], current_user.company_id)
+  rescue ActiveRecord::RecordNotFound
     redirect_to other_payments_path, notice: "El registro de otro pago no existe."
   end
 end

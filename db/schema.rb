@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20180103195903) do
+ActiveRecord::Schema.define(:version => 20180110211905) do
 
   create_table "abamtdsops", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(:version => 20180103195903) do
     t.integer  "currency_id"
   end
 
+  add_index "employees", ["account_bncr"], :name => "index_employees_on_account_bncr", :unique => true
   add_index "employees", ["department_id"], :name => "index_employees_on_department_id"
   add_index "employees", ["employee_id"], :name => "index_employees_on_employee_id"
   add_index "employees", ["entity_id"], :name => "index_employees_on_entity_id"
@@ -291,6 +292,7 @@ ActiveRecord::Schema.define(:version => 20180103195903) do
   add_index "employees", ["payroll_type_id"], :name => "index_employees_on_payroll_type_id"
   add_index "employees", ["position_id"], :name => "index_employees_on_position_id"
   add_index "employees", ["role_id"], :name => "index_employees_on_role_id"
+  add_index "employees", ["social_insurance"], :name => "index_employees_on_social_insurance", :unique => true
 
   create_table "empmaestccs", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -817,6 +819,7 @@ ActiveRecord::Schema.define(:version => 20180103195903) do
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
     t.integer  "currency_id"
+    t.boolean  "provisioning"
   end
 
   add_index "work_benefits_payments", ["employee_benefits_id"], :name => "index_work_benefits_payments_on_employee_benefits_id"

@@ -160,7 +160,7 @@ class WorkBenefitsController < ApplicationController
   end
 
   def set_work_benefit
-    @work_benefit = WorkBenefit.find(params[:id])
+    @work_benefit = WorkBenefit.find_by_id_and_company_id!(params[:id], current_user.company_id)
   rescue ActiveRecord::RecordNotFound
     redirect_to work_benefits_path, notice: 'El registro de prestación no existe'
   end
