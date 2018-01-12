@@ -34,4 +34,48 @@ class Company < ActiveRecord::Base
   belongs_to :costs_center
   has_many :costs_center
 
+  # Sync Companies
+  def self.sync_fb
+    created_records = 0
+    updated_records = 0
+    companies = []
+    empmaestcc = Empmaestcc.includes(:empagropecuaria)
+                           .find(:all, :select =>['iemp', 'ncc'], :conditions => ['icc = ?', ''])
+        
+    empmaestcc.each do |cfb|
+
+      empagropecuaria_params = {
+        :label_reports_1 => cfb.empagropecuaria.srotulorpt1,
+        :label_reports_2 => cfb.empagropecuaria.srotulorpt2,
+        :label_reports_3 => cfb.empagropecuaria.srotulorpt3,
+        :page_footer => cfb.empagropecuaria.sinfopiepagina
+      }
+            
+      if Company.where('code = ?', cfb.iemp).empty?
+        new_company_params = { :code => cfb.iemp, :name => "#{cfb.ncc}" }.merge empagropecuaria_params
+        new_company = Company.new(new_company_params)
+
+        if new_company.save
+          companies << new_company
+          created_records += 1
+        else
+          new_company.errors.each do |error|
+            Rails.logger.error "Error Creating Company: #{cfb.ncc}, Description: #{error}"
+          end
+        end
+      else
+        # UPDATE
+        update_company = Company.find_by_code(cfb.iemp)
+        params = { :name => "#{cfb.ncc}"}.merge empagropecuaria_params
+        updated_records += 1 if update_company.update_attributes(params)
+      end
+    end
+
+    companies_fb = {}
+    companies_fb[:companies] = companies
+    companies_fb[:notice] = ["#{I18n.t('helpers.titles.tasksfb')}: #{created_records} 
+                              #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+    return companies_fb
+  end
+
 end

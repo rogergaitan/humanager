@@ -237,7 +237,7 @@ Reasapp::Application.routes.draw do
 
   resources :companies, only: [:index] do
     collection do
-      get :companies_fb
+      get :sync_process
     end
   end
   

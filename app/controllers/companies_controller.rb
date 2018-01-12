@@ -33,44 +33,12 @@ class CompaniesController < ApplicationController
     end
   end
 
-  def companies_fb
-=begin    
-    @empmaestcc = Empmaestcc.find(:all, :select =>['iemp', 'ncc'], :conditions => ['icc = ?', ''])
-    @c = 0; @ca = 0
-    @companies = []
-    @companies_fb = {}
-    
-    @empmaestcc.each do |cfb|
-      if Company.where('code = ?', cfb.iemp).empty?
-        @new_company = Company.new( :code => cfb.iemp,
-                                    :name => "#{cfb.ncc}" )
-
-        if @new_company.save
-          @companies << @new_company
-          @c += 1
-        else
-          @new_company.errors.each do |error|
-            Rails.logger.error "Error Creating Company: #{cfb.ncc}, Description: #{error}"
-          end
-        end
-      else
-        # UPDATE
-        @update_company = Company.find_by_code(cfb.iemp)
-        params[:company] = { :name => "#{cfb.ncc}" }
-
-        if @update_company.update_attributes(params[:company])
-          @ca += 1
-        end
-      end
-    end
-=end
+  def sync_process
     @companies = firebird_sync_process
     @last_sync = SyncLog.last
-    @companies_fb[:companies] = @companies[:companies][:companies]
-    @companies_fb[:notice] = @companies[:companies][:notice]
 
     respond_to do |format|
-      format.json { render json: @companies_fb }
+      format.json { render json: @companies }
     end
   end
 

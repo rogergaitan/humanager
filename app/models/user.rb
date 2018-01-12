@@ -36,7 +36,13 @@ class User < ActiveRecord::Base
   
   validates :username, :presence => true, :length => { :within => 4..10 }
 
-  validates :email, :presence => true, :uniqueness => true 
+  validates :email, :presence => true, :uniqueness => true
+
+  def self.randow_string
+    value = ''
+    8.times { value << (65 + rand(25)).chr }
+    return value
+  end
   
   def self.search_users(username, name, actualuser, page, per_page)
     query = User.includes :permissions_user
@@ -78,6 +84,61 @@ class User < ActiveRecord::Base
 
   def self.get_permissions(id)
     @permissions = PermissionsUser.where('user_id=?', id)
+  end
+
+  # Sync users
+  def self.sync_fb
+    
+    created_records = 0
+    updated_records = 0
+    usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
+
+    usersfb.each do |ufb|
+	      
+      if User.where("username = ?", ufb.nusr).empty?
+
+        numer = randow_string()
+        new_user = User.new( :username => "#{ufb.nusr}",
+                             :name => "#{ufb.snombre} #{ufb.sapellido}", 
+	                           :email => "#{ufb.semail}", 
+	                           :password => numer, 
+	                           :password_confirmation => numer )
+
+        if new_user.save
+	        # Create default Permissions
+	        PermissionsSubcategory.all.each do |sub|
+            a = PermissionsUser.new(:permissions_subcategory_id => sub.id,
+                                    :user_id => new_user.id,
+                                    :p_create => false,
+                                    :p_view => false,
+                                    :p_modify => false,
+                                    :p_delete => false,
+                                    :p_close => false,
+                                    :p_accounts => false,
+                                    :p_pdf => false,
+                                    :p_exel => false )
+            a.save
+          end
+	        created_records += 1
+        else
+          new_user.errors.each do |error|
+            Rails.logger.error "Error Creating User: #{ufb.nusr}, Description: #{error}"
+          end
+        end
+      else
+        update_user = User.find_by_username(ufb.nusr)
+        params = {
+          :name => "#{ufb.snombre} #{ufb.sapellido}",
+          :email => "#{ufb.semail}"
+        }
+        updated_records += 1 if update_user.update_attributes(params)
+      end
+    end
+
+    users_fb = {}
+    users_fb[:notice] = ["#{I18n.t('helpers.titles.tasksfb')}: #{created_records} 
+                          #{I18n.t('helpers.titles.tasksfb_update')}: #{updated_records}"]
+    return users_fb
   end
 
 end 
