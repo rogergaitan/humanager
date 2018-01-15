@@ -675,18 +675,21 @@ function showHideOptions(selected) {
       $('#ms-deduction_employee_ids').find('input:eq(0)').show();
       $('#list-departments').hide();
       $('#list-superior').hide(); 
-      $('#ms-deduction_employee_ids').find('.ms-selection').css('margin-top', '-1px');
+      $('#ms-deduction_employee_ids').find('.ms-selection').removeClass('custom-multiselect')
+                                                           .addClass('custom-multiselect-empty');
       filterEmployees("all");
       break;
     case 'boss':
-      $('#ms-deduction_employee_ids').find('.ms-selection').css('margin-top', '-5.7%');
+      $('#ms-deduction_employee_ids').find('.ms-selection').addClass('custom-multiselect')
+                                                           .removeClass('custom-multiselect-empty');
       $('#ms-deduction_employee_ids').find('input:eq(0)').hide();
       $('#list-departments').hide();
       filterEmployees("superior", $('#superiors_employees').val());
       $('#list-superior').show(); 
       break;
     case 'department':
-      $('#ms-deduction_employee_ids').find('.ms-selection').css('margin-top', '-5.7%');
+      $('#ms-deduction_employee_ids').find('.ms-selection').addClass('custom-multiselect')
+                                                           .removeClass('custom-multiselect-empty');
       $('#ms-deduction_employee_ids').find('input:eq(0)').hide();
       $('#list-superior').hide(); 
       filterEmployees("department", $('#departments_employees').val());
