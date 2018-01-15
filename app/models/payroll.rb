@@ -15,6 +15,7 @@ class Payroll < ActiveRecord::Base
   has_many :other_payment_payrolls, :dependent => :destroy
   has_many :other_payments, :through => :other_payment_payrolls
 
+  # Validations
   validates :payroll_type_id, :presence => true
   validates :start_date, :presence => true
   validates :end_date, :presence => true
@@ -106,8 +107,8 @@ class Payroll < ActiveRecord::Base
         else
           list_employees_salary[e.employee_id] = check_currency(payroll_currency, task_currency, h.total.to_f, exchange_rate)
         end
-      end # end each h.payroll_employees
-    end # end each list_histories
+      end
+    end
     list_employees_salary
   end
 
@@ -173,17 +174,17 @@ class Payroll < ActiveRecord::Base
               else
                 add = false
               end
-          end # End Case
+          end
 
           if add
             list_other_payments << other_payment_details
             list_employee_other_payments[id] = list_other_payments
           end
-        end # End if states
+        end
         other_payment_details = {}
-      end # OtherPaymentEmployee
+      end
       list_other_payments = []
-    end # list_employees
+    end
 
     list_employee_other_payments
   end
@@ -239,14 +240,12 @@ class Payroll < ActiveRecord::Base
     list_employees_deductions = {}
 
     list_employees.each do |id, salary|
-
       DeductionEmployee.includes(deduction: :deduction_currency, employee: :entity)
                        .where(:employee_id => id)
                        .order("field(deductions.deduction_type, #{keys})")
                        .each do |de|
         
         if de.deduction.state.to_s == Deduction::STATE_ACTIVE and !de.completed
-
           deduction_details['deduction_employee_id'] = de.id
           deduction_details['deduction_id'] = de.deduction.id
           deduction_details['deduction_description'] = de.deduction.description
@@ -425,11 +424,11 @@ class Payroll < ActiveRecord::Base
           end
         end
         work_benefits_details = {}
-      end # End each work_benefits
+      end
 
       list_employees_work_benefits[id] = list_work_benefits
       list_work_benefits = []
-    end # End each list_employees
+    end
 
     list_employees_work_benefits
   end
@@ -455,7 +454,7 @@ class Payroll < ActiveRecord::Base
         detail_employee['total_deductions'] = total_deductions
         detail_report[id] = detail_employee
       end
-    end # End list_deductions
+    end
     detail_report
   end
 
@@ -464,9 +463,7 @@ class Payroll < ActiveRecord::Base
     payments = 0
 
     list_employees_deductions.each do |id, deductions|
-
       deductions.each do |deduction|
-
         deduction_payment = DeductionPayment.new
         deduction_payment.deduction_employee_id = deduction['deduction_employee_id']
         deduction_payment.payment_date = date
@@ -487,8 +484,8 @@ class Payroll < ActiveRecord::Base
           de = DeductionEmployee.find(deduction['deduction_employee_id'])
           de.update_attributes(:completed => true)
         end
-      end # End each deductions
-    end # End each list_employees_deductions
+      end
+    end
     payments
   end
 
@@ -497,19 +494,18 @@ class Payroll < ActiveRecord::Base
     payments = 0
     
     list_employees_work_benefits.each do |id, work_benefits|
-      
       work_benefits.each do |benefits|
         work_benefits_payments = WorkBenefitsPayment.new
         work_benefits_payments.employee_benefits_id = benefits['employee_benefits_id'].to_i
         work_benefits_payments.payroll = payroll
         work_benefits_payments.currency = payroll.currency
         work_benefits_payments.payment_date = date
-	work_benefits_payments.provisioning = benefits['provisioning']
+	      work_benefits_payments.provisioning = benefits['provisioning']
         work_benefits_payments.payment = benefits['payment']
         work_benefits_payments.save
         payments += benefits['payment']
-      end # End each work_benefits
-    end # End each list_employees_work_benefits
+      end
+    end
     payments
   end
 
@@ -538,8 +534,8 @@ class Payroll < ActiveRecord::Base
           ope = OtherPaymentEmployee.find(other_payment['other_payment_employee_id'])
           ope.update_attributes(:completed => true)
         end
-      end # End each other_payments
-    end # End each list_other_payments
+      end
+    end
   end
   
   # Send the information to Firebird.
@@ -768,7 +764,7 @@ class Payroll < ActiveRecord::Base
   end
 
   # Save into Firebird: OPRFPAGO (Part 1)
-  def save_in_oprfpago(num_oper, payroll)
+  def self.save_in_oprfpago(num_oper, payroll)
     transaction do
       oprfpago = Oprfpago.new
       oprfpago.iemp = payroll.company.code
@@ -778,7 +774,7 @@ class Payroll < ActiveRecord::Base
       oprfpago.id = Oprfpago::ID
       oprfpago.init = payroll.payroll_type.payer_employee.entity.entityid
       oprfpago.icuenta = payroll.payroll_type.ledger_account.iaccount
-      oprfpago.mvalor = p.payroll_log.payroll_total
+      oprfpago.mvalor = payroll.payroll_log.payroll_total
       oprfpago.save
     end
   end
@@ -832,12 +828,12 @@ class Payroll < ActiveRecord::Base
       od_last.inumoper = num_oper
       od_last.ilinea = count
       od_last.icuenta = payroll.payroll_type.ledger_account.iaccount
-      od.mcredito = total_other_payments
-      od.initcxx = payroll.payroll_type.payer_employee.entity.entityid
-      od.inumsopcxx = snumsop
+      od_last.mcredito = total_other_payments
+      od_last.initcxx = payroll.payroll_type.payer_employee.entity.entityid
+      od_last.inumsopcxx = snumsop
       od_last.fsoport = payroll.end_date.strftime("%d.%m.%Y")
       od_last.fpagocxx = payroll.payment_date.strftime("%d.%m.%Y")
-      od.save
+      od_last.save
     end
   end
 
@@ -846,7 +842,7 @@ class Payroll < ActiveRecord::Base
 
     transaction do
       count = 1
-      total_deductions = DeductionPayment.where('payroll_id = ?', p.id).sum(:payment)
+      total_deductions = DeductionPayment.where('payroll_id = ?', payroll.id).sum(:payment)
       inumsop = Oprmaest.get_inumsop(payroll.end_date, payroll.company.inum)
 
       DeductionPayment.where('payroll_id = ?', payroll.id).each do |dp|
@@ -902,7 +898,7 @@ class Payroll < ActiveRecord::Base
 
         od_debit = Oprmov1Detalle.new
         od_credit = Oprmov1Detalle.new
-        work_benefit = wb.employee_benefit.work_benefit.costs_center
+        work_benefit = wb.employee_benefit.work_benefit
         
         # D E B I T
         count += 1
@@ -929,7 +925,7 @@ class Payroll < ActiveRecord::Base
         od_credit.ilinea = count
         od_credit.icc = work_benefit.costs_center.icost_center
         # To do: Improve using relations and remove search
-        od_credit.icuenta = LedgerAccount.find(work_benefit.credit_account).iaccount
+        od_credit.icuenta = LedgerAccount.find(work_benefit.credit_account).iaccount if work_benefit.credit_account
         od_credit.tdetalle = work_benefit.name
 
         if work_benefit.pay_to_employee
