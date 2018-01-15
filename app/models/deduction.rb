@@ -44,7 +44,7 @@ class Deduction < ActiveRecord::Base
   validates :description, :format => { :with => /^[A-Za-z0-9- ]+$/i }
 
   validates_uniqueness_of :description, :case_sensitive => false,
-      message: "El nombre ya existe"
+      :scope => [:description, :company_id], message: "El nombre ya existe"
   
   validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
       message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false } 
