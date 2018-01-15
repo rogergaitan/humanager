@@ -16,8 +16,10 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
+require 'concerns/encodable'
 
 class User < ActiveRecord::Base
+  include Encodable
 
   has_many :permissions_user, :dependent => :destroy
   belongs_to :company
@@ -32,6 +34,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :encrypted_password, :password_confirmation, :remember_me, 
     :username, :name, :company_id
   
+  # Validations
   validates :name, :presence => true
   
   validates :username, :presence => true, :length => { :within => 4..10 }
@@ -94,15 +97,17 @@ class User < ActiveRecord::Base
     usersfb = Abausuario.find(:all, :select => ['nusr', 'snombre', 'sapellido', 'semail'])
 
     usersfb.each do |ufb|
-	      
-      if User.where("username = ?", ufb.nusr).empty?
+      
+      full_name = "#{firebird_encoding(ufb.snombre)} #{firebird_encoding(ufb.sapellido)}"
 
+      if User.where("username = ?", ufb.nusr).empty?
+        
         numer = randow_string()
         new_user = User.new( :username => "#{ufb.nusr}",
-                             :name => "#{ufb.snombre} #{ufb.sapellido}",
-	                     :email => "#{ufb.semail}",
-	                     :password => numer,
-	                     :password_confirmation => numer )
+                             :name => full_name,
+                             :email => "#{ufb.semail}",
+                             :password => numer,
+                             :password_confirmation => numer )
 
         if new_user.save
 	        # Create default Permissions
@@ -128,7 +133,7 @@ class User < ActiveRecord::Base
       else
         update_user = User.find_by_username(ufb.nusr)
         params = {
-          :name => "#{ufb.snombre} #{ufb.sapellido}",
+          :name => full_name,
           :email => "#{ufb.semail}"
         }
         updated_records += 1 if update_user.update_attributes(params)
