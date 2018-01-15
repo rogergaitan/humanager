@@ -12,7 +12,7 @@ class PayrollHistory < ActiveRecord::Base
                   :payroll_date, :performance
   
   # Validations
-  validates_numericality_of :performance, :greater_than => 0, :less_than => 1000
+  validates_numericality_of :performance, :greater_than => -1, :less_than => 1000
 
   def self.list_to_oprpla5_detalle(payroll_log_id)
 

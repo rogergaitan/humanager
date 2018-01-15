@@ -7,33 +7,24 @@ class PayrollsController < ApplicationController
   
   respond_to :html, :json, :js
 
-  # GET /payrolls
-  # GET /payrolls.json
   def index
     #@payrolls = Payroll.all
   end
 
-  # GET /payrolls/1
-  # GET /payrolls/1.json
   def show
     @payroll = Payroll.find(params[:id])
     respond_with(@payroll)
   end
 
-  # GET /payrolls/new
-  # GET /payrolls/new.json
   def new
     @payroll = Payroll.new
     respond_with(@payroll)
   end
 
-  # GET /payrolls/1/edit
   def edit
     @payroll = Payroll.find(params[:id])
   end
 
-  # POST /payrolls
-  # POST /payrolls.json
   def create
     params[:payroll][:company_id] = @company.id
     @payroll = Payroll.new(params[:payroll])
@@ -52,8 +43,6 @@ class PayrollsController < ApplicationController
     end
   end
 
-  # PUT /payrolls/1
-  # PUT /payrolls/1.json
   def update
     @payroll = Payroll.find(params[:id])
 
@@ -68,8 +57,6 @@ class PayrollsController < ApplicationController
     end
   end
 
-  # DELETE /payrolls/1
-  # DELETE /payrolls/1.json
   def destroy
     @payroll = Payroll.find(params[:id])
     @payroll.destroy

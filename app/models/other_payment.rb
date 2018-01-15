@@ -41,7 +41,7 @@ class OtherPayment < ActiveRecord::Base
   validates :name, :format => { :with => /^[A-Za-z0-9- ]+$/i }
 
   validates_uniqueness_of :name, :case_sensitive => false,
-      message: "El nombre ya existe"
+      :scope => [:name, :company_id], message: "El nombre ya existe"
   
   before_save :save_state
 

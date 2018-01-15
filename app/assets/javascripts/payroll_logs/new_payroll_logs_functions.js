@@ -171,16 +171,21 @@ pl.addFields = function(e) {
 
     // Validate Performance
     var performance = $(pl.current_performance).find('input[id*=_performance]').val();
-    if( performance != "" && typeof performance != 'undefined' ) {
+    if(performance == '' || typeof performance != 'undefined') {
       
-      performance = parseInt(performance);
+      if(performance == '') {
+        resources.PNotify('Planilla', pl.messages.require_performance , 'info');
+        return false;
+      }
+
+      performance = parseFloat(performance);
 
       if(isNaN(performance)) {
         resources.PNotify('Planilla', pl.messages.performance_wrong_format , 'info');
         return false;
       }
 		
-      if(!(performance > 0 || performance <= 99.99)) {
+      if(!(performance > 0 || performance <= 999.99)) {
         resources.PNotify('Planilla', pl.messages.performance_range , 'info');
         return false;
       }
@@ -188,7 +193,7 @@ pl.addFields = function(e) {
 
     // Validate Date
     var date = $('#payroll_log_payroll_date').val();
-    if(date == "") {
+    if(date == '') {
       resources.PNotify('Planilla', pl.messages.date_not_found , 'info');
       return false;
     }
@@ -204,7 +209,7 @@ pl.addFields = function(e) {
 		
     // Validate currency related to employee
     var employee_currency = $(pl.current_employee).find('input:hidden:eq(6)').val();
-    if(employee_currency != "" && employee_currency != payroll_currency) {
+    if(employee_currency != '' && employee_currency != payroll_currency) {
       resources.PNotify('Planilla', pl.messages.employee_bad_currency, 'info');
       return false;
     }

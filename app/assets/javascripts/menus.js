@@ -23,13 +23,14 @@ $(document).ready( function() {
       },
       statusCode: {
         200: function(e, xhr, settings) {
-          resources.PNotify('Compañia', 'Actualizada con exito', 'success');
+          sessionStorage.setItem('company_updated', true);
+          resources.PNotify('Compañia', 'Actualizando...', 'success');
            
           if($('form').attr('data-company')) { 
             setTimeout(function() { location.assign($('a:contains(Cancelar)').attr('href')); }, 3000);
           } else {
             setTimeout(function() { location.reload(); }, 3000);
-	  }
+	        }
         },
         409: function(e, xhr, settings) {
           var message = e.responseJSON.notice;
@@ -42,4 +43,8 @@ $(document).ready( function() {
     });
   });
 
+  if(sessionStorage.getItem('company_updated')) {
+    sessionStorage.removeItem('company_updated');
+    resources.PNotify('Compañia', 'Actualizada con exito', 'success');
+  }
 });

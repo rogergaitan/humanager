@@ -5,7 +5,7 @@ class PayrollType < ActiveRecord::Base
   
   # Validations
   validates :description, :presence => true
-  validates_uniqueness_of :description, :case_sensitive => false, :scope => :company_id
+  validates_uniqueness_of :description, :case_sensitive => false, :scope => [:description, :company_id]
   validates_length_of :description, :maximum => 30, :message => "maximo 30 caracteres"
   validates :description, :format => { :with => /^[A-Za-z0-9- ]+$/i }
   
@@ -32,19 +32,15 @@ class PayrollType < ActiveRecord::Base
   scope :tipo_planilla,->(company_id){select(['id','description','payroll_type']).where(:state => 1, company_id: company_id ).order('payroll_type')}
   
   def self.validate_description_uniqueness(id, description, company_id)
-    if id.empty?
-      payroll_type = PayrollType.new(:description => description, :company_id => company_id)
-    else
-      payroll_type = PayrollType.find(id)
-      payroll_type.description = description
-    end
+    
+    payroll_type = PayrollType.new() if id.empty?
+    payroll_type = PayrollType.find(id) unless id.empty?
+
+    payroll_type.description = description
+    payroll_type.company_id = company_id
     
     payroll_type.valid?
-  
-    status = 200
-    status = 404 if payroll_type.errors[:description].any?
-
-    status
+    status = 404 if (payroll_type.errors[:description].any?)? 404:200
   end
   
 end
