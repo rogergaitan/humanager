@@ -57,3 +57,10 @@
 .align-top {
 	vertical-align: text-top !important;
 }
+
+.custom-multiselect {
+	margin-top: -43.7px !important;
+}
+.custom-multiselect-empty {
+	margin-top: 0px !important;
+}

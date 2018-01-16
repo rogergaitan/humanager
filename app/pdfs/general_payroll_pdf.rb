@@ -80,8 +80,6 @@ class GeneralPayrollPDF < Prawn::Document
       rows.each_slice(20) do |rows|
         page_count += 1
         start_new_page if page_count > 1
-        
-        print_date()
     
         if page_count == total_pages
           employee_signature(rows.count - 1)
@@ -89,7 +87,7 @@ class GeneralPayrollPDF < Prawn::Document
           employee_signature(rows.count)
         end
         
-        bounding_box([0, 440], :width => 600) do
+        bounding_box([0, 450], :width => 640) do
           table(
             [header] + rows.each do |row|
               row
@@ -99,6 +97,7 @@ class GeneralPayrollPDF < Prawn::Document
               :position => :left
             )
         end
+	print_date()
       end
     else
       print_date()
@@ -125,13 +124,13 @@ class GeneralPayrollPDF < Prawn::Document
   end
   
   def print_date
-    bounding_box([0, 15], :width => 150) do
+    bounding_box([0, 7], :width => 150) do
       text "#{DateTime.now.strftime("Impreso el %d/%m/%Y a las %I:%M %p")}", :size => 7
     end
   end
   
   def employee_signature(rows)
-    bounding_box([635, 420], :width => 120) do
+    bounding_box([635, 430], :width => 120) do
       text "Firma del Empleado", :align => :center, :size => 8, :style => :bold
       move_down(28)
       

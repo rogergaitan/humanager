@@ -524,18 +524,21 @@ op.showHideOptions = function(selected) {
       $('#ms-other_payment_employee_ids').find('input:eq(0)').show();
       $('#list-departments').hide();
       $('#list-superior').hide(); 
-      $(main_selector).find('.ms-selection').css('margin-top', '0px');
+      $(main_selector).find('.ms-selection').removeClass('custom-multiselect')
+                                            .addClass('custom-multiselect-empty');
       op.filterEmployees("all");
       break;
     case 'boss':
-      $(main_selector).find('.ms-selection').css('margin-top', '-3.7%');
+      $(main_selector).find('.ms-selection').addClass('custom-multiselect')
+                                            .removeClass('custom-multiselect-empty');
       $('#ms-other_payment_employee_ids').find('input:eq(0)').hide();
       $('#list-departments').hide();
       op.filterEmployees("superior", $('#superiors_employees').val());
       $('#list-superior').show(); 
       break;
     case 'department':
-      $(main_selector).find('.ms-selection').css('margin-top', '-3.7%');
+      $(main_selector).find('.ms-selection').addClass('custom-multiselect')
+                                            .removeClass('custom-multiselect-empty');
       $('#ms-other_payment_employee_ids').find('input:eq(0)').hide();
       $('#list-superior').hide(); 
       op.filterEmployees('department', $('#departments_employees').val());
