@@ -92,7 +92,7 @@
               <%= label_tag 'Planilla a Aplicar', nil, class: 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <div class="input-group form-group_">
-                  <%= text_field_tag 'deduction_payroll', f.object.payrolls.first.try(:payroll_type).try(:description),  :class => 'form-control'%>
+                  <%= text_field_tag 'deduction_payroll', f.object.payrolls.first.try(:payroll_type).try(:description), :class => 'form-control'%>
                   <div class="help-block with-errors"></div>
                   <span class="input-group-addon">
                     <i class="fa fa-search"></i>
@@ -115,7 +115,9 @@
               <%= f.label :amount_exhaust, :class => 'col-sm-1 control-label' %>
               <div class="col-sm-3 form-group_">
                 <%= f.text_field :amount_exhaust, :class => 'form-control', 
-                 :value => number_to_currency(f.object.amount_exhaust, unit: "", delimeter: "") %>
+		  :value => number_to_currency(f.object.amount_exhaust, unit: "", delimeter: ""),
+		  :data => { :parsley_min => 1 }
+	       	%>
                  <div class="help-block with-errors"></div>
               </div>
               

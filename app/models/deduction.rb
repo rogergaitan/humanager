@@ -47,13 +47,16 @@ class Deduction < ActiveRecord::Base
       :scope => [:description, :company_id], message: "El nombre ya existe"
   
   validates_numericality_of :deduction_value, greater_than: 0, less_than_or_equal_to: 100, 
-      message: "debe ser mayor que cero o menor o igual a 100", if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false } 
+                            message: "solo se permite un numero valido y debe ser mayor que cero o menor o igual a 100", 
+			    if: Proc.new { |d| d.calculation_type == :percentage && d.individual == false } 
   
-  validates_numericality_of :deduction_value, greater_than: 0, 
-      message: "debe ser mayor que cero", if: Proc.new { |d| d.calculation_type == :fixed && d.individual == false }
+  validates_numericality_of :deduction_value, greater_than: 0,
+                            message: "solo se permite un numero valido y debe ser mayor que cero",
+			    if: Proc.new { |d| d.calculation_type == :fixed && d.individual == false }
   
   validates_numericality_of :amount_exhaust, greater_than: 0,
-      message: "debe ser mayor que cero", if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false }
+                            message: "solo se permite un numero valido y debe ser mayor que cero",
+                            if: Proc.new { |d|  d.deduction_type == :amount_to_exhaust && d.individual == false }
   
   before_save :save_state
   before_save :add_deduction_currency_id

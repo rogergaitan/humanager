@@ -265,6 +265,7 @@ $(document).ready(function() {
   });
   
   currencyMask($('#deduction_maximum_deduction'));
+  currencyMask($('#deduction_amount_exhaust'));
   
   //employee search fields
   showHideOptions( $('#select_method_all') );
