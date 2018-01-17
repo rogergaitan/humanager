@@ -51,13 +51,14 @@ class Payroll < ActiveRecord::Base
     payroll_currency = payroll_log.payroll.currency.currency_type
     currency_symbol = payroll_log.payroll.currency.symbol
     list_employees_salary = get_salary_empoyees(payroll_log, payroll_currency, exchange_rate)
-    list_other_payment = get_other_payment(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
-    list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payment)
+    list_other_payments_constitute_salary = get_other_payment(list_employees_salary, payroll_log, payroll_currency, exchange_rate, true)
+    list_employees_salary = sum_other_payments_salary(list_employees_salary, list_other_payments_constitute_salary)
+    list_other_payments = get_other_payment(list_employees_salary, payroll_log, payroll_currency, exchange_rate, false)
     list_employees_deductions = get_deductions_employees(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     detail_report = check_salaries_deductions(list_employees_salary,list_employees_deductions)
     list_employees_work_benefits = get_work_benefits(list_employees_salary, payroll_log, payroll_currency, exchange_rate)
     sum_work_benefits_non_provisioned(list_employees_salary, list_employees_work_benefits)
-    
+
     result = {}
     
     if detail_report.empty?
@@ -76,9 +77,10 @@ class Payroll < ActiveRecord::Base
         save_work_benefits_payments(date, payroll_log.payroll, list_employees_work_benefits)
         
         # Other Payments
-        save_other_payment_payments(date, payroll_log.payroll, list_other_payment)
+        save_other_payment_payments(date, payroll_log.payroll, list_other_payments)
+	save_other_payment_payments(date, payroll_log.payroll, list_other_payments_constitute_salary)
     
-        payroll_log.update_attributes :exchange_rate => exchange_rate
+        payroll_log.update_attributes(:exchange_rate => exchange_rate)
         
         p = payroll_log.payroll
         p.update_attributes(:state => false)
@@ -113,14 +115,16 @@ class Payroll < ActiveRecord::Base
   end
 
   # Get Other Payments of each employee
-  def self.get_other_payment(list_employees, payroll_log, payroll_currency, exchange_rate)
+  def self.get_other_payment(list_employees, payroll_log, payroll_currency, exchange_rate, constitutes_salary)
 
     other_payment_details = {}
     list_other_payments = []
     list_employee_other_payments = {}
     
     list_employees.each do |id, salary|
-      OtherPaymentEmployee.includes(other_payment: [:currency]).where(:employee_id => id).each do |ope|
+      OtherPaymentEmployee.joins(:other_payment)
+                          .where(:employee_id => id,
+                                 :other_payments => {:constitutes_salary => constitutes_salary}).each do |ope|
         if ope.other_payment.state.to_s == OtherPayment::STATE_ACTIVE and !ope.completed
                     
           other_payment_details['other_payment_employee_id'] = ope.id
@@ -199,12 +203,10 @@ class Payroll < ActiveRecord::Base
 
       if list_other_payments.key?(employee_id)   
         list_other_payments[employee_id].each do |other_payment|
-          if other_payment['constitutes_salary']
-            if new_list_employee_salary.has_key?(employee_id)
-              new_list_employee_salary[employee_id] += other_payment['payment'].to_f
-            else              
-              new_list_employee_salary[employee_id] = other_payment['payment'].to_f
-            end
+          if new_list_employee_salary.has_key?(employee_id)
+            new_list_employee_salary[employee_id] += other_payment['payment'].to_f
+          else              
+            new_list_employee_salary[employee_id] = other_payment['payment'].to_f
           end
         end
       end
@@ -372,7 +374,7 @@ class Payroll < ActiveRecord::Base
                 end
               else
                 add = false
-              end
+            end
           end
           
           unless deduction_details['payment'] <= salary.to_f

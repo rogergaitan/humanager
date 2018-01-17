@@ -415,7 +415,7 @@ class ProofPayEmployeesPDF < Prawn::Document
   def get_other_payments_filter(employee_id, is_salary)
     OtherPaymentPayment.joins(:other_payment_employee)
                        .where("other_payment_payments.payroll_id = ? and other_payment_employees.employee_id = ? 
-                              and other_payment_payments.is_salary = ?", 
+                              and other_payment_payments.is_salary = ?",
                               @payroll.id, employee_id, is_salary)
   end
 
