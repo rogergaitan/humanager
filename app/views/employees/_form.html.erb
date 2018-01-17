@@ -275,7 +275,9 @@
               <%= f.label :wage_payment, :class => 'col-sm-2 control-label' %>
               <div class="col-sm-3">
                 <%= f.text_field :wage_payment, :value => number_to_currency(f.object.wage_payment, :unit => ""), 
-                  :required => true, :class => 'form-control' %>
+		  :required => true, :class => 'form-control',
+                  :data => {:parsley_type => "number"}
+		%>
               </div>
             </div>
             

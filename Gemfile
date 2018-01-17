@@ -11,8 +11,6 @@ gem 'devise', '3.5.2'
 gem 'mini_magick', '4.8.0'
 gem 'carrierwave', '0.10.0'
 gem 'client_side_validations', '3.2.7'
-# gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
-# gem 'bootstrap-will_paginate'
 gem 'enum_column3', '0.1.4'
 gem 'will_paginate', '3.0.7'
 gem 'rails3-jquery-autocomplete', '1.0.15'
@@ -43,7 +41,6 @@ group :assets do
   gem 'therubyracer', '0.12.2', :platform => :ruby
   # gem 'libv8', '~> 3.11.8.3'
   # gem 'less'
-  gem 'less-rails', '2.6.0'
   gem 'sass-rails', '3.2.6'
   gem 'coffee-rails', '3.2.2'
 

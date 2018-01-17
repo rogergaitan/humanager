@@ -116,7 +116,7 @@
               <div class="col-sm-3 form-group_">
                 <%= f.text_field :amount_exhaust, :class => 'form-control', 
 		  :value => number_to_currency(f.object.amount_exhaust, unit: "", delimeter: ""),
-		  :data => { :parsley_min => 1 }
+		  :data => {:parsley_type => "number", :parsley_min => 1 }
 	       	%>
                  <div class="help-block with-errors"></div>
               </div>
@@ -144,7 +144,9 @@
             </div>
             <div class="col-sm-3">
               <%= f.text_field :deduction_value, :value => number_to_currency(f.object.deduction_value, unit: "", delimiter: ""),
-                :class => 'form-control', :required => true %>
+	        :class => 'form-control', :required => true,
+		:data => {:parsley_type => "number"}
+	      %>
               <div class="help-block with-errors"></div>
               <div class="individual-check">
                 <%= f.label :individual, :class => 'col-sm-5 control-label' %>
@@ -203,9 +205,8 @@
                 <%= f.text_field :maximum_deduction, 
                   :value => number_to_currency(f.object.maximum_deduction, unit: "", delimiter: ""),
                   :class => "form-control",
-                  :data => {:parsley_errors_container => "#maximum_deduction_errors"} %>
+		  :data => {:parsley_type => "number"} %>
                 </div><span id="maximum_deduction_currency_symbol"></span>
-                <div id="maximum_deduction_errors"></div>
             </div>
             
             <div class="col-sm-6 pull-right maximum_deduction">

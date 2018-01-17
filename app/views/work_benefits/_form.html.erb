@@ -192,7 +192,7 @@
             <%= f.label :work_benefits_value, :class => "col-sm-2 control-label" %>
             <div class="col-sm-3">
               <%= f.text_field :work_benefits_value, :value =>  number_to_currency(f.object.work_benefits_value, :unit => "", :delimiter => ""),
-                :class => "form-control", :required => true %>
+                :class => "form-control", :required => true, :data => {:parsley_type => "number"} %>
                 <div class="individual-check">
                   <%= f.label :individual, :class => "col-sm-5 control-label" %>
                   <div class="col-sm-3">
