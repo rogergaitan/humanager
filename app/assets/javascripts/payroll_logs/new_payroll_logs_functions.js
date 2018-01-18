@@ -288,7 +288,7 @@ pl.addFields = function(e) {
     if($('#select_method_all').is('checked')) {
       $(pl.current_employee).find('#search_code_employee').select2('open');
     } else {
-      $(pl.current_cc).find('#search_code_cc').select2('open');
+      $(pl.current_employee).find('#search_name_employee').select2('open');
     }
 
     pl.checkPerformance();

@@ -975,7 +975,8 @@ class Payroll < ActiveRecord::Base
 
   def self.get_main_calendar(d_start, d_end, company_id)
     Payroll.joins(:payroll_type, :payroll_log)
-           .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, payrolls.payment_date, payroll_types.description')
+           .select('payroll_logs.id, payrolls.start_date, payrolls.end_date, 
+                    payrolls.payment_date, payroll_types.description, payroll_types.calendar_color')
            .where("payrolls.start_date >= ? and payrolls.end_date <= ? and payrolls.company_id = '?' and payrolls.state = ?",
                   DateTime.parse(d_start), DateTime.parse(d_end), company_id, true)
   end

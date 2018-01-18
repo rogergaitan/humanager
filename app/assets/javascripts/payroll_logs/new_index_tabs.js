@@ -487,7 +487,7 @@ pl.customSearchTaskByCode = function() {
        formatResult: pl.customTaskCodeFormatResult,
        formatSelection: pl.customTaskCodeFormatSelection,
        dropdownCssClass: 'bigdrop', // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+       escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 }).on('select2-close', function (e) {
   if( $('#group_id_task').val() == '' ) {
     $('#group_search_name_task').select2('open');

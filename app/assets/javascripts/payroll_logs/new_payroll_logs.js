@@ -42,64 +42,64 @@ $(jQuery(document).ready(function($) {
     bat_payment_type: 'Revise la configuración del tipo de pago e intente de nuevo'
   };
 
-	/**************************************************************************************/
-	/* Multi-Select */
-	/**************************************************************************************/
-	// Multi-Select: Employees list
-	$('#payroll_logs_employee_ids').multiSelect({
-    selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Empleado...'>",
-    selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Empleado...'>",
-    afterInit: function(ms) {
-      var that = this,
-      $selectableSearch = that.$selectableUl.prev(),
-      $selectionSearch = that.$selectionUl.prev(),
-      selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-      selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    /**************************************************************************************/
+    /* Multi-Select */
+    /**************************************************************************************/
+    // Multi-Select: Employees list
+    $('#payroll_logs_employee_ids').multiSelect({
+      selectableHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;'  autocomplete='off' placeholder='Empleado...'>",
+      selectionHeader: "<input type='text' class='form-control' style='margin-bottom: 10px;' autocomplete='off' placeholder='Empleado...'>",
+      afterInit: function(ms) {
+        var that = this,
+        $selectableSearch = that.$selectableUl.prev(),
+        $selectionSearch = that.$selectionUl.prev(),
+        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
-      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-      .on('keydown', function(e) {
-        if(e.which === 40) {
-          that.$selectableUl.focus();
-          return false;
-        }
-      });
+        that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+        .on('keydown', function(e) {
+          if(e.which === 40) {
+            that.$selectableUl.focus();
+            return false;
+         }
+        });
 
-      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-      .on('keydown', function(e) {
-        if(e.which == 40) {
-          that.$selectionUl.focus();
-          return false;
-        }
-      });
-    },
-    afterSelect: function(values) {
-      // values => array[] with all IDs
-      pl.multiSelectGetEmployees(values);
-      // this.qs1.cache();
-      this.qs2.cache();
-    },
-    afterDeselect: function() {
-      // this.qs1.cache();
-      this.qs2.cache();
-    }
-	});
+        that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+        .on('keydown', function(e) {
+          if(e.which == 40) {
+            that.$selectionUl.focus();
+            return false;
+          }
+        });
+      },
+      afterSelect: function(values) {
+        // values => array[] with all IDs
+        pl.multiSelectGetEmployees(values);
+        // this.qs1.cache();
+        this.qs2.cache();
+      },
+      afterDeselect: function() {
+        // this.qs1.cache();
+        this.qs2.cache();
+      }
+    });
 	
-	// Multi-Select: Select All
-	$('#emplotee_select_all').parents('label').click(function() {
-		pl.employeeSelectAll();
-	});
+    // Multi-Select: Select All
+    $('#emplotee_select_all').parents('label').click(function() {
+      pl.employeeSelectAll();
+    });
 
-	$('#emplotee_select_all').next().click(function() {
-		pl.employeeSelectAll();
-	});
+    $('#emplotee_select_all').next().click(function() {
+      pl.employeeSelectAll();
+    });
 
-	// Multi-Select: Options
-	$('#options_employees').find('label').click(function() {
-		pl.showHideOptions($(this).find('input'));
-  });
+    // Multi-Select: Options
+    $('#options_employees').find('label').click(function() {
+      pl.showHideOptions($(this).find('input'));
+    });
 
   $('input[name=select_method]').next().click(function() {
-		pl.showHideOptions($(this).parent().find('input'));
+    pl.showHideOptions($(this).parent().find('input'));
   });
 
   // Multi-Select: Options Initial
@@ -107,27 +107,27 @@ $(jQuery(document).ready(function($) {
 
   // // Multi-Select: Change Department
   $('#departments_employees').change(function() {
-		pl.filterEmployees("department", $(this).val());
-	});
+    pl.filterEmployees("department", $(this).val());
+  });
 
   // Multi-Select: Change Superiors
-	$('#superiors_employees').change(function() {
-		pl.filterEmployees("superior", $(this).val());
-	});
+  $('#superiors_employees').change(function() {
+    pl.filterEmployees("superior", $(this).val());
+  });
 
   // Multi-Select: Custom Search Task
   pl.customSearchTaskByCode();
   pl.customSearchTaskByName();
 
-	/**************************************************************************************/
-	/* Multi-Select */
-	/**************************************************************************************/
-	// Date
-	$('#payroll_log_payroll_date').datepicker({
+  /**************************************************************************************/
+  /* Multi-Select */
+  /**************************************************************************************/
+  // Date
+  $('#payroll_log_payroll_date').datepicker({
     format: 'dd/mm/yyyy',
     autoclose: true,
     language: "es"
-	});
+  });
 
   // Add new Row
   $('form').on('click', '.add_fields', pl.addFields);
@@ -267,8 +267,9 @@ $(jQuery(document).ready(function($) {
     
     var currentEmployees = $(pl.current_save_employees).length;
     var rowIsDisabled = $(pl.current_payments_type+' select[id*=_payment_type_id]').parent('div').hasClass('a-not-active');
+    
 
-    if( currentEmployees == 1 && !rowIsDisabled) {
+    if( currentEmployees == 1 && rowIsDisabled) {
       resources.PNotify('Planilla', pl.messages.last_line, 'info');
     } else {
       pl.ajaxUpdatePerformance();

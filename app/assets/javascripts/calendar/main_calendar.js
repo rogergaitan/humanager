@@ -111,10 +111,9 @@ $(document).ready( function() {
       // Start Date
       obj = {
         id: 'start',
-        url: '/payroll_logs/'+d['id']+'/edit',
         title: 'Inicio '+ d['description'],
         start: set_date(d['start_date']),
-        backgroundColor: Utility.getBrandColor('success')
+        backgroundColor: d['calendar_color']
       }
 
       if( $('#check_start').is(':checked') ) {
@@ -125,10 +124,9 @@ $(document).ready( function() {
       // End Date
       obj = {
         id: 'end',
-        url: '/payroll_logs/'+d['id']+'/edit',
         title: 'Final '+ d['description'],
         start: set_date(d['end_date']),
-        backgroundColor: Utility.getBrandColor('success')
+        backgroundColor: d['calendar_color']
       };
 
       if( $('#check_end').is(':checked') ) {
@@ -139,10 +137,9 @@ $(document).ready( function() {
       // Payment Date
       obj = {
         id: 'payment',
-        url: '/payroll_logs/'+d['id']+'/edit',
         title: 'Pago '+ d['description'],
         start: set_date(d['payment_date']),
-        backgroundColor: Utility.getBrandColor('success')
+        backgroundColor: d['calendar_color']
       };
 
       if( $('#check_payment').is(':checked') ) {
