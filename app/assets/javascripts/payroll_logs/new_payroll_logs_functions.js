@@ -401,7 +401,11 @@ pl.addEmployees = function(tmpData) {
       var e = pl.findEmployeeById(id);
       employee.id = e.id;
       employee.name = e.name + ' ' + e.surname;
-      employee.wage_payment = e.wage_payment;
+      employee.wage_payment = '';
+      employee.price_defined_work = e.price_defined_work;
+      if(e.price_defined_work != 1 || e.price_defined_work == null) {
+        employee.wage_payment = e.wage_payment;
+      }
       employee.payment_unit = e.payment_unit;
       employee.currency_id = e.currency_id;
       employee.data.push(tmpData.data);

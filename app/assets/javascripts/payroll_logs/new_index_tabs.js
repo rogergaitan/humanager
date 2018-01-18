@@ -16,13 +16,16 @@ pl.searchEmployeeByCode = function() {
           employee_code: term, // Search Term
           per_page: pl.per_page, // Page Size
           page: page // Page Number
-        };
+        }
       },
       results: function (data, page) {
-      // Whether or not there are more results available
-      var more = (page * pl.per_page) < data.total;
-      // Notice we return the value of more so Select2 knows if more results can be loaded
-      return {results: data.entries, more: more};
+        // Whether or not there are more results available
+        var more = (page * pl.per_page) < data.total;
+        // Notice we return the value of more so Select2 knows if more results can be loaded
+        return {
+          results: data.entries,
+          more: more
+        }
       }
     },
     formatResult: pl.employeeCodeFormatResult,
@@ -74,29 +77,32 @@ pl.searchEmployeeByName = function() {
       // Page is the one-based page number tracked by Select2
       data: function (term, page) {
         return {
-	  employee_name: term, // Search Term
-	  per_page: pl.per_page, // Page Size
-	  page: page // Page Number
-	};
+          employee_name: term, // Search Term
+          per_page: pl.per_page, // Page Size
+          page: page // Page Number
+        }
       },
       results: function (data, page) {
         // Whether or not there are more results available
-	var more = (page * pl.per_page) < data.total;
-	// Notice we return the value of more so Select2 knows if more results can be loaded
-	return {results: data.entries, more: more};
+        var more = (page * pl.per_page) < data.total;
+        // Notice we return the value of more so Select2 knows if more results can be loaded
+        return {
+          results: data.entries,
+          more: more
+        }
       }
     },
-      formatResult: pl.employeeNameFormatResult,
-      formatSelection: pl.employeeNameFormatSelection,
-      escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+    formatResult: pl.employeeNameFormatResult,
+    formatSelection: pl.employeeNameFormatSelection,
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
   }).on("select2-close", function (e) {
-    if( pl.validationTabs() ) {
-      if( $(pl.current_employee).find('#employee_code').val() == '') {
+    if(pl.validationTabs()) {
+      if($(pl.current_employee).find('#employee_code').val() == '') {
         $(pl.current_employee).find('#search_code_employee').select2('open');
-	var thatCode = $(pl.current_employee).find('a:eq(0)');
-	$(thatCode).find('span:eq(0)').html('#');
+        var thatCode = $(pl.current_employee).find('a:eq(0)');
+        $(thatCode).find('span:eq(0)').html('#');
       } else {
-	  $(pl.current_cc).find('#search_code_cc').select2('open');
+        $(pl.current_cc).find('#search_code_cc').select2('open');
       }
     }
   }).on("select2-highlight", function (e) {
@@ -369,7 +375,14 @@ pl.setValuesFromSearch = function(type, object) {
       var that = $(pl.current_employee).find('a:eq(0)');
       $(that).find('span:eq(0)').html(object.number_employee);
       $(that).removeClass('select2-default');
-      $(pl.current_employee).find('#wage_payment').val(object.wage_payment);
+      // Set Wage Payment
+      var wage_payment = $(pl.current_employee).find('#wage_payment');
+      wage_payment.val('');
+      if(object.price_defined_work != 1 || object.price_defined_work == null) {
+        if(object.wage_payment != '') {
+          wage_payment.val(object.wage_payment);
+        }
+      }
       $(pl.current_employee).find('#payment_unit').val(object.payment_unit);
       $(pl.current_employee).find('#employee_payment_currency').val(object.currency_id);
       // Set Name
@@ -398,27 +411,27 @@ pl.setValuesFromSearch = function(type, object) {
       $(pl.current_task).find('#s2id_search_name_task').removeClass('a-not-active');
       break;
 
-   case pl.search_types.tasks:
-    // Set Code
-    var that = $(pl.current_task).find('a:eq(0)');
-    $(that).find('span:eq(0)').html(object.itask);
-    $(that).removeClass('select2-default');
-    // Set Name
-    that = $(pl.current_task).find('a:eq(1)');
-    $(that).find('span:eq(0)').html(object.ntask);
-    $(that).removeClass('select2-default');
-    // Set ID, Costs, Unidad, Unit performance
-    var cost = $(pl.current_employee).find('#wage_payment').val();
-    if(cost == '') { cost = object.cost };
-    
-    var nunidad = $(pl.current_employee).find('#payment_unit').val();
-    if(nunidad == '') { nunidad = object.nunidad };
-    
-    $(pl.current_task).find('input:hidden[id*=_task_id]').val(object.id);
-    $(pl.current_task).find('input:hidden[id*=_task_total]').val(cost);
-    $(pl.current_task).find('input:hidden[id*=_task_unidad]').val(nunidad);
-    $(pl.current_task).find('input:hidden[id*=currency_id]').val(object.currency_id);
-    break;
+    case pl.search_types.tasks:
+      // Set Code
+      var that = $(pl.current_task).find('a:eq(0)');
+      $(that).find('span:eq(0)').html(object.itask);
+      $(that).removeClass('select2-default');
+      // Set Name
+      that = $(pl.current_task).find('a:eq(1)');
+      $(that).find('span:eq(0)').html(object.ntask);
+      $(that).removeClass('select2-default');
+      // Set ID, Costs, Unidad, Unit performance
+      var cost = $(pl.current_employee).find('#wage_payment').val();
+      if(cost == '') cost = object.cost;
+      
+      var nunidad = $(pl.current_employee).find('#payment_unit').val();
+      if(nunidad == '') nunidad = object.nunidad;
+      
+      $(pl.current_task).find('input:hidden[id*=_task_id]').val(object.id);
+      $(pl.current_task).find('input:hidden[id*=_task_total]').val(cost);
+      $(pl.current_task).find('input:hidden[id*=_task_unidad]').val(nunidad);
+      $(pl.current_task).find('input:hidden[id*=currency_id]').val(object.currency_id);
+      break;
   }
 }
 

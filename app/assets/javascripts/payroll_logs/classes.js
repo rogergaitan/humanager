@@ -9,6 +9,7 @@ $(document).ready(function() {
   pl.Employee = function () {
     this.id = null;
     this.name = null;
+    this.price_defined_work = null;
     this.total = 0;
     this.data = Array();
     this.add = Array();
