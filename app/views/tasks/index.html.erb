@@ -19,16 +19,16 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <%= text_field_tag :search_activity, params[:search_activity],  :class => "form-control",
-                                     :placeholder => model_class.human_attribute_name(:nactivity) %>
+                                      :placeholder => model_class.human_attribute_name(:nactivity) %>
                 </div>
 
                 <div class="form-group">
                   <%= text_field_tag :search_code, params[:search_code], :class => "form-control",
-                                     :placeholder => model_class.human_attribute_name(:itask) %>
+                                      :placeholder => model_class.human_attribute_name(:itask) %>
                 </div>
                 <div class="form-group">
                   <%= text_field_tag :search_desc, params[:search_desc], :class => "form-control",
-                                     :placeholder => model_class.human_attribute_name(:ntask) %>
+                                      :placeholder => model_class.human_attribute_name(:ntask) %>
                 </div>
                 <div class="form-group">
                   <button class="btn btn-primary" id="clear" type="button">Limpiar</button>
@@ -44,40 +44,7 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="panel panel-primary" id="list_tasks">
-      
-      <div class="panel-heading"></div>
-
-      <div class="panel-body panel-no-padding">
-  
-      <table class="table table-striped" id="task_data">
-        <thead>
-          <tr>
-            <th><%= model_class.human_attribute_name(:nactivity) %></th>
-            <th><%= model_class.human_attribute_name(:itask) %></th>
-            <th><%= model_class.human_attribute_name(:ntask) %></th>
-            <th><%= model_class.human_attribute_name(:nunidad) %></th>
-            <th>
-              <%= select_tag :currency, options_from_collection_for_select(@currencies, :id, :name), 
-                prompt: "Filtrar por moneda",  class: "form-control"%>
-              <%= model_class.human_attribute_name(:currency_id) %>
-            </th>
-            <th><%= model_class.human_attribute_name(:cost) %></th>
-            <% if can? :update, Task %>
-              <th>
-                <%= button_tag "Actualizar Costo", class: "btn btn-primary", id: "update_costs",  
-                  disabled: true, data: { update_all: false } %><br>
-                <%= check_box_tag :select_all  %>
-              </th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
           <%= render "tasks_list" %>
-        </tbody>
-      </table>
-      <div id="tasks_pagination" class="pull-right">
-        <%= render "pagination" %>
-      </div>
       </div>
     </div>
   </div>

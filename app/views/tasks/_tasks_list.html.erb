@@ -7,16 +7,16 @@
   <table class="table table-striped" id="task-data">
     <thead>
       <tr>
-        <th><%= model_class.human_attribute_name(:nactivity) %></th>
-        <th><%= model_class.human_attribute_name(:itask) %></th>
-        <th><%= model_class.human_attribute_name(:ntask) %></th>
-        <th><%= model_class.human_attribute_name(:nunidad) %></th>
+        <th class="align-top"><%= model_class.human_attribute_name(:nactivity) %></th>
+        <th class="align-top"><%= model_class.human_attribute_name(:itask) %></th>
+        <th class="align-top"><%= model_class.human_attribute_name(:ntask) %></th>
+        <th class="align-top"><%= model_class.human_attribute_name(:nunidad) %></th>
         <th>
           <%= model_class.human_attribute_name(:currency_id) %>
           <%= select_tag :currency, options_from_collection_for_select(@currencies, :id, :name), 
             prompt: "Filtrar por moneda",  class: "form-control"%>
         </th>
-        <th><%= model_class.human_attribute_name(:cost) %></th>
+        <th class="align-top"><%= model_class.human_attribute_name(:cost) %></th>
         <% if can? :update, Task %>
           <th>
             <%= button_tag "Actualizar Costo", class: "btn btn-primary", id: "update_costs",  

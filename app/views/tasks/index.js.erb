@@ -1,5 +1,4 @@
-$('#task_data tbody').html('<%= escape_javascript(render(:partial => 'tasks_list')) %>');
-$('#tasks_pagination').html('<%= escape_javascript(render(:partial => 'pagination')) %>');
+$('#list_tasks').html('<%= escape_javascript(render(:partial => 'tasks_list')) %>');
 
 $('.pagination a[href]').attr('data-remote', true);
 
